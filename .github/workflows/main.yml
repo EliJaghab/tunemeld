@@ -15,10 +15,20 @@ jobs:
       with:
         node-version: 16
 
-    - name: Upload files to S3
+    - name: Install zip
+      run: sudo apt-get install zip -y
+
+    - name: Create ZIP Archive
+      run: |
+        git clean -X -f -d
+        zip -r my-archive.zip .
+      working-directory: ${{ github.workspace }}
+
+    - name: Upload ZIP to S3
       uses: jakejarvis/s3-sync-action@v0.5.1
       with:
-        args: --delete --exclude '.git/*' 
+        args: --delete
+        files: ./my-archive.zip  # Specify the path to your ZIP archive
       env:
         AWS_S3_BUCKET: playlistaggregator
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
