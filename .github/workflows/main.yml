@@ -30,6 +30,6 @@ jobs:
         args: --delete
         files: ./my-archive.zip  # Specify the path to your ZIP archive
       env:
-        AWS_S3_BUCKET: playlistaggregator
+        AWS_S3_BUCKET: elasticbeanstalk-us-east-2-209117702137
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
