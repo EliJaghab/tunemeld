@@ -31,4 +31,7 @@ jobs:
 
     - name: Upload ZIP to S3
       run: |
-        aws s3 cp deployment_package.zip s3://playlistaggregator/deployment_package.zip --acl public-read
+            - name: Upload ZIP to S3
+      run: |
+        aws s3 cp deployment_package.zip s3://playlistaggregator/deployment_package.zip
+
