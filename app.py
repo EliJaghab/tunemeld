@@ -54,7 +54,6 @@ def home():
     # Get the aggregated playlist
     aggregated_data = aggregate_playlists(soundcloud_data, apple_music_data, spotify_data)
 
-    # Pass the data to your template
     return render_template('index.html', soundcloud_data=soundcloud_data, apple_music_data=apple_music_data, spotify_data=spotify_data, aggregated_data=aggregated_data)
 
 @app.route('/favicon.ico')
