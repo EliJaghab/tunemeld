@@ -51,7 +51,7 @@ def fetch_data(url, extract_method, cache_filename, extractor_instance=None):
         cache_data(data, cache_filename)
     return data
 
-@app.route('/')
+@app.route('/application')
 def home():
     # Fetch and cache data for SoundCloud, Apple Music, and Spotify
     soundcloud_data = fetch_data(SOUNDCLOUD_URL, 'retrieve_soundcloud_items', CACHED_SOUNDCLOUD_TRACKS_FILENAME)
