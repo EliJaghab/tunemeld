@@ -1,7 +1,5 @@
-__pycache__/
-
 cache*.json
-
 chromedriver
-
+venv/
+__pycache__/
 *.ipynb
