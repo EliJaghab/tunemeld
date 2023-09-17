@@ -7,6 +7,13 @@ from extractor import Extractor, SpotifyExtractor, SOUNDCLOUD_URL, APPLE_MUSIC_U
 
 from aggregator import aggregate_playlists
 
+logging.basicConfig(
+    filename='app.log',
+    filemode='w',
+    format='%(asctime)s - %(message)s',
+    level=logging.INFO
+)
+
 
 
 app = Flask(__name__)
