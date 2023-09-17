@@ -1,4 +1,4 @@
-aggregated_logs.logs
+aggregated_logs.log
 cache*.json
 chromedriver
 venv/
