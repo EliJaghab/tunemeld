@@ -1,5 +1,5 @@
-aggregated_logs.log
-cache*.json
+all_logs.log
+#cache*.json
 chromedriver
 venv/
 __pycache__/
