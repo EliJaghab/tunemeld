@@ -1,1 +1,3 @@
 pyproject.toml -> requirements.txt: poetry export -f requirements.txt --output requirements.txt
+venv -> source venv/bin/activate
+get logs -> counter=1 && aws elasticbeanstalk retrieve-environment-info --environment-name Tunemeld-env --info-type tail | jq -r '.EnvironmentInfo[].Message' | while read -r url; do filename="log_$counter.txt"; curl -s "$url" | tail -n 100 >> aggregated_logs.log; ((counter++)); done
