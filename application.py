@@ -16,7 +16,7 @@ logging.basicConfig(
 
 
 
-app = Flask(__name__)
+application = Flask(__name__)
 extractor = Extractor()
 spotify_extractor = SpotifyExtractor()
 
@@ -51,7 +51,7 @@ def fetch_data(url, extract_method, cache_filename, extractor_instance=None):
         cache_data(data, cache_filename)
     return data
 
-@app.route('/application')
+@application.route('/')
 def home():
     # Fetch and cache data for SoundCloud, Apple Music, and Spotify
     soundcloud_data = fetch_data(SOUNDCLOUD_URL, 'retrieve_soundcloud_items', CACHED_SOUNDCLOUD_TRACKS_FILENAME)
@@ -63,9 +63,9 @@ def home():
 
     return render_template('index.html', soundcloud_data=soundcloud_data, apple_music_data=apple_music_data, spotify_data=spotify_data, aggregated_data=aggregated_data)
 
-@app.route('/favicon.ico')
+@application.route('/favicon.ico')
 def favicon():
-    return app.send_static_file('favicon.ico')
+    return application.send_static_file('favicon.ico')
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=80, debug=True)
+    application.run(host='0.0.0.0', port=80, debug=True)
