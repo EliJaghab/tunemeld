@@ -1,0 +1,43 @@
+name: deploy to lambda
+on: 
+  push
+jobs:
+  deploy_source:
+    name: build and deploy lambda
+    strategy:
+      matrix:
+        node-version: [12.x]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Check for changes in lambda_functions
+        run: |
+          git diff --name-only ${{ github.event.before }} ${{ github.sha }} -- 'lambda_functions/*'
+          if [ $? -eq 0 ]; then
+            echo "Changes detected in lambda_functions, proceeding with deployment."
+          else
+            echo "No changes in lambda_functions, exiting."
+            exit 78
+          fi
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: npm install and build
+        run: |
+          npm ci
+          npm run build --if-present
+        env:
+          CI: true
+      - name: zip
+        run: |
+          cd lambda_functions
+          zip -r ../bundle.zip ./
+      - name: default deploy
+        uses: appleboy/lambda-action@master
+        with:
+          aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws_region: us-east-2
+          function_name: retrieve_soundcloud_playlist
+          zip_file: bundle.zip
