@@ -1,15 +1,16 @@
 name: deploy to lambda
-on: 
-  push
+on:
+  push:
+    paths:
+      - 'lambda_functions/**'
+
 jobs:
   deploy_source:
     name: build and deploy lambda
-    strategy:
-      matrix:
-        node-version: [12.x]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
+      
       - name: Check for changes in lambda_functions
         run: |
           git diff --name-only ${{ github.event.before }} ${{ github.sha }} -- 'lambda_functions/*'
@@ -19,20 +20,22 @@ jobs:
             echo "No changes in lambda_functions, exiting."
             exit 78
           fi
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
         with:
-          node-version: ${{ matrix.node-version }}
-      - name: npm install and build
+          python-version: '3.x'  # Replace with your desired Python version
+
+      - name: Install dependencies
         run: |
-          npm ci
-          npm run build --if-present
-        env:
-          CI: true
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
       - name: zip
         run: |
           cd lambda_functions
           zip -r ../bundle.zip ./
+
       - name: default deploy
         uses: appleboy/lambda-action@master
         with:
