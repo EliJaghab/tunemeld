@@ -71,6 +71,9 @@ class Extractor:
                 print(f"Could not extract data for a track item due to error: {e}")
                 continue
         return data
+    
+    def get_soundcloud_tracks(self):
+        return self.retrieve_soundcloud_items(self.soupify(SOUNDCLOUD_URL))
 
     def retrieve_apple_music_song_details(self, soup: BeautifulSoup):
         # Find all song wrappers
