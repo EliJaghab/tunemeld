@@ -21,10 +21,12 @@ list_files_in_directory('/var/task')
 list_files_in_directory('/opt')
 
 
-service = Service(executable_path='/opt/headless-chromium')
+service = Service(executable_path='/opt/chromedriver')
+chrome_options = webdriver.ChromeOptions()
+chrome_options.add_argument("--headless")  # Run Chrome in headless mode, comment this line if you want to see the browser window
+chrome_options.binary_location = '/opt/headless-chromium'    
 
-
-driver = webdriver.Chrome(service=service)
+driver = webdriver.Chrome(service=service, options = chrome_options)
 driver.get('https://www.google.com/')
 
 driver.close()
