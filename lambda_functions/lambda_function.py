@@ -23,7 +23,10 @@ list_files_in_directory('/opt')
 
 service = Service(executable_path='/opt/chromedriver')
 chrome_options = webdriver.ChromeOptions()
-chrome_options.add_argument("--headless")  # Run Chrome in headless mode, comment this line if you want to see the browser window
+chrome_options.add_argument("--headless")
+chrome_options.add_argument('--disable-gpu')
+chrome_options.add_argument('--no-sandbox')
+chrome_options.add_argument('--disable-dev-shm-usage')
 chrome_options.binary_location = '/opt/headless-chromium'    
 
 driver = webdriver.Chrome(service=service, options = chrome_options)
