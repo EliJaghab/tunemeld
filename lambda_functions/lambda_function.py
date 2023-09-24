@@ -1,17 +1,25 @@
 from selenium import webdriver
-from selenium.webdriver.chrome.service import Service as ChromeService
-from webdriver_manager.chrome import ChromeDriverManager
-from webdriver_manager.core.driver_cache import DriverCacheManager
+from selenium.webdriver.chrome.options import Options
 
-# Set the install_path to the writable /tmp directory in AWS Lambda
-install_path = '/tmp'
+def main(event, context):
+    options = Options()
+    options.binary_location = '/opt/headless-chromium'
+    options.add_argument('--headless')
+    options.add_argument('--no-sandbox')
+    options.add_argument('--single-process')
+    options.add_argument('--disable-dev-shm-usage')
 
-# Initialize the DriverCacheManager with the custom install_path
-cache_manager = DriverCacheManager(install_path)
+    driver = webdriver.Chrome('/opt/chromedriver',chrome_options=options)
+    
+    driver.get('https://www.google.com/')
+    title = driver.title
 
-# Download and install ChromeDriver using the custom cache_manager
-driver_path = ChromeDriverManager(cache_manager=cache_manager).install()
+    driver.close();
+    driver.quit();
 
-# Initialize the Chrome WebDriver with the downloaded driver
-driver = webdriver.Chrome(service=ChromeService(executable_path=driver_path))
-driver.get("google.com")
+    response = {
+        "statusCode": 200,
+        "body": title
+    }
+
+    return response
