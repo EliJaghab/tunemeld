@@ -2,6 +2,8 @@ import requests
 import time
 from bs4 import BeautifulSoup
 from selenium import webdriver 
+from selenium.webdriver.chrome.service import Service
+
 
 SOUNDCLOUD_URL = "https://soundcloud.com/soundcloud-the-peak/sets/on-the-up-new-edm-hits"
 APPLE_MUSIC_URL = "https://music.apple.com/us/playlist/dancexl/pl.6bf4415b83ce4f3789614ac4c3675740"
@@ -18,7 +20,14 @@ class Extractor:
     
     def get_driver(self):
         if self.driver is None:
-            self.driver = webdriver.Chrome('/opt/chromedriver')
+            # Specify the path to Chrome WebDriver executable
+            webdriver_path = '/opt/chromedriver'
+            
+            # Create a Service object with the specified path
+            service = Service(webdriver_path)
+            
+            # Create a Chrome WebDriver instance with the Service
+            self.driver = webdriver.Chrome(service=service)
         return self.driver
     
     def retrieve_full_html(self, url, scroll = False):
