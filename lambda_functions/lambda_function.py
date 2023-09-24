@@ -14,9 +14,6 @@ driver = webdriver.Chrome('/opt/chromedriver',chrome_options=options)
 driver.get('https://www.google.com/')
 title = driver.title
 
-driver.close();
-driver.quit();
-
 response = {
     "statusCode": 200,
     "body": title
