@@ -18,7 +18,7 @@ class Extractor:
     
     def get_driver(self):
         if self.driver is None:
-            self.driver = webdriver.Chrome()
+            self.driver = webdriver.Chrome(executable_path = '/opt/chromedriver')
         return self.driver
     
     def retrieve_full_html(self, url, scroll = False):
