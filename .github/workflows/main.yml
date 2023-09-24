@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
-      
+
       - name: Check for changes in lambda_functions
         run: |
           git diff --name-only ${{ github.event.before }} ${{ github.sha }} -- 'lambda_functions/*'
@@ -24,22 +24,16 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: '3.10' 
+          python-version: '3.10'
 
-      - name: Install dependencies
+      - name: Install dependencies and package
         run: |
           cd lambda_functions
           python -m pip install --upgrade pip
-          if [ -f requirements.txt ]; then pip install -r requirements.txt -t ./package; fi
+          if [ -f requirements.txt ]; then pip install -r requirements.txt -t ./; fi
+          zip -r ../bundle.zip ./*
 
-      - name: zip
-        run: |
-          cd lambda_functions/package
-          zip -r ../../bundle.zip ./
-          cd ..
-          zip -g ../../bundle.zip -r ./*
-
-      - name: default deploy
+      - name: Deploy to Lambda
         uses: appleboy/lambda-action@master
         with:
           aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
