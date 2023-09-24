@@ -3,7 +3,23 @@ from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 
 from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
+import os
+
+def list_files_in_directory(directory):
+    print(f"Listing files and directories in: {directory}")
+    print(directory)  # Include the root directory itself in the output
+    for root, dirs, files in os.walk(directory):
+        for file in files:
+            print(os.path.join(root, file))
+        for dir in dirs:
+            print(os.path.join(root, dir))
+
+# List files in the Lambda execution environment's root directory
+list_files_in_directory('/var/task')
+
+# List files in the Lambda execution environment's /opt directory
+list_files_in_directory('/opt')
+
 
 service = Service(executable_path='/opt/headless-chromium')
 
