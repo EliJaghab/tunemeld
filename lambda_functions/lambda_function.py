@@ -1,23 +1,17 @@
-from extractor import Extractor
 from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
-
-from selenium import webdriver
-import os
-
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.chrome.service import Service as ChromeService
 from webdriver_manager.chrome import ChromeDriverManager
+from webdriver_manager.core.driver_cache import DriverCacheManager
 
-options = Options()
-options.add_argument('--disable-gpu')
-options.add_argument('--headless')
-chrome_driver_path = "/tmp/chromedriver"
+# Set the install_path to the writable /tmp directory in AWS Lambda
+install_path = '/tmp'
 
-# Download and install ChromeDriver
-driver_path = ChromeDriverManager(path=chrome_driver_path).install()
+# Initialize the DriverCacheManager with the custom install_path
+cache_manager = DriverCacheManager(install_path)
+
+# Download and install ChromeDriver using the custom cache_manager
+driver_path = ChromeDriverManager(cache_manager=cache_manager).install()
 
 # Initialize the Chrome WebDriver with the downloaded driver
-driver = webdriver.Chrome(executable_path=driver_path, options=options)
-driver.get("http://example.com")
+driver = webdriver.Chrome(service=ChromeService(executable_path=driver_path))
+driver.get("google.com")
