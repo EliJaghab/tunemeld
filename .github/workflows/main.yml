@@ -28,13 +28,16 @@ jobs:
 
       - name: Install dependencies
         run: |
+          cd lambda_functions
           python -m pip install --upgrade pip
-          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          if [ -f requirements.txt ]; then pip install -r requirements.txt -t ./package; fi
 
       - name: zip
         run: |
-          cd lambda_functions
-          zip -r ../bundle.zip ./
+          cd lambda_functions/package
+          zip -r ../../bundle.zip ./
+          cd ..
+          zip -g ../../bundle.zip -r ./*
 
       - name: default deploy
         uses: appleboy/lambda-action@master

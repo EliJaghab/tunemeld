@@ -3,7 +3,7 @@ from datetime import datetime
 import json
 import os
 import logging
-from extractor import Extractor, SpotifyExtractor, SOUNDCLOUD_URL, APPLE_MUSIC_URL, SPOTIFY_PLAYLIST_API_URL
+from lambda_functions.extractor import Extractor, SpotifyExtractor, SOUNDCLOUD_URL, APPLE_MUSIC_URL, SPOTIFY_PLAYLIST_API_URL
 
 from aggregator import aggregate_playlists
 

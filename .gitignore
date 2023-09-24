@@ -4,3 +4,5 @@ chromedriver
 venv/
 __pycache__/
 *.ipynb
+.DS_Store
+*.zip
