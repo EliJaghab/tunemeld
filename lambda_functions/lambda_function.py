@@ -1,25 +1,24 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 
-def main(event, context):
-    options = Options()
-    options.binary_location = '/opt/headless-chromium'
-    options.add_argument('--headless')
-    options.add_argument('--no-sandbox')
-    options.add_argument('--single-process')
-    options.add_argument('--disable-dev-shm-usage')
 
-    driver = webdriver.Chrome('/opt/chromedriver',chrome_options=options)
-    
-    driver.get('https://www.google.com/')
-    title = driver.title
+options = Options()
+options.binary_location = '/opt/headless-chromium'
+options.add_argument('--headless')
+options.add_argument('--no-sandbox')
+options.add_argument('--single-process')
+options.add_argument('--disable-dev-shm-usage')
 
-    driver.close();
-    driver.quit();
+driver = webdriver.Chrome('/opt/chromedriver',chrome_options=options)
 
-    response = {
-        "statusCode": 200,
-        "body": title
-    }
+driver.get('https://www.google.com/')
+title = driver.title
 
-    return response
+driver.close();
+driver.quit();
+
+response = {
+    "statusCode": 200,
+    "body": title
+}
+
