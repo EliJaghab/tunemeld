@@ -1,6 +1,6 @@
 from bs4 import BeautifulSoup
-from lambda_functions.selenium_webdriver import Driver
-from lambda_functions.constants import SOUNDCLOUD_EDM_URL
+from selenium_webdriver import Driver
+from constants import SOUNDCLOUD_EDM_URL
 
 class SoundCloudExtractor:
     def __init__(self, url):
@@ -42,7 +42,7 @@ class SoundCloudExtractor:
         return data
     
     def get_soundcloud_tracks(self):
-        soup = self.driver.soupify_url(self.url)
+        soup = self.driver.soupify_url(self.url, scroll=True)
         track_data = self.convert_soup_to_tracks(soup)
         return track_data
 

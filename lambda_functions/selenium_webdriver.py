@@ -15,7 +15,6 @@ class Driver:
         self.driver = webdriver.Chrome('/opt/chromedriver', options=options)
     
     def retrieve_full_html(self, url, scroll = False):
-        self.driver = self.get_driver()
         self.driver.get(url)
 
         time.sleep(2)
