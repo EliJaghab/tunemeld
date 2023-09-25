@@ -38,7 +38,7 @@ class SoundCloudExtractor:
                     'source': 'SoundCloud'
                 })
             except Exception as e:
-                print(f"Could not extract data for a track item due to error: {e}")
+                logging.info(f"Could not extract data for a track item due to error: {e}")
                 continue
         return data
     
