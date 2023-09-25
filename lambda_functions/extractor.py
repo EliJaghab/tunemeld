@@ -1,6 +1,6 @@
 import requests
 import time
-from bs4 import BeautifulSoup
+
 from selenium import webdriver 
 from selenium.webdriver.chrome.service import Service
 
@@ -44,8 +44,6 @@ class Extractor:
         driver.execute_script(f"window. scrollTo(0, {self.scroll_height});")
         return driver.page_source
     
-    def soupify(self, url, scroll = False):
-        return BeautifulSoup(self.retrieve_full_html(url, scroll), features="html.parser")
 
     def retrieve_soundcloud_items(self, soup: BeautifulSoup):
         track_items = soup.find('ul', class_='trackList__list sc-clearfix sc-list-nostyle')

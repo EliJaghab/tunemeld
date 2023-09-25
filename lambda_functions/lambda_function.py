@@ -1,21 +1,7 @@
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
+from soundcloud_extractor import SoundCloudExtractor
+from lambda_functions.constants import SOUNDCLOUD_EDM_URL
 
-
-options = Options()
-options.binary_location = '/opt/headless-chromium'
-options.add_argument('--headless')
-options.add_argument('--no-sandbox')
-options.add_argument('--single-process')
-options.add_argument('--disable-dev-shm-usage')
-
-driver = webdriver.Chrome('/opt/chromedriver',chrome_options=options)
-
-driver.get('https://www.google.com/')
-title = driver.title
-
-response = {
-    "statusCode": 200,
-    "body": title
-}
+def lambda_handler(event, context):
+    soundcloud_extractor = SoundCloudExtractor(SOUNDCLOUD_EDM_URL)
+    return soundcloud_extractor.get_soundcloud_tracks()
 
