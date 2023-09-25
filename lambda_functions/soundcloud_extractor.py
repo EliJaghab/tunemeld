@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup
 from selenium_webdriver import Driver
 from constants import SOUNDCLOUD_EDM_URL
+import logging
 
 class SoundCloudExtractor:
     def __init__(self, url):

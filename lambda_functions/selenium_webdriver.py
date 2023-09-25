@@ -9,6 +9,7 @@ class Driver:
         self.driver = self.initialize_driver()
     
     def initialize_driver(self):
+        print("initalizing driver")
         options = self.get_options()
         return webdriver.Chrome('/opt/chromedriver', options=options)
 
