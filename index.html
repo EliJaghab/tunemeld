@@ -52,49 +52,19 @@
         <div class="col-md-4">
             <div class="playlist">
                 <div class="playlist-title">SoundCloud</div>
-                {% for track in soundcloud_data %}
-                <div class="card my-1">
-                    <div class="card-body track-item-content">
-                        <img class="album-cover" src="{{ track['album_cover_url'] }}" alt="Album Cover">
-                        <div class="track-number">{{ track['track_number'] }}</div>
-                        <a href="#" class="username">{{ track['artist_name'] }}</a>
-                        <span class="separator">-</span>
-                        <a href="#" class="track-title">{{ track['song_title'] }}</a>
-                    </div>
-                </div>
-                {% endfor %}
+                <div id="soundcloud-data-placeholder"></div>
             </div>
         </div>
         <div class="col-md-4">
             <div class="playlist">
                 <div class="playlist-title">Apple Music</div>
-                {% for track in apple_music_data %}
-                <div class="card my-1">
-                    <div class="card-body track-item-content">
-                        <img class="album-cover" src="{{ track['album_cover_url'] }}" alt="Album Cover">
-                        <div class="track-number">{{ track['track_number'] }}</div>
-                        <a href="#" class="username">{{ track['artist_name'] }}</a>
-                        <span class="separator">-</span>
-                        <a href="#" class="track-title">{{ track['song_title'] }}</a>
-                    </div>
-                </div>
-                {% endfor %}
+                <div id="apple-music-data-placeholder"></div>
             </div>
         </div>
         <div class="col-md-4">
             <div class="playlist">
                 <div class="playlist-title">Spotify</div>
-                {% for track in spotify_data %}
-                <div class="card my-1">
-                    <div class="card-body track-item-content">
-                        <img class="album-cover" src="{{ track['album_cover_url'] }}" alt="Album Cover">
-                        <div class="track-number">{{ track['track_number'] }}</div>
-                        <a href="#" class="username">{{ track['artist_name'] }}</a>
-                        <span class="separator">-</span>
-                        <a href="#" class="track-title">{{ track['song_title'] }}</a>
-                    </div>
-                </div>
-                {% endfor %}
+                <div id="spotify-data-placeholder"></div>
             </div>
         </div>
     </div>
@@ -103,22 +73,11 @@
         <div class="col-md-12">
             <div class="playlist">
                 <div class="playlist-title">Aggregated Playlist</div>
-                {% for track in aggregated_data %}
-                <div class="card my-1">
-                    <div class="card-body track-item-content">
-                        <img class="album-cover" src="{{ track['album_cover_url'] }}" alt="Album Cover">
-                        <div class="track-number">{{ track['rank'] }}</div>
-                        <a href="#" class="username">{{ track['artist_name'] }}</a>
-                        <span class="separator">-</span>
-                        <a href="#" class="track-title">{{ track['song_title'] }}</a>
-                        <span class="separator">-</span>
-                        <span class="source">Available on: {{ track['sources']|join(', ') }}</span>
-                    </div>
-                </div>
-                {% endfor %}
+                <div id="aggregated-data-placeholder"></div>
             </div>
         </div>
     </div> <!-- End of the new row -->
 </div> <!-- End of the container -->
+<script src="main.js"></script>
 </body>
 </html>
