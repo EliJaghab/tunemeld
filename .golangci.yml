@@ -1,0 +1,11 @@
+linters:
+  enable:
+    - gofmt
+    - govet
+    - revive
+    - gocyclo
+    - gosec
+    - misspell
+    - lll
+    - unused
+    - gosimple
