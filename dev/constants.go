@@ -1,7 +1,8 @@
 package dev
 
-var (
-	AppleMusicJSONFile = "dev/dev/apple_music_cache.json"
-	SoundCloudJSONFile = "dev/dev/soundcloud_cache.json"
-	SpotifyJSONFile    = "dev/dev/spotify_cache.json"
-)
+
+var CachedJSONFiles = map[string]string{
+	"AppleMusic":  "dev/dev/apple_music_cache.json",
+	"SoundCloud":  "dev/dev/soundcloud_cache.json",
+	"Spotify":     "dev/dev/spotify_cache.json",
+}

@@ -49,8 +49,7 @@ func (client *RapidAPIClient) MakeRequest(url string, host string) ([]byte, erro
 
 func (client *RapidAPIClient) FetchPlaylist(config ServiceConfig, playlistParam string) (map[string]interface{}, error) {
 	if dev.IsDevelopmentMode() {
-		var data map[string]interface{}
-		err := dev.LoadJSONFromFile(dev.GetJSONFile(info.Host), &data)
+		data, err := dev.LoadJSONFromFile(dev.AppleMusicJSONFile)
 		if err != nil {
 			return nil, err
 		}
