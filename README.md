@@ -1,2 +1,2 @@
 www.tunemeld.com
-Identifies and display similar picks from SoundCloud, Apple Music and Spotify
+Aggregates weekly curated playlists from SoundCloud, Apple Music and Spotify
