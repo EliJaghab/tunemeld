@@ -1,5 +1,4 @@
-
-package local
+package service
 
 import (
     "github.com/EliJaghab/go_migration/constants"
