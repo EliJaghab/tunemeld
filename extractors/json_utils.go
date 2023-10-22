@@ -1,4 +1,4 @@
-package service
+package extractors
 
 import (
 	"encoding/json"
@@ -8,16 +8,16 @@ import (
 	"path/filepath"
 )
 
-func getJSONfromBytes(data []byte) (map[string]interface{}, error) {
+func GetJSONfromBytes(data []byte) (map[string]interface{}, error) {
     var result map[string]interface{}
     err := json.Unmarshal(data, &result)
     if err != nil {
-        return nil, fmt.Errorf("error parsing JSON: %w", err)
+        return nil, fmt.Errorf("error parsing JSON: %w, data: %s", err, string(data))
     }
     return result, nil
 }
 
-func getJSONfromFile(filename string) (map[string]interface{}, error) {
+func GetJSONfromFile(filename string) (map[string]interface{}, error) {
 	data, err := os.ReadFile(filename)
 	if err != nil {
 		return nil, err
