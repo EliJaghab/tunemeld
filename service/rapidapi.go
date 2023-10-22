@@ -2,23 +2,21 @@ package service
 
 import (
 	"io"
+	"log"
 	"net/http"
 	"os"
-	"log"
-	"github.com/EliJaghab/tunemeld/dev"
 )
 
 type RapidAPIClient struct {
 	apiKey string
 }
 
-
 func NewRapidAPIClient() *RapidAPIClient {
 	apiKey := os.Getenv("X_RapidAPI_Key")
 	return &RapidAPIClient{apiKey: apiKey}
 }
 
-func (client *RapidAPIClient) MakeRequest(url string, host string) ([]byte, error) {
+func (client *RapidAPIClient) MakeRequest(url string, host string) (map[string]interface{}, error) {
 	log.Printf("Preparing request to URL: %s with host: %s", url, host)
 
 	req, err := http.NewRequest("GET", url, nil)
@@ -44,22 +42,23 @@ func (client *RapidAPIClient) MakeRequest(url string, host string) ([]byte, erro
 		return nil, err
 	}
 
-	return body, nil
+	json, err := parseJSON(body)
+	if err != nil {
+		log.Printf("Error converting to json: %v", err)
+	}
+
+	return json, nil
 }
 
 func (client *RapidAPIClient) FetchPlaylist(config ServiceConfig, playlistParam string) (map[string]interface{}, error) {
-	if dev.IsDevelopmentMode() {
-		data, err := dev.LoadJSONFromFile(dev.AppleMusicJSONFile)
+	if IsDevelopmentMode() {
+		data, err := FetchExistingData(config.CachedFilePath)
 		if err != nil {
 			return nil, err
 		}
 		return data, nil
 	}
 
-	url := info.BaseURL + playlistParam
-	return client.MakeRequest(url, info.Host)
+	url := config.BaseURL + playlistParam
+	return client.MakeRequest(url, config.Host)
 }
-
-
-
-

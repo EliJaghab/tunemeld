@@ -1,9 +1,2 @@
-all_logs.log
-#cache*.json
-chromedriver
-venv/
-__pycache__/
-*.ipynb
+.envrc
 .DS_Store
-*.zip
-*.sh
