@@ -12,7 +12,6 @@ func main() {
 		bytes, err := client.MakeRequest(playlistConfig)
 		if err != nil {
 			log.Printf("Error processing %s: %v", playlistConfig.BronzePath, err)
-			log.Printf("Error making request: %v", err)
 			return
 		}
 		log.Printf("Successfully processed %s", playlistConfig.BronzePath)
