@@ -4,13 +4,15 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+
+	"github.com/EliJaghab/tunemeld/config"
 )
 
 type SpotifyFetcher struct {
 	client *RapidAPIClient
 }
 
-func (f *SpotifyFetcher) GetPlaylist(playlistConfig PlaylistConfig) ([]byte, error) {
+func (f *SpotifyFetcher) GetPlaylist(playlistConfig config.PlaylistConfig) ([]byte, error) {
 	url := fmt.Sprintf(
 		"%s?%s=%s&offset=%d&limit=%d",
 		playlistConfig.ServiceConfig.BaseURL,

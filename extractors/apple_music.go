@@ -4,13 +4,15 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+
+	"github.com/EliJaghab/tunemeld/config"
 )
 
 type AppleMusicFetcher struct {
 	client *RapidAPIClient
 }
 
-func (f *AppleMusicFetcher) GetPlaylist(playlistConfig PlaylistConfig) ([]byte, error) {
+func (f *AppleMusicFetcher) GetPlaylist(playlistConfig config.PlaylistConfig) ([]byte, error) {
 	url := fmt.Sprintf(
 		"%s?%s=%s",
 		playlistConfig.ServiceConfig.BaseURL,

@@ -1,4 +1,4 @@
-package extractors
+package config
 
 const (
 	BronzeRootPath = "data/bronze/"

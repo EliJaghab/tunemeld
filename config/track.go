@@ -1,4 +1,4 @@
-package transform
+package config
 
 type Track struct {
 	Name   string `json:"name"`

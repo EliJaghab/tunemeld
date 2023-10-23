@@ -6,6 +6,8 @@ import (
 	"net/http"
 	"os"
 	"strings"
+
+	"github.com/EliJaghab/tunemeld/config"
 )
 
 type RapidAPIClient struct {
@@ -28,10 +30,10 @@ func NewRequest(url string, host string, apiKey string) (*http.Request, error) {
 }
 
 type Extractor interface {
-	GetPlaylist(playlistConfig PlaylistConfig) ([]byte, error)
+	GetPlaylist(playlistConfig config.PlaylistConfig) ([]byte, error)
 }
 
-func (client *RapidAPIClient) MakeRequest(playlistConfig PlaylistConfig) ([]byte, error) {
+func (client *RapidAPIClient) MakeRequest(playlistConfig config.PlaylistConfig) ([]byte, error) {
 	var fetcher Extractor
 	switch {
 	case strings.Contains(playlistConfig.BronzePath, "soundcloud"):

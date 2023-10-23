@@ -3,15 +3,17 @@ package transform
 import (
 	"fmt"
 	"strconv"
+
+	"github.com/EliJaghab/tunemeld/config"
 )
 
-func AppleMusic(data map[string]interface{}) ([]Track, error) {
+func AppleMusic(data map[string]interface{}) ([]config.Track, error) {
 	albumDetails, ok := data["album_details"].(map[string]interface{})
 	if !ok {
 		return nil, fmt.Errorf("invalid data format")
 	}
 
-	var tracks []Track
+	var tracks []config.Track
 	for rankStr, trackDataInterface := range albumDetails {
 		rank, err := strconv.Atoi(rankStr)
 		if err != nil {
@@ -23,7 +25,7 @@ func AppleMusic(data map[string]interface{}) ([]Track, error) {
 			return nil, fmt.Errorf("invalid track data format")
 		}
 
-		track := Track{
+		track := config.Track{
 			Name:   trackData["name"].(string),
 			Artist: trackData["artist"].(string),
 			Link:   trackData["link"].(string),

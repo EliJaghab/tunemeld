@@ -3,9 +3,11 @@ package transform
 import (
 	"encoding/json"
 	"fmt"
+
+	"github.com/EliJaghab/tunemeld/config"
 )
 
-func SoundCloud(data []byte) ([]Track, error) {
+func SoundCloud(data []byte) ([]config.Track, error) {
 	var result map[string]map[string][]map[string]interface{}
 	err := json.Unmarshal(data, &result)
 	if err != nil {
@@ -17,7 +19,7 @@ func SoundCloud(data []byte) ([]Track, error) {
 		return nil, fmt.Errorf("missing 'tracks.items' in JSON")
 	}
 
-	var tracks []Track
+	var tracks []config.Track
 	for i, item := range items {
 		name, ok := item["title"].(string)
 		if !ok {
@@ -39,7 +41,7 @@ func SoundCloud(data []byte) ([]Track, error) {
 			return nil, fmt.Errorf("missing or invalid 'user.name' in item %d", i)
 		}
 
-		track := Track{
+		track := config.Track{
 			Name:   name,
 			Artist: artist,
 			Link:   permalink,

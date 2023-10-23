@@ -1,12 +1,14 @@
 package main
 
 import (
-	"github.com/EliJaghab/tunemeld/extractors"
 	"log"
+
+	"github.com/EliJaghab/tunemeld/config"
+	"github.com/EliJaghab/tunemeld/extractors"
 )
 
 func main() {
-	for _, playlistConfig := range extractors.PlaylistConfigs {
+	for _, playlistConfig := range config.PlaylistConfigs {
 		client := extractors.NewRapidAPIClient()
 
 		bytes, err := client.MakeRequest(playlistConfig)
