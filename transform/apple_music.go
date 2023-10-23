@@ -5,8 +5,7 @@ import (
 	"strconv"
 )
 
-
-func ExtractAppleMusicTracks(data map[string]interface{}) ([]Track, error) {
+func AppleMusic(data map[string]interface{}) ([]Track, error) {
 	albumDetails, ok := data["album_details"].(map[string]interface{})
 	if !ok {
 		return nil, fmt.Errorf("invalid data format")

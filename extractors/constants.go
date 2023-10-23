@@ -1,16 +1,16 @@
 package extractors
 
 const (
-	BronzeRootPath   = "data/bronze/"
-    SilverRootPath = "data/silver/"
-	BronzeSuffix = "_bronze.json"
-	SilverSuffix = "_silver.json"
+	BronzeRootPath = "data/bronze/"
+	SilverRootPath = "data/silver/"
+	BronzeSuffix   = "_bronze.json"
+	SilverSuffix   = "_silver.json"
 )
 
 type ServiceConfig struct {
 	BaseURL  string
 	Host     string
-	ParamKey string 
+	ParamKey string
 }
 
 var (
@@ -58,10 +58,10 @@ var (
 		ServiceConfig: SoundCloudConfig,
 	}
 	SpotifyEDMConfig = PlaylistConfig{
-		PlaylistParam: "37i9dQZF1DX4Wsb4d7NKfP",
-		BronzePath:    BronzeRootPath + "spotify_edm" + BronzeSuffix,
-		SilverPath:    SilverRootPath + "spotify_edm" + SilverSuffix,
-		ServiceConfig: SpotifyConfig,
+		PlaylistParam:  "37i9dQZF1DX4Wsb4d7NKfP",
+		BronzePath:     BronzeRootPath + "spotify_edm" + BronzeSuffix,
+		SilverPath:     SilverRootPath + "spotify_edm" + SilverSuffix,
+		ServiceConfig:  SpotifyConfig,
 		RequestOptions: &RequestOptions{Offset: 0, Limit: 100},
 	}
 )

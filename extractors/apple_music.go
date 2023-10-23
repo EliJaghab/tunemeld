@@ -11,8 +11,13 @@ type AppleMusicFetcher struct {
 }
 
 func (f *AppleMusicFetcher) GetPlaylist(playlistConfig PlaylistConfig) ([]byte, error) {
-	url := fmt.Sprintf("%s?%s=%s", playlistConfig.ServiceConfig.BaseURL, playlistConfig.ServiceConfig.ParamKey, playlistConfig.PlaylistParam)
-	req, err := NewRequest(url, playlistConfig.ServiceConfig.Host, f.client.apiKey)  // Use NewRequest function
+	url := fmt.Sprintf(
+		"%s?%s=%s",
+		playlistConfig.ServiceConfig.BaseURL,
+		playlistConfig.ServiceConfig.ParamKey,
+		playlistConfig.PlaylistParam,
+	)
+	req, err := NewRequest(url, playlistConfig.ServiceConfig.Host, f.client.apiKey) // Use NewRequest function
 	if err != nil {
 		return nil, err
 	}

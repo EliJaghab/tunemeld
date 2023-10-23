@@ -5,8 +5,7 @@ import (
 	"fmt"
 )
 
-
-func TransformSoundCloud(data []byte) ([]Track, error) {
+func SoundCloud(data []byte) ([]Track, error) {
 	var result map[string]map[string][]map[string]interface{}
 	err := json.Unmarshal(data, &result)
 	if err != nil {

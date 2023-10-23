@@ -9,12 +9,12 @@ import (
 )
 
 func GetJSONfromBytes(data []byte) (map[string]interface{}, error) {
-    var result map[string]interface{}
-    err := json.Unmarshal(data, &result)
-    if err != nil {
-        return nil, fmt.Errorf("error parsing JSON: %w, data: %s", err, string(data))
-    }
-    return result, nil
+	var result map[string]interface{}
+	err := json.Unmarshal(data, &result)
+	if err != nil {
+		return nil, fmt.Errorf("error parsing JSON: %w, data: %s", err, string(data))
+	}
+	return result, nil
 }
 
 func GetJSONfromFile(filename string) (map[string]interface{}, error) {
@@ -46,7 +46,7 @@ func WriteJSONToFile(data map[string]interface{}, filePath string) error {
 		}
 	}
 
-	err = os.WriteFile(filePath, jsonData, 0644)
+	err = os.WriteFile(filePath, jsonData, 0600)
 	if err != nil {
 		return fmt.Errorf("error writing file: %w", err)
 	}
