@@ -1,4 +1,4 @@
-package transform
+package transformers
 
 import (
 	"encoding/json"
@@ -7,14 +7,11 @@ import (
 	"github.com/EliJaghab/tunemeld/config"
 )
 
-func SoundCloud(data []byte) ([]config.Track, error) {
-	var result map[string]map[string][]map[string]interface{}
-	err := json.Unmarshal(data, &result)
-	if err != nil {
-		return nil, fmt.Errorf("error parsing JSON: %w", err)
-	}
+type SoundCloudTransformer struct{}
 
-	items, ok := result["tracks"]["items"]
+func (t *SoundCloudTransformer) Execute(data []map[string]interface{}) ([]config.Track, error) {
+
+	items, ok := data["tracks"]["items"]
 	if !ok {
 		return nil, fmt.Errorf("missing 'tracks.items' in JSON")
 	}

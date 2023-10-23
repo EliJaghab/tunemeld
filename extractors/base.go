@@ -51,15 +51,5 @@ func (client *RapidAPIClient) MakeRequest(playlistConfig config.PlaylistConfig) 
 		return nil, fmt.Errorf("error fetching playlist: %w", err)
 	}
 
-	jsonData, err := GetJSONfromBytes(bytesData)
-	if err != nil {
-		return nil, fmt.Errorf("error retrieving json: %w", err)
-	}
-
-	err = WriteJSONToFile(jsonData, playlistConfig.BronzePath)
-	if err != nil {
-		return nil, fmt.Errorf("error writing file: %w", err)
-	}
-
 	return bytesData, nil
 }

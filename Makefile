@@ -29,3 +29,13 @@ imports:
 tidy: fmt simplify imports lint
 	@echo "Tidying Go code..."
 
+# Run the extract command.
+run-extract:
+	@echo "Building and running extract command..."
+	@go run cmd/extract/main.go
+
+# Run the transform command.
+run-transform:
+	@echo "Building and running transform command..."
+	@go run cmd/transform/main.go
+

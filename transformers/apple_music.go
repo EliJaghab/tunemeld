@@ -1,4 +1,4 @@
-package transform
+package transformers
 
 import (
 	"fmt"
@@ -7,7 +7,9 @@ import (
 	"github.com/EliJaghab/tunemeld/config"
 )
 
-func AppleMusic(data map[string]interface{}) ([]config.Track, error) {
+type AppleMusicTransformer struct{}
+
+func (t *AppleMusicTransformer) Execute(data []map[string]interface{}) ([]config.Track, error) {
 	albumDetails, ok := data["album_details"].(map[string]interface{})
 	if !ok {
 		return nil, fmt.Errorf("invalid data format")

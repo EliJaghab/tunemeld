@@ -1,8 +1,8 @@
 package config
 
 const (
-	BronzeRootPath = "data/bronze/"
-	SilverRootPath = "data/silver/"
+	BronzeRootPath = "../data/bronze/"
+	SilverRootPath = "../data/silver/"
 	BronzeSuffix   = "_bronze.json"
 	SilverSuffix   = "_silver.json"
 )
