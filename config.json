@@ -1,0 +1,55 @@
+{
+    "BronzeRootPath": "./data/bronze/",
+    "SilverRootPath": "./data/silver/",
+    "BronzeSuffix": "_bronze.json",
+    "SilverSuffix": "_silver.json",
+    "ServiceConfigs": {
+        "AppleMusic": {
+            "BaseURL": "https://apple-music24.p.rapidapi.com/playlist1/",
+            "Host": "apple-music24.p.rapidapi.com",
+            "ParamKey": "url"
+        },
+        "SoundCloud": {
+            "BaseURL": "https://soundcloud-scraper.p.rapidapi.com/v1/playlist/tracks",
+            "Host": "soundcloud-scraper.p.rapidapi.com",
+            "ParamKey": "playlist"
+        },
+        "Spotify": {
+            "BaseURL": "https://spotify23.p.rapidapi.com/playlist_tracks/",
+            "Host": "spotify23.p.rapidapi.com",
+            "ParamKey": "id"
+        }
+    },
+    "PlaylistConfigs": [
+        {
+            "PlaylistParam": "https%3A%2F%2Fmusic.apple.com%2Fus%2Fplaylist%2Fdancexl%2Fpl.6bf4415b83ce4f3789614ac4c3675740",
+            "BronzePath": "./data/bronze/apple_music_edm_bronze.json",
+            "SilverPath": "./data/silver/apple_music_edm_silver.json",
+            "BaseURL": "https://apple-music24.p.rapidapi.com/playlist1/",
+            "Host": "apple-music24.p.rapidapi.com",
+            "ParamKey": "url",
+            "RequestOptions": null
+        },
+        {
+            "PlaylistParam": "https%3A%2F%2Fsoundcloud.com%2Fsoundcloud-the-peak%2Fsets%2Fon-the-up-new-edm-hits",
+            "BronzePath": "./data/bronze/soundcloud_edm_bronze.json",
+            "SilverPath": "./data/silver/soundcloud_edm_silver.json",
+            "BaseURL": "https://soundcloud-scraper.p.rapidapi.com/v1/playlist/tracks",
+            "Host": "soundcloud-scraper.p.rapidapi.com",
+            "ParamKey": "playlist",
+            "RequestOptions": null
+        },
+        {
+            "PlaylistParam": "37i9dQZF1DX4dyzvuaRJ0n",
+            "BronzePath": "./data/bronze/spotify_edm_bronze.json",
+            "SilverPath": "./data/silver/spotify_edm_silver.json",
+            "BaseURL": "https://spotify23.p.rapidapi.com/playlist_tracks/",
+            "Host": "spotify23.p.rapidapi.com",
+            "ParamKey": "id",
+            "RequestOptions": {
+                "Offset": 0,
+                "Limit": 100
+            }
+        }
+    ]
+}

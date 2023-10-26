@@ -1,10 +1,12 @@
 package config
 
+import (
+	"encoding/json"
+	"os"
+)
+
 const (
-	BronzeRootPath = "./data/bronze/"
-	SilverRootPath = "./data/silver/"
-	BronzeSuffix   = "_bronze.json"
-	SilverSuffix   = "_silver.json"
+	ConfigFilePath = "./config.json"
 )
 
 type ServiceConfig struct {
@@ -12,24 +14,6 @@ type ServiceConfig struct {
 	Host     string
 	ParamKey string
 }
-
-var (
-	AppleMusicConfig = ServiceConfig{
-		BaseURL:  "https://apple-music24.p.rapidapi.com/playlist1/",
-		Host:     "apple-music24.p.rapidapi.com",
-		ParamKey: "url",
-	}
-	SoundCloudConfig = ServiceConfig{
-		BaseURL:  "https://soundcloud-scraper.p.rapidapi.com/v1/playlist/tracks",
-		Host:     "soundcloud-scraper.p.rapidapi.com",
-		ParamKey: "playlist",
-	}
-	SpotifyConfig = ServiceConfig{
-		BaseURL:  "https://spotify23.p.rapidapi.com/playlist_tracks/",
-		Host:     "spotify23.p.rapidapi.com",
-		ParamKey: "id",
-	}
-)
 
 type PlaylistConfig struct {
 	PlaylistParam string
@@ -44,32 +28,30 @@ type RequestOptions struct {
 	Limit  int
 }
 
-var (
-	AppleMusicEDMConfig = PlaylistConfig{
-		PlaylistParam: "https%3A%2F%2Fmusic.apple.com%2Fus%2Fplaylist%2Fdancexl%2Fpl.6bf4415b83ce4f3789614ac4c3675740",
-		BronzePath:    BronzeRootPath + "apple_music_edm" + BronzeSuffix,
-		SilverPath:    SilverRootPath + "apple_music_edm" + SilverSuffix,
-		ServiceConfig: AppleMusicConfig,
-	}
-	SoundCloudEDMConfig = PlaylistConfig{
-		PlaylistParam: "https%3A%2F%2Fsoundcloud.com%2Fsoundcloud-the-peak%2Fsets%2Fon-the-up-new-edm-hits",
-		BronzePath:    BronzeRootPath + "soundcloud_edm" + BronzeSuffix,
-		SilverPath:    SilverRootPath + "soundcloud_edm" + SilverSuffix,
-		ServiceConfig: SoundCloudConfig,
-	}
-	SpotifyEDMConfig = PlaylistConfig{
-		PlaylistParam:  "37i9dQZF1DX4dyzvuaRJ0n",
-		BronzePath:     BronzeRootPath + "spotify_edm" + BronzeSuffix,
-		SilverPath:     SilverRootPath + "spotify_edm" + SilverSuffix,
-		ServiceConfig:  SpotifyConfig,
-		RequestOptions: &RequestOptions{Offset: 0, Limit: 100},
-	}
-)
+type Config struct {
+	BronzeRootPath  string
+	SilverRootPath  string
+	BronzeSuffix    string
+	SilverSuffix    string
+	ServiceConfigs  map[string]ServiceConfig
+	PlaylistConfigs []PlaylistConfig
+}
 
-var (
-	PlaylistConfigs = []PlaylistConfig{
-		AppleMusicEDMConfig,
-		SoundCloudEDMConfig,
-		SpotifyEDMConfig,
+var PlaylistConfigs []PlaylistConfig // Global variable to hold the playlist configs
+
+func LoadConfig() error {
+	file, err := os.Open(ConfigFilePath)
+	if err != nil {
+		return err
 	}
-)
+	defer file.Close()
+
+	var cfg Config
+	decoder := json.NewDecoder(file)
+	if err := decoder.Decode(&cfg); err != nil {
+		return err
+	}
+
+	PlaylistConfigs = cfg.PlaylistConfigs // Load the playlist configs into the global variable
+	return nil
+}

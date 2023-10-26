@@ -9,6 +9,12 @@ import (
 )
 
 func main() {
+	err := config.LoadConfig()
+	if err != nil {
+		log.Fatalf("Failed to load config: %v", err)
+		return
+	}
+
 	for _, playlistConfig := range config.PlaylistConfigs {
 		tracks, err := transformers.Transform(playlistConfig)
 		if err != nil {
