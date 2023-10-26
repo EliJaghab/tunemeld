@@ -6,6 +6,8 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+
+	"github.com/EliJaghab/tunemeld/config"
 )
 
 func GetJSONfromBytes(data []byte) (map[string]interface{}, error) {
@@ -33,11 +35,42 @@ func GetJSONfromFile(filename string) (map[string]interface{}, error) {
 }
 
 func WriteJSONToFile(data map[string]interface{}, filePath string) error {
-	jsonData, err := json.MarshalIndent(data, "", "  ")
+	jsonData, err := marshalIndent(data)
 	if err != nil {
-		return fmt.Errorf("error marshalling JSON: %w", err)
+		return err
 	}
 
+	err = ensureDirectory(filePath)
+	if err != nil {
+		return err
+	}
+
+	return writeFile(filePath, jsonData)
+}
+
+func WriteTracksToJSONFile(tracks []config.Track, filePath string) error {
+	jsonData, err := marshalIndent(tracks)
+	if err != nil {
+		return err
+	}
+
+	err = ensureDirectory(filePath)
+	if err != nil {
+		return err
+	}
+
+	return writeFile(filePath, jsonData)
+}
+
+func marshalIndent(data interface{}) ([]byte, error) {
+	jsonData, err := json.MarshalIndent(data, "", "  ")
+	if err != nil {
+		return nil, fmt.Errorf("error marshalling JSON: %w", err)
+	}
+	return jsonData, nil
+}
+
+func ensureDirectory(filePath string) error {
 	dir := filepath.Dir(filePath)
 	if _, err := os.Stat(dir); os.IsNotExist(err) {
 		err = os.MkdirAll(dir, 0755)
@@ -45,13 +78,14 @@ func WriteJSONToFile(data map[string]interface{}, filePath string) error {
 			return fmt.Errorf("error creating directory: %w", err)
 		}
 	}
+	return nil
+}
 
-	err = os.WriteFile(filePath, jsonData, 0600)
+func writeFile(filePath string, data []byte) error {
+	err := os.WriteFile(filePath, data, 0600)
 	if err != nil {
 		return fmt.Errorf("error writing file: %w", err)
 	}
-
 	log.Printf("Successfully wrote JSON data to %s", filePath)
-
 	return nil
 }

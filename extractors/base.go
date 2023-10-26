@@ -16,6 +16,7 @@ type RapidAPIClient struct {
 
 func NewRapidAPIClient() *RapidAPIClient {
 	apiKey := os.Getenv("X_RapidAPI_Key")
+	fmt.Println("apiKey:", apiKey)
 	return &RapidAPIClient{apiKey: apiKey}
 }
 

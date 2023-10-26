@@ -10,17 +10,24 @@ import (
 type AppleMusicTransformer struct{}
 
 func (t *AppleMusicTransformer) Execute(data []map[string]interface{}) ([]config.Track, error) {
-	albumDetails, ok := data["album_details"].(map[string]interface{})
+	albumDetailsInterface, ok := data[0]["album_details"]
 	if !ok {
-		return nil, fmt.Errorf("invalid data format")
+		return nil, fmt.Errorf("album details not found in data")
+	}
+
+	albumDetails, ok := albumDetailsInterface.(map[string]interface{})
+	if !ok {
+		return nil, fmt.Errorf("invalid album details format")
 	}
 
 	var tracks []config.Track
 	for rankStr, trackDataInterface := range albumDetails {
-		rank, err := strconv.Atoi(rankStr)
-		if err != nil {
-			return nil, err
+		// Check if rankStr is a numeric string before attempting conversion
+		if _, err := strconv.Atoi(rankStr); err != nil {
+			continue // Skip non-numeric keys
 		}
+
+		rank, _ := strconv.Atoi(rankStr) // Conversion is safe now
 
 		trackData, ok := trackDataInterface.(map[string]interface{})
 		if !ok {

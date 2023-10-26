@@ -1,8 +1,8 @@
 package config
 
 const (
-	BronzeRootPath = "../data/bronze/"
-	SilverRootPath = "../data/silver/"
+	BronzeRootPath = "./data/bronze/"
+	SilverRootPath = "./data/silver/"
 	BronzeSuffix   = "_bronze.json"
 	SilverSuffix   = "_silver.json"
 )
@@ -58,7 +58,7 @@ var (
 		ServiceConfig: SoundCloudConfig,
 	}
 	SpotifyEDMConfig = PlaylistConfig{
-		PlaylistParam:  "37i9dQZF1DX4Wsb4d7NKfP",
+		PlaylistParam:  "37i9dQZF1DX4dyzvuaRJ0n",
 		BronzePath:     BronzeRootPath + "spotify_edm" + BronzeSuffix,
 		SilverPath:     SilverRootPath + "spotify_edm" + SilverSuffix,
 		ServiceConfig:  SpotifyConfig,

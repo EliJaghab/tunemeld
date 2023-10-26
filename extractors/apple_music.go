@@ -19,7 +19,7 @@ func (f *AppleMusicFetcher) GetPlaylist(playlistConfig config.PlaylistConfig) ([
 		playlistConfig.ServiceConfig.ParamKey,
 		playlistConfig.PlaylistParam,
 	)
-	req, err := NewRequest(url, playlistConfig.ServiceConfig.Host, f.client.apiKey) // Use NewRequest function
+	req, err := NewRequest(url, playlistConfig.ServiceConfig.Host, f.client.apiKey)
 	if err != nil {
 		return nil, err
 	}

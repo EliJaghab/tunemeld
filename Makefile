@@ -31,8 +31,8 @@ tidy: fmt simplify imports lint
 
 # Run the extract command.
 run-extract:
-	@echo "Building and running extract command..."
-	@go run cmd/extract/main.go
+	@echo "Sourcing API credentials and running extract command..."
+	@bash -c "source api_credentials.sh && go run cmd/extract/main.go"
 
 # Run the transform command.
 run-transform:

@@ -2,7 +2,6 @@ package transformers
 
 import (
 	"errors"
-	"fmt"
 	"log"
 	"strings"
 
@@ -11,19 +10,13 @@ import (
 )
 
 type Transformer interface {
-    Execute(data []map[string]interface{}) ([]config.Track, error)
+	Execute(data []map[string]interface{}) ([]config.Track, error)
 }
 
 func Transform(playlistConfig config.PlaylistConfig) ([]config.Track, error) {
-	bronzeJson, err := extractors.GetJSONfromFile(playlistConfig.BronzePath)
+	bronzeJSON, err := extractors.GetJSONfromFile(playlistConfig.BronzePath)
 	if err != nil {
 		log.Printf("Error converting to JSON: %v", err)
-		return nil, err
-	}
-
-	items, err := extractTracks(bronzeJson)
-	if err != nil {
-		log.Printf("Error extracting tracks: %v", err)
 		return nil, err
 	}
 
@@ -33,7 +26,10 @@ func Transform(playlistConfig config.PlaylistConfig) ([]config.Track, error) {
 		return nil, err
 	}
 
-	tracks, err := transformer.Execute(items) 
+	var data []map[string]interface{}
+	data = append(data, bronzeJSON)
+
+	tracks, err := transformer.Execute(data)
 	if err != nil {
 		log.Printf("Error executing transformer: %v", err)
 		return nil, err
@@ -41,21 +37,6 @@ func Transform(playlistConfig config.PlaylistConfig) ([]config.Track, error) {
 
 	return tracks, nil
 }
-
-func extractTracks(bronzeJson map[string]interface{}) ([]map[string]interface{}, error) {
-	tracksMap, ok := bronzeJson["tracks"].(map[string]interface{})
-	if !ok {
-		return nil, fmt.Errorf("bronzeJson['tracks'] is not a map[string]interface{}")
-	}
-
-	items, ok := tracksMap["items"].([]map[string]interface{})
-	if !ok {
-		return nil, fmt.Errorf("missing 'tracks.items' in JSON or 'tracks.items' is not of type []map[string]interface{}")
-	}
-
-	return items, nil
-}
-
 
 func getTransformer(filePath string) (Transformer, error) {
 	var transformer Transformer
