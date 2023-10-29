@@ -20,7 +20,7 @@ jobs:
 
     - name: Run extract
       env:
-        API_KEY: ${{ secrets.X_RAPIDAPI_KEY }}
+        X_RapidAPI_Key: ${{ secrets.X_RAPIDAPI_KEY }}
       run: |
         echo "Sourcing API credentials and running extract command..."
         export X_RapidAPI_Host=${API_HOST}
