@@ -27,7 +27,7 @@ func (t *AppleMusicTransformer) Execute(data []map[string]interface{}) ([]config
 			continue // Skip non-numeric keys
 		}
 
-		rank, _ := strconv.Atoi(rankStr)  // Conversion is safe now
+		rank, _ := strconv.Atoi(rankStr) // Conversion is safe now
 
 		rank = rank + 1 // Rank is 1-indexed, array is 0-indexed
 

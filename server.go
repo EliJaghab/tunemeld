@@ -1,19 +1,19 @@
 package main
 
 import (
-    "net/http"
-    "log"
+	"log"
+	"net/http"
 )
 
 func main() {
-    // Set the directory to serve files from
-    fs := http.FileServer(http.Dir("."))
-    http.Handle("/", fs)
+	// Set the directory to serve files from
+	fs := http.FileServer(http.Dir("."))
+	http.Handle("/", fs)
 
-    // Start the server on port 8000
-    log.Println("Serving on port 8000...")
-    err := http.ListenAndServe(":8000", nil)
-    if err != nil {
-        log.Fatal(err)
-    }
+	// Start the server on port 8000
+	log.Println("Serving on port 8000...")
+	err := http.ListenAndServe(":8000", nil)
+	if err != nil {
+		log.Fatal(err)
+	}
 }
