@@ -3,6 +3,8 @@ name: Playlists ETL
 on:
   schedule:
     - cron: '0 17 * * 6'
+  workflow_dispatch:  # This line enables manual trigger
+
 
 jobs:
   run-tasks:
