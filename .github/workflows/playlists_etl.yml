@@ -32,13 +32,13 @@ jobs:
         make run-transform-actions
 
     - name: Commit and push changes
-        env:
-          GH_PAT: ${{ secrets.GH_PAT }}  # Adjust this line to match the name of your secret
-        run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git remote set-url origin https://x-access-token:${GH_PAT}@github.com/${{ github.repository }}
-          git add .
-          git commit -m "Automated data update" -a || echo "No changes to commit"
-          git push
+      env:
+        GH_PAT: ${{ secrets.GH_PAT }}  # Adjust this line to match the name of your secret
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git remote set-url origin https://x-access-token:${GH_PAT}@github.com/${{ github.repository }}
+        git add .
+        git commit -m "Automated data update" -a || echo "No changes to commit"
+        git push
   
