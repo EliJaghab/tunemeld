@@ -25,7 +25,7 @@ func NewRequest(url string, host string, apiKey string) (*http.Request, error) {
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
-	req.Header.Add("X_RapidAPI_Key", apiKey)
+	req.Header.Add("X-RapidAPI-Key", apiKey)
 	req.Header.Add("X-RapidAPI-Host", host)
 	return req, nil
 }
