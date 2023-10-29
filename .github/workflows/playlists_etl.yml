@@ -30,6 +30,15 @@ jobs:
       run: |
         echo "Building and running transform command..."
         make run-transform-actions
+    
+    - name: Debug Print JSON file content
+      run: cat ./data/bronze/apple_music_edm_bronze.json
+    
+    - name: Debug Print JSON file content
+      run: cat ./data/bronze/spotify_edm_bronze.json
+    
+    - name: Debug Print JSON file content
+      run: cat ./data/bronze/soundcloud_edm_bronze.json
 
     - name: Commit and push changes
       env:
