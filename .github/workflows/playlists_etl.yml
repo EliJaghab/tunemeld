@@ -24,12 +24,12 @@ jobs:
       run: |
         echo "Sourcing API credentials and running extract command..."
         export X_RapidAPI_Host=${API_HOST}
-        make run-extract
+        make run-extract-actions
 
     - name: Run transform
       run: |
         echo "Building and running transform command..."
-        make run-transform
+        make run-transform-actions
 
     - name: Commit and push changes
       run: |
