@@ -15,7 +15,7 @@ func main() {
 		return
 	}
 
-	for _, playlistConfig := range config.PlaylistConfigs {
+	for _, playlistConfig := range config.EDMPlaylistConfigs {
 		tracks, err := transformers.Transform(playlistConfig)
 		if err != nil {
 			log.Printf("Error transforming %s: %v", playlistConfig.BronzePath, err)
@@ -23,10 +23,10 @@ func main() {
 		}
 		log.Printf("Successfully transformed %s", playlistConfig.BronzePath)
 
-		err = extractors.WriteTracksToJSONFile(tracks, playlistConfig.SilverPath)
+		err = extractors.WriteTracksToJSONFile(tracks, playlistConfig.SilverWritePath)
 		if err != nil {
-			log.Printf("Error writing %s: %v", playlistConfig.SilverPath, err)
+			log.Printf("Error writing %s: %v", playlistConfig.SilverWritePath, err)
 		}
-		log.Printf("Successfully wrote %s", playlistConfig.SilverPath)
+		log.Printf("Successfully wrote %s", playlistConfig.SilverWritePath)
 	}
 }

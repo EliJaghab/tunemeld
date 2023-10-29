@@ -1,0 +1,38 @@
+name: Playlists ETL
+
+on:
+  schedule:
+    - cron: '0 17 * * 6'
+
+jobs:
+  run-tasks:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Go
+      uses: actions/setup-go@v2
+      with:
+        go-version: 1.16
+
+    - name: Run extract
+      env:
+        API_KEY: ${{ secrets.API_KEY }}
+      run: |
+        echo "Sourcing API credentials and running extract command..."
+        export X-RapidAPI-Host=${API_HOST}
+        make run-extract
+
+    - name: Run transform
+      run: |
+        echo "Building and running transform command..."
+        make run-transform
+
+    - name: Commit and push changes
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add .
+        git commit -m "Automated data update" -a || echo "No changes to commit"
+        git push

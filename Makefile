@@ -39,3 +39,6 @@ run-transform:
 	@echo "Building and running transform command..."
 	@go run cmd/transform/main.go
 
+start-server:
+	python3 -m http.server 8000
+

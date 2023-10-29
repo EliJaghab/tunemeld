@@ -18,30 +18,39 @@
     .track-number {
         margin-right: 5px;
     }
-    .username, .track-title {
-        margin: 0 2px;
+    .track-info {
+        margin-left: 5px; /* Adjust spacing between image and text */
     }
     .username {
-        font-weight: 600;
+        font-size: 12px;
+        margin: 0; /* Reset margin to avoid extra spacing */
     }
     .track-title {
         font-weight: 400;
-    }
-    .separator {
-        margin: 0 2px;
+        margin: 0; /* Reset margin to avoid extra spacing */
     }
     .playlist {
         height: 80vh;
         overflow-y: auto;
-        border: 1px solid #ccc; 
-        border-radius: 5px; 
+        border: 1px solid #ccc;
+        border-radius: 5px;
         padding: 5px;
-        margin: 5px;
+        margin: 5px 0; /* Adjusts margin around playlist, reduces to 0px on left/right */
     }
     .playlist-title {
         text-align: center;
         font-weight: bold;
         margin-bottom: 5px;
+    }
+    .container {
+        padding: 0 15px; /* Adjust padding around the container */
+        margin: 0 auto; /* Centers the container, but removes any extra margin */
+    }
+    .row {
+        margin: 0; /* Removes margin around rows */
+    }
+    .col-md-4, .col-sm-12 {
+        padding: 0 5px; /* Adjust padding for columns to reduce space between playlists */
     }
 </style>
 </head>
@@ -49,19 +58,19 @@
 <div class="container my-2">
     <h1 class="text-center" style="margin-bottom: 10px;">Track Listings</h1>
     <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-4 col-sm-12"> <!-- Stack on small screens -->
             <div class="playlist">
                 <div class="playlist-title">SoundCloud</div>
                 <div id="soundcloud-data-placeholder"></div>
             </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4 col-sm-12"> <!-- Stack on small screens -->
             <div class="playlist">
                 <div class="playlist-title">Apple Music</div>
                 <div id="apple-music-data-placeholder"></div>
             </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4 col-sm-12"> <!-- Stack on small screens -->
             <div class="playlist">
                 <div class="playlist-title">Spotify</div>
                 <div id="spotify-data-placeholder"></div>
@@ -79,6 +88,5 @@
     </div> <!-- End of the new row -->
 </div> <!-- End of the container -->
 <script src="main.js"></script>
-<script src="loadSilverData.js"></script>
 </body>
 </html>

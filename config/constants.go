@@ -6,7 +6,7 @@ import (
 )
 
 const (
-	ConfigFilePath = "./config.json"
+	ConfigFilePath = "./docs/config.json"
 )
 
 type ServiceConfig struct {
@@ -16,9 +16,9 @@ type ServiceConfig struct {
 }
 
 type PlaylistConfig struct {
-	PlaylistParam string
-	BronzePath    string
-	SilverPath    string
+	PlaylistParam   string
+	BronzePath      string
+	SilverWritePath string
 	ServiceConfig
 	RequestOptions *RequestOptions
 }
@@ -29,15 +29,15 @@ type RequestOptions struct {
 }
 
 type Config struct {
-	BronzeRootPath  string
-	SilverRootPath  string
-	BronzeSuffix    string
-	SilverSuffix    string
-	ServiceConfigs  map[string]ServiceConfig
-	PlaylistConfigs []PlaylistConfig
+	BronzeRootPath     string
+	SilverRootPath     string
+	BronzeSuffix       string
+	SilverSuffix       string
+	ServiceConfigs     map[string]ServiceConfig
+	EDMPlaylistConfigs []PlaylistConfig
 }
 
-var PlaylistConfigs []PlaylistConfig // Global variable to hold the playlist configs
+var EDMPlaylistConfigs []PlaylistConfig // Global variable to hold the playlist configs
 
 func LoadConfig() error {
 	file, err := os.Open(ConfigFilePath)
@@ -52,6 +52,6 @@ func LoadConfig() error {
 		return err
 	}
 
-	PlaylistConfigs = cfg.PlaylistConfigs // Load the playlist configs into the global variable
+	EDMPlaylistConfigs = cfg.EDMPlaylistConfigs // Load the playlist configs into the global variable
 	return nil
 }

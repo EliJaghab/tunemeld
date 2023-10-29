@@ -1,79 +1,126 @@
-document.addEventListener("DOMContentLoaded", function() {
-    console.log("Document loaded and ready.");
+(function () {
+    'use strict';
 
-    // Function to fetch and display data for a playlist
-    function fetchAndDisplayData(playlistName, placeholderId, filename) {
-        console.log(`Fetching data for ${playlistName} from ${filename}...`);
+    document.addEventListener("DOMContentLoaded", function () {
+        console.log("Document loaded and ready.");
 
-        fetch(filename)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`Failed to fetch ${filename}. Status: ${response.status}`);
-                }
-                return response.json();
-            })
-            .then(data => {
-                console.log(`Data fetched for ${playlistName}. Processing...`);
+        // Function to fetch and display data for a playlist
+        function fetchAndDisplayData(playlistName, placeholderId, filename) {
+            console.log(`Fetching data for ${playlistName} from ${filename}...`);
 
-                const placeholder = document.getElementById(placeholderId);
-                if (!placeholder) {
-                    console.error(`Placeholder with ID ${placeholderId} not found.`);
-                    return;
-                }
+            fetch(filename)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`Failed to fetch ${filename}. Status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log(`Data fetched for ${playlistName}. Processing...`);
+        
+                    // Sort the data array by rank in ascending order
+                    data.sort((a, b) => a.rank - b.rank);
+        
+                    const placeholder = document.getElementById(placeholderId);
+                    if (!placeholder) {
+                        console.error(`Placeholder with ID ${placeholderId} not found.`);
+                        return;
+                    }
 
-                placeholder.innerHTML = ""; // Clear the placeholder
+                    placeholder.innerHTML = ""; // Clear the placeholder
 
-                // Iterate through the playlist data and create HTML elements
-                data.forEach((track, index) => {
-                    console.log(`Processing track ${index + 1} for ${playlistName}...`);
-
-                    const card = document.createElement("div");
-                    card.className = "card my-1";
-
-                    const cardBody = document.createElement("div");
-                    cardBody.className = "card-body track-item-content";
-
-                    const albumCover = document.createElement("img");
-                    albumCover.className = "album-cover";
-                    albumCover.src = track.album_cover_url;
-                    albumCover.alt = "Album Cover";
-
-                    const trackNumber = document.createElement("div");
-                    trackNumber.className = "track-number";
-                    trackNumber.textContent = track.track_number;
-
-                    const artistLink = document.createElement("a");
-                    artistLink.className = "username";
-                    artistLink.href = "#";
-                    artistLink.textContent = track.artist_name;
-
-                    const separator1 = document.createElement("span");
-                    separator1.className = "separator";
-                    separator1.textContent = "-";
-
-                    const trackTitle = document.createElement("a");
-                    trackTitle.className = "track-title";
-                    trackTitle.href = "#";
-                    trackTitle.textContent = track.song_title;
-
-                    cardBody.appendChild(albumCover);
-                    cardBody.appendChild(trackNumber);
-                    cardBody.appendChild(artistLink);
-                    cardBody.appendChild(separator1);
-                    cardBody.appendChild(trackTitle);
-
-                    card.appendChild(cardBody);
-                    placeholder.appendChild(card);
+                    // Iterate through the playlist data and create HTML elements
+                    data.forEach((track, index) => {
+                        console.log(`Processing track ${index + 1} for ${playlistName}...`);
+                    
+                        const card = document.createElement("div");
+                        card.className = "card my-1";
+                    
+                        const cardBody = document.createElement("div");
+                        cardBody.className = "card-body track-item-content";
+                    
+                        const albumCover = document.createElement("img");
+                        albumCover.className = "album-cover";
+                        albumCover.src = "https://example.com/album-cover.jpg"; // Hard-coded album cover URL
+                        albumCover.alt = "Album Cover";
+                    
+                        const trackNumber = document.createElement("div");
+                        trackNumber.className = "track-number";
+                        trackNumber.textContent = track.rank;
+                    
+                        const trackInfo = document.createElement("div");
+                        trackInfo.className = "track-info";
+                    
+                        const trackTitle = document.createElement("a");
+                        trackTitle.className = "track-title";
+                        trackTitle.href = "#";
+                        trackTitle.textContent = track.name;
+                    
+                        const artistLink = document.createElement("a");
+                        artistLink.className = "username";
+                        artistLink.href = "#";
+                        artistLink.textContent = track.artist;
+                    
+                        trackInfo.appendChild(trackTitle);
+                        trackInfo.appendChild(document.createElement("br"));  // Add a line break between title and artist
+                        trackInfo.appendChild(artistLink);
+                    
+                        cardBody.appendChild(albumCover);
+                        cardBody.appendChild(trackNumber);
+                        cardBody.appendChild(trackInfo);
+                    
+                        card.appendChild(cardBody);
+                        placeholder.appendChild(card);
+                    });
+                    
+                })
+                .catch(error => {
+                    console.error(`Error fetching and displaying data for ${playlistName}:`, error);
                 });
-            })
-            .catch(error => {
-                console.error(`Error fetching and displaying data for ${playlistName}:`, error);
-            });
-    }
+        }
 
-    // Fetch and display data for each playlist
-    fetchAndDisplayData("SoundCloud", "soundcloud-data-placeholder", "cache_soundcloud.json");
-    fetchAndDisplayData("Apple Music", "apple-music-data-placeholder", "cache_apple_music.json");
-    fetchAndDisplayData("Spotify", "spotify-data-placeholder", "cache_spotify.json");
-    fetchAndDisplayData("Aggregated Playlist", "aggregated-data-placeholder", "aggregated_data.json");
-});
+        // Function to initialize playlists based on configuration and selected genre
+        function initializePlaylists(config, genre) {
+            const playlistConfigsKey = genre + 'PlaylistConfigs';
+            const playlistConfigs = config[playlistConfigsKey];
+        
+            if (playlistConfigs) {
+                playlistConfigs.forEach(playlistConfig => {
+                    const { SilverReadPath, ServiceName } = playlistConfig;  // Get ServiceName from the config
+                    const silverFilename = SilverReadPath;
+                    const placeholderId = ServiceName.toLowerCase() + '-data-placeholder';  // Use ServiceName to generate placeholderId
+        
+                    fetchAndDisplayData(ServiceName, placeholderId, silverFilename);
+                });
+            } else {
+                console.error(`No playlist configurations found for genre: ${genre}`);
+            }
+        }
+
+        // Selector for choosing the genre
+        const genreSelector = document.createElement('select');
+        genreSelector.id = 'genre-selector';
+        genreSelector.innerHTML = `
+            <option value="EDM">EDM</option>
+            <!-- Add other genres as options here -->
+        `;
+        document.body.appendChild(genreSelector);
+
+        // Event listener for genre selector
+        genreSelector.addEventListener('change', function () {
+            const selectedGenre = this.value;
+            // Load configuration and initialize playlists based on selected genre
+            fetch('./config.json')  // assuming your JSON file is named config.json
+                .then(response => response.json())
+                .then(config => {
+                    initializePlaylists(config, selectedGenre);
+                })
+                .catch(error => console.error('Error loading configuration:', error));
+        });
+
+        // Initial load of EDM playlists
+        genreSelector.value = 'EDM';
+        genreSelector.dispatchEvent(new Event('change'));
+    });
+
+})();

@@ -1,99 +1,82 @@
-document.addEventListener("DOMContentLoaded", function() {
-    console.log("Silver data loading script loaded and ready.");
+// Module for handling the display of playlist data
+const PlaylistDisplay = (() => {
+    // Function to create and append card elements for each track
+    function createCardElement(track, index) {
+        const card = document.createElement("div");
+        card.className = "card my-1";
 
-    // Function to fetch and display data for a playlist
-    function fetchAndDisplaySilverData(playlistName, placeholderId, filename) {
-        console.log(`Fetching silver data for ${playlistName} from ${filename}...`);
+        const cardBody = document.createElement("div");
+        cardBody.className = "card-body track-item-content";
 
-        fetch(filename)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`Failed to fetch ${filename}. Status: ${response.status}`);
-                }
-                return response.json();
-            })
-            .then(data => {
-                console.log(`Silver data fetched for ${playlistName}. Processing...`);
+        const albumCover = document.createElement("img");
+        albumCover.className = "album-cover";
+        albumCover.src = track.album_cover_url;
+        albumCover.alt = "Album Cover";
 
-                const placeholder = document.getElementById(placeholderId);
-                if (!placeholder) {
-                    console.error(`Placeholder with ID ${placeholderId} not found.`);
-                    return;
-                }
+        const trackNumber = document.createElement("div");
+        trackNumber.className = "track-number";
+        trackNumber.textContent = track.track_number;
 
-                placeholder.innerHTML = ""; // Clear the placeholder
+        const artistLink = document.createElement("a");
+        artistLink.className = "username";
+        artistLink.href = "#";
+        artistLink.textContent = track.artist_name;
 
-                // Iterate through the playlist data and create HTML elements
-                data.forEach((track, index) => {
-                    console.log(`Processing track ${index + 1} for ${playlistName}...`);
+        const separator1 = document.createElement("span");
+        separator1.className = "separator";
+        separator1.textContent = "-";
 
-                    const card = document.createElement("div");
-                    card.className = "card my-1";
+        const trackTitle = document.createElement("a");
+        trackTitle.className = "track-title";
+        trackTitle.href = "#";
+        trackTitle.textContent = track.song_title;
 
-                    const cardBody = document.createElement("div");
-                    cardBody.className = "card-body track-item-content";
+        cardBody.appendChild(albumCover);
+        cardBody.appendChild(trackNumber);
+        cardBody.appendChild(artistLink);
+        cardBody.appendChild(separator1);
+        cardBody.appendChild(trackTitle);
 
-                    const albumCover = document.createElement("img");
-                    albumCover.className = "album-cover";
-                    albumCover.src = track.album_cover_url;
-                    albumCover.alt = "Album Cover";
+        card.appendChild(cardBody);
 
-                    const trackNumber = document.createElement("div");
-                    trackNumber.className = "track-number";
-                    trackNumber.textContent = track.track_number;
-
-                    const artistLink = document.createElement("a");
-                    artistLink.className = "username";
-                    artistLink.href = "#";
-                    artistLink.textContent = track.artist_name;
-
-                    const separator1 = document.createElement("span");
-                    separator1.className = "separator";
-                    separator1.textContent = "-";
-
-                    const trackTitle = document.createElement("a");
-                    trackTitle.className = "track-title";
-                    trackTitle.href = "#";
-                    trackTitle.textContent = track.song_title;
-
-                    cardBody.appendChild(albumCover);
-                    cardBody.appendChild(trackNumber);
-                    cardBody.appendChild(artistLink);
-                    cardBody.appendChild(separator1);
-                    cardBody.appendChild(trackTitle);
-
-                    card.appendChild(cardBody);
-                    placeholder.appendChild(card);
-                });
-            })
-            .catch(error => {
-                console.error(`Error fetching and displaying silver data for ${playlistName}:`, error);
-            });
+        return card;
     }
 
-    // Fetch the configuration data
-    fetch('config.json')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`Failed to fetch config.json. Status: ${response.status}`);
-            }
-            return response.json();
-        })
-        .then(config => {
-            console.log('Config data fetched. Processing...');
+    return {
+        fetchAndDisplaySilverData,
+    };
+})();
 
-            // Iterate through the playlist configs and fetch the silver data for each playlist
-            config.PlaylistConfigs.forEach(playlistConfig => {
-                const playlistName = playlistConfig.ServiceConfig.Host.split('.')[0]; 
-                const placeholderId = playlistName.toLowerCase() + '-data-placeholder'; 
-                const filename = playlistConfig.SilverPath;
-
-                fetchAndDisplaySilverData(playlistName, placeholderId, filename);
+// Main module for handling page initialization and configuration loading
+const Main = (() => {
+    function initializePlaylists(config, genre) {
+        const playlistConfigsKey = genre + 'PlaylistConfigs';
+        const playlistConfigs = config[playlistConfigsKey];
+    
+        if (playlistConfigs) {
+            playlistConfigs.forEach(playlistConfig => {
+                const { SilverReadPath, ServiceName } = playlistConfig;  // Get ServiceName from the config
+                const silverFilename = SilverReadPath;
+                const placeholderId = ServiceName + '-data-placeholder';  // Use ServiceName to generate placeholderId
+    
+                PlaylistDisplay.fetchAndDisplaySilverData(ServiceName, placeholderId, silverFilename);
             });
-        })
-        .catch(error => {
-            console.error('Error fetching and processing config data:', error);
-        });
+        } else {
+            console.error(`No playlist configurations found for genre: ${genre}`);
+        }
+    };
+})();
+
+document.addEventListener("DOMContentLoaded", function () {
+    const genreSelector = document.createElement('select');
+    // ... (same as before, including the genre selector setup and event listener)
+
+    genreSelector.addEventListener('change', function () {
+        const selectedGenre = this.value;
+        Main.loadConfigurationAndInitialize(selectedGenre);
+    });
+
+    // Initial load of EDM playlists
+    genreSelector.value = 'EDM';
+    genreSelector.dispatchEvent(new Event('change'));
 });
-
-

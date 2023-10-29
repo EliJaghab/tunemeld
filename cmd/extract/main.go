@@ -14,7 +14,7 @@ func main() {
 		return
 	}
 
-	for _, playlistConfig := range config.PlaylistConfigs {
+	for _, playlistConfig := range config.EDMPlaylistConfigs {
 		client := extractors.NewRapidAPIClient()
 
 		bytes, err := client.MakeRequest(playlistConfig)
