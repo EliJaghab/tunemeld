@@ -47,11 +47,17 @@ func (t *SoundCloudTransformer) Execute(data []map[string]interface{}) ([]config
 			return nil, fmt.Errorf("missing or invalid 'user.name' in item %d", i)
 		}
 
+		albumURL, ok := itemMap["artworkUrl"].(string)
+		if !ok {
+			return nil, fmt.Errorf("missing or invalid 'artworkUrl' in item %d", i)
+		}
+
 		track := config.Track{
-			Name:   name,
-			Artist: artist,
-			Link:   permalink,
-			Rank:   i + 1,
+			Name:     name,
+			Artist:   artist,
+			Link:     permalink,
+			Rank:     i + 1,
+			AlbumURL: albumURL,
 		}
 		tracks = append(tracks, track)
 	}

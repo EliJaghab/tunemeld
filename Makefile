@@ -40,7 +40,7 @@ run-extract-actions:
 # Run the transform command.
 run-transform:
 	@echo "Building and running transform command..."
-	@go run cmd/transform/main.go
+	@bash -c "source api_credentials.sh && go run cmd/transform/main.go"
 
 run-transform-actions:
 	@bash -c "go run cmd/transform/main.go"

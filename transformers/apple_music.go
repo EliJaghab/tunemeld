@@ -36,11 +36,19 @@ func (t *AppleMusicTransformer) Execute(data []map[string]interface{}) ([]config
 			return nil, fmt.Errorf("invalid track data format")
 		}
 
+		trackName := trackData["name"].(string)
+		artistName := trackData["artist"].(string)
+		albumURL, err := GetAlbumURL(trackName, artistName)
+		if err != nil {
+			return nil, err // Handle error (e.g., log it, return it, or however you prefer)
+		}
+
 		track := config.Track{
-			Name:   trackData["name"].(string),
-			Artist: trackData["artist"].(string),
-			Link:   trackData["link"].(string),
-			Rank:   rank,
+			Name:     trackName,
+			Artist:   artistName,
+			Link:     trackData["link"].(string),
+			Rank:     rank,
+			AlbumURL: albumURL,
 		}
 		tracks = append(tracks, track)
 	}

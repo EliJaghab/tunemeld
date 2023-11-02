@@ -10,7 +10,7 @@ import (
 )
 
 type Transformer interface {
-    Execute(data []map[string]interface{}) ([]config.Track, error)
+	Execute(data []map[string]interface{}) ([]config.Track, error)
 }
 
 func Transform(playlistConfig config.PlaylistConfig) ([]config.Track, error) {

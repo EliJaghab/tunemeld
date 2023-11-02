@@ -47,12 +47,33 @@ func (t *SpotifyTransformer) Execute(data []map[string]interface{}) ([]config.Tr
 			}
 		}
 
-		track := config.Track{
-			Name:   trackMap["name"].(string),
-			Artist: joinArtists(artistNames),
-			Link:   trackMap["external_urls"].(map[string]interface{})["spotify"].(string),
-			Rank:   rank + 1, // Rank is 1-indexed, array is 0-indexed
+		imagesInterface, ok := trackMap["album"].(map[string]interface{})["images"].([]interface{})
+		if !ok {
+			return nil, fmt.Errorf("invalid images format")
 		}
+
+		if len(imagesInterface) == 0 {
+			return nil, fmt.Errorf("no images available")
+		}
+
+		firstImage, ok := imagesInterface[0].(map[string]interface{})
+		if !ok {
+			return nil, fmt.Errorf("invalid image format")
+		}
+
+		albumCoverURL, ok := firstImage["url"].(string)
+		if !ok {
+			return nil, fmt.Errorf("invalid url format")
+		}
+
+		track := config.Track{
+			Name:     trackMap["name"].(string),
+			Artist:   joinArtists(artistNames),
+			Link:     trackMap["external_urls"].(map[string]interface{})["spotify"].(string),
+			AlbumURL: albumCoverURL,
+			Rank:     rank + 1,
+		}
+
 		tracks = append(tracks, track)
 	}
 	return tracks, nil
