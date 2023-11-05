@@ -1,19 +1,20 @@
 package main
 
 import (
-	"log"
 	"net/http"
+	"time"
 )
 
 func main() {
-	// Set the directory to serve files from
-	fs := http.FileServer(http.Dir("."))
-	http.Handle("/", fs)
+	server := &http.Server{
+		Addr:              ":8000",
+		Handler:           nil,              // Uses http.DefaultServeMux
+		IdleTimeout:       20 * time.Minute, // 20 minutes of idleness before closing the connection
+		ReadHeaderTimeout: 10 * time.Second, // 10 seconds to read the request headers
+	}
 
-	// Start the server on port 8000
-	log.Println("Serving on port 8000...")
-	err := http.ListenAndServe(":8000", nil)
+	err := server.ListenAndServe()
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 }
