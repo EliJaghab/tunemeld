@@ -2,6 +2,8 @@ package transformers
 
 import (
 	"context"
+	"fmt"
+	"log"
 	"os"
 
 	"github.com/zmb3/spotify"
@@ -22,21 +24,29 @@ func GetAlbumURL(trackName string, artistName string) (string, error) {
 	client := spotify.NewClient(httpClient)
 
 	query := trackName + " artist:" + artistName
+
+	log.Printf("Searching for track: %s, artist: %s, query: %s\n", trackName, artistName, query)
 	results, err := client.Search(query, spotify.SearchTypeTrack)
 	if err != nil {
-		return "", err
+		return "", fmt.Errorf("failed to search Spotify: %w", err)
 	}
 
 	if len(results.Tracks.Tracks) == 0 {
-		return "", nil // Or return an error if no matching track is found
+		return "", fmt.Errorf("no tracks found")
 	}
 
 	albumID := results.Tracks.Tracks[0].Album.ID
 	album, err := client.GetAlbum(albumID)
 	if err != nil {
-		return "", err
+		return "", fmt.Errorf("failed to get album from Spotify: %w", err)
 	}
 
+	if len(album.Images) == 0 {
+		return "", fmt.Errorf("no images available for album")
+	}
+	
 	albumCoverURL := album.Images[0].URL
 	return albumCoverURL, nil
+
 }
+
