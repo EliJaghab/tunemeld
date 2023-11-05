@@ -3,8 +3,7 @@ name: Playlists ETL
 on:
   schedule:
     - cron: '0 17 * * 6'
-  workflow_dispatch:  # This line enables manual trigger
-
+  workflow_dispatch: 
 
 jobs:
   run-tasks:
@@ -28,7 +27,7 @@ jobs:
 
     - name: Run transform
       env:
-        spotify_client_id: ${{ secrets.SPOTIFY_CLIENT_ID }},
+        spotify_client_id: ${{ secrets.SPOTIFY_CLIENT_ID }}
         spotify_client_secret: ${{ secrets.SPOTIFY_CLIENT_SECRET }}
       run: |
         echo "Building and running transform command..."
