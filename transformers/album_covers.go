@@ -2,9 +2,12 @@ package transformers
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"log"
+	"net/url"
 	"os"
+	"regexp"
 
 	"github.com/zmb3/spotify"
 	"golang.org/x/oauth2/clientcredentials"
@@ -23,7 +26,10 @@ func GetAlbumURL(trackName string, artistName string) (string, error) {
 	httpClient := config.Client(context.Background())
 	client := spotify.NewClient(httpClient)
 
-	query := trackName + " artist:" + artistName
+	encodedTrackName := url.QueryEscape(strip(trackName))
+	encodedArtistName := url.QueryEscape(strip(artistName))
+
+	query := encodedTrackName + "+artist:" + encodedArtistName
 
 	log.Printf("Searching for track: %s, artist: %s, query: %s\n", trackName, artistName, query)
 	results, err := client.Search(query, spotify.SearchTypeTrack)
@@ -32,6 +38,14 @@ func GetAlbumURL(trackName string, artistName string) (string, error) {
 	}
 
 	if len(results.Tracks.Tracks) == 0 {
+		// Debugging: Log the entire response body from Spotify
+		log.Println("No tracks found. Debugging response from Spotify:")
+		responseBody, err := json.MarshalIndent(results, "", "  ")
+		if err != nil {
+			log.Printf("Failed to marshal response: %v", err)
+		} else {
+			log.Println(string(responseBody))
+		}
 		return "", fmt.Errorf("no tracks found")
 	}
 
@@ -44,9 +58,16 @@ func GetAlbumURL(trackName string, artistName string) (string, error) {
 	if len(album.Images) == 0 {
 		return "", fmt.Errorf("no images available for album")
 	}
-	
+
 	albumCoverURL := album.Images[0].URL
 	return albumCoverURL, nil
 
 }
 
+func strip(s string) string {
+	reg, err := regexp.Compile("[^a-zA-Z0-9]+")
+	if err != nil {
+		log.Fatal(err)
+	}
+	return reg.ReplaceAllString(s, " ")
+}

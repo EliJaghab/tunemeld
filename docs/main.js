@@ -41,7 +41,7 @@
                     
                         const albumCover = document.createElement("img");
                         albumCover.className = "album-cover";
-                        albumCover.src = "https://example.com/album-cover.jpg"; // Hard-coded album cover URL
+                        albumCover.src = track.album_url; 
                         albumCover.alt = "Album Cover";
                     
                         const trackNumber = document.createElement("div");
