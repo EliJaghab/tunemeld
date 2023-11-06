@@ -53,17 +53,16 @@
                     
                         const trackTitle = document.createElement("a");
                         trackTitle.className = "track-title";
-                        trackTitle.href = "#";
+                        trackTitle.href = track.link;;
                         trackTitle.textContent = track.name;
                     
-                        const artistLink = document.createElement("a");
-                        artistLink.className = "username";
-                        artistLink.href = "#";
-                        artistLink.textContent = track.artist;
+                        const artistNameElement = document.createElement("span"); 
+                        artistNameElement.className = "artist-name"; 
+                        artistNameElement.textContent = track.artist;
                     
                         trackInfo.appendChild(trackTitle);
                         trackInfo.appendChild(document.createElement("br"));  // Add a line break between title and artist
-                        trackInfo.appendChild(artistLink);
+                        trackInfo.appendChild(artistNameElement);
                     
                         cardBody.appendChild(albumCover);
                         cardBody.appendChild(trackNumber);
@@ -124,3 +123,29 @@
     });
 
 })();
+
+document.addEventListener('DOMContentLoaded', function () {
+    setTimeout(function () {
+        var loadingScreen = document.getElementById('loading-screen');
+        var mainContent = document.getElementById('main-content');
+
+        if (loadingScreen) {
+            // Start the fade-out animation for the loading screen
+            loadingScreen.style.opacity = '0';
+
+            // Wait for the fade-out to finish before changing the visibility of the loading screen
+            setTimeout(function () {
+                loadingScreen.style.visibility = 'hidden';
+            }, 2000); // This must match the CSS transition-duration
+        } else {
+            console.error('Loading screen element not found');
+        }
+
+        if (mainContent) {
+            // Fade in the main content after the loading screen starts to fade out
+            mainContent.style.opacity = '1'; // This will trigger the fade-in
+        } else {
+            console.error('Main content element not found');
+        }
+    }, 1000); // This delay can be adjusted based on how long you want the loading screen to show
+});

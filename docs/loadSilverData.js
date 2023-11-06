@@ -17,10 +17,9 @@ const PlaylistDisplay = (() => {
         trackNumber.className = "track-number";
         trackNumber.textContent = track.track_number;
 
-        const artistLink = document.createElement("a");
-        artistLink.className = "username";
-        artistLink.href = "#";
-        artistLink.textContent = track.artist_name;
+        const artistNameElement = document.createElement("span"); 
+        artistNameElement.className = "artist-name"; 
+        artistNameElement.textContent = track.artist;
 
         const separator1 = document.createElement("span");
         separator1.className = "separator";

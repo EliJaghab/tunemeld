@@ -1,92 +1,139 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-<title>Track Listings</title>
-<style>
-    .album-cover {
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    />
+    <title>Track Listings</title>
+    <style>
+      #main-content {
+        transition: opacity 2s ease-in-out;
+      }
+      #main-content.fade-in {
+        opacity: 1;
+      }
+      .album-cover {
         width: 50px;
         height: 50px;
         margin-right: 5px;
-    }
-    .track-item-content {
+      }
+      .track-item-content {
         display: flex;
         align-items: center;
-    }
-    .track-number {
+      }
+      .track-number {
         margin-right: 5px;
-    }
-    .track-info {
+      }
+      .track-info {
         margin-left: 5px; /* Adjust spacing between image and text */
-    }
-    .username {
+      }
+      .username {
         font-size: 12px;
         margin: 0; /* Reset margin to avoid extra spacing */
-    }
-    .track-title {
+      }
+      .track-title {
         font-weight: 400;
         margin: 0; /* Reset margin to avoid extra spacing */
-    }
-    .playlist {
+      }
+      .playlist {
         height: 80vh;
         overflow-y: auto;
         border: 1px solid #ccc;
         border-radius: 5px;
         padding: 5px;
         margin: 5px 0; /* Adjusts margin around playlist, reduces to 0px on left/right */
-    }
-    .playlist-title {
+      }
+      .playlist-title {
         text-align: center;
         font-weight: bold;
         margin-bottom: 5px;
-    }
-    .container {
+      }
+      .container {
         padding: 0 15px; /* Adjust padding around the container */
         margin: 0 auto; /* Centers the container, but removes any extra margin */
-    }
-    .row {
+      }
+      .row {
         margin: 0; /* Removes margin around rows */
-    }
-    .col-md-4, .col-sm-12 {
+      }
+      .col-md-4,
+      .col-sm-12 {
         padding: 0 5px; /* Adjust padding for columns to reduce space between playlists */
-    }
-</style>
-</head>
-<body>
-<div class="container my-2">
-    <h1 class="text-center" style="margin-bottom: 10px;">Track Listings</h1>
-    <div class="row">
-        <div class="col-md-4 col-sm-12"> <!-- Stack on small screens -->
-            <div class="playlist">
-                <div class="playlist-title">SoundCloud</div>
-                <div id="soundcloud-data-placeholder"></div>
-            </div>
-        </div>
-        <div class="col-md-4 col-sm-12"> <!-- Stack on small screens -->
-            <div class="playlist">
-                <div class="playlist-title">Apple Music</div>
-                <div id="apple-music-data-placeholder"></div>
-            </div>
-        </div>
-        <div class="col-md-4 col-sm-12"> <!-- Stack on small screens -->
-            <div class="playlist">
-                <div class="playlist-title">Spotify</div>
-                <div id="spotify-data-placeholder"></div>
-            </div>
-        </div>
+      }
+      /* Loading Screen Style */
+      #loading-screen {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: white;
+        z-index: 1000;
+        transition: opacity 2s ease-in-out; /* Smooth transition for the fade-out */
+      }
+
+      #loading-image {
+        max-width: 25%;
+        max-height: 25vh;
+      }
+      /* Keyframes for the fadeOut animation */
+      @keyframes fadeOut {
+        0% {
+          opacity: 1;
+        }
+        100% {
+          opacity: 0;
+        }
+      }
+
+      #loading-screen.fade-out {
+        opacity: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="loading-screen">
+      <img src="tunemeld_loading_screen.png" alt="Loading" id="loading-image" />
     </div>
 
-    <div class="row">
-        <div class="col-md-12">
-            <div class="playlist">
-                <div class="playlist-title">Aggregated Playlist</div>
-                <div id="aggregated-data-placeholder"></div>
-            </div>
+    <div class="container my-2" id="main-content" style="opacity: 0">
+      <h1 class="text-center" style="margin-bottom: 10px">Track Listings</h1>
+      <div class="row">
+        <div class="col-md-4 col-sm-12">
+          <div class="playlist">
+            <div class="playlist-title">SoundCloud</div>
+            <div id="soundcloud-data-placeholder"></div>
+          </div>
         </div>
-    </div> <!-- End of the new row -->
-</div> <!-- End of the container -->
-<script src="main.js"></script>
-</body>
+        <div class="col-md-4 col-sm-12">
+          <div class="playlist">
+            <div class="playlist-title">Apple Music</div>
+            <div id="apple-music-data-placeholder"></div>
+          </div>
+        </div>
+        <div class="col-md-4 col-sm-12">
+          <div class="playlist">
+            <div class="playlist-title">Spotify</div>
+            <div id="spotify-data-placeholder"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12">
+          <div class="playlist">
+            <div class="playlist-title">Aggregated Playlist</div>
+            <div id="aggregated-data-placeholder"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="main.js"></script>
+  </body>
 </html>
