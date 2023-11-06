@@ -7,8 +7,28 @@
       rel="stylesheet"
       href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
     />
-    <title>Track Listings</title>
+
+    <!-- DM Sans Font Embedding -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,600&display=swap"
+      rel="stylesheet"
+    />
+
+    <title>tunemeld</title>
     <style>
+      /* DM Sans font with weight 200 for body text */
+      body {
+        font-family: "DM Sans", sans-serif;
+        font-weight: 400;
+      }
+
+      /* DM Sans font with weight 800 for titles */
+      h1 {
+        font-family: "DM Sans", sans-serif;
+        font-weight: 600;
+      }
       #main-content {
         transition: opacity 2s ease-in-out;
       }
@@ -23,12 +43,21 @@
       .track-item-content {
         display: flex;
         align-items: center;
+        padding-top: 1px;
+        padding-bottom: 1px;
+        justify-content: flex-start; 
       }
       .track-number {
-        margin-right: 5px;
+        margin-right: 10px;
+        font-size: 20px;
+        line-height: 40px;
       }
       .track-info {
-        margin-left: 5px; /* Adjust spacing between image and text */
+        padding: 2px 0; /* Adjust spacing between image and text */
+      }
+      .track-list-item {
+        /* Decrease top and bottom padding or margins if they are adding extra height */
+        padding: 5px 0; /* Example of reduced vertical padding */
       }
       .username {
         font-size: 12px;
@@ -45,6 +74,7 @@
         border-radius: 5px;
         padding: 5px;
         margin: 5px 0; /* Adjusts margin around playlist, reduces to 0px on left/right */
+        width: 100%;
       }
       .playlist-title {
         text-align: center;
@@ -52,8 +82,10 @@
         margin-bottom: 5px;
       }
       .container {
-        padding: 0 15px; /* Adjust padding around the container */
-        margin: 0 auto; /* Centers the container, but removes any extra margin */
+        max-width: 100%; /* Full width of the parent element */
+        max-width: 1200px; /* Maximum of 1200 pixels */
+        max-width: 75rem; /* Based on the root font size */
+        max-width: 90vw; /* 90% of the viewport width */
       }
       .row {
         margin: 0; /* Removes margin around rows */
@@ -102,7 +134,7 @@
     </div>
 
     <div class="container my-2" id="main-content" style="opacity: 0">
-      <h1 class="text-center" style="margin-bottom: 10px">Track Listings</h1>
+      <h1 class="text-center" style="margin-bottom: 10px">tunemeld</h1>
       <div class="row">
         <div class="col-md-4 col-sm-12">
           <div class="playlist">

@@ -38,16 +38,16 @@
                     
                         const cardBody = document.createElement("div");
                         cardBody.className = "card-body track-item-content";
-                    
+                        
+                        const trackNumber = document.createElement("div");
+                        trackNumber.className = "track-number";
+                        trackNumber.textContent = track.rank;
+
                         const albumCover = document.createElement("img");
                         albumCover.className = "album-cover";
                         albumCover.src = track.album_url; 
                         albumCover.alt = "Album Cover";
-                    
-                        const trackNumber = document.createElement("div");
-                        trackNumber.className = "track-number";
-                        trackNumber.textContent = track.rank;
-                    
+                
                         const trackInfo = document.createElement("div");
                         trackInfo.className = "track-info";
                     
@@ -63,9 +63,9 @@
                         trackInfo.appendChild(trackTitle);
                         trackInfo.appendChild(document.createElement("br"));  // Add a line break between title and artist
                         trackInfo.appendChild(artistNameElement);
-                    
-                        cardBody.appendChild(albumCover);
+                        
                         cardBody.appendChild(trackNumber);
+                        cardBody.appendChild(albumCover);
                         cardBody.appendChild(trackInfo);
                     
                         card.appendChild(cardBody);
@@ -147,5 +147,5 @@ document.addEventListener('DOMContentLoaded', function () {
         } else {
             console.error('Main content element not found');
         }
-    }, 1000); // This delay can be adjusted based on how long you want the loading screen to show
+    }, 0); //1500 This delay can be adjusted based on how long you want the loading screen to show
 });
