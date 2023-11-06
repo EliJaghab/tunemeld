@@ -18,10 +18,13 @@
 
     <title>tunemeld</title>
     <style>
-      /* DM Sans font with weight 200 for body text */
+      a {
+        color: white;
+      }
+
       body {
-        font-family: "DM Sans", sans-serif;
-        font-weight: 400;
+        background-color: #333;
+        color: white;
       }
 
       /* DM Sans font with weight 800 for titles */
@@ -45,7 +48,9 @@
         align-items: center;
         padding-top: 1px;
         padding-bottom: 1px;
-        justify-content: flex-start; 
+        justify-content: flex-start;
+        background-color: #444;
+        color: white;
       }
       .track-number {
         margin-right: 10px;
@@ -54,18 +59,21 @@
       }
       .track-info {
         padding: 2px 0; /* Adjust spacing between image and text */
+        color: white;
       }
       .track-list-item {
-        /* Decrease top and bottom padding or margins if they are adding extra height */
-        padding: 5px 0; /* Example of reduced vertical padding */
+        background-color: #444;
+        color: white;
+        padding: 5px 0; 
       }
       .username {
         font-size: 12px;
-        margin: 0; /* Reset margin to avoid extra spacing */
+        margin: 0;
       }
       .track-title {
         font-weight: 400;
-        margin: 0; /* Reset margin to avoid extra spacing */
+        margin: 0;
+        color: white;
       }
       .playlist {
         height: 80vh;
@@ -73,7 +81,7 @@
         border: 1px solid #ccc;
         border-radius: 5px;
         padding: 5px;
-        margin: 5px 0; /* Adjusts margin around playlist, reduces to 0px on left/right */
+        margin: 5px 0;
         width: 100%;
       }
       .playlist-title {

@@ -4,7 +4,6 @@
     document.addEventListener("DOMContentLoaded", function () {
         console.log("Document loaded and ready.");
 
-        // Function to fetch and display data for a playlist
         function fetchAndDisplayData(playlistName, placeholderId, filename) {
             console.log(`Fetching data for ${playlistName} from ${filename}...`);
 
@@ -147,5 +146,5 @@ document.addEventListener('DOMContentLoaded', function () {
         } else {
             console.error('Main content element not found');
         }
-    }, 0); //1500 This delay can be adjusted based on how long you want the loading screen to show
+    }, 500); 
 });
