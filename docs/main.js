@@ -148,3 +148,30 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }, 500); 
 });
+
+const apiUrl = "https://api.countapi.xyz/hit/tunemeld/visitor_count";
+
+// Function to fetch and display page view count
+function displayPageViews(pageViews) {
+    const pageViewsDiv = document.getElementById('page-views');
+    pageViewsDiv.innerText = `Page Views: ${pageViews}`;
+  }
+  
+  // Function to increment page view count and display it
+  function incrementAndDisplayPageViews() {
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", apiUrl);
+    xhr.responseType = "json";
+    xhr.onload = function () {
+      // Once the count has been incremented, display it
+      displayPageViews(this.response.value);
+    };
+    xhr.onerror = function () {
+      // Handle network errors
+      console.error("Network error: Could not connect to CountAPI");
+    };
+    xhr.send();
+  }
+
+// Call the function to increment page views and display them when the page loads
+window.addEventListener('load', incrementAndDisplayPageViews);
