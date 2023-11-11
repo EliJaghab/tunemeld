@@ -1,7 +1,7 @@
 package transformers
 
 import (
-	"fmt"
+	"fmt"	
 
 	"github.com/EliJaghab/tunemeld/config"
 )
@@ -58,7 +58,9 @@ func (t *SoundCloudTransformer) Execute(data []map[string]interface{}) ([]config
 			Link:     permalink,
 			Rank:     i + 1,
 			AlbumURL: albumURL,
+			Source:   config.SourceSoundCloud,
 		}
+
 		tracks = append(tracks, track)
 	}
 

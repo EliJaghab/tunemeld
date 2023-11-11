@@ -68,6 +68,7 @@ func (t *AppleMusicTransformer) Execute(data []map[string]interface{}) ([]config
 			Link:     link,
 			Rank:     rank,
 			AlbumURL: albumURL,
+			Source:   config.SourceAppleMusic,
 		}
 		tracks = append(tracks, track)
 	}

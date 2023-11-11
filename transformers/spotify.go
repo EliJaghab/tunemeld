@@ -3,7 +3,7 @@ package transformers
 import (
 	"fmt"
 	"strings"
-	
+
 	"github.com/EliJaghab/tunemeld/config"
 )
 
@@ -73,10 +73,12 @@ func (t *SpotifyTransformer) Execute(data []map[string]interface{}) ([]config.Tr
 			Link:     trackMap["external_urls"].(map[string]interface{})["spotify"].(string),
 			AlbumURL: albumCoverURL,
 			Rank:     rank + 1,
+			Source:   config.SourceSpotify,
 		}
 
 		tracks = append(tracks, track)
 	}
+
 	return tracks, nil
 }
 
