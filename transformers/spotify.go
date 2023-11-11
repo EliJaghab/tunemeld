@@ -2,7 +2,8 @@ package transformers
 
 import (
 	"fmt"
-
+	"strings"
+	
 	"github.com/EliJaghab/tunemeld/config"
 )
 
@@ -80,7 +81,6 @@ func (t *SpotifyTransformer) Execute(data []map[string]interface{}) ([]config.Tr
 }
 
 func joinArtists(artists []string) string {
-	// This function joins artist names into a single string.
-	// Modify this function to format the artist names as you desire.
-	return fmt.Sprint(artists)
+	return strings.Join(artists, ", ")
+
 }
