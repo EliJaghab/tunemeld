@@ -10,9 +10,10 @@ const (
 )
 
 type ServiceConfig struct {
-	BaseURL  string
-	Host     string
-	ParamKey string
+	ServiceName string
+	BaseURL     string
+	Host        string
+	ParamKey    string
 }
 
 type PlaylistConfig struct {
@@ -37,7 +38,7 @@ type Config struct {
 	EDMPlaylistConfigs []PlaylistConfig
 }
 
-var EDMPlaylistConfigs []PlaylistConfig // Global variable to hold the playlist configs
+var EDMPlaylistConfigs []PlaylistConfig
 
 func LoadConfig() error {
 	file, err := os.Open(ConfigFilePath)

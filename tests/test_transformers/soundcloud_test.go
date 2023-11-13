@@ -61,7 +61,6 @@ func TestSoundCloudTransformer_Execute(t *testing.T) {
 		},
 	}
 
-
 	if !reflect.DeepEqual(tracks, expectedTracks) {
 		t.Errorf("Expected tracks %+v, got %+v", expectedTracks, tracks)
 	}
