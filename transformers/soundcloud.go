@@ -1,7 +1,7 @@
 package transformers
 
 import (
-	"fmt"	
+	"fmt"
 
 	"github.com/EliJaghab/tunemeld/config"
 )
