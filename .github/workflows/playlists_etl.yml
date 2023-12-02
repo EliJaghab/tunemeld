@@ -41,7 +41,7 @@ jobs:
             git config --local user.name "GitHub Action"
             git remote set-url origin https://x-access-token:${GH_PAT}@github.com/${{ github.repository }}
             git add .
-            git commit -m "Automated data update" -a || echo "No changes to commit"
+            git commit -m "Automated silver data update" -a || echo "No changes to commit"
             git push
     
     - name: Run gold
@@ -55,5 +55,5 @@ jobs:
             git config --local user.name "GitHub Action"
             git remote set-url origin https://x-access-token:${GH_PAT}@github.com/${{ github.repository }}
             git add .
-            git commit -m "Automated data update" -a || echo "No changes to commit"
+            git commit -m "Automated gold data update" -a || echo "No changes to commit"
             git push
