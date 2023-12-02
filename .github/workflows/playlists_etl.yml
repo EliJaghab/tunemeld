@@ -33,7 +33,7 @@ jobs:
         echo "Building and running transform command..."
         make run-transform-actions
 
-    - name: Commit and push changes
+    - name: Commit and push silver
       env:
         GH_PAT: ${{ secrets.GH_PAT }} 
       run: |
@@ -46,3 +46,14 @@ jobs:
     
     - name: Run gold
       run: echo "Running gold command..." && make run-gold
+    
+    - name: Commit and push gold
+      env:
+        GH_PAT: ${{ secrets.GH_PAT }} 
+      run: |
+            git config --local user.email "action@github.com"
+            git config --local user.name "GitHub Action"
+            git remote set-url origin https://x-access-token:${GH_PAT}@github.com/${{ github.repository }}
+            git add .
+            git commit -m "Automated data update" -a || echo "No changes to commit"
+            git push
