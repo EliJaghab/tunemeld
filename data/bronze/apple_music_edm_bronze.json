@@ -1,28 +1,28 @@
 {
   "album_details": {
     "0": {
-      "artist": "Jess Bays \u0026 Kelli-Leigh",
-      "duration": "2m 53s",
-      "link": "https://music.apple.com/us/album/real-love/1713788646?i=1713788650",
-      "name": "Real Love"
+      "artist": "Jamie Jones \u0026 Kah-Lo",
+      "duration": "2m 38s",
+      "link": "https://music.apple.com/us/album/fine-fine-baby/1716830861?i=1716830862",
+      "name": "Fine Fine Baby"
     },
     "1": {
-      "artist": "Eliza Rose \u0026 Calvin Harris",
-      "duration": "2m 34s",
-      "link": "https://music.apple.com/us/album/body-moving/1714854055?i=1714854059",
-      "name": "Body Moving"
-    },
-    "10": {
-      "artist": "Anyma, Cassian \u0026 Poppy Baskcomb",
-      "duration": "3m 9s",
-      "link": "https://music.apple.com/us/album/save-me/1698793877?i=1698794080",
-      "name": "Save Me"
-    },
-    "11": {
       "artist": "Ferreck Dawn \u0026 Mila Falls",
       "duration": "2m 35s",
       "link": "https://music.apple.com/us/album/on-on/1699698676?i=1699698690",
       "name": "On \u0026 On"
+    },
+    "10": {
+      "artist": "Devault",
+      "duration": "3m 35s",
+      "link": "https://music.apple.com/us/album/when-im-with-you/1701022072?i=1701022077",
+      "name": "When I'm With You"
+    },
+    "11": {
+      "artist": "FISHER \u0026 Kita Alexander",
+      "duration": "3m 2s",
+      "link": "https://music.apple.com/us/album/atmosphere/1701490198?i=1701490200",
+      "name": "Atmosphere"
     },
     "12": {
       "artist": "Hayla",
@@ -31,190 +31,190 @@
       "name": "Fall Again"
     },
     "13": {
-      "artist": "Joel Corry",
-      "duration": "2m 37s",
-      "link": "https://music.apple.com/us/album/hey-dj/1708949572?i=1708949754",
-      "name": "Hey DJ"
+      "artist": "cassö, RAYE \u0026 D-Block Europe",
+      "duration": "2m 12s",
+      "link": "https://music.apple.com/us/album/prada/1701829489?i=1701829495",
+      "name": "Prada"
     },
     "14": {
-      "artist": "Camden Cox",
-      "duration": "2m 36s",
-      "link": "https://music.apple.com/us/album/touching-me/1700290607?i=1700290614",
-      "name": "Touching Me"
-    },
-    "15": {
       "artist": "3LAU \u0026 XIRA",
       "duration": "3m 25s",
       "link": "https://music.apple.com/us/album/easy/1707025272?i=1707025273",
       "name": "Easy"
     },
-    "16": {
-      "artist": "Devault",
-      "duration": "3m 35s",
-      "link": "https://music.apple.com/us/album/when-im-with-you/1701022072?i=1701022077",
-      "name": "When I'm With You"
-    },
-    "17": {
-      "artist": "Jess Bays \u0026 HARLEE",
-      "duration": "2m 53s",
-      "link": "https://music.apple.com/us/album/slow-motion/1701435687?i=1701435739",
-      "name": "Slow Motion"
-    },
-    "18": {
-      "artist": "Marshmello \u0026 Dove Cameron",
-      "duration": "2m 17s",
-      "link": "https://music.apple.com/us/album/other-boys/1705044736?i=1705044740",
-      "name": "Other Boys"
-    },
-    "19": {
-      "artist": "Kaskade",
-      "duration": "4m 15s",
-      "link": "https://music.apple.com/us/album/on-my-way/1709468295?i=1709468505",
-      "name": "On My Way"
-    },
-    "2": {
-      "artist": "FISHER \u0026 Kita Alexander",
-      "duration": "3m 2s",
-      "link": "https://music.apple.com/us/album/atmosphere/1701490198?i=1701490200",
-      "name": "Atmosphere"
-    },
-    "20": {
-      "artist": "CHANEY",
-      "duration": "3m 46s",
-      "link": "https://music.apple.com/us/album/feeling-for-you-feat-farley/1713480615?i=1713480616",
-      "name": "Feeling for You (feat. FARLEY)"
-    },
-    "21": {
-      "artist": "Felix Jaehn \u0026 Jonas Blue",
-      "duration": "3m 16s",
-      "link": "https://music.apple.com/us/album/past-life/1705327645?i=1705327646",
-      "name": "Past Life"
-    },
-    "22": {
+    "15": {
       "artist": "BL3SS",
       "duration": "2m 4s",
       "link": "https://music.apple.com/us/album/losing-my-head/1702871849?i=1702871851",
       "name": "Losing My Head"
     },
-    "23": {
-      "artist": "Jazzy \u0026 Charlotte Plank",
-      "duration": "2m 32s",
-      "link": "https://music.apple.com/us/album/empty-promises/1707268047?i=1707268274",
-      "name": "Empty Promises"
+    "16": {
+      "artist": "Felix Jaehn \u0026 Jonas Blue",
+      "duration": "3m 16s",
+      "link": "https://music.apple.com/us/album/past-life/1705327645?i=1705327646",
+      "name": "Past Life"
     },
-    "24": {
-      "artist": "Dezko \u0026 Ceres",
-      "duration": "3m 15s",
-      "link": "https://music.apple.com/us/album/u-me/1698794990?i=1698794991",
-      "name": "U\u0026ME"
+    "17": {
+      "artist": "Camden Cox",
+      "duration": "2m 36s",
+      "link": "https://music.apple.com/us/album/touching-me/1700290607?i=1700290614",
+      "name": "Touching Me"
     },
-    "25": {
-      "artist": "Disco Lines \u0026 ayokay",
-      "duration": "3m 2s",
-      "link": "https://music.apple.com/us/album/i-got-you/1703174220?i=1703174221",
-      "name": "I Got You"
-    },
-    "26": {
-      "artist": "ODESZA",
-      "duration": "3m 59s",
-      "link": "https://music.apple.com/us/album/in-the-rain/1703224031?i=1703224033",
-      "name": "In The Rain"
-    },
-    "27": {
-      "artist": "Marsh",
-      "duration": "3m 25s",
-      "link": "https://music.apple.com/us/album/everything-feat-allknight/1709024008?i=1709024011",
-      "name": "Everything (feat. ALLKNIGHT)"
-    },
-    "28": {
-      "artist": "Hannah Wants \u0026 Jem Cooke",
-      "duration": "3m 29s",
-      "link": "https://music.apple.com/us/album/calling/1711594587?i=1711594602",
-      "name": "Calling"
-    },
-    "29": {
-      "artist": "Jazzy",
-      "duration": "2m 26s",
-      "link": "https://music.apple.com/us/album/nrg/1707268047?i=1707268399",
-      "name": "NRG"
-    },
-    "3": {
-      "artist": "Alok, The Chainsmokers \u0026 Mae Stephens",
-      "duration": "2m 55s",
-      "link": "https://music.apple.com/us/album/jungle/1705390809?i=1705391359",
-      "name": "Jungle"
-    },
-    "30": {
-      "artist": "San Pacho",
-      "duration": "2m 34s",
-      "link": "https://music.apple.com/us/album/in-your-mind-feat-notelle/1703141464?i=1703141465",
-      "name": "In Your Mind (feat. Notelle)"
-    },
-    "31": {
-      "artist": "Flowdan, Lil Baby \u0026 Skrillex",
-      "duration": "2m 28s",
-      "link": "https://music.apple.com/us/album/pepper/1710899020?i=1710899021",
-      "name": "Pepper"
-    },
-    "32": {
-      "artist": "RL Grime",
-      "duration": "2m 46s",
-      "link": "https://music.apple.com/us/album/keep-you-close/1706071291?i=1706071781",
-      "name": "Keep You (Close)"
-    },
-    "33": {
-      "artist": "Hayden James \u0026 AR/CO",
-      "duration": "3m 9s",
-      "link": "https://music.apple.com/us/album/we-could-be-love/1699768980?i=1699768991",
-      "name": "We Could Be Love"
-    },
-    "34": {
-      "artist": "David Guetta \u0026 Kim Petras",
-      "duration": "2m 27s",
-      "link": "https://music.apple.com/us/album/when-we-were-young-the-logical-song/1713571199?i=1713571204",
-      "name": "When We Were Young (The Logical Song)"
-    },
-    "35": {
-      "artist": "John Summit",
-      "duration": "3m 50s",
-      "link": "https://music.apple.com/us/album/fade-out-feat-mkla/1702821514?i=1702821525",
-      "name": "Fade Out (feat. MKLA)"
-    },
-    "36": {
-      "artist": "Anabel Englund",
-      "duration": "2m 7s",
-      "link": "https://music.apple.com/us/album/a-lesson-in-chemistry/1708465416?i=1708465421",
-      "name": "a lesson in chemistry"
-    },
-    "37": {
-      "artist": "Seven Lions \u0026 Jason Ross",
-      "duration": "3m 20s",
-      "link": "https://music.apple.com/us/album/darkness-feat-gg-magree/1713748166?i=1713748167",
-      "name": "Darkness (feat. GG Magree)"
-    },
-    "38": {
-      "artist": "Le Youth",
-      "duration": "4m 33s",
-      "link": "https://music.apple.com/us/album/morning-light/1694947670?i=1694947675",
-      "name": "Morning Light"
-    },
-    "39": {
-      "artist": "Surf Mesa",
-      "duration": "3m 12s",
-      "link": "https://music.apple.com/us/album/run-feat-griff-clawson/1708213098?i=1708213100",
-      "name": "Run (feat. Griff Clawson)"
-    },
-    "4": {
+    "18": {
       "artist": "Surf Mesa \u0026 Stevie Appleton",
       "duration": "2m 14s",
       "link": "https://music.apple.com/us/album/first-time/1701724340?i=1701724345",
       "name": "First Time"
     },
-    "40": {
+    "19": {
+      "artist": "James Hype \u0026 Kim Petras",
+      "duration": "2m 32s",
+      "link": "https://music.apple.com/us/album/drums/1708441970?i=1708442177",
+      "name": "Drums"
+    },
+    "2": {
+      "artist": "Chris Lake \u0026 Aluna",
+      "duration": "2m 55s",
+      "link": "https://music.apple.com/us/album/more-baby/1705480175?i=1705480177",
+      "name": "More Baby"
+    },
+    "20": {
+      "artist": "Hayden James \u0026 AR/CO",
+      "duration": "3m 9s",
+      "link": "https://music.apple.com/us/album/we-could-be-love/1699768980?i=1699768991",
+      "name": "We Could Be Love"
+    },
+    "21": {
+      "artist": "Marsh",
+      "duration": "3m 25s",
+      "link": "https://music.apple.com/us/album/everything-feat-allknight/1709024008?i=1709024011",
+      "name": "Everything (feat. ALLKNIGHT)"
+    },
+    "22": {
+      "artist": "San Pacho",
+      "duration": "2m 34s",
+      "link": "https://music.apple.com/us/album/in-your-mind-feat-notelle/1703141464?i=1703141465",
+      "name": "In Your Mind (feat. Notelle)"
+    },
+    "23": {
+      "artist": "Jess Bays \u0026 HARLEE",
+      "duration": "2m 53s",
+      "link": "https://music.apple.com/us/album/slow-motion/1701435687?i=1701435739",
+      "name": "Slow Motion"
+    },
+    "24": {
+      "artist": "MAFRO",
+      "duration": "3m 47s",
+      "link": "https://music.apple.com/us/album/try-feat-qhairo/1705771880?i=1705771887",
+      "name": "Try (feat. Qhairo)"
+    },
+    "25": {
+      "artist": "Anabel Englund",
+      "duration": "2m 7s",
+      "link": "https://music.apple.com/us/album/a-lesson-in-chemistry/1708465416?i=1708465421",
+      "name": "a lesson in chemistry"
+    },
+    "26": {
+      "artist": "Dillon Francis \u0026 REI AMI",
+      "duration": "2m 44s",
+      "link": "https://music.apple.com/us/album/rainy/1710826618?i=1710826628",
+      "name": "Rainy"
+    },
+    "27": {
+      "artist": "Jazzy \u0026 Charlotte Plank",
+      "duration": "2m 32s",
+      "link": "https://music.apple.com/us/album/empty-promises/1707268047?i=1707268274",
+      "name": "Empty Promises"
+    },
+    "28": {
+      "artist": "Disco Lines \u0026 ayokay",
+      "duration": "3m 2s",
+      "link": "https://music.apple.com/us/album/i-got-you/1703174220?i=1703174221",
+      "name": "I Got You"
+    },
+    "29": {
+      "artist": "Paul Woolford \u0026 LF SYSTEM",
+      "duration": "2m 50s",
+      "link": "https://music.apple.com/us/album/in-my-head-feat-shayan/1710403647?i=1710403651",
+      "name": "In My Head (feat. Shayan)"
+    },
+    "3": {
+      "artist": "Dom Dolla",
+      "duration": "3m 27s",
+      "link": "https://music.apple.com/us/album/saving-up/1709177801?i=1709178108",
+      "name": "Saving Up"
+    },
+    "30": {
+      "artist": "John Summit",
+      "duration": "3m 50s",
+      "link": "https://music.apple.com/us/album/fade-out-feat-mkla/1702821514?i=1702821525",
+      "name": "Fade Out (feat. MKLA)"
+    },
+    "31": {
+      "artist": "Joy Anonymous",
+      "duration": "3m 57s",
+      "link": "https://music.apple.com/us/album/joy-up-the-street/1707245047?i=1707245326",
+      "name": "JOY (Up The Street)"
+    },
+    "32": {
+      "artist": "ODESZA",
+      "duration": "3m 59s",
+      "link": "https://music.apple.com/us/album/in-the-rain/1703224031?i=1703224033",
+      "name": "In The Rain"
+    },
+    "33": {
+      "artist": "Jazzy",
+      "duration": "2m 26s",
+      "link": "https://music.apple.com/us/album/nrg/1707268047?i=1707268399",
+      "name": "NRG"
+    },
+    "34": {
+      "artist": "RL Grime",
+      "duration": "2m 46s",
+      "link": "https://music.apple.com/us/album/keep-you-close/1706071291?i=1706071781",
+      "name": "Keep You (Close)"
+    },
+    "35": {
+      "artist": "David Guetta \u0026 Kim Petras",
+      "duration": "2m 27s",
+      "link": "https://music.apple.com/us/album/when-we-were-young-the-logical-song/1713571199?i=1713571204",
+      "name": "When We Were Young (The Logical Song)"
+    },
+    "36": {
+      "artist": "Anyma, Cassian \u0026 Poppy Baskcomb",
+      "duration": "3m 9s",
+      "link": "https://music.apple.com/us/album/save-me/1698793877?i=1698794080",
+      "name": "Save Me"
+    },
+    "37": {
+      "artist": "Kaskade",
+      "duration": "4m 15s",
+      "link": "https://music.apple.com/us/album/on-my-way/1709468295?i=1709468505",
+      "name": "On My Way"
+    },
+    "38": {
       "artist": "Martin Garrix \u0026 Lloyiso",
       "duration": "2m 43s",
       "link": "https://music.apple.com/us/album/real-love/1703795022?i=1703795121",
       "name": "Real Love"
+    },
+    "39": {
+      "artist": "Marshmello \u0026 Dove Cameron",
+      "duration": "2m 17s",
+      "link": "https://music.apple.com/us/album/other-boys/1705044736?i=1705044740",
+      "name": "Other Boys"
+    },
+    "4": {
+      "artist": "Peggy Gou \u0026 Lenny Kravitz",
+      "duration": "3m 19s",
+      "link": "https://music.apple.com/us/album/i-believe-in-love-again-jex-opolis-remix-edit/1715884191?i=1715884197",
+      "name": "I Believe In Love Again (Jex Opolis Remix Edit)"
+    },
+    "40": {
+      "artist": "Joel Corry",
+      "duration": "2m 37s",
+      "link": "https://music.apple.com/us/album/hey-dj/1708949572?i=1708949754",
+      "name": "Hey DJ"
     },
     "41": {
       "artist": "Sammy Virji",
@@ -229,112 +229,112 @@
       "name": "Higher Power"
     },
     "43": {
-      "artist": "Bob Moses",
-      "duration": "3m 39s",
-      "link": "https://music.apple.com/us/album/round-round/1707080860?i=1707081376",
-      "name": "Round \u0026 Round"
-    },
-    "44": {
-      "artist": "Chris Lake \u0026 Aluna",
-      "duration": "2m 55s",
-      "link": "https://music.apple.com/us/album/more-baby/1705480175?i=1705480177",
-      "name": "More Baby"
-    },
-    "45": {
-      "artist": "James Hype \u0026 Kim Petras",
-      "duration": "2m 32s",
-      "link": "https://music.apple.com/us/album/drums/1708441970?i=1708442177",
-      "name": "Drums"
-    },
-    "46": {
-      "artist": "Joy Anonymous",
-      "duration": "3m 57s",
-      "link": "https://music.apple.com/us/album/joy-up-the-street/1707245047?i=1707245326",
-      "name": "JOY (Up The Street)"
-    },
-    "47": {
       "artist": "Armin van Buuren",
       "duration": "3m 20s",
       "link": "https://music.apple.com/us/album/love-is-a-drug-feat-anne-gudrun/1703202271?i=1703202272",
       "name": "Love Is a Drug (feat. Anne Gudrun)"
     },
-    "48": {
+    "44": {
+      "artist": "John Summit \u0026 Hayla",
+      "duration": "3m 56s",
+      "link": "https://music.apple.com/us/album/where-you-are/1673828877?i=1673828907",
+      "name": "Where You Are"
+    },
+    "45": {
       "artist": "Justin Caruso",
       "duration": "2m 37s",
       "link": "https://music.apple.com/us/album/dont-wanna-be-alone/1715570266?i=1715570548",
       "name": "Don't Wanna Be Alone"
     },
-    "49": {
+    "46": {
       "artist": "Cristoph",
       "duration": "3m 11s",
       "link": "https://music.apple.com/us/album/come-with-me/1706874678?i=1706874679",
       "name": "Come With Me"
     },
-    "5": {
-      "artist": "Autograf",
-      "duration": "2m 45s",
-      "link": "https://music.apple.com/us/album/runaway/1699784135?i=1699784136",
-      "name": "Runaway"
-    },
-    "50": {
+    "47": {
       "artist": "Jazzy \u0026 Jax Jones",
       "duration": "2m 43s",
       "link": "https://music.apple.com/us/album/feel-it-jax-jones-remix/1709546982?i=1709547199",
       "name": "Feel It (Jax Jones Remix)"
     },
-    "51": {
-      "artist": "Dom Dolla",
-      "duration": "3m 27s",
-      "link": "https://music.apple.com/us/album/saving-up/1709177801?i=1709178108",
-      "name": "Saving Up"
+    "48": {
+      "artist": "Illyus \u0026 Barrientos",
+      "duration": "2m 49s",
+      "link": "https://music.apple.com/us/album/motions-of-love/1705320186?i=1705320188",
+      "name": "Motions of Love"
     },
-    "52": {
+    "49": {
       "artist": "AR/CO",
       "duration": "3m 9s",
       "link": "https://music.apple.com/us/album/all-over-the-world/1707912343?i=1707912345",
       "name": "All Over The World"
     },
-    "53": {
+    "5": {
+      "artist": "Bob Moses",
+      "duration": "3m 39s",
+      "link": "https://music.apple.com/us/album/round-round/1707080860?i=1707081376",
+      "name": "Round \u0026 Round"
+    },
+    "50": {
       "artist": "LP Giobbi, redfield \u0026 DJ Rae",
       "duration": "2m 53s",
       "link": "https://music.apple.com/us/album/waiting/1712726606?i=1712726607",
       "name": "Waiting"
     },
-    "54": {
-      "artist": "Lucas \u0026 Steve",
-      "duration": "2m 48s",
-      "link": "https://music.apple.com/us/album/what-we-know-feat-conor-byrne/1699424303?i=1699424321",
-      "name": "What We Know (feat. Conor Byrne)"
+    "51": {
+      "artist": "Jess Bays \u0026 Kelli-Leigh",
+      "duration": "2m 53s",
+      "link": "https://music.apple.com/us/album/real-love/1713788646?i=1713788650",
+      "name": "Real Love"
     },
-    "55": {
+    "52": {
       "artist": "Dillon Francis \u0026 Arden Jones",
       "duration": "3m 12s",
       "link": "https://music.apple.com/us/album/im-my-only-friend/1710826618?i=1710826973",
       "name": "I'm My Only Friend"
     },
-    "56": {
-      "artist": "Jax Jones, D.O.D \u0026 Ina Wroldsen",
-      "duration": "2m 33s",
-      "link": "https://music.apple.com/us/album/wont-forget-you/1707422217?i=1707422220",
-      "name": "Won't Forget You"
+    "53": {
+      "artist": "Hannah Wants \u0026 Jem Cooke",
+      "duration": "3m 29s",
+      "link": "https://music.apple.com/us/album/calling/1711594587?i=1711594602",
+      "name": "Calling"
     },
-    "57": {
-      "artist": "Paul Woolford \u0026 LF SYSTEM",
-      "duration": "2m 50s",
-      "link": "https://music.apple.com/us/album/in-my-head-feat-shayan/1710403647?i=1710403651",
-      "name": "In My Head (feat. Shayan)"
-    },
-    "58": {
+    "54": {
       "artist": "Darby",
       "duration": "2m 29s",
       "link": "https://music.apple.com/us/album/crush/1701929529?i=1701929530",
       "name": "Crush"
     },
-    "59": {
+    "55": {
       "artist": "Vintage Culture, Tube \u0026 Berger \u0026 Kyle Pearce",
       "duration": "3m 4s",
       "link": "https://music.apple.com/us/album/come-come/1713854041?i=1713854044",
       "name": "Come Come"
+    },
+    "56": {
+      "artist": "CHANEY",
+      "duration": "3m 46s",
+      "link": "https://music.apple.com/us/album/feeling-for-you-feat-farley/1713480615?i=1713480616",
+      "name": "Feeling for You (feat. FARLEY)"
+    },
+    "57": {
+      "artist": "DNMO \u0026 Zara Kershaw",
+      "duration": "3m 4s",
+      "link": "https://music.apple.com/us/album/forever-changes/1707558011?i=1707558012",
+      "name": "Forever Changes"
+    },
+    "58": {
+      "artist": "Daire",
+      "duration": "2m 35s",
+      "link": "https://music.apple.com/us/album/put-em-high/1704884443?i=1704884781",
+      "name": "Put 'em High"
+    },
+    "59": {
+      "artist": "Ninajirachi",
+      "duration": "3m 4s",
+      "link": "https://music.apple.com/us/album/undo-u-4x4-mix/1709448126?i=1709448128",
+      "name": "Undo U (4x4 Mix)"
     },
     "6": {
       "artist": "Chase \u0026 Status",
@@ -343,130 +343,130 @@
       "name": "Selecta (feat. Stefflon Don)"
     },
     "60": {
-      "artist": "DNMO \u0026 Zara Kershaw",
-      "duration": "3m 4s",
-      "link": "https://music.apple.com/us/album/forever-changes/1707558011?i=1707558012",
-      "name": "Forever Changes"
-    },
-    "61": {
-      "artist": "Daire",
-      "duration": "2m 35s",
-      "link": "https://music.apple.com/us/album/put-em-high/1704884443?i=1704884781",
-      "name": "Put 'em High"
-    },
-    "62": {
-      "artist": "Ninajirachi",
-      "duration": "3m 4s",
-      "link": "https://music.apple.com/us/album/undo-u-4x4-mix/1709448126?i=1709448128",
-      "name": "Undo U (4x4 Mix)"
-    },
-    "63": {
       "artist": "SIDEPIECE",
       "duration": "3m 15s",
       "link": "https://music.apple.com/us/album/on-my-way-feat-faouzia/1707562999?i=1707563009",
       "name": "On My Way (feat. Faouzia)"
     },
-    "64": {
+    "61": {
       "artist": "Jason Ross",
       "duration": "4m 7s",
       "link": "https://music.apple.com/us/album/never-alone-feat-dia-frampton/1709643856?i=1709643857",
       "name": "Never Alone (feat. Dia Frampton)"
     },
-    "65": {
+    "62": {
       "artist": "Durante",
       "duration": "3m 45s",
       "link": "https://music.apple.com/us/album/remedy-feat-running-touch/1710447565?i=1710447566",
       "name": "Remedy (feat. Running Touch)"
     },
-    "66": {
+    "63": {
       "artist": "ISOxo",
       "duration": "4m 1s",
       "link": "https://music.apple.com/us/album/how2fly/1708074358?i=1708075179",
       "name": "how2fly"
     },
-    "67": {
+    "64": {
       "artist": "Skepta",
       "duration": "3m 8s",
       "link": "https://music.apple.com/us/album/cant-play-myself-a-tribute-to-amy/1710809845?i=1710809945",
       "name": "Can't Play Myself (A Tribute To Amy)"
     },
-    "68": {
+    "65": {
       "artist": "venbee",
       "duration": "2m 47s",
       "link": "https://music.apple.com/us/album/rampage-feat-dj-ss/1711596948?i=1711596979",
       "name": "rampage (feat. DJ SS)"
     },
-    "69": {
+    "66": {
       "artist": "Nicole Moudaber",
       "duration": "3m 14s",
       "link": "https://music.apple.com/us/album/reasons-to-love-you/1706413386?i=1706413387",
       "name": "Reasons to Love You"
     },
-    "7": {
-      "artist": "cassö, RAYE \u0026 D-Block Europe",
-      "duration": "2m 12s",
-      "link": "https://music.apple.com/us/album/prada/1701829489?i=1701829495",
-      "name": "Prada"
-    },
-    "70": {
+    "67": {
       "artist": "Peggy Gou",
       "duration": "3m 51s",
       "link": "https://music.apple.com/us/album/it-goes-like-nanana-edit/1689088940?i=1689088958",
       "name": "(It Goes Like) Nanana (Edit)"
     },
-    "71": {
+    "68": {
       "artist": "Lastlings \u0026 Tibasko",
       "duration": "4m 19s",
       "link": "https://music.apple.com/us/album/gravity-tibasko-remix/1711634171?i=1711634172",
       "name": "Gravity (TIBASKO Remix)"
     },
-    "72": {
+    "69": {
       "artist": "Fred again.. \u0026 Jozzy",
       "duration": "3m 1s",
       "link": "https://music.apple.com/us/album/ten/1706861926?i=1706861929",
       "name": "ten"
     },
-    "73": {
+    "7": {
+      "artist": "Eliza Rose \u0026 Calvin Harris",
+      "duration": "2m 34s",
+      "link": "https://music.apple.com/us/album/body-moving/1714854055?i=1714854059",
+      "name": "Body Moving"
+    },
+    "70": {
       "artist": "MK",
       "duration": "3m 18s",
       "link": "https://music.apple.com/us/album/take-my-chance/1715563407?i=1715563408",
       "name": "Take My Chance"
     },
-    "74": {
+    "71": {
       "artist": "Duck Sauce, Armand Van Helden \u0026 A-Trak",
       "duration": "2m 49s",
       "link": "https://music.apple.com/us/album/lalala/1711830560?i=1711830829",
       "name": "LALALA"
     },
-    "75": {
+    "72": {
       "artist": "Bklava",
       "duration": "3m 41s",
       "link": "https://music.apple.com/us/album/make-it-work/1707560424?i=1707560430",
       "name": "Make It Work"
     },
-    "76": {
+    "73": {
       "artist": "Dillon Francis \u0026 Marten Hørger",
       "duration": "3m 26s",
       "link": "https://music.apple.com/us/album/on-a-trip/1710826618?i=1710826631",
       "name": "On A Trip"
     },
-    "77": {
+    "74": {
       "artist": "Flava D \u0026 Paige Eliza",
       "duration": "3m 46s",
       "link": "https://music.apple.com/us/album/miss-dopamine-original/1702083621?i=1702083626",
       "name": "Miss Dopamine (Original)"
     },
-    "78": {
+    "75": {
       "artist": "Hayden James \u0026 SAYGRACE",
       "duration": "3m 35s",
       "link": "https://music.apple.com/us/album/beggin-you/1708212368?i=1708212370",
       "name": "Beggin' You"
     },
-    "79": {
+    "76": {
+      "artist": "Argy \u0026 Omnya",
+      "duration": "3m 56s",
+      "link": "https://music.apple.com/us/album/aria/1707154346?i=1707154347",
+      "name": "Aria"
+    },
+    "77": {
       "artist": "Kaskade \u0026 Lauren L'aimant",
       "duration": "3m 36s",
       "link": "https://music.apple.com/us/album/save-me/1708920523?i=1708920862",
       "name": "Save Me"
+    },
+    "78": {
+      "artist": "Ninetails",
+      "duration": "2m 38s",
+      "link": "https://music.apple.com/us/album/feel-alive/1712436276?i=1712436278",
+      "name": "Feel Alive"
+    },
+    "79": {
+      "artist": "Ben Böhmer",
+      "duration": "4m 16s",
+      "link": "https://music.apple.com/us/album/one-last-call-feat-felix-raphael/1705480117?i=1705480118",
+      "name": "One Last Call (feat. Felix Raphael)"
     },
     "8": {
       "artist": "Shndō",
@@ -475,34 +475,34 @@
       "name": "Risk It All (feat. Talii)"
     },
     "80": {
-      "artist": "Sonny Wern, Zana \u0026 Quinten Circle",
-      "duration": "2m 27s",
-      "link": "https://music.apple.com/us/album/dance-for-me-1-2-3-feat-lyente-stutter-techno/1708190210?i=1708190211",
-      "name": "Dance For Me (1, 2, 3) [feat. Lyente] [Stutter Techno]"
-    },
-    "81": {
-      "artist": "Ben Böhmer",
-      "duration": "4m 16s",
-      "link": "https://music.apple.com/us/album/one-last-call-feat-felix-raphael/1705480117?i=1705480118",
-      "name": "One Last Call (feat. Felix Raphael)"
-    },
-    "82": {
       "artist": "Fred again.. \u0026 Obongjayar",
       "duration": "3m 40s",
       "link": "https://music.apple.com/us/album/adore-u/1700707216?i=1700707219",
       "name": "adore u"
     },
-    "83": {
+    "81": {
+      "artist": "Flowdan, Lil Baby \u0026 Skrillex",
+      "duration": "2m 28s",
+      "link": "https://music.apple.com/us/album/pepper/1710899020?i=1710899021",
+      "name": "Pepper"
+    },
+    "82": {
       "artist": "Disfunktion \u0026 Kris O'Neil",
       "duration": "3m 9s",
       "link": "https://music.apple.com/us/album/u-me/1709279332?i=1709279333",
       "name": "U \u0026 Me"
     },
-    "84": {
+    "83": {
       "artist": "William Black \u0026 Linney",
       "duration": "3m 35s",
       "link": "https://music.apple.com/us/album/higher-now/1710812535?i=1710813070",
       "name": "Higher Now"
+    },
+    "84": {
+      "artist": "Seven Lions \u0026 Jason Ross",
+      "duration": "3m 20s",
+      "link": "https://music.apple.com/us/album/darkness-feat-gg-magree/1713748166?i=1713748167",
+      "name": "Darkness (feat. GG Magree)"
     },
     "85": {
       "artist": "Anna Lunoe",
@@ -523,87 +523,87 @@
       "name": "MIDNIGHT OIL"
     },
     "88": {
-      "artist": "Illyus \u0026 Barrientos",
-      "duration": "2m 49s",
-      "link": "https://music.apple.com/us/album/motions-of-love/1705320186?i=1705320188",
-      "name": "Motions of Love"
-    },
-    "89": {
-      "artist": "Marlon Hoffstadt \u0026 DJ Daddy Trance",
-      "duration": "2m 44s",
-      "link": "https://music.apple.com/us/album/i-got-you/1710803614?i=1710803615",
-      "name": "I Got You"
-    },
-    "9": {
-      "artist": "John Summit \u0026 Hayla",
-      "duration": "3m 56s",
-      "link": "https://music.apple.com/us/album/where-you-are/1673828877?i=1673828907",
-      "name": "Where You Are"
-    },
-    "90": {
-      "artist": "Peggy Gou \u0026 Lenny Kravitz",
-      "duration": "2m 56s",
-      "link": "https://music.apple.com/us/album/i-believe-in-love-again/1710867526?i=1710867533",
-      "name": "I Believe In Love Again"
-    },
-    "91": {
       "artist": "Modern Machines",
       "duration": "2m 29s",
       "link": "https://music.apple.com/us/album/brooklyn/1706414253?i=1706414254",
       "name": "Brooklyn"
     },
-    "92": {
+    "89": {
       "artist": "K?D",
       "duration": "3m 48s",
       "link": "https://music.apple.com/us/album/starting-from-scratch/1711739641?i=1711739644",
       "name": "Starting From Scratch"
     },
-    "93": {
+    "9": {
+      "artist": "Alok, The Chainsmokers \u0026 Mae Stephens",
+      "duration": "2m 55s",
+      "link": "https://music.apple.com/us/album/jungle/1705390809?i=1705391359",
+      "name": "Jungle"
+    },
+    "90": {
       "artist": "Taylor Swift \u0026 LP Giobbi",
       "duration": "3m 12s",
       "link": "https://music.apple.com/us/album/cruel-summer-lp-giobbi-remix/1712547428?i=1712547505",
       "name": "Cruel Summer (LP Giobbi Remix)"
     },
-    "94": {
+    "91": {
       "artist": "Mau P",
       "duration": "3m 23s",
       "link": "https://music.apple.com/us/album/dress-code/1707464782?i=1707464784",
       "name": "Dress Code"
     },
-    "95": {
+    "92": {
       "artist": "SIDEPIECE",
       "duration": "3m 35s",
       "link": "https://music.apple.com/us/album/feel-the-need/1714432734?i=1714432738",
       "name": "Feel The Need"
     },
-    "96": {
-      "artist": "Ninetails",
-      "duration": "2m 38s",
-      "link": "https://music.apple.com/us/album/feel-alive/1712436276?i=1712436278",
-      "name": "Feel Alive"
-    },
-    "97": {
+    "93": {
       "artist": "Nightlapse",
       "duration": "3m 30s",
       "link": "https://music.apple.com/us/album/collide-feat-faber/1711692485?i=1711692488",
       "name": "Collide (feat. FABER)"
     },
-    "98": {
+    "94": {
       "artist": "Billy Gillies",
       "duration": "3m 0s",
       "link": "https://music.apple.com/us/album/dna-loving-you-feat-hannah-boleyn-joel-corry-remix/1715391303?i=1715391308",
       "name": "DNA (Loving You) [feat. Hannah Boleyn] [Joel Corry Remix]"
     },
-    "99": {
+    "95": {
+      "artist": "Marlon Hoffstadt \u0026 DJ Daddy Trance",
+      "duration": "2m 44s",
+      "link": "https://music.apple.com/us/album/i-got-you/1710803614?i=1710803615",
+      "name": "I Got You"
+    },
+    "96": {
       "artist": "Tiga, Hudson Mohawke \u0026 Jesse Boykins III",
       "duration": "4m 10s",
       "link": "https://music.apple.com/us/album/silence-of-love/1707275000?i=1707275066",
       "name": "Silence Of Love"
     },
-    "album": "Real Love - Single",
+    "97": {
+      "artist": "Disco Lines \u0026 Miggy Dela Rosa",
+      "duration": "3m 44s",
+      "link": "https://music.apple.com/us/album/blurring-the-lines/1715655127?i=1715655129",
+      "name": "Blurring the Lines"
+    },
+    "98": {
+      "artist": "CHROMEBODIES \u0026 valentina cy",
+      "duration": "3m 26s",
+      "link": "https://music.apple.com/us/album/i-could-be/1715361956?i=1715361958",
+      "name": "I Could Be"
+    },
+    "99": {
+      "artist": "Grigoré",
+      "duration": "4m 11s",
+      "link": "https://music.apple.com/us/album/signals/1713716153?i=1713716154",
+      "name": "Signals"
+    },
+    "album": "Fine Fine Baby - Single",
     "artist": null,
     "count": 100,
-    "date": "2023-11-24T05:00:12Z",
-    "thumb": "https://is1-ssl.mzstatic.com/image/thumb/Features116/v4/4a/d6/50/4ad6509e-8dc5-a17f-5fd0-177025962d8d/145760dd-293f-41d4-9cbb-ed3b5c6897e7.png/{w}x{h}SC.DN01.{f}?l=en-US"
+    "date": "2023-12-01T05:07:44Z",
+    "thumb": "https://is1-ssl.mzstatic.com/image/thumb/Features126/v4/5e/94/fa/5e94fad2-3b6d-e19e-7d9e-32dbc0643459/1801f14a-4e03-4b9f-8296-5c4be455bc6f.png/{w}x{h}SC.DN01.{f}?l=en-US"
   }
 }
