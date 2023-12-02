@@ -78,7 +78,6 @@
         color: white;
       }
       .playlist {
-        height: 80vh;
         overflow-y: auto;
         border: 1px solid #ccc;
         border-radius: 5px;
@@ -143,8 +142,21 @@
       <img src="tunemeld_loading_screen.png" alt="Loading" id="loading-image" />
     </div>
 
+    
+
     <div class="container my-2" id="main-content" style="opacity: 0">
       <h1 class="text-center" style="margin-bottom: 10px">tunemeld</h1>
+
+      <div class="row">
+        <div class="col-md-12">
+          <div class="playlist">
+            <div class="playlist-title">Aggregated Playlist</div>
+            <div id="aggregated-data-placeholder"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
       <div class="row">
         <div class="col-md-4 col-sm-12">
           <div class="playlist">
@@ -166,15 +178,7 @@
         </div>
       </div>
 
-      <div class="row">
-        <div class="col-md-12">
-          <div class="playlist">
-            <div class="playlist-title">Aggregated Playlist</div>
-            <div id="aggregated-data-placeholder"></div>
-          </div>
-        </div>
-      </div>
-    </div>
+     
     <div id="page-views">Page Views: Loading...</div>
 
 
