@@ -132,7 +132,7 @@
         fetch('./config.json') // assuming your JSON file is named config.json
             .then(response => response.json())
             .then(config => {
-                const aggregatedPlaylistPath = config.AggregatedPlaylistConfigs.EDMPlaylistConfigs;
+                const aggregatedPlaylistPath = config.AggregatedPlaylistConfigs.EDM;
                 fetchAndDisplayData('Aggregated Playlist', 'aggregated-data-placeholder', aggregatedPlaylistPath);
             })
             .catch(error => console.error('Error fetching aggregated playlist:', error));
