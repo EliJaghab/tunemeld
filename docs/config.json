@@ -1,8 +1,4 @@
 {
-    "BronzeRootPath": "./data/bronze/",
-    "SilverRootPath": "./data/silver/",
-    "BronzeSuffix": "_bronze.json",
-    "SilverSuffix": "_silver.json",
     "ServiceConfigs": {
         "AppleMusic": {
             "BaseURL": "https://apple-music24.p.rapidapi.com/playlist1/",
@@ -22,7 +18,7 @@
     },
     "EDMPlaylistConfigs": [
         {
-            "ServiceName":   "apple-music",
+            "ServiceName":   "apple_music",
             "PlaylistParam": "https%3A%2F%2Fmusic.apple.com%2Fus%2Fplaylist%2Fdancexl%2Fpl.6bf4415b83ce4f3789614ac4c3675740",
             "BronzePath": "./data/bronze/apple_music_edm_bronze.json",
             "SilverWritePath": "./docs/silver/apple_music_edm_silver.json",
@@ -57,5 +53,9 @@
                 "Limit": 100
             }
         }
-    ]
+    ],
+    "AggregatedPlaylistConfigs": {
+        "EDMPlaylistConfigs": "./docs/gold/edm_gold.json"
+    }
+
 }

@@ -53,6 +53,9 @@ func ParseTrackSource(source string) (TrackSource, error) {
 	}
 }
 
+type TrackInterface interface {
+    MarshalJSON() ([]byte, error)
+}
 type Track struct {
 	Name     string      `json:"name"`
 	Artist   string      `json:"artist"`
@@ -63,6 +66,23 @@ type Track struct {
 }
 
 type GoldTrack struct {
-	Track
-	AdditionalSources []TrackSource `json:"additional_sources"`
+    Track             Track
+    AdditionalSources []TrackSource `json:"additional_sources"`
+}
+
+func (gt GoldTrack) MarshalJSON() ([]byte, error) {
+    // Marshal the Track part using its MarshalJSON method.
+    trackJSON, err := json.Marshal(gt.Track)
+    if err != nil {
+        return nil, err
+    }
+    
+    // Combine the JSON of Track and the additional fields of GoldTrack.
+    return json.Marshal(struct {
+        *json.RawMessage
+        AdditionalSources []TrackSource `json:"additional_sources"`
+    }{
+        RawMessage:        (*json.RawMessage)(&trackJSON),
+        AdditionalSources: gt.AdditionalSources,
+    })
 }

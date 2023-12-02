@@ -12,6 +12,7 @@ const (
 const (
 	TracksConnectionString = "postgres://eli:your_password@localhost:5432/tracks?sslmode=disable"
 )
+
 const (
 	ConfigFilePath = "./docs/config.json"
 )
@@ -37,15 +38,14 @@ type RequestOptions struct {
 }
 
 type Config struct {
-	BronzeRootPath     string
-	SilverRootPath     string
-	BronzeSuffix       string
-	SilverSuffix       string
-	ServiceConfigs     map[string]ServiceConfig
-	EDMPlaylistConfigs []PlaylistConfig
+    ServiceConfigs            map[string]ServiceConfig
+    EDMPlaylistConfigs        []PlaylistConfig
+    AggregatedPlaylistConfigs map[string]string 
 }
 
 var EDMPlaylistConfigs []PlaylistConfig
+
+var AggregatedPlaylistConfigs map[string]string
 
 func LoadConfig() error {
 	file, err := os.Open(ConfigFilePath)
@@ -61,5 +61,6 @@ func LoadConfig() error {
 	}
 
 	EDMPlaylistConfigs = cfg.EDMPlaylistConfigs
+	AggregatedPlaylistConfigs = cfg.AggregatedPlaylistConfigs
 	return nil
 }

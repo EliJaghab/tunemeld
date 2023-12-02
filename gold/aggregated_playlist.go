@@ -136,16 +136,16 @@ func createTrackSimilarityView(db *sql.DB) error {
 	SELECT
 		*,
 		-- Boolean flags for similarity threshold
-		sim_sc_sp > 0.7 AS match_sc_sp,
-		sim_sc_am > 0.7 AS match_sc_am,
-		sim_sp_am > 0.7 AS match_sp_am,
+		sim_sc_sp > .6 AS match_sc_sp,
+		sim_sc_am > .6 AS match_sc_am,
+		sim_sp_am > .6 AS match_sp_am,
 		
 		-- Determine if a track is on all three services
-		(sim_sc_sp > 0.7 AND sim_sc_am > 0.7 AND sim_sp_am > 0.7) AS match_all_three,
+		(sim_sc_sp > .6 AND sim_sc_am > .6 AND sim_sp_am > .6) AS match_all_three,
 		-- Determine if a track is on any two services
-		(sim_sc_sp > 0.7 AND sim_sc_am > 0.7) OR
-		(sim_sc_sp > 0.7 AND sim_sp_am > 0.7) OR
-		(sim_sc_am > 0.7 AND sim_sp_am > 0.7) AS match_any_two
+		(sim_sc_sp > .6 AND sim_sc_am > .6) OR
+		(sim_sc_sp > .6 AND sim_sp_am > .6) OR
+		(sim_sc_am > .6 AND sim_sp_am > .6) AS match_any_two
 	FROM 
 		track_similarity;
 	
@@ -153,8 +153,6 @@ func createTrackSimilarityView(db *sql.DB) error {
 	if err != nil {
 		log.Fatalf("Failed to create track_pairs view: %v", err)
 	}
-	printViewContents(db, "all_tracks")
-	printViewContents(db, "track_pairs")
 	return nil
 
 }

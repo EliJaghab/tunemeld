@@ -10,6 +10,19 @@ import (
 	"github.com/EliJaghab/tunemeld/config"
 )
 
+func ReadTracksFromJSONFile(filePath string) ([]config.Track, error) {
+	file, err := os.ReadFile(filePath)
+	if err != nil {
+		return nil, err
+	}
+	var tracks []config.Track
+	err = json.Unmarshal(file, &tracks)
+	if err != nil {
+		return nil, err
+	}
+	return tracks, nil
+}
+
 func GetJSONfromBytes(data []byte) (map[string]interface{}, error) {
 	var result map[string]interface{}
 	err := json.Unmarshal(data, &result)
@@ -48,18 +61,18 @@ func WriteJSONToFile(data map[string]interface{}, filePath string) error {
 	return writeFile(filePath, jsonData)
 }
 
-func WriteTracksToJSONFile(tracks []config.Track, filePath string) error {
-	jsonData, err := marshalIndent(tracks)
-	if err != nil {
-		return err
-	}
+func WriteTracksToJSONFile(tracks []config.TrackInterface, filePath string) error {
+    jsonData, err := marshalIndent(tracks)
+    if err != nil {
+        return err
+    }
 
-	err = ensureDirectory(filePath)
-	if err != nil {
-		return err
-	}
+    err = ensureDirectory(filePath)
+    if err != nil {
+        return err
+    }
 
-	return writeFile(filePath, jsonData)
+    return writeFile(filePath, jsonData)
 }
 
 func marshalIndent(data interface{}) ([]byte, error) {

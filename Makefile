@@ -31,9 +31,9 @@ run-transform:
 	@echo "Building and running transform command..."
 	@bash -c "source api_credentials.sh && go run cmd/transform/main.go"
 
-make run-gold:
-	@echo "Getting mongo uri and running gold command..."
-	@bash -c "source api_credentials.sh && go run cmd/gold/main.go"	
+run-gold:
+	@echo "Running gold transform..."
+	@bash -c "go run cmd/gold/main.go"
 
 run-extract-actions:
 	@bash -c "go run cmd/extract/main.go"
