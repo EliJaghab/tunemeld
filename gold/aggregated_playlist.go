@@ -161,46 +161,41 @@ func createMatchesView(db *sql.DB) error {
 	// Prioritize soundcloud values, then spotify for the row values if there is a match
 	_, err := db.Exec(`
 	CREATE OR REPLACE VIEW matches AS
-		SELECT
-			CASE
-				WHEN match_all_three THEN sc_name
-				WHEN match_sc_sp THEN sc_name
-				ELSE sp_name
-			END AS name,
-			CASE
-				WHEN match_all_three THEN sc_artist
-				WHEN match_sc_sp THEN sc_artist
-				ELSE sp_artist
-			END AS artist,
-			CASE
-				WHEN match_all_three THEN sc_link
-				WHEN match_sc_sp THEN sc_link
-				ELSE sp_link
-			END AS link,
-			CASE
-				WHEN match_all_three THEN sc_rank
-				WHEN match_sc_sp THEN sc_rank
-				ELSE sp_rank
-			END AS rank,
-			CASE
-				WHEN match_all_three THEN sc_album_url
-				WHEN match_sc_sp THEN sc_album_url
-				ELSE sp_album_url
-			END AS album_url,
-			CASE
-				WHEN match_sc_sp OR match_sc_am THEN sc_source
-				ELSE sp_source
-			END AS source,
-			CASE
-				WHEN match_sc_sp OR match_sc_am THEN ARRAY[am_source, sp_source]
-				WHEN match_sp_am THEN ARRAY[sc_source, sp_source]
-			ELSE ARRAY[sc_source, am_source]
-		END AS additional_sources
-	FROM
-		track_pairs
-	WHERE
-		match_all_three OR match_any_two
-	ORDER BY am_rank, sp_rank, sc_rank;
+SELECT
+    ROW_NUMBER() OVER (ORDER BY am_rank, sp_rank, sc_rank) AS rank,
+    CASE
+        WHEN match_all_three THEN sc_name
+        WHEN match_sc_sp THEN sc_name
+        ELSE sp_name
+    END AS name,
+    CASE
+        WHEN match_all_three THEN sc_artist
+        WHEN match_sc_sp THEN sc_artist
+        ELSE sp_artist
+    END AS artist,
+    CASE
+        WHEN match_all_three THEN sc_link
+        WHEN match_sc_sp THEN sc_link
+        ELSE sp_link
+    END AS link,
+    CASE
+        WHEN match_all_three THEN sc_album_url
+        WHEN match_sc_sp THEN sc_album_url
+        ELSE sp_album_url
+    END AS album_url,
+    CASE
+        WHEN match_sc_sp OR match_sc_am THEN sc_source
+        ELSE sp_source
+    END AS source,
+    CASE
+        WHEN match_sc_sp OR match_sc_am THEN ARRAY[am_source, sp_source]
+        WHEN match_sp_am THEN ARRAY[sc_source, sp_source]
+    ELSE ARRAY[sc_source, am_source]
+END AS additional_sources
+FROM
+    track_pairs
+WHERE
+    match_all_three OR match_any_two;
     `)
 
 	if err != nil {

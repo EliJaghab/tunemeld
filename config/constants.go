@@ -28,24 +28,28 @@ type PlaylistConfig struct {
 	PlaylistParam   string
 	BronzePath      string
 	SilverWritePath string
+	SilverReadPath  string // Add SilverReadPath field
 	ServiceConfig
 	RequestOptions *RequestOptions
 }
-
 type RequestOptions struct {
 	Offset int
 	Limit  int
 }
 
+type AggregatedPlaylistConfig struct {
+	WritePath string // Add WritePath field
+	ReadPath  string // Add ReadPath field
+}
 type Config struct {
-    ServiceConfigs            map[string]ServiceConfig
-    EDMPlaylistConfigs        []PlaylistConfig
-    AggregatedPlaylistConfigs map[string]string 
+	ServiceConfigs            map[string]ServiceConfig
+	EDMPlaylistConfigs        []PlaylistConfig
+	AggregatedPlaylistConfigs map[string]AggregatedPlaylistConfig 
 }
 
 var EDMPlaylistConfigs []PlaylistConfig
 
-var AggregatedPlaylistConfigs map[string]string
+var AggregatedPlaylistConfigs map[string]AggregatedPlaylistConfig
 
 func LoadConfig() error {
 	file, err := os.Open(ConfigFilePath)

@@ -43,4 +43,6 @@ jobs:
             git add .
             git commit -m "Automated data update" -a || echo "No changes to commit"
             git push
-  
+    
+    - name: Run gold
+      run: echo "Running gold command..." && make run-gold

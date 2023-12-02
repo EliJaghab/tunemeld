@@ -23,7 +23,14 @@ func main() {
 		}
 		log.Printf("Successfully transformed %s", playlistConfig.BronzePath)
 
-		err = extractors.WriteTracksToJSONFile(tracks, playlistConfig.SilverWritePath)
+		// Convert []config.Track to []config.TrackInterface
+		var trackInterfaces []config.TrackInterface
+		for _, track := range tracks {
+			trackInterfaces = append(trackInterfaces, track)
+		}
+
+		// Now you can pass trackInterfaces to extractors.WriteTracksToJSONFile
+		err = extractors.WriteTracksToJSONFile(trackInterfaces, playlistConfig.SilverWritePath)
 		if err != nil {
 			log.Printf("Error writing %s: %v", playlistConfig.SilverWritePath, err)
 		}

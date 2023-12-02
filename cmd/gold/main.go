@@ -45,7 +45,7 @@ func main() {
 		interfaceTracks = append(interfaceTracks, gt)
 	}
 
-	goldPath := config.AggregatedPlaylistConfigs["EDMPlaylistConfigs"]
+	goldPath := config.AggregatedPlaylistConfigs["EDM"].WritePath
 	err = extractors.WriteTracksToJSONFile(interfaceTracks, goldPath)
 	if err != nil {
 		log.Fatalf("Error writing to gold file %s: %v", goldPath, err)

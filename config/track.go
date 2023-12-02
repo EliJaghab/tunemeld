@@ -54,7 +54,7 @@ func ParseTrackSource(source string) (TrackSource, error) {
 }
 
 type TrackInterface interface {
-    MarshalJSON() ([]byte, error)
+	MarshalJSON() ([]byte, error)
 }
 type Track struct {
 	Name     string      `json:"name"`
@@ -65,24 +65,60 @@ type Track struct {
 	Source   TrackSource `json:"source"`
 }
 
+// Implement the TrackInterface interface for the Track type
+func (t Track) MarshalJSON() ([]byte, error) {
+	type Alias Track
+	return json.Marshal(&struct {
+		*Alias
+		Source string `json:"source"`
+	}{
+		Alias:  (*Alias)(&t),
+		Source: t.Source.String(),
+	})
+}
+
+func (t Track) GetTrackName() string {
+	return t.Name
+}
+
+func (t Track) GetTrackArtist() string {
+	return t.Artist
+}
+
+func (t Track) GetTrackLink() string {
+	return t.Link
+}
+
+func (t Track) GetTrackRank() int {
+	return t.Rank
+}
+
+func (t Track) GetTrackAlbumURL() string {
+	return t.AlbumURL
+}
+
+func (t Track) GetTrackSource() TrackSource {
+	return t.Source
+}
+
 type GoldTrack struct {
-    Track             Track
-    AdditionalSources []TrackSource `json:"additional_sources"`
+	Track             Track
+	AdditionalSources []TrackSource `json:"additional_sources"`
 }
 
 func (gt GoldTrack) MarshalJSON() ([]byte, error) {
-    // Marshal the Track part using its MarshalJSON method.
-    trackJSON, err := json.Marshal(gt.Track)
-    if err != nil {
-        return nil, err
-    }
-    
-    // Combine the JSON of Track and the additional fields of GoldTrack.
-    return json.Marshal(struct {
-        *json.RawMessage
-        AdditionalSources []TrackSource `json:"additional_sources"`
-    }{
-        RawMessage:        (*json.RawMessage)(&trackJSON),
-        AdditionalSources: gt.AdditionalSources,
-    })
+	// Marshal the Track part using its MarshalJSON method.
+	trackJSON, err := json.Marshal(gt.Track)
+	if err != nil {
+		return nil, err
+	}
+
+	// Combine the JSON of Track and the additional fields of GoldTrack.
+	return json.Marshal(struct {
+		*json.RawMessage
+		AdditionalSources []TrackSource `json:"additional_sources"`
+	}{
+		RawMessage:        (*json.RawMessage)(&trackJSON),
+		AdditionalSources: gt.AdditionalSources,
+	})
 }

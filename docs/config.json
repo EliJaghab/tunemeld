@@ -18,7 +18,7 @@
     },
     "EDMPlaylistConfigs": [
         {
-            "ServiceName":   "apple_music",
+            "ServiceName":   "apple-music",
             "PlaylistParam": "https%3A%2F%2Fmusic.apple.com%2Fus%2Fplaylist%2Fdancexl%2Fpl.6bf4415b83ce4f3789614ac4c3675740",
             "BronzePath": "./data/bronze/apple_music_edm_bronze.json",
             "SilverWritePath": "./docs/silver/apple_music_edm_silver.json",
@@ -55,7 +55,11 @@
         }
     ],
     "AggregatedPlaylistConfigs": {
-        "EDMPlaylistConfigs": "./docs/gold/edm_gold.json"
+        "EDM": {
+            "WritePath": "./docs/gold/edm_gold.json",
+            "ReadPath": "./gold/edm_gold.json"
+        }
     }
+    
 
 }
