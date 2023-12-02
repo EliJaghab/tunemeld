@@ -6,6 +6,13 @@ import (
 )
 
 const (
+	PostgresConnectionString = "postgres://eli:your_password@localhost:5432/postgres?sslmode=disable"
+)
+
+const (
+	TracksConnectionString = "postgres://eli:your_password@localhost:5432/tracks?sslmode=disable"
+)
+const (
 	ConfigFilePath = "./docs/config.json"
 )
 
@@ -53,6 +60,6 @@ func LoadConfig() error {
 		return err
 	}
 
-	EDMPlaylistConfigs = cfg.EDMPlaylistConfigs // Load the playlist configs into the global variable
+	EDMPlaylistConfigs = cfg.EDMPlaylistConfigs
 	return nil
 }

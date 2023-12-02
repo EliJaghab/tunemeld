@@ -9,6 +9,8 @@ require (
 
 require (
 	github.com/golang/protobuf v1.5.3 // indirect
+	github.com/lib/pq v1.10.9 // indirect
+	github.com/paul-mannino/go-fuzzywuzzy v0.0.0-20200127021948-54652b135d0e // indirect
 	golang.org/x/net v0.16.0 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
 	google.golang.org/protobuf v1.31.0 // indirect

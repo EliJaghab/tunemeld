@@ -2,7 +2,6 @@ package config
 
 import (
 	"encoding/json"
-	"errors"
 )
 
 type TrackSource int
@@ -11,6 +10,7 @@ const (
 	SourceAppleMusic TrackSource = iota
 	SourceSpotify
 	SourceSoundCloud
+	SourceUnknown
 )
 
 func (ts TrackSource) String() string {
@@ -35,18 +35,22 @@ func (ts *TrackSource) UnmarshalJSON(b []byte) error {
 	if err := json.Unmarshal(b, &source); err != nil {
 		return err
 	}
+	var err error
+	*ts, err = ParseTrackSource(source)
+	return err
+}
 
+func ParseTrackSource(source string) (TrackSource, error) {
 	switch source {
 	case "apple_music":
-		*ts = SourceAppleMusic
+		return SourceAppleMusic, nil
 	case "spotify":
-		*ts = SourceSpotify
+		return SourceSpotify, nil
 	case "soundcloud":
-		*ts = SourceSoundCloud
+		return SourceSoundCloud, nil
 	default:
-		return errors.New("unknown track source")
+		return SourceUnknown, nil
 	}
-	return nil
 }
 
 type Track struct {
@@ -56,4 +60,9 @@ type Track struct {
 	Rank     int         `json:"rank"`
 	AlbumURL string      `json:"album_url"`
 	Source   TrackSource `json:"source"`
+}
+
+type GoldTrack struct {
+	Track
+	AdditionalSources []TrackSource `json:"additional_sources"`
 }
