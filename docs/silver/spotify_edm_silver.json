@@ -1,34 +1,34 @@
 [
   {
+    "name": "leavemealone",
+    "artist": "Fred again.., Baby Keem",
+    "link": "https://open.spotify.com/track/1MVqeIAwhD4T44AKVkIfic",
+    "rank": 1,
+    "album_url": "https://i.scdn.co/image/ab67616d0000b273c9049966d5a1c1954ae98480",
+    "source": "spotify"
+  },
+  {
+    "name": "Hungover (with Camden Cox)",
+    "artist": "John Summit, Mathame, Camden Cox",
+    "link": "https://open.spotify.com/track/1HmeANWuuCP6ldvGgKwTLi",
+    "rank": 2,
+    "album_url": "https://i.scdn.co/image/ab67616d0000b273ce5e4af455d4273f46237912",
+    "source": "spotify"
+  },
+  {
     "name": "Aria",
     "artist": "Argy, Omnya",
     "link": "https://open.spotify.com/track/3M1r9ilL53PLcrLdIuyZ4J",
-    "rank": 1,
+    "rank": 3,
     "album_url": "https://i.scdn.co/image/ab67616d0000b2739c80ffdc279b69278ce04d31",
     "source": "spotify"
   },
   {
-    "name": "Body Moving",
-    "artist": "Eliza Rose, Calvin Harris",
-    "link": "https://open.spotify.com/track/5SFCEkybGYmmzKqewtDEaN",
-    "rank": 2,
-    "album_url": "https://i.scdn.co/image/ab67616d0000b273535aaa51352955a479bc5371",
-    "source": "spotify"
-  },
-  {
-    "name": "Lover/Friend",
-    "artist": "KAYTRANADA, Rochelle Jordan",
-    "link": "https://open.spotify.com/track/5ahq8vkzMznGmfN2EVOukP",
-    "rank": 3,
-    "album_url": "https://i.scdn.co/image/ab67616d0000b27300540a663c95a4c2ec8a8c0c",
-    "source": "spotify"
-  },
-  {
-    "name": "Saving Up",
-    "artist": "Dom Dolla",
-    "link": "https://open.spotify.com/track/787Y2idwCU2Rk60Prv4wpr",
+    "name": "Water",
+    "artist": "Tyla, Marshmello",
+    "link": "https://open.spotify.com/track/4Q2IUQo8YuoCqiRrDazKK4",
     "rank": 4,
-    "album_url": "https://i.scdn.co/image/ab67616d0000b273585c329dfd9cdeb22b6cd247",
+    "album_url": "https://i.scdn.co/image/ab67616d0000b2732b35ec31acfe3aa18986f2df",
     "source": "spotify"
   },
   {
@@ -40,74 +40,106 @@
     "source": "spotify"
   },
   {
-    "name": "Water",
-    "artist": "Tyla, Marshmello",
-    "link": "https://open.spotify.com/track/4Q2IUQo8YuoCqiRrDazKK4",
+    "name": "Carry Me Higher - 7 Inch Version",
+    "artist": "The Blessed Madonna, Joy Anonymous, Danielle Ponder",
+    "link": "https://open.spotify.com/track/7tm4pF2JvKc4GGKSagRuS9",
     "rank": 6,
-    "album_url": "https://i.scdn.co/image/ab67616d0000b2732b35ec31acfe3aa18986f2df",
-    "source": "spotify"
-  },
-  {
-    "name": "When We Were Young (The Logical Song)",
-    "artist": "David Guetta, Kim Petras",
-    "link": "https://open.spotify.com/track/1CcLA0eaauck34YEIrvAAq",
-    "rank": 7,
-    "album_url": "https://i.scdn.co/image/ab67616d0000b273c8e153557024fd571a5a83d6",
-    "source": "spotify"
-  },
-  {
-    "name": "Dress Code",
-    "artist": "Mau P",
-    "link": "https://open.spotify.com/track/0rK3a7tLRVgJBoc2DP3tIX",
-    "rank": 8,
-    "album_url": "https://i.scdn.co/image/ab67616d0000b27392056b7591a227aeb2d03f9f",
+    "album_url": "https://i.scdn.co/image/ab67616d0000b2739f1884f29f7569ec583754f5",
     "source": "spotify"
   },
   {
     "name": "Mwaki",
     "artist": "Zerb, Sofiya Nzau",
     "link": "https://open.spotify.com/track/5KTZgG84bKFGm53lhLtTqc",
-    "rank": 9,
+    "rank": 7,
     "album_url": "https://i.scdn.co/image/ab67616d0000b2733e56ef77fe414ce4af6334a4",
     "source": "spotify"
   },
   {
-    "name": "ten",
-    "artist": "Fred again.., Jozzy",
-    "link": "https://open.spotify.com/track/5QOBT97OmYCZo1W5u7tRrB",
+    "name": "Body Moving",
+    "artist": "Eliza Rose, Calvin Harris",
+    "link": "https://open.spotify.com/track/5SFCEkybGYmmzKqewtDEaN",
+    "rank": 8,
+    "album_url": "https://i.scdn.co/image/ab67616d0000b273535aaa51352955a479bc5371",
+    "source": "spotify"
+  },
+  {
+    "name": "I Got Nothing",
+    "artist": "MEDUZA, Ferreck Dawn, Clementine Douglas",
+    "link": "https://open.spotify.com/track/4yagkb6nJCRcfjUhaOVHTw",
+    "rank": 9,
+    "album_url": "https://i.scdn.co/image/ab67616d0000b2735f6b4d60420bed37057115d4",
+    "source": "spotify"
+  },
+  {
+    "name": "Lover/Friend",
+    "artist": "KAYTRANADA, Rochelle Jordan",
+    "link": "https://open.spotify.com/track/5ahq8vkzMznGmfN2EVOukP",
     "rank": 10,
-    "album_url": "https://i.scdn.co/image/ab67616d0000b273d6cddb90ea739c5c20b9edb4",
-    "source": "spotify"
-  },
-  {
-    "name": "She's On My Mind",
-    "artist": "Romy",
-    "link": "https://open.spotify.com/track/4heve4ydl1u6V3AD4moZq9",
-    "rank": 11,
-    "album_url": "https://i.scdn.co/image/ab67616d0000b27335ba0d2342ebda40506ded9f",
-    "source": "spotify"
-  },
-  {
-    "name": "Stay High",
-    "artist": "Diplo, HUGEL, Julia Church",
-    "link": "https://open.spotify.com/track/7LXimIqTYO76Utly8VFABu",
-    "rank": 12,
-    "album_url": "https://i.scdn.co/image/ab67616d0000b2736c085bf11b46f72cb2976fd8",
+    "album_url": "https://i.scdn.co/image/ab67616d0000b27300540a663c95a4c2ec8a8c0c",
     "source": "spotify"
   },
   {
     "name": "Veneno",
     "artist": "Sofi Tukker, Mari Merenda, Sophia Ardessore",
     "link": "https://open.spotify.com/track/7eUalfb6XYFlpM8LvHmsJD",
-    "rank": 13,
+    "rank": 11,
     "album_url": "https://i.scdn.co/image/ab67616d0000b27381b1112ec29b2839799ed36d",
+    "source": "spotify"
+  },
+  {
+    "name": "Saving Up",
+    "artist": "Dom Dolla",
+    "link": "https://open.spotify.com/track/787Y2idwCU2Rk60Prv4wpr",
+    "rank": 12,
+    "album_url": "https://i.scdn.co/image/ab67616d0000b273585c329dfd9cdeb22b6cd247",
+    "source": "spotify"
+  },
+  {
+    "name": "When We Were Young (The Logical Song)",
+    "artist": "David Guetta, Kim Petras",
+    "link": "https://open.spotify.com/track/1CcLA0eaauck34YEIrvAAq",
+    "rank": 13,
+    "album_url": "https://i.scdn.co/image/ab67616d0000b273c8e153557024fd571a5a83d6",
+    "source": "spotify"
+  },
+  {
+    "name": "Stay High",
+    "artist": "Diplo, HUGEL, Julia Church",
+    "link": "https://open.spotify.com/track/7LXimIqTYO76Utly8VFABu",
+    "rank": 14,
+    "album_url": "https://i.scdn.co/image/ab67616d0000b2736c085bf11b46f72cb2976fd8",
+    "source": "spotify"
+  },
+  {
+    "name": "Dress Code",
+    "artist": "Mau P",
+    "link": "https://open.spotify.com/track/0rK3a7tLRVgJBoc2DP3tIX",
+    "rank": 15,
+    "album_url": "https://i.scdn.co/image/ab67616d0000b27392056b7591a227aeb2d03f9f",
+    "source": "spotify"
+  },
+  {
+    "name": "Thank You (Not So Bad)",
+    "artist": "Dimitri Vegas \u0026 Like Mike, Tiësto, Dido, W\u0026W, Dimitri Vegas, Like Mike",
+    "link": "https://open.spotify.com/track/09CnYHiZ5jGT1wr1TXJ9Zt",
+    "rank": 16,
+    "album_url": "https://i.scdn.co/image/ab67616d0000b2730aa08f8923434aab06e43b37",
+    "source": "spotify"
+  },
+  {
+    "name": "She's On My Mind",
+    "artist": "Romy",
+    "link": "https://open.spotify.com/track/4heve4ydl1u6V3AD4moZq9",
+    "rank": 17,
+    "album_url": "https://i.scdn.co/image/ab67616d0000b27335ba0d2342ebda40506ded9f",
     "source": "spotify"
   },
   {
     "name": "Losing Control",
     "artist": "Odd Mob, OMNOM",
     "link": "https://open.spotify.com/track/4LwxeWSBu0LQtEyGLb6FVP",
-    "rank": 14,
+    "rank": 18,
     "album_url": "https://i.scdn.co/image/ab67616d0000b2737f716a9fa5490b70c634821c",
     "source": "spotify"
   },
@@ -115,7 +147,7 @@
     "name": "I Believe In Love Again - Jex Opolis Remix Edit",
     "artist": "Peggy Gou, Lenny Kravitz, Jex Opolis",
     "link": "https://open.spotify.com/track/17t5Ba4T5CEYw2WG2clNeu",
-    "rank": 15,
+    "rank": 19,
     "album_url": "https://i.scdn.co/image/ab67616d0000b27353da239062d119e730473438",
     "source": "spotify"
   },
@@ -123,23 +155,23 @@
     "name": "Can't Play Myself (A Tribute To Amy)",
     "artist": "Skepta, Amy Winehouse",
     "link": "https://open.spotify.com/track/6GrLwf1LdBCmkBOsmOcbPp",
-    "rank": 16,
+    "rank": 20,
     "album_url": "https://i.scdn.co/image/ab67616d0000b273af20826cd7ffc3bcedab235b",
     "source": "spotify"
   },
   {
-    "name": "Mercy (feat. Jacob Lusk)",
-    "artist": "The Blessed Madonna, Jacob Lusk, Gabriels",
-    "link": "https://open.spotify.com/track/4ejCsNXh66YasBUiwfBhDg",
-    "rank": 17,
-    "album_url": "https://i.scdn.co/image/ab67616d0000b2736a8c944c845669fa9a354678",
+    "name": "Losing You - Spotify Singles",
+    "artist": "Gabry Ponte, bshp, Joe Cleere",
+    "link": "https://open.spotify.com/track/76BUikFfXcbbOasPMbOCaZ",
+    "rank": 21,
+    "album_url": "https://i.scdn.co/image/ab67616d0000b273e82d7d4db746c4197481c0f7",
     "source": "spotify"
   },
   {
     "name": "BELLYDANCING",
     "artist": "INJI",
     "link": "https://open.spotify.com/track/74HBdKMibHlpW312HTFReN",
-    "rank": 18,
+    "rank": 22,
     "album_url": "https://i.scdn.co/image/ab67616d0000b2730c7c992ec7dea05eba305410",
     "source": "spotify"
   },
@@ -147,23 +179,15 @@
     "name": "Rainy (with REI AMI)",
     "artist": "Dillon Francis, REI AMI",
     "link": "https://open.spotify.com/track/4feAKLuq3ShnAA84HcUFvf",
-    "rank": 19,
+    "rank": 23,
     "album_url": "https://i.scdn.co/image/ab67616d0000b273c6af01138c83149291621de3",
-    "source": "spotify"
-  },
-  {
-    "name": "Jungle",
-    "artist": "Alok, The Chainsmokers, Mae Stephens",
-    "link": "https://open.spotify.com/track/0OvO2X2Q3i98dc5RcgEN3x",
-    "rank": 20,
-    "album_url": "https://i.scdn.co/image/ab67616d0000b273119e86ab31abf9323008dc1c",
     "source": "spotify"
   },
   {
     "name": "More Baby",
     "artist": "Chris Lake, Aluna",
     "link": "https://open.spotify.com/track/02QE4LsAj7DBjMRxolGE8a",
-    "rank": 21,
+    "rank": 24,
     "album_url": "https://i.scdn.co/image/ab67616d0000b273e3db81b7565e20e3d8d1cd25",
     "source": "spotify"
   },
@@ -171,7 +195,7 @@
     "name": "Higher Power",
     "artist": "Anyma, Argy, MAGNUS",
     "link": "https://open.spotify.com/track/7mQAjg2u5udWhnQ07jIHI7",
-    "rank": 22,
+    "rank": 25,
     "album_url": "https://i.scdn.co/image/ab67616d0000b273bb2261fd25a20d1d72e96913",
     "source": "spotify"
   },
@@ -179,23 +203,23 @@
     "name": "Cruel Summer - LP Giobbi Remix",
     "artist": "Taylor Swift, LP Giobbi",
     "link": "https://open.spotify.com/track/0pjBqAz8GlxGlpaU4W0DxS",
-    "rank": 23,
+    "rank": 26,
     "album_url": "https://i.scdn.co/image/ab67616d0000b273f669b4e7f0327c92909bc762",
     "source": "spotify"
   },
   {
-    "name": "Atmosphere",
-    "artist": "FISHER, Kita Alexander",
-    "link": "https://open.spotify.com/track/1aNUSKBe6UMyMk3pEu9ws7",
-    "rank": 24,
-    "album_url": "https://i.scdn.co/image/ab67616d0000b27337c2bdd58c470e2cbee904e5",
+    "name": "Walked In The Room",
+    "artist": "Channel Tres",
+    "link": "https://open.spotify.com/track/4tPHsS7lFxBCe6zRAOWMSR",
+    "rank": 27,
+    "album_url": "https://i.scdn.co/image/ab67616d0000b273c51f2b672a16ce72ff81e602",
     "source": "spotify"
   },
   {
     "name": "Vois sur ton chemin - Techno Mix",
     "artist": "BENNETT",
     "link": "https://open.spotify.com/track/31nfdEooLEq7dn3UMcIeB5",
-    "rank": 25,
+    "rank": 28,
     "album_url": "https://i.scdn.co/image/ab67616d0000b2731b96e645016c4d431842aa93",
     "source": "spotify"
   },
@@ -203,71 +227,79 @@
     "name": "God Is In The Soundwaves",
     "artist": "Armin van Buuren, Xoro, Yola Recoba",
     "link": "https://open.spotify.com/track/51w0BMC24JALh8uzwRzjMB",
-    "rank": 26,
+    "rank": 29,
     "album_url": "https://i.scdn.co/image/ab67616d0000b273c923c38e19dca4d5e8b08476",
+    "source": "spotify"
+  },
+  {
+    "name": "Fall Again",
+    "artist": "Hayla",
+    "link": "https://open.spotify.com/track/3oOvEw1pgxMtrQMNgPWQHL",
+    "rank": 30,
+    "album_url": "https://i.scdn.co/image/ab67616d0000b2737c0c9ff9fc1a7006bb5b9798",
+    "source": "spotify"
+  },
+  {
+    "name": "Jungle",
+    "artist": "Alok, The Chainsmokers, Mae Stephens",
+    "link": "https://open.spotify.com/track/0OvO2X2Q3i98dc5RcgEN3x",
+    "rank": 31,
+    "album_url": "https://i.scdn.co/image/ab67616d0000b273119e86ab31abf9323008dc1c",
     "source": "spotify"
   },
   {
     "name": "Heart Still Beating",
     "artist": "Nathan Dawe, Bebe Rexha",
     "link": "https://open.spotify.com/track/1IYlFAw4SThAoRx5DWwAjT",
-    "rank": 27,
+    "rank": 32,
     "album_url": "https://i.scdn.co/image/ab67616d0000b2733ece19d805a3fdf45a8326d6",
-    "source": "spotify"
-  },
-  {
-    "name": "Memories",
-    "artist": "Sam Feldt, Sofiloud",
-    "link": "https://open.spotify.com/track/4r9kj0CqH7RCp6Oxx56SvN",
-    "rank": 28,
-    "album_url": "https://i.scdn.co/image/ab67616d0000b27316862c76904b986295338cad",
-    "source": "spotify"
-  },
-  {
-    "name": "Past Life",
-    "artist": "Felix Jaehn, Jonas Blue",
-    "link": "https://open.spotify.com/track/4yc0wKwKXGkx9Vqc42MIFy",
-    "rank": 29,
-    "album_url": "https://i.scdn.co/image/ab67616d0000b2731b4efb650878150252a62034",
     "source": "spotify"
   },
   {
     "name": "Overdrive (feat. Norma Jean Martine)",
     "artist": "Ofenbach, Norma Jean Martine",
     "link": "https://open.spotify.com/track/3bK1zVFBKIzYjmptmI4NsJ",
-    "rank": 30,
+    "rank": 33,
     "album_url": "https://i.scdn.co/image/ab67616d0000b273249f764814d57dc5dfc462c7",
+    "source": "spotify"
+  },
+  {
+    "name": "If U Need It",
+    "artist": "Sammy Virji",
+    "link": "https://open.spotify.com/track/5CaUUACiQFEf4zR5WoeIrp",
+    "rank": 34,
+    "album_url": "https://i.scdn.co/image/ab67616d0000b273d5b8fa0ff5dee9da54847694",
+    "source": "spotify"
+  },
+  {
+    "name": "Mercy (feat. Jacob Lusk)",
+    "artist": "The Blessed Madonna, Jacob Lusk, Gabriels",
+    "link": "https://open.spotify.com/track/4ejCsNXh66YasBUiwfBhDg",
+    "rank": 35,
+    "album_url": "https://i.scdn.co/image/ab67616d0000b2736a8c944c845669fa9a354678",
+    "source": "spotify"
+  },
+  {
+    "name": "Atmosphere",
+    "artist": "FISHER, Kita Alexander",
+    "link": "https://open.spotify.com/track/1aNUSKBe6UMyMk3pEu9ws7",
+    "rank": 36,
+    "album_url": "https://i.scdn.co/image/ab67616d0000b27337c2bdd58c470e2cbee904e5",
     "source": "spotify"
   },
   {
     "name": "Take My Chance",
     "artist": "MK",
     "link": "https://open.spotify.com/track/3uD3HzG6tO8lWUIKtJKcxA",
-    "rank": 31,
+    "rank": 37,
     "album_url": "https://i.scdn.co/image/ab67616d0000b273b3eaa8e75bfc669bbcf7f4a6",
-    "source": "spotify"
-  },
-  {
-    "name": "Won't Forget You",
-    "artist": "Jax Jones, D.O.D, Ina Wroldsen",
-    "link": "https://open.spotify.com/track/2fP9aII1LkmZZmzdAiuNVz",
-    "rank": 32,
-    "album_url": "https://i.scdn.co/image/ab67616d0000b273cb23b61f174de4ff29600f36",
-    "source": "spotify"
-  },
-  {
-    "name": "Prada",
-    "artist": "cassö, RAYE, D-Block Europe",
-    "link": "https://open.spotify.com/track/59NraMJsLaMCVtwXTSia8i",
-    "rank": 33,
-    "album_url": "https://i.scdn.co/image/ab67616d0000b273e4b7dccdfd54375ded9ccc5c",
     "source": "spotify"
   },
   {
     "name": "Strangers",
     "artist": "Kenya Grace",
     "link": "https://open.spotify.com/track/5mjYQaktjmjcMKcUIcqz4s",
-    "rank": 34,
+    "rank": 38,
     "album_url": "https://i.scdn.co/image/ab67616d0000b2734756c2e9ae436437cd75e9f3",
     "source": "spotify"
   },
@@ -275,7 +307,7 @@
     "name": "I Wanna Dance",
     "artist": "Hardwell, Nicky Romero, MERYLL",
     "link": "https://open.spotify.com/track/2UMDjpShbeQoON9Dn7ONMK",
-    "rank": 35,
+    "rank": 39,
     "album_url": "https://i.scdn.co/image/ab67616d0000b273607053cd9e9a56fb510d86e5",
     "source": "spotify"
   },
@@ -283,55 +315,55 @@
     "name": "NRG",
     "artist": "Jazzy",
     "link": "https://open.spotify.com/track/79Ojf7CxxJw04NP4d8hrf8",
-    "rank": 36,
+    "rank": 40,
     "album_url": "https://i.scdn.co/image/ab67616d0000b27395334a341797542f4c8bb1d1",
     "source": "spotify"
   },
   {
-    "name": "If U Need It",
-    "artist": "Sammy Virji",
-    "link": "https://open.spotify.com/track/5CaUUACiQFEf4zR5WoeIrp",
-    "rank": 37,
-    "album_url": "https://i.scdn.co/image/ab67616d0000b273d5b8fa0ff5dee9da54847694",
+    "name": "Kratos (A Little Closer)",
+    "artist": "Alex LeMirage",
+    "link": "https://open.spotify.com/track/5xblvfji6HaQl7L4OwBMsm",
+    "rank": 41,
+    "album_url": "https://i.scdn.co/image/ab67616d0000b27322c4547ed14a6876480e1dba",
     "source": "spotify"
   },
   {
-    "name": "Fall Again",
-    "artist": "Hayla",
-    "link": "https://open.spotify.com/track/3oOvEw1pgxMtrQMNgPWQHL",
-    "rank": 38,
-    "album_url": "https://i.scdn.co/image/ab67616d0000b2737c0c9ff9fc1a7006bb5b9798",
+    "name": "Love On You (feat. Griff Clawson)",
+    "artist": "The Magician, A-Trak, Griff Clawson",
+    "link": "https://open.spotify.com/track/7Iv0928rZ28KjivhAJPqfC",
+    "rank": 42,
+    "album_url": "https://i.scdn.co/image/ab67616d0000b2736590278db70c6cfc9365f017",
     "source": "spotify"
   },
   {
-    "name": "Real Love",
-    "artist": "Martin Garrix, Lloyiso",
-    "link": "https://open.spotify.com/track/6afdNrotJ1PCt9DoFiHpLj",
-    "rank": 39,
-    "album_url": "https://i.scdn.co/image/ab67616d0000b273817c4738f30e101af5b4d1a1",
+    "name": "Dance No More (with Kaleena Zanders)",
+    "artist": "Sunday Scaries, Kaleena Zanders",
+    "link": "https://open.spotify.com/track/7gDgphzQU0urJU3AtoLJup",
+    "rank": 43,
+    "album_url": "https://i.scdn.co/image/ab67616d0000b273b57ab5b27e907f7160a44718",
+    "source": "spotify"
+  },
+  {
+    "name": "RIZZ",
+    "artist": "AYYBO",
+    "link": "https://open.spotify.com/track/3DqOJ2BoddzZpNdty3okJH",
+    "rank": 44,
+    "album_url": "https://i.scdn.co/image/ab67616d0000b273f3fb83bf7c4133d662a0e008",
     "source": "spotify"
   },
   {
     "name": "Drums (Feat. Kim Petras)",
     "artist": "James Hype, Kim Petras",
     "link": "https://open.spotify.com/track/4AFlChQQJbB1MOCgOiiyYc",
-    "rank": 40,
+    "rank": 45,
     "album_url": "https://i.scdn.co/image/ab67616d0000b2733232ebab106e55e093398988",
-    "source": "spotify"
-  },
-  {
-    "name": "Dance No More (with Kaleena Zanders)",
-    "artist": "Sunday Scaries, Kaleena Zanders",
-    "link": "https://open.spotify.com/track/5IkqbeN8L6DC9kRA7Hp64t",
-    "rank": 41,
-    "album_url": "https://i.scdn.co/image/ab67616d0000b273f4d27107428286f06bbbee2f",
     "source": "spotify"
   },
   {
     "name": "thicc",
     "artist": "Shygirl, Cosha",
     "link": "https://open.spotify.com/track/3tda2VED1rPj3MmVf3mXTo",
-    "rank": 42,
+    "rank": 46,
     "album_url": "https://i.scdn.co/image/ab67616d0000b27314c830bfb78b271b91a6369f",
     "source": "spotify"
   },
@@ -339,31 +371,31 @@
     "name": "Sunshine (My Girl)",
     "artist": "Wuki",
     "link": "https://open.spotify.com/track/2bI6KAUqXeIXGAEEvup8ri",
-    "rank": 43,
+    "rank": 47,
     "album_url": "https://i.scdn.co/image/ab67616d0000b27342401c4a9e13cddc69e34ffd",
+    "source": "spotify"
+  },
+  {
+    "name": "Needle On The Record",
+    "artist": "Riordan",
+    "link": "https://open.spotify.com/track/5qKuF0NtvWVn5UarAgyli3",
+    "rank": 48,
+    "album_url": "https://i.scdn.co/image/ab67616d0000b273ac785450fbdb3b4e53c57572",
     "source": "spotify"
   },
   {
     "name": "Tell That Boy",
     "artist": "Azzecca",
     "link": "https://open.spotify.com/track/34x9lHWBLEWgDSUUlx1T5Z",
-    "rank": 44,
+    "rank": 49,
     "album_url": "https://i.scdn.co/image/ab67616d0000b27335597e143507656464950331",
-    "source": "spotify"
-  },
-  {
-    "name": "Love On You (feat. Griff Clawson)",
-    "artist": "The Magician, A-Trak, Griff Clawson",
-    "link": "https://open.spotify.com/track/7Iv0928rZ28KjivhAJPqfC",
-    "rank": 45,
-    "album_url": "https://i.scdn.co/image/ab67616d0000b2736590278db70c6cfc9365f017",
     "source": "spotify"
   },
   {
     "name": "Big FU",
     "artist": "David Guetta, Ayra Starr, Lil Durk",
     "link": "https://open.spotify.com/track/2HbTwmup8SWz5tMcKZXFLh",
-    "rank": 46,
+    "rank": 50,
     "album_url": "https://i.scdn.co/image/ab67616d0000b273cda26a0b4a1753c1f6e33acf",
     "source": "spotify"
   },
@@ -371,7 +403,7 @@
     "name": "Milkshake 20 (Alex Wann Remix)",
     "artist": "Kelis, Alex Wann",
     "link": "https://open.spotify.com/track/49wEdWGkL2CcOrXEKklXtJ",
-    "rank": 47,
+    "rank": 51,
     "album_url": "https://i.scdn.co/image/ab67616d0000b2736a31f70030d3de5fd9b843b6",
     "source": "spotify"
   },
@@ -379,47 +411,71 @@
     "name": "Always Get Through To You",
     "artist": "Barry Can't Swim",
     "link": "https://open.spotify.com/track/0g8nIlk2ltpZP8lYlPvRx1",
-    "rank": 48,
+    "rank": 52,
     "album_url": "https://i.scdn.co/image/ab67616d0000b27316bc57c40991e6d3267765ab",
-    "source": "spotify"
-  },
-  {
-    "name": "Carry Me Higher - 7 Inch Version",
-    "artist": "The Blessed Madonna, Joy Anonymous, Danielle Ponder",
-    "link": "https://open.spotify.com/track/7tm4pF2JvKc4GGKSagRuS9",
-    "rank": 49,
-    "album_url": "https://i.scdn.co/image/ab67616d0000b2739f1884f29f7569ec583754f5",
     "source": "spotify"
   },
   {
     "name": "DNA (Loving You) [feat. Hannah Boleyn]",
     "artist": "Billy Gillies, Hannah Boleyn",
     "link": "https://open.spotify.com/track/6ibDVMcMUNqZ5eXT9sD4Vy",
-    "rank": 50,
+    "rank": 53,
     "album_url": "https://i.scdn.co/image/ab67616d0000b27360c614f7030dd6078ee0d3f0",
+    "source": "spotify"
+  },
+  {
+    "name": "Memories",
+    "artist": "Sam Feldt, Sofiloud",
+    "link": "https://open.spotify.com/track/4r9kj0CqH7RCp6Oxx56SvN",
+    "rank": 54,
+    "album_url": "https://i.scdn.co/image/ab67616d0000b27316862c76904b986295338cad",
+    "source": "spotify"
+  },
+  {
+    "name": "You and Me",
+    "artist": "Amelie Lens",
+    "link": "https://open.spotify.com/track/4Elb9ia3RBhTDtJN8qe29k",
+    "rank": 55,
+    "album_url": "https://i.scdn.co/image/ab67616d0000b273f09a1148a8bdc0f03b6d226e",
     "source": "spotify"
   },
   {
     "name": "Dance For Me (1, 2, 3) - Stutter Techno",
     "artist": "Sonny Wern, Lyente, Quinten Circle, ZANA",
     "link": "https://open.spotify.com/track/3JLpwzhVvYeotNSI4izQUV",
-    "rank": 51,
+    "rank": 56,
     "album_url": "https://i.scdn.co/image/ab67616d0000b273d8127ea50453f15e122506fe",
+    "source": "spotify"
+  },
+  {
+    "name": "Flip It",
+    "artist": "Levity, Dem Jointz",
+    "link": "https://open.spotify.com/track/4NDhaxAmbKXM8LKrOPNxsy",
+    "rank": 57,
+    "album_url": "https://i.scdn.co/image/ab67616d0000b2731cabbfa3660a93b97b80ad95",
     "source": "spotify"
   },
   {
     "name": "All Night",
     "artist": "NGHTMRE, Rezz, DeathbyRomy",
     "link": "https://open.spotify.com/track/68udexWA5NqZQh8YXJkHky",
-    "rank": 52,
+    "rank": 58,
     "album_url": "https://i.scdn.co/image/ab67616d0000b2732d579313d0b8cb47df6f3c45",
+    "source": "spotify"
+  },
+  {
+    "name": "The Future Is Unknown",
+    "artist": "Adriatique, Delhia De France",
+    "link": "https://open.spotify.com/track/4CvvIoMzXxXTzvGPT9nBNO",
+    "rank": 59,
+    "album_url": "https://i.scdn.co/image/ab67616d0000b273722b770304cc4b3c0f30065b",
     "source": "spotify"
   },
   {
     "name": "Spring Girl",
     "artist": "Adam Ten, Maori",
     "link": "https://open.spotify.com/track/03mX4WEpvZPkHmEsd2ZoV8",
-    "rank": 53,
+    "rank": 60,
     "album_url": "https://i.scdn.co/image/ab67616d0000b2731c714a27c485c78129da77e2",
     "source": "spotify"
   },
@@ -427,7 +483,7 @@
     "name": "Me Me Me",
     "artist": "Catz 'n Dogz, Nala",
     "link": "https://open.spotify.com/track/2VMH2r2jqBpxk5kWjM8HCo",
-    "rank": 54,
+    "rank": 61,
     "album_url": "https://i.scdn.co/image/ab67616d0000b27347920ee8b5d6456796f33811",
     "source": "spotify"
   },
@@ -435,7 +491,7 @@
     "name": "Dancing At The Disco",
     "artist": "J. Worra, Cherry Tooth",
     "link": "https://open.spotify.com/track/0nAYPzFbosQZ0a60zf88aN",
-    "rank": 55,
+    "rank": 62,
     "album_url": "https://i.scdn.co/image/ab67616d0000b27301c1ce3b9f4650435869f6f0",
     "source": "spotify"
   },
@@ -443,31 +499,39 @@
     "name": "how2fly",
     "artist": "ISOxo",
     "link": "https://open.spotify.com/track/2fga4JgHuq91W9HiTfo9GC",
-    "rank": 56,
+    "rank": 63,
     "album_url": "https://i.scdn.co/image/ab67616d0000b273a6a6f6dd84ac4ef457a64cc2",
+    "source": "spotify"
+  },
+  {
+    "name": "ten",
+    "artist": "Fred again.., Jozzy",
+    "link": "https://open.spotify.com/track/5QOBT97OmYCZo1W5u7tRrB",
+    "rank": 64,
+    "album_url": "https://i.scdn.co/image/ab67616d0000b273d6cddb90ea739c5c20b9edb4",
+    "source": "spotify"
+  },
+  {
+    "name": "Steady Pace",
+    "artist": "VTSS, Boys Noize",
+    "link": "https://open.spotify.com/track/42Nbp4cNwh3VbncOXjnEkM",
+    "rank": 65,
+    "album_url": "https://i.scdn.co/image/ab67616d0000b27353b234efb49ba7e718d1d30a",
     "source": "spotify"
   },
   {
     "name": "Like A Prayer",
     "artist": "LSR/CITY, Gareth Emery, Annabel",
     "link": "https://open.spotify.com/track/5DIOs6NEUV14lGzerovXZN",
-    "rank": 57,
+    "rank": 66,
     "album_url": "https://i.scdn.co/image/ab67616d0000b27308fdb01e3efb4ba1be6b6800",
-    "source": "spotify"
-  },
-  {
-    "name": "It's That Time",
-    "artist": "Marlon Hoffstadt, DJ Daddy Trance",
-    "link": "https://open.spotify.com/track/5fF9T9SMqBKUvT06cn7kBR",
-    "rank": 58,
-    "album_url": "https://i.scdn.co/image/ab67616d0000b273d7bae5972fedf2805219b5c5",
     "source": "spotify"
   },
   {
     "name": "Electric Feeling",
     "artist": "TELYKAST",
     "link": "https://open.spotify.com/track/6iaFDadGS6EqeyQb0c3QGZ",
-    "rank": 59,
+    "rank": 67,
     "album_url": "https://i.scdn.co/image/ab67616d0000b2731ea982067329f28da7f3fa7a",
     "source": "spotify"
   },
@@ -475,7 +539,7 @@
     "name": "Human",
     "artist": "Lavern",
     "link": "https://open.spotify.com/track/6Kl0BmROA5CAwtQOEFd99y",
-    "rank": 60,
+    "rank": 68,
     "album_url": "https://i.scdn.co/image/ab67616d0000b273849caa3a666151541464c97d",
     "source": "spotify"
   },
@@ -483,39 +547,15 @@
     "name": "One Pill",
     "artist": "VNSSA",
     "link": "https://open.spotify.com/track/3C74wo9oewRgcvMj14O7Xu",
-    "rank": 61,
+    "rank": 69,
     "album_url": "https://i.scdn.co/image/ab67616d0000b2732c783274f2bf5abff1113803",
-    "source": "spotify"
-  },
-  {
-    "name": "Flip It",
-    "artist": "Levity, Dem Jointz",
-    "link": "https://open.spotify.com/track/4NDhaxAmbKXM8LKrOPNxsy",
-    "rank": 62,
-    "album_url": "https://i.scdn.co/image/ab67616d0000b2731cabbfa3660a93b97b80ad95",
-    "source": "spotify"
-  },
-  {
-    "name": "In This World",
-    "artist": "GRiZ",
-    "link": "https://open.spotify.com/track/5CMOwBRA9nShq31cMeMEsE",
-    "rank": 63,
-    "album_url": "https://i.scdn.co/image/ab67616d0000b2730f242f066ebc0fa61ab66876",
-    "source": "spotify"
-  },
-  {
-    "name": "Miracle",
-    "artist": "Adriatique, WhoMadeWho",
-    "link": "https://open.spotify.com/track/0aVrpFRLlrd5zVyPXWP3mS",
-    "rank": 64,
-    "album_url": "https://i.scdn.co/image/ab67616d0000b27392388c3c9c165e73d2b0d560",
     "source": "spotify"
   },
   {
     "name": "The Boy Is Mine",
     "artist": "James Mac, Vall, Rosalie",
     "link": "https://open.spotify.com/track/1aRd5tMVhiRyMJLmSOg2IF",
-    "rank": 65,
+    "rank": 70,
     "album_url": "https://i.scdn.co/image/ab67616d0000b27311f5cb2f4ef58f5e1eae30b6",
     "source": "spotify"
   },
@@ -523,80 +563,40 @@
     "name": "More Love - Rampa \u0026ME Remix",
     "artist": "Moderat, Keinemusik, Rampa, \u0026ME",
     "link": "https://open.spotify.com/track/70ofkwt6aIb4bPQ51OQMQO",
-    "rank": 66,
+    "rank": 71,
     "album_url": "https://i.scdn.co/image/ab67616d0000b273e0cc562977affaa7477aab6b",
-    "source": "spotify"
-  },
-  {
-    "name": "Compute",
-    "artist": "CamelPhat, Ali Love",
-    "link": "https://open.spotify.com/track/7LNsgTO7ipNPLE10Nn7iR7",
-    "rank": 67,
-    "album_url": "https://i.scdn.co/image/ab67616d0000b273f394b25e96378e471490ca0b",
-    "source": "spotify"
-  },
-  {
-    "name": "One Last Call",
-    "artist": "Ben Böhmer, Felix Raphael",
-    "link": "https://open.spotify.com/track/30nygP64gBZqbLoWC72vNq",
-    "rank": 68,
-    "album_url": "https://i.scdn.co/image/ab67616d0000b273b7f00206114c800e3ef44402",
     "source": "spotify"
   },
   {
     "name": "One Of A Kind",
     "artist": "Tita Lau",
     "link": "https://open.spotify.com/track/0GL2DIZoRorbVbsRejFCaW",
-    "rank": 69,
+    "rank": 72,
     "album_url": "https://i.scdn.co/image/ab67616d0000b273c43cb05ea800c5e5d03e9c4b",
-    "source": "spotify"
-  },
-  {
-    "name": "Lo Que Soy",
-    "artist": "Wax Motif, Kura",
-    "link": "https://open.spotify.com/track/3d4lGcDN1FISRTBeBeGRoJ",
-    "rank": 70,
-    "album_url": "https://i.scdn.co/image/ab67616d0000b27342a7da85fb47c6f86ce4aa5d",
     "source": "spotify"
   },
   {
     "name": "Vogue",
     "artist": "Noizu",
     "link": "https://open.spotify.com/track/3FrlcqYxS1A3W7pCGAHai6",
-    "rank": 71,
+    "rank": 73,
     "album_url": "https://i.scdn.co/image/ab67616d0000b2731c3b5a7628c2c3fb0faabb0e",
     "source": "spotify"
   },
   {
-    "name": "Fight or Flight",
-    "artist": "Alison Wonderland, MEMBA",
-    "link": "https://open.spotify.com/track/0biZ6lxXHy4eHweTbOD33W",
-    "rank": 72,
-    "album_url": "https://i.scdn.co/image/ab67616d0000b2730762a2ad5e2201e073c882ff",
+    "name": "It's That Time",
+    "artist": "Marlon Hoffstadt, DJ Daddy Trance",
+    "link": "https://open.spotify.com/track/5fF9T9SMqBKUvT06cn7kBR",
+    "rank": 74,
+    "album_url": "https://i.scdn.co/image/ab67616d0000b273d7bae5972fedf2805219b5c5",
     "source": "spotify"
   },
   {
     "name": "Baddadan (feat. IRAH, Flowdan, Trigga \u0026 Takura)",
     "artist": "Chase \u0026 Status, Bou, Flowdan, IRAH, Trigga, Takura",
     "link": "https://open.spotify.com/track/2ZWmmrWUgDBcPSLihBMvhg",
-    "rank": 73,
-    "album_url": "https://i.scdn.co/image/ab67616d0000b273adfadf345224340773549507",
-    "source": "spotify"
-  },
-  {
-    "name": "Romantic Homicide - Spotify Singles",
-    "artist": "WHIPPED CREAM",
-    "link": "https://open.spotify.com/track/1P7xMiKHrAl4e5Vbi6NbPf",
-    "rank": 74,
-    "album_url": "https://i.scdn.co/image/ab67616d0000b27349a1a377ccb8fb4b2a1b3233",
-    "source": "spotify"
-  },
-  {
-    "name": "Echo",
-    "artist": "RSCL, Repiet, Julia Kleijn",
-    "link": "https://open.spotify.com/track/32fmwlkq7srmOAb5N0vdyj",
     "rank": 75,
-    "album_url": "https://i.scdn.co/image/ab67616d0000b2738c46f64b1d25ac728b7db2e1",
+    "album_url": "https://i.scdn.co/image/ab67616d0000b273adfadf345224340773549507",
     "source": "spotify"
   }
 ]

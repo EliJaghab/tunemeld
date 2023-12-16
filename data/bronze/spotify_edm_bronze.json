@@ -1,7 +1,243 @@
 {
   "items": [
     {
-      "added_at": "2023-12-08T05:00:00Z",
+      "added_at": "2023-12-15T05:00:00Z",
+      "added_by": {
+        "external_urls": {
+          "spotify": "https://open.spotify.com/user/"
+        },
+        "id": "",
+        "type": "user",
+        "uri": "spotify:user:"
+      },
+      "is_local": false,
+      "primary_color": null,
+      "track": {
+        "album": {
+          "album_type": "single",
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/4oLeXFyACqeem2VImYeBFe"
+              },
+              "id": "4oLeXFyACqeem2VImYeBFe",
+              "name": "Fred again..",
+              "type": "artist",
+              "uri": "spotify:artist:4oLeXFyACqeem2VImYeBFe"
+            },
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/5SXuuuRpukkTvsLuUknva1"
+              },
+              "id": "5SXuuuRpukkTvsLuUknva1",
+              "name": "Baby Keem",
+              "type": "artist",
+              "uri": "spotify:artist:5SXuuuRpukkTvsLuUknva1"
+            }
+          ],
+          "external_urls": {
+            "spotify": "https://open.spotify.com/album/3Tsut3cVOWP7AKAR4Dtmhb"
+          },
+          "id": "3Tsut3cVOWP7AKAR4Dtmhb",
+          "images": [
+            {
+              "height": 640,
+              "url": "https://i.scdn.co/image/ab67616d0000b273c9049966d5a1c1954ae98480",
+              "width": 640
+            },
+            {
+              "height": 300,
+              "url": "https://i.scdn.co/image/ab67616d00001e02c9049966d5a1c1954ae98480",
+              "width": 300
+            },
+            {
+              "height": 64,
+              "url": "https://i.scdn.co/image/ab67616d00004851c9049966d5a1c1954ae98480",
+              "width": 64
+            }
+          ],
+          "is_playable": true,
+          "name": "leavemealone",
+          "release_date": "2023-12-08",
+          "release_date_precision": "day",
+          "total_tracks": 1,
+          "type": "album",
+          "uri": "spotify:album:3Tsut3cVOWP7AKAR4Dtmhb"
+        },
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/4oLeXFyACqeem2VImYeBFe"
+            },
+            "id": "4oLeXFyACqeem2VImYeBFe",
+            "name": "Fred again..",
+            "type": "artist",
+            "uri": "spotify:artist:4oLeXFyACqeem2VImYeBFe"
+          },
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/5SXuuuRpukkTvsLuUknva1"
+            },
+            "id": "5SXuuuRpukkTvsLuUknva1",
+            "name": "Baby Keem",
+            "type": "artist",
+            "uri": "spotify:artist:5SXuuuRpukkTvsLuUknva1"
+          }
+        ],
+        "disc_number": 1,
+        "duration_ms": 222784,
+        "episode": false,
+        "explicit": true,
+        "external_ids": {
+          "isrc": "GBAHS2301465"
+        },
+        "external_urls": {
+          "spotify": "https://open.spotify.com/track/1MVqeIAwhD4T44AKVkIfic"
+        },
+        "id": "1MVqeIAwhD4T44AKVkIfic",
+        "is_local": false,
+        "is_playable": true,
+        "name": "leavemealone",
+        "popularity": 80,
+        "preview_url": "https://p.scdn.co/mp3-preview/154e06b77aed19154a2b3e7dcfc9af91c74f4433?cid=d8a5ed958d274c2e8ee717e6a4b0971d",
+        "track": true,
+        "track_number": 1,
+        "type": "track",
+        "uri": "spotify:track:1MVqeIAwhD4T44AKVkIfic"
+      },
+      "video_thumbnail": {
+        "url": null
+      }
+    },
+    {
+      "added_at": "2023-12-15T05:00:00Z",
+      "added_by": {
+        "external_urls": {
+          "spotify": "https://open.spotify.com/user/"
+        },
+        "id": "",
+        "type": "user",
+        "uri": "spotify:user:"
+      },
+      "is_local": false,
+      "primary_color": null,
+      "track": {
+        "album": {
+          "album_type": "single",
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/7kNqXtgeIwFtelmRjWv205"
+              },
+              "id": "7kNqXtgeIwFtelmRjWv205",
+              "name": "John Summit",
+              "type": "artist",
+              "uri": "spotify:artist:7kNqXtgeIwFtelmRjWv205"
+            },
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/6QSwQEz8CDMg8Rqk8dEkxS"
+              },
+              "id": "6QSwQEz8CDMg8Rqk8dEkxS",
+              "name": "Mathame",
+              "type": "artist",
+              "uri": "spotify:artist:6QSwQEz8CDMg8Rqk8dEkxS"
+            },
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/5mNpMP01Co4vXZ3U0fWP3C"
+              },
+              "id": "5mNpMP01Co4vXZ3U0fWP3C",
+              "name": "Camden Cox",
+              "type": "artist",
+              "uri": "spotify:artist:5mNpMP01Co4vXZ3U0fWP3C"
+            }
+          ],
+          "external_urls": {
+            "spotify": "https://open.spotify.com/album/0zmoJBEhLPoiKBzXMeFjAm"
+          },
+          "id": "0zmoJBEhLPoiKBzXMeFjAm",
+          "images": [
+            {
+              "height": 640,
+              "url": "https://i.scdn.co/image/ab67616d0000b273ce5e4af455d4273f46237912",
+              "width": 640
+            },
+            {
+              "height": 300,
+              "url": "https://i.scdn.co/image/ab67616d00001e02ce5e4af455d4273f46237912",
+              "width": 300
+            },
+            {
+              "height": 64,
+              "url": "https://i.scdn.co/image/ab67616d00004851ce5e4af455d4273f46237912",
+              "width": 64
+            }
+          ],
+          "is_playable": true,
+          "name": "Hungover (with Camden Cox)",
+          "release_date": "2023-12-15",
+          "release_date_precision": "day",
+          "total_tracks": 1,
+          "type": "album",
+          "uri": "spotify:album:0zmoJBEhLPoiKBzXMeFjAm"
+        },
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/7kNqXtgeIwFtelmRjWv205"
+            },
+            "id": "7kNqXtgeIwFtelmRjWv205",
+            "name": "John Summit",
+            "type": "artist",
+            "uri": "spotify:artist:7kNqXtgeIwFtelmRjWv205"
+          },
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/6QSwQEz8CDMg8Rqk8dEkxS"
+            },
+            "id": "6QSwQEz8CDMg8Rqk8dEkxS",
+            "name": "Mathame",
+            "type": "artist",
+            "uri": "spotify:artist:6QSwQEz8CDMg8Rqk8dEkxS"
+          },
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/5mNpMP01Co4vXZ3U0fWP3C"
+            },
+            "id": "5mNpMP01Co4vXZ3U0fWP3C",
+            "name": "Camden Cox",
+            "type": "artist",
+            "uri": "spotify:artist:5mNpMP01Co4vXZ3U0fWP3C"
+          }
+        ],
+        "disc_number": 1,
+        "duration_ms": 220588,
+        "episode": false,
+        "explicit": false,
+        "external_ids": {
+          "isrc": "USUG12309688"
+        },
+        "external_urls": {
+          "spotify": "https://open.spotify.com/track/1HmeANWuuCP6ldvGgKwTLi"
+        },
+        "id": "1HmeANWuuCP6ldvGgKwTLi",
+        "is_local": false,
+        "is_playable": true,
+        "name": "Hungover (with Camden Cox)",
+        "popularity": 28,
+        "preview_url": "https://p.scdn.co/mp3-preview/36a5b6c3d595dec3c751991c30bd8950ad30ec3f?cid=d8a5ed958d274c2e8ee717e6a4b0971d",
+        "track": true,
+        "track_number": 1,
+        "type": "track",
+        "uri": "spotify:track:1HmeANWuuCP6ldvGgKwTLi"
+      },
+      "video_thumbnail": {
+        "url": null
+      }
+    },
+    {
+      "added_at": "2023-12-15T05:00:00Z",
       "added_by": {
         "external_urls": {
           "spotify": "https://open.spotify.com/user/"
@@ -98,7 +334,7 @@
         "is_local": false,
         "is_playable": true,
         "name": "Aria",
-        "popularity": 73,
+        "popularity": 74,
         "preview_url": "https://p.scdn.co/mp3-preview/8e2d26f42310a2a49ca7427123ef630ea21a184a?cid=d8a5ed958d274c2e8ee717e6a4b0971d",
         "track": true,
         "track_number": 1,
@@ -110,116 +346,7 @@
       }
     },
     {
-      "added_at": "2023-12-08T05:00:00Z",
-      "added_by": {
-        "external_urls": {
-          "spotify": "https://open.spotify.com/user/"
-        },
-        "id": "",
-        "type": "user",
-        "uri": "spotify:user:"
-      },
-      "is_local": false,
-      "primary_color": null,
-      "track": {
-        "album": {
-          "album_type": "single",
-          "artists": [
-            {
-              "external_urls": {
-                "spotify": "https://open.spotify.com/artist/4oLeXFyACqeem2VImYeBFe"
-              },
-              "id": "4oLeXFyACqeem2VImYeBFe",
-              "name": "Fred again..",
-              "type": "artist",
-              "uri": "spotify:artist:4oLeXFyACqeem2VImYeBFe"
-            },
-            {
-              "external_urls": {
-                "spotify": "https://open.spotify.com/artist/5SXuuuRpukkTvsLuUknva1"
-              },
-              "id": "5SXuuuRpukkTvsLuUknva1",
-              "name": "Baby Keem",
-              "type": "artist",
-              "uri": "spotify:artist:5SXuuuRpukkTvsLuUknva1"
-            }
-          ],
-          "external_urls": {
-            "spotify": "https://open.spotify.com/album/3Tsut3cVOWP7AKAR4Dtmhb"
-          },
-          "id": "3Tsut3cVOWP7AKAR4Dtmhb",
-          "images": [
-            {
-              "height": 640,
-              "url": "https://i.scdn.co/image/ab67616d0000b2736511f80efa5c32b3cad503dc",
-              "width": 640
-            },
-            {
-              "height": 300,
-              "url": "https://i.scdn.co/image/ab67616d00001e026511f80efa5c32b3cad503dc",
-              "width": 300
-            },
-            {
-              "height": 64,
-              "url": "https://i.scdn.co/image/ab67616d000048516511f80efa5c32b3cad503dc",
-              "width": 64
-            }
-          ],
-          "is_playable": true,
-          "name": "leavemealone",
-          "release_date": "2023-12-08",
-          "release_date_precision": "day",
-          "total_tracks": 1,
-          "type": "album",
-          "uri": "spotify:album:3Tsut3cVOWP7AKAR4Dtmhb"
-        },
-        "artists": [
-          {
-            "external_urls": {
-              "spotify": "https://open.spotify.com/artist/4oLeXFyACqeem2VImYeBFe"
-            },
-            "id": "4oLeXFyACqeem2VImYeBFe",
-            "name": "Fred again..",
-            "type": "artist",
-            "uri": "spotify:artist:4oLeXFyACqeem2VImYeBFe"
-          },
-          {
-            "external_urls": {
-              "spotify": "https://open.spotify.com/artist/5SXuuuRpukkTvsLuUknva1"
-            },
-            "id": "5SXuuuRpukkTvsLuUknva1",
-            "name": "Baby Keem",
-            "type": "artist",
-            "uri": "spotify:artist:5SXuuuRpukkTvsLuUknva1"
-          }
-        ],
-        "disc_number": 1,
-        "duration_ms": 222784,
-        "episode": false,
-        "explicit": true,
-        "external_ids": {
-          "isrc": "GBAHS2301465"
-        },
-        "external_urls": {
-          "spotify": "https://open.spotify.com/track/1MVqeIAwhD4T44AKVkIfic"
-        },
-        "id": "1MVqeIAwhD4T44AKVkIfic",
-        "is_local": false,
-        "is_playable": true,
-        "name": "leavemealone",
-        "popularity": 46,
-        "preview_url": "https://p.scdn.co/mp3-preview/ab264cdd74346df9c382c9f637c7508f84dee443?cid=d8a5ed958d274c2e8ee717e6a4b0971d",
-        "track": true,
-        "track_number": 1,
-        "type": "track",
-        "uri": "spotify:track:1MVqeIAwhD4T44AKVkIfic"
-      },
-      "video_thumbnail": {
-        "url": null
-      }
-    },
-    {
-      "added_at": "2023-12-08T05:00:00Z",
+      "added_at": "2023-12-15T05:00:00Z",
       "added_by": {
         "external_urls": {
           "spotify": "https://open.spotify.com/user/"
@@ -328,7 +455,7 @@
       }
     },
     {
-      "added_at": "2023-12-08T05:00:00Z",
+      "added_at": "2023-12-15T05:00:00Z",
       "added_by": {
         "external_urls": {
           "spotify": "https://open.spotify.com/user/"
@@ -464,7 +591,7 @@
       }
     },
     {
-      "added_at": "2023-12-08T05:00:00Z",
+      "added_at": "2023-12-15T05:00:00Z",
       "added_by": {
         "external_urls": {
           "spotify": "https://open.spotify.com/user/"
@@ -579,7 +706,7 @@
         "is_local": false,
         "is_playable": true,
         "name": "Carry Me Higher - 7 Inch Version",
-        "popularity": 60,
+        "popularity": 62,
         "preview_url": "https://p.scdn.co/mp3-preview/0225c3b46ca5a55d1a2faa23a6edbb3eea0d1f4f?cid=d8a5ed958d274c2e8ee717e6a4b0971d",
         "track": true,
         "track_number": 3,
@@ -591,7 +718,107 @@
       }
     },
     {
-      "added_at": "2023-12-08T05:00:00Z",
+      "added_at": "2023-12-15T05:00:00Z",
+      "added_by": {
+        "external_urls": {
+          "spotify": "https://open.spotify.com/user/"
+        },
+        "id": "",
+        "type": "user",
+        "uri": "spotify:user:"
+      },
+      "is_local": false,
+      "primary_color": null,
+      "track": {
+        "album": {
+          "album_type": "single",
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/6mDl7lQiLxT0iQ8LYhAlWy"
+              },
+              "id": "6mDl7lQiLxT0iQ8LYhAlWy",
+              "name": "Zerb",
+              "type": "artist",
+              "uri": "spotify:artist:6mDl7lQiLxT0iQ8LYhAlWy"
+            }
+          ],
+          "external_urls": {
+            "spotify": "https://open.spotify.com/album/5asqLE8StjaHpMWSyjzo2D"
+          },
+          "id": "5asqLE8StjaHpMWSyjzo2D",
+          "images": [
+            {
+              "height": 640,
+              "url": "https://i.scdn.co/image/ab67616d0000b2733e56ef77fe414ce4af6334a4",
+              "width": 640
+            },
+            {
+              "height": 300,
+              "url": "https://i.scdn.co/image/ab67616d00001e023e56ef77fe414ce4af6334a4",
+              "width": 300
+            },
+            {
+              "height": 64,
+              "url": "https://i.scdn.co/image/ab67616d000048513e56ef77fe414ce4af6334a4",
+              "width": 64
+            }
+          ],
+          "is_playable": true,
+          "name": "SURRENDER",
+          "release_date": "2023-10-27",
+          "release_date_precision": "day",
+          "total_tracks": 5,
+          "type": "album",
+          "uri": "spotify:album:5asqLE8StjaHpMWSyjzo2D"
+        },
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/6mDl7lQiLxT0iQ8LYhAlWy"
+            },
+            "id": "6mDl7lQiLxT0iQ8LYhAlWy",
+            "name": "Zerb",
+            "type": "artist",
+            "uri": "spotify:artist:6mDl7lQiLxT0iQ8LYhAlWy"
+          },
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/5Y2FS5YbGf7yRDumzD5nY3"
+            },
+            "id": "5Y2FS5YbGf7yRDumzD5nY3",
+            "name": "Sofiya Nzau",
+            "type": "artist",
+            "uri": "spotify:artist:5Y2FS5YbGf7yRDumzD5nY3"
+          }
+        ],
+        "disc_number": 1,
+        "duration_ms": 208135,
+        "episode": false,
+        "explicit": false,
+        "external_ids": {
+          "isrc": "NLRD52339318"
+        },
+        "external_urls": {
+          "spotify": "https://open.spotify.com/track/5KTZgG84bKFGm53lhLtTqc"
+        },
+        "id": "5KTZgG84bKFGm53lhLtTqc",
+        "is_local": false,
+        "is_playable": true,
+        "name": "Mwaki",
+        "popularity": 75,
+        "preview_url": "https://p.scdn.co/mp3-preview/b7b3c4d18f45f015a4232de9cb3dd7a0c660a6cb?cid=d8a5ed958d274c2e8ee717e6a4b0971d",
+        "track": true,
+        "track_number": 3,
+        "type": "track",
+        "uri": "spotify:track:5KTZgG84bKFGm53lhLtTqc"
+      },
+      "video_thumbnail": {
+        "url": null
+      }
+    },
+    {
+      "added_at": "2023-12-15T05:00:00Z",
       "added_by": {
         "external_urls": {
           "spotify": "https://open.spotify.com/user/"
@@ -688,7 +915,7 @@
         "is_local": false,
         "is_playable": true,
         "name": "Body Moving",
-        "popularity": 76,
+        "popularity": 77,
         "preview_url": "https://p.scdn.co/mp3-preview/7658ca305ae89f9a6fa695dcc67a8f860f1a3ece?cid=d8a5ed958d274c2e8ee717e6a4b0971d",
         "track": true,
         "track_number": 1,
@@ -700,7 +927,7 @@
       }
     },
     {
-      "added_at": "2023-12-08T05:00:00Z",
+      "added_at": "2023-12-15T05:00:00Z",
       "added_by": {
         "external_urls": {
           "spotify": "https://open.spotify.com/user/"
@@ -815,7 +1042,7 @@
         "is_local": false,
         "is_playable": true,
         "name": "I Got Nothing",
-        "popularity": 32,
+        "popularity": 67,
         "preview_url": "https://p.scdn.co/mp3-preview/fc0990bf47c1cd3aaf07a0662a2d5f9249767df5?cid=d8a5ed958d274c2e8ee717e6a4b0971d",
         "track": true,
         "track_number": 1,
@@ -827,107 +1054,7 @@
       }
     },
     {
-      "added_at": "2023-12-08T05:00:00Z",
-      "added_by": {
-        "external_urls": {
-          "spotify": "https://open.spotify.com/user/"
-        },
-        "id": "",
-        "type": "user",
-        "uri": "spotify:user:"
-      },
-      "is_local": false,
-      "primary_color": null,
-      "track": {
-        "album": {
-          "album_type": "single",
-          "artists": [
-            {
-              "external_urls": {
-                "spotify": "https://open.spotify.com/artist/6mDl7lQiLxT0iQ8LYhAlWy"
-              },
-              "id": "6mDl7lQiLxT0iQ8LYhAlWy",
-              "name": "Zerb",
-              "type": "artist",
-              "uri": "spotify:artist:6mDl7lQiLxT0iQ8LYhAlWy"
-            }
-          ],
-          "external_urls": {
-            "spotify": "https://open.spotify.com/album/5asqLE8StjaHpMWSyjzo2D"
-          },
-          "id": "5asqLE8StjaHpMWSyjzo2D",
-          "images": [
-            {
-              "height": 640,
-              "url": "https://i.scdn.co/image/ab67616d0000b2733e56ef77fe414ce4af6334a4",
-              "width": 640
-            },
-            {
-              "height": 300,
-              "url": "https://i.scdn.co/image/ab67616d00001e023e56ef77fe414ce4af6334a4",
-              "width": 300
-            },
-            {
-              "height": 64,
-              "url": "https://i.scdn.co/image/ab67616d000048513e56ef77fe414ce4af6334a4",
-              "width": 64
-            }
-          ],
-          "is_playable": true,
-          "name": "SURRENDER",
-          "release_date": "2023-10-27",
-          "release_date_precision": "day",
-          "total_tracks": 5,
-          "type": "album",
-          "uri": "spotify:album:5asqLE8StjaHpMWSyjzo2D"
-        },
-        "artists": [
-          {
-            "external_urls": {
-              "spotify": "https://open.spotify.com/artist/6mDl7lQiLxT0iQ8LYhAlWy"
-            },
-            "id": "6mDl7lQiLxT0iQ8LYhAlWy",
-            "name": "Zerb",
-            "type": "artist",
-            "uri": "spotify:artist:6mDl7lQiLxT0iQ8LYhAlWy"
-          },
-          {
-            "external_urls": {
-              "spotify": "https://open.spotify.com/artist/5Y2FS5YbGf7yRDumzD5nY3"
-            },
-            "id": "5Y2FS5YbGf7yRDumzD5nY3",
-            "name": "Sofiya Nzau",
-            "type": "artist",
-            "uri": "spotify:artist:5Y2FS5YbGf7yRDumzD5nY3"
-          }
-        ],
-        "disc_number": 1,
-        "duration_ms": 208135,
-        "episode": false,
-        "explicit": false,
-        "external_ids": {
-          "isrc": "NLRD52339318"
-        },
-        "external_urls": {
-          "spotify": "https://open.spotify.com/track/5KTZgG84bKFGm53lhLtTqc"
-        },
-        "id": "5KTZgG84bKFGm53lhLtTqc",
-        "is_local": false,
-        "is_playable": true,
-        "name": "Mwaki",
-        "popularity": 75,
-        "preview_url": "https://p.scdn.co/mp3-preview/b7b3c4d18f45f015a4232de9cb3dd7a0c660a6cb?cid=d8a5ed958d274c2e8ee717e6a4b0971d",
-        "track": true,
-        "track_number": 3,
-        "type": "track",
-        "uri": "spotify:track:5KTZgG84bKFGm53lhLtTqc"
-      },
-      "video_thumbnail": {
-        "url": null
-      }
-    },
-    {
-      "added_at": "2023-12-08T05:00:00Z",
+      "added_at": "2023-12-15T05:00:00Z",
       "added_by": {
         "external_urls": {
           "spotify": "https://open.spotify.com/user/"
@@ -1033,7 +1160,7 @@
         "is_local": false,
         "is_playable": true,
         "name": "Lover/Friend",
-        "popularity": 68,
+        "popularity": 69,
         "preview_url": "https://p.scdn.co/mp3-preview/11c0c5531312a990260ce56a60b6248370e087d9?cid=d8a5ed958d274c2e8ee717e6a4b0971d",
         "track": true,
         "track_number": 1,
@@ -1045,207 +1172,7 @@
       }
     },
     {
-      "added_at": "2023-12-08T05:00:00Z",
-      "added_by": {
-        "external_urls": {
-          "spotify": "https://open.spotify.com/user/"
-        },
-        "id": "",
-        "type": "user",
-        "uri": "spotify:user:"
-      },
-      "is_local": false,
-      "primary_color": null,
-      "track": {
-        "album": {
-          "album_type": "single",
-          "artists": [
-            {
-              "external_urls": {
-                "spotify": "https://open.spotify.com/artist/205i7E8fNVfojowcQSfK9m"
-              },
-              "id": "205i7E8fNVfojowcQSfK9m",
-              "name": "Dom Dolla",
-              "type": "artist",
-              "uri": "spotify:artist:205i7E8fNVfojowcQSfK9m"
-            }
-          ],
-          "external_urls": {
-            "spotify": "https://open.spotify.com/album/3XTTqxcEOZgaTobJlRefvF"
-          },
-          "id": "3XTTqxcEOZgaTobJlRefvF",
-          "images": [
-            {
-              "height": 640,
-              "url": "https://i.scdn.co/image/ab67616d0000b273585c329dfd9cdeb22b6cd247",
-              "width": 640
-            },
-            {
-              "height": 300,
-              "url": "https://i.scdn.co/image/ab67616d00001e02585c329dfd9cdeb22b6cd247",
-              "width": 300
-            },
-            {
-              "height": 64,
-              "url": "https://i.scdn.co/image/ab67616d00004851585c329dfd9cdeb22b6cd247",
-              "width": 64
-            }
-          ],
-          "is_playable": true,
-          "name": "Saving Up",
-          "release_date": "2023-10-06",
-          "release_date_precision": "day",
-          "total_tracks": 1,
-          "type": "album",
-          "uri": "spotify:album:3XTTqxcEOZgaTobJlRefvF"
-        },
-        "artists": [
-          {
-            "external_urls": {
-              "spotify": "https://open.spotify.com/artist/205i7E8fNVfojowcQSfK9m"
-            },
-            "id": "205i7E8fNVfojowcQSfK9m",
-            "name": "Dom Dolla",
-            "type": "artist",
-            "uri": "spotify:artist:205i7E8fNVfojowcQSfK9m"
-          }
-        ],
-        "disc_number": 1,
-        "duration_ms": 207514,
-        "episode": false,
-        "explicit": false,
-        "external_ids": {
-          "isrc": "USQX92305379"
-        },
-        "external_urls": {
-          "spotify": "https://open.spotify.com/track/787Y2idwCU2Rk60Prv4wpr"
-        },
-        "id": "787Y2idwCU2Rk60Prv4wpr",
-        "is_local": false,
-        "is_playable": true,
-        "name": "Saving Up",
-        "popularity": 76,
-        "preview_url": "https://p.scdn.co/mp3-preview/0dc7e54637852a8a9a0652c9e48ca17a745e036f?cid=d8a5ed958d274c2e8ee717e6a4b0971d",
-        "track": true,
-        "track_number": 1,
-        "type": "track",
-        "uri": "spotify:track:787Y2idwCU2Rk60Prv4wpr"
-      },
-      "video_thumbnail": {
-        "url": null
-      }
-    },
-    {
-      "added_at": "2023-12-08T05:00:00Z",
-      "added_by": {
-        "external_urls": {
-          "spotify": "https://open.spotify.com/user/"
-        },
-        "id": "",
-        "type": "user",
-        "uri": "spotify:user:"
-      },
-      "is_local": false,
-      "primary_color": null,
-      "track": {
-        "album": {
-          "album_type": "single",
-          "artists": [
-            {
-              "external_urls": {
-                "spotify": "https://open.spotify.com/artist/1Cs0zKBU1kc0i8ypK3B9ai"
-              },
-              "id": "1Cs0zKBU1kc0i8ypK3B9ai",
-              "name": "David Guetta",
-              "type": "artist",
-              "uri": "spotify:artist:1Cs0zKBU1kc0i8ypK3B9ai"
-            },
-            {
-              "external_urls": {
-                "spotify": "https://open.spotify.com/artist/3Xt3RrJMFv5SZkCfUE8C1J"
-              },
-              "id": "3Xt3RrJMFv5SZkCfUE8C1J",
-              "name": "Kim Petras",
-              "type": "artist",
-              "uri": "spotify:artist:3Xt3RrJMFv5SZkCfUE8C1J"
-            }
-          ],
-          "external_urls": {
-            "spotify": "https://open.spotify.com/album/3vT1YpvKNkGVN3XE1f3kQY"
-          },
-          "id": "3vT1YpvKNkGVN3XE1f3kQY",
-          "images": [
-            {
-              "height": 640,
-              "url": "https://i.scdn.co/image/ab67616d0000b273c8e153557024fd571a5a83d6",
-              "width": 640
-            },
-            {
-              "height": 300,
-              "url": "https://i.scdn.co/image/ab67616d00001e02c8e153557024fd571a5a83d6",
-              "width": 300
-            },
-            {
-              "height": 64,
-              "url": "https://i.scdn.co/image/ab67616d00004851c8e153557024fd571a5a83d6",
-              "width": 64
-            }
-          ],
-          "is_playable": true,
-          "name": "When We Were Young (The Logical Song)",
-          "release_date": "2023-11-10",
-          "release_date_precision": "day",
-          "total_tracks": 2,
-          "type": "album",
-          "uri": "spotify:album:3vT1YpvKNkGVN3XE1f3kQY"
-        },
-        "artists": [
-          {
-            "external_urls": {
-              "spotify": "https://open.spotify.com/artist/1Cs0zKBU1kc0i8ypK3B9ai"
-            },
-            "id": "1Cs0zKBU1kc0i8ypK3B9ai",
-            "name": "David Guetta",
-            "type": "artist",
-            "uri": "spotify:artist:1Cs0zKBU1kc0i8ypK3B9ai"
-          },
-          {
-            "external_urls": {
-              "spotify": "https://open.spotify.com/artist/3Xt3RrJMFv5SZkCfUE8C1J"
-            },
-            "id": "3Xt3RrJMFv5SZkCfUE8C1J",
-            "name": "Kim Petras",
-            "type": "artist",
-            "uri": "spotify:artist:3Xt3RrJMFv5SZkCfUE8C1J"
-          }
-        ],
-        "disc_number": 1,
-        "duration_ms": 147432,
-        "episode": false,
-        "explicit": false,
-        "external_ids": {
-          "isrc": "UKWLG2300117"
-        },
-        "external_urls": {
-          "spotify": "https://open.spotify.com/track/1CcLA0eaauck34YEIrvAAq"
-        },
-        "id": "1CcLA0eaauck34YEIrvAAq",
-        "is_local": false,
-        "is_playable": true,
-        "name": "When We Were Young (The Logical Song)",
-        "popularity": 82,
-        "preview_url": "https://p.scdn.co/mp3-preview/082f3e35b4ffbf7751deac28c70e27a84cab7ed3?cid=d8a5ed958d274c2e8ee717e6a4b0971d",
-        "track": true,
-        "track_number": 1,
-        "type": "track",
-        "uri": "spotify:track:1CcLA0eaauck34YEIrvAAq"
-      },
-      "video_thumbnail": {
-        "url": null
-      }
-    },
-    {
-      "added_at": "2023-12-08T05:00:00Z",
+      "added_at": "2023-12-15T05:00:00Z",
       "added_by": {
         "external_urls": {
           "spotify": "https://open.spotify.com/user/"
@@ -1360,7 +1287,7 @@
         "is_local": false,
         "is_playable": true,
         "name": "Veneno",
-        "popularity": 67,
+        "popularity": 68,
         "preview_url": "https://p.scdn.co/mp3-preview/9c9dcae4b5591b2a501acd7fa0163c9432ee1463?cid=d8a5ed958d274c2e8ee717e6a4b0971d",
         "track": true,
         "track_number": 1,
@@ -1372,7 +1299,207 @@
       }
     },
     {
-      "added_at": "2023-12-08T05:00:00Z",
+      "added_at": "2023-12-15T05:00:00Z",
+      "added_by": {
+        "external_urls": {
+          "spotify": "https://open.spotify.com/user/"
+        },
+        "id": "",
+        "type": "user",
+        "uri": "spotify:user:"
+      },
+      "is_local": false,
+      "primary_color": null,
+      "track": {
+        "album": {
+          "album_type": "single",
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/205i7E8fNVfojowcQSfK9m"
+              },
+              "id": "205i7E8fNVfojowcQSfK9m",
+              "name": "Dom Dolla",
+              "type": "artist",
+              "uri": "spotify:artist:205i7E8fNVfojowcQSfK9m"
+            }
+          ],
+          "external_urls": {
+            "spotify": "https://open.spotify.com/album/3XTTqxcEOZgaTobJlRefvF"
+          },
+          "id": "3XTTqxcEOZgaTobJlRefvF",
+          "images": [
+            {
+              "height": 640,
+              "url": "https://i.scdn.co/image/ab67616d0000b273585c329dfd9cdeb22b6cd247",
+              "width": 640
+            },
+            {
+              "height": 300,
+              "url": "https://i.scdn.co/image/ab67616d00001e02585c329dfd9cdeb22b6cd247",
+              "width": 300
+            },
+            {
+              "height": 64,
+              "url": "https://i.scdn.co/image/ab67616d00004851585c329dfd9cdeb22b6cd247",
+              "width": 64
+            }
+          ],
+          "is_playable": true,
+          "name": "Saving Up",
+          "release_date": "2023-10-06",
+          "release_date_precision": "day",
+          "total_tracks": 1,
+          "type": "album",
+          "uri": "spotify:album:3XTTqxcEOZgaTobJlRefvF"
+        },
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/205i7E8fNVfojowcQSfK9m"
+            },
+            "id": "205i7E8fNVfojowcQSfK9m",
+            "name": "Dom Dolla",
+            "type": "artist",
+            "uri": "spotify:artist:205i7E8fNVfojowcQSfK9m"
+          }
+        ],
+        "disc_number": 1,
+        "duration_ms": 207514,
+        "episode": false,
+        "explicit": false,
+        "external_ids": {
+          "isrc": "USQX92305379"
+        },
+        "external_urls": {
+          "spotify": "https://open.spotify.com/track/787Y2idwCU2Rk60Prv4wpr"
+        },
+        "id": "787Y2idwCU2Rk60Prv4wpr",
+        "is_local": false,
+        "is_playable": true,
+        "name": "Saving Up",
+        "popularity": 76,
+        "preview_url": "https://p.scdn.co/mp3-preview/0dc7e54637852a8a9a0652c9e48ca17a745e036f?cid=d8a5ed958d274c2e8ee717e6a4b0971d",
+        "track": true,
+        "track_number": 1,
+        "type": "track",
+        "uri": "spotify:track:787Y2idwCU2Rk60Prv4wpr"
+      },
+      "video_thumbnail": {
+        "url": null
+      }
+    },
+    {
+      "added_at": "2023-12-15T05:00:00Z",
+      "added_by": {
+        "external_urls": {
+          "spotify": "https://open.spotify.com/user/"
+        },
+        "id": "",
+        "type": "user",
+        "uri": "spotify:user:"
+      },
+      "is_local": false,
+      "primary_color": null,
+      "track": {
+        "album": {
+          "album_type": "single",
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/1Cs0zKBU1kc0i8ypK3B9ai"
+              },
+              "id": "1Cs0zKBU1kc0i8ypK3B9ai",
+              "name": "David Guetta",
+              "type": "artist",
+              "uri": "spotify:artist:1Cs0zKBU1kc0i8ypK3B9ai"
+            },
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/3Xt3RrJMFv5SZkCfUE8C1J"
+              },
+              "id": "3Xt3RrJMFv5SZkCfUE8C1J",
+              "name": "Kim Petras",
+              "type": "artist",
+              "uri": "spotify:artist:3Xt3RrJMFv5SZkCfUE8C1J"
+            }
+          ],
+          "external_urls": {
+            "spotify": "https://open.spotify.com/album/3vT1YpvKNkGVN3XE1f3kQY"
+          },
+          "id": "3vT1YpvKNkGVN3XE1f3kQY",
+          "images": [
+            {
+              "height": 640,
+              "url": "https://i.scdn.co/image/ab67616d0000b273c8e153557024fd571a5a83d6",
+              "width": 640
+            },
+            {
+              "height": 300,
+              "url": "https://i.scdn.co/image/ab67616d00001e02c8e153557024fd571a5a83d6",
+              "width": 300
+            },
+            {
+              "height": 64,
+              "url": "https://i.scdn.co/image/ab67616d00004851c8e153557024fd571a5a83d6",
+              "width": 64
+            }
+          ],
+          "is_playable": true,
+          "name": "When We Were Young (The Logical Song)",
+          "release_date": "2023-11-10",
+          "release_date_precision": "day",
+          "total_tracks": 2,
+          "type": "album",
+          "uri": "spotify:album:3vT1YpvKNkGVN3XE1f3kQY"
+        },
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/1Cs0zKBU1kc0i8ypK3B9ai"
+            },
+            "id": "1Cs0zKBU1kc0i8ypK3B9ai",
+            "name": "David Guetta",
+            "type": "artist",
+            "uri": "spotify:artist:1Cs0zKBU1kc0i8ypK3B9ai"
+          },
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/3Xt3RrJMFv5SZkCfUE8C1J"
+            },
+            "id": "3Xt3RrJMFv5SZkCfUE8C1J",
+            "name": "Kim Petras",
+            "type": "artist",
+            "uri": "spotify:artist:3Xt3RrJMFv5SZkCfUE8C1J"
+          }
+        ],
+        "disc_number": 1,
+        "duration_ms": 147432,
+        "episode": false,
+        "explicit": false,
+        "external_ids": {
+          "isrc": "UKWLG2300117"
+        },
+        "external_urls": {
+          "spotify": "https://open.spotify.com/track/1CcLA0eaauck34YEIrvAAq"
+        },
+        "id": "1CcLA0eaauck34YEIrvAAq",
+        "is_local": false,
+        "is_playable": true,
+        "name": "When We Were Young (The Logical Song)",
+        "popularity": 82,
+        "preview_url": "https://p.scdn.co/mp3-preview/082f3e35b4ffbf7751deac28c70e27a84cab7ed3?cid=d8a5ed958d274c2e8ee717e6a4b0971d",
+        "track": true,
+        "track_number": 1,
+        "type": "track",
+        "uri": "spotify:track:1CcLA0eaauck34YEIrvAAq"
+      },
+      "video_thumbnail": {
+        "url": null
+      }
+    },
+    {
+      "added_at": "2023-12-15T05:00:00Z",
       "added_by": {
         "external_urls": {
           "spotify": "https://open.spotify.com/user/"
@@ -1487,7 +1614,7 @@
         "is_local": false,
         "is_playable": true,
         "name": "Stay High",
-        "popularity": 69,
+        "popularity": 70,
         "preview_url": "https://p.scdn.co/mp3-preview/21ec6252e39d793b8996afa172c048d88ac1bf96?cid=d8a5ed958d274c2e8ee717e6a4b0971d",
         "track": true,
         "track_number": 1,
@@ -1499,7 +1626,7 @@
       }
     },
     {
-      "added_at": "2023-12-08T05:00:00Z",
+      "added_at": "2023-12-15T05:00:00Z",
       "added_by": {
         "external_urls": {
           "spotify": "https://open.spotify.com/user/"
@@ -1578,7 +1705,7 @@
         "is_local": false,
         "is_playable": true,
         "name": "Dress Code",
-        "popularity": 69,
+        "popularity": 70,
         "preview_url": "https://p.scdn.co/mp3-preview/65e6d8a1e67d2a2ed5e0df6a7380c3f5bb1c02af?cid=d8a5ed958d274c2e8ee717e6a4b0971d",
         "track": true,
         "track_number": 1,
@@ -1590,7 +1717,7 @@
       }
     },
     {
-      "added_at": "2023-12-08T05:00:00Z",
+      "added_at": "2023-12-15T05:00:00Z",
       "added_by": {
         "external_urls": {
           "spotify": "https://open.spotify.com/user/"
@@ -1732,7 +1859,7 @@
         "is_local": false,
         "is_playable": true,
         "name": "Thank You (Not So Bad)",
-        "popularity": 72,
+        "popularity": 75,
         "preview_url": "https://p.scdn.co/mp3-preview/90b0c56eb3bd187d09a8ad612eb4049447d056ad?cid=d8a5ed958d274c2e8ee717e6a4b0971d",
         "track": true,
         "track_number": 1,
@@ -1744,7 +1871,7 @@
       }
     },
     {
-      "added_at": "2023-12-08T05:00:00Z",
+      "added_at": "2023-12-15T05:00:00Z",
       "added_by": {
         "external_urls": {
           "spotify": "https://open.spotify.com/user/"
@@ -1835,7 +1962,7 @@
       }
     },
     {
-      "added_at": "2023-12-08T05:00:00Z",
+      "added_at": "2023-12-15T05:00:00Z",
       "added_by": {
         "external_urls": {
           "spotify": "https://open.spotify.com/user/"
@@ -1944,7 +2071,7 @@
       }
     },
     {
-      "added_at": "2023-12-08T05:00:00Z",
+      "added_at": "2023-12-15T05:00:00Z",
       "added_by": {
         "external_urls": {
           "spotify": "https://open.spotify.com/user/"
@@ -2050,7 +2177,7 @@
         "is_local": false,
         "is_playable": true,
         "name": "I Believe In Love Again - Jex Opolis Remix Edit",
-        "popularity": 54,
+        "popularity": 58,
         "preview_url": "https://p.scdn.co/mp3-preview/d58df844b4548401d1f279481530c492fb9c3b93?cid=d8a5ed958d274c2e8ee717e6a4b0971d",
         "track": true,
         "track_number": 2,
@@ -2062,7 +2189,7 @@
       }
     },
     {
-      "added_at": "2023-12-08T05:00:00Z",
+      "added_at": "2023-12-15T05:00:00Z",
       "added_by": {
         "external_urls": {
           "spotify": "https://open.spotify.com/user/"
@@ -2162,7 +2289,7 @@
       }
     },
     {
-      "added_at": "2023-12-08T05:00:00Z",
+      "added_at": "2023-12-15T05:00:00Z",
       "added_by": {
         "external_urls": {
           "spotify": "https://open.spotify.com/user/"
@@ -2277,7 +2404,7 @@
         "is_local": false,
         "is_playable": true,
         "name": "Losing You - Spotify Singles",
-        "popularity": 41,
+        "popularity": 60,
         "preview_url": "https://p.scdn.co/mp3-preview/8145539b40ee358fa52bb1dd1f7317f9dc8a69a1?cid=d8a5ed958d274c2e8ee717e6a4b0971d",
         "track": true,
         "track_number": 1,
@@ -2289,7 +2416,7 @@
       }
     },
     {
-      "added_at": "2023-12-08T05:00:00Z",
+      "added_at": "2023-12-15T05:00:00Z",
       "added_by": {
         "external_urls": {
           "spotify": "https://open.spotify.com/user/"
@@ -2380,7 +2507,7 @@
       }
     },
     {
-      "added_at": "2023-12-08T05:00:00Z",
+      "added_at": "2023-12-15T05:00:00Z",
       "added_by": {
         "external_urls": {
           "spotify": "https://open.spotify.com/user/"
@@ -2468,7 +2595,7 @@
         "is_local": false,
         "is_playable": true,
         "name": "Rainy (with REI AMI)",
-        "popularity": 58,
+        "popularity": 59,
         "preview_url": "https://p.scdn.co/mp3-preview/af259e0b9089d1316f5755ce5aebae2bbd1b00bb?cid=d8a5ed958d274c2e8ee717e6a4b0971d",
         "track": true,
         "track_number": 5,
@@ -2480,7 +2607,7 @@
       }
     },
     {
-      "added_at": "2023-12-08T05:00:00Z",
+      "added_at": "2023-12-15T05:00:00Z",
       "added_by": {
         "external_urls": {
           "spotify": "https://open.spotify.com/user/"
@@ -2589,7 +2716,7 @@
       }
     },
     {
-      "added_at": "2023-12-08T05:00:00Z",
+      "added_at": "2023-12-15T05:00:00Z",
       "added_by": {
         "external_urls": {
           "spotify": "https://open.spotify.com/user/"
@@ -2716,7 +2843,7 @@
       }
     },
     {
-      "added_at": "2023-12-08T05:00:00Z",
+      "added_at": "2023-12-15T05:00:00Z",
       "added_by": {
         "external_urls": {
           "spotify": "https://open.spotify.com/user/"
@@ -2804,7 +2931,7 @@
         "is_local": false,
         "is_playable": true,
         "name": "Cruel Summer - LP Giobbi Remix",
-        "popularity": 70,
+        "popularity": 69,
         "preview_url": "https://p.scdn.co/mp3-preview/840b5533cd1f817748e85bda290c6ac266100b4d?cid=d8a5ed958d274c2e8ee717e6a4b0971d",
         "track": true,
         "track_number": 2,
@@ -2816,7 +2943,7 @@
       }
     },
     {
-      "added_at": "2023-12-08T05:00:00Z",
+      "added_at": "2023-12-15T05:00:00Z",
       "added_by": {
         "external_urls": {
           "spotify": "https://open.spotify.com/user/"
@@ -2895,7 +3022,7 @@
         "is_local": false,
         "is_playable": true,
         "name": "Walked In The Room",
-        "popularity": 26,
+        "popularity": 58,
         "preview_url": "https://p.scdn.co/mp3-preview/53f5b2c13076ce4159e0a933742343c630337160?cid=d8a5ed958d274c2e8ee717e6a4b0971d",
         "track": true,
         "track_number": 1,
@@ -2907,116 +3034,7 @@
       }
     },
     {
-      "added_at": "2023-12-08T05:00:00Z",
-      "added_by": {
-        "external_urls": {
-          "spotify": "https://open.spotify.com/user/"
-        },
-        "id": "",
-        "type": "user",
-        "uri": "spotify:user:"
-      },
-      "is_local": false,
-      "primary_color": null,
-      "track": {
-        "album": {
-          "album_type": "single",
-          "artists": [
-            {
-              "external_urls": {
-                "spotify": "https://open.spotify.com/artist/1VJ0briNOlXRtJUAzoUJdt"
-              },
-              "id": "1VJ0briNOlXRtJUAzoUJdt",
-              "name": "FISHER",
-              "type": "artist",
-              "uri": "spotify:artist:1VJ0briNOlXRtJUAzoUJdt"
-            },
-            {
-              "external_urls": {
-                "spotify": "https://open.spotify.com/artist/3CGuwWgoCYSO5Z72H5G2Ec"
-              },
-              "id": "3CGuwWgoCYSO5Z72H5G2Ec",
-              "name": "Kita Alexander",
-              "type": "artist",
-              "uri": "spotify:artist:3CGuwWgoCYSO5Z72H5G2Ec"
-            }
-          ],
-          "external_urls": {
-            "spotify": "https://open.spotify.com/album/3rGYf6tkyIJ4BE2O2k7o0d"
-          },
-          "id": "3rGYf6tkyIJ4BE2O2k7o0d",
-          "images": [
-            {
-              "height": 640,
-              "url": "https://i.scdn.co/image/ab67616d0000b27337c2bdd58c470e2cbee904e5",
-              "width": 640
-            },
-            {
-              "height": 300,
-              "url": "https://i.scdn.co/image/ab67616d00001e0237c2bdd58c470e2cbee904e5",
-              "width": 300
-            },
-            {
-              "height": 64,
-              "url": "https://i.scdn.co/image/ab67616d0000485137c2bdd58c470e2cbee904e5",
-              "width": 64
-            }
-          ],
-          "is_playable": true,
-          "name": "Atmosphere",
-          "release_date": "2023-08-11",
-          "release_date_precision": "day",
-          "total_tracks": 1,
-          "type": "album",
-          "uri": "spotify:album:3rGYf6tkyIJ4BE2O2k7o0d"
-        },
-        "artists": [
-          {
-            "external_urls": {
-              "spotify": "https://open.spotify.com/artist/1VJ0briNOlXRtJUAzoUJdt"
-            },
-            "id": "1VJ0briNOlXRtJUAzoUJdt",
-            "name": "FISHER",
-            "type": "artist",
-            "uri": "spotify:artist:1VJ0briNOlXRtJUAzoUJdt"
-          },
-          {
-            "external_urls": {
-              "spotify": "https://open.spotify.com/artist/3CGuwWgoCYSO5Z72H5G2Ec"
-            },
-            "id": "3CGuwWgoCYSO5Z72H5G2Ec",
-            "name": "Kita Alexander",
-            "type": "artist",
-            "uri": "spotify:artist:3CGuwWgoCYSO5Z72H5G2Ec"
-          }
-        ],
-        "disc_number": 1,
-        "duration_ms": 182857,
-        "episode": false,
-        "explicit": false,
-        "external_ids": {
-          "isrc": "QZA742318982"
-        },
-        "external_urls": {
-          "spotify": "https://open.spotify.com/track/1aNUSKBe6UMyMk3pEu9ws7"
-        },
-        "id": "1aNUSKBe6UMyMk3pEu9ws7",
-        "is_local": false,
-        "is_playable": true,
-        "name": "Atmosphere",
-        "popularity": 77,
-        "preview_url": "https://p.scdn.co/mp3-preview/b7a1b04e7c075c61fdbea8e9f52059f612cb0972?cid=d8a5ed958d274c2e8ee717e6a4b0971d",
-        "track": true,
-        "track_number": 1,
-        "type": "track",
-        "uri": "spotify:track:1aNUSKBe6UMyMk3pEu9ws7"
-      },
-      "video_thumbnail": {
-        "url": null
-      }
-    },
-    {
-      "added_at": "2023-12-08T05:00:00Z",
+      "added_at": "2023-12-15T05:00:00Z",
       "added_by": {
         "external_urls": {
           "spotify": "https://open.spotify.com/user/"
@@ -3107,7 +3125,7 @@
       }
     },
     {
-      "added_at": "2023-12-08T05:00:00Z",
+      "added_at": "2023-12-15T05:00:00Z",
       "added_by": {
         "external_urls": {
           "spotify": "https://open.spotify.com/user/"
@@ -3234,7 +3252,98 @@
       }
     },
     {
-      "added_at": "2023-12-08T05:00:00Z",
+      "added_at": "2023-12-15T05:00:00Z",
+      "added_by": {
+        "external_urls": {
+          "spotify": "https://open.spotify.com/user/"
+        },
+        "id": "",
+        "type": "user",
+        "uri": "spotify:user:"
+      },
+      "is_local": false,
+      "primary_color": null,
+      "track": {
+        "album": {
+          "album_type": "single",
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/4yX6mpMyBGf9UfvBB8JJrc"
+              },
+              "id": "4yX6mpMyBGf9UfvBB8JJrc",
+              "name": "Hayla",
+              "type": "artist",
+              "uri": "spotify:artist:4yX6mpMyBGf9UfvBB8JJrc"
+            }
+          ],
+          "external_urls": {
+            "spotify": "https://open.spotify.com/album/4Lgy6GaK2eR2QwOyoDeDg0"
+          },
+          "id": "4Lgy6GaK2eR2QwOyoDeDg0",
+          "images": [
+            {
+              "height": 640,
+              "url": "https://i.scdn.co/image/ab67616d0000b2737c0c9ff9fc1a7006bb5b9798",
+              "width": 640
+            },
+            {
+              "height": 300,
+              "url": "https://i.scdn.co/image/ab67616d00001e027c0c9ff9fc1a7006bb5b9798",
+              "width": 300
+            },
+            {
+              "height": 64,
+              "url": "https://i.scdn.co/image/ab67616d000048517c0c9ff9fc1a7006bb5b9798",
+              "width": 64
+            }
+          ],
+          "is_playable": true,
+          "name": "Fall Again",
+          "release_date": "2023-10-27",
+          "release_date_precision": "day",
+          "total_tracks": 1,
+          "type": "album",
+          "uri": "spotify:album:4Lgy6GaK2eR2QwOyoDeDg0"
+        },
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/4yX6mpMyBGf9UfvBB8JJrc"
+            },
+            "id": "4yX6mpMyBGf9UfvBB8JJrc",
+            "name": "Hayla",
+            "type": "artist",
+            "uri": "spotify:artist:4yX6mpMyBGf9UfvBB8JJrc"
+          }
+        ],
+        "disc_number": 1,
+        "duration_ms": 206794,
+        "episode": false,
+        "explicit": false,
+        "external_ids": {
+          "isrc": "GB45A2300216"
+        },
+        "external_urls": {
+          "spotify": "https://open.spotify.com/track/3oOvEw1pgxMtrQMNgPWQHL"
+        },
+        "id": "3oOvEw1pgxMtrQMNgPWQHL",
+        "is_local": false,
+        "is_playable": true,
+        "name": "Fall Again",
+        "popularity": 56,
+        "preview_url": "https://p.scdn.co/mp3-preview/3afb87c17897da4f9a0b1f444bc35d174ff2e23e?cid=d8a5ed958d274c2e8ee717e6a4b0971d",
+        "track": true,
+        "track_number": 1,
+        "type": "track",
+        "uri": "spotify:track:3oOvEw1pgxMtrQMNgPWQHL"
+      },
+      "video_thumbnail": {
+        "url": null
+      }
+    },
+    {
+      "added_at": "2023-12-15T05:00:00Z",
       "added_by": {
         "external_urls": {
           "spotify": "https://open.spotify.com/user/"
@@ -3361,7 +3470,7 @@
       }
     },
     {
-      "added_at": "2023-12-08T05:00:00Z",
+      "added_at": "2023-12-15T05:00:00Z",
       "added_by": {
         "external_urls": {
           "spotify": "https://open.spotify.com/user/"
@@ -3470,207 +3579,7 @@
       }
     },
     {
-      "added_at": "2023-12-08T05:00:00Z",
-      "added_by": {
-        "external_urls": {
-          "spotify": "https://open.spotify.com/user/"
-        },
-        "id": "",
-        "type": "user",
-        "uri": "spotify:user:"
-      },
-      "is_local": false,
-      "primary_color": null,
-      "track": {
-        "album": {
-          "album_type": "single",
-          "artists": [
-            {
-              "external_urls": {
-                "spotify": "https://open.spotify.com/artist/4bL2B6hmLlMWnUEZnorEtG"
-              },
-              "id": "4bL2B6hmLlMWnUEZnorEtG",
-              "name": "Felix Jaehn",
-              "type": "artist",
-              "uri": "spotify:artist:4bL2B6hmLlMWnUEZnorEtG"
-            },
-            {
-              "external_urls": {
-                "spotify": "https://open.spotify.com/artist/1HBjj22wzbscIZ9sEb5dyf"
-              },
-              "id": "1HBjj22wzbscIZ9sEb5dyf",
-              "name": "Jonas Blue",
-              "type": "artist",
-              "uri": "spotify:artist:1HBjj22wzbscIZ9sEb5dyf"
-            }
-          ],
-          "external_urls": {
-            "spotify": "https://open.spotify.com/album/0vJYeZ82yiEUvuGBDMoqwL"
-          },
-          "id": "0vJYeZ82yiEUvuGBDMoqwL",
-          "images": [
-            {
-              "height": 640,
-              "url": "https://i.scdn.co/image/ab67616d0000b2731b4efb650878150252a62034",
-              "width": 640
-            },
-            {
-              "height": 300,
-              "url": "https://i.scdn.co/image/ab67616d00001e021b4efb650878150252a62034",
-              "width": 300
-            },
-            {
-              "height": 64,
-              "url": "https://i.scdn.co/image/ab67616d000048511b4efb650878150252a62034",
-              "width": 64
-            }
-          ],
-          "is_playable": true,
-          "name": "Past Life",
-          "release_date": "2023-09-22",
-          "release_date_precision": "day",
-          "total_tracks": 1,
-          "type": "album",
-          "uri": "spotify:album:0vJYeZ82yiEUvuGBDMoqwL"
-        },
-        "artists": [
-          {
-            "external_urls": {
-              "spotify": "https://open.spotify.com/artist/4bL2B6hmLlMWnUEZnorEtG"
-            },
-            "id": "4bL2B6hmLlMWnUEZnorEtG",
-            "name": "Felix Jaehn",
-            "type": "artist",
-            "uri": "spotify:artist:4bL2B6hmLlMWnUEZnorEtG"
-          },
-          {
-            "external_urls": {
-              "spotify": "https://open.spotify.com/artist/1HBjj22wzbscIZ9sEb5dyf"
-            },
-            "id": "1HBjj22wzbscIZ9sEb5dyf",
-            "name": "Jonas Blue",
-            "type": "artist",
-            "uri": "spotify:artist:1HBjj22wzbscIZ9sEb5dyf"
-          }
-        ],
-        "disc_number": 1,
-        "duration_ms": 196821,
-        "episode": false,
-        "explicit": false,
-        "external_ids": {
-          "isrc": "DEUM72309932"
-        },
-        "external_urls": {
-          "spotify": "https://open.spotify.com/track/4yc0wKwKXGkx9Vqc42MIFy"
-        },
-        "id": "4yc0wKwKXGkx9Vqc42MIFy",
-        "is_local": false,
-        "is_playable": true,
-        "name": "Past Life",
-        "popularity": 69,
-        "preview_url": "https://p.scdn.co/mp3-preview/4bae29ff8ddba228f3a7f773328d0103e960e10c?cid=d8a5ed958d274c2e8ee717e6a4b0971d",
-        "track": true,
-        "track_number": 1,
-        "type": "track",
-        "uri": "spotify:track:4yc0wKwKXGkx9Vqc42MIFy"
-      },
-      "video_thumbnail": {
-        "url": null
-      }
-    },
-    {
-      "added_at": "2023-12-08T05:00:00Z",
-      "added_by": {
-        "external_urls": {
-          "spotify": "https://open.spotify.com/user/"
-        },
-        "id": "",
-        "type": "user",
-        "uri": "spotify:user:"
-      },
-      "is_local": false,
-      "primary_color": null,
-      "track": {
-        "album": {
-          "album_type": "single",
-          "artists": [
-            {
-              "external_urls": {
-                "spotify": "https://open.spotify.com/artist/4yX6mpMyBGf9UfvBB8JJrc"
-              },
-              "id": "4yX6mpMyBGf9UfvBB8JJrc",
-              "name": "Hayla",
-              "type": "artist",
-              "uri": "spotify:artist:4yX6mpMyBGf9UfvBB8JJrc"
-            }
-          ],
-          "external_urls": {
-            "spotify": "https://open.spotify.com/album/4Lgy6GaK2eR2QwOyoDeDg0"
-          },
-          "id": "4Lgy6GaK2eR2QwOyoDeDg0",
-          "images": [
-            {
-              "height": 640,
-              "url": "https://i.scdn.co/image/ab67616d0000b2737c0c9ff9fc1a7006bb5b9798",
-              "width": 640
-            },
-            {
-              "height": 300,
-              "url": "https://i.scdn.co/image/ab67616d00001e027c0c9ff9fc1a7006bb5b9798",
-              "width": 300
-            },
-            {
-              "height": 64,
-              "url": "https://i.scdn.co/image/ab67616d000048517c0c9ff9fc1a7006bb5b9798",
-              "width": 64
-            }
-          ],
-          "is_playable": true,
-          "name": "Fall Again",
-          "release_date": "2023-10-27",
-          "release_date_precision": "day",
-          "total_tracks": 1,
-          "type": "album",
-          "uri": "spotify:album:4Lgy6GaK2eR2QwOyoDeDg0"
-        },
-        "artists": [
-          {
-            "external_urls": {
-              "spotify": "https://open.spotify.com/artist/4yX6mpMyBGf9UfvBB8JJrc"
-            },
-            "id": "4yX6mpMyBGf9UfvBB8JJrc",
-            "name": "Hayla",
-            "type": "artist",
-            "uri": "spotify:artist:4yX6mpMyBGf9UfvBB8JJrc"
-          }
-        ],
-        "disc_number": 1,
-        "duration_ms": 206794,
-        "episode": false,
-        "explicit": false,
-        "external_ids": {
-          "isrc": "GB45A2300216"
-        },
-        "external_urls": {
-          "spotify": "https://open.spotify.com/track/3oOvEw1pgxMtrQMNgPWQHL"
-        },
-        "id": "3oOvEw1pgxMtrQMNgPWQHL",
-        "is_local": false,
-        "is_playable": true,
-        "name": "Fall Again",
-        "popularity": 55,
-        "preview_url": "https://p.scdn.co/mp3-preview/3afb87c17897da4f9a0b1f444bc35d174ff2e23e?cid=d8a5ed958d274c2e8ee717e6a4b0971d",
-        "track": true,
-        "track_number": 1,
-        "type": "track",
-        "uri": "spotify:track:3oOvEw1pgxMtrQMNgPWQHL"
-      },
-      "video_thumbnail": {
-        "url": null
-      }
-    },
-    {
-      "added_at": "2023-12-08T05:00:00Z",
+      "added_at": "2023-12-15T05:00:00Z",
       "added_by": {
         "external_urls": {
           "spotify": "https://open.spotify.com/user/"
@@ -3767,7 +3676,7 @@
         "is_local": false,
         "is_playable": true,
         "name": "Overdrive (feat. Norma Jean Martine)",
-        "popularity": 82,
+        "popularity": 83,
         "preview_url": "https://p.scdn.co/mp3-preview/b2b6a59603c6726af9ec980ebf03520f7bc5dede?cid=d8a5ed958d274c2e8ee717e6a4b0971d",
         "track": true,
         "track_number": 1,
@@ -3779,7 +3688,98 @@
       }
     },
     {
-      "added_at": "2023-12-08T05:00:00Z",
+      "added_at": "2023-12-15T05:00:00Z",
+      "added_by": {
+        "external_urls": {
+          "spotify": "https://open.spotify.com/user/"
+        },
+        "id": "",
+        "type": "user",
+        "uri": "spotify:user:"
+      },
+      "is_local": false,
+      "primary_color": null,
+      "track": {
+        "album": {
+          "album_type": "single",
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/1GuqTQbuixFHD6eBkFwVcb"
+              },
+              "id": "1GuqTQbuixFHD6eBkFwVcb",
+              "name": "Sammy Virji",
+              "type": "artist",
+              "uri": "spotify:artist:1GuqTQbuixFHD6eBkFwVcb"
+            }
+          ],
+          "external_urls": {
+            "spotify": "https://open.spotify.com/album/628CN0UzuPsstc678cQ5Sn"
+          },
+          "id": "628CN0UzuPsstc678cQ5Sn",
+          "images": [
+            {
+              "height": 640,
+              "url": "https://i.scdn.co/image/ab67616d0000b273d5b8fa0ff5dee9da54847694",
+              "width": 640
+            },
+            {
+              "height": 300,
+              "url": "https://i.scdn.co/image/ab67616d00001e02d5b8fa0ff5dee9da54847694",
+              "width": 300
+            },
+            {
+              "height": 64,
+              "url": "https://i.scdn.co/image/ab67616d00004851d5b8fa0ff5dee9da54847694",
+              "width": 64
+            }
+          ],
+          "is_playable": true,
+          "name": "If U Need It",
+          "release_date": "2023-11-03",
+          "release_date_precision": "day",
+          "total_tracks": 1,
+          "type": "album",
+          "uri": "spotify:album:628CN0UzuPsstc678cQ5Sn"
+        },
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/1GuqTQbuixFHD6eBkFwVcb"
+            },
+            "id": "1GuqTQbuixFHD6eBkFwVcb",
+            "name": "Sammy Virji",
+            "type": "artist",
+            "uri": "spotify:artist:1GuqTQbuixFHD6eBkFwVcb"
+          }
+        ],
+        "disc_number": 1,
+        "duration_ms": 179999,
+        "episode": false,
+        "explicit": false,
+        "external_ids": {
+          "isrc": "GBUM72309238"
+        },
+        "external_urls": {
+          "spotify": "https://open.spotify.com/track/5CaUUACiQFEf4zR5WoeIrp"
+        },
+        "id": "5CaUUACiQFEf4zR5WoeIrp",
+        "is_local": false,
+        "is_playable": true,
+        "name": "If U Need It",
+        "popularity": 68,
+        "preview_url": "https://p.scdn.co/mp3-preview/9e5b6f977271b2ba2d0bf99c980c33f12cf6c97b?cid=d8a5ed958d274c2e8ee717e6a4b0971d",
+        "track": true,
+        "track_number": 1,
+        "type": "track",
+        "uri": "spotify:track:5CaUUACiQFEf4zR5WoeIrp"
+      },
+      "video_thumbnail": {
+        "url": null
+      }
+    },
+    {
+      "added_at": "2023-12-15T05:00:00Z",
       "added_by": {
         "external_urls": {
           "spotify": "https://open.spotify.com/user/"
@@ -3897,7 +3897,116 @@
       }
     },
     {
-      "added_at": "2023-12-08T05:00:00Z",
+      "added_at": "2023-12-15T05:00:00Z",
+      "added_by": {
+        "external_urls": {
+          "spotify": "https://open.spotify.com/user/"
+        },
+        "id": "",
+        "type": "user",
+        "uri": "spotify:user:"
+      },
+      "is_local": false,
+      "primary_color": null,
+      "track": {
+        "album": {
+          "album_type": "single",
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/1VJ0briNOlXRtJUAzoUJdt"
+              },
+              "id": "1VJ0briNOlXRtJUAzoUJdt",
+              "name": "FISHER",
+              "type": "artist",
+              "uri": "spotify:artist:1VJ0briNOlXRtJUAzoUJdt"
+            },
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/3CGuwWgoCYSO5Z72H5G2Ec"
+              },
+              "id": "3CGuwWgoCYSO5Z72H5G2Ec",
+              "name": "Kita Alexander",
+              "type": "artist",
+              "uri": "spotify:artist:3CGuwWgoCYSO5Z72H5G2Ec"
+            }
+          ],
+          "external_urls": {
+            "spotify": "https://open.spotify.com/album/3rGYf6tkyIJ4BE2O2k7o0d"
+          },
+          "id": "3rGYf6tkyIJ4BE2O2k7o0d",
+          "images": [
+            {
+              "height": 640,
+              "url": "https://i.scdn.co/image/ab67616d0000b27337c2bdd58c470e2cbee904e5",
+              "width": 640
+            },
+            {
+              "height": 300,
+              "url": "https://i.scdn.co/image/ab67616d00001e0237c2bdd58c470e2cbee904e5",
+              "width": 300
+            },
+            {
+              "height": 64,
+              "url": "https://i.scdn.co/image/ab67616d0000485137c2bdd58c470e2cbee904e5",
+              "width": 64
+            }
+          ],
+          "is_playable": true,
+          "name": "Atmosphere",
+          "release_date": "2023-08-11",
+          "release_date_precision": "day",
+          "total_tracks": 1,
+          "type": "album",
+          "uri": "spotify:album:3rGYf6tkyIJ4BE2O2k7o0d"
+        },
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/1VJ0briNOlXRtJUAzoUJdt"
+            },
+            "id": "1VJ0briNOlXRtJUAzoUJdt",
+            "name": "FISHER",
+            "type": "artist",
+            "uri": "spotify:artist:1VJ0briNOlXRtJUAzoUJdt"
+          },
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/3CGuwWgoCYSO5Z72H5G2Ec"
+            },
+            "id": "3CGuwWgoCYSO5Z72H5G2Ec",
+            "name": "Kita Alexander",
+            "type": "artist",
+            "uri": "spotify:artist:3CGuwWgoCYSO5Z72H5G2Ec"
+          }
+        ],
+        "disc_number": 1,
+        "duration_ms": 182857,
+        "episode": false,
+        "explicit": false,
+        "external_ids": {
+          "isrc": "QZA742318982"
+        },
+        "external_urls": {
+          "spotify": "https://open.spotify.com/track/1aNUSKBe6UMyMk3pEu9ws7"
+        },
+        "id": "1aNUSKBe6UMyMk3pEu9ws7",
+        "is_local": false,
+        "is_playable": true,
+        "name": "Atmosphere",
+        "popularity": 77,
+        "preview_url": "https://p.scdn.co/mp3-preview/b7a1b04e7c075c61fdbea8e9f52059f612cb0972?cid=d8a5ed958d274c2e8ee717e6a4b0971d",
+        "track": true,
+        "track_number": 1,
+        "type": "track",
+        "uri": "spotify:track:1aNUSKBe6UMyMk3pEu9ws7"
+      },
+      "video_thumbnail": {
+        "url": null
+      }
+    },
+    {
+      "added_at": "2023-12-15T05:00:00Z",
       "added_by": {
         "external_urls": {
           "spotify": "https://open.spotify.com/user/"
@@ -3976,7 +4085,7 @@
         "is_local": false,
         "is_playable": true,
         "name": "Take My Chance",
-        "popularity": 52,
+        "popularity": 53,
         "preview_url": "https://p.scdn.co/mp3-preview/50b39dc85be8eb2f9203173433dd29c69a92701c?cid=d8a5ed958d274c2e8ee717e6a4b0971d",
         "track": true,
         "track_number": 1,
@@ -3988,7 +4097,7 @@
       }
     },
     {
-      "added_at": "2023-12-08T05:00:00Z",
+      "added_at": "2023-12-15T05:00:00Z",
       "added_by": {
         "external_urls": {
           "spotify": "https://open.spotify.com/user/"
@@ -4079,7 +4188,7 @@
       }
     },
     {
-      "added_at": "2023-12-08T05:00:00Z",
+      "added_at": "2023-12-15T05:00:00Z",
       "added_by": {
         "external_urls": {
           "spotify": "https://open.spotify.com/user/"
@@ -4194,7 +4303,7 @@
         "is_local": false,
         "is_playable": true,
         "name": "I Wanna Dance",
-        "popularity": 62,
+        "popularity": 61,
         "preview_url": "https://p.scdn.co/mp3-preview/c524bad9025760e6b6e30d00a349dbe0ec577089?cid=d8a5ed958d274c2e8ee717e6a4b0971d",
         "track": true,
         "track_number": 1,
@@ -4206,7 +4315,7 @@
       }
     },
     {
-      "added_at": "2023-12-08T05:00:00Z",
+      "added_at": "2023-12-15T05:00:00Z",
       "added_by": {
         "external_urls": {
           "spotify": "https://open.spotify.com/user/"
@@ -4297,98 +4406,7 @@
       }
     },
     {
-      "added_at": "2023-12-08T05:00:00Z",
-      "added_by": {
-        "external_urls": {
-          "spotify": "https://open.spotify.com/user/"
-        },
-        "id": "",
-        "type": "user",
-        "uri": "spotify:user:"
-      },
-      "is_local": false,
-      "primary_color": null,
-      "track": {
-        "album": {
-          "album_type": "single",
-          "artists": [
-            {
-              "external_urls": {
-                "spotify": "https://open.spotify.com/artist/1GuqTQbuixFHD6eBkFwVcb"
-              },
-              "id": "1GuqTQbuixFHD6eBkFwVcb",
-              "name": "Sammy Virji",
-              "type": "artist",
-              "uri": "spotify:artist:1GuqTQbuixFHD6eBkFwVcb"
-            }
-          ],
-          "external_urls": {
-            "spotify": "https://open.spotify.com/album/628CN0UzuPsstc678cQ5Sn"
-          },
-          "id": "628CN0UzuPsstc678cQ5Sn",
-          "images": [
-            {
-              "height": 640,
-              "url": "https://i.scdn.co/image/ab67616d0000b273d5b8fa0ff5dee9da54847694",
-              "width": 640
-            },
-            {
-              "height": 300,
-              "url": "https://i.scdn.co/image/ab67616d00001e02d5b8fa0ff5dee9da54847694",
-              "width": 300
-            },
-            {
-              "height": 64,
-              "url": "https://i.scdn.co/image/ab67616d00004851d5b8fa0ff5dee9da54847694",
-              "width": 64
-            }
-          ],
-          "is_playable": true,
-          "name": "If U Need It",
-          "release_date": "2023-11-03",
-          "release_date_precision": "day",
-          "total_tracks": 1,
-          "type": "album",
-          "uri": "spotify:album:628CN0UzuPsstc678cQ5Sn"
-        },
-        "artists": [
-          {
-            "external_urls": {
-              "spotify": "https://open.spotify.com/artist/1GuqTQbuixFHD6eBkFwVcb"
-            },
-            "id": "1GuqTQbuixFHD6eBkFwVcb",
-            "name": "Sammy Virji",
-            "type": "artist",
-            "uri": "spotify:artist:1GuqTQbuixFHD6eBkFwVcb"
-          }
-        ],
-        "disc_number": 1,
-        "duration_ms": 179999,
-        "episode": false,
-        "explicit": false,
-        "external_ids": {
-          "isrc": "GBUM72309238"
-        },
-        "external_urls": {
-          "spotify": "https://open.spotify.com/track/5CaUUACiQFEf4zR5WoeIrp"
-        },
-        "id": "5CaUUACiQFEf4zR5WoeIrp",
-        "is_local": false,
-        "is_playable": true,
-        "name": "If U Need It",
-        "popularity": 67,
-        "preview_url": "https://p.scdn.co/mp3-preview/9e5b6f977271b2ba2d0bf99c980c33f12cf6c97b?cid=d8a5ed958d274c2e8ee717e6a4b0971d",
-        "track": true,
-        "track_number": 1,
-        "type": "track",
-        "uri": "spotify:track:5CaUUACiQFEf4zR5WoeIrp"
-      },
-      "video_thumbnail": {
-        "url": null
-      }
-    },
-    {
-      "added_at": "2023-12-08T05:00:00Z",
+      "added_at": "2023-12-15T05:00:00Z",
       "added_by": {
         "external_urls": {
           "spotify": "https://open.spotify.com/user/"
@@ -4479,607 +4497,7 @@
       }
     },
     {
-      "added_at": "2023-12-08T05:00:00Z",
-      "added_by": {
-        "external_urls": {
-          "spotify": "https://open.spotify.com/user/"
-        },
-        "id": "",
-        "type": "user",
-        "uri": "spotify:user:"
-      },
-      "is_local": false,
-      "primary_color": null,
-      "track": {
-        "album": {
-          "album_type": "single",
-          "artists": [
-            {
-              "external_urls": {
-                "spotify": "https://open.spotify.com/artist/0PavAVTZWBEpaj4iJdKCyj"
-              },
-              "id": "0PavAVTZWBEpaj4iJdKCyj",
-              "name": "Sunday Scaries",
-              "type": "artist",
-              "uri": "spotify:artist:0PavAVTZWBEpaj4iJdKCyj"
-            },
-            {
-              "external_urls": {
-                "spotify": "https://open.spotify.com/artist/0Sz2jslaxjcw2VM5zYh2jK"
-              },
-              "id": "0Sz2jslaxjcw2VM5zYh2jK",
-              "name": "Kaleena Zanders",
-              "type": "artist",
-              "uri": "spotify:artist:0Sz2jslaxjcw2VM5zYh2jK"
-            }
-          ],
-          "external_urls": {
-            "spotify": "https://open.spotify.com/album/3QOx2Pb0YAOD48iVQOAqjA"
-          },
-          "id": "3QOx2Pb0YAOD48iVQOAqjA",
-          "images": [
-            {
-              "height": 640,
-              "url": "https://i.scdn.co/image/ab67616d0000b273f4d27107428286f06bbbee2f",
-              "width": 640
-            },
-            {
-              "height": 300,
-              "url": "https://i.scdn.co/image/ab67616d00001e02f4d27107428286f06bbbee2f",
-              "width": 300
-            },
-            {
-              "height": 64,
-              "url": "https://i.scdn.co/image/ab67616d00004851f4d27107428286f06bbbee2f",
-              "width": 64
-            }
-          ],
-          "is_playable": true,
-          "name": "Dance No More (with Kaleena Zanders)",
-          "release_date": "2023-08-25",
-          "release_date_precision": "day",
-          "total_tracks": 3,
-          "type": "album",
-          "uri": "spotify:album:3QOx2Pb0YAOD48iVQOAqjA"
-        },
-        "artists": [
-          {
-            "external_urls": {
-              "spotify": "https://open.spotify.com/artist/0PavAVTZWBEpaj4iJdKCyj"
-            },
-            "id": "0PavAVTZWBEpaj4iJdKCyj",
-            "name": "Sunday Scaries",
-            "type": "artist",
-            "uri": "spotify:artist:0PavAVTZWBEpaj4iJdKCyj"
-          },
-          {
-            "external_urls": {
-              "spotify": "https://open.spotify.com/artist/0Sz2jslaxjcw2VM5zYh2jK"
-            },
-            "id": "0Sz2jslaxjcw2VM5zYh2jK",
-            "name": "Kaleena Zanders",
-            "type": "artist",
-            "uri": "spotify:artist:0Sz2jslaxjcw2VM5zYh2jK"
-          }
-        ],
-        "disc_number": 1,
-        "duration_ms": 202657,
-        "episode": false,
-        "explicit": false,
-        "external_ids": {
-          "isrc": "USUG12307216"
-        },
-        "external_urls": {
-          "spotify": "https://open.spotify.com/track/5IkqbeN8L6DC9kRA7Hp64t"
-        },
-        "id": "5IkqbeN8L6DC9kRA7Hp64t",
-        "is_local": false,
-        "is_playable": true,
-        "name": "Dance No More (with Kaleena Zanders)",
-        "popularity": 64,
-        "preview_url": "https://p.scdn.co/mp3-preview/d125586fc2cd9f7269212d6aea560cfa20d07269?cid=d8a5ed958d274c2e8ee717e6a4b0971d",
-        "track": true,
-        "track_number": 1,
-        "type": "track",
-        "uri": "spotify:track:5IkqbeN8L6DC9kRA7Hp64t"
-      },
-      "video_thumbnail": {
-        "url": null
-      }
-    },
-    {
-      "added_at": "2023-12-08T05:00:00Z",
-      "added_by": {
-        "external_urls": {
-          "spotify": "https://open.spotify.com/user/"
-        },
-        "id": "",
-        "type": "user",
-        "uri": "spotify:user:"
-      },
-      "is_local": false,
-      "primary_color": null,
-      "track": {
-        "album": {
-          "album_type": "single",
-          "artists": [
-            {
-              "external_urls": {
-                "spotify": "https://open.spotify.com/artist/43BxCL6t4c73BQnIJtry5v"
-              },
-              "id": "43BxCL6t4c73BQnIJtry5v",
-              "name": "James Hype",
-              "type": "artist",
-              "uri": "spotify:artist:43BxCL6t4c73BQnIJtry5v"
-            },
-            {
-              "external_urls": {
-                "spotify": "https://open.spotify.com/artist/3Xt3RrJMFv5SZkCfUE8C1J"
-              },
-              "id": "3Xt3RrJMFv5SZkCfUE8C1J",
-              "name": "Kim Petras",
-              "type": "artist",
-              "uri": "spotify:artist:3Xt3RrJMFv5SZkCfUE8C1J"
-            }
-          ],
-          "external_urls": {
-            "spotify": "https://open.spotify.com/album/5Xs1g4UOOm6NBk4cSxyl2M"
-          },
-          "id": "5Xs1g4UOOm6NBk4cSxyl2M",
-          "images": [
-            {
-              "height": 640,
-              "url": "https://i.scdn.co/image/ab67616d0000b2733232ebab106e55e093398988",
-              "width": 640
-            },
-            {
-              "height": 300,
-              "url": "https://i.scdn.co/image/ab67616d00001e023232ebab106e55e093398988",
-              "width": 300
-            },
-            {
-              "height": 64,
-              "url": "https://i.scdn.co/image/ab67616d000048513232ebab106e55e093398988",
-              "width": 64
-            }
-          ],
-          "is_playable": true,
-          "name": "Drums (Feat. Kim Petras)",
-          "release_date": "2023-10-06",
-          "release_date_precision": "day",
-          "total_tracks": 1,
-          "type": "album",
-          "uri": "spotify:album:5Xs1g4UOOm6NBk4cSxyl2M"
-        },
-        "artists": [
-          {
-            "external_urls": {
-              "spotify": "https://open.spotify.com/artist/43BxCL6t4c73BQnIJtry5v"
-            },
-            "id": "43BxCL6t4c73BQnIJtry5v",
-            "name": "James Hype",
-            "type": "artist",
-            "uri": "spotify:artist:43BxCL6t4c73BQnIJtry5v"
-          },
-          {
-            "external_urls": {
-              "spotify": "https://open.spotify.com/artist/3Xt3RrJMFv5SZkCfUE8C1J"
-            },
-            "id": "3Xt3RrJMFv5SZkCfUE8C1J",
-            "name": "Kim Petras",
-            "type": "artist",
-            "uri": "spotify:artist:3Xt3RrJMFv5SZkCfUE8C1J"
-          }
-        ],
-        "disc_number": 1,
-        "duration_ms": 152400,
-        "episode": false,
-        "explicit": false,
-        "external_ids": {
-          "isrc": "GBUM72308471"
-        },
-        "external_urls": {
-          "spotify": "https://open.spotify.com/track/4AFlChQQJbB1MOCgOiiyYc"
-        },
-        "id": "4AFlChQQJbB1MOCgOiiyYc",
-        "is_local": false,
-        "is_playable": true,
-        "name": "Drums (Feat. Kim Petras)",
-        "popularity": 74,
-        "preview_url": "https://p.scdn.co/mp3-preview/1182aa6cb44a1c9a0b27f31dded879103a76097e?cid=d8a5ed958d274c2e8ee717e6a4b0971d",
-        "track": true,
-        "track_number": 1,
-        "type": "track",
-        "uri": "spotify:track:4AFlChQQJbB1MOCgOiiyYc"
-      },
-      "video_thumbnail": {
-        "url": null
-      }
-    },
-    {
-      "added_at": "2023-12-08T05:00:00Z",
-      "added_by": {
-        "external_urls": {
-          "spotify": "https://open.spotify.com/user/"
-        },
-        "id": "",
-        "type": "user",
-        "uri": "spotify:user:"
-      },
-      "is_local": false,
-      "primary_color": null,
-      "track": {
-        "album": {
-          "album_type": "single",
-          "artists": [
-            {
-              "external_urls": {
-                "spotify": "https://open.spotify.com/artist/3M3wTTCDwicRubwMyHyEDy"
-              },
-              "id": "3M3wTTCDwicRubwMyHyEDy",
-              "name": "Shygirl",
-              "type": "artist",
-              "uri": "spotify:artist:3M3wTTCDwicRubwMyHyEDy"
-            },
-            {
-              "external_urls": {
-                "spotify": "https://open.spotify.com/artist/5P8FHUS4EuE2FXskLnqkAg"
-              },
-              "id": "5P8FHUS4EuE2FXskLnqkAg",
-              "name": "Cosha",
-              "type": "artist",
-              "uri": "spotify:artist:5P8FHUS4EuE2FXskLnqkAg"
-            }
-          ],
-          "external_urls": {
-            "spotify": "https://open.spotify.com/album/7CGatMISsY9SZCJhVsYiT5"
-          },
-          "id": "7CGatMISsY9SZCJhVsYiT5",
-          "images": [
-            {
-              "height": 640,
-              "url": "https://i.scdn.co/image/ab67616d0000b27314c830bfb78b271b91a6369f",
-              "width": 640
-            },
-            {
-              "height": 300,
-              "url": "https://i.scdn.co/image/ab67616d00001e0214c830bfb78b271b91a6369f",
-              "width": 300
-            },
-            {
-              "height": 64,
-              "url": "https://i.scdn.co/image/ab67616d0000485114c830bfb78b271b91a6369f",
-              "width": 64
-            }
-          ],
-          "is_playable": true,
-          "name": "thicc",
-          "release_date": "2023-11-14",
-          "release_date_precision": "day",
-          "total_tracks": 1,
-          "type": "album",
-          "uri": "spotify:album:7CGatMISsY9SZCJhVsYiT5"
-        },
-        "artists": [
-          {
-            "external_urls": {
-              "spotify": "https://open.spotify.com/artist/3M3wTTCDwicRubwMyHyEDy"
-            },
-            "id": "3M3wTTCDwicRubwMyHyEDy",
-            "name": "Shygirl",
-            "type": "artist",
-            "uri": "spotify:artist:3M3wTTCDwicRubwMyHyEDy"
-          },
-          {
-            "external_urls": {
-              "spotify": "https://open.spotify.com/artist/5P8FHUS4EuE2FXskLnqkAg"
-            },
-            "id": "5P8FHUS4EuE2FXskLnqkAg",
-            "name": "Cosha",
-            "type": "artist",
-            "uri": "spotify:artist:5P8FHUS4EuE2FXskLnqkAg"
-          }
-        ],
-        "disc_number": 1,
-        "duration_ms": 222682,
-        "episode": false,
-        "explicit": false,
-        "external_ids": {
-          "isrc": "GBMVH2300650"
-        },
-        "external_urls": {
-          "spotify": "https://open.spotify.com/track/3tda2VED1rPj3MmVf3mXTo"
-        },
-        "id": "3tda2VED1rPj3MmVf3mXTo",
-        "is_local": false,
-        "is_playable": true,
-        "name": "thicc",
-        "popularity": 61,
-        "preview_url": "https://p.scdn.co/mp3-preview/26f666ba38e64b0aedd8873a2eacc7d74a8d98e0?cid=d8a5ed958d274c2e8ee717e6a4b0971d",
-        "track": true,
-        "track_number": 1,
-        "type": "track",
-        "uri": "spotify:track:3tda2VED1rPj3MmVf3mXTo"
-      },
-      "video_thumbnail": {
-        "url": null
-      }
-    },
-    {
-      "added_at": "2023-12-08T05:00:00Z",
-      "added_by": {
-        "external_urls": {
-          "spotify": "https://open.spotify.com/user/"
-        },
-        "id": "",
-        "type": "user",
-        "uri": "spotify:user:"
-      },
-      "is_local": false,
-      "primary_color": null,
-      "track": {
-        "album": {
-          "album_type": "single",
-          "artists": [
-            {
-              "external_urls": {
-                "spotify": "https://open.spotify.com/artist/6Se1y4vDcu9fVHLqdj1N3q"
-              },
-              "id": "6Se1y4vDcu9fVHLqdj1N3q",
-              "name": "Wuki",
-              "type": "artist",
-              "uri": "spotify:artist:6Se1y4vDcu9fVHLqdj1N3q"
-            }
-          ],
-          "external_urls": {
-            "spotify": "https://open.spotify.com/album/7AE0HaidGUaRBSmIZmJ8As"
-          },
-          "id": "7AE0HaidGUaRBSmIZmJ8As",
-          "images": [
-            {
-              "height": 640,
-              "url": "https://i.scdn.co/image/ab67616d0000b27342401c4a9e13cddc69e34ffd",
-              "width": 640
-            },
-            {
-              "height": 300,
-              "url": "https://i.scdn.co/image/ab67616d00001e0242401c4a9e13cddc69e34ffd",
-              "width": 300
-            },
-            {
-              "height": 64,
-              "url": "https://i.scdn.co/image/ab67616d0000485142401c4a9e13cddc69e34ffd",
-              "width": 64
-            }
-          ],
-          "is_playable": true,
-          "name": "Sunshine (My Girl)",
-          "release_date": "2023-09-01",
-          "release_date_precision": "day",
-          "total_tracks": 1,
-          "type": "album",
-          "uri": "spotify:album:7AE0HaidGUaRBSmIZmJ8As"
-        },
-        "artists": [
-          {
-            "external_urls": {
-              "spotify": "https://open.spotify.com/artist/6Se1y4vDcu9fVHLqdj1N3q"
-            },
-            "id": "6Se1y4vDcu9fVHLqdj1N3q",
-            "name": "Wuki",
-            "type": "artist",
-            "uri": "spotify:artist:6Se1y4vDcu9fVHLqdj1N3q"
-          }
-        ],
-        "disc_number": 1,
-        "duration_ms": 131250,
-        "episode": false,
-        "explicit": false,
-        "external_ids": {
-          "isrc": "QZFPL2100424"
-        },
-        "external_urls": {
-          "spotify": "https://open.spotify.com/track/2bI6KAUqXeIXGAEEvup8ri"
-        },
-        "id": "2bI6KAUqXeIXGAEEvup8ri",
-        "is_local": false,
-        "is_playable": true,
-        "name": "Sunshine (My Girl)",
-        "popularity": 69,
-        "preview_url": "https://p.scdn.co/mp3-preview/6d337812e2f00d8956af933ac30d235ee2cb6ecc?cid=d8a5ed958d274c2e8ee717e6a4b0971d",
-        "track": true,
-        "track_number": 1,
-        "type": "track",
-        "uri": "spotify:track:2bI6KAUqXeIXGAEEvup8ri"
-      },
-      "video_thumbnail": {
-        "url": null
-      }
-    },
-    {
-      "added_at": "2023-12-08T05:00:00Z",
-      "added_by": {
-        "external_urls": {
-          "spotify": "https://open.spotify.com/user/"
-        },
-        "id": "",
-        "type": "user",
-        "uri": "spotify:user:"
-      },
-      "is_local": false,
-      "primary_color": null,
-      "track": {
-        "album": {
-          "album_type": "single",
-          "artists": [
-            {
-              "external_urls": {
-                "spotify": "https://open.spotify.com/artist/68rU1sdZ0HjxjEC5YnSmao"
-              },
-              "id": "68rU1sdZ0HjxjEC5YnSmao",
-              "name": "Riordan",
-              "type": "artist",
-              "uri": "spotify:artist:68rU1sdZ0HjxjEC5YnSmao"
-            }
-          ],
-          "external_urls": {
-            "spotify": "https://open.spotify.com/album/7E0q2fAykseBKfLY7X53jJ"
-          },
-          "id": "7E0q2fAykseBKfLY7X53jJ",
-          "images": [
-            {
-              "height": 640,
-              "url": "https://i.scdn.co/image/ab67616d0000b273ac785450fbdb3b4e53c57572",
-              "width": 640
-            },
-            {
-              "height": 300,
-              "url": "https://i.scdn.co/image/ab67616d00001e02ac785450fbdb3b4e53c57572",
-              "width": 300
-            },
-            {
-              "height": 64,
-              "url": "https://i.scdn.co/image/ab67616d00004851ac785450fbdb3b4e53c57572",
-              "width": 64
-            }
-          ],
-          "is_playable": true,
-          "name": "Needle On The Record",
-          "release_date": "2023-11-10",
-          "release_date_precision": "day",
-          "total_tracks": 1,
-          "type": "album",
-          "uri": "spotify:album:7E0q2fAykseBKfLY7X53jJ"
-        },
-        "artists": [
-          {
-            "external_urls": {
-              "spotify": "https://open.spotify.com/artist/68rU1sdZ0HjxjEC5YnSmao"
-            },
-            "id": "68rU1sdZ0HjxjEC5YnSmao",
-            "name": "Riordan",
-            "type": "artist",
-            "uri": "spotify:artist:68rU1sdZ0HjxjEC5YnSmao"
-          }
-        ],
-        "disc_number": 1,
-        "duration_ms": 186625,
-        "episode": false,
-        "explicit": false,
-        "external_ids": {
-          "isrc": "US39N2389841"
-        },
-        "external_urls": {
-          "spotify": "https://open.spotify.com/track/5qKuF0NtvWVn5UarAgyli3"
-        },
-        "id": "5qKuF0NtvWVn5UarAgyli3",
-        "is_local": false,
-        "is_playable": true,
-        "name": "Needle On The Record",
-        "popularity": 59,
-        "preview_url": "https://p.scdn.co/mp3-preview/055a6ff6dc3151f5516fa2819ff3606c05b6fbe6?cid=d8a5ed958d274c2e8ee717e6a4b0971d",
-        "track": true,
-        "track_number": 1,
-        "type": "track",
-        "uri": "spotify:track:5qKuF0NtvWVn5UarAgyli3"
-      },
-      "video_thumbnail": {
-        "url": null
-      }
-    },
-    {
-      "added_at": "2023-12-08T05:00:00Z",
-      "added_by": {
-        "external_urls": {
-          "spotify": "https://open.spotify.com/user/"
-        },
-        "id": "",
-        "type": "user",
-        "uri": "spotify:user:"
-      },
-      "is_local": false,
-      "primary_color": null,
-      "track": {
-        "album": {
-          "album_type": "single",
-          "artists": [
-            {
-              "external_urls": {
-                "spotify": "https://open.spotify.com/artist/2k5DY2QDU3kBi5DX7OQlWj"
-              },
-              "id": "2k5DY2QDU3kBi5DX7OQlWj",
-              "name": "Azzecca",
-              "type": "artist",
-              "uri": "spotify:artist:2k5DY2QDU3kBi5DX7OQlWj"
-            }
-          ],
-          "external_urls": {
-            "spotify": "https://open.spotify.com/album/1pQODgWcJzz8oUoucbos1R"
-          },
-          "id": "1pQODgWcJzz8oUoucbos1R",
-          "images": [
-            {
-              "height": 640,
-              "url": "https://i.scdn.co/image/ab67616d0000b27335597e143507656464950331",
-              "width": 640
-            },
-            {
-              "height": 300,
-              "url": "https://i.scdn.co/image/ab67616d00001e0235597e143507656464950331",
-              "width": 300
-            },
-            {
-              "height": 64,
-              "url": "https://i.scdn.co/image/ab67616d0000485135597e143507656464950331",
-              "width": 64
-            }
-          ],
-          "is_playable": true,
-          "name": "Tell That Boy",
-          "release_date": "2023-10-12",
-          "release_date_precision": "day",
-          "total_tracks": 2,
-          "type": "album",
-          "uri": "spotify:album:1pQODgWcJzz8oUoucbos1R"
-        },
-        "artists": [
-          {
-            "external_urls": {
-              "spotify": "https://open.spotify.com/artist/2k5DY2QDU3kBi5DX7OQlWj"
-            },
-            "id": "2k5DY2QDU3kBi5DX7OQlWj",
-            "name": "Azzecca",
-            "type": "artist",
-            "uri": "spotify:artist:2k5DY2QDU3kBi5DX7OQlWj"
-          }
-        ],
-        "disc_number": 1,
-        "duration_ms": 214211,
-        "episode": false,
-        "explicit": false,
-        "external_ids": {
-          "isrc": "USZ4V2300244"
-        },
-        "external_urls": {
-          "spotify": "https://open.spotify.com/track/34x9lHWBLEWgDSUUlx1T5Z"
-        },
-        "id": "34x9lHWBLEWgDSUUlx1T5Z",
-        "is_local": false,
-        "is_playable": true,
-        "name": "Tell That Boy",
-        "popularity": 55,
-        "preview_url": "https://p.scdn.co/mp3-preview/52ac1b09bffe9693b1de88b322f3d4f4d842f863?cid=d8a5ed958d274c2e8ee717e6a4b0971d",
-        "track": true,
-        "track_number": 1,
-        "type": "track",
-        "uri": "spotify:track:34x9lHWBLEWgDSUUlx1T5Z"
-      },
-      "video_thumbnail": {
-        "url": null
-      }
-    },
-    {
-      "added_at": "2023-12-08T05:00:00Z",
+      "added_at": "2023-12-15T05:00:00Z",
       "added_by": {
         "external_urls": {
           "spotify": "https://open.spotify.com/user/"
@@ -5194,7 +4612,7 @@
         "is_local": false,
         "is_playable": true,
         "name": "Love On You (feat. Griff Clawson)",
-        "popularity": 55,
+        "popularity": 56,
         "preview_url": "https://p.scdn.co/mp3-preview/4247049f14cc8d23b123b996a64bdff15b419dc8?cid=d8a5ed958d274c2e8ee717e6a4b0971d",
         "track": true,
         "track_number": 1,
@@ -5206,7 +4624,7 @@
       }
     },
     {
-      "added_at": "2023-12-08T05:00:00Z",
+      "added_at": "2023-12-15T05:00:00Z",
       "added_by": {
         "external_urls": {
           "spotify": "https://open.spotify.com/user/"
@@ -5223,99 +4641,681 @@
           "artists": [
             {
               "external_urls": {
-                "spotify": "https://open.spotify.com/artist/4oLeXFyACqeem2VImYeBFe"
+                "spotify": "https://open.spotify.com/artist/0PavAVTZWBEpaj4iJdKCyj"
               },
-              "id": "4oLeXFyACqeem2VImYeBFe",
-              "name": "Fred again..",
+              "id": "0PavAVTZWBEpaj4iJdKCyj",
+              "name": "Sunday Scaries",
               "type": "artist",
-              "uri": "spotify:artist:4oLeXFyACqeem2VImYeBFe"
+              "uri": "spotify:artist:0PavAVTZWBEpaj4iJdKCyj"
             },
             {
               "external_urls": {
-                "spotify": "https://open.spotify.com/artist/6Ja6zFB5d7XRihhfMo6KzY"
+                "spotify": "https://open.spotify.com/artist/0Sz2jslaxjcw2VM5zYh2jK"
               },
-              "id": "6Ja6zFB5d7XRihhfMo6KzY",
-              "name": "Jozzy",
+              "id": "0Sz2jslaxjcw2VM5zYh2jK",
+              "name": "Kaleena Zanders",
               "type": "artist",
-              "uri": "spotify:artist:6Ja6zFB5d7XRihhfMo6KzY"
+              "uri": "spotify:artist:0Sz2jslaxjcw2VM5zYh2jK"
             }
           ],
           "external_urls": {
-            "spotify": "https://open.spotify.com/album/0GuEvq4vzB9QqUaU8lVL0F"
+            "spotify": "https://open.spotify.com/album/7uvMgsCSqtqOGaUfTRMZpL"
           },
-          "id": "0GuEvq4vzB9QqUaU8lVL0F",
+          "id": "7uvMgsCSqtqOGaUfTRMZpL",
           "images": [
             {
               "height": 640,
-              "url": "https://i.scdn.co/image/ab67616d0000b273d6cddb90ea739c5c20b9edb4",
+              "url": "https://i.scdn.co/image/ab67616d0000b273b57ab5b27e907f7160a44718",
               "width": 640
             },
             {
               "height": 300,
-              "url": "https://i.scdn.co/image/ab67616d00001e02d6cddb90ea739c5c20b9edb4",
+              "url": "https://i.scdn.co/image/ab67616d00001e02b57ab5b27e907f7160a44718",
               "width": 300
             },
             {
               "height": 64,
-              "url": "https://i.scdn.co/image/ab67616d00004851d6cddb90ea739c5c20b9edb4",
+              "url": "https://i.scdn.co/image/ab67616d00004851b57ab5b27e907f7160a44718",
               "width": 64
             }
           ],
           "is_playable": true,
-          "name": "ten",
-          "release_date": "2023-10-13",
+          "name": "Dance No More (with Kaleena Zanders)",
+          "release_date": "2023-08-25",
           "release_date_precision": "day",
-          "total_tracks": 1,
+          "total_tracks": 3,
           "type": "album",
-          "uri": "spotify:album:0GuEvq4vzB9QqUaU8lVL0F"
+          "uri": "spotify:album:7uvMgsCSqtqOGaUfTRMZpL"
         },
         "artists": [
           {
             "external_urls": {
-              "spotify": "https://open.spotify.com/artist/4oLeXFyACqeem2VImYeBFe"
+              "spotify": "https://open.spotify.com/artist/0PavAVTZWBEpaj4iJdKCyj"
             },
-            "id": "4oLeXFyACqeem2VImYeBFe",
-            "name": "Fred again..",
+            "id": "0PavAVTZWBEpaj4iJdKCyj",
+            "name": "Sunday Scaries",
             "type": "artist",
-            "uri": "spotify:artist:4oLeXFyACqeem2VImYeBFe"
+            "uri": "spotify:artist:0PavAVTZWBEpaj4iJdKCyj"
           },
           {
             "external_urls": {
-              "spotify": "https://open.spotify.com/artist/6Ja6zFB5d7XRihhfMo6KzY"
+              "spotify": "https://open.spotify.com/artist/0Sz2jslaxjcw2VM5zYh2jK"
             },
-            "id": "6Ja6zFB5d7XRihhfMo6KzY",
-            "name": "Jozzy",
+            "id": "0Sz2jslaxjcw2VM5zYh2jK",
+            "name": "Kaleena Zanders",
             "type": "artist",
-            "uri": "spotify:artist:6Ja6zFB5d7XRihhfMo6KzY"
+            "uri": "spotify:artist:0Sz2jslaxjcw2VM5zYh2jK"
           }
         ],
         "disc_number": 1,
-        "duration_ms": 181545,
+        "duration_ms": 202657,
         "episode": false,
         "explicit": false,
         "external_ids": {
-          "isrc": "GBAHS2301151"
+          "isrc": "USUG12307216"
         },
         "external_urls": {
-          "spotify": "https://open.spotify.com/track/5QOBT97OmYCZo1W5u7tRrB"
+          "spotify": "https://open.spotify.com/track/7gDgphzQU0urJU3AtoLJup"
         },
-        "id": "5QOBT97OmYCZo1W5u7tRrB",
+        "id": "7gDgphzQU0urJU3AtoLJup",
         "is_local": false,
         "is_playable": true,
-        "name": "ten",
-        "popularity": 80,
-        "preview_url": "https://p.scdn.co/mp3-preview/99fc4c0f25e64d30af9e619ea820bed60aa2b1c6?cid=d8a5ed958d274c2e8ee717e6a4b0971d",
+        "name": "Dance No More (with Kaleena Zanders)",
+        "popularity": 49,
+        "preview_url": "https://p.scdn.co/mp3-preview/b5ff2a10854ecea5b17a624081eea22648a82b67?cid=d8a5ed958d274c2e8ee717e6a4b0971d",
         "track": true,
         "track_number": 1,
         "type": "track",
-        "uri": "spotify:track:5QOBT97OmYCZo1W5u7tRrB"
+        "uri": "spotify:track:7gDgphzQU0urJU3AtoLJup"
       },
       "video_thumbnail": {
         "url": null
       }
     },
     {
-      "added_at": "2023-12-08T05:00:00Z",
+      "added_at": "2023-12-15T05:00:00Z",
+      "added_by": {
+        "external_urls": {
+          "spotify": "https://open.spotify.com/user/"
+        },
+        "id": "",
+        "type": "user",
+        "uri": "spotify:user:"
+      },
+      "is_local": false,
+      "primary_color": null,
+      "track": {
+        "album": {
+          "album_type": "single",
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/0YVquC9RaJLYFNmlJFzkTV"
+              },
+              "id": "0YVquC9RaJLYFNmlJFzkTV",
+              "name": "AYYBO",
+              "type": "artist",
+              "uri": "spotify:artist:0YVquC9RaJLYFNmlJFzkTV"
+            }
+          ],
+          "external_urls": {
+            "spotify": "https://open.spotify.com/album/6uH0vo25qVqNveP02Pr4Uc"
+          },
+          "id": "6uH0vo25qVqNveP02Pr4Uc",
+          "images": [
+            {
+              "height": 640,
+              "url": "https://i.scdn.co/image/ab67616d0000b273f3fb83bf7c4133d662a0e008",
+              "width": 640
+            },
+            {
+              "height": 300,
+              "url": "https://i.scdn.co/image/ab67616d00001e02f3fb83bf7c4133d662a0e008",
+              "width": 300
+            },
+            {
+              "height": 64,
+              "url": "https://i.scdn.co/image/ab67616d00004851f3fb83bf7c4133d662a0e008",
+              "width": 64
+            }
+          ],
+          "is_playable": true,
+          "name": "RIZZ",
+          "release_date": "2023-11-15",
+          "release_date_precision": "day",
+          "total_tracks": 1,
+          "type": "album",
+          "uri": "spotify:album:6uH0vo25qVqNveP02Pr4Uc"
+        },
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/0YVquC9RaJLYFNmlJFzkTV"
+            },
+            "id": "0YVquC9RaJLYFNmlJFzkTV",
+            "name": "AYYBO",
+            "type": "artist",
+            "uri": "spotify:artist:0YVquC9RaJLYFNmlJFzkTV"
+          }
+        ],
+        "disc_number": 1,
+        "duration_ms": 200787,
+        "episode": false,
+        "explicit": true,
+        "external_ids": {
+          "isrc": "QZVEM2366898"
+        },
+        "external_urls": {
+          "spotify": "https://open.spotify.com/track/3DqOJ2BoddzZpNdty3okJH"
+        },
+        "id": "3DqOJ2BoddzZpNdty3okJH",
+        "is_local": false,
+        "is_playable": true,
+        "name": "RIZZ",
+        "popularity": 56,
+        "preview_url": "https://p.scdn.co/mp3-preview/1f4b82ed2b5443edbb459dbe9af4b92d7308ed47?cid=d8a5ed958d274c2e8ee717e6a4b0971d",
+        "track": true,
+        "track_number": 1,
+        "type": "track",
+        "uri": "spotify:track:3DqOJ2BoddzZpNdty3okJH"
+      },
+      "video_thumbnail": {
+        "url": null
+      }
+    },
+    {
+      "added_at": "2023-12-15T05:00:00Z",
+      "added_by": {
+        "external_urls": {
+          "spotify": "https://open.spotify.com/user/"
+        },
+        "id": "",
+        "type": "user",
+        "uri": "spotify:user:"
+      },
+      "is_local": false,
+      "primary_color": null,
+      "track": {
+        "album": {
+          "album_type": "single",
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/43BxCL6t4c73BQnIJtry5v"
+              },
+              "id": "43BxCL6t4c73BQnIJtry5v",
+              "name": "James Hype",
+              "type": "artist",
+              "uri": "spotify:artist:43BxCL6t4c73BQnIJtry5v"
+            },
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/3Xt3RrJMFv5SZkCfUE8C1J"
+              },
+              "id": "3Xt3RrJMFv5SZkCfUE8C1J",
+              "name": "Kim Petras",
+              "type": "artist",
+              "uri": "spotify:artist:3Xt3RrJMFv5SZkCfUE8C1J"
+            }
+          ],
+          "external_urls": {
+            "spotify": "https://open.spotify.com/album/5Xs1g4UOOm6NBk4cSxyl2M"
+          },
+          "id": "5Xs1g4UOOm6NBk4cSxyl2M",
+          "images": [
+            {
+              "height": 640,
+              "url": "https://i.scdn.co/image/ab67616d0000b2733232ebab106e55e093398988",
+              "width": 640
+            },
+            {
+              "height": 300,
+              "url": "https://i.scdn.co/image/ab67616d00001e023232ebab106e55e093398988",
+              "width": 300
+            },
+            {
+              "height": 64,
+              "url": "https://i.scdn.co/image/ab67616d000048513232ebab106e55e093398988",
+              "width": 64
+            }
+          ],
+          "is_playable": true,
+          "name": "Drums (Feat. Kim Petras)",
+          "release_date": "2023-10-06",
+          "release_date_precision": "day",
+          "total_tracks": 1,
+          "type": "album",
+          "uri": "spotify:album:5Xs1g4UOOm6NBk4cSxyl2M"
+        },
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/43BxCL6t4c73BQnIJtry5v"
+            },
+            "id": "43BxCL6t4c73BQnIJtry5v",
+            "name": "James Hype",
+            "type": "artist",
+            "uri": "spotify:artist:43BxCL6t4c73BQnIJtry5v"
+          },
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/3Xt3RrJMFv5SZkCfUE8C1J"
+            },
+            "id": "3Xt3RrJMFv5SZkCfUE8C1J",
+            "name": "Kim Petras",
+            "type": "artist",
+            "uri": "spotify:artist:3Xt3RrJMFv5SZkCfUE8C1J"
+          }
+        ],
+        "disc_number": 1,
+        "duration_ms": 152400,
+        "episode": false,
+        "explicit": false,
+        "external_ids": {
+          "isrc": "GBUM72308471"
+        },
+        "external_urls": {
+          "spotify": "https://open.spotify.com/track/4AFlChQQJbB1MOCgOiiyYc"
+        },
+        "id": "4AFlChQQJbB1MOCgOiiyYc",
+        "is_local": false,
+        "is_playable": true,
+        "name": "Drums (Feat. Kim Petras)",
+        "popularity": 74,
+        "preview_url": "https://p.scdn.co/mp3-preview/1182aa6cb44a1c9a0b27f31dded879103a76097e?cid=d8a5ed958d274c2e8ee717e6a4b0971d",
+        "track": true,
+        "track_number": 1,
+        "type": "track",
+        "uri": "spotify:track:4AFlChQQJbB1MOCgOiiyYc"
+      },
+      "video_thumbnail": {
+        "url": null
+      }
+    },
+    {
+      "added_at": "2023-12-15T05:00:00Z",
+      "added_by": {
+        "external_urls": {
+          "spotify": "https://open.spotify.com/user/"
+        },
+        "id": "",
+        "type": "user",
+        "uri": "spotify:user:"
+      },
+      "is_local": false,
+      "primary_color": null,
+      "track": {
+        "album": {
+          "album_type": "single",
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/3M3wTTCDwicRubwMyHyEDy"
+              },
+              "id": "3M3wTTCDwicRubwMyHyEDy",
+              "name": "Shygirl",
+              "type": "artist",
+              "uri": "spotify:artist:3M3wTTCDwicRubwMyHyEDy"
+            },
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/5P8FHUS4EuE2FXskLnqkAg"
+              },
+              "id": "5P8FHUS4EuE2FXskLnqkAg",
+              "name": "Cosha",
+              "type": "artist",
+              "uri": "spotify:artist:5P8FHUS4EuE2FXskLnqkAg"
+            }
+          ],
+          "external_urls": {
+            "spotify": "https://open.spotify.com/album/7CGatMISsY9SZCJhVsYiT5"
+          },
+          "id": "7CGatMISsY9SZCJhVsYiT5",
+          "images": [
+            {
+              "height": 640,
+              "url": "https://i.scdn.co/image/ab67616d0000b27314c830bfb78b271b91a6369f",
+              "width": 640
+            },
+            {
+              "height": 300,
+              "url": "https://i.scdn.co/image/ab67616d00001e0214c830bfb78b271b91a6369f",
+              "width": 300
+            },
+            {
+              "height": 64,
+              "url": "https://i.scdn.co/image/ab67616d0000485114c830bfb78b271b91a6369f",
+              "width": 64
+            }
+          ],
+          "is_playable": true,
+          "name": "thicc",
+          "release_date": "2023-11-14",
+          "release_date_precision": "day",
+          "total_tracks": 1,
+          "type": "album",
+          "uri": "spotify:album:7CGatMISsY9SZCJhVsYiT5"
+        },
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/3M3wTTCDwicRubwMyHyEDy"
+            },
+            "id": "3M3wTTCDwicRubwMyHyEDy",
+            "name": "Shygirl",
+            "type": "artist",
+            "uri": "spotify:artist:3M3wTTCDwicRubwMyHyEDy"
+          },
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/5P8FHUS4EuE2FXskLnqkAg"
+            },
+            "id": "5P8FHUS4EuE2FXskLnqkAg",
+            "name": "Cosha",
+            "type": "artist",
+            "uri": "spotify:artist:5P8FHUS4EuE2FXskLnqkAg"
+          }
+        ],
+        "disc_number": 1,
+        "duration_ms": 222682,
+        "episode": false,
+        "explicit": false,
+        "external_ids": {
+          "isrc": "GBMVH2300650"
+        },
+        "external_urls": {
+          "spotify": "https://open.spotify.com/track/3tda2VED1rPj3MmVf3mXTo"
+        },
+        "id": "3tda2VED1rPj3MmVf3mXTo",
+        "is_local": false,
+        "is_playable": true,
+        "name": "thicc",
+        "popularity": 61,
+        "preview_url": "https://p.scdn.co/mp3-preview/26f666ba38e64b0aedd8873a2eacc7d74a8d98e0?cid=d8a5ed958d274c2e8ee717e6a4b0971d",
+        "track": true,
+        "track_number": 1,
+        "type": "track",
+        "uri": "spotify:track:3tda2VED1rPj3MmVf3mXTo"
+      },
+      "video_thumbnail": {
+        "url": null
+      }
+    },
+    {
+      "added_at": "2023-12-15T05:00:00Z",
+      "added_by": {
+        "external_urls": {
+          "spotify": "https://open.spotify.com/user/"
+        },
+        "id": "",
+        "type": "user",
+        "uri": "spotify:user:"
+      },
+      "is_local": false,
+      "primary_color": null,
+      "track": {
+        "album": {
+          "album_type": "single",
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/6Se1y4vDcu9fVHLqdj1N3q"
+              },
+              "id": "6Se1y4vDcu9fVHLqdj1N3q",
+              "name": "Wuki",
+              "type": "artist",
+              "uri": "spotify:artist:6Se1y4vDcu9fVHLqdj1N3q"
+            }
+          ],
+          "external_urls": {
+            "spotify": "https://open.spotify.com/album/7AE0HaidGUaRBSmIZmJ8As"
+          },
+          "id": "7AE0HaidGUaRBSmIZmJ8As",
+          "images": [
+            {
+              "height": 640,
+              "url": "https://i.scdn.co/image/ab67616d0000b27342401c4a9e13cddc69e34ffd",
+              "width": 640
+            },
+            {
+              "height": 300,
+              "url": "https://i.scdn.co/image/ab67616d00001e0242401c4a9e13cddc69e34ffd",
+              "width": 300
+            },
+            {
+              "height": 64,
+              "url": "https://i.scdn.co/image/ab67616d0000485142401c4a9e13cddc69e34ffd",
+              "width": 64
+            }
+          ],
+          "is_playable": true,
+          "name": "Sunshine (My Girl)",
+          "release_date": "2023-09-01",
+          "release_date_precision": "day",
+          "total_tracks": 1,
+          "type": "album",
+          "uri": "spotify:album:7AE0HaidGUaRBSmIZmJ8As"
+        },
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/6Se1y4vDcu9fVHLqdj1N3q"
+            },
+            "id": "6Se1y4vDcu9fVHLqdj1N3q",
+            "name": "Wuki",
+            "type": "artist",
+            "uri": "spotify:artist:6Se1y4vDcu9fVHLqdj1N3q"
+          }
+        ],
+        "disc_number": 1,
+        "duration_ms": 131250,
+        "episode": false,
+        "explicit": false,
+        "external_ids": {
+          "isrc": "QZFPL2100424"
+        },
+        "external_urls": {
+          "spotify": "https://open.spotify.com/track/2bI6KAUqXeIXGAEEvup8ri"
+        },
+        "id": "2bI6KAUqXeIXGAEEvup8ri",
+        "is_local": false,
+        "is_playable": true,
+        "name": "Sunshine (My Girl)",
+        "popularity": 69,
+        "preview_url": "https://p.scdn.co/mp3-preview/6d337812e2f00d8956af933ac30d235ee2cb6ecc?cid=d8a5ed958d274c2e8ee717e6a4b0971d",
+        "track": true,
+        "track_number": 1,
+        "type": "track",
+        "uri": "spotify:track:2bI6KAUqXeIXGAEEvup8ri"
+      },
+      "video_thumbnail": {
+        "url": null
+      }
+    },
+    {
+      "added_at": "2023-12-15T05:00:00Z",
+      "added_by": {
+        "external_urls": {
+          "spotify": "https://open.spotify.com/user/"
+        },
+        "id": "",
+        "type": "user",
+        "uri": "spotify:user:"
+      },
+      "is_local": false,
+      "primary_color": null,
+      "track": {
+        "album": {
+          "album_type": "single",
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/68rU1sdZ0HjxjEC5YnSmao"
+              },
+              "id": "68rU1sdZ0HjxjEC5YnSmao",
+              "name": "Riordan",
+              "type": "artist",
+              "uri": "spotify:artist:68rU1sdZ0HjxjEC5YnSmao"
+            }
+          ],
+          "external_urls": {
+            "spotify": "https://open.spotify.com/album/7E0q2fAykseBKfLY7X53jJ"
+          },
+          "id": "7E0q2fAykseBKfLY7X53jJ",
+          "images": [
+            {
+              "height": 640,
+              "url": "https://i.scdn.co/image/ab67616d0000b273ac785450fbdb3b4e53c57572",
+              "width": 640
+            },
+            {
+              "height": 300,
+              "url": "https://i.scdn.co/image/ab67616d00001e02ac785450fbdb3b4e53c57572",
+              "width": 300
+            },
+            {
+              "height": 64,
+              "url": "https://i.scdn.co/image/ab67616d00004851ac785450fbdb3b4e53c57572",
+              "width": 64
+            }
+          ],
+          "is_playable": true,
+          "name": "Needle On The Record",
+          "release_date": "2023-11-10",
+          "release_date_precision": "day",
+          "total_tracks": 1,
+          "type": "album",
+          "uri": "spotify:album:7E0q2fAykseBKfLY7X53jJ"
+        },
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/68rU1sdZ0HjxjEC5YnSmao"
+            },
+            "id": "68rU1sdZ0HjxjEC5YnSmao",
+            "name": "Riordan",
+            "type": "artist",
+            "uri": "spotify:artist:68rU1sdZ0HjxjEC5YnSmao"
+          }
+        ],
+        "disc_number": 1,
+        "duration_ms": 186625,
+        "episode": false,
+        "explicit": false,
+        "external_ids": {
+          "isrc": "US39N2389841"
+        },
+        "external_urls": {
+          "spotify": "https://open.spotify.com/track/5qKuF0NtvWVn5UarAgyli3"
+        },
+        "id": "5qKuF0NtvWVn5UarAgyli3",
+        "is_local": false,
+        "is_playable": true,
+        "name": "Needle On The Record",
+        "popularity": 60,
+        "preview_url": "https://p.scdn.co/mp3-preview/055a6ff6dc3151f5516fa2819ff3606c05b6fbe6?cid=d8a5ed958d274c2e8ee717e6a4b0971d",
+        "track": true,
+        "track_number": 1,
+        "type": "track",
+        "uri": "spotify:track:5qKuF0NtvWVn5UarAgyli3"
+      },
+      "video_thumbnail": {
+        "url": null
+      }
+    },
+    {
+      "added_at": "2023-12-15T05:00:00Z",
+      "added_by": {
+        "external_urls": {
+          "spotify": "https://open.spotify.com/user/"
+        },
+        "id": "",
+        "type": "user",
+        "uri": "spotify:user:"
+      },
+      "is_local": false,
+      "primary_color": null,
+      "track": {
+        "album": {
+          "album_type": "single",
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/2k5DY2QDU3kBi5DX7OQlWj"
+              },
+              "id": "2k5DY2QDU3kBi5DX7OQlWj",
+              "name": "Azzecca",
+              "type": "artist",
+              "uri": "spotify:artist:2k5DY2QDU3kBi5DX7OQlWj"
+            }
+          ],
+          "external_urls": {
+            "spotify": "https://open.spotify.com/album/1pQODgWcJzz8oUoucbos1R"
+          },
+          "id": "1pQODgWcJzz8oUoucbos1R",
+          "images": [
+            {
+              "height": 640,
+              "url": "https://i.scdn.co/image/ab67616d0000b27335597e143507656464950331",
+              "width": 640
+            },
+            {
+              "height": 300,
+              "url": "https://i.scdn.co/image/ab67616d00001e0235597e143507656464950331",
+              "width": 300
+            },
+            {
+              "height": 64,
+              "url": "https://i.scdn.co/image/ab67616d0000485135597e143507656464950331",
+              "width": 64
+            }
+          ],
+          "is_playable": true,
+          "name": "Tell That Boy",
+          "release_date": "2023-10-12",
+          "release_date_precision": "day",
+          "total_tracks": 2,
+          "type": "album",
+          "uri": "spotify:album:1pQODgWcJzz8oUoucbos1R"
+        },
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/2k5DY2QDU3kBi5DX7OQlWj"
+            },
+            "id": "2k5DY2QDU3kBi5DX7OQlWj",
+            "name": "Azzecca",
+            "type": "artist",
+            "uri": "spotify:artist:2k5DY2QDU3kBi5DX7OQlWj"
+          }
+        ],
+        "disc_number": 1,
+        "duration_ms": 214211,
+        "episode": false,
+        "explicit": false,
+        "external_ids": {
+          "isrc": "USZ4V2300244"
+        },
+        "external_urls": {
+          "spotify": "https://open.spotify.com/track/34x9lHWBLEWgDSUUlx1T5Z"
+        },
+        "id": "34x9lHWBLEWgDSUUlx1T5Z",
+        "is_local": false,
+        "is_playable": true,
+        "name": "Tell That Boy",
+        "popularity": 55,
+        "preview_url": "https://p.scdn.co/mp3-preview/52ac1b09bffe9693b1de88b322f3d4f4d842f863?cid=d8a5ed958d274c2e8ee717e6a4b0971d",
+        "track": true,
+        "track_number": 1,
+        "type": "track",
+        "uri": "spotify:track:34x9lHWBLEWgDSUUlx1T5Z"
+      },
+      "video_thumbnail": {
+        "url": null
+      }
+    },
+    {
+      "added_at": "2023-12-15T05:00:00Z",
       "added_by": {
         "external_urls": {
           "spotify": "https://open.spotify.com/user/"
@@ -5442,7 +5442,7 @@
       }
     },
     {
-      "added_at": "2023-12-08T05:00:00Z",
+      "added_at": "2023-12-15T05:00:00Z",
       "added_by": {
         "external_urls": {
           "spotify": "https://open.spotify.com/user/"
@@ -5539,7 +5539,7 @@
         "is_local": false,
         "is_playable": true,
         "name": "Milkshake 20 (Alex Wann Remix)",
-        "popularity": 66,
+        "popularity": 67,
         "preview_url": "https://p.scdn.co/mp3-preview/8ae1713d4f2fc71873a094d8c14f1271b0ca99cb?cid=d8a5ed958d274c2e8ee717e6a4b0971d",
         "track": true,
         "track_number": 1,
@@ -5551,7 +5551,7 @@
       }
     },
     {
-      "added_at": "2023-12-08T05:00:00Z",
+      "added_at": "2023-12-15T05:00:00Z",
       "added_by": {
         "external_urls": {
           "spotify": "https://open.spotify.com/user/"
@@ -5642,7 +5642,7 @@
       }
     },
     {
-      "added_at": "2023-12-08T05:00:00Z",
+      "added_at": "2023-12-15T05:00:00Z",
       "added_by": {
         "external_urls": {
           "spotify": "https://open.spotify.com/user/"
@@ -5751,7 +5751,7 @@
       }
     },
     {
-      "added_at": "2023-12-08T05:00:00Z",
+      "added_at": "2023-12-15T05:00:00Z",
       "added_by": {
         "external_urls": {
           "spotify": "https://open.spotify.com/user/"
@@ -5848,7 +5848,7 @@
         "is_local": false,
         "is_playable": true,
         "name": "Memories",
-        "popularity": 72,
+        "popularity": 73,
         "preview_url": "https://p.scdn.co/mp3-preview/c85e337af3dd3042d43378fe052d9dda9e4880d5?cid=d8a5ed958d274c2e8ee717e6a4b0971d",
         "track": true,
         "track_number": 1,
@@ -5860,7 +5860,98 @@
       }
     },
     {
-      "added_at": "2023-12-08T05:00:00Z",
+      "added_at": "2023-12-15T05:00:00Z",
+      "added_by": {
+        "external_urls": {
+          "spotify": "https://open.spotify.com/user/"
+        },
+        "id": "",
+        "type": "user",
+        "uri": "spotify:user:"
+      },
+      "is_local": false,
+      "primary_color": null,
+      "track": {
+        "album": {
+          "album_type": "single",
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/5Ho1vKl1Uz8bJlk4vbmvmf"
+              },
+              "id": "5Ho1vKl1Uz8bJlk4vbmvmf",
+              "name": "Amelie Lens",
+              "type": "artist",
+              "uri": "spotify:artist:5Ho1vKl1Uz8bJlk4vbmvmf"
+            }
+          ],
+          "external_urls": {
+            "spotify": "https://open.spotify.com/album/0IGpJTaj2t5dsb7OVeKFBt"
+          },
+          "id": "0IGpJTaj2t5dsb7OVeKFBt",
+          "images": [
+            {
+              "height": 640,
+              "url": "https://i.scdn.co/image/ab67616d0000b273f09a1148a8bdc0f03b6d226e",
+              "width": 640
+            },
+            {
+              "height": 300,
+              "url": "https://i.scdn.co/image/ab67616d00001e02f09a1148a8bdc0f03b6d226e",
+              "width": 300
+            },
+            {
+              "height": 64,
+              "url": "https://i.scdn.co/image/ab67616d00004851f09a1148a8bdc0f03b6d226e",
+              "width": 64
+            }
+          ],
+          "is_playable": true,
+          "name": "You and Me",
+          "release_date": "2023-11-17",
+          "release_date_precision": "day",
+          "total_tracks": 3,
+          "type": "album",
+          "uri": "spotify:album:0IGpJTaj2t5dsb7OVeKFBt"
+        },
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/5Ho1vKl1Uz8bJlk4vbmvmf"
+            },
+            "id": "5Ho1vKl1Uz8bJlk4vbmvmf",
+            "name": "Amelie Lens",
+            "type": "artist",
+            "uri": "spotify:artist:5Ho1vKl1Uz8bJlk4vbmvmf"
+          }
+        ],
+        "disc_number": 1,
+        "duration_ms": 191408,
+        "episode": false,
+        "explicit": false,
+        "external_ids": {
+          "isrc": "BEN582300888"
+        },
+        "external_urls": {
+          "spotify": "https://open.spotify.com/track/4Elb9ia3RBhTDtJN8qe29k"
+        },
+        "id": "4Elb9ia3RBhTDtJN8qe29k",
+        "is_local": false,
+        "is_playable": true,
+        "name": "You and Me",
+        "popularity": 62,
+        "preview_url": "https://p.scdn.co/mp3-preview/814d7993ea94e98e50e86a24d57f8d182c793e17?cid=d8a5ed958d274c2e8ee717e6a4b0971d",
+        "track": true,
+        "track_number": 1,
+        "type": "track",
+        "uri": "spotify:track:4Elb9ia3RBhTDtJN8qe29k"
+      },
+      "video_thumbnail": {
+        "url": null
+      }
+    },
+    {
+      "added_at": "2023-12-15T05:00:00Z",
       "added_by": {
         "external_urls": {
           "spotify": "https://open.spotify.com/user/"
@@ -5996,7 +6087,107 @@
       }
     },
     {
-      "added_at": "2023-12-08T05:00:00Z",
+      "added_at": "2023-12-15T05:00:00Z",
+      "added_by": {
+        "external_urls": {
+          "spotify": "https://open.spotify.com/user/"
+        },
+        "id": "",
+        "type": "user",
+        "uri": "spotify:user:"
+      },
+      "is_local": false,
+      "primary_color": null,
+      "track": {
+        "album": {
+          "album_type": "single",
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/1PbO7aQiVeKbGp8GYWDL9C"
+              },
+              "id": "1PbO7aQiVeKbGp8GYWDL9C",
+              "name": "Levity",
+              "type": "artist",
+              "uri": "spotify:artist:1PbO7aQiVeKbGp8GYWDL9C"
+            }
+          ],
+          "external_urls": {
+            "spotify": "https://open.spotify.com/album/6pdKC8JtPq2fbz8er190xE"
+          },
+          "id": "6pdKC8JtPq2fbz8er190xE",
+          "images": [
+            {
+              "height": 640,
+              "url": "https://i.scdn.co/image/ab67616d0000b2731cabbfa3660a93b97b80ad95",
+              "width": 640
+            },
+            {
+              "height": 300,
+              "url": "https://i.scdn.co/image/ab67616d00001e021cabbfa3660a93b97b80ad95",
+              "width": 300
+            },
+            {
+              "height": 64,
+              "url": "https://i.scdn.co/image/ab67616d000048511cabbfa3660a93b97b80ad95",
+              "width": 64
+            }
+          ],
+          "is_playable": true,
+          "name": "Flip It",
+          "release_date": "2023-10-10",
+          "release_date_precision": "day",
+          "total_tracks": 1,
+          "type": "album",
+          "uri": "spotify:album:6pdKC8JtPq2fbz8er190xE"
+        },
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/1PbO7aQiVeKbGp8GYWDL9C"
+            },
+            "id": "1PbO7aQiVeKbGp8GYWDL9C",
+            "name": "Levity",
+            "type": "artist",
+            "uri": "spotify:artist:1PbO7aQiVeKbGp8GYWDL9C"
+          },
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/2AUT4fNQ2QC0e2f5pIxOCd"
+            },
+            "id": "2AUT4fNQ2QC0e2f5pIxOCd",
+            "name": "Dem Jointz",
+            "type": "artist",
+            "uri": "spotify:artist:2AUT4fNQ2QC0e2f5pIxOCd"
+          }
+        ],
+        "disc_number": 1,
+        "duration_ms": 135000,
+        "episode": false,
+        "explicit": false,
+        "external_ids": {
+          "isrc": "CAUM82300317"
+        },
+        "external_urls": {
+          "spotify": "https://open.spotify.com/track/4NDhaxAmbKXM8LKrOPNxsy"
+        },
+        "id": "4NDhaxAmbKXM8LKrOPNxsy",
+        "is_local": false,
+        "is_playable": true,
+        "name": "Flip It",
+        "popularity": 64,
+        "preview_url": "https://p.scdn.co/mp3-preview/dc2e27603b4b9e10e5460e29817c8d31959bb897?cid=d8a5ed958d274c2e8ee717e6a4b0971d",
+        "track": true,
+        "track_number": 1,
+        "type": "track",
+        "uri": "spotify:track:4NDhaxAmbKXM8LKrOPNxsy"
+      },
+      "video_thumbnail": {
+        "url": null
+      }
+    },
+    {
+      "added_at": "2023-12-15T05:00:00Z",
       "added_by": {
         "external_urls": {
           "spotify": "https://open.spotify.com/user/"
@@ -6123,7 +6314,116 @@
       }
     },
     {
-      "added_at": "2023-12-08T05:00:00Z",
+      "added_at": "2023-12-15T05:00:00Z",
+      "added_by": {
+        "external_urls": {
+          "spotify": "https://open.spotify.com/user/"
+        },
+        "id": "",
+        "type": "user",
+        "uri": "spotify:user:"
+      },
+      "is_local": false,
+      "primary_color": null,
+      "track": {
+        "album": {
+          "album_type": "single",
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/02DWGcShQivFepRvGJ7xhB"
+              },
+              "id": "02DWGcShQivFepRvGJ7xhB",
+              "name": "Adriatique",
+              "type": "artist",
+              "uri": "spotify:artist:02DWGcShQivFepRvGJ7xhB"
+            },
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/7A4TdwdnxfR9auD1yAmpWD"
+              },
+              "id": "7A4TdwdnxfR9auD1yAmpWD",
+              "name": "Delhia De France",
+              "type": "artist",
+              "uri": "spotify:artist:7A4TdwdnxfR9auD1yAmpWD"
+            }
+          ],
+          "external_urls": {
+            "spotify": "https://open.spotify.com/album/0htK1OiP8v8kU6SSNEDaal"
+          },
+          "id": "0htK1OiP8v8kU6SSNEDaal",
+          "images": [
+            {
+              "height": 640,
+              "url": "https://i.scdn.co/image/ab67616d0000b273722b770304cc4b3c0f30065b",
+              "width": 640
+            },
+            {
+              "height": 300,
+              "url": "https://i.scdn.co/image/ab67616d00001e02722b770304cc4b3c0f30065b",
+              "width": 300
+            },
+            {
+              "height": 64,
+              "url": "https://i.scdn.co/image/ab67616d00004851722b770304cc4b3c0f30065b",
+              "width": 64
+            }
+          ],
+          "is_playable": true,
+          "name": "The Future Is Unknown",
+          "release_date": "2023-12-01",
+          "release_date_precision": "day",
+          "total_tracks": 1,
+          "type": "album",
+          "uri": "spotify:album:0htK1OiP8v8kU6SSNEDaal"
+        },
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/02DWGcShQivFepRvGJ7xhB"
+            },
+            "id": "02DWGcShQivFepRvGJ7xhB",
+            "name": "Adriatique",
+            "type": "artist",
+            "uri": "spotify:artist:02DWGcShQivFepRvGJ7xhB"
+          },
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/7A4TdwdnxfR9auD1yAmpWD"
+            },
+            "id": "7A4TdwdnxfR9auD1yAmpWD",
+            "name": "Delhia De France",
+            "type": "artist",
+            "uri": "spotify:artist:7A4TdwdnxfR9auD1yAmpWD"
+          }
+        ],
+        "disc_number": 1,
+        "duration_ms": 263520,
+        "episode": false,
+        "explicit": false,
+        "external_ids": {
+          "isrc": "QMFMF2351938"
+        },
+        "external_urls": {
+          "spotify": "https://open.spotify.com/track/4CvvIoMzXxXTzvGPT9nBNO"
+        },
+        "id": "4CvvIoMzXxXTzvGPT9nBNO",
+        "is_local": false,
+        "is_playable": true,
+        "name": "The Future Is Unknown",
+        "popularity": 55,
+        "preview_url": "https://p.scdn.co/mp3-preview/7d3059de97e261ebfe68254e17a367ae2d2af630?cid=d8a5ed958d274c2e8ee717e6a4b0971d",
+        "track": true,
+        "track_number": 1,
+        "type": "track",
+        "uri": "spotify:track:4CvvIoMzXxXTzvGPT9nBNO"
+      },
+      "video_thumbnail": {
+        "url": null
+      }
+    },
+    {
+      "added_at": "2023-12-15T05:00:00Z",
       "added_by": {
         "external_urls": {
           "spotify": "https://open.spotify.com/user/"
@@ -6232,7 +6532,7 @@
       }
     },
     {
-      "added_at": "2023-12-08T05:00:00Z",
+      "added_at": "2023-12-15T05:00:00Z",
       "added_by": {
         "external_urls": {
           "spotify": "https://open.spotify.com/user/"
@@ -6329,7 +6629,7 @@
         "is_local": false,
         "is_playable": true,
         "name": "Me Me Me",
-        "popularity": 54,
+        "popularity": 55,
         "preview_url": "https://p.scdn.co/mp3-preview/e5ed0cd204dc805bc9182e41583d682d5b3a57ec?cid=d8a5ed958d274c2e8ee717e6a4b0971d",
         "track": true,
         "track_number": 1,
@@ -6341,7 +6641,7 @@
       }
     },
     {
-      "added_at": "2023-12-08T05:00:00Z",
+      "added_at": "2023-12-15T05:00:00Z",
       "added_by": {
         "external_urls": {
           "spotify": "https://open.spotify.com/user/"
@@ -6450,7 +6750,7 @@
       }
     },
     {
-      "added_at": "2023-12-08T05:00:00Z",
+      "added_at": "2023-12-15T05:00:00Z",
       "added_by": {
         "external_urls": {
           "spotify": "https://open.spotify.com/user/"
@@ -6541,7 +6841,116 @@
       }
     },
     {
-      "added_at": "2023-12-08T05:00:00Z",
+      "added_at": "2023-12-15T05:00:00Z",
+      "added_by": {
+        "external_urls": {
+          "spotify": "https://open.spotify.com/user/"
+        },
+        "id": "",
+        "type": "user",
+        "uri": "spotify:user:"
+      },
+      "is_local": false,
+      "primary_color": null,
+      "track": {
+        "album": {
+          "album_type": "single",
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/4oLeXFyACqeem2VImYeBFe"
+              },
+              "id": "4oLeXFyACqeem2VImYeBFe",
+              "name": "Fred again..",
+              "type": "artist",
+              "uri": "spotify:artist:4oLeXFyACqeem2VImYeBFe"
+            },
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/6Ja6zFB5d7XRihhfMo6KzY"
+              },
+              "id": "6Ja6zFB5d7XRihhfMo6KzY",
+              "name": "Jozzy",
+              "type": "artist",
+              "uri": "spotify:artist:6Ja6zFB5d7XRihhfMo6KzY"
+            }
+          ],
+          "external_urls": {
+            "spotify": "https://open.spotify.com/album/0GuEvq4vzB9QqUaU8lVL0F"
+          },
+          "id": "0GuEvq4vzB9QqUaU8lVL0F",
+          "images": [
+            {
+              "height": 640,
+              "url": "https://i.scdn.co/image/ab67616d0000b273d6cddb90ea739c5c20b9edb4",
+              "width": 640
+            },
+            {
+              "height": 300,
+              "url": "https://i.scdn.co/image/ab67616d00001e02d6cddb90ea739c5c20b9edb4",
+              "width": 300
+            },
+            {
+              "height": 64,
+              "url": "https://i.scdn.co/image/ab67616d00004851d6cddb90ea739c5c20b9edb4",
+              "width": 64
+            }
+          ],
+          "is_playable": true,
+          "name": "ten",
+          "release_date": "2023-10-13",
+          "release_date_precision": "day",
+          "total_tracks": 1,
+          "type": "album",
+          "uri": "spotify:album:0GuEvq4vzB9QqUaU8lVL0F"
+        },
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/4oLeXFyACqeem2VImYeBFe"
+            },
+            "id": "4oLeXFyACqeem2VImYeBFe",
+            "name": "Fred again..",
+            "type": "artist",
+            "uri": "spotify:artist:4oLeXFyACqeem2VImYeBFe"
+          },
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/6Ja6zFB5d7XRihhfMo6KzY"
+            },
+            "id": "6Ja6zFB5d7XRihhfMo6KzY",
+            "name": "Jozzy",
+            "type": "artist",
+            "uri": "spotify:artist:6Ja6zFB5d7XRihhfMo6KzY"
+          }
+        ],
+        "disc_number": 1,
+        "duration_ms": 181545,
+        "episode": false,
+        "explicit": false,
+        "external_ids": {
+          "isrc": "GBAHS2301151"
+        },
+        "external_urls": {
+          "spotify": "https://open.spotify.com/track/5QOBT97OmYCZo1W5u7tRrB"
+        },
+        "id": "5QOBT97OmYCZo1W5u7tRrB",
+        "is_local": false,
+        "is_playable": true,
+        "name": "ten",
+        "popularity": 81,
+        "preview_url": "https://p.scdn.co/mp3-preview/99fc4c0f25e64d30af9e619ea820bed60aa2b1c6?cid=d8a5ed958d274c2e8ee717e6a4b0971d",
+        "track": true,
+        "track_number": 1,
+        "type": "track",
+        "uri": "spotify:track:5QOBT97OmYCZo1W5u7tRrB"
+      },
+      "video_thumbnail": {
+        "url": null
+      }
+    },
+    {
+      "added_at": "2023-12-15T05:00:00Z",
       "added_by": {
         "external_urls": {
           "spotify": "https://open.spotify.com/user/"
@@ -6638,7 +7047,7 @@
         "is_local": false,
         "is_playable": true,
         "name": "Steady Pace",
-        "popularity": 52,
+        "popularity": 53,
         "preview_url": "https://p.scdn.co/mp3-preview/0c0862997e4aff28bc1c2d7fb85753a69075edf0?cid=d8a5ed958d274c2e8ee717e6a4b0971d",
         "track": true,
         "track_number": 1,
@@ -6650,7 +7059,7 @@
       }
     },
     {
-      "added_at": "2023-12-08T05:00:00Z",
+      "added_at": "2023-12-15T05:00:00Z",
       "added_by": {
         "external_urls": {
           "spotify": "https://open.spotify.com/user/"
@@ -6777,7 +7186,7 @@
       }
     },
     {
-      "added_at": "2023-12-08T05:00:00Z",
+      "added_at": "2023-12-15T05:00:00Z",
       "added_by": {
         "external_urls": {
           "spotify": "https://open.spotify.com/user/"
@@ -6868,7 +7277,7 @@
       }
     },
     {
-      "added_at": "2023-12-08T05:00:00Z",
+      "added_at": "2023-12-15T05:00:00Z",
       "added_by": {
         "external_urls": {
           "spotify": "https://open.spotify.com/user/"
@@ -6947,7 +7356,7 @@
         "is_local": false,
         "is_playable": true,
         "name": "Human",
-        "popularity": 65,
+        "popularity": 66,
         "preview_url": "https://p.scdn.co/mp3-preview/32a4b8166593d48c2afefcb59ec73b0af1be3b12?cid=d8a5ed958d274c2e8ee717e6a4b0971d",
         "track": true,
         "track_number": 1,
@@ -6959,7 +7368,7 @@
       }
     },
     {
-      "added_at": "2023-12-08T05:00:00Z",
+      "added_at": "2023-12-15T05:00:00Z",
       "added_by": {
         "external_urls": {
           "spotify": "https://open.spotify.com/user/"
@@ -7050,307 +7459,7 @@
       }
     },
     {
-      "added_at": "2023-12-08T05:00:00Z",
-      "added_by": {
-        "external_urls": {
-          "spotify": "https://open.spotify.com/user/"
-        },
-        "id": "",
-        "type": "user",
-        "uri": "spotify:user:"
-      },
-      "is_local": false,
-      "primary_color": null,
-      "track": {
-        "album": {
-          "album_type": "single",
-          "artists": [
-            {
-              "external_urls": {
-                "spotify": "https://open.spotify.com/artist/1PbO7aQiVeKbGp8GYWDL9C"
-              },
-              "id": "1PbO7aQiVeKbGp8GYWDL9C",
-              "name": "Levity",
-              "type": "artist",
-              "uri": "spotify:artist:1PbO7aQiVeKbGp8GYWDL9C"
-            }
-          ],
-          "external_urls": {
-            "spotify": "https://open.spotify.com/album/6pdKC8JtPq2fbz8er190xE"
-          },
-          "id": "6pdKC8JtPq2fbz8er190xE",
-          "images": [
-            {
-              "height": 640,
-              "url": "https://i.scdn.co/image/ab67616d0000b2731cabbfa3660a93b97b80ad95",
-              "width": 640
-            },
-            {
-              "height": 300,
-              "url": "https://i.scdn.co/image/ab67616d00001e021cabbfa3660a93b97b80ad95",
-              "width": 300
-            },
-            {
-              "height": 64,
-              "url": "https://i.scdn.co/image/ab67616d000048511cabbfa3660a93b97b80ad95",
-              "width": 64
-            }
-          ],
-          "is_playable": true,
-          "name": "Flip It",
-          "release_date": "2023-10-10",
-          "release_date_precision": "day",
-          "total_tracks": 1,
-          "type": "album",
-          "uri": "spotify:album:6pdKC8JtPq2fbz8er190xE"
-        },
-        "artists": [
-          {
-            "external_urls": {
-              "spotify": "https://open.spotify.com/artist/1PbO7aQiVeKbGp8GYWDL9C"
-            },
-            "id": "1PbO7aQiVeKbGp8GYWDL9C",
-            "name": "Levity",
-            "type": "artist",
-            "uri": "spotify:artist:1PbO7aQiVeKbGp8GYWDL9C"
-          },
-          {
-            "external_urls": {
-              "spotify": "https://open.spotify.com/artist/2AUT4fNQ2QC0e2f5pIxOCd"
-            },
-            "id": "2AUT4fNQ2QC0e2f5pIxOCd",
-            "name": "Dem Jointz",
-            "type": "artist",
-            "uri": "spotify:artist:2AUT4fNQ2QC0e2f5pIxOCd"
-          }
-        ],
-        "disc_number": 1,
-        "duration_ms": 135000,
-        "episode": false,
-        "explicit": false,
-        "external_ids": {
-          "isrc": "CAUM82300317"
-        },
-        "external_urls": {
-          "spotify": "https://open.spotify.com/track/4NDhaxAmbKXM8LKrOPNxsy"
-        },
-        "id": "4NDhaxAmbKXM8LKrOPNxsy",
-        "is_local": false,
-        "is_playable": true,
-        "name": "Flip It",
-        "popularity": 64,
-        "preview_url": "https://p.scdn.co/mp3-preview/dc2e27603b4b9e10e5460e29817c8d31959bb897?cid=d8a5ed958d274c2e8ee717e6a4b0971d",
-        "track": true,
-        "track_number": 1,
-        "type": "track",
-        "uri": "spotify:track:4NDhaxAmbKXM8LKrOPNxsy"
-      },
-      "video_thumbnail": {
-        "url": null
-      }
-    },
-    {
-      "added_at": "2023-12-08T05:00:00Z",
-      "added_by": {
-        "external_urls": {
-          "spotify": "https://open.spotify.com/user/"
-        },
-        "id": "",
-        "type": "user",
-        "uri": "spotify:user:"
-      },
-      "is_local": false,
-      "primary_color": null,
-      "track": {
-        "album": {
-          "album_type": "album",
-          "artists": [
-            {
-              "external_urls": {
-                "spotify": "https://open.spotify.com/artist/25oLRSUjJk4YHNUsQXk7Ut"
-              },
-              "id": "25oLRSUjJk4YHNUsQXk7Ut",
-              "name": "GRiZ",
-              "type": "artist",
-              "uri": "spotify:artist:25oLRSUjJk4YHNUsQXk7Ut"
-            }
-          ],
-          "external_urls": {
-            "spotify": "https://open.spotify.com/album/6pNuyY90Baz2qxRa4Z2B8C"
-          },
-          "id": "6pNuyY90Baz2qxRa4Z2B8C",
-          "images": [
-            {
-              "height": 640,
-              "url": "https://i.scdn.co/image/ab67616d0000b2730f242f066ebc0fa61ab66876",
-              "width": 640
-            },
-            {
-              "height": 300,
-              "url": "https://i.scdn.co/image/ab67616d00001e020f242f066ebc0fa61ab66876",
-              "width": 300
-            },
-            {
-              "height": 64,
-              "url": "https://i.scdn.co/image/ab67616d000048510f242f066ebc0fa61ab66876",
-              "width": 64
-            }
-          ],
-          "is_playable": true,
-          "name": "Ouroboros",
-          "release_date": "2023-10-06",
-          "release_date_precision": "day",
-          "total_tracks": 8,
-          "type": "album",
-          "uri": "spotify:album:6pNuyY90Baz2qxRa4Z2B8C"
-        },
-        "artists": [
-          {
-            "external_urls": {
-              "spotify": "https://open.spotify.com/artist/25oLRSUjJk4YHNUsQXk7Ut"
-            },
-            "id": "25oLRSUjJk4YHNUsQXk7Ut",
-            "name": "GRiZ",
-            "type": "artist",
-            "uri": "spotify:artist:25oLRSUjJk4YHNUsQXk7Ut"
-          }
-        ],
-        "disc_number": 1,
-        "duration_ms": 264293,
-        "episode": false,
-        "explicit": false,
-        "external_ids": {
-          "isrc": "USA2P2346392"
-        },
-        "external_urls": {
-          "spotify": "https://open.spotify.com/track/5CMOwBRA9nShq31cMeMEsE"
-        },
-        "id": "5CMOwBRA9nShq31cMeMEsE",
-        "is_local": false,
-        "is_playable": true,
-        "name": "In This World",
-        "popularity": 56,
-        "preview_url": "https://p.scdn.co/mp3-preview/4fce0b80e5eda284758195729d7a73c39bcffb16?cid=d8a5ed958d274c2e8ee717e6a4b0971d",
-        "track": true,
-        "track_number": 3,
-        "type": "track",
-        "uri": "spotify:track:5CMOwBRA9nShq31cMeMEsE"
-      },
-      "video_thumbnail": {
-        "url": null
-      }
-    },
-    {
-      "added_at": "2023-12-08T05:00:00Z",
-      "added_by": {
-        "external_urls": {
-          "spotify": "https://open.spotify.com/user/"
-        },
-        "id": "",
-        "type": "user",
-        "uri": "spotify:user:"
-      },
-      "is_local": false,
-      "primary_color": null,
-      "track": {
-        "album": {
-          "album_type": "single",
-          "artists": [
-            {
-              "external_urls": {
-                "spotify": "https://open.spotify.com/artist/02DWGcShQivFepRvGJ7xhB"
-              },
-              "id": "02DWGcShQivFepRvGJ7xhB",
-              "name": "Adriatique",
-              "type": "artist",
-              "uri": "spotify:artist:02DWGcShQivFepRvGJ7xhB"
-            },
-            {
-              "external_urls": {
-                "spotify": "https://open.spotify.com/artist/50Lr1puweM1hFsF1LpIZLM"
-              },
-              "id": "50Lr1puweM1hFsF1LpIZLM",
-              "name": "WhoMadeWho",
-              "type": "artist",
-              "uri": "spotify:artist:50Lr1puweM1hFsF1LpIZLM"
-            }
-          ],
-          "external_urls": {
-            "spotify": "https://open.spotify.com/album/2ctujff7VotoPkcd4AXXT8"
-          },
-          "id": "2ctujff7VotoPkcd4AXXT8",
-          "images": [
-            {
-              "height": 640,
-              "url": "https://i.scdn.co/image/ab67616d0000b27392388c3c9c165e73d2b0d560",
-              "width": 640
-            },
-            {
-              "height": 300,
-              "url": "https://i.scdn.co/image/ab67616d00001e0292388c3c9c165e73d2b0d560",
-              "width": 300
-            },
-            {
-              "height": 64,
-              "url": "https://i.scdn.co/image/ab67616d0000485192388c3c9c165e73d2b0d560",
-              "width": 64
-            }
-          ],
-          "is_playable": true,
-          "name": "Miracle",
-          "release_date": "2023-09-01",
-          "release_date_precision": "day",
-          "total_tracks": 1,
-          "type": "album",
-          "uri": "spotify:album:2ctujff7VotoPkcd4AXXT8"
-        },
-        "artists": [
-          {
-            "external_urls": {
-              "spotify": "https://open.spotify.com/artist/02DWGcShQivFepRvGJ7xhB"
-            },
-            "id": "02DWGcShQivFepRvGJ7xhB",
-            "name": "Adriatique",
-            "type": "artist",
-            "uri": "spotify:artist:02DWGcShQivFepRvGJ7xhB"
-          },
-          {
-            "external_urls": {
-              "spotify": "https://open.spotify.com/artist/50Lr1puweM1hFsF1LpIZLM"
-            },
-            "id": "50Lr1puweM1hFsF1LpIZLM",
-            "name": "WhoMadeWho",
-            "type": "artist",
-            "uri": "spotify:artist:50Lr1puweM1hFsF1LpIZLM"
-          }
-        ],
-        "disc_number": 1,
-        "duration_ms": 302740,
-        "episode": false,
-        "explicit": false,
-        "external_ids": {
-          "isrc": "QM24S2305899"
-        },
-        "external_urls": {
-          "spotify": "https://open.spotify.com/track/0aVrpFRLlrd5zVyPXWP3mS"
-        },
-        "id": "0aVrpFRLlrd5zVyPXWP3mS",
-        "is_local": false,
-        "is_playable": true,
-        "name": "Miracle",
-        "popularity": 60,
-        "preview_url": "https://p.scdn.co/mp3-preview/57f52c30c69e8d93c95f58b8a2a144eab3551dbe?cid=d8a5ed958d274c2e8ee717e6a4b0971d",
-        "track": true,
-        "track_number": 1,
-        "type": "track",
-        "uri": "spotify:track:0aVrpFRLlrd5zVyPXWP3mS"
-      },
-      "video_thumbnail": {
-        "url": null
-      }
-    },
-    {
-      "added_at": "2023-12-08T05:00:00Z",
+      "added_at": "2023-12-15T05:00:00Z",
       "added_by": {
         "external_urls": {
           "spotify": "https://open.spotify.com/user/"
@@ -7468,7 +7577,7 @@
       }
     },
     {
-      "added_at": "2023-12-08T05:00:00Z",
+      "added_at": "2023-12-15T05:00:00Z",
       "added_by": {
         "external_urls": {
           "spotify": "https://open.spotify.com/user/"
@@ -7604,7 +7713,7 @@
       }
     },
     {
-      "added_at": "2023-12-08T05:00:00Z",
+      "added_at": "2023-12-15T05:00:00Z",
       "added_by": {
         "external_urls": {
           "spotify": "https://open.spotify.com/user/"
@@ -7695,7 +7804,7 @@
       }
     },
     {
-      "added_at": "2023-12-08T05:00:00Z",
+      "added_at": "2023-12-15T05:00:00Z",
       "added_by": {
         "external_urls": {
           "spotify": "https://open.spotify.com/user/"
@@ -7786,7 +7895,7 @@
       }
     },
     {
-      "added_at": "2023-12-08T05:00:00Z",
+      "added_at": "2023-12-15T05:00:00Z",
       "added_by": {
         "external_urls": {
           "spotify": "https://open.spotify.com/user/"
@@ -7886,7 +7995,7 @@
       }
     },
     {
-      "added_at": "2023-12-08T05:00:00Z",
+      "added_at": "2023-12-15T05:00:00Z",
       "added_by": {
         "external_urls": {
           "spotify": "https://open.spotify.com/user/"
@@ -8034,115 +8143,6 @@
         "track_number": 1,
         "type": "track",
         "uri": "spotify:track:2ZWmmrWUgDBcPSLihBMvhg"
-      },
-      "video_thumbnail": {
-        "url": null
-      }
-    },
-    {
-      "added_at": "2023-12-08T05:00:00Z",
-      "added_by": {
-        "external_urls": {
-          "spotify": "https://open.spotify.com/user/"
-        },
-        "id": "",
-        "type": "user",
-        "uri": "spotify:user:"
-      },
-      "is_local": false,
-      "primary_color": null,
-      "track": {
-        "album": {
-          "album_type": "single",
-          "artists": [
-            {
-              "external_urls": {
-                "spotify": "https://open.spotify.com/artist/11gWrKZMBsGQWmobv3oNfW"
-              },
-              "id": "11gWrKZMBsGQWmobv3oNfW",
-              "name": "Alison Wonderland",
-              "type": "artist",
-              "uri": "spotify:artist:11gWrKZMBsGQWmobv3oNfW"
-            },
-            {
-              "external_urls": {
-                "spotify": "https://open.spotify.com/artist/7nJNuftnqwrFGFs3ZRRe0u"
-              },
-              "id": "7nJNuftnqwrFGFs3ZRRe0u",
-              "name": "MEMBA",
-              "type": "artist",
-              "uri": "spotify:artist:7nJNuftnqwrFGFs3ZRRe0u"
-            }
-          ],
-          "external_urls": {
-            "spotify": "https://open.spotify.com/album/21flOOgl2FgBHpxum2PVVH"
-          },
-          "id": "21flOOgl2FgBHpxum2PVVH",
-          "images": [
-            {
-              "height": 640,
-              "url": "https://i.scdn.co/image/ab67616d0000b2730762a2ad5e2201e073c882ff",
-              "width": 640
-            },
-            {
-              "height": 300,
-              "url": "https://i.scdn.co/image/ab67616d00001e020762a2ad5e2201e073c882ff",
-              "width": 300
-            },
-            {
-              "height": 64,
-              "url": "https://i.scdn.co/image/ab67616d000048510762a2ad5e2201e073c882ff",
-              "width": 64
-            }
-          ],
-          "is_playable": true,
-          "name": "Fight or Flight",
-          "release_date": "2023-09-08",
-          "release_date_precision": "day",
-          "total_tracks": 1,
-          "type": "album",
-          "uri": "spotify:album:21flOOgl2FgBHpxum2PVVH"
-        },
-        "artists": [
-          {
-            "external_urls": {
-              "spotify": "https://open.spotify.com/artist/11gWrKZMBsGQWmobv3oNfW"
-            },
-            "id": "11gWrKZMBsGQWmobv3oNfW",
-            "name": "Alison Wonderland",
-            "type": "artist",
-            "uri": "spotify:artist:11gWrKZMBsGQWmobv3oNfW"
-          },
-          {
-            "external_urls": {
-              "spotify": "https://open.spotify.com/artist/7nJNuftnqwrFGFs3ZRRe0u"
-            },
-            "id": "7nJNuftnqwrFGFs3ZRRe0u",
-            "name": "MEMBA",
-            "type": "artist",
-            "uri": "spotify:artist:7nJNuftnqwrFGFs3ZRRe0u"
-          }
-        ],
-        "disc_number": 1,
-        "duration_ms": 151538,
-        "episode": false,
-        "explicit": false,
-        "external_ids": {
-          "isrc": "USA2P2340252"
-        },
-        "external_urls": {
-          "spotify": "https://open.spotify.com/track/0biZ6lxXHy4eHweTbOD33W"
-        },
-        "id": "0biZ6lxXHy4eHweTbOD33W",
-        "is_local": false,
-        "is_playable": true,
-        "name": "Fight or Flight",
-        "popularity": 54,
-        "preview_url": "https://p.scdn.co/mp3-preview/7d01583bcf739b3433e3bdcd1dace37bb7c98871?cid=d8a5ed958d274c2e8ee717e6a4b0971d",
-        "track": true,
-        "track_number": 1,
-        "type": "track",
-        "uri": "spotify:track:0biZ6lxXHy4eHweTbOD33W"
       },
       "video_thumbnail": {
         "url": null
