@@ -44,7 +44,7 @@ type AggregatedPlaylistConfig struct {
 type Config struct {
 	ServiceConfigs            map[string]ServiceConfig
 	EDMPlaylistConfigs        []PlaylistConfig
-	AggregatedPlaylistConfigs map[string]AggregatedPlaylistConfig 
+	AggregatedPlaylistConfigs map[string]AggregatedPlaylistConfig
 }
 
 var EDMPlaylistConfigs []PlaylistConfig
