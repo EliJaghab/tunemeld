@@ -2,6 +2,7 @@ package transformers
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/EliJaghab/tunemeld/config"
 )
@@ -27,7 +28,7 @@ func (t *SoundCloudTransformer) Execute(data []map[string]interface{}) ([]config
 			return nil, fmt.Errorf("invalid item %d", i)
 		}
 
-		name, ok := itemMap["title"].(string)
+		originalTitle, ok := itemMap["title"].(string)
 		if !ok {
 			return nil, fmt.Errorf("missing or invalid 'title' in item %d", i)
 		}
@@ -42,7 +43,7 @@ func (t *SoundCloudTransformer) Execute(data []map[string]interface{}) ([]config
 			return nil, fmt.Errorf("missing or invalid 'user' in item %d", i)
 		}
 
-		artist, ok := user["name"].(string)
+		originalArtist, ok := user["name"].(string)
 		if !ok {
 			return nil, fmt.Errorf("missing or invalid 'user.name' in item %d", i)
 		}
@@ -50,6 +51,16 @@ func (t *SoundCloudTransformer) Execute(data []map[string]interface{}) ([]config
 		albumURL, ok := itemMap["artworkUrl"].(string)
 		if !ok {
 			return nil, fmt.Errorf("missing or invalid 'artworkUrl' in item %d", i)
+		}
+
+		// Handle titles with hyphens
+		name := originalTitle
+		artist := originalArtist
+		if hyphenIndex := strings.Index(originalTitle, " - "); hyphenIndex != -1 {
+			// Split at the first hyphen
+			parts := strings.SplitN(originalTitle, " - ", 2)
+			artist = parts[0]
+			name = parts[1]
 		}
 
 		track := config.Track{
