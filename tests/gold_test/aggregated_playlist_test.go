@@ -92,7 +92,7 @@ func TestTransform(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Failed to transform tracks: %v", err)
 	}
-	
+
 	expectedTracks := []config.Track{
 		{
 			Name:              "Starting From Scratch",
@@ -107,7 +107,7 @@ func TestTransform(t *testing.T) {
 			Name:              "Fine Fine Baby",
 			Artist:            "Jamie Jones Kah-Lo",
 			Link:              "https://soundcloud.com/jamie-jones/jamie-jones-kah-lo-fine-fine",
-			Rank:              2, 
+			Rank:              2,
 			AlbumURL:          "https://i1.sndcdn.com/artworks-NNd59rC0VBnD-0-original.jpg",
 			Source:            config.SourceSoundCloud,
 			AdditionalSources: []config.TrackSource{config.SourceAppleMusic},
