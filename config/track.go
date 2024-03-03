@@ -57,36 +57,35 @@ type TrackInterface interface {
 	MarshalJSON() ([]byte, error)
 }
 type Track struct {
-    Name              string        `json:"name"`
-    Artist            string        `json:"artist"`
-    Link              string        `json:"link"`
-    Rank              int           `json:"rank"`
-    AlbumURL          string        `json:"album_url"`
-    Source            TrackSource   `json:"source"`
-    AdditionalSources []TrackSource `json:"additional_sources,omitempty"`
+	Name              string        `json:"name"`
+	Artist            string        `json:"artist"`
+	Link              string        `json:"link"`
+	Rank              int           `json:"rank"`
+	AlbumURL          string        `json:"album_url"`
+	Source            TrackSource   `json:"source"`
+	AdditionalSources []TrackSource `json:"additional_sources,omitempty"`
 }
 
 func (t Track) MarshalJSON() ([]byte, error) {
-    type Alias Track
-    return json.Marshal(&struct {
-        *Alias
-        Source            string        `json:"source"`
-        AdditionalSources []string      `json:"additional_sources,omitempty"` // Represent sources as strings
-    }{
-        Alias:             (*Alias)(&t),
-        Source:            t.Source.String(),
-        AdditionalSources: sourcesToStrings(t.AdditionalSources),
-    })
+	type Alias Track
+	return json.Marshal(&struct {
+		*Alias
+		Source            string   `json:"source"`
+		AdditionalSources []string `json:"additional_sources,omitempty"` // Represent sources as strings
+	}{
+		Alias:             (*Alias)(&t),
+		Source:            t.Source.String(),
+		AdditionalSources: sourcesToStrings(t.AdditionalSources),
+	})
 }
 
 func sourcesToStrings(sources []TrackSource) []string {
-    var result []string
-    for _, source := range sources {
-        result = append(result, source.String())
-    }
-    return result
+	var result []string
+	for _, source := range sources {
+		result = append(result, source.String())
+	}
+	return result
 }
-
 
 func (t Track) GetTrackName() string {
 	return t.Name
@@ -116,4 +115,3 @@ type GoldTrack struct {
 	Track             Track
 	AdditionalSources []TrackSource `json:"additional_sources"`
 }
-

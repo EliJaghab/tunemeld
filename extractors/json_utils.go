@@ -62,17 +62,17 @@ func WriteJSONToFile(data map[string]interface{}, filePath string) error {
 }
 
 func WriteTracksToJSONFile(tracks []config.TrackInterface, filePath string) error {
-    jsonData, err := marshalIndent(tracks)
-    if err != nil {
-        return err
-    }
+	jsonData, err := marshalIndent(tracks)
+	if err != nil {
+		return err
+	}
 
-    err = ensureDirectory(filePath)
-    if err != nil {
-        return err
-    }
+	err = ensureDirectory(filePath)
+	if err != nil {
+		return err
+	}
 
-    return writeFile(filePath, jsonData)
+	return writeFile(filePath, jsonData)
 }
 
 func marshalIndent(data interface{}) ([]byte, error) {
