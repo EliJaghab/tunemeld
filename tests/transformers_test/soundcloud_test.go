@@ -14,7 +14,7 @@ func TestSoundCloudTransformer_Execute(t *testing.T) {
 		"tracks": {
 			"items": [
 				{
-					"title": "Test Track 1",
+					"title": "Artist - Track 1",
 					"permalink": "http://soundcloud.com/testtrack1",
 					"user": {"name": "Test Artist 1"},
 					"artworkUrl": "http://imageurl.com/test1.jpg"
@@ -44,8 +44,8 @@ func TestSoundCloudTransformer_Execute(t *testing.T) {
 
 	expectedTracks := []config.Track{
 		{
-			Name:     "Test Track 1",
-			Artist:   "Test Artist 1",
+			Name:     "Track 1",
+			Artist:   "Artist",
 			Link:     "http://soundcloud.com/testtrack1",
 			Rank:     1,
 			AlbumURL: "http://imageurl.com/test1.jpg",
