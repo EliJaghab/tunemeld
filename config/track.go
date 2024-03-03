@@ -57,25 +57,36 @@ type TrackInterface interface {
 	MarshalJSON() ([]byte, error)
 }
 type Track struct {
-	Name     string      `json:"name"`
-	Artist   string      `json:"artist"`
-	Link     string      `json:"link"`
-	Rank     int         `json:"rank"`
-	AlbumURL string      `json:"album_url"`
-	Source   TrackSource `json:"source"`
+    Name              string        `json:"name"`
+    Artist            string        `json:"artist"`
+    Link              string        `json:"link"`
+    Rank              int           `json:"rank"`
+    AlbumURL          string        `json:"album_url"`
+    Source            TrackSource   `json:"source"`
+    AdditionalSources []TrackSource `json:"additional_sources,omitempty"`
 }
 
-// Implement the TrackInterface interface for the Track type
 func (t Track) MarshalJSON() ([]byte, error) {
-	type Alias Track
-	return json.Marshal(&struct {
-		*Alias
-		Source string `json:"source"`
-	}{
-		Alias:  (*Alias)(&t),
-		Source: t.Source.String(),
-	})
+    type Alias Track
+    return json.Marshal(&struct {
+        *Alias
+        Source            string        `json:"source"`
+        AdditionalSources []string      `json:"additional_sources,omitempty"` // Represent sources as strings
+    }{
+        Alias:             (*Alias)(&t),
+        Source:            t.Source.String(),
+        AdditionalSources: sourcesToStrings(t.AdditionalSources),
+    })
 }
+
+func sourcesToStrings(sources []TrackSource) []string {
+    var result []string
+    for _, source := range sources {
+        result = append(result, source.String())
+    }
+    return result
+}
+
 
 func (t Track) GetTrackName() string {
 	return t.Name
@@ -106,19 +117,3 @@ type GoldTrack struct {
 	AdditionalSources []TrackSource `json:"additional_sources"`
 }
 
-func (gt GoldTrack) MarshalJSON() ([]byte, error) {
-	// Marshal the Track part using its MarshalJSON method.
-	trackJSON, err := json.Marshal(gt.Track)
-	if err != nil {
-		return nil, err
-	}
-
-	// Combine the JSON of Track and the additional fields of GoldTrack.
-	return json.Marshal(struct {
-		*json.RawMessage
-		AdditionalSources []TrackSource `json:"additional_sources"`
-	}{
-		RawMessage:        (*json.RawMessage)(&trackJSON),
-		AdditionalSources: gt.AdditionalSources,
-	})
-}
