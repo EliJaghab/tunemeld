@@ -55,7 +55,7 @@ jobs:
             git config --local user.email "action@github.com"
             git config --local user.name "GitHub Action"
             git remote set-url origin https://x-access-token:${GH_PAT}@github.com/${{ github.repository }}
-            echo "Last Updated: $(date)" > last-updated.txt
+            echo "Last Updated: $(date)" > ./docs/last-updated.txt
             git add .
             git commit -m "Automated gold data update and last updated date" -a || echo "No changes to commit"
             git push
