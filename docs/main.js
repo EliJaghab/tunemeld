@@ -5,7 +5,7 @@
       console.log("Document loaded and ready.");
       fetchAndDisplayLastUpdated();
   
-      function fetchAndDisplayData(playlistName, placeholderId, filename) {
+      function fetchAndDisplayData(playlistName, placeholderId, filename, includeAdditionalSources) {
         console.log(`Fetching data for ${playlistName} from ${filename}...`);
   
         fetch(filename)
@@ -29,7 +29,7 @@
               includeAdditionalSources = true;
             }
   
-            processData(data, placeholderId, playlistName);
+            processData(data, placeholderId, playlistName, includeAdditionalSources);
           })
           .catch((error) => {
             console.error(
@@ -39,7 +39,7 @@
           });
       }
   
-      function processData(data, placeholderId, playlistName) {
+      function processData(data, placeholderId, playlistName, includeAdditionalSources) {
         // Sort the data array by rank in ascending order
         data.sort((a, b) => a.rank - b.rank);
   
@@ -142,7 +142,7 @@
             const silverFilename = SilverReadPath;
             const placeholderId = ServiceName.toLowerCase() + "-data-placeholder"; // Use ServiceName to generate placeholderId
   
-            fetchAndDisplayData(ServiceName, placeholderId, silverFilename);
+            fetchAndDisplayData(ServiceName, placeholderId, silverFilename, includeAdditionalSources);
             includeAdditionalSources = false;
           });
         } else {
@@ -158,7 +158,8 @@
           fetchAndDisplayData(
             "Aggregated Playlist",
             placeholderId,
-            aggregatedPlaylistConfig.ReadPath
+            aggregatedPlaylistConfig.ReadPath,
+            includeAdditionalSources
           );
         }
       }
@@ -172,10 +173,21 @@
             return response.text();
           })
           .then(lastUpdatedDate => {
-            // Assuming you have an element with id='last-updated' in your HTML
+            // Convert UTC date string to Date object
+            const utcDate = new Date(lastUpdatedDate.trim());
+            
+            // Convert UTC to Eastern Time
+            const etDate = new Date(utcDate.toLocaleString("en-US", {timeZone: "America/New_York"}));
+            
+            // Format the date as a string in the desired format
+            const formattedDate = etDate.toLocaleString("en-US", {
+              month: "long", day: "numeric", year: "numeric", hour: "numeric", minute: "2-digit", timeZoneName: "short"
+            });
+      
+            // Update the HTML element with the formatted date
             const lastUpdatedElement = document.getElementById('last-updated');
             if (lastUpdatedElement) {
-              lastUpdatedElement.textContent = `Last Updated: ${lastUpdatedDate.trim()}`;
+              lastUpdatedElement.textContent = `Last Updated - ${formattedDate}`;
             }
           })
           .catch(error => console.error('Error fetching last updated date:', error));
