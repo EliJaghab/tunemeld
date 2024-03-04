@@ -122,6 +122,14 @@
         z-index: 1000;
         transition: opacity 2s ease-in-out; /* Smooth transition for the fade-out */
       }
+      .playlist-description {
+        text-align: center; /* Center align the description */
+        font-family: "DM Sans", sans-serif; /* Match the font of the tunemeld logo */
+        font-weight: 400; /* Make font weight regular */
+        font-size: 14px; /* Smaller font size */
+        color: #ccc; /* Lighter text color */
+        margin-bottom: 10px; /* Add some space below the description */
+      }
 
       #loading-image {
         max-width: 25%;
@@ -156,6 +164,8 @@
         <div class="col-md-12">
           <div class="playlist">
             <div class="playlist-title">Aggregated Playlist</div>
+            <div class="playlist-description">Tracks seen on more than one streaming service</div>
+
             <div id="aggregated-data-placeholder"></div>
           </div>
         </div>
@@ -166,7 +176,9 @@
         <div class="col-md-4 col-sm-12">
             <div class="playlist">
                 <div class="playlist-title">
-                    <a href="https://soundcloud.com/soundcloud-the-peak/sets/on-the-up-new-edm-hits" target="_blank">SoundCloud - New EDM Hits: On The Up</a>
+                  <a href="https://soundcloud.com/soundcloud-the-peak/sets/on-the-up-new-edm-hits" target="_blank">
+                    <img src="./images/logos/soundcloud_logo.png" alt="SoundCloud" class="source-icon"> New EDM Hits: On The Up
+                  </a>                
                 </div>
                 <div id="soundcloud-data-placeholder"></div>
             </div>
@@ -174,7 +186,8 @@
         <div class="col-md-4 col-sm-12">
             <div class="playlist">
                 <div class="playlist-title">
-                    <a href="https://music.apple.com/us/playlist/dancexl/pl.6bf4415b83ce4f3789614ac4c3675740" target="_blank">Apple Music - danceXL</a>
+                    <a href="https://music.apple.com/us/playlist/dancexl/pl.6bf4415b83ce4f3789614ac4c3675740" target="_blank">
+                      <img src="./images/logos/apple_music_logo.png" alt="Apple Music" class="source-icon"> danceXL</a>
                 </div>
                 <div id="apple-music-data-placeholder"></div>
             </div>
@@ -182,7 +195,8 @@
         <div class="col-md-4 col-sm-12">
             <div class="playlist">
                 <div class="playlist-title">
-                    <a href="https://open.spotify.com/playlist/37i9dQZF1DX4dyzvuaRJ0n" target="_blank">Spotify - mint</a>
+                    <a href="https://open.spotify.com/playlist/37i9dQZF1DX4dyzvuaRJ0n" target="_blank">
+                      <img src="./images/logos/spotify_logo.png" alt="Spotify" class="source-icon"> mint</a>
                 </div>
                 <div id="spotify-data-placeholder"></div>
             </div>
