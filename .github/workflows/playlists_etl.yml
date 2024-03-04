@@ -8,20 +8,6 @@ on:
 jobs:
   run-tasks:
     runs-on: ubuntu-latest
-    services:
-      postgres:
-        image: postgres:latest
-        env:
-          POSTGRES_USER: eli
-          POSTGRES_PASSWORD: your_password
-          POSTGRES_DB: postgres
-        ports:
-          - 5432:5432
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
 
     steps:
     - name: Checkout repository
@@ -69,6 +55,7 @@ jobs:
             git config --local user.email "action@github.com"
             git config --local user.name "GitHub Action"
             git remote set-url origin https://x-access-token:${GH_PAT}@github.com/${{ github.repository }}
+            echo "Last Updated: $(date)" > last-updated.txt
             git add .
-            git commit -m "Automated gold data update" -a || echo "No changes to commit"
+            git commit -m "Automated gold data update and last updated date" -a || echo "No changes to commit"
             git push
