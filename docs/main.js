@@ -3,8 +3,7 @@
   
     document.addEventListener("DOMContentLoaded", function () {
       console.log("Document loaded and ready.");
-  
-      let includeAdditionalSources = false;
+      fetchAndDisplayLastUpdated();
   
       function fetchAndDisplayData(playlistName, placeholderId, filename) {
         console.log(`Fetching data for ${playlistName} from ${filename}...`);
@@ -134,6 +133,8 @@
       function initializePlaylists(config, genre) {
         const playlistConfigsKey = genre + "PlaylistConfigs";
         const playlistConfigs = config[playlistConfigsKey];
+
+        let includeAdditionalSources = false;
   
         if (playlistConfigs) {
           playlistConfigs.forEach((playlistConfig) => {
@@ -142,6 +143,7 @@
             const placeholderId = ServiceName.toLowerCase() + "-data-placeholder"; // Use ServiceName to generate placeholderId
   
             fetchAndDisplayData(ServiceName, placeholderId, silverFilename);
+            includeAdditionalSources = false;
           });
         } else {
           console.error(`No playlist configurations found for genre: ${genre}`);
@@ -160,6 +162,25 @@
           );
         }
       }
+
+      function fetchAndDisplayLastUpdated() {
+        fetch('./last-updated.txt')
+          .then(response => {
+            if (!response.ok) {
+              throw new Error(`Failed to fetch last-updated.txt. Status: ${response.status}`);
+            }
+            return response.text();
+          })
+          .then(lastUpdatedDate => {
+            // Assuming you have an element with id='last-updated' in your HTML
+            const lastUpdatedElement = document.getElementById('last-updated');
+            if (lastUpdatedElement) {
+              lastUpdatedElement.textContent = `Last Updated: ${lastUpdatedDate.trim()}`;
+            }
+          })
+          .catch(error => console.error('Error fetching last updated date:', error));
+      }
+      
   
       // Selector for choosing the genre
       const genreSelector = document.createElement("select");
