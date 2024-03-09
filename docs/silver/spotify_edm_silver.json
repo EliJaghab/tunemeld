@@ -16,10 +16,18 @@
     "source": "spotify"
   },
   {
+    "name": "Fuck The Pain Away",
+    "artist": "Hannah Laing, Peaches",
+    "link": "https://open.spotify.com/track/4xCmCF6pHz0v6vcANehny0",
+    "rank": 3,
+    "album_url": "https://i.scdn.co/image/ab67616d0000b27343ea366e4af8a3b9df8f6959",
+    "source": "spotify"
+  },
+  {
     "name": "Von dutch",
     "artist": "Charli XCX",
     "link": "https://open.spotify.com/track/01TnMXIy7mJJQ7E8uy937N",
-    "rank": 3,
+    "rank": 4,
     "album_url": "https://i.scdn.co/image/ab67616d0000b273c785c27da601350c05390d39",
     "source": "spotify"
   },
@@ -27,15 +35,31 @@
     "name": "Somebody (2024)",
     "artist": "Gotye, FISHER, Chris Lake, Kimbra, Sante Sansone",
     "link": "https://open.spotify.com/track/0agQ9vIV7NP4dntGKLcCXO",
-    "rank": 4,
+    "rank": 5,
     "album_url": "https://i.scdn.co/image/ab67616d0000b273decbf9beecb3cb749ce3a2e2",
+    "source": "spotify"
+  },
+  {
+    "name": "Weak",
+    "artist": "Vintage Culture, Maverick Sabre, Tom Breu",
+    "link": "https://open.spotify.com/track/62gzfhHi2supfHWfi6iHbA",
+    "rank": 6,
+    "album_url": "https://i.scdn.co/image/ab67616d0000b273fb6391b7f42e2c83a75e9970",
+    "source": "spotify"
+  },
+  {
+    "name": "Empty",
+    "artist": "Martin Garrix, DubVision, Jaimes",
+    "link": "https://open.spotify.com/track/575ViHchpSUjfTLCQPdE49",
+    "rank": 7,
+    "album_url": "https://i.scdn.co/image/ab67616d0000b2733af2b28b3209856b7d35691f",
     "source": "spotify"
   },
   {
     "name": "Buscando Money",
     "artist": "TWENTY SIX, Tayson Kryss",
     "link": "https://open.spotify.com/track/6vsKOJPjdxlYgRs8McgtCQ",
-    "rank": 5,
+    "rank": 8,
     "album_url": "https://i.scdn.co/image/ab67616d0000b27304a5e9280739d24c9c127864",
     "source": "spotify"
   },
@@ -43,39 +67,23 @@
     "name": "One Night/All Night",
     "artist": "Justice, Tame Impala",
     "link": "https://open.spotify.com/track/7sjuNUjWtSqhbxJ3RAUffm",
-    "rank": 6,
+    "rank": 9,
     "album_url": "https://i.scdn.co/image/ab67616d0000b273e2d85e24e16dadb90a67a6df",
-    "source": "spotify"
-  },
-  {
-    "name": "Hard dreams",
-    "artist": "Gesaffelstein",
-    "link": "https://open.spotify.com/track/1sJAQWkZdaJDsPifl1fvOd",
-    "rank": 7,
-    "album_url": "https://i.scdn.co/image/ab67616d0000b273ff150c335de3ac71a2ca424f",
     "source": "spotify"
   },
   {
     "name": "Happier (feat. Clementine Douglas)",
     "artist": "The Blessed Madonna, Clementine Douglas",
     "link": "https://open.spotify.com/track/1TcF5F10EN17vraisG1gQv",
-    "rank": 8,
+    "rank": 10,
     "album_url": "https://i.scdn.co/image/ab67616d0000b2735d564f7de772a0675ab893be",
-    "source": "spotify"
-  },
-  {
-    "name": "Weak",
-    "artist": "Vintage Culture, Maverick Sabre, Tom Breu",
-    "link": "https://open.spotify.com/track/62gzfhHi2supfHWfi6iHbA",
-    "rank": 9,
-    "album_url": "https://i.scdn.co/image/ab67616d0000b273fb6391b7f42e2c83a75e9970",
     "source": "spotify"
   },
   {
     "name": "mr useless",
     "artist": "Shygirl, SG Lewis",
     "link": "https://open.spotify.com/track/1HogDCzANgKv9mE8MgeYKg",
-    "rank": 10,
+    "rank": 11,
     "album_url": "https://i.scdn.co/image/ab67616d0000b273068ea49505ba5d8e9daae67b",
     "source": "spotify"
   },
@@ -83,7 +91,7 @@
     "name": "We Groovin (with Jazzy)",
     "artist": "Jamie Jones, Jazzy",
     "link": "https://open.spotify.com/track/6LiuMpZjyjjuXFP5Ljo9bv",
-    "rank": 11,
+    "rank": 12,
     "album_url": "https://i.scdn.co/image/ab67616d0000b27376e966ae2ae721c771183228",
     "source": "spotify"
   },
@@ -91,7 +99,7 @@
     "name": "LAST OF US (feat. Rita Ora)",
     "artist": "Gryffin, Rita Ora",
     "link": "https://open.spotify.com/track/2Mwmp4qVCe8CJcalsT4xm1",
-    "rank": 12,
+    "rank": 13,
     "album_url": "https://i.scdn.co/image/ab67616d0000b273f0c5b18be674664912c284d6",
     "source": "spotify"
   },
@@ -99,7 +107,7 @@
     "name": "Mwaki",
     "artist": "Zerb, Sofiya Nzau",
     "link": "https://open.spotify.com/track/5KTZgG84bKFGm53lhLtTqc",
-    "rank": 13,
+    "rank": 14,
     "album_url": "https://i.scdn.co/image/ab67616d0000b2733e56ef77fe414ce4af6334a4",
     "source": "spotify"
   },
@@ -107,23 +115,23 @@
     "name": "Lovers In A Past Life (with Rag'n'Bone Man)",
     "artist": "Calvin Harris, Rag'n'Bone Man",
     "link": "https://open.spotify.com/track/6v4ABPB255HDSWyIj3S9Wn",
-    "rank": 14,
+    "rank": 15,
     "album_url": "https://i.scdn.co/image/ab67616d0000b273bb08484f74ca64acd08882a1",
     "source": "spotify"
   },
   {
-    "name": "Carry You",
-    "artist": "Martin Garrix, Third Party, Oaks, Declan J Donovan",
-    "link": "https://open.spotify.com/track/31ZO9XuKt48Qb2eUTBynd2",
-    "rank": 15,
-    "album_url": "https://i.scdn.co/image/ab67616d0000b2732cd834c826d484dcb3414699",
+    "name": "Hard dreams",
+    "artist": "Gesaffelstein, Yan Wagner",
+    "link": "https://open.spotify.com/track/1sJAQWkZdaJDsPifl1fvOd",
+    "rank": 16,
+    "album_url": "https://i.scdn.co/image/ab67616d0000b273ff150c335de3ac71a2ca424f",
     "source": "spotify"
   },
   {
     "name": "Rule The World (Everybody)",
     "artist": "Tiësto, Tears For Fears, NIIKO X SWAE, GUDFELLA",
     "link": "https://open.spotify.com/track/2f2dRxjiUOoV5qhZFbnVO6",
-    "rank": 16,
+    "rank": 17,
     "album_url": "https://i.scdn.co/image/ab67616d0000b2734049dfafed38fcb64836d374",
     "source": "spotify"
   },
@@ -131,16 +139,8 @@
     "name": "Pictures Of You",
     "artist": "Anyma",
     "link": "https://open.spotify.com/track/1D5ifTPFnQWDnSxSAfc1hc",
-    "rank": 17,
-    "album_url": "https://i.scdn.co/image/ab67616d0000b273d684fe59d12d2f95ad19a978",
-    "source": "spotify"
-  },
-  {
-    "name": "Aria",
-    "artist": "Argy, Omnya",
-    "link": "https://open.spotify.com/track/1o2WYr42HrIoR38WhMy4p6",
     "rank": 18,
-    "album_url": "https://i.scdn.co/image/ab67616d0000b2734fe091f3a9b45c0166877f82",
+    "album_url": "https://i.scdn.co/image/ab67616d0000b273d684fe59d12d2f95ad19a978",
     "source": "spotify"
   },
   {
@@ -152,10 +152,18 @@
     "source": "spotify"
   },
   {
+    "name": "RIZZ",
+    "artist": "AYYBO",
+    "link": "https://open.spotify.com/track/3DqOJ2BoddzZpNdty3okJH",
+    "rank": 20,
+    "album_url": "https://i.scdn.co/image/ab67616d0000b273f3fb83bf7c4133d662a0e008",
+    "source": "spotify"
+  },
+  {
     "name": "All Night Long",
     "artist": "Kungs, David Guetta, Izzy Bizu",
     "link": "https://open.spotify.com/track/1vQWFjEC34DHNXrRTFjDxe",
-    "rank": 20,
+    "rank": 21,
     "album_url": "https://i.scdn.co/image/ab67616d0000b2739cc02d9ed2a77408ed4cc916",
     "source": "spotify"
   },
@@ -163,32 +171,24 @@
     "name": "Thank You (Not So Bad)",
     "artist": "Dimitri Vegas \u0026 Like Mike, Tiësto, Dido, W\u0026W, Dimitri Vegas, Like Mike",
     "link": "https://open.spotify.com/track/09CnYHiZ5jGT1wr1TXJ9Zt",
-    "rank": 21,
+    "rank": 22,
     "album_url": "https://i.scdn.co/image/ab67616d0000b2730aa08f8923434aab06e43b37",
     "source": "spotify"
   },
   {
-    "name": "leavemealone",
-    "artist": "Fred again.., Baby Keem",
-    "link": "https://open.spotify.com/track/1MVqeIAwhD4T44AKVkIfic",
-    "rank": 22,
-    "album_url": "https://i.scdn.co/image/ab67616d0000b273c9049966d5a1c1954ae98480",
+    "name": "Jamming - FISHER Rework",
+    "artist": "Bob Marley \u0026 The Wailers, FISHER",
+    "link": "https://open.spotify.com/track/2gKewcQZEV1fqoWH81RUDk",
+    "rank": 23,
+    "album_url": "https://i.scdn.co/image/ab67616d0000b2737e536112cde0150fdaec65b6",
     "source": "spotify"
   },
   {
     "name": "Veneno",
     "artist": "Sofi Tukker, Mari Merenda, Sophia Ardessore",
     "link": "https://open.spotify.com/track/7eUalfb6XYFlpM8LvHmsJD",
-    "rank": 23,
-    "album_url": "https://i.scdn.co/image/ab67616d0000b27381b1112ec29b2839799ed36d",
-    "source": "spotify"
-  },
-  {
-    "name": "RIZZ",
-    "artist": "AYYBO",
-    "link": "https://open.spotify.com/track/3DqOJ2BoddzZpNdty3okJH",
     "rank": 24,
-    "album_url": "https://i.scdn.co/image/ab67616d0000b273f3fb83bf7c4133d662a0e008",
+    "album_url": "https://i.scdn.co/image/ab67616d0000b27381b1112ec29b2839799ed36d",
     "source": "spotify"
   },
   {
@@ -240,10 +240,26 @@
     "source": "spotify"
   },
   {
+    "name": "Aria",
+    "artist": "Argy, Omnya",
+    "link": "https://open.spotify.com/track/1o2WYr42HrIoR38WhMy4p6",
+    "rank": 31,
+    "album_url": "https://i.scdn.co/image/ab67616d0000b2734fe091f3a9b45c0166877f82",
+    "source": "spotify"
+  },
+  {
+    "name": "leavemealone",
+    "artist": "Fred again.., Baby Keem",
+    "link": "https://open.spotify.com/track/1MVqeIAwhD4T44AKVkIfic",
+    "rank": 32,
+    "album_url": "https://i.scdn.co/image/ab67616d0000b273c9049966d5a1c1954ae98480",
+    "source": "spotify"
+  },
+  {
     "name": "Cruel Summer - LP Giobbi Remix",
     "artist": "Taylor Swift, LP Giobbi",
     "link": "https://open.spotify.com/track/0pjBqAz8GlxGlpaU4W0DxS",
-    "rank": 31,
+    "rank": 33,
     "album_url": "https://i.scdn.co/image/ab67616d0000b273f669b4e7f0327c92909bc762",
     "source": "spotify"
   },
@@ -251,7 +267,7 @@
     "name": "Never Be Alone",
     "artist": "Becky Hill, Sonny Fodera",
     "link": "https://open.spotify.com/track/3WB9r0SqS5ThjK49bDexXe",
-    "rank": 32,
+    "rank": 34,
     "album_url": "https://i.scdn.co/image/ab67616d0000b273925431ee44855bcae58f6ac4",
     "source": "spotify"
   },
@@ -259,47 +275,63 @@
     "name": "Forever (Stay Like This)",
     "artist": "Armin van Buuren, Goodboys",
     "link": "https://open.spotify.com/track/7pUtuvFh9SMtFozqwsPHnl",
-    "rank": 33,
+    "rank": 35,
     "album_url": "https://i.scdn.co/image/ab67616d0000b2738ea56bb29ad94f5c9638e636",
+    "source": "spotify"
+  },
+  {
+    "name": "Forget",
+    "artist": "Azzecca",
+    "link": "https://open.spotify.com/track/3X39bUXqQDCzDGUjeMd82e",
+    "rank": 36,
+    "album_url": "https://i.scdn.co/image/ab67616d0000b273a5ff7aea846f8ecfb20fe031",
     "source": "spotify"
   },
   {
     "name": "Beso (Fruta Fresca)",
     "artist": "Wakyin, Carlos Vives",
     "link": "https://open.spotify.com/track/0r3nMF80NSIuPIxeod4aoG",
-    "rank": 34,
+    "rank": 37,
     "album_url": "https://i.scdn.co/image/ab67616d0000b2730c1faf936b87bdf93bee8d7e",
-    "source": "spotify"
-  },
-  {
-    "name": "Jamming - FISHER Rework",
-    "artist": "Bob Marley \u0026 The Wailers, FISHER",
-    "link": "https://open.spotify.com/track/2gKewcQZEV1fqoWH81RUDk",
-    "rank": 35,
-    "album_url": "https://i.scdn.co/image/ab67616d0000b2737e536112cde0150fdaec65b6",
     "source": "spotify"
   },
   {
     "name": "Last Night",
     "artist": "Loofy",
     "link": "https://open.spotify.com/track/5mF7p5mwgaPZyIykUhO3PN",
-    "rank": 36,
+    "rank": 38,
     "album_url": "https://i.scdn.co/image/ab67616d0000b2739bd41d12cda81e29eece0b4c",
+    "source": "spotify"
+  },
+  {
+    "name": "Halo",
+    "artist": "Eli \u0026 Fur, Punctual, Richard Judge",
+    "link": "https://open.spotify.com/track/6LziN7kYIkvyV4DLz5kAL1",
+    "rank": 39,
+    "album_url": "https://i.scdn.co/image/ab67616d0000b2731e9a424725b22bb6a7291cb1",
     "source": "spotify"
   },
   {
     "name": "Fire! (feat. YUQI ((G)I-DLE), JVKE)",
     "artist": "Alan Walker, YUQI, JVKE, (G)I-DLE",
     "link": "https://open.spotify.com/track/5B8VpcIC3EAI3wke3XQoRy",
-    "rank": 37,
+    "rank": 40,
     "album_url": "https://i.scdn.co/image/ab67616d0000b2739bcee2cb961a04d2e5a29f5c",
+    "source": "spotify"
+  },
+  {
+    "name": "Places I Belong",
+    "artist": "Seven Lions, Andrew Bayer, Fiora",
+    "link": "https://open.spotify.com/track/3d7RiAd7X9QEOyJiZJatbv",
+    "rank": 41,
+    "album_url": "https://i.scdn.co/image/ab67616d0000b273eb829e1b247721739f9b873b",
     "source": "spotify"
   },
   {
     "name": "Fall Again",
     "artist": "Hayla",
     "link": "https://open.spotify.com/track/3oOvEw1pgxMtrQMNgPWQHL",
-    "rank": 38,
+    "rank": 42,
     "album_url": "https://i.scdn.co/image/ab67616d0000b2737c0c9ff9fc1a7006bb5b9798",
     "source": "spotify"
   },
@@ -307,7 +339,7 @@
     "name": "DARLING DRIVE",
     "artist": "METTE, Sam Gellaitry",
     "link": "https://open.spotify.com/track/3JhpAudiaS7sjVGnL09fx2",
-    "rank": 39,
+    "rank": 43,
     "album_url": "https://i.scdn.co/image/ab67616d0000b2731f5a787b98b9bc09caf92a7a",
     "source": "spotify"
   },
@@ -315,7 +347,7 @@
     "name": "All Ur Luv",
     "artist": "Wavedash, Madeon, Toro y Moi",
     "link": "https://open.spotify.com/track/3K1RnBxBkrMwoBE8gC63eY",
-    "rank": 40,
+    "rank": 44,
     "album_url": "https://i.scdn.co/image/ab67616d0000b273a8591576b255b60d199867bd",
     "source": "spotify"
   },
@@ -323,7 +355,7 @@
     "name": "Love On You (feat. Griff Clawson)",
     "artist": "The Magician, A-Trak, Griff Clawson",
     "link": "https://open.spotify.com/track/7Iv0928rZ28KjivhAJPqfC",
-    "rank": 41,
+    "rank": 45,
     "album_url": "https://i.scdn.co/image/ab67616d0000b2736590278db70c6cfc9365f017",
     "source": "spotify"
   },
@@ -331,7 +363,7 @@
     "name": "Saving Up",
     "artist": "Dom Dolla",
     "link": "https://open.spotify.com/track/787Y2idwCU2Rk60Prv4wpr",
-    "rank": 42,
+    "rank": 46,
     "album_url": "https://i.scdn.co/image/ab67616d0000b273585c329dfd9cdeb22b6cd247",
     "source": "spotify"
   },
@@ -339,7 +371,7 @@
     "name": "She's On My Mind",
     "artist": "Romy",
     "link": "https://open.spotify.com/track/4heve4ydl1u6V3AD4moZq9",
-    "rank": 43,
+    "rank": 47,
     "album_url": "https://i.scdn.co/image/ab67616d0000b27335ba0d2342ebda40506ded9f",
     "source": "spotify"
   },
@@ -347,39 +379,23 @@
     "name": "Lifetime",
     "artist": "Tobiahs",
     "link": "https://open.spotify.com/track/1oH6oeK8iKeRL9VTQY5w2r",
-    "rank": 44,
+    "rank": 48,
     "album_url": "https://i.scdn.co/image/ab67616d0000b273f825c5f3a2a0d8857636328d",
-    "source": "spotify"
-  },
-  {
-    "name": "Can't Play Myself (A Tribute To Amy)",
-    "artist": "Skepta, Amy Winehouse",
-    "link": "https://open.spotify.com/track/6GrLwf1LdBCmkBOsmOcbPp",
-    "rank": 45,
-    "album_url": "https://i.scdn.co/image/ab67616d0000b273af20826cd7ffc3bcedab235b",
     "source": "spotify"
   },
   {
     "name": "I Got Nothing",
     "artist": "MEDUZA, Ferreck Dawn, Clementine Douglas",
     "link": "https://open.spotify.com/track/4yagkb6nJCRcfjUhaOVHTw",
-    "rank": 46,
+    "rank": 49,
     "album_url": "https://i.scdn.co/image/ab67616d0000b2735f6b4d60420bed37057115d4",
-    "source": "spotify"
-  },
-  {
-    "name": "Generator",
-    "artist": "Justice",
-    "link": "https://open.spotify.com/track/4ZVTe0Pn5sjcFu71Oel0i0",
-    "rank": 47,
-    "album_url": "https://i.scdn.co/image/ab67616d0000b2734e18be1213cef256db8766da",
     "source": "spotify"
   },
   {
     "name": "Lover/Friend",
     "artist": "KAYTRANADA, Rochelle Jordan",
     "link": "https://open.spotify.com/track/5ahq8vkzMznGmfN2EVOukP",
-    "rank": 48,
+    "rank": 50,
     "album_url": "https://i.scdn.co/image/ab67616d0000b27300540a663c95a4c2ec8a8c0c",
     "source": "spotify"
   },
@@ -387,7 +403,7 @@
     "name": "Cash For Love",
     "artist": "Carlita",
     "link": "https://open.spotify.com/track/1QCjgRff7EzAtIUlOpWSJV",
-    "rank": 49,
+    "rank": 51,
     "album_url": "https://i.scdn.co/image/ab67616d0000b273bf1be90a31a8e36214fe4557",
     "source": "spotify"
   },
@@ -395,15 +411,23 @@
     "name": "If U Need It",
     "artist": "Sammy Virji",
     "link": "https://open.spotify.com/track/5CaUUACiQFEf4zR5WoeIrp",
-    "rank": 50,
+    "rank": 52,
     "album_url": "https://i.scdn.co/image/ab67616d0000b273d5b8fa0ff5dee9da54847694",
+    "source": "spotify"
+  },
+  {
+    "name": "Mr. Sandman",
+    "artist": "Oppidan",
+    "link": "https://open.spotify.com/track/1Y2eoRAhwsjCKcdNnrZOzV",
+    "rank": 53,
+    "album_url": "https://i.scdn.co/image/ab67616d0000b273d3c4ea69e980069f84b75d57",
     "source": "spotify"
   },
   {
     "name": "I Just Need (with Lyrah)",
     "artist": "Daniel Allan, Lyrah",
     "link": "https://open.spotify.com/track/6JbeNVHHrvRGY9BjB8hmkR",
-    "rank": 51,
+    "rank": 54,
     "album_url": "https://i.scdn.co/image/ab67616d0000b27341771976993a37d7a4262ac2",
     "source": "spotify"
   },
@@ -411,7 +435,7 @@
     "name": "Other Side",
     "artist": "AVAION, BUNT.",
     "link": "https://open.spotify.com/track/74qKLdiiTnXNqh2Co21RlJ",
-    "rank": 52,
+    "rank": 55,
     "album_url": "https://i.scdn.co/image/ab67616d0000b273696131b29b49113b48925103",
     "source": "spotify"
   },
@@ -419,7 +443,7 @@
     "name": "Frikitona",
     "artist": "Andruss",
     "link": "https://open.spotify.com/track/5ls4FQAoSlAFPFnaYpeyhn",
-    "rank": 53,
+    "rank": 56,
     "album_url": "https://i.scdn.co/image/ab67616d0000b2733bcb19f8a0b2d27451cac151",
     "source": "spotify"
   },
@@ -427,48 +451,24 @@
     "name": "Black Ice",
     "artist": "Subtronics, Rezz",
     "link": "https://open.spotify.com/track/1oacAKa5ReNOfuqaJ1gdBJ",
-    "rank": 54,
+    "rank": 57,
     "album_url": "https://i.scdn.co/image/ab67616d0000b27336c202616949f841fdbf6d7f",
-    "source": "spotify"
-  },
-  {
-    "name": "No Man's Land",
-    "artist": "Marshmello, venbee",
-    "link": "https://open.spotify.com/track/1pzcBd8A2f2pnVCGWro0fo",
-    "rank": 55,
-    "album_url": "https://i.scdn.co/image/ab67616d0000b273d5b3f24592b3329e64215d64",
     "source": "spotify"
   },
   {
     "name": "iluv",
     "artist": "Effy, Mall Grab",
     "link": "https://open.spotify.com/track/4u0N8a9adNalT4XdihjeSr",
-    "rank": 56,
+    "rank": 58,
     "album_url": "https://i.scdn.co/image/ab67616d0000b273d0f6e166d6c605b2406d788a",
-    "source": "spotify"
-  },
-  {
-    "name": "Mr. Sandman",
-    "artist": "Oppidan",
-    "link": "https://open.spotify.com/track/1Y2eoRAhwsjCKcdNnrZOzV",
-    "rank": 57,
-    "album_url": "https://i.scdn.co/image/ab67616d0000b273d3c4ea69e980069f84b75d57",
     "source": "spotify"
   },
   {
     "name": "This Is My Life",
     "artist": "HoneyLuv, Roland Clark",
     "link": "https://open.spotify.com/track/5oOUGZNKsx5LEE1FYyLcoB",
-    "rank": 58,
-    "album_url": "https://i.scdn.co/image/ab67616d0000b27387354bc96c630292c5d1b844",
-    "source": "spotify"
-  },
-  {
-    "name": "Hijos De La Noche",
-    "artist": "Shermanology",
-    "link": "https://open.spotify.com/track/1XgsBtX1glXMrclgp6JBb5",
     "rank": 59,
-    "album_url": "https://i.scdn.co/image/ab67616d0000b2730c9a25b509d5381a88717eb1",
+    "album_url": "https://i.scdn.co/image/ab67616d0000b27387354bc96c630292c5d1b844",
     "source": "spotify"
   },
   {
@@ -520,10 +520,18 @@
     "source": "spotify"
   },
   {
+    "name": "Can't Play Myself (A Tribute To Amy)",
+    "artist": "Skepta, Amy Winehouse",
+    "link": "https://open.spotify.com/track/6GrLwf1LdBCmkBOsmOcbPp",
+    "rank": 66,
+    "album_url": "https://i.scdn.co/image/ab67616d0000b273af20826cd7ffc3bcedab235b",
+    "source": "spotify"
+  },
+  {
     "name": "I Believe In Love Again - Jex Opolis Remix Edit",
     "artist": "Peggy Gou, Lenny Kravitz, Jex Opolis",
     "link": "https://open.spotify.com/track/17t5Ba4T5CEYw2WG2clNeu",
-    "rank": 66,
+    "rank": 67,
     "album_url": "https://i.scdn.co/image/ab67616d0000b27353da239062d119e730473438",
     "source": "spotify"
   },
@@ -531,7 +539,7 @@
     "name": "Always Get Through To You",
     "artist": "Barry Can't Swim",
     "link": "https://open.spotify.com/track/0g8nIlk2ltpZP8lYlPvRx1",
-    "rank": 67,
+    "rank": 68,
     "album_url": "https://i.scdn.co/image/ab67616d0000b27316bc57c40991e6d3267765ab",
     "source": "spotify"
   },
@@ -539,7 +547,7 @@
     "name": "system",
     "artist": "salute",
     "link": "https://open.spotify.com/track/0Tc7p0cKE8078NVGRDcDOX",
-    "rank": 68,
+    "rank": 69,
     "album_url": "https://i.scdn.co/image/ab67616d0000b273f292ee4172c5a52f2499fd97",
     "source": "spotify"
   },
@@ -547,7 +555,7 @@
     "name": "Dance For Me (1, 2, 3) - Stutter Techno",
     "artist": "Sonny Wern, Lyente, Quinten Circle, ZANA",
     "link": "https://open.spotify.com/track/7F7N0yugLFgKXoEACgtzD8",
-    "rank": 69,
+    "rank": 70,
     "album_url": "https://i.scdn.co/image/ab67616d0000b273249e4a9c2671529898252f91",
     "source": "spotify"
   },
@@ -555,7 +563,7 @@
     "name": "Funk 55",
     "artist": "Shakes \u0026 Les, DBN Gogo, Zee Nxumalo, Ceeka RSA, Chley",
     "link": "https://open.spotify.com/track/5CD3ImPPdCW8QFQkjo5TXt",
-    "rank": 70,
+    "rank": 71,
     "album_url": "https://i.scdn.co/image/ab67616d0000b273ac02b6ac8defc45ca5db585a",
     "source": "spotify"
   },
@@ -563,16 +571,8 @@
     "name": "You and Me",
     "artist": "Amelie Lens",
     "link": "https://open.spotify.com/track/4Elb9ia3RBhTDtJN8qe29k",
-    "rank": 71,
-    "album_url": "https://i.scdn.co/image/ab67616d0000b273f09a1148a8bdc0f03b6d226e",
-    "source": "spotify"
-  },
-  {
-    "name": "Tell That Boy",
-    "artist": "Azzecca",
-    "link": "https://open.spotify.com/track/34x9lHWBLEWgDSUUlx1T5Z",
     "rank": 72,
-    "album_url": "https://i.scdn.co/image/ab67616d0000b27335597e143507656464950331",
+    "album_url": "https://i.scdn.co/image/ab67616d0000b273f09a1148a8bdc0f03b6d226e",
     "source": "spotify"
   },
   {
