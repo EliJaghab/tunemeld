@@ -1,67 +1,43 @@
 [
   {
-    "name": "Shiver",
-    "artist": "John Summit \u0026 Hayla",
-    "link": "https://music.apple.com/us/album/shiver/1728957955?i=1728957956",
+    "name": "Never Be Alone",
+    "artist": "Becky Hill \u0026 Sonny Fodera",
+    "link": "https://music.apple.com/us/album/never-be-alone/1731891564?i=1731891893",
     "rank": 1,
-    "album_url": "https://i.scdn.co/image/ab67616d0000b273cce81d5ef0a2962779a12d95",
+    "album_url": "",
     "source": "soundcloud",
     "additional_sources": [
-      "apple_music",
-      "spotify"
+      "apple_music"
     ]
   },
   {
-    "name": "stayinit",
-    "artist": "Fred again.., Lil Yachty \u0026 Overmono",
-    "link": "https://music.apple.com/us/album/stayinit/1730976891?i=1730976903",
+    "name": "Fuck The Pain Away",
+    "artist": "Hannah Laing x Peaches",
+    "link": "https://soundcloud.com/hannahlaingdj/fuck-the-pain-away",
     "rank": 2,
-    "album_url": "https://i.scdn.co/image/ab67616d0000b273caa718aa1278c4016a17bc05",
-    "source": "soundcloud",
-    "additional_sources": [
-      "apple_music",
-      "spotify"
-    ]
-  },
-  {
-    "name": "Hard dreams",
-    "artist": "Gesaffelstein",
-    "link": "https://soundcloud.com/gesaffelstein/hard-dreams",
-    "rank": 3,
-    "album_url": "https://i1.sndcdn.com/artworks-SehoD06acLx7-0-original.jpg",
+    "album_url": "https://i1.sndcdn.com/artworks-T96SNChx6iaa8xaL-Hi3GmQ-original.jpg",
     "source": "spotify",
     "additional_sources": [
       "apple_music"
     ]
   },
   {
-    "name": "mr useless",
-    "artist": "Shygirl \u0026 SG Lewis",
-    "link": "https://music.apple.com/us/album/mr-useless/1725825321?i=1725826047",
-    "rank": 4,
-    "album_url": "https://i.scdn.co/image/ab67616d0000b273068ea49505ba5d8e9daae67b",
+    "name": "Shiver",
+    "artist": "John Summit \u0026 Hayla",
+    "link": "https://music.apple.com/us/album/shiver/1728957955?i=1728957956",
+    "rank": 3,
+    "album_url": "",
     "source": "soundcloud",
     "additional_sources": [
       "apple_music"
     ]
   },
   {
-    "name": "We Groovin",
-    "artist": "Jamie Jones \u0026 Jazzy",
-    "link": "https://music.apple.com/us/album/we-groovin/1729232019?i=1729232020",
-    "rank": 5,
-    "album_url": "https://i.scdn.co/image/ab67616d0000b27376e966ae2ae721c771183228",
-    "source": "soundcloud",
-    "additional_sources": [
-      "spotify"
-    ]
-  },
-  {
-    "name": "Never Be Alone",
-    "artist": "Becky Hill \u0026 Sonny Fodera",
-    "link": "https://music.apple.com/us/album/never-be-alone/1731891564?i=1731891893",
-    "rank": 6,
-    "album_url": "https://i.scdn.co/image/ab67616d0000b273925431ee44855bcae58f6ac4",
+    "name": "system",
+    "artist": "salute",
+    "link": "https://music.apple.com/us/album/system/1726621108?i=1726621112",
+    "rank": 4,
+    "album_url": "https://i.scdn.co/image/ab67616d0000b273f292ee4172c5a52f2499fd97",
     "source": "soundcloud",
     "additional_sources": [
       "apple_music"
@@ -71,7 +47,7 @@
     "name": "Fall Again",
     "artist": "Hayla",
     "link": "https://music.apple.com/us/album/fall-again/1708886158?i=1708886171",
-    "rank": 7,
+    "rank": 5,
     "album_url": "https://i.scdn.co/image/ab67616d0000b2737c0c9ff9fc1a7006bb5b9798",
     "source": "soundcloud",
     "additional_sources": [
@@ -79,22 +55,11 @@
     ]
   },
   {
-    "name": "Other Side",
-    "artist": "AVAION \u0026 BUNT.",
-    "link": "https://music.apple.com/us/album/other-side/1717635721?i=1717636042",
-    "rank": 8,
-    "album_url": "https://i.scdn.co/image/ab67616d0000b2734f205c7786a248e23179f7f7",
-    "source": "soundcloud",
-    "additional_sources": [
-      "apple_music"
-    ]
-  },
-  {
-    "name": "Skip",
-    "artist": "Sebastian Ingrosso \u0026 Steve Angello",
-    "link": "https://music.apple.com/us/album/skip/1730705472?i=1730705473",
-    "rank": 9,
-    "album_url": "https://i.scdn.co/image/ab67616d0000b2731e310ac72c0b4221ac8cc6b5",
+    "name": "Empty",
+    "artist": "Martin Garrix, DubVision \u0026 Jaimes",
+    "link": "https://music.apple.com/us/album/empty/1732966794?i=1732966798",
+    "rank": 6,
+    "album_url": "",
     "source": "soundcloud",
     "additional_sources": [
       "apple_music"
@@ -104,30 +69,42 @@
     "name": "Saving Up",
     "artist": "Dom Dolla",
     "link": "https://music.apple.com/us/album/saving-up/1709177801?i=1709178108",
+    "rank": 7,
+    "album_url": "https://i.scdn.co/image/ab67616d0000b273585c329dfd9cdeb22b6cd247",
+    "source": "soundcloud",
+    "additional_sources": [
+      "apple_music"
+    ]
+  },
+  {
+    "name": "stayinit",
+    "artist": "Fred again.., Lil Yachty \u0026 Overmono",
+    "link": "https://music.apple.com/us/album/stayinit/1730976891?i=1730976903",
+    "rank": 8,
+    "album_url": "",
+    "source": "soundcloud",
+    "additional_sources": [
+      "apple_music",
+      "spotify"
+    ]
+  },
+  {
+    "name": "Incognito",
+    "artist": "Justice",
+    "link": "https://music.apple.com/us/album/incognito/1724935208?i=1724935855",
+    "rank": 9,
+    "album_url": "https://i.scdn.co/image/ab67616d0000b2737f7166be74003da51b0354c8",
+    "source": "soundcloud",
+    "additional_sources": [
+      "spotify"
+    ]
+  },
+  {
+    "name": "Other Side",
+    "artist": "AVAION \u0026 BUNT.",
+    "link": "https://music.apple.com/us/album/other-side/1717635721?i=1717636042",
     "rank": 10,
-    "album_url": "https://i.scdn.co/image/ab67616d0000b273e9f9adfb696ae83cbec81bfa",
-    "source": "soundcloud",
-    "additional_sources": [
-      "apple_music"
-    ]
-  },
-  {
-    "name": "Cutting Loose",
-    "artist": "Disco Lines, J. Worra \u0026 Anabel Englund",
-    "link": "https://music.apple.com/us/album/cutting-loose/1720846257?i=1720846263",
-    "rank": 11,
-    "album_url": "https://i.scdn.co/image/ab67616d0000b273899bbbee6d9c8292d3023c31",
-    "source": "soundcloud",
-    "additional_sources": [
-      "apple_music"
-    ]
-  },
-  {
-    "name": "All Night Long",
-    "artist": "Kungs, David Guetta \u0026 Izzy Bizu",
-    "link": "https://music.apple.com/us/album/all-night-long/1724806443?i=1724806451",
-    "rank": 12,
-    "album_url": "https://i.scdn.co/image/ab67616d0000b2739cc02d9ed2a77408ed4cc916",
+    "album_url": "",
     "source": "soundcloud",
     "additional_sources": [
       "apple_music"
@@ -137,7 +114,7 @@
     "name": "Lifetime",
     "artist": "Tobiahs",
     "link": "https://music.apple.com/us/album/lifetime/1722564698?i=1722564700",
-    "rank": 13,
+    "rank": 11,
     "album_url": "https://i.scdn.co/image/ab67616d0000b273f825c5f3a2a0d8857636328d",
     "source": "soundcloud",
     "additional_sources": [
@@ -145,22 +122,11 @@
     ]
   },
   {
-    "name": "LAST OF US",
-    "artist": "Gryffin \u0026 Rita Ora",
-    "link": "https://music.apple.com/us/album/last-of-us/1727303712?i=1727303716",
-    "rank": 14,
-    "album_url": "https://i.scdn.co/image/ab67616d0000b2736362397987db1fbf17f3d9b5",
-    "source": "soundcloud",
-    "additional_sources": [
-      "spotify"
-    ]
-  },
-  {
-    "name": "If U Need It",
-    "artist": "Sammy Virji",
-    "link": "https://music.apple.com/us/album/if-u-need-it/1711713804?i=1711713806",
-    "rank": 15,
-    "album_url": "https://i.scdn.co/image/ab67616d0000b273d5b8fa0ff5dee9da54847694",
+    "name": "mr useless",
+    "artist": "Shygirl \u0026 SG Lewis",
+    "link": "https://music.apple.com/us/album/mr-useless/1725825321?i=1725826047",
+    "rank": 12,
+    "album_url": "",
     "source": "soundcloud",
     "additional_sources": [
       "apple_music"
@@ -170,8 +136,41 @@
     "name": "Forever (Stay Like This)",
     "artist": "Armin van Buuren \u0026 Goodboys",
     "link": "https://music.apple.com/us/album/forever-stay-like-this/1720145379?i=1720145381",
+    "rank": 13,
+    "album_url": "",
+    "source": "soundcloud",
+    "additional_sources": [
+      "apple_music"
+    ]
+  },
+  {
+    "name": "Cutting Loose",
+    "artist": "Disco Lines, J. Worra \u0026 Anabel Englund",
+    "link": "https://music.apple.com/us/album/cutting-loose/1720846257?i=1720846263",
+    "rank": 14,
+    "album_url": "",
+    "source": "soundcloud",
+    "additional_sources": [
+      "apple_music"
+    ]
+  },
+  {
+    "name": "All Night Long",
+    "artist": "Kungs, David Guetta \u0026 Izzy Bizu",
+    "link": "https://music.apple.com/us/album/all-night-long/1724806443?i=1724806451",
+    "rank": 15,
+    "album_url": "",
+    "source": "soundcloud",
+    "additional_sources": [
+      "apple_music"
+    ]
+  },
+  {
+    "name": "If U Need It",
+    "artist": "Sammy Virji",
+    "link": "https://music.apple.com/us/album/if-u-need-it/1711713804?i=1711713806",
     "rank": 16,
-    "album_url": "https://i.scdn.co/image/ab67616d0000b2738ea56bb29ad94f5c9638e636",
+    "album_url": "https://i.scdn.co/image/ab67616d0000b273d5b8fa0ff5dee9da54847694",
     "source": "soundcloud",
     "additional_sources": [
       "apple_music"
@@ -189,22 +188,33 @@
     ]
   },
   {
-    "name": "No Man's Land",
-    "artist": "Marshmello \u0026 venbee",
-    "link": "https://music.apple.com/us/album/no-mans-land/1722322260?i=1722322261",
+    "name": "Weak",
+    "artist": "Vintage Culture, Maverick Sabre \u0026 Tom Breu",
+    "link": "https://music.apple.com/us/album/weak/1725169738?i=1725169850",
     "rank": 18,
-    "album_url": "https://i.scdn.co/image/ab67616d0000b273398440a650914ea88e22dded",
+    "album_url": "",
     "source": "soundcloud",
     "additional_sources": [
       "apple_music"
     ]
   },
   {
-    "name": "Weak",
-    "artist": "Vintage Culture, Maverick Sabre \u0026 Tom Breu",
-    "link": "https://music.apple.com/us/album/weak/1725169738?i=1725169850",
+    "name": "We Groovin",
+    "artist": "Jamie Jones \u0026 Jazzy",
+    "link": "https://music.apple.com/us/album/we-groovin/1729232019?i=1729232020",
     "rank": 19,
-    "album_url": "https://i.scdn.co/image/ab67616d0000b273311ae739ddd6e05e4895a1ec",
+    "album_url": "",
+    "source": "soundcloud",
+    "additional_sources": [
+      "spotify"
+    ]
+  },
+  {
+    "name": "Skip",
+    "artist": "Sebastian Ingrosso \u0026 Steve Angello",
+    "link": "https://music.apple.com/us/album/skip/1730705472?i=1730705473",
+    "rank": 20,
+    "album_url": "",
     "source": "soundcloud",
     "additional_sources": [
       "apple_music"
@@ -214,19 +224,19 @@
     "name": "leavemealone",
     "artist": "Fred again.. \u0026 Baby Keem",
     "link": "https://music.apple.com/us/album/leavemealone/1720043736?i=1720043991",
-    "rank": 20,
-    "album_url": "https://i.scdn.co/image/ab67616d0000b273c9049966d5a1c1954ae98480",
+    "rank": 21,
+    "album_url": "",
     "source": "soundcloud",
     "additional_sources": [
       "apple_music"
     ]
   },
   {
-    "name": "Generator",
-    "artist": "Justice",
-    "link": "https://music.apple.com/us/album/generator/1724935208?i=1724935214",
-    "rank": 21,
-    "album_url": "https://i.scdn.co/image/ab67616d0000b2734e18be1213cef256db8766da",
+    "name": "Halo",
+    "artist": "Eli \u0026 Fur, Punctual \u0026 Richard Judge",
+    "link": "https://music.apple.com/us/album/halo/1726898160?i=1726898169",
+    "rank": 22,
+    "album_url": "",
     "source": "soundcloud",
     "additional_sources": [
       "apple_music"
