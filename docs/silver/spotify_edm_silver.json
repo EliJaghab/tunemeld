@@ -1,33 +1,25 @@
 [
   {
-    "name": "Cheerleader",
-    "artist": "Porter Robinson",
-    "link": "https://open.spotify.com/track/779mhz1mAry946r91qzR1r",
-    "rank": 1,
-    "album_url": "https://i.scdn.co/image/ab67616d0000b273dc62d955a52189e19ada8d4f",
-    "source": "spotify"
-  },
-  {
     "name": "stayinit",
     "artist": "Fred again.., Lil Yachty, Overmono",
     "link": "https://open.spotify.com/track/6WS2TcsMEGOFtveWbtbuwZ",
-    "rank": 2,
+    "rank": 1,
     "album_url": "https://i.scdn.co/image/ab67616d0000b2735ed4a44f611bee241a915e17",
     "source": "spotify"
   },
   {
-    "name": "CUT ME OUT",
-    "artist": "Rezz, Digital Ethos",
-    "link": "https://open.spotify.com/track/7wa5lBm1Nl0kcXb9psV2Sj",
-    "rank": 3,
-    "album_url": "https://i.scdn.co/image/ab67616d0000b2734e6e86bf9f564c31dcb7e89c",
+    "name": "Outside Of Love",
+    "artist": "Becky Hill",
+    "link": "https://open.spotify.com/track/5ld9X26dRZIcFNLzeclQ40",
+    "rank": 2,
+    "album_url": "https://i.scdn.co/image/ab67616d0000b2735774ccf1e91a4ae31a908399",
     "source": "spotify"
   },
   {
     "name": "Shiver",
     "artist": "John Summit, Hayla",
     "link": "https://open.spotify.com/track/1ls2PNiOHOxmSfHRyslgAl",
-    "rank": 4,
+    "rank": 3,
     "album_url": "https://i.scdn.co/image/ab67616d0000b273cce81d5ef0a2962779a12d95",
     "source": "spotify"
   },
@@ -35,8 +27,16 @@
     "name": "Fuck The Pain Away",
     "artist": "Hannah Laing, Peaches",
     "link": "https://open.spotify.com/track/4xCmCF6pHz0v6vcANehny0",
-    "rank": 5,
+    "rank": 4,
     "album_url": "https://i.scdn.co/image/ab67616d0000b27343ea366e4af8a3b9df8f6959",
+    "source": "spotify"
+  },
+  {
+    "name": "Cheerleader",
+    "artist": "Porter Robinson",
+    "link": "https://open.spotify.com/track/779mhz1mAry946r91qzR1r",
+    "rank": 5,
+    "album_url": "https://i.scdn.co/image/ab67616d0000b273dc62d955a52189e19ada8d4f",
     "source": "spotify"
   },
   {
@@ -48,19 +48,19 @@
     "source": "spotify"
   },
   {
-    "name": "TAKA",
-    "artist": "Ahadadream, Priya Ragu, Skrillex, contra",
-    "link": "https://open.spotify.com/track/645e3XeVtB7QYpl3RdJBil",
-    "rank": 7,
-    "album_url": "https://i.scdn.co/image/ab67616d0000b2737ce8a27b991b21d3b0108f8e",
-    "source": "spotify"
-  },
-  {
     "name": "Weak",
     "artist": "Vintage Culture, Maverick Sabre, Tom Breu",
     "link": "https://open.spotify.com/track/62gzfhHi2supfHWfi6iHbA",
-    "rank": 8,
+    "rank": 7,
     "album_url": "https://i.scdn.co/image/ab67616d0000b273fb6391b7f42e2c83a75e9970",
+    "source": "spotify"
+  },
+  {
+    "name": "TAKA",
+    "artist": "Ahadadream, Priya Ragu, Skrillex, contra",
+    "link": "https://open.spotify.com/track/645e3XeVtB7QYpl3RdJBil",
+    "rank": 8,
+    "album_url": "https://i.scdn.co/image/ab67616d0000b2737ce8a27b991b21d3b0108f8e",
     "source": "spotify"
   },
   {
@@ -72,34 +72,66 @@
     "source": "spotify"
   },
   {
+    "name": "CUT ME OUT",
+    "artist": "Rezz, Digital Ethos",
+    "link": "https://open.spotify.com/track/7wa5lBm1Nl0kcXb9psV2Sj",
+    "rank": 10,
+    "album_url": "https://i.scdn.co/image/ab67616d0000b2734e6e86bf9f564c31dcb7e89c",
+    "source": "spotify"
+  },
+  {
     "name": "Von dutch",
     "artist": "Charli XCX",
     "link": "https://open.spotify.com/track/01TnMXIy7mJJQ7E8uy937N",
-    "rank": 10,
-    "album_url": "https://i.scdn.co/image/ab67616d0000b273c785c27da601350c05390d39",
+    "rank": 11,
+    "album_url": "https://i.scdn.co/image/ab67616d0000b2735a933871a40c5b9e1deea8d3",
     "source": "spotify"
   },
   {
     "name": "What Took You So Long",
     "artist": "Armin van Buuren, Gryffin",
     "link": "https://open.spotify.com/track/2YSWJU0HINhi24oH19ALo6",
-    "rank": 11,
+    "rank": 12,
     "album_url": "https://i.scdn.co/image/ab67616d0000b273566639bef3ab4b7bfdd29734",
+    "source": "spotify"
+  },
+  {
+    "name": "Now Or Never",
+    "artist": "Anyma",
+    "link": "https://open.spotify.com/track/5ODOZBqS9a6bRmyWtsBsRt",
+    "rank": 13,
+    "album_url": "https://i.scdn.co/image/ab67616d0000b273d2454ff9b99989ac16faf007",
+    "source": "spotify"
+  },
+  {
+    "name": "Addicted",
+    "artist": "Zerb, The Chainsmokers, Ink",
+    "link": "https://open.spotify.com/track/5ZUIPLoTLJZrPQh2kFZEUM",
+    "rank": 14,
+    "album_url": "https://i.scdn.co/image/ab67616d0000b273c2961154bf261e656c20862b",
     "source": "spotify"
   },
   {
     "name": "One Night/All Night",
     "artist": "Justice, Tame Impala",
     "link": "https://open.spotify.com/track/7sjuNUjWtSqhbxJ3RAUffm",
-    "rank": 12,
+    "rank": 15,
     "album_url": "https://i.scdn.co/image/ab67616d0000b273e2d85e24e16dadb90a67a6df",
+    "source": "spotify"
+  },
+  {
+    "name": "Digital slaves",
+    "artist": "Gesaffelstein",
+    "link": "https://open.spotify.com/track/2vMXEYcrqv5HAoBy83UQkT",
+    "rank": 16,
+    "album_url": "https://i.scdn.co/image/ab67616d0000b273c26ef587413a17530deb82fd",
     "source": "spotify"
   },
   {
     "name": "Happier (feat. Clementine Douglas)",
     "artist": "The Blessed Madonna, Clementine Douglas",
     "link": "https://open.spotify.com/track/1TcF5F10EN17vraisG1gQv",
-    "rank": 13,
+    "rank": 17,
     "album_url": "https://i.scdn.co/image/ab67616d0000b2735d564f7de772a0675ab893be",
     "source": "spotify"
   },
@@ -107,7 +139,7 @@
     "name": "RIZZ",
     "artist": "AYYBO",
     "link": "https://open.spotify.com/track/3DqOJ2BoddzZpNdty3okJH",
-    "rank": 14,
+    "rank": 18,
     "album_url": "https://i.scdn.co/image/ab67616d0000b273f3fb83bf7c4133d662a0e008",
     "source": "spotify"
   },
@@ -115,7 +147,7 @@
     "name": "mr useless",
     "artist": "Shygirl, SG Lewis",
     "link": "https://open.spotify.com/track/1HogDCzANgKv9mE8MgeYKg",
-    "rank": 15,
+    "rank": 19,
     "album_url": "https://i.scdn.co/image/ab67616d0000b273068ea49505ba5d8e9daae67b",
     "source": "spotify"
   },
@@ -123,7 +155,7 @@
     "name": "Buscando Money",
     "artist": "TWENTY SIX, Tayson Kryss",
     "link": "https://open.spotify.com/track/6vsKOJPjdxlYgRs8McgtCQ",
-    "rank": 16,
+    "rank": 20,
     "album_url": "https://i.scdn.co/image/ab67616d0000b27304a5e9280739d24c9c127864",
     "source": "spotify"
   },
@@ -131,7 +163,7 @@
     "name": "We Groovin (with Jazzy)",
     "artist": "Jamie Jones, Jazzy",
     "link": "https://open.spotify.com/track/6LiuMpZjyjjuXFP5Ljo9bv",
-    "rank": 17,
+    "rank": 21,
     "album_url": "https://i.scdn.co/image/ab67616d0000b27376e966ae2ae721c771183228",
     "source": "spotify"
   },
@@ -139,23 +171,23 @@
     "name": "LAST OF US (feat. Rita Ora)",
     "artist": "Gryffin, Rita Ora",
     "link": "https://open.spotify.com/track/2Mwmp4qVCe8CJcalsT4xm1",
-    "rank": 18,
+    "rank": 22,
     "album_url": "https://i.scdn.co/image/ab67616d0000b273f0c5b18be674664912c284d6",
     "source": "spotify"
   },
   {
-    "name": "Mwaki",
-    "artist": "Zerb, Sofiya Nzau",
-    "link": "https://open.spotify.com/track/5KTZgG84bKFGm53lhLtTqc",
-    "rank": 19,
-    "album_url": "https://i.scdn.co/image/ab67616d0000b2733e56ef77fe414ce4af6334a4",
+    "name": "Stumblin' In",
+    "artist": "CYRIL",
+    "link": "https://open.spotify.com/track/0h3Xy4V4apMraB5NuM8U7Z",
+    "rank": 23,
+    "album_url": "https://i.scdn.co/image/ab67616d0000b27357732f3a97f6d356b547cf1e",
     "source": "spotify"
   },
   {
     "name": "Faust",
     "artist": "Argy, Son Of Son",
     "link": "https://open.spotify.com/track/4nlH5jTAEsKrWYYVfUouRX",
-    "rank": 20,
+    "rank": 24,
     "album_url": "https://i.scdn.co/image/ab67616d0000b2734b0cf5068f1af6be93fa0a60",
     "source": "spotify"
   },
@@ -163,7 +195,7 @@
     "name": "Lovers In A Past Life (with Rag'n'Bone Man)",
     "artist": "Calvin Harris, Rag'n'Bone Man",
     "link": "https://open.spotify.com/track/6v4ABPB255HDSWyIj3S9Wn",
-    "rank": 21,
+    "rank": 25,
     "album_url": "https://i.scdn.co/image/ab67616d0000b273bb08484f74ca64acd08882a1",
     "source": "spotify"
   },
@@ -171,23 +203,15 @@
     "name": "Rule The World (Everybody)",
     "artist": "Tiësto, Tears For Fears, NIIKO X SWAE, GUDFELLA",
     "link": "https://open.spotify.com/track/2f2dRxjiUOoV5qhZFbnVO6",
-    "rank": 22,
+    "rank": 26,
     "album_url": "https://i.scdn.co/image/ab67616d0000b2734049dfafed38fcb64836d374",
-    "source": "spotify"
-  },
-  {
-    "name": "Pictures Of You",
-    "artist": "Anyma",
-    "link": "https://open.spotify.com/track/1D5ifTPFnQWDnSxSAfc1hc",
-    "rank": 23,
-    "album_url": "https://i.scdn.co/image/ab67616d0000b273d684fe59d12d2f95ad19a978",
     "source": "spotify"
   },
   {
     "name": "You \u0026 Me - Rivo Remix",
     "artist": "Disclosure, Eliza Doolittle, Rivo",
     "link": "https://open.spotify.com/track/0xoYZ45fgTfyQYREZPN7Sa",
-    "rank": 24,
+    "rank": 27,
     "album_url": "https://i.scdn.co/image/ab67616d0000b2739b18753eb7552e25b7f134c4",
     "source": "spotify"
   },
@@ -195,7 +219,7 @@
     "name": "Sippin' Yak",
     "artist": "Cloonee",
     "link": "https://open.spotify.com/track/1LldihpfcYdxAnCigKijW2",
-    "rank": 25,
+    "rank": 28,
     "album_url": "https://i.scdn.co/image/ab67616d0000b27360e9b078daf0e2e4e4513b36",
     "source": "spotify"
   },
@@ -203,7 +227,7 @@
     "name": "It's Not Right But It's Okay",
     "artist": "Mr. Belt \u0026 Wezol",
     "link": "https://open.spotify.com/track/5OFVzqSeFxGpvDGyHvVeLj",
-    "rank": 26,
+    "rank": 29,
     "album_url": "https://i.scdn.co/image/ab67616d0000b27303f9f7783244b38aec79cb6d",
     "source": "spotify"
   },
@@ -211,7 +235,7 @@
     "name": "Jamming - FISHER Rework",
     "artist": "Bob Marley \u0026 The Wailers, FISHER",
     "link": "https://open.spotify.com/track/2gKewcQZEV1fqoWH81RUDk",
-    "rank": 27,
+    "rank": 30,
     "album_url": "https://i.scdn.co/image/ab67616d0000b2737e536112cde0150fdaec65b6",
     "source": "spotify"
   },
@@ -219,7 +243,7 @@
     "name": "Famax",
     "artist": "RAFFA GUIDO",
     "link": "https://open.spotify.com/track/4yhqQAKFiHNCXpxxFVhxRq",
-    "rank": 28,
+    "rank": 31,
     "album_url": "https://i.scdn.co/image/ab67616d0000b2730a26dbad173e90d2e3fad5ed",
     "source": "spotify"
   },
@@ -227,7 +251,7 @@
     "name": "All Night Long",
     "artist": "Kungs, David Guetta, Izzy Bizu",
     "link": "https://open.spotify.com/track/1vQWFjEC34DHNXrRTFjDxe",
-    "rank": 29,
+    "rank": 32,
     "album_url": "https://i.scdn.co/image/ab67616d0000b2739cc02d9ed2a77408ed4cc916",
     "source": "spotify"
   },
@@ -235,7 +259,7 @@
     "name": "Not Even Love",
     "artist": "Seven Lions, ILLENIUM, ÁSDÍS",
     "link": "https://open.spotify.com/track/65s9dLrylbHp60IYIcUZEz",
-    "rank": 30,
+    "rank": 33,
     "album_url": "https://i.scdn.co/image/ab67616d0000b273c0e4cf83ef4f8476b6fa3304",
     "source": "spotify"
   },
@@ -243,7 +267,7 @@
     "name": "Alibi (feat. Rudimental)",
     "artist": "Ella Henderson, Rudimental",
     "link": "https://open.spotify.com/track/5Jpz4nv8nA6FIYO5gEyQa2",
-    "rank": 31,
+    "rank": 34,
     "album_url": "https://i.scdn.co/image/ab67616d0000b2739e3b2d14dee8000a862c941e",
     "source": "spotify"
   },
@@ -251,7 +275,7 @@
     "name": "Last Night",
     "artist": "Loofy",
     "link": "https://open.spotify.com/track/5mF7p5mwgaPZyIykUhO3PN",
-    "rank": 32,
+    "rank": 35,
     "album_url": "https://i.scdn.co/image/ab67616d0000b2739bd41d12cda81e29eece0b4c",
     "source": "spotify"
   },
@@ -259,23 +283,39 @@
     "name": "Water",
     "artist": "Tyla, Marshmello",
     "link": "https://open.spotify.com/track/4Q2IUQo8YuoCqiRrDazKK4",
-    "rank": 33,
+    "rank": 36,
     "album_url": "https://i.scdn.co/image/ab67616d0000b2732b35ec31acfe3aa18986f2df",
+    "source": "spotify"
+  },
+  {
+    "name": "Mwaki",
+    "artist": "Zerb, Sofiya Nzau",
+    "link": "https://open.spotify.com/track/5KTZgG84bKFGm53lhLtTqc",
+    "rank": 37,
+    "album_url": "https://i.scdn.co/image/ab67616d0000b2733e56ef77fe414ce4af6334a4",
     "source": "spotify"
   },
   {
     "name": "Thank You (Not So Bad)",
     "artist": "Dimitri Vegas \u0026 Like Mike, Tiësto, Dido, W\u0026W, Dimitri Vegas, Like Mike",
     "link": "https://open.spotify.com/track/09CnYHiZ5jGT1wr1TXJ9Zt",
-    "rank": 34,
+    "rank": 38,
     "album_url": "https://i.scdn.co/image/ab67616d0000b2730aa08f8923434aab06e43b37",
+    "source": "spotify"
+  },
+  {
+    "name": "Moment",
+    "artist": "BUNT.",
+    "link": "https://open.spotify.com/track/7wNKtCzafd3om6QKiub1Js",
+    "rank": 39,
+    "album_url": "https://i.scdn.co/image/ab67616d0000b27397c69473dcf16d2bb4598222",
     "source": "spotify"
   },
   {
     "name": "Settle For Less",
     "artist": "ZHU, Sabrina Claudio",
     "link": "https://open.spotify.com/track/2JnF9w6ONUVFN1JqhgZYSn",
-    "rank": 35,
+    "rank": 40,
     "album_url": "https://i.scdn.co/image/ab67616d0000b273731d6ea378141feac795dcef",
     "source": "spotify"
   },
@@ -283,7 +323,7 @@
     "name": "Whatever",
     "artist": "Kygo, Ava Max",
     "link": "https://open.spotify.com/track/0LMwmV37RCmBO2so0szAFs",
-    "rank": 36,
+    "rank": 41,
     "album_url": "https://i.scdn.co/image/ab67616d0000b2734d914470ab899815f103f5cc",
     "source": "spotify"
   },
@@ -291,7 +331,7 @@
     "name": "BEATS FOR THE UNDERGROUND",
     "artist": "Mau P",
     "link": "https://open.spotify.com/track/62bjfb5YMLvZU44vfjJVxp",
-    "rank": 37,
+    "rank": 42,
     "album_url": "https://i.scdn.co/image/ab67616d0000b2730c36bb8d6a130c19a28b3e21",
     "source": "spotify"
   },
@@ -299,7 +339,7 @@
     "name": "Skip",
     "artist": "Sebastian Ingrosso, Steve Angello",
     "link": "https://open.spotify.com/track/0OHyE7d3EfGT6jIDVRN4Qn",
-    "rank": 38,
+    "rank": 43,
     "album_url": "https://i.scdn.co/image/ab67616d0000b27342d2a0c4026c12d898767984",
     "source": "spotify"
   },
@@ -307,7 +347,7 @@
     "name": "Forget",
     "artist": "Azzecca",
     "link": "https://open.spotify.com/track/3X39bUXqQDCzDGUjeMd82e",
-    "rank": 39,
+    "rank": 44,
     "album_url": "https://i.scdn.co/image/ab67616d0000b273a5ff7aea846f8ecfb20fe031",
     "source": "spotify"
   },
@@ -315,7 +355,7 @@
     "name": "Stay High",
     "artist": "Diplo, HUGEL, Julia Church",
     "link": "https://open.spotify.com/track/7LXimIqTYO76Utly8VFABu",
-    "rank": 40,
+    "rank": 45,
     "album_url": "https://i.scdn.co/image/ab67616d0000b2736c085bf11b46f72cb2976fd8",
     "source": "spotify"
   },
@@ -323,39 +363,23 @@
     "name": "leavemealone",
     "artist": "Fred again.., Baby Keem",
     "link": "https://open.spotify.com/track/1MVqeIAwhD4T44AKVkIfic",
-    "rank": 41,
+    "rank": 46,
     "album_url": "https://i.scdn.co/image/ab67616d0000b273c9049966d5a1c1954ae98480",
-    "source": "spotify"
-  },
-  {
-    "name": "Hard dreams",
-    "artist": "Gesaffelstein, Yan Wagner",
-    "link": "https://open.spotify.com/track/1sJAQWkZdaJDsPifl1fvOd",
-    "rank": 42,
-    "album_url": "https://i.scdn.co/image/ab67616d0000b273ff150c335de3ac71a2ca424f",
     "source": "spotify"
   },
   {
     "name": "Cruel Summer - LP Giobbi Remix",
     "artist": "Taylor Swift, LP Giobbi",
     "link": "https://open.spotify.com/track/0pjBqAz8GlxGlpaU4W0DxS",
-    "rank": 43,
+    "rank": 47,
     "album_url": "https://i.scdn.co/image/ab67616d0000b273f669b4e7f0327c92909bc762",
-    "source": "spotify"
-  },
-  {
-    "name": "Never Be Alone",
-    "artist": "Becky Hill, Sonny Fodera",
-    "link": "https://open.spotify.com/track/3WB9r0SqS5ThjK49bDexXe",
-    "rank": 44,
-    "album_url": "https://i.scdn.co/image/ab67616d0000b273925431ee44855bcae58f6ac4",
     "source": "spotify"
   },
   {
     "name": "Beso (Fruta Fresca)",
     "artist": "Wakyin, Carlos Vives",
     "link": "https://open.spotify.com/track/0r3nMF80NSIuPIxeod4aoG",
-    "rank": 45,
+    "rank": 48,
     "album_url": "https://i.scdn.co/image/ab67616d0000b2730c1faf936b87bdf93bee8d7e",
     "source": "spotify"
   },
@@ -363,7 +387,7 @@
     "name": "Can't Let Go",
     "artist": "Logic1000",
     "link": "https://open.spotify.com/track/5CS3Y1sfMFXftNEKI5etxs",
-    "rank": 46,
+    "rank": 49,
     "album_url": "https://i.scdn.co/image/ab67616d0000b273e1d64f65741b3f535227a411",
     "source": "spotify"
   },
@@ -371,7 +395,7 @@
     "name": "Halo",
     "artist": "Eli \u0026 Fur, Punctual, Richard Judge",
     "link": "https://open.spotify.com/track/6LziN7kYIkvyV4DLz5kAL1",
-    "rank": 47,
+    "rank": 50,
     "album_url": "https://i.scdn.co/image/ab67616d0000b2731e9a424725b22bb6a7291cb1",
     "source": "spotify"
   },
@@ -379,7 +403,7 @@
     "name": "Fire! (feat. YUQI ((G)I-DLE), JVKE)",
     "artist": "Alan Walker, YUQI, JVKE, (G)I-DLE",
     "link": "https://open.spotify.com/track/5B8VpcIC3EAI3wke3XQoRy",
-    "rank": 48,
+    "rank": 51,
     "album_url": "https://i.scdn.co/image/ab67616d0000b2739bcee2cb961a04d2e5a29f5c",
     "source": "spotify"
   },
@@ -387,23 +411,15 @@
     "name": "In The End",
     "artist": "Dabin, Said The Sky, Clara Mae",
     "link": "https://open.spotify.com/track/5pt4hbLckWiwVDM9xcDG9D",
-    "rank": 49,
+    "rank": 52,
     "album_url": "https://i.scdn.co/image/ab67616d0000b273f7b581d490b6f79b6624edfd",
-    "source": "spotify"
-  },
-  {
-    "name": "Places I Belong",
-    "artist": "Seven Lions, Andrew Bayer, Fiora",
-    "link": "https://open.spotify.com/track/3d7RiAd7X9QEOyJiZJatbv",
-    "rank": 50,
-    "album_url": "https://i.scdn.co/image/ab67616d0000b273eb829e1b247721739f9b873b",
     "source": "spotify"
   },
   {
     "name": "Fall Again",
     "artist": "Hayla",
     "link": "https://open.spotify.com/track/3oOvEw1pgxMtrQMNgPWQHL",
-    "rank": 51,
+    "rank": 53,
     "album_url": "https://i.scdn.co/image/ab67616d0000b2737c0c9ff9fc1a7006bb5b9798",
     "source": "spotify"
   },
@@ -411,7 +427,7 @@
     "name": "Love On You (feat. Griff Clawson)",
     "artist": "The Magician, A-Trak, Griff Clawson",
     "link": "https://open.spotify.com/track/7Iv0928rZ28KjivhAJPqfC",
-    "rank": 52,
+    "rank": 54,
     "album_url": "https://i.scdn.co/image/ab67616d0000b2736590278db70c6cfc9365f017",
     "source": "spotify"
   },
@@ -419,15 +435,23 @@
     "name": "Saving Up",
     "artist": "Dom Dolla",
     "link": "https://open.spotify.com/track/787Y2idwCU2Rk60Prv4wpr",
-    "rank": 53,
+    "rank": 55,
     "album_url": "https://i.scdn.co/image/ab67616d0000b273585c329dfd9cdeb22b6cd247",
+    "source": "spotify"
+  },
+  {
+    "name": "Right Spot",
+    "artist": "HoneyLuv",
+    "link": "https://open.spotify.com/track/2pgCADpQ8xzPTRt2YwmJue",
+    "rank": 56,
+    "album_url": "https://i.scdn.co/image/ab67616d0000b273d05f2d52aed311d78d2919db",
     "source": "spotify"
   },
   {
     "name": "She's On My Mind",
     "artist": "Romy",
     "link": "https://open.spotify.com/track/4heve4ydl1u6V3AD4moZq9",
-    "rank": 54,
+    "rank": 57,
     "album_url": "https://i.scdn.co/image/ab67616d0000b27335ba0d2342ebda40506ded9f",
     "source": "spotify"
   },
@@ -435,7 +459,7 @@
     "name": "Lifetime",
     "artist": "Tobiahs",
     "link": "https://open.spotify.com/track/1oH6oeK8iKeRL9VTQY5w2r",
-    "rank": 55,
+    "rank": 58,
     "album_url": "https://i.scdn.co/image/ab67616d0000b273f825c5f3a2a0d8857636328d",
     "source": "spotify"
   },
@@ -443,7 +467,7 @@
     "name": "Lover/Friend",
     "artist": "KAYTRANADA, Rochelle Jordan",
     "link": "https://open.spotify.com/track/5ahq8vkzMznGmfN2EVOukP",
-    "rank": 56,
+    "rank": 59,
     "album_url": "https://i.scdn.co/image/ab67616d0000b27300540a663c95a4c2ec8a8c0c",
     "source": "spotify"
   },
@@ -451,7 +475,7 @@
     "name": "Cash For Love",
     "artist": "Carlita",
     "link": "https://open.spotify.com/track/1QCjgRff7EzAtIUlOpWSJV",
-    "rank": 57,
+    "rank": 60,
     "album_url": "https://i.scdn.co/image/ab67616d0000b273bf1be90a31a8e36214fe4557",
     "source": "spotify"
   },
@@ -459,7 +483,7 @@
     "name": "If U Need It",
     "artist": "Sammy Virji",
     "link": "https://open.spotify.com/track/5CaUUACiQFEf4zR5WoeIrp",
-    "rank": 58,
+    "rank": 61,
     "album_url": "https://i.scdn.co/image/ab67616d0000b273d5b8fa0ff5dee9da54847694",
     "source": "spotify"
   },
@@ -467,7 +491,7 @@
     "name": "Mr. Sandman",
     "artist": "Oppidan",
     "link": "https://open.spotify.com/track/1Y2eoRAhwsjCKcdNnrZOzV",
-    "rank": 59,
+    "rank": 62,
     "album_url": "https://i.scdn.co/image/ab67616d0000b273d3c4ea69e980069f84b75d57",
     "source": "spotify"
   },
@@ -475,23 +499,15 @@
     "name": "I Just Need (with Lyrah)",
     "artist": "Daniel Allan, Lyrah",
     "link": "https://open.spotify.com/track/6JbeNVHHrvRGY9BjB8hmkR",
-    "rank": 60,
+    "rank": 63,
     "album_url": "https://i.scdn.co/image/ab67616d0000b27341771976993a37d7a4262ac2",
-    "source": "spotify"
-  },
-  {
-    "name": "Other Side",
-    "artist": "AVAION, BUNT.",
-    "link": "https://open.spotify.com/track/74qKLdiiTnXNqh2Co21RlJ",
-    "rank": 61,
-    "album_url": "https://i.scdn.co/image/ab67616d0000b273696131b29b49113b48925103",
     "source": "spotify"
   },
   {
     "name": "Frikitona",
     "artist": "Andruss",
     "link": "https://open.spotify.com/track/5ls4FQAoSlAFPFnaYpeyhn",
-    "rank": 62,
+    "rank": 64,
     "album_url": "https://i.scdn.co/image/ab67616d0000b2731b1bcd78b734a63467c99765",
     "source": "spotify"
   },
@@ -499,7 +515,7 @@
     "name": "Black Ice",
     "artist": "Subtronics, Rezz",
     "link": "https://open.spotify.com/track/1oacAKa5ReNOfuqaJ1gdBJ",
-    "rank": 63,
+    "rank": 65,
     "album_url": "https://i.scdn.co/image/ab67616d0000b27336c202616949f841fdbf6d7f",
     "source": "spotify"
   },
@@ -507,23 +523,15 @@
     "name": "iluv",
     "artist": "Effy, Mall Grab",
     "link": "https://open.spotify.com/track/4u0N8a9adNalT4XdihjeSr",
-    "rank": 64,
+    "rank": 66,
     "album_url": "https://i.scdn.co/image/ab67616d0000b273d0f6e166d6c605b2406d788a",
-    "source": "spotify"
-  },
-  {
-    "name": "This Is My Life",
-    "artist": "HoneyLuv, Roland Clark",
-    "link": "https://open.spotify.com/track/5oOUGZNKsx5LEE1FYyLcoB",
-    "rank": 65,
-    "album_url": "https://i.scdn.co/image/ab67616d0000b27387354bc96c630292c5d1b844",
     "source": "spotify"
   },
   {
     "name": "Overdrive (feat. Norma Jean Martine)",
     "artist": "Ofenbach, Norma Jean Martine",
     "link": "https://open.spotify.com/track/3bK1zVFBKIzYjmptmI4NsJ",
-    "rank": 66,
+    "rank": 67,
     "album_url": "https://i.scdn.co/image/ab67616d0000b273249f764814d57dc5dfc462c7",
     "source": "spotify"
   },
@@ -531,7 +539,7 @@
     "name": "Dernière danse - Techno Mix",
     "artist": "Indila, BENNETT",
     "link": "https://open.spotify.com/track/5fIZ683j2xPeLAXfHeWKEG",
-    "rank": 67,
+    "rank": 68,
     "album_url": "https://i.scdn.co/image/ab67616d0000b273d691a8f53f6b487ecbe27cbf",
     "source": "spotify"
   },
@@ -539,7 +547,7 @@
     "name": "buttons!",
     "artist": "Knock2, Dillon Francis",
     "link": "https://open.spotify.com/track/5ekfEEnkAHxrn2KNvyZg7E",
-    "rank": 68,
+    "rank": 69,
     "album_url": "https://i.scdn.co/image/ab67616d0000b2731a7d590af9e58e58d561d31b",
     "source": "spotify"
   },
@@ -547,7 +555,7 @@
     "name": "Cutting Loose",
     "artist": "Disco Lines, J. Worra, Anabel Englund",
     "link": "https://open.spotify.com/track/6n34hL7CBdTVeekAeprHow",
-    "rank": 69,
+    "rank": 70,
     "album_url": "https://i.scdn.co/image/ab67616d0000b273899bbbee6d9c8292d3023c31",
     "source": "spotify"
   },
@@ -555,7 +563,7 @@
     "name": "Dance No More (with Kaleena Zanders)",
     "artist": "Sunday Scaries, Kaleena Zanders",
     "link": "https://open.spotify.com/track/7gDgphzQU0urJU3AtoLJup",
-    "rank": 70,
+    "rank": 71,
     "album_url": "https://i.scdn.co/image/ab67616d0000b273b57ab5b27e907f7160a44718",
     "source": "spotify"
   },
@@ -563,7 +571,7 @@
     "name": "Shook Pt. 3 - Radio Edit",
     "artist": "Nick Morgan",
     "link": "https://open.spotify.com/track/2VcQUEGgTGfJLLjAM8iqLj",
-    "rank": 71,
+    "rank": 72,
     "album_url": "https://i.scdn.co/image/ab67616d0000b273a0ed84a5ac0e024b2b46a9e4",
     "source": "spotify"
   },
@@ -571,16 +579,8 @@
     "name": "system",
     "artist": "salute",
     "link": "https://open.spotify.com/track/0Tc7p0cKE8078NVGRDcDOX",
-    "rank": 72,
-    "album_url": "https://i.scdn.co/image/ab67616d0000b273f292ee4172c5a52f2499fd97",
-    "source": "spotify"
-  },
-  {
-    "name": "You and Me",
-    "artist": "Amelie Lens",
-    "link": "https://open.spotify.com/track/4Elb9ia3RBhTDtJN8qe29k",
     "rank": 73,
-    "album_url": "https://i.scdn.co/image/ab67616d0000b273f09a1148a8bdc0f03b6d226e",
+    "album_url": "https://i.scdn.co/image/ab67616d0000b273f292ee4172c5a52f2499fd97",
     "source": "spotify"
   },
   {
