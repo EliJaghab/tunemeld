@@ -1,9 +1,201 @@
 [
   {
+    "name": "Teka",
+    "artist": "DJ Snake, Peso Pluma",
+    "link": "https://soundcloud.com/djsnake/teka",
+    "rank": 1,
+    "album_url": "https://i1.sndcdn.com/artworks-vasins8tqv82-0-original.jpg",
+    "source": "soundcloud"
+  },
+  {
+    "name": "Your Love",
+    "artist": "The Outfield \u0026 Diplo",
+    "link": "https://soundcloud.com/diplo/the-outfield-diplo-your-love",
+    "rank": 2,
+    "album_url": "https://i1.sndcdn.com/artworks-yOI4OG0evF4mEI0j-3Hwqrw-original.jpg",
+    "source": "soundcloud"
+  },
+  {
+    "name": "Black Ice (feat. Phantogram)",
+    "artist": "Subtronics, Rezz",
+    "link": "https://soundcloud.com/subtronics/subtronics-rezz-black-ice-feat-phantogram",
+    "rank": 3,
+    "album_url": "https://i1.sndcdn.com/artworks-zaUGONKnWdQzfNbt-WiUcdg-original.jpg",
+    "source": "soundcloud"
+  },
+  {
+    "name": "Maybe",
+    "artist": "BUNT.",
+    "link": "https://soundcloud.com/buntmusic/maybe",
+    "rank": 4,
+    "album_url": "https://i1.sndcdn.com/artworks-4GCQbdscYWEM-0-original.jpg",
+    "source": "soundcloud"
+  },
+  {
+    "name": "ACID",
+    "artist": "Wooli x SampliFire",
+    "link": "https://soundcloud.com/woolimusic/acid",
+    "rank": 5,
+    "album_url": "https://i1.sndcdn.com/artworks-xLHmO94ybWRRdPTz-JZEKmg-original.jpg",
+    "source": "soundcloud"
+  },
+  {
+    "name": "Deadweight",
+    "artist": "JAWNS \u0026 Party Favor",
+    "link": "https://soundcloud.com/sablevalley/deadweight",
+    "rank": 6,
+    "album_url": "https://i1.sndcdn.com/artworks-uEvOk0j0bLVl5gO9-XAltZg-original.jpg",
+    "source": "soundcloud"
+  },
+  {
+    "name": "Give It To Me Good",
+    "artist": "SIDEPIECE",
+    "link": "https://soundcloud.com/youasidepiece/give-it-to-me-good",
+    "rank": 7,
+    "album_url": "https://i1.sndcdn.com/artworks-3aET9BGBNtzK-0-original.jpg",
+    "source": "soundcloud"
+  },
+  {
+    "name": "For Life (feat. Nile Rodgers)",
+    "artist": "Kygo",
+    "link": "https://soundcloud.com/kygo/for-life-feat-zak-abel-nile",
+    "rank": 8,
+    "album_url": "https://i1.sndcdn.com/artworks-nCTbYj9xWgRh-0-original.jpg",
+    "source": "soundcloud"
+  },
+  {
+    "name": "Fallin Luv",
+    "artist": "Gordo \u0026 Jeria",
+    "link": "https://soundcloud.com/gordoszn/gordo-jeria-fallin-luv",
+    "rank": 9,
+    "album_url": "https://i1.sndcdn.com/artworks-AOrHcU80SoS9-0-original.jpg",
+    "source": "soundcloud"
+  },
+  {
+    "name": "Lift You Up",
+    "artist": "LF SYSTEM",
+    "link": "https://soundcloud.com/lfsystem/lift-you-up",
+    "rank": 10,
+    "album_url": "https://i1.sndcdn.com/artworks-gfLLcmaU1taK-0-original.jpg",
+    "source": "soundcloud"
+  },
+  {
+    "name": "Satellite",
+    "artist": "Dimension x Alison Wonderland",
+    "link": "https://soundcloud.com/dimension_uk/satellite",
+    "rank": 11,
+    "album_url": "https://i1.sndcdn.com/artworks-O7b1MrlNECoiwX3F-JikyoA-original.jpg",
+    "source": "soundcloud"
+  },
+  {
+    "name": "Forgive Me (Live) (feat. Izzy Bizu) (ODESZA VIP Remix)",
+    "artist": "ODESZA",
+    "link": "https://soundcloud.com/odesza/odesza-featuring-izzy-bizu",
+    "rank": 12,
+    "album_url": "https://i1.sndcdn.com/artworks-8N1IrP3y9sRz-0-original.png",
+    "source": "soundcloud"
+  },
+  {
+    "name": "Light",
+    "artist": "Will Sparks",
+    "link": "https://soundcloud.com/willsparks/light",
+    "rank": 13,
+    "album_url": "https://i1.sndcdn.com/artworks-6XhsiNab4lLW-0-original.jpg",
+    "source": "soundcloud"
+  },
+  {
+    "name": "If The World Was Ending",
+    "artist": "NURKO \u0026 Dayce Williams",
+    "link": "https://soundcloud.com/proximity/nurko-dayce-williams-if-the-world-was-ending",
+    "rank": 14,
+    "album_url": "https://i1.sndcdn.com/artworks-NNEpUtMQTigeGyHH-m0EGpw-original.jpg",
+    "source": "soundcloud"
+  },
+  {
+    "name": "Black Magic",
+    "artist": "SubDocta \u0026 Tyro",
+    "link": "https://soundcloud.com/bassrush/subdocta-tyro-black-magic",
+    "rank": 15,
+    "album_url": "https://i1.sndcdn.com/artworks-rnxEeS5j0TXLZjFF-XdOD2w-original.jpg",
+    "source": "soundcloud"
+  },
+  {
+    "name": "FALLEN ANGEL",
+    "artist": "Nu-La, Manila Killa",
+    "link": "https://soundcloud.com/manilakilla/manila-killa-fallen-angel-feat",
+    "rank": 16,
+    "album_url": "https://i1.sndcdn.com/artworks-b21wOd1lvEXH-0-original.jpg",
+    "source": "soundcloud"
+  },
+  {
+    "name": "Before You Leave Me (TELYKAST Remix)",
+    "artist": "Alex Warren",
+    "link": "https://soundcloud.com/alexwaarren/before-you-leave-me-telykast",
+    "rank": 17,
+    "album_url": "https://i1.sndcdn.com/artworks-vVvARNushRIi-0-original.jpg",
+    "source": "soundcloud"
+  },
+  {
+    "name": "How Does It Feel",
+    "artist": "Jerro, Kasbo",
+    "link": "https://soundcloud.com/thisneverhappenedlabel/jerro-kasbo-how-does-it-feel",
+    "rank": 18,
+    "album_url": "https://i1.sndcdn.com/artworks-yEuJUieQJuhrhhtZ-zlQ3Xw-original.jpg",
+    "source": "soundcloud"
+  },
+  {
+    "name": "In My Bones",
+    "artist": "Lost Frequencies",
+    "link": "https://soundcloud.com/lo-freq-1/in-my-bones",
+    "rank": 19,
+    "album_url": "https://i1.sndcdn.com/artworks-ITaOwFrsyokR-0-original.jpg",
+    "source": "soundcloud"
+  },
+  {
+    "name": "Shake It",
+    "artist": "wuki",
+    "link": "https://soundcloud.com/iamwuki/shake-it",
+    "rank": 20,
+    "album_url": "https://i1.sndcdn.com/artworks-A9Olk1WlY1EJ-0-original.png",
+    "source": "soundcloud"
+  },
+  {
+    "name": "To The Beat",
+    "artist": "Dimitri Vegas \u0026 Like Mike, Regard, Natti Natasha, SASH!",
+    "link": "https://soundcloud.com/smashthehouse/dimitri-vegas-like-mike-regard-natti-natasha-sash-to-the-beat",
+    "rank": 21,
+    "album_url": "https://i1.sndcdn.com/artworks-GZuKIH43niB2jzkM-Dxt4Rg-original.jpg",
+    "source": "soundcloud"
+  },
+  {
+    "name": "Animal",
+    "artist": "R3HAB, Jason Derulo",
+    "link": "https://soundcloud.com/r3hab/r3hab-jason-derulo-animal",
+    "rank": 22,
+    "album_url": "https://i1.sndcdn.com/artworks-Vst2nBTHxrXb-0-original.jpg",
+    "source": "soundcloud"
+  },
+  {
+    "name": "How You Feel (feat. Leven Kali)",
+    "artist": "ANOTR",
+    "link": "https://soundcloud.com/anotr/how-you-feel-feat-leven-kali",
+    "rank": 23,
+    "album_url": "https://i1.sndcdn.com/artworks-F96xezUFQVlB-0-original.jpg",
+    "source": "soundcloud"
+  },
+  {
+    "name": "BLAM",
+    "artist": "Jody Wisternoff \u0026 Blake.08",
+    "link": "https://soundcloud.com/anjunadeep/jody-wisternoff-blake08-blam",
+    "rank": 24,
+    "album_url": "https://i1.sndcdn.com/artworks-I8LTXJquA0QtLmhz-li8mWA-original.jpg",
+    "source": "soundcloud"
+  },
+  {
     "name": "BerwynGesaffNeighbours",
     "artist": "Fred again.. x BERWYN x Gesaffelstein",
     "link": "https://soundcloud.com/fredagain/fred-again-x-berwyn-x",
-    "rank": 1,
+    "rank": 25,
     "album_url": "https://i1.sndcdn.com/artworks-AzQXmbRGyFGo-0-original.jpg",
     "source": "soundcloud"
   },
@@ -11,23 +203,23 @@
     "name": "EAT THE BASS",
     "artist": "John Summit",
     "link": "https://soundcloud.com/johnsummit/john-summit-eat-the-bass",
-    "rank": 2,
+    "rank": 26,
     "album_url": "https://i1.sndcdn.com/artworks-Yo74dqQlU3AtiDR4-cpPJfA-original.jpg",
     "source": "soundcloud"
   },
   {
     "name": "Big Bang",
-    "artist": "DJ SNAKE",
+    "artist": "DJ Snake, Crankdat",
     "link": "https://soundcloud.com/djsnake/big-bang",
-    "rank": 3,
-    "album_url": "https://i1.sndcdn.com/artworks-qrThyul9YmBc-0-original.jpg",
+    "rank": 27,
+    "album_url": "https://i1.sndcdn.com/artworks-Sre8pF2X2XNa-0-original.jpg",
     "source": "soundcloud"
   },
   {
     "name": "The von dutch remix with skream and benga",
     "artist": "Charli XCX",
     "link": "https://soundcloud.com/iambenga/charli-xcx-the-von-dutch-remix-with-skream-and-benga",
-    "rank": 4,
+    "rank": 28,
     "album_url": "https://i1.sndcdn.com/artworks-xb9J7K2SvNyc74zE-xIaMNw-original.jpg",
     "source": "soundcloud"
   },
@@ -35,7 +227,7 @@
     "name": "Roar (Original Mix)",
     "artist": "Charlotte de Witte",
     "link": "https://soundcloud.com/kntxtmusic/charlotte-de-witte-roar-original-mix",
-    "rank": 5,
+    "rank": 29,
     "album_url": "https://i1.sndcdn.com/artworks-gr8HGK3Xnl6Wa3ZZ-mo496w-original.jpg",
     "source": "soundcloud"
   },
@@ -43,7 +235,7 @@
     "name": "Not Exactly (Rebūke Remix)",
     "artist": "deadmau5",
     "link": "https://soundcloud.com/deadmau5/deadmau5-not-exactly-reb-ke",
-    "rank": 6,
+    "rank": 30,
     "album_url": "https://i1.sndcdn.com/artworks-kvlnJpbaUoD7-0-original.jpg",
     "source": "soundcloud"
   },
@@ -51,7 +243,7 @@
     "name": "Restless (feat. Mougleta)",
     "artist": "NGHTMRE \u0026 Liquid Stranger",
     "link": "https://soundcloud.com/nghtmre/nghtmre-liquid-stranger-restless-feat-mougleta",
-    "rank": 7,
+    "rank": 31,
     "album_url": "https://i1.sndcdn.com/artworks-yY0ZsSTUcSTzCn4P-lHKUqg-original.jpg",
     "source": "soundcloud"
   },
@@ -59,7 +251,7 @@
     "name": "Cards On The Table",
     "artist": "Nia Archives",
     "link": "https://soundcloud.com/nia-archives/cards-on-the-table",
-    "rank": 8,
+    "rank": 32,
     "album_url": "https://i1.sndcdn.com/artworks-cpsafNzPKEjA-0-original.jpg",
     "source": "soundcloud"
   },
@@ -67,7 +259,7 @@
     "name": "STUPID IN LOVE (feat. HUH YUNJIN of LE SSERAFIM) [Dabin Remix]",
     "artist": "MAX",
     "link": "https://soundcloud.com/officialmaxmusic/stupid-in-love-feat-huh-4",
-    "rank": 9,
+    "rank": 33,
     "album_url": "https://i1.sndcdn.com/artworks-cAJa0vuHhGsc-0-original.jpg",
     "source": "soundcloud"
   },
@@ -75,7 +267,7 @@
     "name": "365",
     "artist": "NIIKO X SWAE",
     "link": "https://soundcloud.com/niiko_swae/niiko-x-swae-365",
-    "rank": 10,
+    "rank": 34,
     "album_url": "https://i1.sndcdn.com/artworks-GGKKWRIxlJq6-0-original.png",
     "source": "soundcloud"
   },
@@ -83,7 +275,7 @@
     "name": "Feel The Vibe",
     "artist": "Kill The Noise, Trivecta \u0026 Doktor",
     "link": "https://soundcloud.com/ophelia_records/kill-the-noise-trivecta-doktor-feel-the-vibe",
-    "rank": 11,
+    "rank": 35,
     "album_url": "https://i1.sndcdn.com/artworks-olC3SwxD9G6uT2gs-3ENHBw-original.jpg",
     "source": "soundcloud"
   },
@@ -91,7 +283,7 @@
     "name": "Seek Love (On The Beach)",
     "artist": "Alok",
     "link": "https://soundcloud.com/livealok/seek-love-on-the-beach",
-    "rank": 12,
+    "rank": 36,
     "album_url": "https://i1.sndcdn.com/artworks-aEaba3Tj90r1-0-original.jpg",
     "source": "soundcloud"
   },
@@ -99,7 +291,7 @@
     "name": "Venom (feat. barnacle boi)",
     "artist": "UZ",
     "link": "https://soundcloud.com/monstercat/uz-venom-feat-barnacle-boi",
-    "rank": 13,
+    "rank": 37,
     "album_url": "https://i1.sndcdn.com/artworks-qvGLzEsgyKKP4vrK-Lo0onQ-original.jpg",
     "source": "soundcloud"
   },
@@ -107,7 +299,7 @@
     "name": "Glad I Found You",
     "artist": "Elderbrook",
     "link": "https://soundcloud.com/elderbrook/elderbrook-george-fitzgerald-glad-i-found-you-teaser",
-    "rank": 14,
+    "rank": 38,
     "album_url": "https://i1.sndcdn.com/artworks-3uab1aUJS1mX-0-original.jpg",
     "source": "soundcloud"
   },
@@ -115,7 +307,7 @@
     "name": "Oxygen",
     "artist": "BIJOU",
     "link": "https://soundcloud.com/bijou/oxygen",
-    "rank": 15,
+    "rank": 39,
     "album_url": "https://i1.sndcdn.com/artworks-nXhPE0PGy1gV-0-original.jpg",
     "source": "soundcloud"
   },
@@ -123,7 +315,7 @@
     "name": "Stay Still",
     "artist": "Le Youth, Forester, Lyrah",
     "link": "https://soundcloud.com/thisneverhappenedlabel/le-youth-forester-lyrah-stay-still",
-    "rank": 16,
+    "rank": 40,
     "album_url": "https://i1.sndcdn.com/artworks-YQjTl0yeEMToyRxp-ulzhmA-original.jpg",
     "source": "soundcloud"
   },
@@ -131,7 +323,7 @@
     "name": "Shadows (feat. Blythe)",
     "artist": "Matisse \u0026 Sadko",
     "link": "https://soundcloud.com/matissesadko/shadows-feat-blythe",
-    "rank": 17,
+    "rank": 41,
     "album_url": "https://i1.sndcdn.com/artworks-LNIiWp4c6UQQ-0-original.jpg",
     "source": "soundcloud"
   },
@@ -139,7 +331,7 @@
     "name": "Feeling Good",
     "artist": "Hypaton x David Guetta",
     "link": "https://soundcloud.com/davidguetta/hypaton-x-david-guetta-feeling",
-    "rank": 18,
+    "rank": 42,
     "album_url": "https://i1.sndcdn.com/artworks-1JrZdjVyEgSm-0-original.jpg",
     "source": "soundcloud"
   },
@@ -147,7 +339,7 @@
     "name": "Friends (ARTBAT Remix)",
     "artist": "MEDUZA",
     "link": "https://soundcloud.com/meduzamusic/meduza-friends-artbat-remix",
-    "rank": 19,
+    "rank": 43,
     "album_url": "https://i1.sndcdn.com/artworks-ogXRCDlZQEN6-0-original.jpg",
     "source": "soundcloud"
   },
@@ -155,7 +347,7 @@
     "name": "Dhunga (with Toxic Rob)",
     "artist": "TroyBoi",
     "link": "https://soundcloud.com/troyboi/dhunga",
-    "rank": 20,
+    "rank": 44,
     "album_url": "https://i1.sndcdn.com/artworks-v1byGGqyDy5eNYRE-qmcz3Q-original.jpg",
     "source": "soundcloud"
   },
@@ -163,7 +355,7 @@
     "name": "Now Love Will Begin",
     "artist": "Armin van Buuren",
     "link": "https://soundcloud.com/arminvanbuuren/now-love-will-begin",
-    "rank": 21,
+    "rank": 45,
     "album_url": "https://i1.sndcdn.com/artworks-bd1EUpsXznYq-0-original.jpg",
     "source": "soundcloud"
   },
@@ -171,7 +363,7 @@
     "name": "Closer (feat. Chenai)",
     "artist": "Ben Hemsley",
     "link": "https://soundcloud.com/benhemsley/closer-feat-chenai-1",
-    "rank": 22,
+    "rank": 46,
     "album_url": "https://i1.sndcdn.com/artworks-VYO41Tkhi5yQ-0-original.jpg",
     "source": "soundcloud"
   },
@@ -179,7 +371,7 @@
     "name": "The Weekend",
     "artist": "Anti Up",
     "link": "https://soundcloud.com/antiupmusic/the-weekend",
-    "rank": 23,
+    "rank": 47,
     "album_url": "https://i1.sndcdn.com/artworks-7VY9o3SP5H4Z-0-original.jpg",
     "source": "soundcloud"
   },
@@ -187,7 +379,7 @@
     "name": "Tear Me Down",
     "artist": "K?D",
     "link": "https://soundcloud.com/nightmoderecs/tearmedown",
-    "rank": 24,
+    "rank": 48,
     "album_url": "https://i1.sndcdn.com/artworks-NRArCwpm9dK56JWg-zmoxPg-original.jpg",
     "source": "soundcloud"
   },
@@ -195,7 +387,7 @@
     "name": "I Don't Wanna Wait",
     "artist": "David Guetta \u0026 OneRepublic",
     "link": "https://soundcloud.com/davidguetta/david-guetta-onerepublic-i",
-    "rank": 25,
+    "rank": 49,
     "album_url": "https://i1.sndcdn.com/artworks-HXhWUOfPJFdv-0-original.jpg",
     "source": "soundcloud"
   },
@@ -203,200 +395,8 @@
     "name": "Waves",
     "artist": "Zeds Dead X Flux Pavilion X DeathbyRomy",
     "link": "https://soundcloud.com/zedsdead/zeds-dead-x-flux-pavilion-x-deathbyromy-waves",
-    "rank": 26,
-    "album_url": "https://i1.sndcdn.com/artworks-Fbb3wjeHgi9HYbiR-GjXUtw-original.jpg",
-    "source": "soundcloud"
-  },
-  {
-    "name": "Love Potion",
-    "artist": "Effin",
-    "link": "https://soundcloud.com/effin/effin-love-potion",
-    "rank": 27,
-    "album_url": "https://i1.sndcdn.com/artworks-3zdV2V6wgvaFX4id-xpN0CQ-original.jpg",
-    "source": "soundcloud"
-  },
-  {
-    "name": "Hiding",
-    "artist": "Two Friends ft. Arizona Zervas",
-    "link": "https://soundcloud.com/two-friends/twofriendshiding",
-    "rank": 28,
-    "album_url": "https://i1.sndcdn.com/artworks-qhSNpU2MCNdexYHa-0u0jcA-original.jpg",
-    "source": "soundcloud"
-  },
-  {
-    "name": "Mind Still (feat. blythe)",
-    "artist": "Sonny Fodera",
-    "link": "https://soundcloud.com/sonnyfodera/mind_still_v7",
-    "rank": 29,
-    "album_url": "https://i1.sndcdn.com/artworks-RXCFzz5K8Jm7-0-original.jpg",
-    "source": "soundcloud"
-  },
-  {
-    "name": "All That You Need",
-    "artist": "Gorgon City",
-    "link": "https://soundcloud.com/gorgon-city/all-that-you-need",
-    "rank": 30,
-    "album_url": "https://i1.sndcdn.com/artworks-kAyOXLXeSpVR-0-original.jpg",
-    "source": "soundcloud"
-  },
-  {
-    "name": "PATT (Party All The Time) (Adam Beyer, Layton Giordani \u0026 Green Velvet Remix)",
-    "artist": "Sharam",
-    "link": "https://soundcloud.com/sharam/sharam-party-all-the-time-adam",
-    "rank": 31,
-    "album_url": "https://i1.sndcdn.com/artworks-nrmGPoX8g9e8-0-original.png",
-    "source": "soundcloud"
-  },
-  {
-    "name": "Whole Lotta Drugs",
-    "artist": "Dillon Francis \u0026 Ship Wrek",
-    "link": "https://soundcloud.com/dillonfrancis/dillon-francis-ship-wrek-whole",
-    "rank": 32,
-    "album_url": "https://i1.sndcdn.com/artworks-CKxRwSHgMKXq-0-original.png",
-    "source": "soundcloud"
-  },
-  {
-    "name": "CLICK",
-    "artist": "GHENGAR X P$YCHEDELIC",
-    "link": "https://soundcloud.com/ghastly/click",
-    "rank": 33,
-    "album_url": "https://i1.sndcdn.com/artworks-0L1ifXd1LcQCxeb6-ym8BaA-original.jpg",
-    "source": "soundcloud"
-  },
-  {
-    "name": "1+1=11 (Edit)",
-    "artist": "Peggy Gou",
-    "link": "https://soundcloud.com/peggygou/peggy-gou-1-1-11-edit",
-    "rank": 34,
-    "album_url": "https://i1.sndcdn.com/artworks-bErB6gIr023C-0-original.png",
-    "source": "soundcloud"
-  },
-  {
-    "name": "Devotion",
-    "artist": "KSHMR",
-    "link": "https://soundcloud.com/kshmr/devotion",
-    "rank": 35,
-    "album_url": "https://i1.sndcdn.com/artworks-jhUW1I7yJ929-0-original.jpg",
-    "source": "soundcloud"
-  },
-  {
-    "name": "Drive ft. KIDDO",
-    "artist": "Steve Aoki, KIDDO",
-    "link": "https://soundcloud.com/steveaoki/steve-aoki-kiddo-drive-ft",
-    "rank": 36,
-    "album_url": "https://i1.sndcdn.com/artworks-aSh4r44zBsOB-0-original.jpg",
-    "source": "soundcloud"
-  },
-  {
-    "name": "If You Love Me Now",
-    "artist": "Slushii",
-    "link": "https://soundcloud.com/slushii73059/if-you-love-me-now",
-    "rank": 37,
-    "album_url": "https://i1.sndcdn.com/artworks-KdHHSpUVPQMa-0-original.jpg",
-    "source": "soundcloud"
-  },
-  {
-    "name": "Changes",
-    "artist": "Empire Of The Sun",
-    "link": "https://soundcloud.com/empireofthesunsound/changes",
-    "rank": 38,
-    "album_url": "https://i1.sndcdn.com/artworks-o86tOPAQE0My-0-original.jpg",
-    "source": "soundcloud"
-  },
-  {
-    "name": "Club classics",
-    "artist": "charlixcx",
-    "link": "https://soundcloud.com/charlixcx/club-classics",
-    "rank": 39,
-    "album_url": "https://i1.sndcdn.com/artworks-eqasRaovduxN-0-original.jpg",
-    "source": "soundcloud"
-  },
-  {
-    "name": "Finesse",
-    "artist": "Michael Sparks \u0026 Basstrick",
-    "link": "https://soundcloud.com/housecallrecs/michael-sparks-basstrick-finesse",
-    "rank": 40,
-    "album_url": "https://i1.sndcdn.com/artworks-yQpdhgkrGCzJzr0q-4HqMnw-original.jpg",
-    "source": "soundcloud"
-  },
-  {
-    "name": "i hate edm",
-    "artist": "RIOT TEN",
-    "link": "https://soundcloud.com/riotten/i-hate-edm",
-    "rank": 41,
-    "album_url": "https://i1.sndcdn.com/artworks-KsGsqxg210H9-0-original.jpg",
-    "source": "soundcloud"
-  },
-  {
-    "name": "End Of Time (feat. Jordan Shaw)",
-    "artist": "Lucas \u0026 Steve",
-    "link": "https://soundcloud.com/lucasandsteve/end-of-time-feat-jordan-shaw",
-    "rank": 42,
-    "album_url": "https://i1.sndcdn.com/artworks-QWH8V5RldKFH-0-original.jpg",
-    "source": "soundcloud"
-  },
-  {
-    "name": "Jump Jump Jump",
-    "artist": "W\u0026W , ItaloBrothers \u0026 Captain Curtis",
-    "link": "https://soundcloud.com/wandw/w-w-italobrothers-captain",
-    "rank": 43,
-    "album_url": "https://i1.sndcdn.com/artworks-iX9uWYZVHXf4-0-original.jpg",
-    "source": "soundcloud"
-  },
-  {
-    "name": "Business As Usual (night shift mix)",
-    "artist": "Eliza Rose x MJ Cole",
-    "link": "https://soundcloud.com/elizarosemusic/business-as-usual-night-shift-mix",
-    "rank": 44,
-    "album_url": "https://i1.sndcdn.com/artworks-jvxOYUbtlkq0cYjW-LqkJgg-original.jpg",
-    "source": "soundcloud"
-  },
-  {
-    "name": "Peaceful Avenues",
-    "artist": "anamē \u0026 Lydmor",
-    "link": "https://soundcloud.com/anjunabeats/aname-lydmor-peaceful-avenues-1",
-    "rank": 45,
-    "album_url": "https://i1.sndcdn.com/artworks-mhiyqAydYdGjyzBL-Um0aLw-original.jpg",
-    "source": "soundcloud"
-  },
-  {
-    "name": "Concentrate",
-    "artist": "Paul Oakenfold \u0026 Carl Cox",
-    "link": "https://soundcloud.com/pauloakenfold/paul-oakenfold-carl-cox",
-    "rank": 46,
-    "album_url": "https://i1.sndcdn.com/artworks-k7nFaAaS02RU-0-original.png",
-    "source": "soundcloud"
-  },
-  {
-    "name": "9mm",
-    "artist": "Brutalismus 3000",
-    "link": "https://soundcloud.com/brutalismus-3000/9mm",
-    "rank": 47,
-    "album_url": "https://i1.sndcdn.com/artworks-H93jwTj6l9K6-0-original.jpg",
-    "source": "soundcloud"
-  },
-  {
-    "name": "Stolen",
-    "artist": "Markus Schulz",
-    "link": "https://soundcloud.com/markusschulz/stolen-1",
-    "rank": 48,
-    "album_url": "https://i1.sndcdn.com/artworks-c5m4cKltMCux-0-original.png",
-    "source": "soundcloud"
-  },
-  {
-    "name": "Weak (Mav's Version)",
-    "artist": "Vintage Culture, Maverick Sabre, Tom Breu",
-    "link": "https://soundcloud.com/vintageculturemusic/vintage-culture-maverick-2",
-    "rank": 49,
-    "album_url": "https://i1.sndcdn.com/artworks-VOdev7o7TJjN-0-original.jpg",
-    "source": "soundcloud"
-  },
-  {
-    "name": "H.O.T.",
-    "artist": "Rico Nasty \u0026 Boys Noize",
-    "link": "https://soundcloud.com/boysnoize/rico-nasty-boys-noize-h-o-t",
     "rank": 50,
-    "album_url": "https://i1.sndcdn.com/artworks-r9o6xaxz7dhm-0-original.jpg",
+    "album_url": "https://i1.sndcdn.com/artworks-Fbb3wjeHgi9HYbiR-GjXUtw-original.jpg",
     "source": "soundcloud"
   }
 ]
