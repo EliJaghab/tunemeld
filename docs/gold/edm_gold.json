@@ -1,19 +1,19 @@
 [
   {
-    "name": "The von dutch remix with skream and benga",
-    "artist": "Charli XCX",
-    "link": "https://music.apple.com/us/album/the-von-dutch-remix-with-skream-and-benga/1740421168?i=1740421183",
+    "name": "Shiver",
+    "artist": "John Summit \u0026 Hayla",
+    "link": "https://music.apple.com/us/album/shiver/1728957955?i=1728957956",
     "rank": 1,
-    "album_url": "https://i.scdn.co/image/ab67616d0000b273d3b38e43d8f074e3f8479829",
+    "album_url": "",
     "source": "soundcloud",
     "additional_sources": [
-      "spotify"
+      "apple_music"
     ]
   },
   {
-    "name": "Mind Still (feat. blythe)",
-    "artist": "Sonny Fodera",
-    "link": "https://music.apple.com/us/album/mind-still-feat-blythe/1729414512?i=1729414926",
+    "name": "Teka",
+    "artist": "DJ Snake \u0026 Peso Pluma",
+    "link": "https://music.apple.com/us/album/teka/1741006070?i=1741006093",
     "rank": 2,
     "album_url": "",
     "source": "soundcloud",
@@ -22,11 +22,11 @@
     ]
   },
   {
-    "name": "Shiver",
-    "artist": "John Summit \u0026 Hayla",
-    "link": "https://music.apple.com/us/album/shiver/1728957955?i=1728957956",
+    "name": "If U Need It",
+    "artist": "Sammy Virji",
+    "link": "https://music.apple.com/us/album/if-u-need-it/1711713804?i=1711713806",
     "rank": 3,
-    "album_url": "",
+    "album_url": "https://i.scdn.co/image/ab67616d0000b273d5b8fa0ff5dee9da54847694",
     "source": "soundcloud",
     "additional_sources": [
       "apple_music"
@@ -44,10 +44,21 @@
     ]
   },
   {
+    "name": "Sippin' Yak",
+    "artist": "Cloonee",
+    "link": "https://music.apple.com/us/album/sippin-yak/1734676552?i=1734676556",
+    "rank": 5,
+    "album_url": "",
+    "source": "soundcloud",
+    "additional_sources": [
+      "apple_music"
+    ]
+  },
+  {
     "name": "Fall Again",
     "artist": "Hayla",
     "link": "https://music.apple.com/us/album/fall-again/1708886158?i=1708886171",
-    "rank": 5,
+    "rank": 6,
     "album_url": "https://i.scdn.co/image/ab67616d0000b2737c0c9ff9fc1a7006bb5b9798",
     "source": "soundcloud",
     "additional_sources": [
@@ -58,7 +69,7 @@
     "name": "Lifetime",
     "artist": "Tobiahs",
     "link": "https://music.apple.com/us/album/lifetime/1722564698?i=1722564700",
-    "rank": 6,
+    "rank": 7,
     "album_url": "https://i.scdn.co/image/ab67616d0000b273f825c5f3a2a0d8857636328d",
     "source": "soundcloud",
     "additional_sources": [
@@ -66,11 +77,11 @@
     ]
   },
   {
-    "name": "If U Need It",
-    "artist": "Sammy Virji",
-    "link": "https://music.apple.com/us/album/if-u-need-it/1711713804?i=1711713806",
-    "rank": 7,
-    "album_url": "https://i.scdn.co/image/ab67616d0000b273d5b8fa0ff5dee9da54847694",
+    "name": "We Groovin",
+    "artist": "Jamie Jones \u0026 Jazzy",
+    "link": "https://music.apple.com/us/album/we-groovin/1729232019?i=1729232020",
+    "rank": 8,
+    "album_url": "",
     "source": "soundcloud",
     "additional_sources": [
       "apple_music"
@@ -80,7 +91,7 @@
     "name": "Empty",
     "artist": "Martin Garrix, DubVision \u0026 Jaimes",
     "link": "https://music.apple.com/us/album/empty/1732966794?i=1732966798",
-    "rank": 8,
+    "rank": 9,
     "album_url": "",
     "source": "soundcloud",
     "additional_sources": [
@@ -88,21 +99,21 @@
     ]
   },
   {
-    "name": "Roar",
-    "artist": "Charlotte de Witte",
-    "link": "https://music.apple.com/us/album/roar/1736537340?i=1736537349",
-    "rank": 9,
-    "album_url": "https://i.scdn.co/image/ab67616d0000b2739fae5caa6d6bf5e3da412047",
+    "name": "The von dutch remix with skream and benga",
+    "artist": "Charli XCX",
+    "link": "https://music.apple.com/us/album/the-von-dutch-remix-with-skream-and-benga/1740421168?i=1740421183",
+    "rank": 10,
+    "album_url": "https://i.scdn.co/image/ab67616d0000b273d3b38e43d8f074e3f8479829",
     "source": "soundcloud",
     "additional_sources": [
-      "apple_music"
+      "spotify"
     ]
   },
   {
     "name": "system",
     "artist": "salute",
     "link": "https://music.apple.com/us/album/system/1726621108?i=1726621112",
-    "rank": 10,
+    "rank": 11,
     "album_url": "https://i.scdn.co/image/ab67616d0000b273f292ee4172c5a52f2499fd97",
     "source": "soundcloud",
     "additional_sources": [
@@ -113,7 +124,7 @@
     "name": "stayinit",
     "artist": "Fred again.., Lil Yachty \u0026 Overmono",
     "link": "https://music.apple.com/us/album/stayinit/1730976891?i=1730976903",
-    "rank": 11,
+    "rank": 12,
     "album_url": "",
     "source": "soundcloud",
     "additional_sources": [
@@ -124,7 +135,7 @@
     "name": "Buscando Money",
     "artist": "TWENTY SIX \u0026 Tayson Kryss",
     "link": "https://music.apple.com/us/album/buscando-money/1732549261?i=1732549265",
-    "rank": 12,
+    "rank": 13,
     "album_url": "",
     "source": "soundcloud",
     "additional_sources": [
@@ -135,22 +146,11 @@
     "name": "Last Night",
     "artist": "Loofy",
     "link": "https://music.apple.com/us/album/last-night/1707086680?i=1707086900",
-    "rank": 13,
+    "rank": 14,
     "album_url": "https://i.scdn.co/image/ab67616d0000b2739bd41d12cda81e29eece0b4c",
     "source": "soundcloud",
     "additional_sources": [
       "apple_music"
-    ]
-  },
-  {
-    "name": "1+1=11 (Edit)",
-    "artist": "Peggy Gou",
-    "link": "https://music.apple.com/us/album/1-1-11-edit/1735727562?i=1735727566",
-    "rank": 14,
-    "album_url": "",
-    "source": "soundcloud",
-    "additional_sources": [
-      "spotify"
     ]
   },
   {
@@ -173,6 +173,17 @@
     "source": "soundcloud",
     "additional_sources": [
       "spotify"
+    ]
+  },
+  {
+    "name": "Roar",
+    "artist": "Charlotte de Witte",
+    "link": "https://music.apple.com/us/album/roar/1736537340?i=1736537349",
+    "rank": 17,
+    "album_url": "https://i.scdn.co/image/ab67616d0000b2739fae5caa6d6bf5e3da412047",
+    "source": "soundcloud",
+    "additional_sources": [
+      "apple_music"
     ]
   }
 ]
