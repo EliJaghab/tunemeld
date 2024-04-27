@@ -23,6 +23,10 @@ imports:
 tidy: fmt simplify imports lint
 	@echo "Tidying Go code..."
 
+run-extract2:
+	@echo "Sourcing API credentials and running extract command..."
+	@bash -c "source api_credentials.sh && python migration/extractors.py"
+
 run-extract:
 	@echo "Sourcing API credentials and running extract command..."
 	@bash -c "source api_credentials.sh && go run cmd/extract/main.go"
