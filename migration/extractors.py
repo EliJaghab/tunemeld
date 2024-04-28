@@ -1,45 +1,67 @@
 import os
 import json
 import requests
+import subprocess
 
 SERVICE_CONFIGS = {
     "AppleMusic": {
-        "BaseURL": "https://apple-music24.p.rapidapi.com/playlist1/",
-        "Host": "apple-music24.p.rapidapi.com",
-        "ParamKey": "url",
-        "DancePlaylistParam": "https%3A%2F%2Fmusic.apple.com%2Fus%2Fplaylist%2Fdancexl%2Fpl.6bf4415b83ce4f3789614ac4c3675740"
+        "base_url": "https://apple-music24.p.rapidapi.com/playlist1/",
+        "host": "apple-music24.p.rapidapi.com",
+        "param_key": "url",
+        "dance_playlist_param": "https%3A%2F%2Fmusic.apple.com%2Fus%2Fplaylist%2Fdancexl%2Fpl.6bf4415b83ce4f3789614ac4c3675740"
     },
     "SoundCloud": {
-        "BaseURL": "https://soundcloud-scraper.p.rapidapi.com/v1/playlist/tracks",
-        "Host": "soundcloud-scraper.p.rapidapi.com",
-        "ParamKey": "playlist",
-        "DancePlaylistParam": "https%3A%2F%2Fsoundcloud.com%2Fsoundcloud-the-peak%2Fsets%2Fon-the-up-new-edm-hits"
+        "base_url": "https://soundcloud-scraper.p.rapidapi.com/v1/playlist/tracks",
+        "host": "soundcloud-scraper.p.rapidapi.com",
+        "param_key": "playlist",
+        "dance_playlist_param": "https%3A%2F%2Fsoundcloud.com%2Fsoundcloud-the-peak%2Fsets%2Fon-the-up-new-edm-hits"
     },
     "Spotify": {
-        "BaseURL": "https://spotify23.p.rapidapi.com/playlist_tracks/",
-        "Host": "spotify23.p.rapidapi.com",
-        "ParamKey": "id",
-        "DancePlaylistParam": "37i9dQZF1DX4dyzvuaRJ0n"
+        "base_url": "https://spotify23.p.rapidapi.com/playlist_tracks/",
+        "host": "spotify23.p.rapidapi.com",
+        "param_key": "id",
+        "dance_playlist_param": "37i9dQZF1DX4dyzvuaRJ0n"
     }
 }
 
+SCRIPT_PATH = "migration/api_credentials.sh"
+    
 class RapidAPIClient:
     def __init__(self):
-        self.api_key = os.getenv("X_RapidAPI_Key")
+        self.api_key = self.get_api_key()
         print(f"apiKey: {self.api_key}")
+    
+    def get_api_key(self):
+        # First try to get the API key from the current environment
+        api_key = os.getenv("X_RapidAPI_Key")
+        if api_key:
+            return api_key
+
+        result = subprocess.Popen(['bash', '-c', f'source {SCRIPT_PATH} && env'],
+                                    stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        stdout, stderr = result.communicate()
+
+        if result.returncode != 0:
+            raise Exception(f"Script failed to execute cleanly: {stderr.decode()}")
+
+        for line in stdout.decode().splitlines():
+            key, _, value = line.partition('=')
+            os.environ[key] = value
+
+        api_key = os.getenv("X_RapidAPI_Key")
+        if not api_key:
+            raise Exception("Failed to set API Key.")
+
+        return api_key
 
 def get_json_response(url, host, api_key):
     headers = {
         "X-RapidAPI-Key": api_key,
-        "X-RapidAPI-Host": host
+        "X-RapidAPI-host": host
     }
-    try:
-        response = requests.get(url, headers=headers)
-        response.raise_for_status()
-        return response.json()
-    except requests.RequestException as e:
-        raise Exception(f"Error creating or executing request: {e}")
-
+    response = requests.get(url, headers=headers)
+    response.raise_for_status()
+    return response.json()
 class Extractor:
     def __init__(self, client, service_name):
         self.client = client
@@ -52,20 +74,20 @@ class Extractor:
 class AppleMusicFetcher(Extractor):
     def get_playlist(self, playlist_key):
         playlist_param = self.config[playlist_key]
-        url = f"{self.config['BaseURL']}?{self.config['ParamKey']}={playlist_param}"
-        return get_json_response(url, self.config['Host'], self.client.api_key)
+        url = f"{self.config['base_url']}?{self.config['param_key']}={playlist_param}"
+        return get_json_response(url, self.config['host'], self.client.api_key)
 
 class SoundCloudFetcher(Extractor):
     def get_playlist(self, playlist_key):
         playlist_param = self.config[playlist_key]
-        url = f"{self.config['BaseURL']}?{self.config['ParamKey']}={playlist_param}"
-        return get_json_response(url, self.config['Host'], self.client.api_key)
+        url = f"{self.config['base_url']}?{self.config['param_key']}={playlist_param}"
+        return get_json_response(url, self.config['host'], self.client.api_key)
 
 class SpotifyFetcher(Extractor):
-    def get_playlist(self, playlist_key, offset=0, limit=20):  # Include pagination for Spotify
+    def get_playlist(self, playlist_key, offset=0, limit=100):
         playlist_param = self.config[playlist_key]
-        url = f"{self.config['BaseURL']}?{self.config['ParamKey']}={playlist_param}&offset={offset}&limit={limit}"
-        return get_json_response(url, self.config['Host'], self.client.api_key)
+        url = f"{self.config['base_url']}?{self.config['param_key']}={playlist_param}&offset={offset}&limit={limit}"
+        return get_json_response(url, self.config['host'], self.client.api_key)
 
 def write_json_to_file(data, file_path):
     """Write a Python dictionary to a JSON file."""
@@ -78,8 +100,11 @@ def write_json_to_file(data, file_path):
 
 def format_filename(service_name, playlist_key):
     """Generate a clean file name for the JSON output."""
-    base_name = f"{service_name} {playlist_key.replace('Param', '')} Extract".replace(' ', '_').lower()
-    return f"{base_name}.json"
+    base_name = f"{service_name}_{playlist_key.replace('Param', '')}_Extract".replace(' ', '_').lower()
+    base_path = "migration/data/extract"
+    full_path = f"{base_path}/{base_name}.json"
+    os.makedirs(base_path, exist_ok=True)  # Ensure the directory `data/extract` exists
+    return full_path
 
 if __name__ == "__main__":
     client = RapidAPIClient()
