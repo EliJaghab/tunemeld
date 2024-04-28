@@ -32,34 +32,37 @@ class RapidAPIClient:
         print(f"apiKey: {self.api_key}")
     
     def get_api_key(self):
-        # First try to get the API key from the current environment
-        api_key = os.getenv("X_RapidAPI_Key")
-        if api_key:
-            return api_key
-
-        result = subprocess.Popen(['bash', '-c', f'source {SCRIPT_PATH} && env'],
-                                    stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        stdout, stderr = result.communicate()
-
-        if result.returncode != 0:
-            raise Exception(f"Script failed to execute cleanly: {stderr.decode()}")
-
-        for line in stdout.decode().splitlines():
-            key, _, value = line.partition('=')
-            os.environ[key] = value
-
         api_key = os.getenv("X_RapidAPI_Key")
         if not api_key:
-            raise Exception("Failed to set API Key.")
-
+            load_env_variables_from_script() 
+            api_key = os.getenv("X_RapidAPI_Key")
+            if not api_key:
+                raise Exception("Failed to set API Key.")
         return api_key
 
-def get_json_response(url, host, api_key):
+
+def load_env_variables_from_script():
+    result = subprocess.Popen(['bash', '-c', f'source {SCRIPT_PATH} && env'],
+                              stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    stdout, stderr = result.communicate()
+
+    if result.returncode != 0:
+        raise Exception(f"Script failed to execute cleanly: {stderr.decode()}")
+
+    for line in stdout.decode().splitlines():
+        key, _, value = line.partition('=')
+        os.environ[key] = value
+
+def get_json_response(url, host, api_key, method='GET', payload=None):
     headers = {
         "X-RapidAPI-Key": api_key,
-        "X-RapidAPI-host": host
+        "X-RapidAPI-Host": host,
+        "Content-Type": "application/json"
     }
-    response = requests.get(url, headers=headers)
+    if method == 'POST':
+        response = requests.post(url, json=payload, headers=headers)
+    else:
+        response = requests.get(url, headers=headers)
     response.raise_for_status()
     return response.json()
 class Extractor:
