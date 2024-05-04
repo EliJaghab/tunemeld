@@ -1,32 +1,34 @@
 [
   {
-    "name": "Summertime Blues",
-    "artist": "Chris Lake, Sammy Virji \u0026 Nathan Nicholson",
-    "link": "https://music.apple.com/us/album/summertime-blues/1741634636?i=1741634639",
+    "name": "Kimbara",
+    "artist": "Barry Can't Swim",
+    "link": "https://music.apple.com/us/album/kimbara/1739798395?i=1739798396",
     "rank": 1,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/16/e5/89/16e589be-ba73-4121-f24b-41debea58b4f/24UMGIM35464.rgb.jpg/296x296bb-60.jpg",
+    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/ba/c2/fe/bac2fe1b-9996-2a7f-0c1c-a728f415591b/5054429193589.png/296x296bb-60.jpg",
     "source": "soundcloud",
     "additional_sources": [
+      "apple_music",
       "spotify"
     ]
   },
   {
-    "name": "mr useless",
-    "artist": "Shygirl \u0026 SG Lewis",
-    "link": "https://music.apple.com/us/album/mr-useless/1725825321?i=1725826047",
+    "name": "On Again",
+    "artist": "Mau P",
+    "link": "https://music.apple.com/us/album/on-again/1736836112?i=1736836113",
     "rank": 2,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/8c/ca/50/8cca5060-55f1-a9df-3ff9-519295f0aa5a/5056556135012_cover.jpg/296x296bb-60.jpg",
+    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/5c/e7/3f/5ce73f0a-4843-4f25-00cd-0d49eb2a0e20/8721056815135.png/296x296bb-60.jpg",
     "source": "soundcloud",
     "additional_sources": [
-      "apple_music"
+      "apple_music",
+      "spotify"
     ]
   },
   {
-    "name": "Neverender",
-    "artist": "Justice, Tame Impala",
-    "link": "https://soundcloud.com/justice-official/justice-tame-impala-neverender",
+    "name": "Throw Some Ass",
+    "artist": "Sofi Tukker",
+    "link": "https://soundcloud.com/sofitukker/sofi-tukker-throw-some-ass",
     "rank": 3,
-    "album_url": "https://i1.sndcdn.com/artworks-471Qw5LXkhTQ-0-original.jpg",
+    "album_url": "https://i1.sndcdn.com/artworks-e9hAI0YSXYQ9-0-original.jpg",
     "source": "spotify",
     "additional_sources": [
       "apple_music"
@@ -44,77 +46,43 @@
     ]
   },
   {
-    "name": "Now Or Never",
-    "artist": "Anyma",
-    "link": "https://music.apple.com/us/album/now-or-never/1740222240?i=1740222478",
+    "name": "Summertime Blues",
+    "artist": "Chris Lake, Sammy Virji \u0026 Nathan Nicholson",
+    "link": "https://music.apple.com/us/album/summertime-blues/1741634636?i=1741634639",
     "rank": 5,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/ab/7f/f2/ab7ff219-5949-0965-8fb0-603d6b92ac79/24UMGIM28490.rgb.jpg/296x296bb-60.jpg",
-    "source": "soundcloud",
-    "additional_sources": [
-      "apple_music"
-    ]
-  },
-  {
-    "name": "MAGIC",
-    "artist": "Gryffin \u0026 babyidontlikeyou",
-    "link": "https://music.apple.com/us/album/magic/1740903229?i=1740903237",
-    "rank": 6,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/76/ce/70/76ce70f8-0a9a-8d3f-42a8-b778698ddb6a/00196922890604_Cover.jpg/296x296bb-60.jpg",
+    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/16/e5/89/16e589be-ba73-4121-f24b-41debea58b4f/24UMGIM35464.rgb.jpg/296x296bb-60.jpg",
     "source": "soundcloud",
     "additional_sources": [
       "spotify"
+    ]
+  },
+  {
+    "name": "mr useless",
+    "artist": "Shygirl \u0026 SG Lewis",
+    "link": "https://music.apple.com/us/album/mr-useless/1725825321?i=1725826047",
+    "rank": 6,
+    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/8c/ca/50/8cca5060-55f1-a9df-3ff9-519295f0aa5a/5056556135012_cover.jpg/296x296bb-60.jpg",
+    "source": "soundcloud",
+    "additional_sources": [
+      "apple_music"
     ]
   },
   {
     "name": "Neverender",
-    "artist": "Justice \u0026 Tame Impala",
-    "link": "https://music.apple.com/us/album/neverender/1724935208?i=1724935211",
+    "artist": "Justice, Tame Impala",
+    "link": "https://soundcloud.com/justice-official/justice-tame-impala-neverender",
     "rank": 7,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/c2/19/4b/c2194bc8-63e2-b31f-b872-9611aa5fcded/5056556135845_cover.jpg/296x296bb-60.jpg",
-    "source": "soundcloud",
-    "additional_sources": [
-      "apple_music",
-      "spotify"
-    ]
-  },
-  {
-    "name": "Pedro",
-    "artist": "Jaxomy, Agatino Romero \u0026 Raffaella Carrà",
-    "link": "https://music.apple.com/us/album/pedro/1736775759?i=1736776071",
-    "rank": 8,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/e7/d4/ee/e7d4eed2-44e5-2b08-9f68-d0c34609d098/196871959841.jpg/296x296bb-60.jpg",
-    "source": "soundcloud",
+    "album_url": "https://i1.sndcdn.com/artworks-471Qw5LXkhTQ-0-original.jpg",
+    "source": "spotify",
     "additional_sources": [
       "apple_music"
-    ]
-  },
-  {
-    "name": "Fall Again",
-    "artist": "Hayla",
-    "link": "https://music.apple.com/us/album/fall-again/1708886158?i=1708886171",
-    "rank": 9,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/0c/e3/57/0ce35775-55e7-c630-d81b-3e3df9f1d7f9/cover.jpg/296x296bb-60.jpg",
-    "source": "soundcloud",
-    "additional_sources": [
-      "apple_music"
-    ]
-  },
-  {
-    "name": "The von dutch remix with skream and benga",
-    "artist": "Charli XCX",
-    "link": "https://music.apple.com/us/album/the-von-dutch-remix-with-skream-and-benga/1740421168?i=1740421183",
-    "rank": 10,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/c4/c6/c5/c4c6c5e0-80da-b253-842e-bbb676dae730/075679649614.jpg/296x296bb-60.jpg",
-    "source": "soundcloud",
-    "additional_sources": [
-      "spotify"
     ]
   },
   {
     "name": "Lifetime",
     "artist": "Tobiahs",
     "link": "https://music.apple.com/us/album/lifetime/1722564698?i=1722564700",
-    "rank": 11,
+    "rank": 8,
     "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/83/41/a9/8341a93b-6d9f-883a-7857-a5b3dca6bc71/23SYMIM08853.rgb.jpg/296x296bb-60.jpg",
     "source": "soundcloud",
     "additional_sources": [
@@ -122,11 +90,11 @@
     ]
   },
   {
-    "name": "Empty",
-    "artist": "Martin Garrix, DubVision \u0026 Jaimes",
-    "link": "https://music.apple.com/us/album/empty/1732966794?i=1732966798",
-    "rank": 12,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/00/15/56/00155682-93b0-2066-65c7-04ae17a906fc/8720996840610.png/296x296bb-60.jpg",
+    "name": "Ride Or Die",
+    "artist": "Aluna",
+    "link": "https://music.apple.com/us/album/ride-or-die/1739664479?i=1739664485",
+    "rank": 9,
+    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/79/42/ad/7942ad9e-bb6b-4870-e0cf-69d4041d6a41/2632.jpg/296x296bb-60.jpg",
     "source": "soundcloud",
     "additional_sources": [
       "apple_music"
@@ -136,7 +104,7 @@
     "name": "We Groovin",
     "artist": "Jamie Jones \u0026 Jazzy",
     "link": "https://music.apple.com/us/album/we-groovin/1729232019?i=1729232020",
-    "rank": 13,
+    "rank": 10,
     "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/ef/66/63/ef666393-3931-02a6-ddc4-3675f160eff8/0196762014802.png/296x296bb-60.jpg",
     "source": "soundcloud",
     "additional_sources": [
@@ -144,21 +112,21 @@
     ]
   },
   {
-    "name": "Teka",
-    "artist": "DJ Snake \u0026 Peso Pluma",
-    "link": "https://music.apple.com/us/album/teka/1741006070?i=1741006093",
-    "rank": 14,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/07/87/5c/07875cc5-9a91-73f9-7193-91f315a1d966/24UMGIM13634.rgb.jpg/296x296bb-60.jpg",
+    "name": "Now Or Never",
+    "artist": "Anyma",
+    "link": "https://music.apple.com/us/album/now-or-never/1740222240?i=1740222478",
+    "rank": 11,
+    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/ab/7f/f2/ab7ff219-5949-0965-8fb0-603d6b92ac79/24UMGIM28490.rgb.jpg/296x296bb-60.jpg",
     "source": "soundcloud",
     "additional_sources": [
-      "spotify"
+      "apple_music"
     ]
   },
   {
     "name": "Last Night",
     "artist": "Loofy",
     "link": "https://music.apple.com/us/album/last-night/1707086680?i=1707086900",
-    "rank": 15,
+    "rank": 12,
     "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/cd/c4/0d/cdc40d37-15a4-bd9a-67ce-88e0c0caa709/091012641060.jpg/296x296bb-60.jpg",
     "source": "soundcloud",
     "additional_sources": [
@@ -166,14 +134,49 @@
     ]
   },
   {
+    "name": "Right Here",
+    "artist": "Becky Hill",
+    "link": "https://music.apple.com/us/album/right-here/1731891564?i=1731892440",
+    "rank": 13,
+    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/3d/ca/7a/3dca7ae2-a6e0-e61c-d3b7-55879e9bcc99/24UMGIM00242.rgb.jpg/296x296bb-60.jpg",
+    "source": "soundcloud",
+    "additional_sources": [
+      "apple_music",
+      "spotify"
+    ]
+  },
+  {
+    "name": "Neverender",
+    "artist": "Justice \u0026 Tame Impala",
+    "link": "https://music.apple.com/us/album/neverender/1724935208?i=1724935211",
+    "rank": 14,
+    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/c2/19/4b/c2194bc8-63e2-b31f-b872-9611aa5fcded/5056556135845_cover.jpg/296x296bb-60.jpg",
+    "source": "soundcloud",
+    "additional_sources": [
+      "apple_music",
+      "spotify"
+    ]
+  },
+  {
     "name": "stayinit",
     "artist": "Fred again.., Lil Yachty \u0026 Overmono",
     "link": "https://music.apple.com/us/album/stayinit/1730976891?i=1730976903",
-    "rank": 16,
+    "rank": 15,
     "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/5d/9b/c4/5d9bc4f2-7e17-161a-45de-2087a6cc49d4/5054197995231.jpg/296x296bb-60.jpg",
     "source": "soundcloud",
     "additional_sources": [
       "apple_music"
+    ]
+  },
+  {
+    "name": "MAGIC",
+    "artist": "Gryffin \u0026 babyidontlikeyou",
+    "link": "https://music.apple.com/us/album/magic/1740903229?i=1740903237",
+    "rank": 16,
+    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/76/ce/70/76ce70f8-0a9a-8d3f-42a8-b778698ddb6a/00196922890604_Cover.jpg/296x296bb-60.jpg",
+    "source": "soundcloud",
+    "additional_sources": [
+      "spotify"
     ]
   },
   {
@@ -188,47 +191,36 @@
     ]
   },
   {
-    "name": "What Took You so Long",
-    "artist": "Armin van Buuren \u0026 Gryffin",
-    "link": "https://music.apple.com/us/album/what-took-you-so-long/1733871927?i=1733871928",
-    "rank": 18,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/37/fb/06/37fb062d-57e4-e37d-46ca-267444fe6680/8718522456848.png/296x296bb-60.jpg",
-    "source": "soundcloud",
-    "additional_sources": [
-      "apple_music"
-    ]
-  },
-  {
-    "name": "Sippin' Yak",
-    "artist": "Cloonee",
-    "link": "https://music.apple.com/us/album/sippin-yak/1734676552?i=1734676556",
-    "rank": 19,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/a3/63/1c/a3631cd3-f312-4646-c52f-6a384a63be6b/24UMGIM25199.rgb.jpg/296x296bb-60.jpg",
-    "source": "soundcloud",
-    "additional_sources": [
-      "apple_music"
-    ]
-  },
-  {
-    "name": "Roar",
-    "artist": "Charlotte de Witte",
-    "link": "https://music.apple.com/us/album/roar/1736537340?i=1736537349",
-    "rank": 20,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/88/bd/a2/88bda288-6e80-4baf-eaa8-18fc4c1fa348/198391524479.jpg/296x296bb-60.jpg",
-    "source": "soundcloud",
-    "additional_sources": [
-      "apple_music"
-    ]
-  },
-  {
     "name": "Satellite",
     "artist": "Dimension \u0026 Alison Wonderland",
     "link": "https://music.apple.com/us/album/satellite/1732748625?i=1732748719",
-    "rank": 21,
+    "rank": 18,
     "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/c1/dd/46/c1dd46e8-8be5-66d6-22d0-2e2c62e16398/085365695368.jpg/296x296bb-60.jpg",
     "source": "soundcloud",
     "additional_sources": [
+      "apple_music"
+    ]
+  },
+  {
+    "name": "Teka",
+    "artist": "DJ Snake \u0026 Peso Pluma",
+    "link": "https://music.apple.com/us/album/teka/1741006070?i=1741006093",
+    "rank": 19,
+    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/07/87/5c/07875cc5-9a91-73f9-7193-91f315a1d966/24UMGIM13634.rgb.jpg/296x296bb-60.jpg",
+    "source": "soundcloud",
+    "additional_sources": [
       "spotify"
+    ]
+  },
+  {
+    "name": "Pedro",
+    "artist": "Jaxomy, Agatino Romero \u0026 Raffaella Carrà",
+    "link": "https://music.apple.com/us/album/pedro/1736775759?i=1736776071",
+    "rank": 20,
+    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/e7/d4/ee/e7d4eed2-44e5-2b08-9f68-d0c34609d098/196871959841.jpg/296x296bb-60.jpg",
+    "source": "soundcloud",
+    "additional_sources": [
+      "apple_music"
     ]
   }
 ]
