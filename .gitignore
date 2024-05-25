@@ -1,4 +1,6 @@
 # Python
+api_credentials.sh
+.DS_Store
 __pycache__/
 *.py[cod]
 *.egg
