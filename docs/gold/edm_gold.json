@@ -1,20 +1,9 @@
 [
   {
-    "name": "Lobster Telephone (Edit)",
-    "artist": "Peggy Gou",
-    "link": "https://music.apple.com/us/album/lobster-telephone-edit/1742767133?i=1742767138",
-    "rank": 1,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/94/74/1e/94741efd-c35a-214d-1300-f09e8ca54827/191404145777.png/296x296bb-60.jpg",
-    "source": "soundcloud",
-    "additional_sources": [
-      "spotify"
-    ]
-  },
-  {
     "name": "saving flowers",
     "artist": "salute \u0026 Rina Sawayama",
     "link": "https://music.apple.com/us/album/saving-flowers/1732069006?i=1732069098",
-    "rank": 2,
+    "rank": 1,
     "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/df/43/34/df4334f4-b599-a2aa-0af3-779288222e13/5054429192650.png/296x296bb-60.jpg",
     "source": "soundcloud",
     "additional_sources": [
@@ -22,14 +11,25 @@
     ]
   },
   {
-    "name": "Chase It (Mmm Da Da Da)",
-    "artist": "Bebe Rexha",
-    "link": "https://soundcloud.com/beberexha/chase-it-mmm-da-da-da",
-    "rank": 3,
-    "album_url": "https://i1.sndcdn.com/artworks-EdQN49wqGMay-0-original.jpg",
-    "source": "spotify",
+    "name": "Feel (feat. Jacob Banks)",
+    "artist": "LP Giobbi",
+    "link": "https://music.apple.com/us/album/feel-feat-jacob-banks/1744642617?i=1744642619",
+    "rank": 2,
+    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/6c/05/3e/6c053e17-3034-c7cd-3798-c24393c11b4e/5054429195743.png/296x296bb-60.jpg",
+    "source": "soundcloud",
     "additional_sources": [
-      "apple_music"
+      "spotify"
+    ]
+  },
+  {
+    "name": "One New Change",
+    "artist": "Gorgon City",
+    "link": "https://music.apple.com/us/album/one-new-change/1738461195?i=1738461903",
+    "rank": 3,
+    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/b2/03/cc/b203ccf4-e9dd-2125-60d8-6a9d9faa6c84/24UMGIM21053.rgb.jpg/296x296bb-60.jpg",
+    "source": "soundcloud",
+    "additional_sources": [
+      "spotify"
     ]
   },
   {
@@ -44,76 +44,10 @@
     ]
   },
   {
-    "name": "back2u",
-    "artist": "Disco Lines \u0026 GUDFELLA",
-    "link": "https://music.apple.com/us/album/back2u/1743833095?i=1743833098",
-    "rank": 5,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/07/b4/79/07b479a4-9761-8da1-526b-02c5352b5432/24SYMIM11830.rgb.jpg/296x296bb-60.jpg",
-    "source": "soundcloud",
-    "additional_sources": [
-      "spotify"
-    ]
-  },
-  {
-    "name": "If U Like Me (Edit)",
-    "artist": "DJ Seinfeld",
-    "link": "https://music.apple.com/us/album/if-u-like-me-edit/1742098438?i=1742098439",
-    "rank": 6,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/df/bf/92/dfbf92c4-517e-885b-e9d3-8e1bff55084a/5054429194630.png/296x296bb-60.jpg",
-    "source": "soundcloud",
-    "additional_sources": [
-      "spotify"
-    ]
-  },
-  {
-    "name": "Find A Way",
-    "artist": "Vintage Culture",
-    "link": "https://music.apple.com/us/album/find-a-way/1725169738?i=1725169876",
-    "rank": 7,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/ae/b8/19/aeb819de-114d-98b7-97da-a6f51b14829e/23SYMIM08764.rgb.jpg/296x296bb-60.jpg",
-    "source": "soundcloud",
-    "additional_sources": [
-      "spotify"
-    ]
-  },
-  {
-    "name": "My City",
-    "artist": "Tiësto \u0026 Prophecy",
-    "link": "https://music.apple.com/us/album/my-city/1745160493?i=1745160495",
-    "rank": 8,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/f7/85/c5/f785c572-f737-b282-ced6-9afe586d26af/8721093111559.png/296x296bb-60.jpg",
-    "source": "soundcloud",
-    "additional_sources": [
-      "apple_music"
-    ]
-  },
-  {
-    "name": "Shiver",
-    "artist": "John Summit \u0026 HAYLA",
-    "link": "https://music.apple.com/us/album/shiver/1728957955?i=1728957956",
-    "rank": 9,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/be/7d/23/be7d23e1-ed96-302f-83e7-053cd9b20dbb/193436371179_SHIVERSQUAREFORDELIVERY.jpg/296x296bb-60.jpg",
-    "source": "soundcloud",
-    "additional_sources": [
-      "apple_music"
-    ]
-  },
-  {
-    "name": "On Again",
-    "artist": "Mau P",
-    "link": "https://music.apple.com/us/album/on-again/1736836112?i=1736836113",
-    "rank": 10,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/5c/e7/3f/5ce73f0a-4843-4f25-00cd-0d49eb2a0e20/8721056815135.png/296x296bb-60.jpg",
-    "source": "soundcloud",
-    "additional_sources": [
-      "apple_music"
-    ]
-  },
-  {
     "name": "mr useless",
     "artist": "Shygirl \u0026 SG Lewis",
     "link": "https://music.apple.com/us/album/mr-useless/1725825321?i=1725826047",
-    "rank": 11,
+    "rank": 5,
     "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/8c/ca/50/8cca5060-55f1-a9df-3ff9-519295f0aa5a/5056556135012_cover.jpg/296x296bb-60.jpg",
     "source": "soundcloud",
     "additional_sources": [
@@ -121,23 +55,12 @@
     ]
   },
   {
-    "name": "Mountains",
-    "artist": "Jonas Blue, Galantis, Zoe Wees",
-    "link": "https://soundcloud.com/jonasblue/jonas-blue-galantis-zoe-wees",
-    "rank": 12,
-    "album_url": "https://i1.sndcdn.com/artworks-Ly7oSWtnQCcT-0-original.jpg",
+    "name": "Chase It (Mmm Da Da Da)",
+    "artist": "Bebe Rexha",
+    "link": "https://soundcloud.com/beberexha/chase-it-mmm-da-da-da",
+    "rank": 6,
+    "album_url": "https://i1.sndcdn.com/artworks-HaSmkeq2UtO5-0-original.jpg",
     "source": "spotify",
-    "additional_sources": [
-      "apple_music"
-    ]
-  },
-  {
-    "name": "Lifetime",
-    "artist": "Tobiahs",
-    "link": "https://music.apple.com/us/album/lifetime/1722564698?i=1722564700",
-    "rank": 13,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/83/41/a9/8341a93b-6d9f-883a-7857-a5b3dca6bc71/23SYMIM08853.rgb.jpg/296x296bb-60.jpg",
-    "source": "soundcloud",
     "additional_sources": [
       "apple_music"
     ]
@@ -146,8 +69,30 @@
     "name": "We Groovin",
     "artist": "Jamie Jones \u0026 Jazzy",
     "link": "https://music.apple.com/us/album/we-groovin/1729232019?i=1729232020",
-    "rank": 14,
+    "rank": 7,
     "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/ef/66/63/ef666393-3931-02a6-ddc4-3675f160eff8/0196762014802.png/296x296bb-60.jpg",
+    "source": "soundcloud",
+    "additional_sources": [
+      "apple_music"
+    ]
+  },
+  {
+    "name": "Lobster Telephone (Edit)",
+    "artist": "Peggy Gou",
+    "link": "https://music.apple.com/us/album/lobster-telephone-edit/1742767133?i=1742767138",
+    "rank": 8,
+    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/94/74/1e/94741efd-c35a-214d-1300-f09e8ca54827/191404145777.png/296x296bb-60.jpg",
+    "source": "soundcloud",
+    "additional_sources": [
+      "spotify"
+    ]
+  },
+  {
+    "name": "On Again",
+    "artist": "Mau P",
+    "link": "https://music.apple.com/us/album/on-again/1736836112?i=1736836113",
+    "rank": 9,
+    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/5c/e7/3f/5ce73f0a-4843-4f25-00cd-0d49eb2a0e20/8721056815135.png/296x296bb-60.jpg",
     "source": "soundcloud",
     "additional_sources": [
       "apple_music"
@@ -157,7 +102,7 @@
     "name": "Right Here",
     "artist": "Becky Hill",
     "link": "https://music.apple.com/us/album/right-here/1731891564?i=1731892440",
-    "rank": 15,
+    "rank": 10,
     "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/3d/ca/7a/3dca7ae2-a6e0-e61c-d3b7-55879e9bcc99/24UMGIM00242.rgb.jpg/296x296bb-60.jpg",
     "source": "soundcloud",
     "additional_sources": [
@@ -168,7 +113,7 @@
     "name": "Neverender",
     "artist": "Justice \u0026 Tame Impala",
     "link": "https://music.apple.com/us/album/neverender/1724935208?i=1724935211",
-    "rank": 16,
+    "rank": 11,
     "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/c2/19/4b/c2194bc8-63e2-b31f-b872-9611aa5fcded/5056556135845_cover.jpg/296x296bb-60.jpg",
     "source": "soundcloud",
     "additional_sources": [
@@ -179,7 +124,7 @@
     "name": "Satellite",
     "artist": "Dimension \u0026 Alison Wonderland",
     "link": "https://music.apple.com/us/album/satellite/1732748625?i=1732748719",
-    "rank": 17,
+    "rank": 12,
     "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/c1/dd/46/c1dd46e8-8be5-66d6-22d0-2e2c62e16398/085365695368.jpg/296x296bb-60.jpg",
     "source": "soundcloud",
     "additional_sources": [
@@ -190,19 +135,18 @@
     "name": "Kimbara",
     "artist": "Barry Can't Swim",
     "link": "https://music.apple.com/us/album/kimbara/1739798395?i=1739798396",
-    "rank": 18,
+    "rank": 13,
     "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/ba/c2/fe/bac2fe1b-9996-2a7f-0c1c-a728f415591b/5054429193589.png/296x296bb-60.jpg",
     "source": "soundcloud",
     "additional_sources": [
-      "apple_music",
-      "spotify"
+      "apple_music"
     ]
   },
   {
     "name": "Von dutch",
     "artist": "Charli XCX",
     "link": "https://music.apple.com/us/album/von-dutch/1732110349?i=1732110358",
-    "rank": 19,
+    "rank": 14,
     "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/58/d4/74/58d47475-3797-bad8-9c66-77bfb8cbf352/075679655516.jpg/296x296bb-60.jpg",
     "source": "soundcloud",
     "additional_sources": [
@@ -210,14 +154,14 @@
     ]
   },
   {
-    "name": "Right Here",
-    "artist": "Anna Lunoe \u0026 Totally Enormous Extinct Dinosaurs",
-    "link": "https://music.apple.com/us/album/right-here/1740457938?i=1740457955",
-    "rank": 20,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/68/8e/a4/688ea4e1-0cd9-fdd7-2f5d-8da66deae84f/198391741517.jpg/296x296bb-60.jpg",
+    "name": "My City",
+    "artist": "Tiësto \u0026 Prophecy",
+    "link": "https://music.apple.com/us/album/my-city/1744858496?i=1744858499",
+    "rank": 15,
+    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/57/d8/e0/57d8e05a-0ca5-8741-1d7c-8bb739f173dd/8721093133780.png/296x296bb-60.jpg",
     "source": "soundcloud",
     "additional_sources": [
-      "spotify"
+      "apple_music"
     ]
   }
 ]
