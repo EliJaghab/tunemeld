@@ -270,7 +270,8 @@ if __name__ == "__main__":
     print()
     print("starting transform")
     client = requests.Session()
-    load_env_variables_from_script()
+    if not os.getenv("GITHUB_ACTIONS"):
+        load_env_variables_from_script()
 
     for filename in os.listdir(EXTRACT_BASE_PATH):
         if "extract" in filename:
