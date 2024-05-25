@@ -1,4 +1,4 @@
-name: Playlists ETL
+name: playlists_etl
 
 on:
   schedule:
@@ -31,7 +31,7 @@ jobs:
           echo "Sourcing API credentials and running extract script..."
           export X_RapidAPI_Host=${API_HOST}
           bash api_credentials.sh
-          python extract.py
+          python playlist_etl/extract.py
 
       - name: Run transform
         env:
@@ -39,7 +39,7 @@ jobs:
           spotify_client_secret: ${{ secrets.SPOTIFY_CLIENT_SECRET }}
         run: |
           echo "Running transform script..."
-          python transform.py
+          python playlist_etl/transform.py
 
       - name: Commit and push silver
         env:
@@ -53,7 +53,7 @@ jobs:
           git push
 
       - name: Run gold
-        run: echo "Running gold script..." && python aggregator.py
+        run: echo "Running gold script..." && python playlist_etl/aggregator.py
 
       - name: Commit and push gold
         env:
