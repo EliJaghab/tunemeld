@@ -37,11 +37,11 @@ class RapidAPIClient:
 
     def get_api_key(self):
         api_key = os.getenv("X_RapidAPI_Key")
-        if not api_key and not os.getenv("GITHUB_ACTIONS"):
+        if not api_key:
             load_env_variables_from_script()
             api_key = os.getenv("X_RapidAPI_Key")
-        if not api_key:
-            raise Exception("Failed to set API Key.")
+            if not api_key:
+                raise Exception("Failed to set API Key.")
         return api_key
 
 

@@ -27,10 +27,9 @@ jobs:
       - name: Run extract
         env:
           X_RapidAPI_Key: ${{ secrets.X_RAPIDAPI_KEY }}
+          X_RapidAPI_Host: ${{ secrets.X_RAPIDAPI_HOST }}  # Assuming you also have this secret
         run: |
-          echo "Sourcing API credentials and running extract script..."
-          export X_RapidAPI_Host=${API_HOST}
-          bash api_credentials.sh
+          echo "Running extract script..."
           python playlist_etl/extract.py
 
       - name: Run transform
