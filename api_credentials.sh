@@ -1,0 +1,3 @@
+export X_RapidAPI_Key=be4693d6fdmshe2eb13bfc1b963dp1076a4jsndf37b2dc83bb
+export spotify_client_id=943b6c1c8113466d8d004e148b43d857
+export spotify_client_secret=6b1492cd2795463097724b1a9458bf32

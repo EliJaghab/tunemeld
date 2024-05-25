@@ -1,4 +1,18 @@
-.envrc
-.DS_Store
-.vscode
-*.sh
+# Python
+__pycache__/
+*.py[cod]
+*.egg
+*.egg-info/
+
+# Virtual Environment
+venv/
+
+# Node.js
+node_modules/
+npm-debug.log*
+
+# Environment variables
+.env
+
+# Tox
+.tox/

@@ -1,50 +1,18 @@
-.PHONY: fmt simplify lint fix imports
+# Makefile
 
-fmt:
-	@echo "Formatting Go code..."
-	@go fmt ./...
+.PHONY: format lint fix
 
-simplify:
-	@echo "Simplifying Go code..."
-	@gofmt -s -w .
-
+# Linting and formatting combined targets
 lint:
-	@echo "Linting Go code..."
-	@golangci-lint run
+	@echo "Linting code with tox..."
+	tox -e lint
 
-fix:
-	@echo "Auto-fixing Go code..."
-	@golangci-lint run --fix
+format:
+	@echo "Formatting code with tox..."
+	tox -e format
 
-imports:
-	@echo "Organizing imports..."
-	@goimports -w .
+fix: format
+	@echo "Automatically fixing code style issues..."
 
-tidy: fmt simplify imports lint
-	@echo "Tidying Go code..."
-
-run-extract2:
-	@echo "Sourcing API credentials and running extract command..."
-	@bash -c "source api_credentials.sh && python migration/extractors.py"
-
-run-extract:
-	@echo "Sourcing API credentials and running extract command..."
-	@bash -c "source api_credentials.sh && go run cmd/extract/main.go"
-
-run-transform:
-	@echo "Building and running transform command..."
-	@bash -c "source api_credentials.sh && go run cmd/transform/main.go"
-
-run-gold:
-	@echo "Running gold transform..."
-	@bash -c "go run cmd/gold/main.go"
-
-run-extract-actions:
-	@bash -c "go run cmd/extract/main.go"
-
-run-transform-actions:
-	@bash -c "go run cmd/transform/main.go"
-
-start-server:
-	python -m http.server 8000
-
+# Default target to lint and format everything
+all: lint format

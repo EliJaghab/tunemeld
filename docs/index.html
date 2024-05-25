@@ -1,43 +1,35 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <link rel="icon" href="chicken.png" type="image/x-icon" />
-   <meta property="og:image" content="chicken.png" />
+    <meta property="og:image" content="chicken.png" />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link
       rel="stylesheet"
       href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
     />
-
-    <!-- DM Sans Font Embedding -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,600&display=swap"
       rel="stylesheet"
     />
-
     <title>tunemeld</title>
     <style>
       a {
         color: white;
       }
-
       body {
         background-color: #333;
         color: white;
       }
-
-      /* DM Sans font with weight 800 for titles */
       h1 {
-        font-family: "DM Sans", sans-serif;
+        font-family: 'DM Sans', sans-serif;
         font-weight: 600;
       }
       #main-content {
         transition: opacity 2s ease-in-out;
-      }
-      #main-content.fade-in {
         opacity: 1;
       }
       .album-cover {
@@ -60,13 +52,13 @@
         line-height: 40px;
       }
       .track-info {
-        padding: 2px 0; /* Adjust spacing between image and text */
+        padding: 2px 0;
         color: white;
       }
       .track-list-item {
         background-color: #444;
         color: white;
-        padding: 5px 0; 
+        padding: 5px 0;
       }
       .username {
         font-size: 12px;
@@ -91,24 +83,23 @@
         margin-bottom: 5px;
       }
       .source-icon {
-        width: 24px; 
+        width: 24px;
         height: 24px;
-        margin-left: 5px; /* Space between icons */
+        margin-left: 5px;
       }
       .container {
-        max-width: 100%; /* Full width of the parent element */
-        max-width: 1200px; /* Maximum of 1200 pixels */
-        max-width: 75rem; /* Based on the root font size */
-        max-width: 90vw; /* 90% of the viewport width */
+        max-width: 100%;
+        max-width: 1200px;
+        max-width: 75rem;
+        max-width: 90vw;
       }
       .row {
-        margin: 0; /* Removes margin around rows */
+        margin: 0;
       }
       .col-md-4,
       .col-sm-12 {
-        padding: 0 5px; /* Adjust padding for columns to reduce space between playlists */
+        padding: 0 5px;
       }
-      /* Loading Screen Style */
       #loading-screen {
         display: flex;
         justify-content: center;
@@ -120,22 +111,20 @@
         height: 100%;
         background-color: white;
         z-index: 1000;
-        transition: opacity 2s ease-in-out; /* Smooth transition for the fade-out */
+        transition: opacity 2s ease-in-out;
       }
       .playlist-description {
-        text-align: center; /* Center align the description */
-        font-family: "DM Sans", sans-serif; /* Match the font of the tunemeld logo */
-        font-weight: 400; /* Make font weight regular */
-        font-size: 14px; /* Smaller font size */
-        color: #ccc; /* Lighter text color */
-        margin-bottom: 10px; /* Add some space below the description */
+        text-align: center;
+        font-family: 'DM Sans', sans-serif;
+        font-weight: 400;
+        font-size: 14px;
+        color: #ccc;
+        margin-bottom: 10px;
       }
-
       #loading-image {
         max-width: 25%;
         max-height: 25vh;
       }
-      /* Keyframes for the fadeOut animation */
       @keyframes fadeOut {
         0% {
           opacity: 1;
@@ -144,72 +133,94 @@
           opacity: 0;
         }
       }
-
       #loading-screen.fade-out {
         opacity: 0;
       }
     </style>
   </head>
   <body>
-    <div id="loading-screen">
-      <img src="tunemeld_loading_screen.png" alt="Loading" id="loading-image" />
-    </div>
-
-    
-
-    <div class="container my-2" id="main-content" style="opacity: 0">
+    <div class="container my-2" id="main-content">
       <h1 class="text-center" style="margin-bottom: 10px">tunemeld</h1>
-      <div id="last-updated" style="text-align: center; font-family: 'DM Sans', sans-serif; font-size: 0.6rem; color: #ccc;">
+      <div
+        id="last-updated"
+        style="
+          text-align: center;
+          font-family: 'DM Sans', sans-serif;
+          font-size: 0.6rem;
+          color: #ccc;
+        "
+      >
         Last Updated: Loading...
       </div>
-
       <div class="row">
         <div class="col-md-12">
           <div class="playlist">
             <div class="playlist-title">Aggregated Playlist</div>
-            <div class="playlist-description">Tracks seen on more than one curated streaming service, updated every Saturday</div>
-
+            <div class="playlist-description">
+              Tracks seen on more than one curated streaming service, updated
+              every Saturday
+            </div>
             <div id="aggregated-data-placeholder"></div>
           </div>
         </div>
       </div>
     </div>
-
     <div class="row">
-        <div class="col-md-4 col-sm-12">
-            <div class="playlist">
-                <div class="playlist-title">
-                  <a href="https://soundcloud.com/soundcloud-the-peak/sets/on-the-up-new-edm-hits" target="_blank">
-                    <img src="./images/logos/soundcloud_logo.png" alt="SoundCloud" class="source-icon"> New EDM Hits: On The Up
-                  </a>                
-                </div>
-                <div id="soundcloud-data-placeholder"></div>
-            </div>
+      <div class="col-md-4 col-sm-12">
+        <div class="playlist">
+          <div class="playlist-title">
+            <a
+              href="https://soundcloud.com/soundcloud-the-peak/sets/on-the-up-new-edm-hits"
+              target="_blank"
+            >
+              <img
+                src="./images/soundcloud_logo.png"
+                alt="SoundCloud"
+                class="source-icon"
+              />
+              New EDM Hits: On The Up
+            </a>
+          </div>
+          <div id="soundcloud-data-placeholder"></div>
         </div>
-        <div class="col-md-4 col-sm-12">
-            <div class="playlist">
-                <div class="playlist-title">
-                    <a href="https://music.apple.com/us/playlist/dancexl/pl.6bf4415b83ce4f3789614ac4c3675740" target="_blank">
-                      <img src="./images/logos/apple_music_logo.png" alt="Apple Music" class="source-icon"> danceXL</a>
-                </div>
-                <div id="apple-music-data-placeholder"></div>
-            </div>
+      </div>
+      <div class="col-md-4 col-sm-12">
+        <div class="playlist">
+          <div class="playlist-title">
+            <a
+              href="https://music.apple.com/us/playlist/dancexl/pl.6bf4415b83ce4f3789614ac4c3675740"
+              target="_blank"
+            >
+              <img
+                src="./images/apple_music_logo.png"
+                alt="Apple Music"
+                class="source-icon"
+              />
+              danceXL
+            </a>
+          </div>
+          <div id="apple-music-data-placeholder"></div>
         </div>
-        <div class="col-md-4 col-sm-12">
-            <div class="playlist">
-                <div class="playlist-title">
-                    <a href="https://open.spotify.com/playlist/37i9dQZF1DX4dyzvuaRJ0n" target="_blank">
-                      <img src="./images/logos/spotify_logo.png" alt="Spotify" class="source-icon"> mint</a>
-                </div>
-                <div id="spotify-data-placeholder"></div>
-            </div>
+      </div>
+      <div class="col-md-4 col-sm-12">
+        <div class="playlist">
+          <div class="playlist-title">
+            <a
+              href="https://open.spotify.com/playlist/37i9dQZF1DX4dyzvuaRJ0n"
+              target="_blank"
+            >
+              <img
+                src="./images/spotify_logo.png"
+                alt="Spotify"
+                class="source-icon"
+              />
+              mint
+            </a>
+          </div>
+          <div id="spotify-data-placeholder"></div>
         </div>
+      </div>
     </div>
-
-     
-    <div id="page-views">Page Views: Loading...</div>
-
-
     <script src="main.js"></script>
   </body>
 </html>
