@@ -23,8 +23,8 @@ import os
 
 from typing import Dict, List
 
-from extractors import write_json_to_file
-from transformers import read_json_from_file
+from extract import write_json_to_file
+from transform import read_json_from_file
 import collections
 
 def aggregate_tracks_by_isrc(services):
@@ -94,7 +94,7 @@ if __name__ == "__main__":
     tracks_by_isrc = aggregate_tracks_by_isrc(loaded_data)
     consolidated = consolidate_tracks(tracks_by_isrc)
     base_path = "migration/data/aggregated/"
-    os.makedirs(base_path)
+    os.makedirs(base_path, exist_ok=True)
     write_json_to_file(consolidated, f"{base_path}/danceplaylist_gold.json")
     
     

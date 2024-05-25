@@ -3,36 +3,25 @@ import os
 import re
 
 import requests
-import base64
 from bs4 import BeautifulSoup
 from urllib.parse import unquote
 
+import spotipy
+from spotipy.oauth2 import SpotifyClientCredentials
+
+
 import musicbrainzngs
 
-from extractors import RapidAPIClient, get_json_response, load_env_variables_from_script, write_json_to_file
 
-def read_json_from_file(file_path):
-    with open(file_path, 'r') as file:
-        data = json.load(file)
-        return data
+from extract import EXTRACT_BASE_PATH, load_env_variables_from_script, write_json_to_file
+
+BASE_TRANSFORM_PATH = "migration/data/transform"
 
 def transform_applemusic_data(data):
-    if not data:
-        raise ValueError("Data is empty")
-
-    album_details = data.get("album_details")
-    if not album_details:
-        raise ValueError("Album details not found in data")
-
     tracks = []
-    for key, track_data in album_details.items():
-        if key.isdigit():  # Check if the key is a rank number
-            try:
-                rank = int(key) + 1  # Convert to 1-based index
-            except ValueError:
-                print(f"Warning: Skipping rank {key} due to conversion error")
-                continue
-            
+    for key, track_data in data["album_details"].items():
+        if key.isdigit():
+            rank = int(key) + 1  # Convert to 1-based index
             track_name = track_data.get("name")
             artist_name = track_data.get("artist")
             url = track_data.get("link")
@@ -58,11 +47,9 @@ def transform_applemusic_data(data):
 def get_apple_music_album_cover(url_link):
     """Manually scrapes the URL for the Album cover for Apple Music Links."""
     response = client.get(url_link, timeout=30)
-    response.raise_for_status()  # Raises an HTTPError for bad responses
-
+    response.raise_for_status()
     doc = BeautifulSoup(response.text, 'html.parser')
 
-    # Query the document to find the specific tag and attribute
     source_tag = doc.find("source", attrs={"type": "image/jpeg"})
     if not source_tag or not source_tag.has_attr('srcset'):
         raise ValueError("Album cover URL not found")
@@ -81,20 +68,42 @@ def duration_to_milliseconds(duration):
         return total_seconds * 1000
     return 0
 
+cache_file = "migration/isrc_cache.json"
+cache = {}
+
+def load_cache():
+    global cache
+    if os.path.exists(cache_file):
+        with open(cache_file, 'r') as file:
+            cache = json.load(file)
+
+def save_cache(cache):
+    with open(cache_file, 'w') as file:
+        json.dump(cache, file)
+
 def get_isrc(track_name, artist_name, expected_duration_ms, link):
-    isrc = None
-    
+    global cache
+    # Initialize cache if empty
+    if not cache:
+        load_cache()
+    # Using tuple of track name and artist name as the key
+    cache_key = track_name + "|" + artist_name
+    if cache_key in cache:
+        print(f"Cache hit for {track_name} {artist_name}")
+        return cache[cache_key]
+
     isrc = get_isrc_from_music_brainz(track_name, artist_name, expected_duration_ms, link)
     if not isrc:
-        
         print(f"retrieving isrc from spotify for {track_name} {artist_name}")
         isrc = get_isrc_from_spotify_api(track_name, artist_name)
-        
+
+    # Update the cache with the new ISRC
+    cache[cache_key] = isrc
+    save_cache(cache)
     return isrc
 
 def get_isrc_from_music_brainz(track_name, artist_name, expected_duration_ms, link):
     musicbrainzngs.set_useragent("TuneMeld", "0.1", "http://www.tunemeld.com")
-
     result = musicbrainzngs.search_recordings(query=track_name, artist=artist_name, limit=5)
     
     isrc_list = []
@@ -120,111 +129,72 @@ def get_isrc_from_music_brainz(track_name, artist_name, expected_duration_ms, li
 
         if isrc_list:
             best_match = isrc_list[0]
-            if best_match['score'] > 95 and abs(best_match['duration_diff']) <= 3000:
+            if best_match['score'] > 96 and abs(best_match['duration_diff']) <= 3000:
                 return best_match['isrc']
             else:
                 print(f"found more than one isrc for {track_name} {artist_name} {link}")
                 print(f"Best ISRC: {best_match['isrc']} with score: {best_match['score']} and duration diff: {best_match['duration_diff']}ms")
         return None
-    
 
 def get_isrc_from_spotify_api(track_name, artist_name):
     client_id = os.getenv('spotify_client_id')
     client_secret = os.getenv('spotify_client_secret')
-    if not client_id or not client_secret:
-        raise ValueError("Spotify client ID or secret not set in environment variables")
+    client_credentials_manager = SpotifyClientCredentials(client_id=client_id, client_secret=client_secret)
+    spotify = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 
-    auth_url = "https://accounts.spotify.com/api/token"
-    auth_headers = {
-        'Authorization': 'Basic ' + base64.b64encode(f"{client_id}:{client_secret}".encode()).decode(),
-        'Content-Type': 'application/x-www-form-urlencoded'
-    }
-    auth_body = {'grant_type': 'client_credentials'}
-    auth_response = requests.post(auth_url, headers=auth_headers, data=auth_body)
-    auth_response.raise_for_status()
-    token = auth_response.json()['access_token']
-
-    search_url = f"https://api.spotify.com/v1/search"
-    search_headers = {'Authorization': f'Bearer {token}'}
+    # Remove parentheses and contents within
     track_name_no_parens = re.sub(r'\([^()]*\)', '', track_name.lower())
     query = f"track:{track_name_no_parens} artist:{artist_name}"
-    search_params = {
-        'q': query,
-        'type': 'track',
-        'limit': 1
-    }
-    search_response = requests.get(search_url, headers=search_headers, params=search_params)
-    search_response.raise_for_status()
-    tracks = search_response.json()['tracks']['items']
-
+    results = spotify.search(q=query, type='track', limit=1)
+    
+    tracks = results['tracks']['items']
     if tracks:
-        print("found on spotify")
-        print(tracks[0]["name"], tracks[0]['external_ids']['isrc'])
-        return tracks[0]['external_ids']['isrc']
+        isrc = tracks[0]['external_ids']['isrc']
+        print("Found on Spotify:", tracks[0]["name"], isrc)
+        return isrc
     else:
-        print(f"No track found on spotify using query: {query} for {track_name} {artist_name}")
-        return f"No track found using query: {query} for {track_name} {artist_name}"
-
-
-def get_isrc_from_rapid_api_apple_music_api(track_url):
-    client = RapidAPIClient()
-    api_key = client.api_key
-    url = "https://musicapi13.p.rapidapi.com/public/inspect/url"
-    host = "musicapi13.p.rapidapi.com"
-    payload = {"url": track_url}
-    data = get_json_response(url, host, api_key, method='POST', payload=payload)
-    return data['data']['isrc']
-
-
+        error_message = f"No track found on Spotify using query: {query} for {track_name} {artist_name}"
+        print(error_message)
+        return None
 
 def transform_soundcloud_data(data):
     items = data['tracks']['items']
 
     tracks = []
     for i, item in enumerate(items):
-        try:
-            isrc = item['publisher']['isrc']
-            title = item['title']
-            permalink = item['permalink']
-            user = item['user']
-            artist_name = user['name']
-            artwork_url = item.get('artworkUrl', '')
+        isrc = item['publisher']['isrc']
+        title = item['title']
+        permalink = item['permalink']
+        user = item['user']
+        artist_name = user['name']
+        artwork_url = item.get('artworkUrl', '')
 
-            # Handle titles with hyphens
-            if ' - ' in title:
-                parts = title.split(' - ', 1)
-                artist_name = parts[0]
-                track_name = parts[1]
-            else:
-                track_name = title
+        # Handle titles with hyphens
+        if ' - ' in title:
+            parts = title.split(' - ', 1)
+            artist_name = parts[0]
+            track_name = parts[1]
+        else:
+            track_name = title
 
-            track = {
-                "isrc": isrc,
-                'name': track_name,
-                'artist': artist_name,
-                'link': permalink,
-                'rank': i + 1,
-                'album_url': artwork_url,
-                'source': 'soundcloud'
-            }
-            tracks.append(track)
-
-        except KeyError as e:
-            print(f"Missing key {e} in item index {i}, skipping this item.")
-            continue
+        track = {
+            "isrc": isrc,
+            'name': track_name,
+            'artist': artist_name,
+            'link': permalink,
+            'rank': i + 1,
+            'album_url': artwork_url,
+            'source': 'soundcloud'
+        }
+        tracks.append(track)
 
     sorted_tracks = sorted(tracks, key=lambda x: x['rank'])
     return sorted_tracks
 
 def transform_spotify_data(data):
-    items = data['items']
-
     tracks = []
-    for rank, item in enumerate(items):
+    for rank, item in enumerate(data['items']):
         track_info = item.get('track', {})
-        if not track_info:
-            print(f"Missing 'track' key in item at index {rank}")
-            continue
         isrc = track_info["external_ids"]["isrc"]
         name = track_info.get('name', '')
         external_urls = track_info.get('external_urls', {}).get('spotify', '')
@@ -232,11 +202,7 @@ def transform_spotify_data(data):
         artist_names = ", ".join(artists)
         album_info = track_info.get('album', {})
         images = album_info.get('images', [])
-
         album_url = images[0].get('url', '') if images else None
-
-        if not album_url:
-            print(f"No album cover available for track at index {rank}")
 
         track = {
             "isrc": isrc,
@@ -255,32 +221,35 @@ def transform_spotify_data(data):
 def format_transformed_filename(original_filename):
     """Generate a clean file name for the JSON transformed output based on the original filename."""
     base_name = original_filename.replace('extract', 'transformed')
-    base_path = "migration/data/transform"
-    full_path = f"{base_path}/{base_name}"
-    os.makedirs(base_path, exist_ok=True) 
+    full_path = f"{BASE_TRANSFORM_PATH}/{base_name}"
+    os.makedirs(BASE_TRANSFORM_PATH, exist_ok=True) 
     return full_path
 
+def read_json_from_file(file_path):
+    with open(file_path, 'r') as file:
+        data = json.load(file)
+        return data
+
+
+
 if __name__ == "__main__":
-    # Directory listing and file processing
+    print()
+    print("starting transform")
     client = requests.Session()
     load_env_variables_from_script()
     
-    for filename in os.listdir('.'):
+    for filename in os.listdir(EXTRACT_BASE_PATH):
         if 'extract' in filename:
-            service_name = filename.split('_')[0]  # Extracts the service name from filename
+            service_name = filename.split('_')[0] 
             transform_function_name = f"transform_{service_name}_data"
             
-            # Dynamically get the transform function from globals
             transform_function = globals().get(transform_function_name)
-            if not transform_function:
-                print(f"No transform function found for {service_name}")
-                continue
             
-            # Read, transform, and write the data
-            input_path = filename
+            input_path = f"{EXTRACT_BASE_PATH}/{filename}"
             output_path = format_transformed_filename(filename)
-            
             data = read_json_from_file(input_path)
             transformed_data = transform_function(data)
             write_json_to_file(transformed_data, output_path)
             print(f"Processed {input_path} -> {output_path}")
+    
+    print("transform completed")
