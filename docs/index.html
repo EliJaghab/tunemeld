@@ -133,15 +133,46 @@
           opacity: 0;
         }
       }
-      #loading-screen.fade-out {
-        opacity: 0;
+      #soundcloud-link {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        color: white;
+        font-family: 'DM Sans', sans-serif;
+        font-weight: 600;
+        text-decoration: none;
+        background-color: #444;
+        padding: 3px 8px; /* Reduced padding */
+        border-radius: 5px;
+        display: flex;
+        align-items: center;
+        font-size: 12px; /* Reduced font size */
+        transition: background-color 0.3s ease;
+      }
+      
+      #soundcloud-link:hover {
+        background-color: #555;
+      }
+      
+      #soundcloud-logo {
+        width: 20px;
+        height: 20px;
+        margin-right: 5px;
       }
     </style>
   </head>
   <body>
     <div class="container my-2" id="main-content">
       <h1 class="text-center" style="margin-bottom: 10px">tunemeld</h1>
-      <div
+      <a href="https://soundcloud.com/elijaghab" target="_blank" id="soundcloud-link">
+        <img src="./images/soundcloud_logo.png" alt="SoundCloud" id="soundcloud-logo" />
+        Eli's SoundCloud
+      </a>      
+      <div class="row">
+        <div class="col-md-12">
+          <div class="playlist">
+            <div class="playlist-title">Aggregated Playlist</div>
+            <div
         id="last-updated"
         style="
           text-align: center;
@@ -152,10 +183,6 @@
       >
         Last Updated: Loading...
       </div>
-      <div class="row">
-        <div class="col-md-12">
-          <div class="playlist">
-            <div class="playlist-title">Aggregated Playlist</div>
             <div class="playlist-description">
               Tracks seen on more than one curated streaming service, updated
               every Saturday
