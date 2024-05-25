@@ -36,10 +36,10 @@ class RapidAPIClient:
         print(f"apiKey: {self.api_key}")
 
     def get_api_key(self):
-        api_key = os.getenv("X_RapidAPI_Key")
+        api_key = os.getenv("X_RAPIDAPI_KEY")
         if not api_key:
             load_env_variables_from_script()
-            api_key = os.getenv("X_RapidAPI_Key")
+            api_key = os.getenv("X_RAPIDAPI_KEY")
             if not api_key:
                 raise Exception("Failed to set API Key.")
         return api_key

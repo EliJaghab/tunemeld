@@ -27,7 +27,7 @@ jobs:
       - name: Run extract
         env:
           X_RapidAPI_Key: ${{ secrets.X_RAPIDAPI_KEY }}
-          X_RapidAPI_Host: ${{ secrets.X_RAPIDAPI_HOST }}  # Assuming you also have this secret
+          X_RapidAPI_Host: ${{ secrets.X_RAPIDAPI_HOST }} 
         run: |
           echo "Running extract script..."
           python playlist_etl/extract.py
