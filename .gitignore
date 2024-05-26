@@ -1,5 +1,7 @@
 # Python
 api_credentials.sh
+.cache
+isrc_cache.json
 .DS_Store
 __pycache__/
 *.py[cod]
@@ -8,6 +10,7 @@ __pycache__/
 
 # Virtual Environment
 venv/
+.vscode/
 
 # Node.js
 node_modules/
