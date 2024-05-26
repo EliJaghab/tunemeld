@@ -1,1673 +1,902 @@
 [
-  {
-<<<<<<< Updated upstream:docs/files/transform/applemusic_dance_transformed.json
-    "isrc": "GBCFB2400153",
-    "name": "saving flowers",
-    "artist": "salute & Rina Sawayama",
-    "link": "https://music.apple.com/us/album/saving-flowers/1732069006?i=1732069098",
-    "rank": 1,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/df/43/34/df4334f4-b599-a2aa-0af3-779288222e13/5054429192650.png/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "isrc": "USUG12402628",
-    "name": "Go Back",
-    "artist": "John Summit, Sub Focus & Julia Church",
-    "link": "https://music.apple.com/us/album/go-back/1745292769?i=1745292770",
-    "rank": 2,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/15/4d/ec/154dece1-0b05-3516-a381-894671a5669a/24UMGIM52349.rgb.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "isrc": "NLRD52350359",
-    "name": "Addicted (feat. Ink)",
-    "artist": "ZERB & The Chainsmokers",
-    "link": "https://music.apple.com/us/album/addicted-feat-ink/1734260110?i=1734260111",
-    "rank": 3,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/0f/df/a1/0fdfa19f-aae2-c601-3c44-9d3e45f80adf/8721056755820.png/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "isrc": "GBCFB2400659",
-    "name": "Feel (feat. Jacob Banks)",
-    "artist": "LP Giobbi",
-    "link": "https://music.apple.com/us/album/feel-feat-jacob-banks/1744642617?i=1744642619",
-    "rank": 4,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/6c/05/3e/6c053e17-3034-c7cd-3798-c24393c11b4e/5054429195743.png/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "isrc": "DEE862400426",
-    "name": "Seek Love (On The Beach) [feat. Amanda Wilson & York]",
-    "artist": "Alok, Tazi & Samuele Sartini",
-    "link": "https://music.apple.com/us/album/seek-love-on-the-beach-feat-amanda-wilson-york/1736802685?i=1736802698",
-    "rank": 5,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/5d/63/1f/5d631f33-e1c1-7ab2-69b9-b5a072cf8669/196871959674.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "isrc": "NLF712400101",
-    "name": "I Wanna Go",
-    "artist": "Autograf",
-    "link": "https://music.apple.com/us/album/i-wanna-go/1726586964?i=1726586965",
-    "rank": 6,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/9c/97/fe/9c97fea8-ffee-dd82-287c-6b7a12cd2fbf/8718522436734.png/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "isrc": "GBUM72402172",
-    "name": "One New Change",
-    "artist": "Gorgon City",
-    "link": "https://music.apple.com/us/album/one-new-change/1738461195?i=1738461903",
-    "rank": 7,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/b2/03/cc/b203ccf4-e9dd-2125-60d8-6a9d9faa6c84/24UMGIM21053.rgb.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "isrc": "AUNV02400018",
-    "name": "Nostalgia",
-    "artist": "PNAU",
-    "link": "https://music.apple.com/us/album/nostalgia/1735082167?i=1735082174",
-    "rank": 8,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/dd/23/a7/dd23a7c6-1944-839e-ea16-cf91cbd23329/196871840156.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "isrc": "US38Y2403431",
-    "name": "Mind Still (feat. blythe)",
-    "artist": "Sonny Fodera",
-    "link": "https://music.apple.com/us/album/mind-still-feat-blythe/1729414512?i=1729414926",
-    "rank": 9,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/12/4c/0a/124c0ac8-80a4-ab06-38e7-d8e5800b34dc/197338037492.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "isrc": "GBEWA2401190",
-    "name": "Feel It",
-    "artist": "ayokay",
-    "link": "https://music.apple.com/us/album/feel-it/1734804331?i=1734804333",
-    "rank": 10,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/45/5f/a1/455fa12b-c6f2-e63f-b7c3-acc382c23725/5039060981191.png/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "isrc": "USUG12401003",
-    "name": "Shiver",
-    "artist": "John Summit & HAYLA",
-    "link": "https://music.apple.com/us/album/shiver/1728957955?i=1728957956",
-    "rank": 11,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/be/7d/23/be7d23e1-ed96-302f-83e7-053cd9b20dbb/193436371179_SHIVERSQUAREFORDELIVERY.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "isrc": "UKRPL1900629",
-    "name": "In Your Arms",
-    "artist": "Jess Bays & Jem Cooke",
-    "link": "https://music.apple.com/us/album/in-your-arms/1728715876?i=1728716001",
-    "rank": 12,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/3f/61/e9/3f61e905-8e49-a89d-c10c-d3b2b84bdeca/197338046340.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "isrc": "QZGLM2496266",
-    "name": "Teardrops",
-    "artist": "Jauz",
-    "link": "https://music.apple.com/us/album/teardrops/1735241404?i=1735241405",
-    "rank": 13,
-=======
-    "name": "Pictures Of You",
-    "artist": "Anyma",
-    "link": "https://music.apple.com/us/album/pictures-of-you/1727256693?i=1727256702",
-    "rank": 45,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/86/d9/66/86d96679-15b6-2d80-9eb4-729e5a4fe5b7/24UMGIM06973.rgb.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "name": "If U Need It",
-    "artist": "Sammy Virji",
-    "link": "https://music.apple.com/us/album/if-u-need-it/1711713804?i=1711713806",
-    "rank": 6,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/42/9a/a7/429aa7b4-820e-c03f-3de4-349f3d185ae0/23UM1IM13809.rgb.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "name": "Breathe",
-    "artist": "Amelie Lens",
-    "link": "https://music.apple.com/us/album/breathe/1735334428?i=1735334432",
-    "rank": 73,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/fc/16/c6/fc16c661-da56-398f-dab5-2f125eafa7f6/5414166676569.png/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "name": "Incognito",
-    "artist": "Justice",
-    "link": "https://music.apple.com/us/album/incognito/1724935208?i=1724935855",
-    "rank": 95,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/c2/19/4b/c2194bc8-63e2-b31f-b872-9611aa5fcded/5056556135845_cover.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "name": "Teardrops",
-    "artist": "Jauz",
-    "link": "https://music.apple.com/us/album/teardrops/1735241404?i=1735241405",
-    "rank": 40,
->>>>>>> Stashed changes:docs/silver/apple_music_edm_silver.json
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/c7/f8/8a/c7f88ac0-06ea-d152-980d-b0f4177d8cd1/0.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-<<<<<<< Updated upstream:docs/files/transform/applemusic_dance_transformed.json
-    "isrc": "UKRPL1900658",
-    "name": "All For You (feat. Joanna Cooke)",
-    "artist": "Maur",
-    "link": "https://music.apple.com/us/album/all-for-you-feat-joanna-cooke/1733726021?i=1733726359",
-    "rank": 14,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/f6/65/cd/f665cde0-56ae-8e53-2e46-da78f6cab8d9/085365688612.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "isrc": "GBUM72205897",
-    "name": "Never Be Alone",
-    "artist": "Becky Hill & Sonny Fodera",
-    "link": "https://music.apple.com/us/album/never-be-alone/1731891564?i=1731891893",
-    "rank": 15,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/3d/ca/7a/3dca7ae2-a6e0-e61c-d3b7-55879e9bcc99/24UMGIM00242.rgb.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "isrc": "NLF712401951",
-    "name": "By Now (feat. Laura Welsh)",
-    "artist": "Armin van Buuren & D.O.D",
-    "link": "https://music.apple.com/us/album/by-now-feat-laura-welsh/1739816531?i=1739816532",
-    "rank": 16,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/66/4a/95/664a953d-e787-0d9c-2ac1-7c59df3cda75/8718522467691.png/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "isrc": "GBUM72400217",
-    "name": "Never Be Lonely",
-    "artist": "Jax Jones & Zoe Wees",
-    "link": "https://music.apple.com/us/album/never-be-lonely/1727350063?i=1727350064",
-    "rank": 17,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/62/ba/fe/62bafe08-a872-ef85-29fe-f5e878c12cc9/24UMGIM04446.rgb.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "isrc": "QZFPL2400078",
-    "name": "back2u",
-    "artist": "Disco Lines & GUDFELLA",
-    "link": "https://music.apple.com/us/album/back2u/1743833095?i=1743833098",
-    "rank": 18,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/07/b4/79/07b479a4-9761-8da1-526b-02c5352b5432/24SYMIM11830.rgb.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "isrc": "GBCFB2400443",
-    "name": "If U Like Me (Edit)",
-    "artist": "DJ Seinfeld",
-    "link": "https://music.apple.com/us/album/if-u-like-me-edit/1742098438?i=1742098439",
-    "rank": 19,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/df/bf/92/dfbf92c4-517e-885b-e9d3-8e1bff55084a/5054429194630.png/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "isrc": "UK4ZF2400087",
-    "name": "Always (Me & You)",
-    "artist": "CHANEY",
-    "link": "https://music.apple.com/us/album/always-me-you/1731873701?i=1731873702",
-    "rank": 20,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/f3/0f/a5/f30fa504-a505-a630-6a8a-4f100c0c0eb8/198391228438.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "isrc": "USUG12401134",
-    "name": "Rainy (Devault Remix)",
-    "artist": "Dillon Francis, REI AMI & Devault",
-    "link": "https://music.apple.com/us/album/rainy-devault-remix/1738133917?i=1738134239",
-    "rank": 21,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/9f/5a/c2/9f5ac2f1-aee0-5138-3d44-325a2f3052f5/24UMGIM10882.rgb.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "isrc": "DEA622400985",
-    "name": "All the Things She Said",
-    "artist": "Robin Schulz, Timmy Trumpet & KOPPY",
-    "link": "https://music.apple.com/us/album/all-the-things-she-said/1737007334?i=1737007336",
-    "rank": 22,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/08/78/74/08787436-75e6-fe6c-c373-8e4fa4f2efe3/5021732265654.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "isrc": "GBUM72401679",
-    "name": "All That You Need",
-    "artist": "Gorgon City & Caroline Byrne",
-    "link": "https://music.apple.com/us/album/all-that-you-need/1738461195?i=1738461888",
-    "rank": 23,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/b2/03/cc/b203ccf4-e9dd-2125-60d8-6a9d9faa6c84/24UMGIM21053.rgb.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "isrc": "NLQ8D2201286",
-    "name": "Rain",
-    "artist": "NIIKO X SWAE & Mougleta",
-    "link": "https://music.apple.com/us/album/rain/1730740173?i=1730740174",
-    "rank": 24,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/95/e1/18/95e1187b-e919-f196-9050-aeabfcaec481/8718522454639.png/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "isrc": "GBUM72309238",
-    "name": "If U Need It",
-    "artist": "Sammy Virji",
-    "link": "https://music.apple.com/us/album/if-u-need-it/1711713804?i=1711713806",
-    "rank": 25,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/42/9a/a7/429aa7b4-820e-c03f-3de4-349f3d185ae0/23UM1IM13809.rgb.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "isrc": "AULI02355900",
-    "name": "Lifetime",
-    "artist": "Tobiahs",
-    "link": "https://music.apple.com/us/album/lifetime/1722564698?i=1722564700",
-    "rank": 26,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/83/41/a9/8341a93b-6d9f-883a-7857-a5b3dca6bc71/23SYMIM08853.rgb.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "isrc": "GBARL2301797",
-    "name": "Lovers In A Past Life (LP Giobbi Remix)",
-    "artist": "Calvin Harris & Rag'n'Bone Man",
-    "link": "https://music.apple.com/us/album/lovers-in-a-past-life-lp-giobbi-remix/1741613366?i=1741613368",
-    "rank": 27,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/e3/2c/7d/e32c7d3e-c9a8-4896-9afb-e2528b7adb65/196872016550.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "isrc": "USUG12402645",
-    "name": "Summertime Blues",
-    "artist": "Chris Lake, Sammy Virji & Nathan Nicholson",
-    "link": "https://music.apple.com/us/album/summertime-blues/1741634636?i=1741634639",
-    "rank": 28,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/16/e5/89/16e589be-ba73-4121-f24b-41debea58b4f/24UMGIM35464.rgb.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "isrc": "USUM72402931",
-    "name": "Not Even Love (feat. Asdis)",
-    "artist": "Seven Lions & ILLENIUM",
-    "link": "https://music.apple.com/us/album/not-even-love-feat-asdis/1736048757?i=1736048763",
-    "rank": 29,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/32/53/dd/3253ddf5-3f2e-c447-69e5-2cbb7ca51311/24UMGIM26713.rgb.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "isrc": "GBARL2400194",
-    "name": "Another",
-    "artist": "Camden Cox",
-    "link": "https://music.apple.com/us/album/another/1732538266?i=1732538538",
-    "rank": 30,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/e4/5e/e6/e45ee6f1-1d6d-bbf9-c4b8-68a429be7ef8/196871877404.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "isrc": "GBCPZ2422963",
-    "name": "Paranoid",
-    "artist": "Layton Giordani",
-    "link": "https://music.apple.com/us/album/paranoid/1733919601?i=1733919604",
-    "rank": 31,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/41/51/bf/4151bfe8-12f7-eba0-970e-09b4f3ffe9c5/826194664497.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "isrc": "USZ4V2400153",
-    "name": "Ride Or Die",
-    "artist": "Aluna",
-    "link": "https://music.apple.com/us/album/ride-or-die/1739664479?i=1739664485",
-    "rank": 32,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/79/42/ad/7942ad9e-bb6b-4870-e0cf-69d4041d6a41/2632.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "isrc": "USZXT2453422",
-    "name": "Find A Way",
-    "artist": "Vintage Culture",
-    "link": "https://music.apple.com/us/album/find-a-way/1725169738?i=1725169876",
-    "rank": 33,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/ae/b8/19/aeb819de-114d-98b7-97da-a6f51b14829e/23SYMIM08764.rgb.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "isrc": "GBMVH2300940",
-    "name": "mr useless",
-    "artist": "Shygirl & SG Lewis",
-    "link": "https://music.apple.com/us/album/mr-useless/1725825321?i=1725826047",
-    "rank": 34,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/8c/ca/50/8cca5060-55f1-a9df-3ff9-519295f0aa5a/5056556135012_cover.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "isrc": "USZ4V2400142",
-    "name": "Heaven or Not (feat. Kareen Lomax)",
-    "artist": "Diplo & Riva Starr",
-    "link": "https://music.apple.com/us/album/heaven-or-not-feat-kareen-lomax/1736593206?i=1736593212",
-    "rank": 35,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/a2/bf/f0/a2bff082-84e6-0ed0-1efc-e9f7bc486e77/2594.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "isrc": "USUS12400185",
-    "name": "Fallin Luv",
-    "artist": "Gordo & Jeria",
-    "link": "https://music.apple.com/us/album/fallin-luv/1738547942?i=1738547945",
-    "rank": 36,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/06/9e/e3/069ee383-23b0-5de3-3453-4bc67e6c9746/196871994156.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "isrc": "GBCPZ2423116",
-    "name": "Give Me Something To Hold",
-    "artist": "Jack Back, THEMBA & David Guetta",
-    "link": "https://music.apple.com/us/album/give-me-something-to-hold/1740179463?i=1740179464",
-    "rank": 37,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/26/b6/4e/26b64e65-0f46-b3bf-69d5-21be6c3a1557/826194665296.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "isrc": "GBEWA2400021",
-    "name": "Fever",
-    "artist": "Jerro & Running Touch",
-    "link": "https://music.apple.com/us/album/fever/1731385596?i=1731385597",
-    "rank": 38,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/1f/dd/9a/1fdd9a61-bd65-61c9-8adf-0d3bc9f74378/5039060975190.png/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "isrc": "GBAHT2301515",
-    "name": "Happier (feat. Clementine Douglas)",
-    "artist": "The Blessed Madonna",
-    "link": "https://music.apple.com/us/album/happier-feat-clementine-douglas/1721072384?i=1721072870",
-    "rank": 39,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/9d/b5/c7/9db5c79b-d70a-d617-a8fa-6599b6094eac/5054197941139.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "isrc": "USQX92401237",
-    "name": "Waterfall",
-    "artist": "Drove & Dillon Francis",
-    "link": "https://music.apple.com/us/album/waterfall/1738280897?i=1738280901",
-    "rank": 40,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/88/32/f9/8832f97d-c676-43a4-7d51-7b7e618c0a00/196871955874.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "isrc": "CAM372300505",
-    "name": "dive /stay/",
-    "artist": "Felix Cartal & emma l\u00f8v",
-    "link": "https://music.apple.com/us/album/dive-stay/1737044611?i=1737044615",
-    "rank": 41,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/c2/cc/ef/c2ccef76-fed5-fccf-f9b8-03411fa232e3/823675299933_Cover.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "isrc": null,
-    "name": "Down Low",
-    "artist": "it's murph & Sorana",
-    "link": "https://music.apple.com/us/album/down-low/1744030910?i=1744030921",
-    "rank": 42,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/14/1f/1f/141f1f70-81d5-2f21-15d1-b1b201a63d4b/24UMGIM49088.rgb.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "isrc": "NLF712402047",
-    "name": "Kinetic Cinema",
-    "artist": "Gabriel & Dresden",
-    "link": "https://music.apple.com/us/album/kinetic-cinema/1735938948?i=1735938950",
-    "rank": 43,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/e0/82/fd/e082fd90-e4b9-8815-d7e2-6e0532b3481c/5039060982693.png/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "isrc": "GBJAJ2400413",
-    "name": "One by One",
-    "artist": "Deeper Purpose, Jalja & LAZY JOE",
-    "link": "https://music.apple.com/us/album/one-by-one/1735977579?i=1735977581",
-    "rank": 44,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/8c/0c/31/8c0c31bb-aec4-5201-47b3-da7e7d2ace2f/5052075031224.png/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "isrc": "USZXT2353144",
-    "name": "Nothing Ever Changes",
-    "artist": "Vintage Culture & MAGNUS",
-    "link": "https://music.apple.com/us/album/nothing-ever-changes/1725169738?i=1725169743",
-    "rank": 45,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/ae/b8/19/aeb819de-114d-98b7-97da-a6f51b14829e/23SYMIM08764.rgb.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "isrc": "BEIW12400233",
-    "name": "To The Beat",
-    "artist": "Dimitri Vegas & Like Mike, Regard & NATTI NATASHA",
-    "link": "https://music.apple.com/us/album/to-the-beat/1737256243?i=1737256746",
-    "rank": 46,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/49/18/0e/49180ea9-fc43-7f42-1384-b54c1c303286/198391629136.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "isrc": "GBCEN2400021",
-    "name": "Sinner",
-    "artist": "Charlotte Haining",
-    "link": "https://music.apple.com/us/album/sinner/1733068862?i=1733068864",
-    "rank": 47,
-=======
-    "name": "Beat Of Your Love (feat. EKKO)",
-    "artist": "Öwnboss \u0026 LAWRENT",
-    "link": "https://music.apple.com/us/album/beat-of-your-love-feat-ekko/1728073223?i=1728073224",
-    "rank": 10,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/c7/f5/a1/c7f5a190-57ed-f17e-0603-50c849c40d94/5054197972676.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "name": "Free",
-    "artist": "Bklava",
-    "link": "https://music.apple.com/us/album/free/1733245691?i=1733245861",
-    "rank": 93,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/2e/3a/86/2e3a8699-6059-f374-fae8-0d4085ae3f7b/196922871368_Cover.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "name": "What I Wanted (GUDFELLA Remix)",
-    "artist": "Jauz \u0026 GUDFELLA",
-    "link": "https://music.apple.com/us/album/what-i-wanted-gudfella-remix/1733914503?i=1733914505",
-    "rank": 100,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/f4/3f/1e/f43f1e2d-bd2a-0376-1c91-b2d287ecf320/0.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "name": "Sinner",
-    "artist": "Charlotte Haining",
-    "link": "https://music.apple.com/us/album/sinner/1733068862?i=1733068864",
-    "rank": 76,
->>>>>>> Stashed changes:docs/silver/apple_music_edm_silver.json
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/eb/22/fe/eb22fea9-46f2-9f37-32f6-92b5e8821107/196871899611.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-<<<<<<< Updated upstream:docs/files/transform/applemusic_dance_transformed.json
-    "isrc": "QZMZ92420283",
-    "name": "Chains",
-    "artist": "Jauz & Nevve",
-    "link": "https://music.apple.com/us/album/chains/1739826271?i=1739826272",
-    "rank": 48,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/28/62/cb/2862cb78-68f8-1bff-cd2f-d2fadb99dee7/0.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "isrc": "USA2P2415020",
-    "name": "MAGIC",
-    "artist": "Gryffin & babyidontlikeyou",
-    "link": "https://music.apple.com/us/album/magic/1740903229?i=1740903237",
-    "rank": 49,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/76/ce/70/76ce70f8-0a9a-8d3f-42a8-b778698ddb6a/00196922890604_Cover.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "isrc": "USUS12400109",
-    "name": "Different Worlds",
-    "artist": "Hayden James & Anabel Englund",
-    "link": "https://music.apple.com/us/album/different-worlds/1733122303?i=1733122304",
-    "rank": 50,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/21/94/ff/2194ff58-3c7d-e237-c15f-acea87fa11d7/196871901475.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "isrc": "CA5KR2434567",
-    "name": "COME BACK HOME",
-    "artist": "OddKidOut, Angrybaby & Nina Sung",
-    "link": "https://music.apple.com/us/album/come-back-home/1732736446?i=1732736597",
-    "rank": 51,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/53/31/00/533100fd-dfa2-70ca-23a1-afdd0fa1a862/cover.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "isrc": "GBENL2403882",
-    "name": "Insomnia",
-    "artist": "Eli & Fur",
-    "link": "https://music.apple.com/us/album/insomnia/1733961667?i=1733961676",
-    "rank": 52,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/46/77/40/4677408c-263b-36fe-033e-e445b2673bfa/5400863162238_cover.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "isrc": "NLRD52339318",
-    "name": "Mwaki",
-    "artist": "ZERB & Sofiya Nzau",
-    "link": "https://music.apple.com/us/album/mwaki/1715015592?i=1715015717",
-    "rank": 53,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/2d/68/39/2d683965-8149-029e-f749-c4df9038e32c/8721056104857.png/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "isrc": "QZUCN2201485",
-    "name": "We Groovin",
-    "artist": "Jamie Jones & Jazzy",
-    "link": "https://music.apple.com/us/album/we-groovin/1729232019?i=1729232020",
-    "rank": 54,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/ef/66/63/ef666393-3931-02a6-ddc4-3675f160eff8/0196762014802.png/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "isrc": "USUG12401869",
-    "name": "Now Or Never",
-    "artist": "Anyma",
-    "link": "https://music.apple.com/us/album/now-or-never/1740222240?i=1740222478",
-    "rank": 55,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/ab/7f/f2/ab7ff219-5949-0965-8fb0-603d6b92ac79/24UMGIM28490.rgb.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "isrc": "USQX92305379",
-    "name": "Saving Up",
-    "artist": "Dom Dolla",
-    "link": "https://music.apple.com/us/album/saving-up/1709177801?i=1709178108",
-    "rank": 56,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/84/5e/33/845e3390-0d0c-ce76-b1b1-76f17126df60/196871470261.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "isrc": "GBBKS2400221",
-    "name": "Lobster Telephone (Edit)",
-    "artist": "Peggy Gou",
-    "link": "https://music.apple.com/us/album/lobster-telephone-edit/1742767133?i=1742767138",
-    "rank": 57,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/94/74/1e/94741efd-c35a-214d-1300-f09e8ca54827/191404145777.png/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "isrc": "NLZ542400382",
-    "name": "My City",
-    "artist": "Ti\u00ebsto & Prophecy",
-    "link": "https://music.apple.com/us/album/my-city/1745160493?i=1745160495",
-    "rank": 58,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/f7/85/c5/f785c572-f737-b282-ced6-9afe586d26af/8721093111559.png/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "isrc": "USNRS2343078",
-    "name": "Last Night",
-    "artist": "Loofy",
-    "link": "https://music.apple.com/us/album/last-night/1707086680?i=1707086900",
-    "rank": 59,
-=======
-    "name": "Last Night",
-    "artist": "Loofy",
-    "link": "https://music.apple.com/us/album/last-night/1707086680?i=1707086900",
-    "rank": 82,
->>>>>>> Stashed changes:docs/silver/apple_music_edm_silver.json
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/cd/c4/0d/cdc40d37-15a4-bd9a-67ce-88e0c0caa709/091012641060.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-<<<<<<< Updated upstream:docs/files/transform/applemusic_dance_transformed.json
-    "isrc": "QM4TW2437510",
-    "name": "Desire",
-    "artist": "Chris Stussy",
-    "link": "https://music.apple.com/us/album/desire/1744599883?i=1744599886",
-    "rank": 60,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/e2/52/13/e252138e-ad1d-0e85-4d5b-88c6da577cb7/197190967067_Cover.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "isrc": "GBUM72311080",
-    "name": "No Reason (Chris Lake Remix)",
-    "artist": "The Chemical Brothers",
-    "link": "https://music.apple.com/us/album/no-reason-chris-lake-remix/1722565474?i=1722565475",
-    "rank": 61,
-=======
-    "name": "Another",
-    "artist": "Camden Cox",
-    "link": "https://music.apple.com/us/album/another/1732538266?i=1732538538",
-    "rank": 12,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/e4/5e/e6/e45ee6f1-1d6d-bbf9-c4b8-68a429be7ef8/196871877404.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "name": "Green \u0026 Gold (feat. Charlotte Plank \u0026 Riko Dan)",
-    "artist": "Rudimental \u0026 Skepsis",
-    "link": "https://music.apple.com/us/album/green-gold-feat-charlotte-plank-riko-dan/1731346217?i=1731346229",
-    "rank": 33,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/76/f1/cd/76f1cd2f-786c-eee7-0027-de07f1a66bfa/196871844444.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "name": "Rage",
-    "artist": "Charlotte Plank",
-    "link": "https://music.apple.com/us/album/rage/1725358169?i=1725358182",
-    "rank": 48,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/60/08/87/60088798-5e33-151d-6652-3108128dd885/196871765312.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "name": "Lovers In A Past Life",
-    "artist": "Calvin Harris \u0026 Rag'n'Bone Man",
-    "link": "https://music.apple.com/us/album/lovers-in-a-past-life/1729198779?i=1729198782",
-    "rank": 49,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/11/27/dd/1127dd4a-285f-6295-2da0-3442ad5a3684/196871819862.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "name": "The von dutch remix with skream and benga",
-    "artist": "Charli XCX",
-    "link": "https://music.apple.com/us/album/the-von-dutch-remix-with-skream-and-benga/1740421168?i=1740421183",
-    "rank": 53,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/c4/c6/c5/c4c6c5e0-80da-b253-842e-bbb676dae730/075679649614.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "name": "I Wanna Go",
-    "artist": "Autograf",
-    "link": "https://music.apple.com/us/album/i-wanna-go/1726586964?i=1726586965",
-    "rank": 8,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/9c/97/fe/9c97fea8-ffee-dd82-287c-6b7a12cd2fbf/8718522436734.png/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "name": "Fatalistic Groove",
-    "artist": "Walker \u0026 Royce \u0026 Barney Bones",
-    "link": "https://music.apple.com/us/album/fatalistic-groove/1735847281?i=1735847538",
-    "rank": 85,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/b1/03/15/b10315f0-5e44-cea8-0bce-1eee789afbca/197342542296_cover.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "name": "The Weekend",
-    "artist": "Anti Up",
-    "link": "https://music.apple.com/us/album/the-weekend/1737937550?i=1737937559",
-    "rank": 94,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/e8/1d/f6/e81df685-72e5-9885-bca7-de96139cd5b2/075679652867.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "name": "You \u0026 Me (feat. Eliza Doolittle) [Rivo Remix]",
-    "artist": "Disclosure",
-    "link": "https://music.apple.com/us/album/you-me-feat-eliza-doolittle-rivo-remix/1721345200?i=1721345202",
-    "rank": 9,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/c7/20/25/c72025be-5a14-3b79-ed01-c7962169bcea/23UM1IM62832.rgb.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "name": "Save Me",
-    "artist": "Kaleena Zanders \u0026 House Gospel Choir",
-    "link": "https://music.apple.com/us/album/save-me/1738513894?i=1738513895",
-    "rank": 72,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/d5/09/f8/d509f868-0f1b-15b6-0f79-fd521b295f73/0196762016134.png/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "name": "Famax (Edit)",
-    "artist": "RAFFA GUIDO",
-    "link": "https://music.apple.com/us/album/famax-edit/1728329795?i=1728329797",
-    "rank": 87,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/a2/c0/e1/a2c0e148-bf23-1be4-80a9-080e95d448bb/617513995053_cover.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "name": "Tell Me Who You Are",
-    "artist": "Morgin Madison, Ryan Lucian \u0026 Jas.",
-    "link": "https://music.apple.com/us/album/tell-me-who-you-are/1722299144?i=1722299145",
-    "rank": 17,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/68/f0/53/68f05312-4e6a-3368-1494-9e24281b475b/cover.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "name": "All That You Need",
-    "artist": "Gorgon City \u0026 Caroline Byrne",
-    "link": "https://music.apple.com/us/album/all-that-you-need/1738461195?i=1738461888",
-    "rank": 4,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/b2/03/cc/b203ccf4-e9dd-2125-60d8-6a9d9faa6c84/24UMGIM21053.rgb.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "name": "Easy Baby",
-    "artist": "Ferreck Dawn \u0026 Mo Selleck",
-    "link": "https://music.apple.com/us/album/easy-baby/1731266584?i=1731266595",
-    "rank": 71,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/88/85/77/88857779-0968-f8e4-5334-1d74788a9782/24SYMIM09931.rgb.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "name": "Giving Me Life",
-    "artist": "Tchami, Malaa \u0026 Kaleena Zanders",
-    "link": "https://music.apple.com/us/album/giving-me-life/1732142580?i=1732142594",
-    "rank": 41,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/d0/2e/8c/d02e8cc6-c67a-993a-00d6-20c33dbe7db6/00196922853975_Cover.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "name": "When You Gonna",
-    "artist": "Illyus \u0026 Barrientos",
-    "link": "https://music.apple.com/us/album/when-you-gonna/1727603169?i=1727603170",
-    "rank": 51,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/27/fe/7f/27fe7f53-1762-be71-5807-8e73da9ec458/5052075030890.png/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "name": "1+1=11 (Edit)",
-    "artist": "Peggy Gou",
-    "link": "https://music.apple.com/us/album/1-1-11-edit/1735727562?i=1735727566",
-    "rank": 83,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/51/91/1d/51911d08-cc7a-b7f5-835b-50a1470be29b/191404143520.png/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "name": "Seek Love (On The Beach) [feat. Amanda Wilson \u0026 York]",
-    "artist": "Alok, Tazi \u0026 Samuele Sartini",
-    "link": "https://music.apple.com/us/album/seek-love-on-the-beach-feat-amanda-wilson-york/1736802685?i=1736802698",
-    "rank": 99,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/5d/63/1f/5d631f33-e1c1-7ab2-69b9-b5a072cf8669/196871959674.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "name": "Nostalgia",
-    "artist": "PNAU",
-    "link": "https://music.apple.com/us/album/nostalgia/1735082167?i=1735082174",
-    "rank": 20,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/dd/23/a7/dd23a7c6-1944-839e-ea16-cf91cbd23329/196871840156.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "name": "What Took You so Long",
-    "artist": "Armin van Buuren \u0026 Gryffin",
-    "link": "https://music.apple.com/us/album/what-took-you-so-long/1733871927?i=1733871928",
-    "rank": 86,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/37/fb/06/37fb062d-57e4-e37d-46ca-267444fe6680/8718522456848.png/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "name": "Mwaki",
-    "artist": "ZERB \u0026 Sofiya Nzau",
-    "link": "https://music.apple.com/us/album/mwaki/1715015592?i=1715015717",
-    "rank": 54,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/2d/68/39/2d683965-8149-029e-f749-c4df9038e32c/8721056104857.png/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "name": "All the Things She Said",
-    "artist": "Robin Schulz, Timmy Trumpet \u0026 KOPPY",
-    "link": "https://music.apple.com/us/album/all-the-things-she-said/1737007334?i=1737007336",
-    "rank": 98,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/08/78/74/08787436-75e6-fe6c-c373-8e4fa4f2efe3/5021732265654.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "name": "Balance",
-    "artist": "Wilkinson \u0026 NORTH",
-    "link": "https://music.apple.com/us/album/balance/1731821253?i=1731821254",
-    "rank": 64,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/d4/cf/d8/d4cfd847-420d-4c2d-9a92-b4088e6508c4/4099964040616.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "name": "DOPAMINE HIT",
-    "artist": "SAYMYNAME",
-    "link": "https://music.apple.com/us/album/dopamine-hit/1728349684?i=1728349852",
-    "rank": 25,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/02/ec/32/02ec32a6-bc9d-e96c-b696-bb06617cba08/196871813747.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "name": "All For You (feat. Joanna Cooke)",
-    "artist": "Maur",
-    "link": "https://music.apple.com/us/album/all-for-you-feat-joanna-cooke/1733726021?i=1733726359",
-    "rank": 39,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/f6/65/cd/f665cde0-56ae-8e53-2e46-da78f6cab8d9/085365688612.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "name": "Heaven or Not (feat. Kareen Lomax)",
-    "artist": "Diplo \u0026 Riva Starr",
-    "link": "https://music.apple.com/us/album/heaven-or-not-feat-kareen-lomax/1736593206?i=1736593212",
-    "rank": 7,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/a2/bf/f0/a2bff082-84e6-0ed0-1efc-e9f7bc486e77/2594.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "name": "Jamming (FISHER Rework)",
-    "artist": "Bob Marley \u0026 The Wailers \u0026 FISHER",
-    "link": "https://music.apple.com/us/album/jamming-fisher-rework/1728925733?i=1728925734",
-    "rank": 80,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/e7/24/4e/e7244ef1-a9f6-e754-72ae-578814f7c11e/24UMGIM11528.rgb.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "name": "No Reason (Chris Lake Remix)",
-    "artist": "The Chemical Brothers",
-    "link": "https://music.apple.com/us/album/no-reason-chris-lake-remix/1722565474?i=1722565475",
-    "rank": 60,
->>>>>>> Stashed changes:docs/silver/apple_music_edm_silver.json
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/26/87/04/26870426-ed6f-bf7c-73c0-837faca800e8/23UM1IM64163.rgb.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-<<<<<<< Updated upstream:docs/files/transform/applemusic_dance_transformed.json
-    "isrc": "GBEWA2401310",
-    "name": "Remission",
-    "artist": "Kasablanca & Lane 8",
-    "link": "https://music.apple.com/us/album/remission/1735923246?i=1735923247",
-    "rank": 62,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/04/ce/2b/04ce2b7a-3d9e-912b-184b-7c81e9efe50f/5039060982495.png/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "isrc": "NL8RL2409745",
-    "name": "On Again",
-    "artist": "Mau P",
-    "link": "https://music.apple.com/us/album/on-again/1736836112?i=1736836113",
-    "rank": 63,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/5c/e7/3f/5ce73f0a-4843-4f25-00cd-0d49eb2a0e20/8721056815135.png/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "isrc": "GBUM72311096",
-    "name": "Right Here",
-    "artist": "Becky Hill",
-    "link": "https://music.apple.com/us/album/right-here/1731891564?i=1731892440",
-    "rank": 64,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/3d/ca/7a/3dca7ae2-a6e0-e61c-d3b7-55879e9bcc99/24UMGIM00242.rgb.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "isrc": "USSM12403627",
-    "name": "Waiting For Tonight",
-    "artist": "FISHER & Jennifer Lopez",
-    "link": "https://music.apple.com/us/album/waiting-for-tonight/1744209206?i=1744209207",
-    "rank": 65,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/65/62/5a/65625acb-fa0d-d991-1bf3-fa7650531852/193436382328_FisherJloFinal.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "isrc": "FR8EU2300010",
-    "name": "Neverender",
-    "artist": "Justice & Tame Impala",
-    "link": "https://music.apple.com/us/album/neverender/1724935208?i=1724935211",
-    "rank": 66,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/c2/19/4b/c2194bc8-63e2-b31f-b872-9611aa5fcded/5056556135845_cover.jpg/296x296bb-60.jpg",
-=======
-    "name": "CHROMA 002 L.A.V.A",
-    "artist": "Bicep \u0026 Benjamin Damage",
-    "link": "https://music.apple.com/us/album/chroma-002-l-a-v-a/1732241695?i=1732241696",
-    "rank": 77,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/07/f4/52/07f45221-9d34-5ca4-6388-87924d60c6bf/5054429188936.png/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "name": "One More Time",
-    "artist": "Shiba San",
-    "link": "https://music.apple.com/us/album/one-more-time/1733616381?i=1733616382",
-    "rank": 52,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/7e/47/2a/7e472ac3-da88-0158-963b-b5b171626235/TINT0423.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "name": "Desire",
-    "artist": "Chris Stussy",
-    "link": "https://music.apple.com/us/album/desire/1726980894?i=1726980898",
-    "rank": 63,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/e8/ec/79/e8ec79c5-3b0b-8447-6634-637a84f821ad/197190967067.jpg/296x296bb-60.jpg",
->>>>>>> Stashed changes:docs/silver/apple_music_edm_silver.json
-    "source": "apple_music"
-  },
-  {
-    "isrc": "GBCFB2400160",
-    "name": "system",
-    "artist": "salute",
-    "link": "https://music.apple.com/us/album/system/1726621108?i=1726621112",
-    "rank": 67,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/1e/82/26/1e82269a-76a2-1c3f-65c9-b73100cb21b8/5054429193442.png/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-<<<<<<< Updated upstream:docs/files/transform/applemusic_dance_transformed.json
-    "isrc": "GBJAJ2400531",
-    "name": "I Choose You",
-    "artist": "CHANEY",
-    "link": "https://music.apple.com/us/album/i-choose-you/1740974902?i=1740974905",
-    "rank": 68,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/eb/98/9c/eb989c3b-5a10-4dd6-82f5-54e3b9376477/5052075031422.png/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "isrc": "USUS12400233",
-    "name": "Testify",
-    "artist": "Solardo & Kaleena Zanders",
-    "link": "https://music.apple.com/us/album/testify/1741414116?i=1741414118",
-    "rank": 69,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/f8/46/8d/f8468de1-ed5b-83c3-8406-dad2bd2ee22e/196872040449.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "isrc": "NL8RL2408340",
-    "name": "Forget",
-    "artist": "Yotto, AVIRA & ALSO ASTIR",
-    "link": "https://music.apple.com/us/album/forget/1736770058?i=1736770060",
-    "rank": 70,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/5d/f1/d6/5df1d698-1ce3-60fd-aa01-77e5fac88e45/8721056783557.png/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "isrc": "USUM72401299",
-    "name": "Jamming (FISHER Rework)",
-    "artist": "Bob Marley & The Wailers & FISHER",
-    "link": "https://music.apple.com/us/album/jamming-fisher-rework/1728925733?i=1728925734",
-    "rank": 71,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/e7/24/4e/e7244ef1-a9f6-e754-72ae-578814f7c11e/24UMGIM11528.rgb.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "isrc": "GBPQS2300184",
-    "name": "Buscando Money",
-    "artist": "TWENTY SIX & Tayson Kryss",
-    "link": "https://music.apple.com/us/album/buscando-money/1732549261?i=1732549265",
-    "rank": 72,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/35/e0/e0/35e0e061-3c0f-0038-ad20-217075d63e62/823220184912.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "isrc": "ITFGO2400001",
-    "name": "Famax (Edit)",
-    "artist": "RAFFA GUIDO",
-    "link": "https://music.apple.com/us/album/famax-edit/1728329795?i=1728329797",
-    "rank": 73,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/a2/c0/e1/a2c0e148-bf23-1be4-80a9-080e95d448bb/617513995053_cover.jpg/296x296bb-60.jpg",
-=======
-    "name": "Only For A Moment (feat. Ekko)",
-    "artist": "Rezident",
-    "link": "https://music.apple.com/us/album/only-for-a-moment-feat-ekko/1726346228?i=1726346229",
-    "rank": 31,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/88/3c/1e/883c1e2a-16fc-bc39-46f7-85c174bb06fe/5039060967294.png/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "name": "Teka",
-    "artist": "DJ Snake \u0026 Peso Pluma",
-    "link": "https://music.apple.com/us/album/teka/1741006070?i=1741006093",
-    "rank": 5,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/07/87/5c/07875cc5-9a91-73f9-7193-91f315a1d966/24UMGIM13634.rgb.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "name": "Remission",
-    "artist": "Kasablanca \u0026 Lane 8",
-    "link": "https://music.apple.com/us/album/remission/1735923246?i=1735923247",
-    "rank": 62,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/04/ce/2b/04ce2b7a-3d9e-912b-184b-7c81e9efe50f/5039060982495.png/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "name": "mr useless",
-    "artist": "Shygirl \u0026 SG Lewis",
-    "link": "https://music.apple.com/us/album/mr-useless/1725825321?i=1725826047",
-    "rank": 14,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/8c/ca/50/8cca5060-55f1-a9df-3ff9-519295f0aa5a/5056556135012_cover.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "name": "Not Even Love (feat. Asdis)",
-    "artist": "Seven Lions \u0026 ILLENIUM",
-    "link": "https://music.apple.com/us/album/not-even-love-feat-asdis/1736048757?i=1736048763",
-    "rank": 36,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/32/53/dd/3253ddf5-3f2e-c447-69e5-2cbb7ca51311/24UMGIM26713.rgb.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "name": "Different Worlds",
-    "artist": "Hayden James \u0026 Anabel Englund",
-    "link": "https://music.apple.com/us/album/different-worlds/1733122303?i=1733122304",
-    "rank": 50,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/21/94/ff/2194ff58-3c7d-e237-c15f-acea87fa11d7/196871901475.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "name": "Saving Up",
-    "artist": "Dom Dolla",
-    "link": "https://music.apple.com/us/album/saving-up/1709177801?i=1709178108",
-    "rank": 56,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/84/5e/33/845e3390-0d0c-ce76-b1b1-76f17126df60/196871470261.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "name": "Pachamama (feat. Elliphant)",
-    "artist": "Luude",
-    "link": "https://music.apple.com/us/album/pachamama-feat-elliphant/1733769915?i=1733770125",
-    "rank": 75,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/81/94/2b/81942b74-6be8-353f-746b-5d7587083901/24UMGIM20847.rgb.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "name": "Fever",
-    "artist": "Jerro \u0026 Running Touch",
-    "link": "https://music.apple.com/us/album/fever/1731385596?i=1731385597",
-    "rank": 30,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/1f/dd/9a/1fdd9a61-bd65-61c9-8adf-0d3bc9f74378/5039060975190.png/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "name": "Want Me",
-    "artist": "Skeptic \u0026 Sophia Violet",
-    "link": "https://music.apple.com/us/album/want-me/1730539052?i=1730539211",
-    "rank": 67,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/29/5d/58/295d5845-008b-0295-fd6e-ceecd893602f/5054197970610.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "name": "All I've Got",
-    "artist": "LF SYSTEM",
-    "link": "https://music.apple.com/us/album/all-ive-got/1726044555?i=1726044677",
-    "rank": 70,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/95/e7/3b/95e73b98-b06a-2128-726d-f78191e4e924/8721056430376.png/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "name": "Shiver",
-    "artist": "John Summit \u0026 Hayla",
-    "link": "https://music.apple.com/us/album/shiver/1728957955?i=1728957956",
-    "rank": 3,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/be/7d/23/be7d23e1-ed96-302f-83e7-053cd9b20dbb/193436371179_SHIVERSQUAREFORDELIVERY.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "name": "Paranoid",
-    "artist": "Layton Giordani",
-    "link": "https://music.apple.com/us/album/paranoid/1733919601?i=1733919604",
-    "rank": 35,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/41/51/bf/4151bfe8-12f7-eba0-970e-09b4f3ffe9c5/826194664497.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "name": "Forget",
-    "artist": "Yotto, AVIRA \u0026 ALSO ASTIR",
-    "link": "https://music.apple.com/us/album/forget/1736770058?i=1736770060",
-    "rank": 79,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/5d/f1/d6/5df1d698-1ce3-60fd-aa01-77e5fac88e45/8721056783557.png/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "name": "Regenerator",
-    "artist": "Eelke Kleijn",
-    "link": "https://music.apple.com/us/album/regenerator/1731343936?i=1731344327",
-    "rank": 84,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/76/54/4e/76544e45-985a-8f44-1f8c-9f579c525835/8718522453984.png/296x296bb-60.jpg",
->>>>>>> Stashed changes:docs/silver/apple_music_edm_silver.json
-    "source": "apple_music"
-  },
-  {
-    "isrc": "USZ4V2300268",
-    "name": "Gorah",
-    "artist": "Nitefreak & Emmanuel Jal",
-    "link": "https://music.apple.com/us/album/gorah/1712725935?i=1712725936",
-    "rank": 74,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/87/75/aa/8775aa00-8171-eb4b-88bc-0f20770cec06/2279.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-<<<<<<< Updated upstream:docs/files/transform/applemusic_dance_transformed.json
-    "isrc": "GBCEN2400063",
-    "name": "Lift You Up",
-    "artist": "LF SYSTEM",
-    "link": "https://music.apple.com/us/album/lift-you-up/1737989915?i=1737989916",
-    "rank": 75,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/26/86/59/2686599a-f699-29c9-8896-8b60f04d0e63/196871981699.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "isrc": "CAUM82400042",
-    "name": "Waves",
-    "artist": "Zeds Dead, Flux Pavilion & DeathbyRomy",
-    "link": "https://music.apple.com/us/album/waves/1737508849?i=1737508852",
-    "rank": 76,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/68/1d/00/681d00c3-3e62-d0c3-bfa9-836a2b6e1aa5/24UMGIM32037.rgb.jpg/296x296bb-60.jpg",
-=======
-    "name": "Roar",
-    "artist": "Charlotte de Witte",
-    "link": "https://music.apple.com/us/album/roar/1736537340?i=1736537349",
-    "rank": 96,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/88/bd/a2/88bda288-6e80-4baf-eaa8-18fc4c1fa348/198391524479.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "name": "Sippin' Yak",
-    "artist": "Cloonee",
-    "link": "https://music.apple.com/us/album/sippin-yak/1734676552?i=1734676556",
-    "rank": 23,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/a3/63/1c/a3631cd3-f312-4646-c52f-6a384a63be6b/24UMGIM25199.rgb.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "name": "Free",
-    "artist": "Quarterhead",
-    "link": "https://music.apple.com/us/album/free/1719324231?i=1719324233",
-    "rank": 29,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/f1/ec/98/f1ec98c9-acbf-6471-e782-28f852681210/cover.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "name": "Lifetime",
-    "artist": "Tobiahs",
-    "link": "https://music.apple.com/us/album/lifetime/1722564698?i=1722564700",
-    "rank": 34,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/83/41/a9/8341a93b-6d9f-883a-7857-a5b3dca6bc71/23SYMIM08853.rgb.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "name": "One by One",
-    "artist": "Deeper Purpose, Jalja \u0026 LAZY JOE",
-    "link": "https://music.apple.com/us/album/one-by-one/1735977579?i=1735977581",
-    "rank": 90,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/8c/0c/31/8c0c31bb-aec4-5201-47b3-da7e7d2ace2f/5052075031224.png/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "name": "Shooting Star",
-    "artist": "Jazzy",
-    "link": "https://music.apple.com/us/album/shooting-star/1722565972?i=1722565974",
-    "rank": 19,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/f4/92/26/f4922642-65b0-a123-9725-06c258f2b082/23UMGIM95508.rgb.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "name": "Sweet Escape",
-    "artist": "Louis Millne",
-    "link": "https://music.apple.com/us/album/sweet-escape/1720209337?i=1720209698",
-    "rank": 24,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/81/1e/73/811e732d-67fc-6d7b-be8e-4da34742303d/197338173459.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "name": "SET ME FREE",
-    "artist": "Mattilo",
-    "link": "https://music.apple.com/us/album/set-me-free/1723360851?i=1723360857",
-    "rank": 26,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/c9/2e/71/c92e71b6-f667-3faa-25d7-722d9a6f8ee2/197190827644.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "name": "I Got Nothing",
-    "artist": "Meduza, Ferreck Dawn \u0026 Clementine Douglas",
-    "link": "https://music.apple.com/us/album/i-got-nothing/1718773701?i=1718773713",
-    "rank": 44,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/f5/16/54/f516547c-9e7f-891a-378b-80156a6e049f/826194653095.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "name": "Nothing Ever Changes",
-    "artist": "Vintage Culture \u0026 MAGNUS",
-    "link": "https://music.apple.com/us/album/nothing-ever-changes/1725169738?i=1725169743",
-    "rank": 68,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/ae/b8/19/aeb819de-114d-98b7-97da-a6f51b14829e/23SYMIM08764.rgb.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "name": "We Groovin",
-    "artist": "Jamie Jones \u0026 Jazzy",
-    "link": "https://music.apple.com/us/album/we-groovin/1729232019?i=1729232020",
-    "rank": 37,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/ef/66/63/ef666393-3931-02a6-ddc4-3675f160eff8/0196762014802.png/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "name": "Drowning Mind",
-    "artist": "goddard. \u0026 Billy Lockett",
-    "link": "https://music.apple.com/us/album/drowning-mind/1736194183?i=1736194186",
-    "rank": 57,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/ec/cb/0c/eccb0c1d-e599-715c-42ad-148624a13467/5055199569260.png/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "name": "Eat the Bass",
-    "artist": "John Summit",
-    "link": "https://music.apple.com/us/album/eat-the-bass/1738496220?i=1738496221",
-    "rank": 61,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/f0/81/50/f08150d8-c5c4-019a-9201-d259a63c9569/193436377942_EatTheBassCoverArtFinal.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "name": "Rest Of My Life",
-    "artist": "Jonas Blue, Sam Feldt, Endless Summer \u0026 Sadie Rose Van",
-    "link": "https://music.apple.com/us/album/rest-of-my-life/1723412115?i=1723412388",
-    "rank": 18,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/5f/a8/37/5fa837e5-5a73-abd8-a871-70a2aec2c2ec/23UM1IM34986.rgb.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "name": "Waves",
-    "artist": "Zeds Dead, Flux Pavilion \u0026 DeathbyRomy",
-    "link": "https://music.apple.com/us/album/waves/1737508849?i=1737508852",
-    "rank": 89,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/68/1d/00/681d00c3-3e62-d0c3-bfa9-836a2b6e1aa5/24UMGIM32037.rgb.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "name": "Higher Ground (feat. Roosevelt)",
-    "artist": "Purple Disco Machine",
-    "link": "https://music.apple.com/us/album/higher-ground-feat-roosevelt/1734453806?i=1734453812",
-    "rank": 91,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/6d/9d/e8/6d9de895-8c1c-fd07-157b-d8dd746864c5/196871834643.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "name": "In Your Arms",
-    "artist": "Jess Bays \u0026 Jem Cooke",
-    "link": "https://music.apple.com/us/album/in-your-arms/1728715876?i=1728716001",
-    "rank": 15,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/3f/61/e9/3f61e905-8e49-a89d-c10c-d3b2b84bdeca/197338046340.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "name": "Disco Boy",
-    "artist": "Disco Lines",
-    "link": "https://music.apple.com/us/album/disco-boy/1730235873?i=1730235882",
-    "rank": 59,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/b7/60/4e/b7604e94-203a-d73d-87bf-43e10fdd2d28/cover.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "name": "Sway (feat. DUCKWRTH)",
-    "artist": "A-Trak \u0026 AJ Christou",
-    "link": "https://music.apple.com/us/album/sway-feat-duckwrth/1731295313?i=1731295316",
-    "rank": 78,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/ff/d9/0c/ffd90c31-4901-ac4b-4467-c33c1555fdb6/198391225208.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "name": "Feel It",
-    "artist": "ayokay",
-    "link": "https://music.apple.com/us/album/feel-it/1734804331?i=1734804333",
-    "rank": 97,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/45/5f/a1/455fa12b-c6f2-e63f-b7c3-acc382c23725/5039060981191.png/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "name": "Mind Still (feat. blythe)",
-    "artist": "Sonny Fodera",
-    "link": "https://music.apple.com/us/album/mind-still-feat-blythe/1729414512?i=1729414926",
-    "rank": 22,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/12/4c/0a/124c0ac8-80a4-ab06-38e7-d8e5800b34dc/197338037492.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "name": "Never Be Alone",
-    "artist": "Becky Hill \u0026 Sonny Fodera",
-    "link": "https://music.apple.com/us/album/never-be-alone/1731891564?i=1731891893",
-    "rank": 38,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/3d/ca/7a/3dca7ae2-a6e0-e61c-d3b7-55879e9bcc99/24UMGIM00242.rgb.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "name": "Buscando Money",
-    "artist": "TWENTY SIX \u0026 Tayson Kryss",
-    "link": "https://music.apple.com/us/album/buscando-money/1732549261?i=1732549265",
-    "rank": 81,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/35/e0/e0/35e0e061-3c0f-0038-ad20-217075d63e62/823220184912.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "name": "COME BACK HOME",
-    "artist": "OddKidOut, Angrybaby \u0026 Nina Sung",
-    "link": "https://music.apple.com/us/album/come-back-home/1732736446?i=1732736597",
-    "rank": 92,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/53/31/00/533100fd-dfa2-70ca-23a1-afdd0fa1a862/cover.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "name": "Baby I'm Bad",
-    "artist": "Rain Radio, shugz \u0026 Caitlyn Scarlett",
-    "link": "https://music.apple.com/us/album/baby-im-bad/1732078591?i=1732078597",
-    "rank": 65,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/08/07/16/080716d3-d802-5006-4965-22a1b445b7e5/196871844253.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "name": "Happier (feat. Clementine Douglas)",
-    "artist": "The Blessed Madonna",
-    "link": "https://music.apple.com/us/album/happier-feat-clementine-douglas/1721072384?i=1721072870",
-    "rank": 43,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/9d/b5/c7/9db5c79b-d70a-d617-a8fa-6599b6094eac/5054197941139.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "name": "Horizon",
-    "artist": "Joris Voorn",
-    "link": "https://music.apple.com/us/album/horizon/1732238839?i=1732238842",
-    "rank": 74,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/29/cd/5d/29cd5d29-b657-9bf8-c1e8-4100eeba64c0/cover.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "name": "Addicted (feat. Ink)",
-    "artist": "ZERB \u0026 The Chainsmokers",
-    "link": "https://music.apple.com/us/album/addicted-feat-ink/1734260110?i=1734260111",
-    "rank": 2,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/0f/df/a1/0fdfa19f-aae2-c601-3c44-9d3e45f80adf/8721056755820.png/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "name": "Never Be Lonely",
-    "artist": "Jax Jones \u0026 Zoe Wees",
-    "link": "https://music.apple.com/us/album/never-be-lonely/1727350063?i=1727350064",
-    "rank": 13,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/62/ba/fe/62bafe08-a872-ef85-29fe-f5e878c12cc9/24UMGIM04446.rgb.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "name": "Home (Vintage Culture Remix)",
-    "artist": "CamelPhat \u0026 RHODES",
-    "link": "https://music.apple.com/us/album/home-vintage-culture-remix/1730561809?i=1730561813",
-    "rank": 27,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/df/8d/d6/df8dd6b5-0b97-1549-bfc0-6fd0e94eca9f/cover.jpg/296x296bb-60.jpg",
->>>>>>> Stashed changes:docs/silver/apple_music_edm_silver.json
-    "source": "apple_music"
-  },
-  {
-    "isrc": "NLF712402037",
-    "name": "Yesterday",
-    "artist": "Schak, Will Atkinson & Abi Flynn",
-    "link": "https://music.apple.com/us/album/yesterday/1739817085?i=1739817086",
-    "rank": 77,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/a4/81/d6/a481d619-039c-7045-dde1-30ffda1a0381/8718522463624.png/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-<<<<<<< Updated upstream:docs/files/transform/applemusic_dance_transformed.json
-    "isrc": "US38Y2404377",
-    "name": "Satellite",
-    "artist": "Dimension & Alison Wonderland",
-    "link": "https://music.apple.com/us/album/satellite/1732748625?i=1732748719",
-    "rank": 78,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/c1/dd/46/c1dd46e8-8be5-66d6-22d0-2e2c62e16398/085365695368.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "isrc": "GBCFB2400292",
-    "name": "Kimbara",
-    "artist": "Barry Can't Swim",
-    "link": "https://music.apple.com/us/album/kimbara/1739798395?i=1739798396",
-    "rank": 79,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/ba/c2/fe/bac2fe1b-9996-2a7f-0c1c-a728f415591b/5054429193589.png/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "isrc": "UK7MC2200081",
-    "name": "Baddy On the Floor (feat. Honey Dijon)",
-    "artist": "Jamie xx",
-    "link": "https://music.apple.com/us/album/baddy-on-the-floor-feat-honey-dijon/1736774386?i=1736774725",
-    "rank": 80,
-=======
-    "name": "Fall Again",
-    "artist": "Hayla",
-    "link": "https://music.apple.com/us/album/fall-again/1708886158?i=1708886171",
-    "rank": 28,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/0c/e3/57/0ce35775-55e7-c630-d81b-3e3df9f1d7f9/cover.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "name": "tell me",
-    "artist": "Shygirl \u0026 Boys Noize",
-    "link": "https://music.apple.com/us/album/tell-me/1720749636?i=1720749949",
-    "rank": 32,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/71/d9/db/71d9db9d-25eb-e2cd-8775-1d418bfed099/5056556135050_cover.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "name": "Cruel Intentions",
-    "artist": "Hannah Wants, Sam Divine \u0026 Jem Cooke",
-    "link": "https://music.apple.com/us/album/cruel-intentions/1720818523?i=1720818526",
-    "rank": 47,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/54/d7/16/54d71691-50e5-7515-9657-7230fb0da7a8/826194654290.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "name": "Fine Fine Baby",
-    "artist": "Jamie Jones \u0026 Kah-Lo",
-    "link": "https://music.apple.com/us/album/fine-fine-baby/1716830861?i=1716830862",
-    "rank": 55,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/ce/cc/6f/cecc6f74-1044-1d53-796f-7d96374bafa4/0196762013898.png/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "name": "Sun Is Shining",
-    "artist": "D.O.D",
-    "link": "https://music.apple.com/us/album/sun-is-shining/1735090757?i=1735090758",
-    "rank": 58,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/ab/d6/e8/abd6e818-7473-fec6-0fa9-10ebbcf6f181/24UMGIM16391.rgb.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "name": "Rain",
-    "artist": "NIIKO X SWAE \u0026 Mougleta",
-    "link": "https://music.apple.com/us/album/rain/1730740173?i=1730740174",
-    "rank": 16,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/95/e1/18/95e1187b-e919-f196-9050-aeabfcaec481/8718522454639.png/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "name": "Rainy (Devault Remix)",
-    "artist": "Dillon Francis, REI AMI \u0026 Devault",
-    "link": "https://music.apple.com/us/album/rainy-devault-remix/1738133917?i=1738134239",
-    "rank": 42,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/9f/5a/c2/9f5ac2f1-aee0-5138-3d44-325a2f3052f5/24UMGIM10882.rgb.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "name": "Empty",
-    "artist": "Martin Garrix, DubVision \u0026 Jaimes",
-    "link": "https://music.apple.com/us/album/empty/1732966794?i=1732966798",
-    "rank": 46,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/00/15/56/00155682-93b0-2066-65c7-04ae17a906fc/8720996840610.png/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "name": "stayinit",
-    "artist": "Fred again.., Lil Yachty \u0026 Overmono",
-    "link": "https://music.apple.com/us/album/stayinit/1730976891?i=1730976903",
-    "rank": 69,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/5d/9b/c4/5d9bc4f2-7e17-161a-45de-2087a6cc49d4/5054197995231.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "name": "Baddy On the Floor (feat. Honey Dijon)",
-    "artist": "Jamie xx",
-    "link": "https://music.apple.com/us/album/baddy-on-the-floor-feat-honey-dijon/1736774386?i=1736774725",
-    "rank": 1,
->>>>>>> Stashed changes:docs/silver/apple_music_edm_silver.json
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/58/79/46/5879463c-e688-c482-423f-a8dbcb691383/889030028976.png/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-<<<<<<< Updated upstream:docs/files/transform/applemusic_dance_transformed.json
-    "isrc": "DEE862302298",
-    "name": "life gets hard (Edit)",
-    "artist": "iilliaa & Jem Cooke",
-    "link": "https://music.apple.com/us/album/life-gets-hard-edit/1722619068?i=1722619085",
-    "rank": 81,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/54/6d/46/546d4658-24e6-e4be-d849-2321c037ca9f/196871750677.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "isrc": "US23A1580904",
-    "name": "searching",
-    "artist": "wilo wilde",
-    "link": "https://music.apple.com/us/album/searching/1740099704?i=1740099705",
-    "rank": 82,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/d5/18/2f/d5182ff2-efd8-cc6f-fd88-05375463dfcb/5059449173306.png/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "isrc": "USAT22313737",
-    "name": "Von dutch",
-    "artist": "Charli XCX",
-    "link": "https://music.apple.com/us/album/von-dutch/1732110349?i=1732110358",
-    "rank": 83,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/58/d4/74/58d47475-3797-bad8-9c66-77bfb8cbf352/075679655516.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "isrc": "GBEWA2402579",
-    "name": "BLAM",
-    "artist": "Jody Wisternoff & Blake.08",
-    "link": "https://music.apple.com/us/album/blam/1737197178?i=1737197179",
-    "rank": 84,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/e5/20/9c/e5209c29-294f-8a90-70f0-5ec53c27b9d5/5039060984291.png/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "isrc": "GBUM72402366",
-    "name": "Sippin' Yak (Morgan Seatree Remix)",
-    "artist": "Cloonee & Morgan Seatree",
-    "link": "https://music.apple.com/us/album/sippin-yak-morgan-seatree-remix/1742982369?i=1742982689",
-    "rank": 85,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/dd/a5/50/dda55054-d7a3-8ef7-3bc2-9fc4090e613a/24UMGIM40936.rgb.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "isrc": "GBJX32463018",
-    "name": "Delirious",
-    "artist": "Leftwing : Kody & Raphi",
-    "link": "https://music.apple.com/us/album/delirious/1743016390?i=1743016547",
-    "rank": 86,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/42/57/c8/4257c8f5-6ecd-0c1f-410e-c54a4f736293/198391905032.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "isrc": "NLF712401878",
-    "name": "Weekend Love (feat. House Gospel Choir)",
-    "artist": "Will Clarke",
-    "link": "https://music.apple.com/us/album/weekend-love-feat-house-gospel-choir/1741512742?i=1741512744",
-    "rank": 87,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/1f/62/c8/1f62c8db-0bee-0179-be38-1f622aab175a/8718522466663.png/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "isrc": "AULI02457180",
-    "name": "World Collapsing",
-    "artist": "Willaris. K & The Presets",
-    "link": "https://music.apple.com/us/album/world-collapsing/1740871630?i=1740871633",
-    "rank": 88,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/b5/80/39/b5803916-5241-f02f-0dd7-28b307da13fd/24SYMIM11215.rgb.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "isrc": "QM6MZ2440782",
-    "name": "Right Here",
-    "artist": "Anna Lunoe & Totally Enormous Extinct Dinosaurs",
-    "link": "https://music.apple.com/us/album/right-here/1740457938?i=1740457955",
-    "rank": 89,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/68/8e/a4/688ea4e1-0cd9-fdd7-2f5d-8da66deae84f/198391741517.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "isrc": "GBCFB2400455",
-    "name": "Sweet Devotion (feat. Caroline Byrne) [Edit]",
-    "artist": "TSHA",
-    "link": "https://music.apple.com/us/album/sweet-devotion-feat-caroline-byrne-edit/1738506759?i=1738507103",
-    "rank": 90,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/c6/29/8e/c6298ebe-8cbc-db77-d187-66f187701f2b/5054429194838.png/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "isrc": "GBARL2400479",
-    "name": "Nightshift",
-    "artist": "Charlotte Plank",
-    "link": "https://music.apple.com/us/album/nightshift/1741753447?i=1741753448",
-    "rank": 91,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/69/89/ec/6989ec2c-b2cc-15e3-6ff1-e6dda00d4c2e/196872020328.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "isrc": "USUG12401184",
-    "name": "Teka",
-    "artist": "DJ Snake & Peso Pluma",
-    "link": "https://music.apple.com/us/album/teka/1741006070?i=1741006093",
-    "rank": 92,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/07/87/5c/07875cc5-9a91-73f9-7193-91f315a1d966/24UMGIM13634.rgb.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "isrc": "USUYG1543294",
-    "name": "Rhythm Guide",
-    "artist": "Mal\u00f3ne & Ky William",
-    "link": "https://music.apple.com/us/album/rhythm-guide/1739412929?i=1739412937",
-    "rank": 93,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/bb/42/d7/bb42d779-94ac-026f-3089-8df1eff16211/197342563604_cover.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "isrc": "GBCEN2400083",
-    "name": "Northern Rhythm",
-    "artist": "Patrick Topping & Ewan McVicar",
-    "link": "https://music.apple.com/us/album/northern-rhythm/1744145322?i=1744145325",
-    "rank": 94,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/42/8f/41/428f417a-8692-7865-5b5a-28ab1b31143f/196872080773.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "isrc": "USAT22401742",
-    "name": "Control The Media",
-    "artist": "Anti Up",
-    "link": "https://music.apple.com/us/album/control-the-media/1737937550?i=1737937563",
-    "rank": 95,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/e8/1d/f6/e81df685-72e5-9885-bca7-de96139cd5b2/075679652867.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "isrc": "DEG932401677",
-    "name": "Your Eyes",
-    "artist": "Fedele",
-    "link": "https://music.apple.com/us/album/your-eyes/1742098276?i=1742098789",
-    "rank": 96,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/4f/0b/9f/4f0b9f41-cd98-5986-f05a-3c57a4e39d8d/4062548089592.png/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "isrc": "GBCPZ2423192",
-    "name": "Sky (Shining Bright)",
-    "artist": "KC Lights",
-    "link": "https://music.apple.com/us/album/sky-shining-bright/1743233664?i=1743233761",
-    "rank": 97,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/b2/c2/74/b2c274b1-20d8-e4f6-4fbb-185666d86052/826194606800.jpg/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "isrc": "NLZ542400382",
-    "name": "My City",
-    "artist": "Ti\u00ebsto & Prophecy",
-    "link": "https://music.apple.com/us/album/my-city/1744858496?i=1744858499",
-    "rank": 98,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/57/d8/e0/57d8e05a-0ca5-8741-1d7c-8bb739f173dd/8721093133780.png/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "isrc": "NL8RL2415361",
-    "name": "Fever Dream (feat. Annaca)",
-    "artist": "Wenzday",
-    "link": "https://music.apple.com/us/album/fever-dream-feat-annaca/1740681247?i=1740681248",
-    "rank": 99,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/82/3d/96/823d96d3-eb46-cbfb-619e-afbd721883f2/8721056928859.png/296x296bb-60.jpg",
-    "source": "apple_music"
-  },
-  {
-    "isrc": "NLF712402352",
-    "name": "Blow My Mind",
-    "artist": "Arielle Free & GHSTGHSTGHST",
-    "link": "https://music.apple.com/us/album/blow-my-mind/1742180206?i=1742180207",
-    "rank": 100,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/24/1f/ae/241fae9d-d90f-5a62-d72f-2417991021f0/8718522474446.png/296x296bb-60.jpg",
-=======
-    "name": "Always (Me \u0026 You)",
-    "artist": "CHANEY",
-    "link": "https://music.apple.com/us/album/always-me-you/1731873701?i=1731873702",
-    "rank": 11,
-    "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/f3/0f/a5/f30fa504-a505-a630-6a8a-4f100c0c0eb8/198391228438.jpg/296x296bb-60.jpg",
->>>>>>> Stashed changes:docs/silver/apple_music_edm_silver.json
-    "source": "apple_music"
-  }
+    {
+        "isrc": "GBCFB2400153",
+        "name": "saving flowers",
+        "artist": "salute & Rina Sawayama",
+        "link": "https://music.apple.com/us/album/saving-flowers/1732069006?i=1732069098",
+        "rank": 1,
+        "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/df/43/34/df4334f4-b599-a2aa-0af3-779288222e13/5054429192650.png/296x296bb-60.jpg",
+        "source": "apple_music"
+    },
+    {
+        "isrc": "USUG12402628",
+        "name": "Go Back",
+        "artist": "John Summit, Sub Focus & Julia Church",
+        "link": "https://music.apple.com/us/album/go-back/1745292769?i=1745292770",
+        "rank": 2,
+        "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/15/4d/ec/154dece1-0b05-3516-a381-894671a5669a/24UMGIM52349.rgb.jpg/296x296bb-60.jpg",
+        "source": "apple_music"
+    },
+    {
+        "isrc": "NLRD52350359",
+        "name": "Addicted (feat. Ink)",
+        "artist": "ZERB & The Chainsmokers",
+        "link": "https://music.apple.com/us/album/addicted-feat-ink/1734260110?i=1734260111",
+        "rank": 3,
+        "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/0f/df/a1/0fdfa19f-aae2-c601-3c44-9d3e45f80adf/8721056755820.png/296x296bb-60.jpg",
+        "source": "apple_music"
+    },
+    {
+        "isrc": "GBCFB2400659",
+        "name": "Feel (feat. Jacob Banks)",
+        "artist": "LP Giobbi",
+        "link": "https://music.apple.com/us/album/feel-feat-jacob-banks/1744642617?i=1744642619",
+        "rank": 4,
+        "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/6c/05/3e/6c053e17-3034-c7cd-3798-c24393c11b4e/5054429195743.png/296x296bb-60.jpg",
+        "source": "apple_music"
+    },
+    {
+        "isrc": "DEE862400426",
+        "name": "Seek Love (On The Beach) [feat. Amanda Wilson & York]",
+        "artist": "Alok, Tazi & Samuele Sartini",
+        "link": "https://music.apple.com/us/album/seek-love-on-the-beach-feat-amanda-wilson-york/1736802685?i=1736802698",
+        "rank": 5,
+        "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/5d/63/1f/5d631f33-e1c1-7ab2-69b9-b5a072cf8669/196871959674.jpg/296x296bb-60.jpg",
+        "source": "apple_music"
+    },
+    {
+        "isrc": "NLF712400101",
+        "name": "I Wanna Go",
+        "artist": "Autograf",
+        "link": "https://music.apple.com/us/album/i-wanna-go/1726586964?i=1726586965",
+        "rank": 6,
+        "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/9c/97/fe/9c97fea8-ffee-dd82-287c-6b7a12cd2fbf/8718522436734.png/296x296bb-60.jpg",
+        "source": "apple_music"
+    },
+    {
+        "isrc": "GBUM72402172",
+        "name": "One New Change",
+        "artist": "Gorgon City",
+        "link": "https://music.apple.com/us/album/one-new-change/1738461195?i=1738461903",
+        "rank": 7,
+        "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/b2/03/cc/b203ccf4-e9dd-2125-60d8-6a9d9faa6c84/24UMGIM21053.rgb.jpg/296x296bb-60.jpg",
+        "source": "apple_music"
+    },
+    {
+        "isrc": "AUNV02400018",
+        "name": "Nostalgia",
+        "artist": "PNAU",
+        "link": "https://music.apple.com/us/album/nostalgia/1735082167?i=1735082174",
+        "rank": 8,
+        "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/dd/23/a7/dd23a7c6-1944-839e-ea16-cf91cbd23329/196871840156.jpg/296x296bb-60.jpg",
+        "source": "apple_music"
+    },
+    {
+        "isrc": "US38Y2403431",
+        "name": "Mind Still (feat. blythe)",
+        "artist": "Sonny Fodera",
+        "link": "https://music.apple.com/us/album/mind-still-feat-blythe/1729414512?i=1729414926",
+        "rank": 9,
+        "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/12/4c/0a/124c0ac8-80a4-ab06-38e7-d8e5800b34dc/197338037492.jpg/296x296bb-60.jpg",
+        "source": "apple_music"
+    },
+    {
+        "isrc": "GBEWA2401190",
+        "name": "Feel It",
+        "artist": "ayokay",
+        "link": "https://music.apple.com/us/album/feel-it/1734804331?i=1734804333",
+        "rank": 10,
+        "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/45/5f/a1/455fa12b-c6f2-e63f-b7c3-acc382c23725/5039060981191.png/296x296bb-60.jpg",
+        "source": "apple_music"
+    },
+    {
+        "isrc": "USUG12401003",
+        "name": "Shiver",
+        "artist": "John Summit & HAYLA",
+        "link": "https://music.apple.com/us/album/shiver/1728957955?i=1728957956",
+        "rank": 11,
+        "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/be/7d/23/be7d23e1-ed96-302f-83e7-053cd9b20dbb/193436371179_SHIVERSQUAREFORDELIVERY.jpg/296x296bb-60.jpg",
+        "source": "apple_music"
+    },
+    {
+        "isrc": "UKRPL1900629",
+        "name": "In Your Arms",
+        "artist": "Jess Bays & Jem Cooke",
+        "link": "https://music.apple.com/us/album/in-your-arms/1728715876?i=1728716001",
+        "rank": 12,
+        "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/3f/61/e9/3f61e905-8e49-a89d-c10c-d3b2b84bdeca/197338046340.jpg/296x296bb-60.jpg",
+        "source": "apple_music"
+    },
+    {
+        "isrc": "QZGLM2496266",
+        "name": "Teardrops",
+        "artist": "Jauz",
+        "link": "https://music.apple.com/us/album/teardrops/1735241404?i=1735241405",
+        "rank": 13,
+        "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/c7/f8/8a/c7f88ac0-06ea-d152-980d-b0f4177d8cd1/0.jpg/296x296bb-60.jpg",
+        "source": "apple_music"
+    },
+    {
+        "isrc": "UKRPL1900658",
+        "name": "All For You (feat. Joanna Cooke)",
+        "artist": "Maur",
+        "link": "https://music.apple.com/us/album/all-for-you-feat-joanna-cooke/1733726021?i=1733726359",
+        "rank": 14,
+        "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/f6/65/cd/f665cde0-56ae-8e53-2e46-da78f6cab8d9/085365688612.jpg/296x296bb-60.jpg",
+        "source": "apple_music"
+    },
+    {
+        "isrc": "GBUM72205897",
+        "name": "Never Be Alone",
+        "artist": "Becky Hill & Sonny Fodera",
+        "link": "https://music.apple.com/us/album/never-be-alone/1731891564?i=1731891893",
+        "rank": 15,
+        "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/3d/ca/7a/3dca7ae2-a6e0-e61c-d3b7-55879e9bcc99/24UMGIM00242.rgb.jpg/296x296bb-60.jpg",
+        "source": "apple_music"
+    },
+    {
+        "isrc": "NLF712401951",
+        "name": "By Now (feat. Laura Welsh)",
+        "artist": "Armin van Buuren & D.O.D",
+        "link": "https://music.apple.com/us/album/by-now-feat-laura-welsh/1739816531?i=1739816532",
+        "rank": 16,
+        "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/66/4a/95/664a953d-e787-0d9c-2ac1-7c59df3cda75/8718522467691.png/296x296bb-60.jpg",
+        "source": "apple_music"
+    },
+    {
+        "isrc": "GBUM72400217",
+        "name": "Never Be Lonely",
+        "artist": "Jax Jones & Zoe Wees",
+        "link": "https://music.apple.com/us/album/never-be-lonely/1727350063?i=1727350064",
+        "rank": 17,
+        "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/62/ba/fe/62bafe08-a872-ef85-29fe-f5e878c12cc9/24UMGIM04446.rgb.jpg/296x296bb-60.jpg",
+        "source": "apple_music"
+    },
+    {
+        "isrc": "QZFPL2400078",
+        "name": "back2u",
+        "artist": "Disco Lines & GUDFELLA",
+        "link": "https://music.apple.com/us/album/back2u/1743833095?i=1743833098",
+        "rank": 18,
+        "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/07/b4/79/07b479a4-9761-8da1-526b-02c5352b5432/24SYMIM11830.rgb.jpg/296x296bb-60.jpg",
+        "source": "apple_music"
+    },
+    {
+        "isrc": "GBCFB2400443",
+        "name": "If U Like Me (Edit)",
+        "artist": "DJ Seinfeld",
+        "link": "https://music.apple.com/us/album/if-u-like-me-edit/1742098438?i=1742098439",
+        "rank": 19,
+        "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/df/bf/92/dfbf92c4-517e-885b-e9d3-8e1bff55084a/5054429194630.png/296x296bb-60.jpg",
+        "source": "apple_music"
+    },
+    {
+        "isrc": "UK4ZF2400087",
+        "name": "Always (Me & You)",
+        "artist": "CHANEY",
+        "link": "https://music.apple.com/us/album/always-me-you/1731873701?i=1731873702",
+        "rank": 20,
+        "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/f3/0f/a5/f30fa504-a505-a630-6a8a-4f100c0c0eb8/198391228438.jpg/296x296bb-60.jpg",
+        "source": "apple_music"
+    },
+    {
+        "isrc": "USUG12401134",
+        "name": "Rainy (Devault Remix)",
+        "artist": "Dillon Francis, REI AMI & Devault",
+        "link": "https://music.apple.com/us/album/rainy-devault-remix/1738133917?i=1738134239",
+        "rank": 21,
+        "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/9f/5a/c2/9f5ac2f1-aee0-5138-3d44-325a2f3052f5/24UMGIM10882.rgb.jpg/296x296bb-60.jpg",
+        "source": "apple_music"
+    },
+    {
+        "isrc": "DEA622400985",
+        "name": "All the Things She Said",
+        "artist": "Robin Schulz, Timmy Trumpet & KOPPY",
+        "link": "https://music.apple.com/us/album/all-the-things-she-said/1737007334?i=1737007336",
+        "rank": 22,
+        "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/08/78/74/08787436-75e6-fe6c-c373-8e4fa4f2efe3/5021732265654.jpg/296x296bb-60.jpg",
+        "source": "apple_music"
+    },
+    {
+        "isrc": "GBUM72401679",
+        "name": "All That You Need",
+        "artist": "Gorgon City & Caroline Byrne",
+        "link": "https://music.apple.com/us/album/all-that-you-need/1738461195?i=1738461888",
+        "rank": 23,
+        "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/b2/03/cc/b203ccf4-e9dd-2125-60d8-6a9d9faa6c84/24UMGIM21053.rgb.jpg/296x296bb-60.jpg",
+        "source": "apple_music"
+    },
+    {
+        "isrc": "NLQ8D2201286",
+        "name": "Rain",
+        "artist": "NIIKO X SWAE & Mougleta",
+        "link": "https://music.apple.com/us/album/rain/1730740173?i=1730740174",
+        "rank": 24,
+        "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/95/e1/18/95e1187b-e919-f196-9050-aeabfcaec481/8718522454639.png/296x296bb-60.jpg",
+        "source": "apple_music"
+    },
+    {
+        "isrc": "GBUM72309238",
+        "name": "If U Need It",
+        "artist": "Sammy Virji",
+        "link": "https://music.apple.com/us/album/if-u-need-it/1711713804?i=1711713806",
+        "rank": 25,
+        "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/42/9a/a7/429aa7b4-820e-c03f-3de4-349f3d185ae0/23UM1IM13809.rgb.jpg/296x296bb-60.jpg",
+        "source": "apple_music"
+    },
+    {
+        "isrc": "AULI02355900",
+        "name": "Lifetime",
+        "artist": "Tobiahs",
+        "link": "https://music.apple.com/us/album/lifetime/1722564698?i=1722564700",
+        "rank": 26,
+        "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/83/41/a9/8341a93b-6d9f-883a-7857-a5b3dca6bc71/23SYMIM08853.rgb.jpg/296x296bb-60.jpg",
+        "source": "apple_music"
+    },
+    {
+        "isrc": "GBARL2301797",
+        "name": "Lovers In A Past Life (LP Giobbi Remix)",
+        "artist": "Calvin Harris & Rag'n'Bone Man",
+        "link": "https://music.apple.com/us/album/lovers-in-a-past-life-lp-giobbi-remix/1741613366?i=1741613368",
+        "rank": 27,
+        "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/e3/2c/7d/e32c7d3e-c9a8-4896-9afb-e2528b7adb65/196872016550.jpg/296x296bb-60.jpg",
+        "source": "apple_music"
+    },
+    {
+        "isrc": "USUG12402645",
+        "name": "Summertime Blues",
+        "artist": "Chris Lake, Sammy Virji & Nathan Nicholson",
+        "link": "https://music.apple.com/us/album/summertime-blues/1741634636?i=1741634639",
+        "rank": 28,
+        "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/16/e5/89/16e589be-ba73-4121-f24b-41debea58b4f/24UMGIM35464.rgb.jpg/296x296bb-60.jpg",
+        "source": "apple_music"
+    },
+    {
+        "isrc": "USUM72402931",
+        "name": "Not Even Love (feat. Asdis)",
+        "artist": "Seven Lions & ILLENIUM",
+        "link": "https://music.apple.com/us/album/not-even-love-feat-asdis/1736048757?i=1736048763",
+        "rank": 29,
+        "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/32/53/dd/3253ddf5-3f2e-c447-69e5-2cbb7ca51311/24UMGIM26713.rgb.jpg/296x296bb-60.jpg",
+        "source": "apple_music"
+    },
+    {
+        "isrc": "GBARL2400194",
+        "name": "Another",
+        "artist": "Camden Cox",
+        "link": "https://music.apple.com/us/album/another/1732538266?i=1732538538",
+        "rank": 30,
+        "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/e4/5e/e6/e45ee6f1-1d6d-bbf9-c4b8-68a429be7ef8/196871877404.jpg/296x296bb-60.jpg",
+        "source": "apple_music"
+    },
+    {
+        "isrc": "GBCPZ2422963",
+        "name": "Paranoid",
+        "artist": "Layton Giordani",
+        "link": "https://music.apple.com/us/album/paranoid/1733919601?i=1733919604",
+        "rank": 31,
+        "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/41/51/bf/4151bfe8-12f7-eba0-970e-09b4f3ffe9c5/826194664497.jpg/296x296bb-60.jpg",
+        "source": "apple_music"
+    },
+    {
+        "isrc": "USZ4V2400153",
+        "name": "Ride Or Die",
+        "artist": "Aluna",
+        "link": "https://music.apple.com/us/album/ride-or-die/1739664479?i=1739664485",
+        "rank": 32,
+        "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/79/42/ad/7942ad9e-bb6b-4870-e0cf-69d4041d6a41/2632.jpg/296x296bb-60.jpg",
+        "source": "apple_music"
+    },
+    {
+        "isrc": "USZXT2453422",
+        "name": "Find A Way",
+        "artist": "Vintage Culture",
+        "link": "https://music.apple.com/us/album/find-a-way/1725169738?i=1725169876",
+        "rank": 33,
+        "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/ae/b8/19/aeb819de-114d-98b7-97da-a6f51b14829e/23SYMIM08764.rgb.jpg/296x296bb-60.jpg",
+        "source": "apple_music"
+    },
+    {
+        "isrc": "GBMVH2300940",
+        "name": "mr useless",
+        "artist": "Shygirl & SG Lewis",
+        "link": "https://music.apple.com/us/album/mr-useless/1725825321?i=1725826047",
+        "rank": 34,
+        "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/8c/ca/50/8cca5060-55f1-a9df-3ff9-519295f0aa5a/5056556135012_cover.jpg/296x296bb-60.jpg",
+        "source": "apple_music"
+    },
+    {
+        "isrc": "USZ4V2400142",
+        "name": "Heaven or Not (feat. Kareen Lomax)",
+        "artist": "Diplo & Riva Starr",
+        "link": "https://music.apple.com/us/album/heaven-or-not-feat-kareen-lomax/1736593206?i=1736593212",
+        "rank": 35,
+        "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/a2/bf/f0/a2bff082-84e6-0ed0-1efc-e9f7bc486e77/2594.jpg/296x296bb-60.jpg",
+        "source": "apple_music"
+    },
+    {
+        "isrc": "USUS12400185",
+        "name": "Fallin Luv",
+        "artist": "Gordo & Jeria",
+        "link": "https://music.apple.com/us/album/fallin-luv/1738547942?i=1738547945",
+        "rank": 36,
+        "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/06/9e/e3/069ee383-23b0-5de3-3453-4bc67e6c9746/196871994156.jpg/296x296bb-60.jpg",
+        "source": "apple_music"
+    },
+    {
+        "isrc": "GBCPZ2423116",
+        "name": "Give Me Something To Hold",
+        "artist": "Jack Back, THEMBA & David Guetta",
+        "link": "https://music.apple.com/us/album/give-me-something-to-hold/1740179463?i=1740179464",
+        "rank": 37,
+        "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/26/b6/4e/26b64e65-0f46-b3bf-69d5-21be6c3a1557/826194665296.jpg/296x296bb-60.jpg",
+        "source": "apple_music"
+    },
+    {
+        "isrc": "GBEWA2400021",
+        "name": "Fever",
+        "artist": "Jerro & Running Touch",
+        "link": "https://music.apple.com/us/album/fever/1731385596?i=1731385597",
+        "rank": 38,
+        "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/1f/dd/9a/1fdd9a61-bd65-61c9-8adf-0d3bc9f74378/5039060975190.png/296x296bb-60.jpg",
+        "source": "apple_music"
+    },
+    {
+        "isrc": "GBAHT2301515",
+        "name": "Happier (feat. Clementine Douglas)",
+        "artist": "The Blessed Madonna",
+        "link": "https://music.apple.com/us/album/happier-feat-clementine-douglas/1721072384?i=1721072870",
+        "rank": 39,
+        "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/9d/b5/c7/9db5c79b-d70a-d617-a8fa-6599b6094eac/5054197941139.jpg/296x296bb-60.jpg",
+        "source": "apple_music"
+    },
+    {
+        "isrc": "USQX92401237",
+        "name": "Waterfall",
+        "artist": "Drove & Dillon Francis",
+        "link": "https://music.apple.com/us/album/waterfall/1738280897?i=1738280901",
+        "rank": 40,
+        "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/88/32/f9/8832f97d-c676-43a4-7d51-7b7e618c0a00/196871955874.jpg/296x296bb-60.jpg",
+        "source": "apple_music"
+    },
+    {
+        "isrc": "CAM372300505",
+        "name": "dive /stay/",
+        "artist": "Felix Cartal & emma l\u00f8v",
+        "link": "https://music.apple.com/us/album/dive-stay/1737044611?i=1737044615",
+        "rank": 41,
+        "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/c2/cc/ef/c2ccef76-fed5-fccf-f9b8-03411fa232e3/823675299933_Cover.jpg/296x296bb-60.jpg",
+        "source": "apple_music"
+    },
+    {
+        "isrc": null,
+        "name": "Down Low",
+        "artist": "it's murph & Sorana",
+        "link": "https://music.apple.com/us/album/down-low/1744030910?i=1744030921",
+        "rank": 42,
+        "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/14/1f/1f/141f1f70-81d5-2f21-15d1-b1b201a63d4b/24UMGIM49088.rgb.jpg/296x296bb-60.jpg",
+        "source": "apple_music"
+    },
+    {
+        "isrc": "NLF712402047",
+        "name": "Kinetic Cinema",
+        "artist": "Gabriel & Dresden",
+        "link": "https://music.apple.com/us/album/kinetic-cinema/1735938948?i=1735938950",
+        "rank": 43,
+        "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/e0/82/fd/e082fd90-e4b9-8815-d7e2-6e0532b3481c/5039060982693.png/296x296bb-60.jpg",
+        "source": "apple_music"
+    },
+    {
+        "isrc": "GBJAJ2400413",
+        "name": "One by One",
+        "artist": "Deeper Purpose, Jalja & LAZY JOE",
+        "link": "https://music.apple.com/us/album/one-by-one/1735977579?i=1735977581",
+        "rank": 44,
+        "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/8c/0c/31/8c0c31bb-aec4-5201-47b3-da7e7d2ace2f/5052075031224.png/296x296bb-60.jpg",
+        "source": "apple_music"
+    },
+    {
+        "isrc": "USZXT2353144",
+        "name": "Nothing Ever Changes",
+        "artist": "Vintage Culture & MAGNUS",
+        "link": "https://music.apple.com/us/album/nothing-ever-changes/1725169738?i=1725169743",
+        "rank": 45,
+        "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/ae/b8/19/aeb819de-114d-98b7-97da-a6f51b14829e/23SYMIM08764.rgb.jpg/296x296bb-60.jpg",
+        "source": "apple_music"
+    },
+    {
+        "isrc": "BEIW12400233",
+        "name": "To The Beat",
+        "artist": "Dimitri Vegas & Like Mike, Regard & NATTI NATASHA",
+        "link": "https://music.apple.com/us/album/to-the-beat/1737256243?i=1737256746",
+        "rank": 46,
+        "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/49/18/0e/49180ea9-fc43-7f42-1384-b54c1c303286/198391629136.jpg/296x296bb-60.jpg",
+        "source": "apple_music"
+    },
+    {
+        "isrc": "GBCEN2400021",
+        "name": "Sinner",
+        "artist": "Charlotte Haining",
+        "link": "https://music.apple.com/us/album/sinner/1733068862?i=1733068864",
+        "rank": 47,
+        "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/eb/22/fe/eb22fea9-46f2-9f37-32f6-92b5e8821107/196871899611.jpg/296x296bb-60.jpg",
+        "source": "apple_music"
+    },
+    {
+        "isrc": "QZMZ92420283",
+        "name": "Chains",
+        "artist": "Jauz & Nevve",
+        "link": "https://music.apple.com/us/album/chains/1739826271?i=1739826272",
+        "rank": 48,
+        "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/28/62/cb/2862cb78-68f8-1bff-cd2f-d2fadb99dee7/0.jpg/296x296bb-60.jpg",
+        "source": "apple_music"
+    },
+    {
+        "isrc": "USA2P2415020",
+        "name": "MAGIC",
+        "artist": "Gryffin & babyidontlikeyou",
+        "link": "https://music.apple.com/us/album/magic/1740903229?i=1740903237",
+        "rank": 49,
+        "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/76/ce/70/76ce70f8-0a9a-8d3f-42a8-b778698ddb6a/00196922890604_Cover.jpg/296x296bb-60.jpg",
+        "source": "apple_music"
+    },
+    {
+        "isrc": "USUS12400109",
+        "name": "Different Worlds",
+        "artist": "Hayden James & Anabel Englund",
+        "link": "https://music.apple.com/us/album/different-worlds/1733122303?i=1733122304",
+        "rank": 50,
+        "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/21/94/ff/2194ff58-3c7d-e237-c15f-acea87fa11d7/196871901475.jpg/296x296bb-60.jpg",
+        "source": "apple_music"
+    },
+    {
+        "isrc": "CA5KR2434567",
+        "name": "COME BACK HOME",
+        "artist": "OddKidOut, Angrybaby & Nina Sung",
+        "link": "https://music.apple.com/us/album/come-back-home/1732736446?i=1732736597",
+        "rank": 51,
+        "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/53/31/00/533100fd-dfa2-70ca-23a1-afdd0fa1a862/cover.jpg/296x296bb-60.jpg",
+        "source": "apple_music"
+    },
+    {
+        "isrc": "GBENL2403882",
+        "name": "Insomnia",
+        "artist": "Eli & Fur",
+        "link": "https://music.apple.com/us/album/insomnia/1733961667?i=1733961676",
+        "rank": 52,
+        "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/46/77/40/4677408c-263b-36fe-033e-e445b2673bfa/5400863162238_cover.jpg/296x296bb-60.jpg",
+        "source": "apple_music"
+    },
+    {
+        "isrc": "NLRD52339318",
+        "name": "Mwaki",
+        "artist": "ZERB & Sofiya Nzau",
+        "link": "https://music.apple.com/us/album/mwaki/1715015592?i=1715015717",
+        "rank": 53,
+        "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/2d/68/39/2d683965-8149-029e-f749-c4df9038e32c/8721056104857.png/296x296bb-60.jpg",
+        "source": "apple_music"
+    },
+    {
+        "isrc": "QZUCN2201485",
+        "name": "We Groovin",
+        "artist": "Jamie Jones & Jazzy",
+        "link": "https://music.apple.com/us/album/we-groovin/1729232019?i=1729232020",
+        "rank": 54,
+        "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/ef/66/63/ef666393-3931-02a6-ddc4-3675f160eff8/0196762014802.png/296x296bb-60.jpg",
+        "source": "apple_music"
+    },
+    {
+        "isrc": "USUG12401869",
+        "name": "Now Or Never",
+        "artist": "Anyma",
+        "link": "https://music.apple.com/us/album/now-or-never/1740222240?i=1740222478",
+        "rank": 55,
+        "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/ab/7f/f2/ab7ff219-5949-0965-8fb0-603d6b92ac79/24UMGIM28490.rgb.jpg/296x296bb-60.jpg",
+        "source": "apple_music"
+    },
+    {
+        "isrc": "USQX92305379",
+        "name": "Saving Up",
+        "artist": "Dom Dolla",
+        "link": "https://music.apple.com/us/album/saving-up/1709177801?i=1709178108",
+        "rank": 56,
+        "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/84/5e/33/845e3390-0d0c-ce76-b1b1-76f17126df60/196871470261.jpg/296x296bb-60.jpg",
+        "source": "apple_music"
+    },
+    {
+        "isrc": "GBBKS2400221",
+        "name": "Lobster Telephone (Edit)",
+        "artist": "Peggy Gou",
+        "link": "https://music.apple.com/us/album/lobster-telephone-edit/1742767133?i=1742767138",
+        "rank": 57,
+        "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/94/74/1e/94741efd-c35a-214d-1300-f09e8ca54827/191404145777.png/296x296bb-60.jpg",
+        "source": "apple_music"
+    },
+    {
+        "isrc": "NLZ542400382",
+        "name": "My City",
+        "artist": "Ti\u00ebsto & Prophecy",
+        "link": "https://music.apple.com/us/album/my-city/1745160493?i=1745160495",
+        "rank": 58,
+        "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/f7/85/c5/f785c572-f737-b282-ced6-9afe586d26af/8721093111559.png/296x296bb-60.jpg",
+        "source": "apple_music"
+    },
+    {
+        "isrc": "USNRS2343078",
+        "name": "Last Night",
+        "artist": "Loofy",
+        "link": "https://music.apple.com/us/album/last-night/1707086680?i=1707086900",
+        "rank": 59,
+        "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/cd/c4/0d/cdc40d37-15a4-bd9a-67ce-88e0c0caa709/091012641060.jpg/296x296bb-60.jpg",
+        "source": "apple_music"
+    },
+    {
+        "isrc": "QM4TW2437510",
+        "name": "Desire",
+        "artist": "Chris Stussy",
+        "link": "https://music.apple.com/us/album/desire/1744599883?i=1744599886",
+        "rank": 60,
+        "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/e2/52/13/e252138e-ad1d-0e85-4d5b-88c6da577cb7/197190967067_Cover.jpg/296x296bb-60.jpg",
+        "source": "apple_music"
+    },
+    {
+        "isrc": "GBUM72311080",
+        "name": "No Reason (Chris Lake Remix)",
+        "artist": "The Chemical Brothers",
+        "link": "https://music.apple.com/us/album/no-reason-chris-lake-remix/1722565474?i=1722565475",
+        "rank": 61,
+        "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/26/87/04/26870426-ed6f-bf7c-73c0-837faca800e8/23UM1IM64163.rgb.jpg/296x296bb-60.jpg",
+        "source": "apple_music"
+    },
+    {
+        "isrc": "GBEWA2401310",
+        "name": "Remission",
+        "artist": "Kasablanca & Lane 8",
+        "link": "https://music.apple.com/us/album/remission/1735923246?i=1735923247",
+        "rank": 62,
+        "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/04/ce/2b/04ce2b7a-3d9e-912b-184b-7c81e9efe50f/5039060982495.png/296x296bb-60.jpg",
+        "source": "apple_music"
+    },
+    {
+        "isrc": "NL8RL2409745",
+        "name": "On Again",
+        "artist": "Mau P",
+        "link": "https://music.apple.com/us/album/on-again/1736836112?i=1736836113",
+        "rank": 63,
+        "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/5c/e7/3f/5ce73f0a-4843-4f25-00cd-0d49eb2a0e20/8721056815135.png/296x296bb-60.jpg",
+        "source": "apple_music"
+    },
+    {
+        "isrc": "GBUM72311096",
+        "name": "Right Here",
+        "artist": "Becky Hill",
+        "link": "https://music.apple.com/us/album/right-here/1731891564?i=1731892440",
+        "rank": 64,
+        "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/3d/ca/7a/3dca7ae2-a6e0-e61c-d3b7-55879e9bcc99/24UMGIM00242.rgb.jpg/296x296bb-60.jpg",
+        "source": "apple_music"
+    },
+    {
+        "isrc": "USSM12403627",
+        "name": "Waiting For Tonight",
+        "artist": "FISHER & Jennifer Lopez",
+        "link": "https://music.apple.com/us/album/waiting-for-tonight/1744209206?i=1744209207",
+        "rank": 65,
+        "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/65/62/5a/65625acb-fa0d-d991-1bf3-fa7650531852/193436382328_FisherJloFinal.jpg/296x296bb-60.jpg",
+        "source": "apple_music"
+    },
+    {
+        "isrc": "FR8EU2300010",
+        "name": "Neverender",
+        "artist": "Justice & Tame Impala",
+        "link": "https://music.apple.com/us/album/neverender/1724935208?i=1724935211",
+        "rank": 66,
+        "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/c2/19/4b/c2194bc8-63e2-b31f-b872-9611aa5fcded/5056556135845_cover.jpg/296x296bb-60.jpg",
+        "source": "apple_music"
+    },
+    {
+        "isrc": "GBCFB2400160",
+        "name": "system",
+        "artist": "salute",
+        "link": "https://music.apple.com/us/album/system/1726621108?i=1726621112",
+        "rank": 67,
+        "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/1e/82/26/1e82269a-76a2-1c3f-65c9-b73100cb21b8/5054429193442.png/296x296bb-60.jpg",
+        "source": "apple_music"
+    },
+    {
+        "isrc": "GBJAJ2400531",
+        "name": "I Choose You",
+        "artist": "CHANEY",
+        "link": "https://music.apple.com/us/album/i-choose-you/1740974902?i=1740974905",
+        "rank": 68,
+        "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/eb/98/9c/eb989c3b-5a10-4dd6-82f5-54e3b9376477/5052075031422.png/296x296bb-60.jpg",
+        "source": "apple_music"
+    },
+    {
+        "isrc": "USUS12400233",
+        "name": "Testify",
+        "artist": "Solardo & Kaleena Zanders",
+        "link": "https://music.apple.com/us/album/testify/1741414116?i=1741414118",
+        "rank": 69,
+        "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/f8/46/8d/f8468de1-ed5b-83c3-8406-dad2bd2ee22e/196872040449.jpg/296x296bb-60.jpg",
+        "source": "apple_music"
+    },
+    {
+        "isrc": "NL8RL2408340",
+        "name": "Forget",
+        "artist": "Yotto, AVIRA & ALSO ASTIR",
+        "link": "https://music.apple.com/us/album/forget/1736770058?i=1736770060",
+        "rank": 70,
+        "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/5d/f1/d6/5df1d698-1ce3-60fd-aa01-77e5fac88e45/8721056783557.png/296x296bb-60.jpg",
+        "source": "apple_music"
+    },
+    {
+        "isrc": "USUM72401299",
+        "name": "Jamming (FISHER Rework)",
+        "artist": "Bob Marley & The Wailers & FISHER",
+        "link": "https://music.apple.com/us/album/jamming-fisher-rework/1728925733?i=1728925734",
+        "rank": 71,
+        "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/e7/24/4e/e7244ef1-a9f6-e754-72ae-578814f7c11e/24UMGIM11528.rgb.jpg/296x296bb-60.jpg",
+        "source": "apple_music"
+    },
+    {
+        "isrc": "GBPQS2300184",
+        "name": "Buscando Money",
+        "artist": "TWENTY SIX & Tayson Kryss",
+        "link": "https://music.apple.com/us/album/buscando-money/1732549261?i=1732549265",
+        "rank": 72,
+        "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/35/e0/e0/35e0e061-3c0f-0038-ad20-217075d63e62/823220184912.jpg/296x296bb-60.jpg",
+        "source": "apple_music"
+    },
+    {
+        "isrc": "ITFGO2400001",
+        "name": "Famax (Edit)",
+        "artist": "RAFFA GUIDO",
+        "link": "https://music.apple.com/us/album/famax-edit/1728329795?i=1728329797",
+        "rank": 73,
+        "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/a2/c0/e1/a2c0e148-bf23-1be4-80a9-080e95d448bb/617513995053_cover.jpg/296x296bb-60.jpg",
+        "source": "apple_music"
+    },
+    {
+        "isrc": "USZ4V2300268",
+        "name": "Gorah",
+        "artist": "Nitefreak & Emmanuel Jal",
+        "link": "https://music.apple.com/us/album/gorah/1712725935?i=1712725936",
+        "rank": 74,
+        "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/87/75/aa/8775aa00-8171-eb4b-88bc-0f20770cec06/2279.jpg/296x296bb-60.jpg",
+        "source": "apple_music"
+    },
+    {
+        "isrc": "GBCEN2400063",
+        "name": "Lift You Up",
+        "artist": "LF SYSTEM",
+        "link": "https://music.apple.com/us/album/lift-you-up/1737989915?i=1737989916",
+        "rank": 75,
+        "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/26/86/59/2686599a-f699-29c9-8896-8b60f04d0e63/196871981699.jpg/296x296bb-60.jpg",
+        "source": "apple_music"
+    },
+    {
+        "isrc": "CAUM82400042",
+        "name": "Waves",
+        "artist": "Zeds Dead, Flux Pavilion & DeathbyRomy",
+        "link": "https://music.apple.com/us/album/waves/1737508849?i=1737508852",
+        "rank": 76,
+        "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/68/1d/00/681d00c3-3e62-d0c3-bfa9-836a2b6e1aa5/24UMGIM32037.rgb.jpg/296x296bb-60.jpg",
+        "source": "apple_music"
+    },
+    {
+        "isrc": "NLF712402037",
+        "name": "Yesterday",
+        "artist": "Schak, Will Atkinson & Abi Flynn",
+        "link": "https://music.apple.com/us/album/yesterday/1739817085?i=1739817086",
+        "rank": 77,
+        "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/a4/81/d6/a481d619-039c-7045-dde1-30ffda1a0381/8718522463624.png/296x296bb-60.jpg",
+        "source": "apple_music"
+    },
+    {
+        "isrc": "US38Y2404377",
+        "name": "Satellite",
+        "artist": "Dimension & Alison Wonderland",
+        "link": "https://music.apple.com/us/album/satellite/1732748625?i=1732748719",
+        "rank": 78,
+        "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/c1/dd/46/c1dd46e8-8be5-66d6-22d0-2e2c62e16398/085365695368.jpg/296x296bb-60.jpg",
+        "source": "apple_music"
+    },
+    {
+        "isrc": "GBCFB2400292",
+        "name": "Kimbara",
+        "artist": "Barry Can't Swim",
+        "link": "https://music.apple.com/us/album/kimbara/1739798395?i=1739798396",
+        "rank": 79,
+        "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/ba/c2/fe/bac2fe1b-9996-2a7f-0c1c-a728f415591b/5054429193589.png/296x296bb-60.jpg",
+        "source": "apple_music"
+    },
+    {
+        "isrc": "UK7MC2200081",
+        "name": "Baddy On the Floor (feat. Honey Dijon)",
+        "artist": "Jamie xx",
+        "link": "https://music.apple.com/us/album/baddy-on-the-floor-feat-honey-dijon/1736774386?i=1736774725",
+        "rank": 80,
+        "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/58/79/46/5879463c-e688-c482-423f-a8dbcb691383/889030028976.png/296x296bb-60.jpg",
+        "source": "apple_music"
+    },
+    {
+        "isrc": "DEE862302298",
+        "name": "life gets hard (Edit)",
+        "artist": "iilliaa & Jem Cooke",
+        "link": "https://music.apple.com/us/album/life-gets-hard-edit/1722619068?i=1722619085",
+        "rank": 81,
+        "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/54/6d/46/546d4658-24e6-e4be-d849-2321c037ca9f/196871750677.jpg/296x296bb-60.jpg",
+        "source": "apple_music"
+    },
+    {
+        "isrc": "US23A1580904",
+        "name": "searching",
+        "artist": "wilo wilde",
+        "link": "https://music.apple.com/us/album/searching/1740099704?i=1740099705",
+        "rank": 82,
+        "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/d5/18/2f/d5182ff2-efd8-cc6f-fd88-05375463dfcb/5059449173306.png/296x296bb-60.jpg",
+        "source": "apple_music"
+    },
+    {
+        "isrc": "USAT22313737",
+        "name": "Von dutch",
+        "artist": "Charli XCX",
+        "link": "https://music.apple.com/us/album/von-dutch/1732110349?i=1732110358",
+        "rank": 83,
+        "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/58/d4/74/58d47475-3797-bad8-9c66-77bfb8cbf352/075679655516.jpg/296x296bb-60.jpg",
+        "source": "apple_music"
+    },
+    {
+        "isrc": "GBEWA2402579",
+        "name": "BLAM",
+        "artist": "Jody Wisternoff & Blake.08",
+        "link": "https://music.apple.com/us/album/blam/1737197178?i=1737197179",
+        "rank": 84,
+        "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/e5/20/9c/e5209c29-294f-8a90-70f0-5ec53c27b9d5/5039060984291.png/296x296bb-60.jpg",
+        "source": "apple_music"
+    },
+    {
+        "isrc": "GBUM72402366",
+        "name": "Sippin' Yak (Morgan Seatree Remix)",
+        "artist": "Cloonee & Morgan Seatree",
+        "link": "https://music.apple.com/us/album/sippin-yak-morgan-seatree-remix/1742982369?i=1742982689",
+        "rank": 85,
+        "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/dd/a5/50/dda55054-d7a3-8ef7-3bc2-9fc4090e613a/24UMGIM40936.rgb.jpg/296x296bb-60.jpg",
+        "source": "apple_music"
+    },
+    {
+        "isrc": "GBJX32463018",
+        "name": "Delirious",
+        "artist": "Leftwing : Kody & Raphi",
+        "link": "https://music.apple.com/us/album/delirious/1743016390?i=1743016547",
+        "rank": 86,
+        "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/42/57/c8/4257c8f5-6ecd-0c1f-410e-c54a4f736293/198391905032.jpg/296x296bb-60.jpg",
+        "source": "apple_music"
+    },
+    {
+        "isrc": "NLF712401878",
+        "name": "Weekend Love (feat. House Gospel Choir)",
+        "artist": "Will Clarke",
+        "link": "https://music.apple.com/us/album/weekend-love-feat-house-gospel-choir/1741512742?i=1741512744",
+        "rank": 87,
+        "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/1f/62/c8/1f62c8db-0bee-0179-be38-1f622aab175a/8718522466663.png/296x296bb-60.jpg",
+        "source": "apple_music"
+    },
+    {
+        "isrc": "AULI02457180",
+        "name": "World Collapsing",
+        "artist": "Willaris. K & The Presets",
+        "link": "https://music.apple.com/us/album/world-collapsing/1740871630?i=1740871633",
+        "rank": 88,
+        "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/b5/80/39/b5803916-5241-f02f-0dd7-28b307da13fd/24SYMIM11215.rgb.jpg/296x296bb-60.jpg",
+        "source": "apple_music"
+    },
+    {
+        "isrc": "QM6MZ2440782",
+        "name": "Right Here",
+        "artist": "Anna Lunoe & Totally Enormous Extinct Dinosaurs",
+        "link": "https://music.apple.com/us/album/right-here/1740457938?i=1740457955",
+        "rank": 89,
+        "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/68/8e/a4/688ea4e1-0cd9-fdd7-2f5d-8da66deae84f/198391741517.jpg/296x296bb-60.jpg",
+        "source": "apple_music"
+    },
+    {
+        "isrc": "GBCFB2400455",
+        "name": "Sweet Devotion (feat. Caroline Byrne) [Edit]",
+        "artist": "TSHA",
+        "link": "https://music.apple.com/us/album/sweet-devotion-feat-caroline-byrne-edit/1738506759?i=1738507103",
+        "rank": 90,
+        "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/c6/29/8e/c6298ebe-8cbc-db77-d187-66f187701f2b/5054429194838.png/296x296bb-60.jpg",
+        "source": "apple_music"
+    },
+    {
+        "isrc": "GBARL2400479",
+        "name": "Nightshift",
+        "artist": "Charlotte Plank",
+        "link": "https://music.apple.com/us/album/nightshift/1741753447?i=1741753448",
+        "rank": 91,
+        "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/69/89/ec/6989ec2c-b2cc-15e3-6ff1-e6dda00d4c2e/196872020328.jpg/296x296bb-60.jpg",
+        "source": "apple_music"
+    },
+    {
+        "isrc": "USUG12401184",
+        "name": "Teka",
+        "artist": "DJ Snake & Peso Pluma",
+        "link": "https://music.apple.com/us/album/teka/1741006070?i=1741006093",
+        "rank": 92,
+        "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/07/87/5c/07875cc5-9a91-73f9-7193-91f315a1d966/24UMGIM13634.rgb.jpg/296x296bb-60.jpg",
+        "source": "apple_music"
+    },
+    {
+        "isrc": "USUYG1543294",
+        "name": "Rhythm Guide",
+        "artist": "Mal\u00f3ne & Ky William",
+        "link": "https://music.apple.com/us/album/rhythm-guide/1739412929?i=1739412937",
+        "rank": 93,
+        "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/bb/42/d7/bb42d779-94ac-026f-3089-8df1eff16211/197342563604_cover.jpg/296x296bb-60.jpg",
+        "source": "apple_music"
+    },
+    {
+        "isrc": "GBCEN2400083",
+        "name": "Northern Rhythm",
+        "artist": "Patrick Topping & Ewan McVicar",
+        "link": "https://music.apple.com/us/album/northern-rhythm/1744145322?i=1744145325",
+        "rank": 94,
+        "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/42/8f/41/428f417a-8692-7865-5b5a-28ab1b31143f/196872080773.jpg/296x296bb-60.jpg",
+        "source": "apple_music"
+    },
+    {
+        "isrc": "USAT22401742",
+        "name": "Control The Media",
+        "artist": "Anti Up",
+        "link": "https://music.apple.com/us/album/control-the-media/1737937550?i=1737937563",
+        "rank": 95,
+        "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/e8/1d/f6/e81df685-72e5-9885-bca7-de96139cd5b2/075679652867.jpg/296x296bb-60.jpg",
+        "source": "apple_music"
+    },
+    {
+        "isrc": "DEG932401677",
+        "name": "Your Eyes",
+        "artist": "Fedele",
+        "link": "https://music.apple.com/us/album/your-eyes/1742098276?i=1742098789",
+        "rank": 96,
+        "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/4f/0b/9f/4f0b9f41-cd98-5986-f05a-3c57a4e39d8d/4062548089592.png/296x296bb-60.jpg",
+        "source": "apple_music"
+    },
+    {
+        "isrc": "GBCPZ2423192",
+        "name": "Sky (Shining Bright)",
+        "artist": "KC Lights",
+        "link": "https://music.apple.com/us/album/sky-shining-bright/1743233664?i=1743233761",
+        "rank": 97,
+        "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/b2/c2/74/b2c274b1-20d8-e4f6-4fbb-185666d86052/826194606800.jpg/296x296bb-60.jpg",
+        "source": "apple_music"
+    },
+    {
+        "isrc": "NLZ542400382",
+        "name": "My City",
+        "artist": "Ti\u00ebsto & Prophecy",
+        "link": "https://music.apple.com/us/album/my-city/1744858496?i=1744858499",
+        "rank": 98,
+        "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/57/d8/e0/57d8e05a-0ca5-8741-1d7c-8bb739f173dd/8721093133780.png/296x296bb-60.jpg",
+        "source": "apple_music"
+    },
+    {
+        "isrc": "NL8RL2415361",
+        "name": "Fever Dream (feat. Annaca)",
+        "artist": "Wenzday",
+        "link": "https://music.apple.com/us/album/fever-dream-feat-annaca/1740681247?i=1740681248",
+        "rank": 99,
+        "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/82/3d/96/823d96d3-eb46-cbfb-619e-afbd721883f2/8721056928859.png/296x296bb-60.jpg",
+        "source": "apple_music"
+    },
+    {
+        "isrc": "NLF712402352",
+        "name": "Blow My Mind",
+        "artist": "Arielle Free & GHSTGHSTGHST",
+        "link": "https://music.apple.com/us/album/blow-my-mind/1742180206?i=1742180207",
+        "rank": 100,
+        "album_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/24/1f/ae/241fae9d-d90f-5a62-d72f-2417991021f0/8718522474446.png/296x296bb-60.jpg",
+        "source": "apple_music"
+    }
 ]
