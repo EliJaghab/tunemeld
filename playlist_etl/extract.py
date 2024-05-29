@@ -38,14 +38,14 @@ class RapidAPIClient:
     def get_api_key(self):
         api_key = os.getenv("X_RAPIDAPI_KEY")
         if not api_key:
-            load_env_variables_from_script()
+            get_local_secrets()
             api_key = os.getenv("X_RAPIDAPI_KEY")
             if not api_key:
                 raise Exception("Failed to set API Key.")
         return api_key
 
 
-def load_env_variables_from_script():
+def get_local_secrets():
     result = subprocess.Popen(
         ["bash", "-c", f"source {SCRIPT_PATH} && env"],
         stdout=subprocess.PIPE,

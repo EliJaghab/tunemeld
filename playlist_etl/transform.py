@@ -1,57 +1,191 @@
-import json
 import os
+import json
 import re
-
 import requests
 from bs4 import BeautifulSoup
 from urllib.parse import unquote
-
+import concurrent.futures
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
-
-
-import musicbrainzngs
-
-
-from extract import (
-    EXTRACT_BASE_PATH,
-    load_env_variables_from_script,
-    write_json_to_file,
-)
+from extract import EXTRACT_BASE_PATH, get_local_secrets, write_json_to_file
 
 BASE_TRANSFORM_PATH = "docs/files/transform"
+ISRC_CACHE_FILE = "isrc_cache.json"
+YOUTUBE_CACHE_FILE = "youtube_cache.json"
+SOURCES = ["apple_music", "spotify", "soundcloud"]
+GENRES = ["dance"]
 
+isrc_cache = {}
+youtube_cache = {}
+youtube_count = 0
 
-def transform_applemusic_data(data):
+def convert_apple_music_raw_export_to_track_type(data):
     tracks = []
-    for key, track_data in data["album_details"].items():
+    raw_track_data = data["album_details"].items()
+    for key, track_data in raw_track_data:
         if key.isdigit():
-            rank = int(key) + 1  # Convert to 1-based index
-            track_name = track_data.get("name")
-            artist_name = track_data.get("artist")
-            url = track_data.get("link")
-            album_url = get_apple_music_album_cover(url)
+            rank = int(key) + 1
+            track_name = track_data["name"]
+            artist_name = track_data["artist"]
+            track_url = track_data["link"]
+            track = Track(
+                source_name="apple_music",
+                rank=rank,
+                track_name=track_name,
+                artist_name=artist_name,
+                track_url=track_url
+            )
+            tracks.append(track)
+    return tracks
 
-            milliseconds = duration_to_milliseconds(track_data["duration"])
-            isrc = get_isrc(track_name, artist_name, milliseconds, url)
+def convert_soundcloud_raw_export_to_track_type(data):
+    tracks = []
+    for i, item in enumerate(data["tracks"]["items"]):
+        track_name = item["title"]
+        track_url = item["permalink"]
+        rank = i + 1
+        artist_name = item["user"]["name"]
+        album_cover_url = item["artworkUrl"]
+        isrc = item["publisher"]["isrc"]
 
-            track_info = {
-                "isrc": isrc,
-                "name": track_name,
-                "artist": artist_name,
-                "link": url,
-                "rank": rank,
-                "album_url": album_url,
-                "source": "apple_music",
-            }
-            tracks.append(track_info)
+        if " - " in track_name:
+            artist_name, track_name = track_name.split(" - ", 1)
 
-    sorted_tracks = sorted(tracks, key=lambda x: x["rank"])
-    return sorted_tracks
+        track = Track(
+            isrc=isrc,
+            track_name=track_name,
+            artist_name=artist_name,
+            track_url=track_url,
+            rank=rank,
+            album_cover_url=album_cover_url,
+            source_name="soundcloud"
+        )
+        tracks.append(track)
+    return tracks
 
+def convert_spotify_raw_export_to_track_type(data):
+    tracks = []
+    for rank, item in enumerate(data["items"]):
+        track_info = item["track"]
+        isrc = track_info["external_ids"]["isrc"]
+        track_name = track_info["name"]
+        track_url = track_info["external_urls"]["spotify"]
+        artist_name = ", ".join(artist["name"] for artist in track_info["artists"])
+        album_cover_url = track_info["album"]["images"][0]["url"]
+
+        track = Track(
+            isrc=isrc,
+            track_name=track_name,
+            artist_name=artist_name,
+            track_url=track_url,
+            rank=rank + 1,
+            album_cover_url=album_cover_url,
+            source_name="spotify"
+        )
+        tracks.append(track)
+    return tracks
+
+class Track:
+    def __init__(self, track_name, artist_name, track_url, rank, source_name, album_cover_url=None, isrc=None):
+        self.isrc = isrc
+        self.track_name = track_name
+        self.artist_name = artist_name
+        self.track_url = track_url
+        self.album_cover_url = album_cover_url
+        self.rank = rank
+        self.source_name = source_name
+        self.youtube_url = None
+
+    def to_dict(self):
+        return self.__dict__
+
+    @staticmethod
+    def from_dict(data):
+        return Track(**data)
+
+    def set_isrc(self):
+        self.isrc = get_isrc_from_spotify_api(self.track_name, self.artist_name)
+
+    def set_youtube_url(self):
+        if not self.youtube_url:
+            self.youtube_url = get_youtube_url_by_track_and_artist_name(self.track_name, self.artist_name)
+
+    def set_apple_music_album_cover_url(self):
+        if not self.album_cover_url:
+            self.album_cover_url = get_apple_music_album_cover(self.track_url)
+
+def save_tracks_to_json(tracks, filename):
+    with open(filename, 'w') as file:
+        json.dump([track.to_dict() for track in tracks], file, indent=4)
+
+def load_tracks_from_json(filename):
+    with open(filename, 'r') as file:
+        track_dicts = json.load(file)
+        return [Track.from_dict(track_dict) for track_dict in track_dicts]
+
+def get_isrc_from_spotify_api(track_name, artist_name):
+    client_id = os.getenv("spotify_client_id")
+    client_secret = os.getenv("spotify_client_secret")
+    client_credentials_manager = SpotifyClientCredentials(client_id=client_id, client_secret=client_secret)
+    spotify = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
+
+    def search_spotify(query):
+        results = spotify.search(q=query, type="track", limit=1)
+        tracks = results["tracks"]["items"]
+        if tracks:
+            return tracks[0]["external_ids"]["isrc"]
+        return None
+
+    track_name_no_parens = re.sub(r"\([^()]*\)", "", track_name.lower())
+    queries = [
+        f"track:{track_name_no_parens} artist:{artist_name}",
+        f"{track_name_no_parens} {artist_name}",
+        f"track:{track_name.lower()} artist:{artist_name}"
+    ]
+
+    for query in queries:
+        isrc = search_spotify(query)
+        if isrc:
+            return isrc
+
+    print(f"No track found on Spotify using queries: {queries} for {track_name} {artist_name}")
+    return None
+
+def get_youtube_url_by_track_and_artist_name(track_name, artist_name):
+    global youtube_count, youtube_cache
+    cache_key = f"{track_name}|{artist_name}"
+
+    if cache_key in youtube_cache:
+        return youtube_cache[cache_key]
+
+    youtube_count += 1
+    query = f"{track_name} {artist_name}"
+    print(f"{youtube_count} getting youtube url for {query}")
+    api_key = os.getenv("GOOGLE_API_KEY")
+    if not api_key:
+        raise ValueError("API key not found. Make sure to set the GOOGLE_API_KEY environment variable.")
+
+    youtube_search_url = f"https://www.googleapis.com/youtube/v3/search?part=snippet&q={query}&key={api_key}&quotaUser={youtube_count}"
+
+    response = requests.get(youtube_search_url)
+    if response.status_code == 200:
+        data = response.json()
+        if "items" in data and len(data["items"]) > 0:
+            video_id = data["items"][0]["id"]["videoId"]
+            youtube_url = f"https://www.youtube.com/watch?v={video_id}"
+            youtube_cache[cache_key] = youtube_url
+            write_json_to_file(youtube_cache, YOUTUBE_CACHE_FILE)
+            return youtube_url
+
+        youtube_cache[cache_key] = "No video found"
+        write_json_to_file(youtube_cache, YOUTUBE_CACHE_FILE)
+        return "No video found"
+    
+    error_msg = f"Error: {response.status_code}, {response.text}"
+    print(error_msg)
+    return error_msg
 
 def get_apple_music_album_cover(url_link):
-    """Manually scrapes the URL for the Album cover for Apple Music Links."""
     response = client.get(url_link, timeout=30)
     response.raise_for_status()
     doc = BeautifulSoup(response.text, "html.parser")
@@ -60,231 +194,62 @@ def get_apple_music_album_cover(url_link):
     if not source_tag or not source_tag.has_attr("srcset"):
         raise ValueError("Album cover URL not found")
 
-    # Extracts the first URL from the srcset attribute value and decodes
-    # URL-encoded characters
     srcset = source_tag["srcset"]
     url = unquote(srcset.split()[0])
     return url
 
-
-def duration_to_milliseconds(duration):
-    parts = duration.split()
-    if len(parts) == 2:
-        minutes = int(parts[0].strip("m"))
-        seconds = int(parts[1].strip("s"))
-        total_seconds = minutes * 60 + seconds
-        return total_seconds * 1000
-    return 0
-
-
-cache_file = "isrc_cache.json"
-cache = {}
-
-
-def load_cache():
-    global cache
-    if os.path.exists(cache_file):
-        with open(cache_file, "r") as file:
-            cache = json.load(file)
-
-
-def save_cache(cache):
-    with open(cache_file, "w") as file:
-        json.dump(cache, file)
-
-
-def get_isrc(track_name, artist_name, expected_duration_ms, link):
-    global cache
-    # Initialize cache if empty
-    if not cache:
-        load_cache()
-    # Using tuple of track name and artist name as the key
-    cache_key = track_name + "|" + artist_name
-    if cache_key in cache:
-        print(f"Cache hit for {track_name} {artist_name}")
-        return cache[cache_key]
-
-    isrc = get_isrc_from_music_brainz(
-        track_name, artist_name, expected_duration_ms, link
-    )
-    if not isrc:
-        print(f"retrieving isrc from spotify for {track_name} {artist_name}")
-        isrc = get_isrc_from_spotify_api(track_name, artist_name)
-
-    # Update the cache with the new ISRC
-    cache[cache_key] = isrc
-    save_cache(cache)
-    return isrc
-
-
-def get_isrc_from_music_brainz(track_name, artist_name, expected_duration_ms, link):
-    musicbrainzngs.set_useragent("TuneMeld", "0.1", "http://www.tunemeld.com")
-    result = musicbrainzngs.search_recordings(
-        query=track_name, artist=artist_name, limit=5
-    )
-
-    isrc_list = []
-    for recording in result["recording-list"]:
-        if "isrc-list" not in recording:
-            continue
-
-        is_disqualified = any(
-            x in recording.get("disambiguation", "").lower()
-            for x in ["mix", "live", "extended", "dolby atmos"]
-        )
-        if is_disqualified:
-            continue
-
-        recording_duration_ms = int(recording.get("length", 0))
-        duration_diff = abs(recording_duration_ms - expected_duration_ms)
-
-        for isrc in recording["isrc-list"]:
-            isrc_list.append(
-                {
-                    "isrc": isrc,
-                    "score": int(recording.get("ext:score", 0)),
-                    "duration_diff": duration_diff,
-                }
-            )
-
-        isrc_list.sort(key=lambda x: (-x["score"], x["duration_diff"]))
-
-        if isrc_list:
-            best_match = isrc_list[0]
-            if best_match["score"] > 96 and abs(best_match["duration_diff"]) <= 3000:
-                return best_match["isrc"]
-            else:
-                print(f"found more than one isrc for {track_name} {artist_name} {link}")
-                print(
-                    f"Best ISRC: {best_match['isrc']} with score: {best_match['score']} and duration diff: {best_match['duration_diff']}ms"
-                )
-        return None
-
-
-def get_isrc_from_spotify_api(track_name, artist_name):
-    client_id = os.getenv("spotify_client_id")
-    client_secret = os.getenv("spotify_client_secret")
-    client_credentials_manager = SpotifyClientCredentials(
-        client_id=client_id, client_secret=client_secret
-    )
-    spotify = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
-
-    # Remove parentheses and contents within
-    track_name_no_parens = re.sub(r"\([^()]*\)", "", track_name.lower())
-    query = f"track:{track_name_no_parens} artist:{artist_name}"
-    results = spotify.search(q=query, type="track", limit=1)
-
-    tracks = results["tracks"]["items"]
-    if tracks:
-        isrc = tracks[0]["external_ids"]["isrc"]
-        print("Found on Spotify:", tracks[0]["name"], isrc)
-        return isrc
-    else:
-        error_message = f"No track found on Spotify using query: {query} for {track_name} {artist_name}"
-        print(error_message)
-        return None
-
-
-def transform_soundcloud_data(data):
-    items = data["tracks"]["items"]
-
-    tracks = []
-    for i, item in enumerate(items):
-        isrc = item["publisher"]["isrc"]
-        title = item["title"]
-        permalink = item["permalink"]
-        user = item["user"]
-        artist_name = user["name"]
-        artwork_url = item.get("artworkUrl", "")
-
-        # Handle titles with hyphens
-        if " - " in title:
-            parts = title.split(" - ", 1)
-            artist_name = parts[0]
-            track_name = parts[1]
-        else:
-            track_name = title
-
-        track = {
-            "isrc": isrc,
-            "name": track_name,
-            "artist": artist_name,
-            "link": permalink,
-            "rank": i + 1,
-            "album_url": artwork_url,
-            "source": "soundcloud",
-        }
-        tracks.append(track)
-
-    sorted_tracks = sorted(tracks, key=lambda x: x["rank"])
-    return sorted_tracks
-
-
-def transform_spotify_data(data):
-    tracks = []
-    for rank, item in enumerate(data["items"]):
-        track_info = item.get("track", {})
-        isrc = track_info["external_ids"]["isrc"]
-        name = track_info.get("name", "")
-        external_urls = track_info.get("external_urls", {}).get("spotify", "")
-        artists = [
-            artist.get("name", "")
-            for artist in track_info.get("artists", [])
-            if artist.get("name")
-        ]
-        artist_names = ", ".join(artists)
-        album_info = track_info.get("album", {})
-        images = album_info.get("images", [])
-        album_url = images[0].get("url", "") if images else None
-
-        track = {
-            "isrc": isrc,
-            "name": name,
-            "artist": artist_names,
-            "link": external_urls,
-            "rank": rank + 1,
-            "album_url": album_url,
-            "source": "spotify",
-        }
-        tracks.append(track)
-
-    sorted_tracks = sorted(tracks, key=lambda x: x["rank"])
-    return sorted_tracks
-
-
-def format_transformed_filename(original_filename):
-    """Generate a clean file name for the JSON transformed output based on the original filename."""
-    base_name = original_filename.replace("extract", "transformed")
-    full_path = f"{BASE_TRANSFORM_PATH}/{base_name}"
-    os.makedirs(BASE_TRANSFORM_PATH, exist_ok=True)
-    return full_path
-
-
 def read_json_from_file(file_path):
     with open(file_path, "r") as file:
-        data = json.load(file)
-        return data
+        return json.load(file)
 
+def process_tracks(tracks, filename):
+    filtered_tracks = [track for track in tracks if track.source_name in filename]
+    sorted_tracks = sorted(filtered_tracks, key=lambda x: x.rank)
+    output_path = f"{BASE_TRANSFORM_PATH}/{filename}_transformed.json"
+    save_tracks_to_json(sorted_tracks, output_path)
 
 if __name__ == "__main__":
-    print()
-    print("starting transform")
+    print("\nStarting transform")
     client = requests.Session()
+
     if not os.getenv("GITHUB_ACTIONS"):
-        load_env_variables_from_script()
+        get_local_secrets()
+    
+    isrc_cache = read_json_from_file(ISRC_CACHE_FILE)
+    youtube_cache = read_json_from_file(YOUTUBE_CACHE_FILE)
 
+    all_tracks = []
     for filename in os.listdir(EXTRACT_BASE_PATH):
-        if "extract" in filename:
-            service_name = filename.split("_")[0]
-            transform_function_name = f"transform_{service_name}_data"
+        input_path = f"{EXTRACT_BASE_PATH}/{filename}"
+        data = read_json_from_file(input_path)
 
-            transform_function = globals().get(transform_function_name)
+        if "applemusic" in filename:
+            all_tracks.extend(convert_apple_music_raw_export_to_track_type(data))
+        elif "spotify" in filename:
+            all_tracks.extend(convert_spotify_raw_export_to_track_type(data))
+        elif "soundcloud" in filename:
+            all_tracks.extend(convert_soundcloud_raw_export_to_track_type(data))
+        else:
+            raise ValueError("unknown file name")
+        
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        futures = [executor.submit(track.set_isrc) for track in all_tracks]
+        concurrent.futures.wait(futures)
+        for future in futures:
+            future.result()
 
-            input_path = f"{EXTRACT_BASE_PATH}/{filename}"
-            output_path = format_transformed_filename(filename)
-            data = read_json_from_file(input_path)
-            transformed_data = transform_function(data)
-            write_json_to_file(transformed_data, output_path)
-            print(f"Processed {input_path} -> {output_path}")
+        futures = [executor.submit(track.set_youtube_url) for track in all_tracks]
+        concurrent.futures.wait(futures)
+        for future in futures:
+            future.result()
 
-    print("transform completed")
+        futures = [executor.submit(track.set_apple_music_album_cover_url) for track in all_tracks if track.source_name == "apple_music"]
+        concurrent.futures.wait(futures)
+        for future in futures:
+            future.result()
+        
+    for source in SOURCES:
+        for genre in GENRES:
+            process_tracks(all_tracks, f"{source}_{genre}")
+
+    print("Transform completed")

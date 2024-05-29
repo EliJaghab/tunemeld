@@ -1,192 +1,204 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <link rel="icon" href="chicken.png" type="image/x-icon" />
-    <meta property="og:image" content="chicken.png" />
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
-      rel="stylesheet"
-      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-    />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,600&display=swap"
-      rel="stylesheet"
-    />
-    <title>tunemeld</title>
-    <style>
-      a {
-        color: white;
-      }
-      body {
-        background-color: #333;
-        color: white;
-      }
-      h1 {
-        font-family: 'DM Sans', sans-serif;
-        font-weight: 600;
-      }
-      #main-content {
-        transition: opacity 2s ease-in-out;
-        opacity: 1;
-      }
-      .album-cover {
-        width: 50px;
-        height: 50px;
-        margin-right: 5px;
-      }
-      .track-item-content {
-        display: flex;
-        align-items: center;
-        padding-top: 1px;
-        padding-bottom: 1px;
-        justify-content: flex-start;
-        background-color: #444;
-        color: white;
-      }
-      .track-number {
-        margin-right: 10px;
-        font-size: 20px;
-        line-height: 40px;
-      }
-      .track-info {
-        padding: 2px 0;
-        color: white;
-      }
-      .track-list-item {
-        background-color: #444;
-        color: white;
-        padding: 5px 0;
-      }
-      .username {
-        font-size: 12px;
-        margin: 0;
-      }
-      .track-title {
-        font-weight: 400;
-        margin: 0;
-        color: white;
-      }
-      .playlist {
-        overflow-y: auto;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        padding: 5px;
-        margin: 5px 0;
-        width: 100%;
-      }
-      .playlist-title {
-        text-align: center;
-        font-weight: bold;
-        margin-bottom: 5px;
-      }
-      .source-icon {
-        width: 24px;
-        height: 24px;
-        margin-left: 5px;
-      }
-      .container {
-        max-width: 100%;
-        max-width: 1200px;
-        max-width: 75rem;
-        max-width: 90vw;
-      }
-      .row {
-        margin: 0;
-      }
-      .col-md-4,
-      .col-sm-12 {
-        padding: 0 5px;
-      }
-      #loading-screen {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: white;
-        z-index: 1000;
-        transition: opacity 2s ease-in-out;
-      }
-      .playlist-description {
-        text-align: center;
-        font-family: 'DM Sans', sans-serif;
-        font-weight: 400;
-        font-size: 14px;
-        color: #ccc;
-        margin-bottom: 10px;
-      }
-      #loading-image {
-        max-width: 25%;
-        max-height: 25vh;
-      }
-      @keyframes fadeOut {
-        0% {
-          opacity: 1;
-        }
-        100% {
-          opacity: 0;
-        }
-      }
-      #soundcloud-link {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        color: white;
-        font-family: 'DM Sans', sans-serif;
-        font-weight: 600;
-        text-decoration: none;
-        background-color: #444;
-        padding: 3px 8px; /* Reduced padding */
-        border-radius: 5px;
-        display: flex;
-        align-items: center;
-        font-size: 12px; /* Reduced font size */
-        transition: background-color 0.3s ease;
-      }
-      
-      #soundcloud-link:hover {
-        background-color: #555;
-      }
-      
-      #soundcloud-logo {
-        width: 20px;
-        height: 20px;
-        margin-right: 5px;
-      }
+<head>
+  <link rel="icon" href="chicken.png" type="image/x-icon" />
+  <meta property="og:image" content="chicken.png" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,600&display=swap" rel="stylesheet" />
+  <title>tunemeld</title>
+  <style>
+    a {
+      color: white;
+    }
+    body {
+      background-color: #333;
+      color: white;
+    }
+    h1 {
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 600;
+    }
+    #main-content {
+      transition: opacity 2s ease-in-out;
+      opacity: 1;
+    }
+    .album-cover {
+      width: 50px;
+      height: 50px;
+      margin-right: 5px;
+    }
+    .track-item-content {
+      display: flex;
+      align-items: center;
+      padding: 10px;
+      background-color: #444;
+      color: white;
+    }
+    .track-number {
+      margin-right: 10px;
+      font-size: 20px;
+      line-height: 40px;
+      width: 50px;
+      text-align: center;
+    }
+    .track-info {
+      flex: 3;
+      padding: 0 10px;
+    }
+    .track-column {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 150px;
+    }
+    .column-header {
+      font-weight: bold;
+      text-align: center;
+    }
+    .source-icons, .external-links {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 5px;
+    }
+    .track-list-item {
+      background-color: #444;
+      color: white;
+      padding: 5px 0;
+    }
+    .username {
+      font-size: 12px;
+      margin: 0;
+    }
+    .track-title {
+      font-weight: 400;
+      margin: 0;
+      color: white;
+    }
+    .playlist {
+      overflow-y: auto;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      padding: 5px;
+      margin: 5px 0;
+      width: 100%;
+    }
+    .playlist-title {
+      text-align: center;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    .source-icon {
+      width: 24px;
+      height: 24px;
+    }
+    .container {
+      max-width: 100%;
+      max-width: 1200px;
+      max-width: 75rem;
+      max-width: 90vw;
+    }
+    .row {
+      margin: 0;
+    }
+    .col-md-4,
+    .col-sm-12 {
+      padding: 0 5px;
+    }
+    .playlist-description {
+      text-align: center;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 400;
+      font-size: 14px;
+      color: #ccc;
+      margin-bottom: 10px;
+    }
+    #soundcloud-link {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      color: white;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 600;
+      text-decoration: none;
+      background-color: #444;
+      padding: 3px 8px;
+      border-radius: 5px;
+      display: flex;
+      align-items: center;
+      font-size: 12px;
+      transition: background-color 0.3s ease;
+    }
+    #soundcloud-link:hover {
+      background-color: #555;
+    }
+    #soundcloud-logo {
+      width: 20px;
+      height: 20px;
+      margin-right: 5px;
+    }
+    .track-header {
+      font-weight: bold;
+      text-align: left;
+      flex: 1;
+      width: 150px;
+    }
+    
+    .track-header-info {
+      composes: track-header;
+      margin-left: 12%;
+    }
+    
+    .track-header-seen-on {
+      composes: track-header;
+      margin-left: 40%; 
+    }
+    
+    .track-header-external-links {
+      composes: track-header;
+      margin-right: 5%;
+    }
+    
+    .track-column {
+      flex: 1;
+    }
+    
+    .track-headers {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px;
+      background-color: #555;
+    }
     </style>
-  </head>
-  <body>
-    <div class="container my-2" id="main-content">
-      <h1 class="text-center" style="margin-bottom: 10px">tunemeld</h1>
-      <a href="https://soundcloud.com/elijaghab" target="_blank" id="soundcloud-link">
-        <img src="./images/soundcloud_logo.png" alt="SoundCloud" id="soundcloud-logo" />
-        Eli's SoundCloud
-      </a>      
-      <div class="row">
-        <div class="col-md-12">
-          <div class="playlist">
-            <div class="playlist-title">Aggregated Playlist</div>
-            <div
-        id="last-updated"
-        style="
-          text-align: center;
-          font-family: 'DM Sans', sans-serif;
-          font-size: 0.6rem;
-          color: #ccc;
-        "
-      >
-        Last Updated: Loading...
-      </div>
-            <div class="playlist-description">
-              Tracks seen on more than one curated streaming service, updated
-              every Saturday
-            </div>
+    
+</head>
+<body>
+  <div class="container my-2" id="main-content">
+    <h1 class="text-center" style="margin-bottom: 10px">tunemeld</h1>
+    <a href="https://soundcloud.com/elijaghab" target="_blank" id="soundcloud-link">
+      <img src="./images/soundcloud_logo.png" alt="SoundCloud" id="soundcloud-logo" />
+      Eli's SoundCloud
+    </a>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="playlist">
+          <div class="playlist-title">Aggregated Playlist</div>
+          <div id="last-updated" style="text-align: center; font-family: 'DM Sans', sans-serif; font-size: 0.6rem; color: #ccc;">
+            Last Updated: Loading...
+          </div>
+          <div class="playlist-description">
+            Tracks seen on more than one curated streaming service, updated every Saturday
+          </div>
+          <div class="track-headers">
+            <div class="track-header-info">Track Info</div>
+            <div class="track-header-seen-on">Seen On</div>
+            <div class="track-header-external-links">External</div>
+          </div>
             <div id="aggregated-data-placeholder"></div>
           </div>
         </div>

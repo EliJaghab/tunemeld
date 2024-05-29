@@ -44,7 +44,7 @@
     const config = {
       dance: {
         Aggregated: './files/aggregated/danceplaylist_gold.json',
-        AppleMusic: './files/transform/applemusic_dance_transformed.json',
+        AppleMusic: './files/transform/apple_music_dance_transformed.json',
         SoundCloud: './files/transform/soundcloud_dance_transformed.json',
         Spotify: './files/transform/spotify_dance_transformed.json',
       },
@@ -121,7 +121,7 @@
 
     const albumCover = document.createElement('img');
     albumCover.className = 'album-cover';
-    albumCover.src = track.album_url;
+    albumCover.src = track.album_cover_url;
     albumCover.alt = 'Album Cover';
 
     const trackInfo = document.createElement('div');
@@ -129,12 +129,12 @@
 
     const trackTitle = document.createElement('a');
     trackTitle.className = 'track-title';
-    trackTitle.href = track.link;
-    trackTitle.textContent = track.name;
+    trackTitle.href = track.track_url;
+    trackTitle.textContent = track.track_name;
 
     const artistNameElement = document.createElement('span');
     artistNameElement.className = 'artist-name';
-    artistNameElement.textContent = track.artist;
+    artistNameElement.textContent = track.artist_name;
 
     trackInfo.appendChild(trackTitle);
     trackInfo.appendChild(document.createElement('br'));
@@ -145,8 +145,19 @@
     cardBody.appendChild(trackInfo);
 
     if (isAggregated) {
-      displaySources(cardBody, track);
+      const seenOnColumn = document.createElement('div');
+      seenOnColumn.className = 'track-column source-icons';
+      displaySources(seenOnColumn, track);
+      cardBody.appendChild(seenOnColumn);
     }
+
+    const externalLinksColumn = document.createElement('div');
+    externalLinksColumn.className = 'track-column external-links';
+    if (track.youtube_url) {
+      const youtubeLink = createSourceLink('youtube', track.youtube_url);
+      externalLinksColumn.appendChild(youtubeLink);
+    }
+    cardBody.appendChild(externalLinksColumn);
 
     card.appendChild(cardBody);
     return card;
@@ -190,7 +201,13 @@
         sourceIcon.src = './images/apple_music_logo.png';
         sourceIcon.alt = 'Apple Music';
         break;
-    }
+      case 'youtube':
+          sourceIcon.src = './images/youtube_logo.png';
+          sourceIcon.alt = 'YouTube';
+          break;
+      default:
+        return document.createTextNode('');
+      }
 
     linkElement.appendChild(sourceIcon);
     return linkElement;

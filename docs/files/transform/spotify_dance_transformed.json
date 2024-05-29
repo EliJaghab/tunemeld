@@ -1,677 +1,752 @@
 [
     {
         "isrc": "USAT22403644",
-        "name": "Push",
-        "artist": "Skrillex, Hamdi, TAICHU, Contra, OFFAIAH",
-        "link": "https://open.spotify.com/track/29OFLlrrfKIEVwbVMTjBYe",
+        "track_name": "Push",
+        "artist_name": "Skrillex, Hamdi, TAICHU, Contra, OFFAIAH",
+        "track_url": "https://open.spotify.com/track/29OFLlrrfKIEVwbVMTjBYe",
+        "album_cover_url": "https://i.scdn.co/image/ab67616d0000b27310bc90dfaa9bf82637a34a71",
         "rank": 1,
-        "album_url": "https://i.scdn.co/image/ab67616d0000b27310bc90dfaa9bf82637a34a71",
-        "source": "spotify"
+        "source_name": "spotify",
+        "youtube_url": "https://www.youtube.com/watch?v=vfZPptuU7-M"
     },
     {
         "isrc": "USUG12402628",
-        "name": "Go Back (feat. Julia Church)",
-        "artist": "John Summit, Sub Focus, Julia Church",
-        "link": "https://open.spotify.com/track/68R0zVUeMJ2C852Ov6d2Mh",
+        "track_name": "Go Back (feat. Julia Church)",
+        "artist_name": "John Summit, Sub Focus, Julia Church",
+        "track_url": "https://open.spotify.com/track/68R0zVUeMJ2C852Ov6d2Mh",
+        "album_cover_url": "https://i.scdn.co/image/ab67616d0000b273e1f3772ebd35d96a489d8741",
         "rank": 2,
-        "album_url": "https://i.scdn.co/image/ab67616d0000b273e1f3772ebd35d96a489d8741",
-        "source": "spotify"
+        "source_name": "spotify",
+        "youtube_url": "https://www.youtube.com/watch?v=o9Bgl8HUFZA"
     },
     {
         "isrc": "CAUM72400193",
-        "name": "Love Bites (Feat. Tove Lo & SG Lewis)",
-        "artist": "Nelly Furtado, Tove Lo, SG Lewis",
-        "link": "https://open.spotify.com/track/3bgaDjKLaicRMFD3Vmw3wv",
+        "track_name": "Love Bites (Feat. Tove Lo & SG Lewis)",
+        "artist_name": "Nelly Furtado, Tove Lo, SG Lewis",
+        "track_url": "https://open.spotify.com/track/3bgaDjKLaicRMFD3Vmw3wv",
+        "album_cover_url": "https://i.scdn.co/image/ab67616d0000b273855ec06bd7013e901e7e60a0",
         "rank": 3,
-        "album_url": "https://i.scdn.co/image/ab67616d0000b273855ec06bd7013e901e7e60a0",
-        "source": "spotify"
+        "source_name": "spotify",
+        "youtube_url": "https://www.youtube.com/watch?v=Kf_TN7i4eUA"
     },
     {
         "isrc": "NLZ542400382",
-        "name": "My City",
-        "artist": "Ti\u00ebsto, Prophecy",
-        "link": "https://open.spotify.com/track/5sjvmFMLPjBXDd2XDr9JIm",
+        "track_name": "My City",
+        "artist_name": "Ti\u00ebsto, Prophecy",
+        "track_url": "https://open.spotify.com/track/5sjvmFMLPjBXDd2XDr9JIm",
+        "album_cover_url": "https://i.scdn.co/image/ab67616d0000b273362d1d0b3c80665e295cce11",
         "rank": 4,
-        "album_url": "https://i.scdn.co/image/ab67616d0000b273362d1d0b3c80665e295cce11",
-        "source": "spotify"
+        "source_name": "spotify",
+        "youtube_url": "https://www.youtube.com/watch?v=vd2YM9Yj8Es"
     },
     {
         "isrc": "NLRD52350359",
-        "name": "Addicted",
-        "artist": "Zerb, The Chainsmokers, Ink",
-        "link": "https://open.spotify.com/track/5ZUIPLoTLJZrPQh2kFZEUM",
+        "track_name": "Addicted",
+        "artist_name": "Zerb, The Chainsmokers, Ink",
+        "track_url": "https://open.spotify.com/track/5ZUIPLoTLJZrPQh2kFZEUM",
+        "album_cover_url": "https://i.scdn.co/image/ab67616d0000b27386662f0bf0b8df09e7e6ee34",
         "rank": 5,
-        "album_url": "https://i.scdn.co/image/ab67616d0000b27386662f0bf0b8df09e7e6ee34",
-        "source": "spotify"
+        "source_name": "spotify",
+        "youtube_url": "https://www.youtube.com/watch?v=ROhlsgTOsgc"
     },
     {
         "isrc": "USWB12401323",
-        "name": "Chase It (Mmm Da Da Da)",
-        "artist": "Bebe Rexha",
-        "link": "https://open.spotify.com/track/08APpCYHGsbJ2N9jhRgLQY",
+        "track_name": "Chase It (Mmm Da Da Da)",
+        "artist_name": "Bebe Rexha",
+        "track_url": "https://open.spotify.com/track/08APpCYHGsbJ2N9jhRgLQY",
+        "album_cover_url": "https://i.scdn.co/image/ab67616d0000b273b24069af64a886e1b2a2d3f2",
         "rank": 6,
-        "album_url": "https://i.scdn.co/image/ab67616d0000b273b24069af64a886e1b2a2d3f2",
-        "source": "spotify"
+        "source_name": "spotify",
+        "youtube_url": "https://www.youtube.com/watch?v=wNTrl8E-eac"
     },
     {
         "isrc": "USRC12400376",
-        "name": "For Life (feat. Nile Rodgers)",
-        "artist": "Kygo, Zak Abel, Nile Rodgers",
-        "link": "https://open.spotify.com/track/4QfikoJtCEiOj7G5R9m3sP",
+        "track_name": "For Life (feat. Nile Rodgers)",
+        "artist_name": "Kygo, Zak Abel, Nile Rodgers",
+        "track_url": "https://open.spotify.com/track/4QfikoJtCEiOj7G5R9m3sP",
+        "album_cover_url": "https://i.scdn.co/image/ab67616d0000b2737198e498826796ff81f560a7",
         "rank": 7,
-        "album_url": "https://i.scdn.co/image/ab67616d0000b2737198e498826796ff81f560a7",
-        "source": "spotify"
+        "source_name": "spotify",
+        "youtube_url": "https://www.youtube.com/watch?v=lBdQy97uTiw"
     },
     {
         "isrc": "FR8EU2300010",
-        "name": "Neverender",
-        "artist": "Justice, Tame Impala",
-        "link": "https://open.spotify.com/track/3aQ9MHkMeL7Yu7jpyF62xn",
+        "track_name": "Neverender",
+        "artist_name": "Justice, Tame Impala",
+        "track_url": "https://open.spotify.com/track/3aQ9MHkMeL7Yu7jpyF62xn",
+        "album_cover_url": "https://i.scdn.co/image/ab67616d0000b2738f4b5df3a6ee2abb733080a9",
         "rank": 8,
-        "album_url": "https://i.scdn.co/image/ab67616d0000b2738f4b5df3a6ee2abb733080a9",
-        "source": "spotify"
+        "source_name": "spotify",
+        "youtube_url": "https://www.youtube.com/watch?v=47YNsf-7Y7c"
     },
     {
         "isrc": "USNRS2443512",
-        "name": "Last Night - Anyma x Layton Giordani Remix",
-        "artist": "Loofy, Anyma, Layton Giordani",
-        "link": "https://open.spotify.com/track/22hOKPKTAegLoLJKM33K4a",
+        "track_name": "Last Night - Anyma x Layton Giordani Remix",
+        "artist_name": "Loofy, Anyma, Layton Giordani",
+        "track_url": "https://open.spotify.com/track/22hOKPKTAegLoLJKM33K4a",
+        "album_cover_url": "https://i.scdn.co/image/ab67616d0000b273a87250e8aff9558e9b6f1933",
         "rank": 9,
-        "album_url": "https://i.scdn.co/image/ab67616d0000b273a87250e8aff9558e9b6f1933",
-        "source": "spotify"
+        "source_name": "spotify",
+        "youtube_url": "https://www.youtube.com/watch?v=PuH-7swYK5c"
     },
     {
         "isrc": "USUG12402645",
-        "name": "Summertime Blues (feat. Nathan Nicholson)",
-        "artist": "Chris Lake, Sammy Virji, Nathan Nicholson",
-        "link": "https://open.spotify.com/track/6q36Cqt2d3O5jqrQR9uXCp",
+        "track_name": "Summertime Blues (feat. Nathan Nicholson)",
+        "artist_name": "Chris Lake, Sammy Virji, Nathan Nicholson",
+        "track_url": "https://open.spotify.com/track/6q36Cqt2d3O5jqrQR9uXCp",
+        "album_cover_url": "https://i.scdn.co/image/ab67616d0000b273f3b42c0ca1c479b251e1b393",
         "rank": 10,
-        "album_url": "https://i.scdn.co/image/ab67616d0000b273f3b42c0ca1c479b251e1b393",
-        "source": "spotify"
+        "source_name": "spotify",
+        "youtube_url": "https://www.youtube.com/watch?v=LmFfiXI0P84"
     },
     {
         "isrc": "NL8RL2409745",
-        "name": "On Again",
-        "artist": "Mau P",
-        "link": "https://open.spotify.com/track/5vASuVQkngtFoCOczem52V",
+        "track_name": "On Again",
+        "artist_name": "Mau P",
+        "track_url": "https://open.spotify.com/track/5vASuVQkngtFoCOczem52V",
+        "album_cover_url": "https://i.scdn.co/image/ab67616d0000b27365196ad375037658c9b2637a",
         "rank": 11,
-        "album_url": "https://i.scdn.co/image/ab67616d0000b27365196ad375037658c9b2637a",
-        "source": "spotify"
+        "source_name": "spotify",
+        "youtube_url": "https://www.youtube.com/watch?v=OsYwX5WSj0w"
     },
     {
         "isrc": "UK7MC2200081",
-        "name": "Baddy On The Floor",
-        "artist": "Jamie xx, Honey Dijon",
-        "link": "https://open.spotify.com/track/3CqaTHbiU2nBy3Ar9RnDHN",
+        "track_name": "Baddy On The Floor",
+        "artist_name": "Jamie xx, Honey Dijon",
+        "track_url": "https://open.spotify.com/track/3CqaTHbiU2nBy3Ar9RnDHN",
+        "album_cover_url": "https://i.scdn.co/image/ab67616d0000b27372441424fe34dde8e76f8daa",
         "rank": 12,
-        "album_url": "https://i.scdn.co/image/ab67616d0000b27372441424fe34dde8e76f8daa",
-        "source": "spotify"
+        "source_name": "spotify",
+        "youtube_url": "https://www.youtube.com/watch?v=xeKSdJqFM6o"
     },
     {
         "isrc": "BE4JP2400010",
-        "name": "Roar",
-        "artist": "Charlotte de Witte",
-        "link": "https://open.spotify.com/track/1FubT3w22RMHC3vreAL7cH",
+        "track_name": "Roar",
+        "artist_name": "Charlotte de Witte",
+        "track_url": "https://open.spotify.com/track/1FubT3w22RMHC3vreAL7cH",
+        "album_cover_url": "https://i.scdn.co/image/ab67616d0000b2739fae5caa6d6bf5e3da412047",
         "rank": 13,
-        "album_url": "https://i.scdn.co/image/ab67616d0000b2739fae5caa6d6bf5e3da412047",
-        "source": "spotify"
+        "source_name": "spotify",
+        "youtube_url": "https://www.youtube.com/watch?v=1OY8B8J4lk4"
     },
     {
         "isrc": "DEE862400427",
-        "name": "Pedro",
-        "artist": "Jaxomy, Agatino Romero, Raffaella Carr\u00e0",
-        "link": "https://open.spotify.com/track/48lxT5qJF0yYyf2z4wB4xW",
+        "track_name": "Pedro",
+        "artist_name": "Jaxomy, Agatino Romero, Raffaella Carr\u00e0",
+        "track_url": "https://open.spotify.com/track/48lxT5qJF0yYyf2z4wB4xW",
+        "album_cover_url": "https://i.scdn.co/image/ab67616d0000b27384464d902b1ebaf62775a6da",
         "rank": 14,
-        "album_url": "https://i.scdn.co/image/ab67616d0000b27384464d902b1ebaf62775a6da",
-        "source": "spotify"
+        "source_name": "spotify",
+        "youtube_url": "https://www.youtube.com/watch?v=XzilCu9PcZk"
     },
     {
         "isrc": "GBUM72311096",
-        "name": "Right Here",
-        "artist": "Becky Hill",
-        "link": "https://open.spotify.com/track/2VpKBfkqAZr1iAwwg8AGDO",
+        "track_name": "Right Here",
+        "artist_name": "Becky Hill",
+        "track_url": "https://open.spotify.com/track/2VpKBfkqAZr1iAwwg8AGDO",
+        "album_cover_url": "https://i.scdn.co/image/ab67616d0000b273cc2f4203fe1d7f64e79f6ba6",
         "rank": 15,
-        "album_url": "https://i.scdn.co/image/ab67616d0000b273cc2f4203fe1d7f64e79f6ba6",
-        "source": "spotify"
+        "source_name": "spotify",
+        "youtube_url": "https://www.youtube.com/watch?v=SJ7K2Yk5yfM"
     },
     {
         "isrc": "UKWLG2400013",
-        "name": "I Don't Wanna Wait",
-        "artist": "David Guetta, OneRepublic",
-        "link": "https://open.spotify.com/track/331l3xABO0HMr1Kkyh2LZq",
+        "track_name": "I Don't Wanna Wait",
+        "artist_name": "David Guetta, OneRepublic",
+        "track_url": "https://open.spotify.com/track/331l3xABO0HMr1Kkyh2LZq",
+        "album_cover_url": "https://i.scdn.co/image/ab67616d0000b2732f479a6c1825c1f29e0a3d49",
         "rank": 16,
-        "album_url": "https://i.scdn.co/image/ab67616d0000b2732f479a6c1825c1f29e0a3d49",
-        "source": "spotify"
+        "source_name": "spotify",
+        "youtube_url": "https://www.youtube.com/watch?v=dSDbwfXX5_I"
     },
     {
         "isrc": "USZXT2454115",
-        "name": "How You Feel (Ft. Leven Kali)",
-        "artist": "ANOTR, Erik Bandt, Leven Kali",
-        "link": "https://open.spotify.com/track/3Kwj07sN1wdzlRNMU8rNX0",
+        "track_name": "How You Feel (Ft. Leven Kali)",
+        "artist_name": "ANOTR, Erik Bandt, Leven Kali",
+        "track_url": "https://open.spotify.com/track/3Kwj07sN1wdzlRNMU8rNX0",
+        "album_cover_url": "https://i.scdn.co/image/ab67616d0000b273e6ef824871ae510415373427",
         "rank": 17,
-        "album_url": "https://i.scdn.co/image/ab67616d0000b273e6ef824871ae510415373427",
-        "source": "spotify"
+        "source_name": "spotify",
+        "youtube_url": "https://www.youtube.com/watch?v=OmQupct7buY"
     },
     {
         "isrc": "DEE862400579",
-        "name": "Honey Boy (feat. Nile Rodgers & Shenseea)",
-        "artist": "Purple Disco Machine, Benjamin Ingrosso, Nile Rodgers, Shenseea",
-        "link": "https://open.spotify.com/track/1xIhiVVntsudPMTRFoODyo",
+        "track_name": "Honey Boy (feat. Nile Rodgers & Shenseea)",
+        "artist_name": "Purple Disco Machine, Benjamin Ingrosso, Nile Rodgers, Shenseea",
+        "track_url": "https://open.spotify.com/track/1xIhiVVntsudPMTRFoODyo",
+        "album_cover_url": "https://i.scdn.co/image/ab67616d0000b273429dd14fe6bc49feee210b82",
         "rank": 18,
-        "album_url": "https://i.scdn.co/image/ab67616d0000b273429dd14fe6bc49feee210b82",
-        "source": "spotify"
+        "source_name": "spotify",
+        "youtube_url": "https://www.youtube.com/watch?v=39w5wOJXqBE"
     },
     {
         "isrc": "GBUM72402507",
-        "name": "Mountains",
-        "artist": "Jonas Blue, Galantis, Zoe Wees",
-        "link": "https://open.spotify.com/track/5JqTe36RFGJ1wdYBma0cZ7",
+        "track_name": "Mountains",
+        "artist_name": "Jonas Blue, Galantis, Zoe Wees",
+        "track_url": "https://open.spotify.com/track/5JqTe36RFGJ1wdYBma0cZ7",
+        "album_cover_url": "https://i.scdn.co/image/ab67616d0000b2733ed77f4ccd5de8bb4bb17555",
         "rank": 19,
-        "album_url": "https://i.scdn.co/image/ab67616d0000b2733ed77f4ccd5de8bb4bb17555",
-        "source": "spotify"
+        "source_name": "spotify",
+        "youtube_url": "https://www.youtube.com/watch?v=RdCs-i8MIqU"
     },
     {
         "isrc": "QM37X2400008",
-        "name": "Throw Some Ass",
-        "artist": "Sofi Tukker",
-        "link": "https://open.spotify.com/track/5YO44oPkpH4zeinnihUpIR",
+        "track_name": "Throw Some Ass",
+        "artist_name": "Sofi Tukker",
+        "track_url": "https://open.spotify.com/track/5YO44oPkpH4zeinnihUpIR",
+        "album_cover_url": "https://i.scdn.co/image/ab67616d0000b2737097d88ccc40d1945b27311d",
         "rank": 20,
-        "album_url": "https://i.scdn.co/image/ab67616d0000b2737097d88ccc40d1945b27311d",
-        "source": "spotify"
+        "source_name": "spotify",
+        "youtube_url": "https://www.youtube.com/watch?v=nRpCivrtmXM"
     },
     {
         "isrc": "USZ4V2400153",
-        "name": "Ride Or Die",
-        "artist": "Aluna",
-        "link": "https://open.spotify.com/track/2CbuQYjqutizzJraX3ILZY",
+        "track_name": "Ride Or Die",
+        "artist_name": "Aluna",
+        "track_url": "https://open.spotify.com/track/2CbuQYjqutizzJraX3ILZY",
+        "album_cover_url": "https://i.scdn.co/image/ab67616d0000b27347a8dd0924835ce10b0557ec",
         "rank": 21,
-        "album_url": "https://i.scdn.co/image/ab67616d0000b27347a8dd0924835ce10b0557ec",
-        "source": "spotify"
+        "source_name": "spotify",
+        "youtube_url": "https://www.youtube.com/watch?v=U2CRNYtt9bI"
     },
     {
         "isrc": "GBARL2400375",
-        "name": "These Words",
-        "artist": "Badger, Natasha Bedingfield",
-        "link": "https://open.spotify.com/track/7leW1Dmvs9A4oDh9i5Qwpz",
+        "track_name": "These Words",
+        "artist_name": "Badger, Natasha Bedingfield",
+        "track_url": "https://open.spotify.com/track/7leW1Dmvs9A4oDh9i5Qwpz",
+        "album_cover_url": "https://i.scdn.co/image/ab67616d0000b27300f75805e619ec91836d28f9",
         "rank": 22,
-        "album_url": "https://i.scdn.co/image/ab67616d0000b27300f75805e619ec91836d28f9",
-        "source": "spotify"
+        "source_name": "spotify",
+        "youtube_url": "https://www.youtube.com/watch?v=4FAtNcQOkPk"
     },
     {
         "isrc": "NLZ542301810",
-        "name": "Stumblin' In",
-        "artist": "CYRIL",
-        "link": "https://open.spotify.com/track/0h3Xy4V4apMraB5NuM8U7Z",
+        "track_name": "Stumblin' In",
+        "artist_name": "CYRIL",
+        "track_url": "https://open.spotify.com/track/0h3Xy4V4apMraB5NuM8U7Z",
+        "album_cover_url": "https://i.scdn.co/image/ab67616d0000b27357732f3a97f6d356b547cf1e",
         "rank": 23,
-        "album_url": "https://i.scdn.co/image/ab67616d0000b27357732f3a97f6d356b547cf1e",
-        "source": "spotify"
+        "source_name": "spotify",
+        "youtube_url": "https://www.youtube.com/watch?v=d5wURLqNTXE"
     },
     {
         "isrc": "GBARL2400539",
-        "name": "Set My Heart On Fire (I'm Alive x And The Beat Goes On)",
-        "artist": "Majestic, The Jammin Kid, C\u00e9line Dion",
-        "link": "https://open.spotify.com/track/33oyHkoS7H92RWsecOKn6u",
+        "track_name": "Set My Heart On Fire (I'm Alive x And The Beat Goes On)",
+        "artist_name": "Majestic, The Jammin Kid, C\u00e9line Dion",
+        "track_url": "https://open.spotify.com/track/33oyHkoS7H92RWsecOKn6u",
+        "album_cover_url": "https://i.scdn.co/image/ab67616d0000b273893b2394c303ca7c834b2f99",
         "rank": 24,
-        "album_url": "https://i.scdn.co/image/ab67616d0000b273893b2394c303ca7c834b2f99",
-        "source": "spotify"
+        "source_name": "spotify",
+        "youtube_url": "https://www.youtube.com/watch?v=XZ5kN9yzfjc"
     },
     {
         "isrc": "USZXT2353100",
-        "name": "Weak",
-        "artist": "Vintage Culture, Maverick Sabre, Tom Breu",
-        "link": "https://open.spotify.com/track/62gzfhHi2supfHWfi6iHbA",
+        "track_name": "Weak",
+        "artist_name": "Vintage Culture, Maverick Sabre, Tom Breu",
+        "track_url": "https://open.spotify.com/track/62gzfhHi2supfHWfi6iHbA",
+        "album_cover_url": "https://i.scdn.co/image/ab67616d0000b273fb6391b7f42e2c83a75e9970",
         "rank": 25,
-        "album_url": "https://i.scdn.co/image/ab67616d0000b273fb6391b7f42e2c83a75e9970",
-        "source": "spotify"
+        "source_name": "spotify",
+        "youtube_url": "https://www.youtube.com/watch?v=fneCWdB8d04"
     },
     {
         "isrc": "BEHP42400031",
-        "name": "In My Bones",
-        "artist": "Lost Frequencies, David Kushner",
-        "link": "https://open.spotify.com/track/1dcK8O2qEq7E34o4ImQEco",
+        "track_name": "In My Bones",
+        "artist_name": "Lost Frequencies, David Kushner",
+        "track_url": "https://open.spotify.com/track/1dcK8O2qEq7E34o4ImQEco",
+        "album_cover_url": "https://i.scdn.co/image/ab67616d0000b27336d804998bb567e07dfbaeaf",
         "rank": 26,
-        "album_url": "https://i.scdn.co/image/ab67616d0000b27336d804998bb567e07dfbaeaf",
-        "source": "spotify"
+        "source_name": "spotify",
+        "youtube_url": "https://www.youtube.com/watch?v=WmafVo73v9w"
     },
     {
         "isrc": "NLP762300246",
-        "name": "It's Not Right But It's Okay",
-        "artist": "Mr. Belt & Wezol",
-        "link": "https://open.spotify.com/track/5OFVzqSeFxGpvDGyHvVeLj",
+        "track_name": "It's Not Right But It's Okay",
+        "artist_name": "Mr. Belt & Wezol",
+        "track_url": "https://open.spotify.com/track/5OFVzqSeFxGpvDGyHvVeLj",
+        "album_cover_url": "https://i.scdn.co/image/ab67616d0000b27303f9f7783244b38aec79cb6d",
         "rank": 27,
-        "album_url": "https://i.scdn.co/image/ab67616d0000b27303f9f7783244b38aec79cb6d",
-        "source": "spotify"
+        "source_name": "spotify",
+        "youtube_url": "https://www.youtube.com/watch?v=jr8Sj-8ikNY"
     },
     {
         "isrc": "USA2P2415020",
-        "name": "MAGIC (feat. babyidontlikeyou)",
-        "artist": "Gryffin, babyidontlikeyou",
-        "link": "https://open.spotify.com/track/7pTC4natqyNBB0EBtdDeYi",
+        "track_name": "MAGIC (feat. babyidontlikeyou)",
+        "artist_name": "Gryffin, babyidontlikeyou",
+        "track_url": "https://open.spotify.com/track/7pTC4natqyNBB0EBtdDeYi",
+        "album_cover_url": "https://i.scdn.co/image/ab67616d0000b2735d01971ec90ce59944076366",
         "rank": 28,
-        "album_url": "https://i.scdn.co/image/ab67616d0000b2735d01971ec90ce59944076366",
-        "source": "spotify"
+        "source_name": "spotify",
+        "youtube_url": "https://www.youtube.com/watch?v=fgmDgWUYFY4"
     },
     {
         "isrc": "QZS672482294",
-        "name": "FWTDJ (All Night Long)",
-        "artist": "Hannah Laing",
-        "link": "https://open.spotify.com/track/5FyugvX0og6OA1s2NUBK6L",
+        "track_name": "FWTDJ (All Night Long)",
+        "artist_name": "Hannah Laing",
+        "track_url": "https://open.spotify.com/track/5FyugvX0og6OA1s2NUBK6L",
+        "album_cover_url": "https://i.scdn.co/image/ab67616d0000b273ce61897b7aa3b18a3199d03d",
         "rank": 29,
-        "album_url": "https://i.scdn.co/image/ab67616d0000b273ce61897b7aa3b18a3199d03d",
-        "source": "spotify"
+        "source_name": "spotify",
+        "youtube_url": "https://www.youtube.com/watch?v=VdfH9cVy5GE"
     },
     {
         "isrc": "NL1ZN2402785",
-        "name": "Monster",
-        "artist": "Don Diablo, Felix Jaehn",
-        "link": "https://open.spotify.com/track/0oWN1xuaWUrx8QGiYqxAs9",
+        "track_name": "Monster",
+        "artist_name": "Don Diablo, Felix Jaehn",
+        "track_url": "https://open.spotify.com/track/0oWN1xuaWUrx8QGiYqxAs9",
+        "album_cover_url": "https://i.scdn.co/image/ab67616d0000b273467f1d5ec9f7e2fde2d9b454",
         "rank": 30,
-        "album_url": "https://i.scdn.co/image/ab67616d0000b273467f1d5ec9f7e2fde2d9b454",
-        "source": "spotify"
+        "source_name": "spotify",
+        "youtube_url": "https://www.youtube.com/watch?v=QEVxn6D-wyU"
     },
     {
-        "isrc": "DEE862301931",
-        "name": "LET'S GET FKD UP",
-        "artist": "Alok, Mondello'G, CERES, Tribbs",
-        "link": "https://open.spotify.com/track/0iB5f04XdJ2tcfhoVkeLV8",
+        "isrc": "DEE862400284",
+        "track_name": "LET'S GET FKD UP",
+        "artist_name": "Alok, Mondello'G, CERES, Tribbs",
+        "track_url": "https://open.spotify.com/track/0iB5f04XdJ2tcfhoVkeLV8",
+        "album_cover_url": "https://i.scdn.co/image/ab67616d0000b273c382591cc811c82caf497f13",
         "rank": 31,
-        "album_url": "https://i.scdn.co/image/ab67616d0000b273c382591cc811c82caf497f13",
-        "source": "spotify"
+        "source_name": "spotify",
+        "youtube_url": "https://www.youtube.com/watch?v=_eudL0xra3A"
     },
     {
         "isrc": "DED622400105",
-        "name": "Honey",
-        "artist": "Caribou",
-        "link": "https://open.spotify.com/track/6ztI9zfPNMhocBJcXbeEqt",
+        "track_name": "Honey",
+        "artist_name": "Caribou",
+        "track_url": "https://open.spotify.com/track/6ztI9zfPNMhocBJcXbeEqt",
+        "album_cover_url": "https://i.scdn.co/image/ab67616d0000b27307445e56db323e4682bf33a8",
         "rank": 32,
-        "album_url": "https://i.scdn.co/image/ab67616d0000b27307445e56db323e4682bf33a8",
-        "source": "spotify"
+        "source_name": "spotify",
+        "youtube_url": "https://www.youtube.com/watch?v=yC0r8RCYyvY"
     },
     {
         "isrc": "GBBKS2400071",
-        "name": "1+1=11 - Edit",
-        "artist": "Peggy Gou",
-        "link": "https://open.spotify.com/track/2HMas4DrtQoPebT1VL52Dr",
+        "track_name": "1+1=11 - Edit",
+        "artist_name": "Peggy Gou",
+        "track_url": "https://open.spotify.com/track/2HMas4DrtQoPebT1VL52Dr",
+        "album_cover_url": "https://i.scdn.co/image/ab67616d0000b27329e6bc4461bea38b991a9b35",
         "rank": 33,
-        "album_url": "https://i.scdn.co/image/ab67616d0000b27329e6bc4461bea38b991a9b35",
-        "source": "spotify"
+        "source_name": "spotify",
+        "youtube_url": "https://www.youtube.com/watch?v=qTSadqfWeDw"
     },
     {
         "isrc": "GBCFB2400292",
-        "name": "Kimbara",
-        "artist": "Barry Can't Swim",
-        "link": "https://open.spotify.com/track/3iHrGCUXfZ4BoOy615Ydbk",
+        "track_name": "Kimbara",
+        "artist_name": "Barry Can't Swim",
+        "track_url": "https://open.spotify.com/track/3iHrGCUXfZ4BoOy615Ydbk",
+        "album_cover_url": "https://i.scdn.co/image/ab67616d0000b2730ade2366138036037a83b1d6",
         "rank": 34,
-        "album_url": "https://i.scdn.co/image/ab67616d0000b2730ade2366138036037a83b1d6",
-        "source": "spotify"
+        "source_name": "spotify",
+        "youtube_url": "https://www.youtube.com/watch?v=d2Yb1b8OOh0"
     },
     {
         "isrc": "FRX202462919",
-        "name": "Sierra",
-        "artist": "Argy, Baset",
-        "link": "https://open.spotify.com/track/5c4gtyaea8i7H1BqRyb2Xp",
+        "track_name": "Sierra",
+        "artist_name": "Argy, Baset",
+        "track_url": "https://open.spotify.com/track/5c4gtyaea8i7H1BqRyb2Xp",
+        "album_cover_url": "https://i.scdn.co/image/ab67616d0000b273a31d9ae5735f24b5f5ad4e45",
         "rank": 35,
-        "album_url": "https://i.scdn.co/image/ab67616d0000b273a31d9ae5735f24b5f5ad4e45",
-        "source": "spotify"
+        "source_name": "spotify",
+        "youtube_url": "https://www.youtube.com/watch?v=L1IPbx28wAM"
     },
     {
         "isrc": "USAT22313737",
-        "name": "Von dutch",
-        "artist": "Charli XCX",
-        "link": "https://open.spotify.com/track/01TnMXIy7mJJQ7E8uy937N",
+        "track_name": "Von dutch",
+        "artist_name": "Charli XCX",
+        "track_url": "https://open.spotify.com/track/01TnMXIy7mJJQ7E8uy937N",
+        "album_cover_url": "https://i.scdn.co/image/ab67616d0000b2735a933871a40c5b9e1deea8d3",
         "rank": 36,
-        "album_url": "https://i.scdn.co/image/ab67616d0000b2735a933871a40c5b9e1deea8d3",
-        "source": "spotify"
+        "source_name": "spotify",
+        "youtube_url": "https://www.youtube.com/watch?v=cwZ1L_0QLjw"
     },
     {
         "isrc": "TCAHZ2454098",
-        "name": "Vent",
-        "artist": "NOIT",
-        "link": "https://open.spotify.com/track/4yMXKeuRDOIzrh3fBiJYds",
+        "track_name": "Vent",
+        "artist_name": "NOIT",
+        "track_url": "https://open.spotify.com/track/4yMXKeuRDOIzrh3fBiJYds",
+        "album_cover_url": "https://i.scdn.co/image/ab67616d0000b27344ae2446b555ef7c0b2b4cda",
         "rank": 37,
-        "album_url": "https://i.scdn.co/image/ab67616d0000b27344ae2446b555ef7c0b2b4cda",
-        "source": "spotify"
+        "source_name": "spotify",
+        "youtube_url": "https://www.youtube.com/watch?v=cUIzgro6U7o"
     },
     {
         "isrc": "USWB12400504",
-        "name": "TAKA",
-        "artist": "Ahadadream, Priya Ragu, Skrillex, contra",
-        "link": "https://open.spotify.com/track/645e3XeVtB7QYpl3RdJBil",
+        "track_name": "TAKA",
+        "artist_name": "Ahadadream, Priya Ragu, Skrillex, contra",
+        "track_url": "https://open.spotify.com/track/645e3XeVtB7QYpl3RdJBil",
+        "album_cover_url": "https://i.scdn.co/image/ab67616d0000b2737ce8a27b991b21d3b0108f8e",
         "rank": 38,
-        "album_url": "https://i.scdn.co/image/ab67616d0000b2737ce8a27b991b21d3b0108f8e",
-        "source": "spotify"
+        "source_name": "spotify",
+        "youtube_url": "https://www.youtube.com/watch?v=4fAO9AkK_CE"
     },
     {
         "isrc": "GBUM72401679",
-        "name": "All That You Need (feat. Caroline Byrne)",
-        "artist": "Gorgon City, Caroline Byrne",
-        "link": "https://open.spotify.com/track/5Bux5dq6CHM7pJLlrx8R3f",
+        "track_name": "All That You Need (feat. Caroline Byrne)",
+        "artist_name": "Gorgon City, Caroline Byrne",
+        "track_url": "https://open.spotify.com/track/5Bux5dq6CHM7pJLlrx8R3f",
+        "album_cover_url": "https://i.scdn.co/image/ab67616d0000b273fc090b4c990cef0ce8940ed2",
         "rank": 39,
-        "album_url": "https://i.scdn.co/image/ab67616d0000b273fc090b4c990cef0ce8940ed2",
-        "source": "spotify"
+        "source_name": "spotify",
+        "youtube_url": "https://www.youtube.com/watch?v=BEU9AYh7AfA"
     },
     {
         "isrc": "MXF012400211",
-        "name": "Patadas de Ahogado / LAT\u00cdN MAFIA, HUMBE - Rework",
-        "artist": "HUGEL",
-        "link": "https://open.spotify.com/track/14S2VMZRhekYGluotZ4pqg",
+        "track_name": "Patadas de Ahogado / LAT\u00cdN MAFIA, HUMBE - Rework",
+        "artist_name": "HUGEL",
+        "track_url": "https://open.spotify.com/track/14S2VMZRhekYGluotZ4pqg",
+        "album_cover_url": "https://i.scdn.co/image/ab67616d0000b273c8101cc61a1a16540f1f7528",
         "rank": 40,
-        "album_url": "https://i.scdn.co/image/ab67616d0000b273c8101cc61a1a16540f1f7528",
-        "source": "spotify"
+        "source_name": "spotify",
+        "youtube_url": "https://www.youtube.com/watch?v=Lj_fT3LkHXw"
     },
     {
         "isrc": "GBUM72311281",
-        "name": "Somebody (2024)",
-        "artist": "Gotye, FISHER, Chris Lake, Kimbra, Sante Sansone",
-        "link": "https://open.spotify.com/track/0agQ9vIV7NP4dntGKLcCXO",
+        "track_name": "Somebody (2024)",
+        "artist_name": "Gotye, FISHER, Chris Lake, Kimbra, Sante Sansone",
+        "track_url": "https://open.spotify.com/track/0agQ9vIV7NP4dntGKLcCXO",
+        "album_cover_url": "https://i.scdn.co/image/ab67616d0000b273decbf9beecb3cb749ce3a2e2",
         "rank": 41,
-        "album_url": "https://i.scdn.co/image/ab67616d0000b273decbf9beecb3cb749ce3a2e2",
-        "source": "spotify"
+        "source_name": "spotify",
+        "youtube_url": "https://www.youtube.com/watch?v=cS-kmwDhBAQ"
     },
     {
         "isrc": "GBMVH2300940",
-        "name": "mr useless",
-        "artist": "Shygirl, SG Lewis",
-        "link": "https://open.spotify.com/track/1HogDCzANgKv9mE8MgeYKg",
+        "track_name": "mr useless",
+        "artist_name": "Shygirl, SG Lewis",
+        "track_url": "https://open.spotify.com/track/1HogDCzANgKv9mE8MgeYKg",
+        "album_cover_url": "https://i.scdn.co/image/ab67616d0000b273068ea49505ba5d8e9daae67b",
         "rank": 42,
-        "album_url": "https://i.scdn.co/image/ab67616d0000b273068ea49505ba5d8e9daae67b",
-        "source": "spotify"
+        "source_name": "spotify",
+        "youtube_url": "https://www.youtube.com/watch?v=kliUoRjylkQ"
     },
     {
         "isrc": "USQE92400031",
-        "name": "Cheerleader",
-        "artist": "Porter Robinson",
-        "link": "https://open.spotify.com/track/6Nd0zIgpwa1W1faRldX6n8",
+        "track_name": "Cheerleader",
+        "artist_name": "Porter Robinson",
+        "track_url": "https://open.spotify.com/track/6Nd0zIgpwa1W1faRldX6n8",
+        "album_cover_url": "https://i.scdn.co/image/ab67616d0000b273eebb288e5be14fb1079d9f4e",
         "rank": 43,
-        "album_url": "https://i.scdn.co/image/ab67616d0000b273eebb288e5be14fb1079d9f4e",
-        "source": "spotify"
+        "source_name": "spotify",
+        "youtube_url": "https://www.youtube.com/watch?v=CzJbz9qSsd0"
     },
     {
         "isrc": "GBCFB2400153",
-        "name": "saving flowers",
-        "artist": "salute, Rina Sawayama",
-        "link": "https://open.spotify.com/track/4ZZO8buYpKMS7gR9koYhD9",
+        "track_name": "saving flowers",
+        "artist_name": "salute, Rina Sawayama",
+        "track_url": "https://open.spotify.com/track/4ZZO8buYpKMS7gR9koYhD9",
+        "album_cover_url": "https://i.scdn.co/image/ab67616d0000b2733943fa2f649f1b23855c214e",
         "rank": 44,
-        "album_url": "https://i.scdn.co/image/ab67616d0000b2733943fa2f649f1b23855c214e",
-        "source": "spotify"
+        "source_name": "spotify",
+        "youtube_url": "https://www.youtube.com/watch?v=G353KFZrjTo"
     },
     {
         "isrc": "NLM5S2402172",
-        "name": "Empty",
-        "artist": "Martin Garrix, DubVision, Jaimes",
-        "link": "https://open.spotify.com/track/575ViHchpSUjfTLCQPdE49",
+        "track_name": "Empty",
+        "artist_name": "Martin Garrix, DubVision, Jaimes",
+        "track_url": "https://open.spotify.com/track/575ViHchpSUjfTLCQPdE49",
+        "album_cover_url": "https://i.scdn.co/image/ab67616d0000b2733af2b28b3209856b7d35691f",
         "rank": 45,
-        "album_url": "https://i.scdn.co/image/ab67616d0000b2733af2b28b3209856b7d35691f",
-        "source": "spotify"
+        "source_name": "spotify",
+        "youtube_url": "https://www.youtube.com/watch?v=TMIxbMgRLG4"
     },
     {
         "isrc": "NLF712401158",
-        "name": "What Took You So Long",
-        "artist": "Armin van Buuren, Gryffin",
-        "link": "https://open.spotify.com/track/2YSWJU0HINhi24oH19ALo6",
+        "track_name": "What Took You So Long",
+        "artist_name": "Armin van Buuren, Gryffin",
+        "track_url": "https://open.spotify.com/track/2YSWJU0HINhi24oH19ALo6",
+        "album_cover_url": "https://i.scdn.co/image/ab67616d0000b273566639bef3ab4b7bfdd29734",
         "rank": 46,
-        "album_url": "https://i.scdn.co/image/ab67616d0000b273566639bef3ab4b7bfdd29734",
-        "source": "spotify"
+        "source_name": "spotify",
+        "youtube_url": "https://www.youtube.com/watch?v=TipxELDEX0M"
     },
     {
         "isrc": "US38Y2404377",
-        "name": "Satellite",
-        "artist": "Dimension, Alison Wonderland",
-        "link": "https://open.spotify.com/track/3tHCG0ISOA0pXscIdNrJml",
+        "track_name": "Satellite",
+        "artist_name": "Dimension, Alison Wonderland",
+        "track_url": "https://open.spotify.com/track/3tHCG0ISOA0pXscIdNrJml",
+        "album_cover_url": "https://i.scdn.co/image/ab67616d0000b27338fad8114e54b15520366e44",
         "rank": 47,
-        "album_url": "https://i.scdn.co/image/ab67616d0000b27338fad8114e54b15520366e44",
-        "source": "spotify"
+        "source_name": "spotify",
+        "youtube_url": "https://www.youtube.com/watch?v=ojBy68xYyLc"
     },
     {
         "isrc": "USZ4V2400142",
-        "name": "Heaven or Not",
-        "artist": "Diplo, Riva Starr, Kareen Lomax",
-        "link": "https://open.spotify.com/track/6B8ZQyILzGTzJZ2BE8ydcF",
+        "track_name": "Heaven or Not",
+        "artist_name": "Diplo, Riva Starr, Kareen Lomax",
+        "track_url": "https://open.spotify.com/track/6B8ZQyILzGTzJZ2BE8ydcF",
+        "album_cover_url": "https://i.scdn.co/image/ab67616d0000b2734b751e27641fc262eeebfa3b",
         "rank": 48,
-        "album_url": "https://i.scdn.co/image/ab67616d0000b2734b751e27641fc262eeebfa3b",
-        "source": "spotify"
+        "source_name": "spotify",
+        "youtube_url": "https://www.youtube.com/watch?v=alZdgHHNgDE"
     },
     {
         "isrc": "CAUG12400006",
-        "name": "CUT ME OUT",
-        "artist": "Rezz, Digital Ethos",
-        "link": "https://open.spotify.com/track/7wa5lBm1Nl0kcXb9psV2Sj",
+        "track_name": "CUT ME OUT",
+        "artist_name": "Rezz, Digital Ethos",
+        "track_url": "https://open.spotify.com/track/7wa5lBm1Nl0kcXb9psV2Sj",
+        "album_cover_url": "https://i.scdn.co/image/ab67616d0000b2734e6e86bf9f564c31dcb7e89c",
         "rank": 49,
-        "album_url": "https://i.scdn.co/image/ab67616d0000b2734e6e86bf9f564c31dcb7e89c",
-        "source": "spotify"
+        "source_name": "spotify",
+        "youtube_url": "https://www.youtube.com/watch?v=k_RTIWMLfcs"
     },
     {
         "isrc": "ZA56E2415753",
-        "name": "Tshwala Bam (feat. S.N.E, EeQue) - Radio Edit",
-        "artist": "TitoM, Yuppe, EeQue, S.N.E",
-        "link": "https://open.spotify.com/track/5dyB3aZaRLnaLtdO73wJkc",
+        "track_name": "Tshwala Bam (feat. S.N.E, EeQue) - Radio Edit",
+        "artist_name": "TitoM, Yuppe, EeQue, S.N.E",
+        "track_url": "https://open.spotify.com/track/5dyB3aZaRLnaLtdO73wJkc",
+        "album_cover_url": "https://i.scdn.co/image/ab67616d0000b2734f57af199c7ae3a267049aef",
         "rank": 50,
-        "album_url": "https://i.scdn.co/image/ab67616d0000b2734f57af199c7ae3a267049aef",
-        "source": "spotify"
+        "source_name": "spotify",
+        "youtube_url": "https://www.youtube.com/watch?v=KK4dC7rASYs"
     },
     {
         "isrc": "ITFGO2400001",
-        "name": "Famax",
-        "artist": "RAFFA GUIDO",
-        "link": "https://open.spotify.com/track/4yhqQAKFiHNCXpxxFVhxRq",
+        "track_name": "Famax",
+        "artist_name": "RAFFA GUIDO",
+        "track_url": "https://open.spotify.com/track/4yhqQAKFiHNCXpxxFVhxRq",
+        "album_cover_url": "https://i.scdn.co/image/ab67616d0000b2730a26dbad173e90d2e3fad5ed",
         "rank": 51,
-        "album_url": "https://i.scdn.co/image/ab67616d0000b2730a26dbad173e90d2e3fad5ed",
-        "source": "spotify"
+        "source_name": "spotify",
+        "youtube_url": "https://www.youtube.com/watch?v=5m-GTedQ7Hg"
     },
     {
         "isrc": "GBARL2301797",
-        "name": "Lovers In A Past Life (with Rag'n'Bone Man)",
-        "artist": "Calvin Harris, Rag'n'Bone Man",
-        "link": "https://open.spotify.com/track/6v4ABPB255HDSWyIj3S9Wn",
+        "track_name": "Lovers In A Past Life (with Rag'n'Bone Man)",
+        "artist_name": "Calvin Harris, Rag'n'Bone Man",
+        "track_url": "https://open.spotify.com/track/6v4ABPB255HDSWyIj3S9Wn",
+        "album_cover_url": "https://i.scdn.co/image/ab67616d0000b273bb08484f74ca64acd08882a1",
         "rank": 52,
-        "album_url": "https://i.scdn.co/image/ab67616d0000b273bb08484f74ca64acd08882a1",
-        "source": "spotify"
+        "source_name": "spotify",
+        "youtube_url": "https://www.youtube.com/watch?v=uksTezIJqA4"
     },
     {
         "isrc": "QZUCN2201485",
-        "name": "We Groovin",
-        "artist": "Jamie Jones, Jazzy",
-        "link": "https://open.spotify.com/track/1lzbOrmaBhueOQfwKCfi1J",
+        "track_name": "We Groovin",
+        "artist_name": "Jamie Jones, Jazzy",
+        "track_url": "https://open.spotify.com/track/1lzbOrmaBhueOQfwKCfi1J",
+        "album_cover_url": "https://i.scdn.co/image/ab67616d0000b273fcfd46c7722312071c48e169",
         "rank": 53,
-        "album_url": "https://i.scdn.co/image/ab67616d0000b273fcfd46c7722312071c48e169",
-        "source": "spotify"
+        "source_name": "spotify",
+        "youtube_url": "https://www.youtube.com/watch?v=x9zFDnspx4o"
     },
     {
         "isrc": "GBAHT2301515",
-        "name": "Happier (feat. Clementine Douglas)",
-        "artist": "The Blessed Madonna, Clementine Douglas",
-        "link": "https://open.spotify.com/track/1TcF5F10EN17vraisG1gQv",
+        "track_name": "Happier (feat. Clementine Douglas)",
+        "artist_name": "The Blessed Madonna, Clementine Douglas",
+        "track_url": "https://open.spotify.com/track/1TcF5F10EN17vraisG1gQv",
+        "album_cover_url": "https://i.scdn.co/image/ab67616d0000b2735d564f7de772a0675ab893be",
         "rank": 54,
-        "album_url": "https://i.scdn.co/image/ab67616d0000b2735d564f7de772a0675ab893be",
-        "source": "spotify"
+        "source_name": "spotify",
+        "youtube_url": "https://www.youtube.com/watch?v=6AbEFloifG4"
     },
     {
         "isrc": "GBUM72401644",
-        "name": "Sippin' Yak",
-        "artist": "Cloonee",
-        "link": "https://open.spotify.com/track/1LldihpfcYdxAnCigKijW2",
+        "track_name": "Sippin' Yak",
+        "artist_name": "Cloonee",
+        "track_url": "https://open.spotify.com/track/1LldihpfcYdxAnCigKijW2",
+        "album_cover_url": "https://i.scdn.co/image/ab67616d0000b27360e9b078daf0e2e4e4513b36",
         "rank": 55,
-        "album_url": "https://i.scdn.co/image/ab67616d0000b27360e9b078daf0e2e4e4513b36",
-        "source": "spotify"
+        "source_name": "spotify",
+        "youtube_url": "https://www.youtube.com/watch?v=9CyJ8LDynv0"
     },
     {
         "isrc": "US38Y2405797",
-        "name": "Wild",
-        "artist": "James Hype",
-        "link": "https://open.spotify.com/track/6Yimrlg9ndHZUy1hGm6uQ9",
+        "track_name": "Wild",
+        "artist_name": "James Hype",
+        "track_url": "https://open.spotify.com/track/6Yimrlg9ndHZUy1hGm6uQ9",
+        "album_cover_url": "https://i.scdn.co/image/ab67616d0000b273904f28bc3fd5e5c2207d6f2e",
         "rank": 56,
-        "album_url": "https://i.scdn.co/image/ab67616d0000b273904f28bc3fd5e5c2207d6f2e",
-        "source": "spotify"
+        "source_name": "spotify",
+        "youtube_url": "https://www.youtube.com/watch?v=_kFKqY9oCUc"
     },
     {
         "isrc": "NLZ542400214",
-        "name": "So H\u00ef",
-        "artist": "KREAM",
-        "link": "https://open.spotify.com/track/4TNiHQs5zO3slGpbBwutVB",
+        "track_name": "So H\u00ef",
+        "artist_name": "KREAM",
+        "track_url": "https://open.spotify.com/track/4TNiHQs5zO3slGpbBwutVB",
+        "album_cover_url": "https://i.scdn.co/image/ab67616d0000b273d685e23238ce9731223b51f3",
         "rank": 57,
-        "album_url": "https://i.scdn.co/image/ab67616d0000b273d685e23238ce9731223b51f3",
-        "source": "spotify"
+        "source_name": "spotify",
+        "youtube_url": "https://www.youtube.com/watch?v=c0D2h71bFFI"
     },
     {
         "isrc": "GBCPZ2423110",
-        "name": "Killa",
-        "artist": "Chris Avantgarde, Kevin de Vries",
-        "link": "https://open.spotify.com/track/4xKkpbUcrVoYrIXu7Xgzo9",
+        "track_name": "Killa",
+        "artist_name": "Chris Avantgarde, Kevin de Vries",
+        "track_url": "https://open.spotify.com/track/4xKkpbUcrVoYrIXu7Xgzo9",
+        "album_cover_url": "https://i.scdn.co/image/ab67616d0000b27364e4624d82a4021300dae1c2",
         "rank": 58,
-        "album_url": "https://i.scdn.co/image/ab67616d0000b27364e4624d82a4021300dae1c2",
-        "source": "spotify"
+        "source_name": "spotify",
+        "youtube_url": "https://www.youtube.com/watch?v=uc8l2kqxHyQ"
     },
     {
         "isrc": "NLF712401155",
-        "name": "PATT (Party All The Time) - Adam Beyer, Layton Giordani & Green Velvet Remix",
-        "artist": "Sharam, Adam Beyer, Layton Giordani, Green Velvet",
-        "link": "https://open.spotify.com/track/6DFHSmlrZLDZnXV5kTTMF6",
+        "track_name": "PATT (Party All The Time) - Adam Beyer, Layton Giordani & Green Velvet Remix",
+        "artist_name": "Sharam, Adam Beyer, Layton Giordani, Green Velvet",
+        "track_url": "https://open.spotify.com/track/6DFHSmlrZLDZnXV5kTTMF6",
+        "album_cover_url": "https://i.scdn.co/image/ab67616d0000b2731a0f0570b3524141317c28b9",
         "rank": 59,
-        "album_url": "https://i.scdn.co/image/ab67616d0000b2731a0f0570b3524141317c28b9",
-        "source": "spotify"
+        "source_name": "spotify",
+        "youtube_url": "https://www.youtube.com/watch?v=GkTMmE4bR_s"
     },
     {
         "isrc": "USUM72402931",
-        "name": "Not Even Love",
-        "artist": "Seven Lions, ILLENIUM, \u00c1SD\u00cdS",
-        "link": "https://open.spotify.com/track/65s9dLrylbHp60IYIcUZEz",
+        "track_name": "Not Even Love",
+        "artist_name": "Seven Lions, ILLENIUM, \u00c1SD\u00cdS",
+        "track_url": "https://open.spotify.com/track/65s9dLrylbHp60IYIcUZEz",
+        "album_cover_url": "https://i.scdn.co/image/ab67616d0000b273c0e4cf83ef4f8476b6fa3304",
         "rank": 60,
-        "album_url": "https://i.scdn.co/image/ab67616d0000b273c0e4cf83ef4f8476b6fa3304",
-        "source": "spotify"
+        "source_name": "spotify",
+        "youtube_url": "https://www.youtube.com/watch?v=zk80sRP57Rg"
     },
     {
         "isrc": "CA6D22400048",
-        "name": "SEE YOU DROP",
-        "artist": "Ray Volpe",
-        "link": "https://open.spotify.com/track/7hBUvEg6V9TQPZgLie2krb",
+        "track_name": "SEE YOU DROP",
+        "artist_name": "Ray Volpe",
+        "track_url": "https://open.spotify.com/track/7hBUvEg6V9TQPZgLie2krb",
+        "album_cover_url": "https://i.scdn.co/image/ab67616d0000b273facbfd7b69c7eab718e57c0a",
         "rank": 61,
-        "album_url": "https://i.scdn.co/image/ab67616d0000b273facbfd7b69c7eab718e57c0a",
-        "source": "spotify"
+        "source_name": "spotify",
+        "youtube_url": "https://www.youtube.com/watch?v=_D4Y0jiYxWE"
     },
     {
         "isrc": "QMFMF2310845",
-        "name": "SAFE WITH ME (SECRETOS)",
-        "artist": "Jhay Rivas",
-        "link": "https://open.spotify.com/track/0FCABIXhXHI4mi0qao8gTR",
+        "track_name": "SAFE WITH ME (SECRETOS)",
+        "artist_name": "Jhay Rivas",
+        "track_url": "https://open.spotify.com/track/0FCABIXhXHI4mi0qao8gTR",
+        "album_cover_url": "https://i.scdn.co/image/ab67616d0000b27331241e0e7a2551c512ce7e6d",
         "rank": 62,
-        "album_url": "https://i.scdn.co/image/ab67616d0000b27331241e0e7a2551c512ce7e6d",
-        "source": "spotify"
+        "source_name": "spotify",
+        "youtube_url": "https://www.youtube.com/watch?v=nESi695-F3w"
     },
     {
         "isrc": "QM4TW2416035",
-        "name": "Forget",
-        "artist": "Azzecca",
-        "link": "https://open.spotify.com/track/3X39bUXqQDCzDGUjeMd82e",
+        "track_name": "Forget",
+        "artist_name": "Azzecca",
+        "track_url": "https://open.spotify.com/track/3X39bUXqQDCzDGUjeMd82e",
+        "album_cover_url": "https://i.scdn.co/image/ab67616d0000b273a5ff7aea846f8ecfb20fe031",
         "rank": 63,
-        "album_url": "https://i.scdn.co/image/ab67616d0000b273a5ff7aea846f8ecfb20fe031",
-        "source": "spotify"
+        "source_name": "spotify",
+        "youtube_url": "https://www.youtube.com/watch?v=VYXwoKUFBiU"
     },
     {
         "isrc": "GBCFB2400411",
-        "name": "Time - Edit",
-        "artist": "Carlita",
-        "link": "https://open.spotify.com/track/3VNoo8PUhcbWG0oxHcpeBs",
+        "track_name": "Time - Edit",
+        "artist_name": "Carlita",
+        "track_url": "https://open.spotify.com/track/3VNoo8PUhcbWG0oxHcpeBs",
+        "album_cover_url": "https://i.scdn.co/image/ab67616d0000b273cd28fdd7cfe8d57d9f97d6a6",
         "rank": 64,
-        "album_url": "https://i.scdn.co/image/ab67616d0000b273cd28fdd7cfe8d57d9f97d6a6",
-        "source": "spotify"
+        "source_name": "spotify",
+        "youtube_url": "https://www.youtube.com/watch?v=aFc6xPW9Hfk"
     },
     {
         "isrc": "DEN062400232",
-        "name": "Karibu",
-        "artist": "WITH U",
-        "link": "https://open.spotify.com/track/01BjQ7kJDzs7JEVSF1ZHHL",
+        "track_name": "Karibu",
+        "artist_name": "WITH U",
+        "track_url": "https://open.spotify.com/track/01BjQ7kJDzs7JEVSF1ZHHL",
+        "album_cover_url": "https://i.scdn.co/image/ab67616d0000b273cbe0ec4da7c25f6953282dfd",
         "rank": 65,
-        "album_url": "https://i.scdn.co/image/ab67616d0000b273cbe0ec4da7c25f6953282dfd",
-        "source": "spotify"
+        "source_name": "spotify",
+        "youtube_url": "https://www.youtube.com/watch?v=RM9cWB2QuqU"
     },
     {
         "isrc": "GBCFB2300996",
-        "name": "ZOOM",
-        "artist": "Machinedrum, Tinashe",
-        "link": "https://open.spotify.com/track/5BrX72zkxJaowRZwgM8wyB",
+        "track_name": "ZOOM",
+        "artist_name": "Machinedrum, Tinashe",
+        "track_url": "https://open.spotify.com/track/5BrX72zkxJaowRZwgM8wyB",
+        "album_cover_url": "https://i.scdn.co/image/ab67616d0000b273df2cc04fe629a8a428d6b4e2",
         "rank": 66,
-        "album_url": "https://i.scdn.co/image/ab67616d0000b273df2cc04fe629a8a428d6b4e2",
-        "source": "spotify"
+        "source_name": "spotify",
+        "youtube_url": "https://www.youtube.com/watch?v=JlV8zVUgdLM"
     },
     {
         "isrc": "USA2P2403856",
-        "name": "Halo",
-        "artist": "Eli & Fur, Punctual, Richard Judge",
-        "link": "https://open.spotify.com/track/6LziN7kYIkvyV4DLz5kAL1",
+        "track_name": "Halo",
+        "artist_name": "Eli & Fur, Punctual, Richard Judge",
+        "track_url": "https://open.spotify.com/track/6LziN7kYIkvyV4DLz5kAL1",
+        "album_cover_url": "https://i.scdn.co/image/ab67616d0000b2731e9a424725b22bb6a7291cb1",
         "rank": 67,
-        "album_url": "https://i.scdn.co/image/ab67616d0000b2731e9a424725b22bb6a7291cb1",
-        "source": "spotify"
+        "source_name": "spotify",
+        "youtube_url": "https://www.youtube.com/watch?v=HB-WTKhVn1k"
     },
     {
         "isrc": "GBCPZ2423084",
-        "name": "Rain",
-        "artist": "Todd Edwards, Shermanology, Rudimental",
-        "link": "https://open.spotify.com/track/1Rndhv6jSNOtPMddRd0AGT",
+        "track_name": "Rain",
+        "artist_name": "Todd Edwards, Shermanology, Rudimental",
+        "track_url": "https://open.spotify.com/track/1Rndhv6jSNOtPMddRd0AGT",
+        "album_cover_url": "https://i.scdn.co/image/ab67616d0000b27354edd51f608c19047bea85bc",
         "rank": 68,
-        "album_url": "https://i.scdn.co/image/ab67616d0000b27354edd51f608c19047bea85bc",
-        "source": "spotify"
+        "source_name": "spotify",
+        "youtube_url": "https://www.youtube.com/watch?v=oAgaRDoTBu4"
     },
     {
         "isrc": "CA5KR2433043",
-        "name": "In The End",
-        "artist": "Dabin, Said The Sky, Clara Mae",
-        "link": "https://open.spotify.com/track/5pt4hbLckWiwVDM9xcDG9D",
+        "track_name": "In The End",
+        "artist_name": "Dabin, Said The Sky, Clara Mae",
+        "track_url": "https://open.spotify.com/track/5pt4hbLckWiwVDM9xcDG9D",
+        "album_cover_url": "https://i.scdn.co/image/ab67616d0000b273f7b581d490b6f79b6624edfd",
         "rank": 69,
-        "album_url": "https://i.scdn.co/image/ab67616d0000b273f7b581d490b6f79b6624edfd",
-        "source": "spotify"
+        "source_name": "spotify",
+        "youtube_url": "https://www.youtube.com/watch?v=zTZ_jfy95gA"
     },
     {
         "isrc": "GB7NR2430801",
-        "name": "Right Spot",
-        "artist": "HoneyLuv",
-        "link": "https://open.spotify.com/track/2pgCADpQ8xzPTRt2YwmJue",
+        "track_name": "Right Spot",
+        "artist_name": "HoneyLuv",
+        "track_url": "https://open.spotify.com/track/2pgCADpQ8xzPTRt2YwmJue",
+        "album_cover_url": "https://i.scdn.co/image/ab67616d0000b273d05f2d52aed311d78d2919db",
         "rank": 70,
-        "album_url": "https://i.scdn.co/image/ab67616d0000b273d05f2d52aed311d78d2919db",
-        "source": "spotify"
+        "source_name": "spotify",
+        "youtube_url": "https://www.youtube.com/watch?v=q6xAMajRaFg"
     },
     {
         "isrc": "USAR12300389",
-        "name": "Moment",
-        "artist": "BUNT.",
-        "link": "https://open.spotify.com/track/7wNKtCzafd3om6QKiub1Js",
+        "track_name": "Moment",
+        "artist_name": "BUNT.",
+        "track_url": "https://open.spotify.com/track/7wNKtCzafd3om6QKiub1Js",
+        "album_cover_url": "https://i.scdn.co/image/ab67616d0000b27397c69473dcf16d2bb4598222",
         "rank": 71,
-        "album_url": "https://i.scdn.co/image/ab67616d0000b27397c69473dcf16d2bb4598222",
-        "source": "spotify"
+        "source_name": "spotify",
+        "youtube_url": "https://www.youtube.com/watch?v=pvojZsbcCYQ"
     },
     {
         "isrc": "FRUM72302505",
-        "name": "Derni\u00e8re danse - Techno Mix",
-        "artist": "Indila, BENNETT",
-        "link": "https://open.spotify.com/track/5fIZ683j2xPeLAXfHeWKEG",
+        "track_name": "Derni\u00e8re danse - Techno Mix",
+        "artist_name": "Indila, BENNETT",
+        "track_url": "https://open.spotify.com/track/5fIZ683j2xPeLAXfHeWKEG",
+        "album_cover_url": "https://i.scdn.co/image/ab67616d0000b273d691a8f53f6b487ecbe27cbf",
         "rank": 72,
-        "album_url": "https://i.scdn.co/image/ab67616d0000b273d691a8f53f6b487ecbe27cbf",
-        "source": "spotify"
+        "source_name": "spotify",
+        "youtube_url": "https://www.youtube.com/watch?v=oIUveqb6kSA"
     },
     {
         "isrc": "USA2P2361763",
-        "name": "Mr. Sandman",
-        "artist": "Oppidan",
-        "link": "https://open.spotify.com/track/1Y2eoRAhwsjCKcdNnrZOzV",
+        "track_name": "Mr. Sandman",
+        "artist_name": "Oppidan",
+        "track_url": "https://open.spotify.com/track/1Y2eoRAhwsjCKcdNnrZOzV",
+        "album_cover_url": "https://i.scdn.co/image/ab67616d0000b273d3c4ea69e980069f84b75d57",
         "rank": 73,
-        "album_url": "https://i.scdn.co/image/ab67616d0000b273d3c4ea69e980069f84b75d57",
-        "source": "spotify"
+        "source_name": "spotify",
+        "youtube_url": "https://www.youtube.com/watch?v=prfKqUn-ggQ"
     },
     {
         "isrc": "USZXT2453475",
-        "name": "iluv",
-        "artist": "Effy, Mall Grab",
-        "link": "https://open.spotify.com/track/4u0N8a9adNalT4XdihjeSr",
+        "track_name": "iluv",
+        "artist_name": "Effy, Mall Grab",
+        "track_url": "https://open.spotify.com/track/4u0N8a9adNalT4XdihjeSr",
+        "album_cover_url": "https://i.scdn.co/image/ab67616d0000b273d0f6e166d6c605b2406d788a",
         "rank": 74,
-        "album_url": "https://i.scdn.co/image/ab67616d0000b273d0f6e166d6c605b2406d788a",
-        "source": "spotify"
+        "source_name": "spotify",
+        "youtube_url": "https://www.youtube.com/watch?v=lXH0Q_E8DNE"
     },
     {
         "isrc": "GBMVH2300550",
-        "name": "Can't Let Go",
-        "artist": "Logic1000",
-        "link": "https://open.spotify.com/track/5CS3Y1sfMFXftNEKI5etxs",
+        "track_name": "Can't Let Go",
+        "artist_name": "Logic1000",
+        "track_url": "https://open.spotify.com/track/5CS3Y1sfMFXftNEKI5etxs",
+        "album_cover_url": "https://i.scdn.co/image/ab67616d0000b273e1d64f65741b3f535227a411",
         "rank": 75,
-        "album_url": "https://i.scdn.co/image/ab67616d0000b273e1d64f65741b3f535227a411",
-        "source": "spotify"
+        "source_name": "spotify",
+        "youtube_url": "https://www.youtube.com/watch?v=-RtubqrF9sY"
     }
 ]

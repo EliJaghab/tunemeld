@@ -9,10 +9,10 @@ Note: Its source is duplicated in the additional sources key.
     "isrc": "USUG12402645",
     "name": "Summertime Blues",
     "artist": "Chris Lake, Sammy Virji, Nathan Nicholson",
-    "link": "https://soundcloud.com/chrislake/chris-lake-sammy-virji-nathan",
+    "track_url": "https://soundcloud.com/chrislake/chris-lake-sammy-virji-nathan",
     "rank": 4,
     "album_url": "https://i1.sndcdn.com/artworks-p4XAkRuaHNhD-0-original.jpg",
-    "source": "soundcloud"
+    "source_name": "soundcloud"
     "additional_sources":
         {
             "apple_music": "www.apple_music_link.com",
@@ -37,7 +37,7 @@ def aggregate_tracks_by_isrc(services):
     for service in services:
         for track in service:
             isrc = track["isrc"]
-            service = track["source"]
+            service = track["source_name"]
             track_aggregate[isrc][service] = track
 
     filtered_aggregate = {}
@@ -73,7 +73,7 @@ def consolidate_tracks(tracks_by_isrc):
         new_track_entry["additional_sources"] = {}
 
         for source, details in track.items():
-            new_track_entry["additional_sources"][source] = details["link"]
+            new_track_entry["additional_sources"][source] = details["track_url"]
 
         consolidated_tracks.append(new_track_entry)
 
