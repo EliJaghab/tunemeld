@@ -1,31 +1,16 @@
 [
     {
-        "isrc": "GBCFB2400153",
-        "track_name": "saving flowers",
-        "artist_name": "salute & Rina Sawayama",
-        "track_url": "https://music.apple.com/us/album/saving-flowers/1732069006?i=1732069098",
-        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/df/43/34/df4334f4-b599-a2aa-0af3-779288222e13/5054429192650.png/296x296bb-60.jpg",
+        "isrc": "USA2P2430008",
+        "track_name": "HEAT",
+        "artist_name": "Tove Lo & SG Lewis",
+        "track_url": "https://music.apple.com/us/album/heat/1749612943?i=1749613191",
+        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/72/c7/df/72c7dfa4-1dcb-aa7a-a976-e591ba943728/00196922982446_Cover.jpg/296x296bb-60.jpg",
         "rank": 1,
         "source_name": "apple_music",
-        "youtube_url": "https://www.youtube.com/watch?v=G353KFZrjTo",
+        "youtube_url": "https://www.youtube.com/watch?v=TX5t3xVwvFk",
         "additional_sources": {
-            "spotify": "https://open.spotify.com/track/4ZZO8buYpKMS7gR9koYhD9",
-            "apple_music": "https://music.apple.com/us/album/saving-flowers/1732069006?i=1732069098"
-        }
-    },
-    {
-        "isrc": "USUG12402628",
-        "track_name": "Go Back (ft. Julia Church)",
-        "artist_name": "John Summit & Sub Focus",
-        "track_url": "https://soundcloud.com/johnsummit/john-summit-sub-focus-go-back-ft-julia-church-1",
-        "album_cover_url": "https://i1.sndcdn.com/artworks-Q1q3chc0zAUx8qMZ-Ig0X2g-original.jpg",
-        "rank": 2,
-        "source_name": "soundcloud",
-        "youtube_url": "https://www.youtube.com/watch?v=o9Bgl8HUFZA",
-        "additional_sources": {
-            "soundcloud": "https://soundcloud.com/johnsummit/john-summit-sub-focus-go-back-ft-julia-church-1",
-            "spotify": "https://open.spotify.com/track/68R0zVUeMJ2C852Ov6d2Mh",
-            "apple_music": "https://music.apple.com/us/album/go-back/1745292769?i=1745292770"
+            "apple_music": "https://music.apple.com/us/album/heat/1749612943?i=1749613191",
+            "spotify": "https://open.spotify.com/track/3Du9k9oZz7DJCMZviju2lD"
         }
     },
     {
@@ -34,54 +19,140 @@
         "artist_name": "ZERB & The Chainsmokers",
         "track_url": "https://music.apple.com/us/album/addicted-feat-ink/1734260110?i=1734260111",
         "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/0f/df/a1/0fdfa19f-aae2-c601-3c44-9d3e45f80adf/8721056755820.png/296x296bb-60.jpg",
-        "rank": 3,
+        "rank": 2,
         "source_name": "apple_music",
         "youtube_url": "https://www.youtube.com/watch?v=ipG8RowaOA8",
         "additional_sources": {
-            "spotify": "https://open.spotify.com/track/5ZUIPLoTLJZrPQh2kFZEUM",
-            "apple_music": "https://music.apple.com/us/album/addicted-feat-ink/1734260110?i=1734260111"
+            "apple_music": "https://music.apple.com/us/album/addicted-feat-ink/1734260110?i=1734260111",
+            "spotify": "https://open.spotify.com/track/5ZUIPLoTLJZrPQh2kFZEUM"
         }
     },
     {
-        "isrc": "GBCFB2400659",
-        "track_name": "Feel (feat. Jacob Banks)",
-        "artist_name": "LP Giobbi",
-        "track_url": "https://soundcloud.com/lpgiobbi/feel",
-        "album_cover_url": "https://i1.sndcdn.com/artworks-Dbn8HzjWR8kb-0-original.png",
-        "rank": 4,
-        "source_name": "soundcloud",
-        "youtube_url": "https://www.youtube.com/watch?v=_70kZ-jyfr8",
+        "isrc": "US38Y2403431",
+        "track_name": "Mind Still (feat. blythe)",
+        "artist_name": "Sonny Fodera",
+        "track_url": "https://music.apple.com/us/album/mind-still-feat-blythe/1729414512?i=1729414926",
+        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/12/4c/0a/124c0ac8-80a4-ab06-38e7-d8e5800b34dc/197338037492.jpg/296x296bb-60.jpg",
+        "rank": 3,
+        "source_name": "apple_music",
+        "youtube_url": "https://www.youtube.com/watch?v=RzIr26qpA7E",
         "additional_sources": {
-            "soundcloud": "https://soundcloud.com/lpgiobbi/feel",
-            "apple_music": "https://music.apple.com/us/album/feel-feat-jacob-banks/1744642617?i=1744642619"
+            "apple_music": "https://music.apple.com/us/album/mind-still-feat-blythe/1729414512?i=1729414926",
+            "spotify": "https://open.spotify.com/track/5698qx5K7VmYzeJ6O4WR7v"
         }
     },
     {
-        "isrc": "GBUM72402172",
-        "track_name": "One New Change",
-        "artist_name": "Gorgon City",
-        "track_url": "https://soundcloud.com/gorgon-city/one-new-change",
-        "album_cover_url": "https://i1.sndcdn.com/artworks-O0GBujjBwA8k-0-original.jpg",
+        "isrc": "USUG12403371",
+        "track_name": "Lioness",
+        "artist_name": "Swedish House Mafia & Niki & The Dove",
+        "track_url": "https://music.apple.com/us/album/lioness/1749175516?i=1749175517",
+        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/a5/f5/a3/a5f5a371-3a51-19b2-f15c-a269d03db8fa/24UMGIM58353.rgb.jpg/296x296bb-60.jpg",
+        "rank": 4,
+        "source_name": "apple_music",
+        "youtube_url": "https://www.youtube.com/watch?v=ekXgoQnOCQI",
+        "additional_sources": {
+            "apple_music": "https://music.apple.com/us/album/lioness/1749175516?i=1749175517",
+            "spotify": "https://open.spotify.com/track/73rh3AJNXQl8iMWgWRrQTR"
+        }
+    },
+    {
+        "isrc": "USUG12402628",
+        "track_name": "Go Back (ft. Julia Church)",
+        "artist_name": "John Summit & Sub Focus",
+        "track_url": "https://soundcloud.com/johnsummit/john-summit-sub-focus-go-back-ft-julia-church-1",
+        "album_cover_url": "https://i1.sndcdn.com/artworks-Q1q3chc0zAUx8qMZ-Ig0X2g-original.jpg",
         "rank": 5,
         "source_name": "soundcloud",
-        "youtube_url": "https://www.youtube.com/watch?v=v3vR5B9juVE",
+        "youtube_url": "https://www.youtube.com/watch?v=o9Bgl8HUFZA",
         "additional_sources": {
-            "soundcloud": "https://soundcloud.com/gorgon-city/one-new-change",
-            "apple_music": "https://music.apple.com/us/album/one-new-change/1738461195?i=1738461903"
+            "apple_music": "https://music.apple.com/us/album/go-back/1745292769?i=1745292770",
+            "soundcloud": "https://soundcloud.com/johnsummit/john-summit-sub-focus-go-back-ft-julia-church-1",
+            "spotify": "https://open.spotify.com/track/68R0zVUeMJ2C852Ov6d2Mh"
         }
     },
     {
-        "isrc": "CAUM72400193",
-        "track_name": "Love Bites",
-        "artist_name": "Nelly Furtado",
-        "track_url": "https://soundcloud.com/nellyfurtado/love-bites",
-        "album_cover_url": "https://i1.sndcdn.com/artworks-PLcf0BfzCT7A-0-original.jpg",
+        "isrc": "USQX92401650",
+        "track_name": "girl$",
+        "artist_name": "Dom Dolla",
+        "track_url": "https://music.apple.com/us/album/girl%24/1749336829?i=1749336837",
+        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/9e/50/1c/9e501cdc-eb6c-1e33-25b4-fc11d8762159/196872043785.jpg/296x296bb-60.jpg",
         "rank": 6,
-        "source_name": "soundcloud",
-        "youtube_url": "https://www.youtube.com/watch?v=Kf_TN7i4eUA",
+        "source_name": "apple_music",
+        "youtube_url": "https://www.youtube.com/watch?v=rNU5vsJmMIY",
         "additional_sources": {
-            "soundcloud": "https://soundcloud.com/nellyfurtado/love-bites",
-            "spotify": "https://open.spotify.com/track/3bgaDjKLaicRMFD3Vmw3wv"
+            "apple_music": "https://music.apple.com/us/album/girl%24/1749336829?i=1749336837",
+            "spotify": "https://open.spotify.com/track/46N3FCKFABRjNoNBVq4osr"
+        }
+    },
+    {
+        "isrc": "QZUCN2201777",
+        "track_name": "LOOKING FOR JOY",
+        "artist_name": "Kaleena Zanders",
+        "track_url": "https://soundcloud.com/kaleenazanders/looking-for-joy",
+        "album_cover_url": "https://i1.sndcdn.com/artworks-oE9Xfs070PKA-0-original.jpg",
+        "rank": 7,
+        "source_name": "soundcloud",
+        "youtube_url": "https://www.youtube.com/watch?v=qkY54XFxKno",
+        "additional_sources": {
+            "soundcloud": "https://soundcloud.com/kaleenazanders/looking-for-joy",
+            "spotify": "https://open.spotify.com/track/5EqfKJSbG8yQBicX9YRMKu"
+        }
+    },
+    {
+        "isrc": "USA2P2420371",
+        "track_name": "She's Gone, Dance On",
+        "artist_name": "Disclosure",
+        "track_url": "https://soundcloud.com/disclosuremusic/shes-gone-dance-on",
+        "album_cover_url": "https://i1.sndcdn.com/artworks-rUJCOmqAbkPy4gi1-x7OP0w-original.jpg",
+        "rank": 8,
+        "source_name": "soundcloud",
+        "youtube_url": "https://www.youtube.com/watch?v=N95i9JjIem8",
+        "additional_sources": {
+            "apple_music": "https://music.apple.com/us/album/shes-gone-dance-on/1747616877?i=1747616881",
+            "soundcloud": "https://soundcloud.com/disclosuremusic/shes-gone-dance-on",
+            "spotify": "https://open.spotify.com/track/29I9dv9Nq704w0Oc5yFGsR"
+        }
+    },
+    {
+        "isrc": "GBCFB2400292",
+        "track_name": "Kimbara",
+        "artist_name": "Barry Can't Swim",
+        "track_url": "https://music.apple.com/us/album/kimbara/1739798395?i=1739798396",
+        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/ba/c2/fe/bac2fe1b-9996-2a7f-0c1c-a728f415591b/5054429193589.png/296x296bb-60.jpg",
+        "rank": 9,
+        "source_name": "apple_music",
+        "youtube_url": "https://www.youtube.com/watch?v=d2Yb1b8OOh0",
+        "additional_sources": {
+            "apple_music": "https://music.apple.com/us/album/kimbara/1739798395?i=1739798396",
+            "spotify": "https://open.spotify.com/track/3iHrGCUXfZ4BoOy615Ydbk"
+        }
+    },
+    {
+        "isrc": "DEEC33501508",
+        "track_name": "Move",
+        "artist_name": "Adam Port, Stryv, Keinemusik, Orso & Malachiii",
+        "track_url": "https://music.apple.com/us/album/move/1749043131?i=1749043132",
+        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/dd/c4/8b/ddc48b48-4ce6-679f-c4ea-99bcc1e2367d/4251353210455.png/296x296bb-60.jpg",
+        "rank": 10,
+        "source_name": "apple_music",
+        "youtube_url": "https://www.youtube.com/watch?v=95dB-ObZ7Ho",
+        "additional_sources": {
+            "apple_music": "https://music.apple.com/us/album/move/1749043131?i=1749043132",
+            "spotify": "https://open.spotify.com/track/1BJJbSX6muJVF2AK7uH1x4"
+        }
+    },
+    {
+        "isrc": "GBUM72401679",
+        "track_name": "All That You Need",
+        "artist_name": "Gorgon City & Caroline Byrne",
+        "track_url": "https://music.apple.com/us/album/all-that-you-need/1738461195?i=1738461888",
+        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/2f/51/39/2f51393c-8c86-cf06-a5b2-e2adabbfa618/24UMGIM21053.rgb.jpg/296x296bb-60.jpg",
+        "rank": 11,
+        "source_name": "apple_music",
+        "youtube_url": "https://www.youtube.com/watch?v=UF5VxTbHykE",
+        "additional_sources": {
+            "apple_music": "https://music.apple.com/us/album/all-that-you-need/1738461195?i=1738461888",
+            "spotify": "https://open.spotify.com/track/5Bux5dq6CHM7pJLlrx8R3f"
         }
     },
     {
@@ -90,54 +161,12 @@
         "artist_name": "John Summit & Hayla",
         "track_url": "https://soundcloud.com/johnsummit/john-summit-hayla-shiver-cassian-remix",
         "album_cover_url": "https://i1.sndcdn.com/artworks-onJmwhF0E8G2xBsp-sZvuuQ-original.jpg",
-        "rank": 7,
+        "rank": 12,
         "source_name": "soundcloud",
         "youtube_url": "https://www.youtube.com/watch?v=MpEPZ-sTXDM",
         "additional_sources": {
-            "soundcloud": "https://soundcloud.com/johnsummit/john-summit-hayla-shiver-cassian-remix",
-            "apple_music": "https://music.apple.com/us/album/shiver/1728957955?i=1728957956"
-        }
-    },
-    {
-        "isrc": "GBUM72401679",
-        "track_name": "All That You Need",
-        "artist_name": "Gorgon City & Caroline Byrne",
-        "track_url": "https://music.apple.com/us/album/all-that-you-need/1738461195?i=1738461888",
-        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/b2/03/cc/b203ccf4-e9dd-2125-60d8-6a9d9faa6c84/24UMGIM21053.rgb.jpg/296x296bb-60.jpg",
-        "rank": 8,
-        "source_name": "apple_music",
-        "youtube_url": "https://www.youtube.com/watch?v=UF5VxTbHykE",
-        "additional_sources": {
-            "spotify": "https://open.spotify.com/track/5Bux5dq6CHM7pJLlrx8R3f",
-            "apple_music": "https://music.apple.com/us/album/all-that-you-need/1738461195?i=1738461888"
-        }
-    },
-    {
-        "isrc": "GBARL2301797",
-        "track_name": "Lovers In A Past Life (LP Giobbi Remix)",
-        "artist_name": "Calvin Harris & Rag'n'Bone Man",
-        "track_url": "https://music.apple.com/us/album/lovers-in-a-past-life-lp-giobbi-remix/1741613366?i=1741613368",
-        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/e3/2c/7d/e32c7d3e-c9a8-4896-9afb-e2528b7adb65/196872016550.jpg/296x296bb-60.jpg",
-        "rank": 9,
-        "source_name": "apple_music",
-        "youtube_url": "https://www.youtube.com/watch?v=IM3ccXiNsM4",
-        "additional_sources": {
-            "spotify": "https://open.spotify.com/track/6v4ABPB255HDSWyIj3S9Wn",
-            "apple_music": "https://music.apple.com/us/album/lovers-in-a-past-life-lp-giobbi-remix/1741613366?i=1741613368"
-        }
-    },
-    {
-        "isrc": "USUG12402645",
-        "track_name": "Summertime Blues",
-        "artist_name": "Chris Lake, Sammy Virji & Nathan Nicholson",
-        "track_url": "https://music.apple.com/us/album/summertime-blues/1741634636?i=1741634639",
-        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/16/e5/89/16e589be-ba73-4121-f24b-41debea58b4f/24UMGIM35464.rgb.jpg/296x296bb-60.jpg",
-        "rank": 10,
-        "source_name": "apple_music",
-        "youtube_url": "https://www.youtube.com/watch?v=LmFfiXI0P84",
-        "additional_sources": {
-            "spotify": "https://open.spotify.com/track/6q36Cqt2d3O5jqrQR9uXCp",
-            "apple_music": "https://music.apple.com/us/album/summertime-blues/1741634636?i=1741634639"
+            "apple_music": "https://music.apple.com/us/album/shiver/1728957955?i=1728957956",
+            "soundcloud": "https://soundcloud.com/johnsummit/john-summit-hayla-shiver-cassian-remix"
         }
     },
     {
@@ -146,12 +175,40 @@
         "artist_name": "Seven Lions & ILLENIUM",
         "track_url": "https://music.apple.com/us/album/not-even-love-feat-asdis/1736048757?i=1736048763",
         "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/32/53/dd/3253ddf5-3f2e-c447-69e5-2cbb7ca51311/24UMGIM26713.rgb.jpg/296x296bb-60.jpg",
-        "rank": 11,
+        "rank": 13,
         "source_name": "apple_music",
         "youtube_url": "https://www.youtube.com/watch?v=zk80sRP57Rg",
         "additional_sources": {
-            "spotify": "https://open.spotify.com/track/65s9dLrylbHp60IYIcUZEz",
-            "apple_music": "https://music.apple.com/us/album/not-even-love-feat-asdis/1736048757?i=1736048763"
+            "apple_music": "https://music.apple.com/us/album/not-even-love-feat-asdis/1736048757?i=1736048763",
+            "spotify": "https://open.spotify.com/track/65s9dLrylbHp60IYIcUZEz"
+        }
+    },
+    {
+        "isrc": "UK7MC2200081",
+        "track_name": "Baddy On the Floor (feat. Honey Dijon)",
+        "artist_name": "Jamie xx",
+        "track_url": "https://music.apple.com/us/album/baddy-on-the-floor-feat-honey-dijon/1736774386?i=1736774725",
+        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/58/79/46/5879463c-e688-c482-423f-a8dbcb691383/889030028976.png/296x296bb-60.jpg",
+        "rank": 14,
+        "source_name": "apple_music",
+        "youtube_url": "https://www.youtube.com/watch?v=xeKSdJqFM6o",
+        "additional_sources": {
+            "apple_music": "https://music.apple.com/us/album/baddy-on-the-floor-feat-honey-dijon/1736774386?i=1736774725",
+            "spotify": "https://open.spotify.com/track/3CqaTHbiU2nBy3Ar9RnDHN"
+        }
+    },
+    {
+        "isrc": "GBMVH2300940",
+        "track_name": "mr useless",
+        "artist_name": "Shygirl, SG Lewis & Club Shy",
+        "track_url": "https://music.apple.com/us/album/mr-useless/1725825321?i=1725826047",
+        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/8c/ca/50/8cca5060-55f1-a9df-3ff9-519295f0aa5a/5056556135012_cover.jpg/296x296bb-60.jpg",
+        "rank": 15,
+        "source_name": "apple_music",
+        "youtube_url": "https://www.youtube.com/watch?v=kliUoRjylkQ",
+        "additional_sources": {
+            "apple_music": "https://music.apple.com/us/album/mr-useless/1725825321?i=1725826047",
+            "spotify": "https://open.spotify.com/track/1HogDCzANgKv9mE8MgeYKg"
         }
     },
     {
@@ -160,111 +217,55 @@
         "artist_name": "Aluna",
         "track_url": "https://music.apple.com/us/album/ride-or-die/1739664479?i=1739664485",
         "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/79/42/ad/7942ad9e-bb6b-4870-e0cf-69d4041d6a41/2632.jpg/296x296bb-60.jpg",
-        "rank": 12,
+        "rank": 16,
         "source_name": "apple_music",
         "youtube_url": "https://www.youtube.com/watch?v=U2CRNYtt9bI",
         "additional_sources": {
-            "spotify": "https://open.spotify.com/track/2CbuQYjqutizzJraX3ILZY",
-            "apple_music": "https://music.apple.com/us/album/ride-or-die/1739664479?i=1739664485"
+            "apple_music": "https://music.apple.com/us/album/ride-or-die/1739664479?i=1739664485",
+            "spotify": "https://open.spotify.com/track/2CbuQYjqutizzJraX3ILZY"
         }
     },
     {
-        "isrc": "GBMVH2300940",
-        "track_name": "mr useless (MK remix)",
-        "artist_name": "Shygirl, SG Lewis",
-        "track_url": "https://soundcloud.com/0800shygirl/shygirl-sg-lewis-mr-useless-mk",
-        "album_cover_url": "https://i1.sndcdn.com/artworks-a1xuQ21Mlia7-0-original.jpg",
-        "rank": 13,
-        "source_name": "soundcloud",
-        "youtube_url": "https://www.youtube.com/watch?v=Ydo1NIEzasQ",
-        "additional_sources": {
-            "soundcloud": "https://soundcloud.com/0800shygirl/shygirl-sg-lewis-mr-useless-mk",
-            "spotify": "https://open.spotify.com/track/1HogDCzANgKv9mE8MgeYKg",
-            "apple_music": "https://music.apple.com/us/album/mr-useless/1725825321?i=1725826047"
-        }
-    },
-    {
-        "isrc": "USZ4V2400142",
-        "track_name": "Heaven or Not (feat. Kareen Lomax)",
-        "artist_name": "Diplo & Riva Starr",
-        "track_url": "https://music.apple.com/us/album/heaven-or-not-feat-kareen-lomax/1736593206?i=1736593212",
-        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/a2/bf/f0/a2bff082-84e6-0ed0-1efc-e9f7bc486e77/2594.jpg/296x296bb-60.jpg",
-        "rank": 14,
-        "source_name": "apple_music",
-        "youtube_url": "https://www.youtube.com/watch?v=alZdgHHNgDE",
-        "additional_sources": {
-            "spotify": "https://open.spotify.com/track/6B8ZQyILzGTzJZ2BE8ydcF",
-            "apple_music": "https://music.apple.com/us/album/heaven-or-not-feat-kareen-lomax/1736593206?i=1736593212"
-        }
-    },
-    {
-        "isrc": "USWB12401323",
-        "track_name": "Chase It (Mmm Da Da Da)",
-        "artist_name": "Bebe Rexha",
-        "track_url": "https://soundcloud.com/beberexha/chase-it-mmm-da-da-da",
-        "album_cover_url": "https://i1.sndcdn.com/artworks-HaSmkeq2UtO5-0-original.jpg",
-        "rank": 15,
-        "source_name": "soundcloud",
-        "youtube_url": "https://www.youtube.com/watch?v=wNTrl8E-eac",
-        "additional_sources": {
-            "soundcloud": "https://soundcloud.com/beberexha/chase-it-mmm-da-da-da",
-            "spotify": "https://open.spotify.com/track/08APpCYHGsbJ2N9jhRgLQY"
-        }
-    },
-    {
-        "isrc": "GBAHT2301515",
-        "track_name": "Happier (feat. Clementine Douglas)",
-        "artist_name": "The Blessed Madonna",
-        "track_url": "https://music.apple.com/us/album/happier-feat-clementine-douglas/1721072384?i=1721072870",
-        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/9d/b5/c7/9db5c79b-d70a-d617-a8fa-6599b6094eac/5054197941139.jpg/296x296bb-60.jpg",
-        "rank": 16,
-        "source_name": "apple_music",
-        "youtube_url": "https://www.youtube.com/watch?v=6AbEFloifG4",
-        "additional_sources": {
-            "spotify": "https://open.spotify.com/track/1TcF5F10EN17vraisG1gQv",
-            "apple_music": "https://music.apple.com/us/album/happier-feat-clementine-douglas/1721072384?i=1721072870"
-        }
-    },
-    {
-        "isrc": "USA2P2415020",
-        "track_name": "MAGIC",
-        "artist_name": "Gryffin & babyidontlikeyou",
-        "track_url": "https://music.apple.com/us/album/magic/1740903229?i=1740903237",
-        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/76/ce/70/76ce70f8-0a9a-8d3f-42a8-b778698ddb6a/00196922890604_Cover.jpg/296x296bb-60.jpg",
+        "isrc": "FRX762422912",
+        "track_name": "Heaven",
+        "artist_name": "Sara Landry, Alt8",
+        "track_url": "https://soundcloud.com/sara-landry-dj/heaven",
+        "album_cover_url": "https://i1.sndcdn.com/artworks-qBjAX1xJyYcc-0-original.jpg",
         "rank": 17,
-        "source_name": "apple_music",
-        "youtube_url": "https://www.youtube.com/watch?v=fgmDgWUYFY4",
-        "additional_sources": {
-            "spotify": "https://open.spotify.com/track/7pTC4natqyNBB0EBtdDeYi",
-            "apple_music": "https://music.apple.com/us/album/magic/1740903229?i=1740903237"
-        }
-    },
-    {
-        "isrc": "QZUCN2201485",
-        "track_name": "We Groovin",
-        "artist_name": "Jamie Jones & Jazzy",
-        "track_url": "https://music.apple.com/us/album/we-groovin/1729232019?i=1729232020",
-        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/ef/66/63/ef666393-3931-02a6-ddc4-3675f160eff8/0196762014802.png/296x296bb-60.jpg",
-        "rank": 18,
-        "source_name": "apple_music",
-        "youtube_url": "https://www.youtube.com/watch?v=x9zFDnspx4o",
-        "additional_sources": {
-            "spotify": "https://open.spotify.com/track/1lzbOrmaBhueOQfwKCfi1J",
-            "apple_music": "https://music.apple.com/us/album/we-groovin/1729232019?i=1729232020"
-        }
-    },
-    {
-        "isrc": "GBBKS2400221",
-        "track_name": "Lobster Telephone (Edit)",
-        "artist_name": "Peggy Gou",
-        "track_url": "https://soundcloud.com/peggygou/peggy-gou-lobster-telephone-1",
-        "album_cover_url": "https://i1.sndcdn.com/artworks-MJkxC2ve2kJa-0-original.png",
-        "rank": 19,
         "source_name": "soundcloud",
-        "youtube_url": "https://www.youtube.com/watch?v=yOdnqOOd2ZI",
+        "youtube_url": "https://www.youtube.com/watch?v=ZXyHbqodDT8",
         "additional_sources": {
-            "soundcloud": "https://soundcloud.com/peggygou/peggy-gou-lobster-telephone-1",
-            "apple_music": "https://music.apple.com/us/album/lobster-telephone-edit/1742767133?i=1742767138"
+            "soundcloud": "https://soundcloud.com/sara-landry-dj/heaven",
+            "spotify": "https://open.spotify.com/track/5Hh09KHzQ9NRjRd6HIes5R"
+        }
+    },
+    {
+        "isrc": "USRC12400764",
+        "track_name": "Without You (with HAYLA)",
+        "artist_name": "Kygo",
+        "track_url": "https://soundcloud.com/kygo/without-you",
+        "album_cover_url": "https://i1.sndcdn.com/artworks-kRhYTJB5PR4W-0-original.jpg",
+        "rank": 18,
+        "source_name": "soundcloud",
+        "youtube_url": "https://www.youtube.com/watch?v=w304OXHrDmg",
+        "additional_sources": {
+            "apple_music": "https://music.apple.com/us/album/without-you/1747949161?i=1747950148",
+            "soundcloud": "https://soundcloud.com/kygo/without-you",
+            "spotify": "https://open.spotify.com/track/5KW4qNLjWeh7rMbxCfg89N"
+        }
+    },
+    {
+        "isrc": "USUG12402645",
+        "track_name": "Summertime Blues",
+        "artist_name": "Chris Lake, Sammy Virji & Nathan Nicholson",
+        "track_url": "https://music.apple.com/us/album/summertime-blues/1741634636?i=1741634639",
+        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/16/e5/89/16e589be-ba73-4121-f24b-41debea58b4f/24UMGIM35464.rgb.jpg/296x296bb-60.jpg",
+        "rank": 19,
+        "source_name": "apple_music",
+        "youtube_url": "https://www.youtube.com/watch?v=LmFfiXI0P84",
+        "additional_sources": {
+            "apple_music": "https://music.apple.com/us/album/summertime-blues/1741634636?i=1741634639",
+            "spotify": "https://open.spotify.com/track/6q36Cqt2d3O5jqrQR9uXCp"
         }
     },
     {
@@ -277,8 +278,36 @@
         "source_name": "apple_music",
         "youtube_url": "https://www.youtube.com/watch?v=OsYwX5WSj0w",
         "additional_sources": {
-            "spotify": "https://open.spotify.com/track/5vASuVQkngtFoCOczem52V",
-            "apple_music": "https://music.apple.com/us/album/on-again/1736836112?i=1736836113"
+            "apple_music": "https://music.apple.com/us/album/on-again/1736836112?i=1736836113",
+            "spotify": "https://open.spotify.com/track/5vASuVQkngtFoCOczem52V"
+        }
+    },
+    {
+        "isrc": "USA2P2415020",
+        "track_name": "MAGIC",
+        "artist_name": "Gryffin & babyidontlikeyou",
+        "track_url": "https://music.apple.com/us/album/magic/1740903229?i=1740903237",
+        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/76/ce/70/76ce70f8-0a9a-8d3f-42a8-b778698ddb6a/00196922890604_Cover.jpg/296x296bb-60.jpg",
+        "rank": 21,
+        "source_name": "apple_music",
+        "youtube_url": "https://www.youtube.com/watch?v=fgmDgWUYFY4",
+        "additional_sources": {
+            "apple_music": "https://music.apple.com/us/album/magic/1740903229?i=1740903237",
+            "spotify": "https://open.spotify.com/track/7pTC4natqyNBB0EBtdDeYi"
+        }
+    },
+    {
+        "isrc": "USUM72404923",
+        "track_name": "Believe It",
+        "artist_name": "Louis The Child",
+        "track_url": "https://soundcloud.com/louisthechild/believe-it",
+        "album_cover_url": "https://i1.sndcdn.com/artworks-47olandzVXaG-0-original.jpg",
+        "rank": 22,
+        "source_name": "soundcloud",
+        "youtube_url": "https://www.youtube.com/watch?v=TBx5Hy53Xyw",
+        "additional_sources": {
+            "apple_music": "https://music.apple.com/us/album/believe-it/1745614209?i=1745614210",
+            "soundcloud": "https://soundcloud.com/louisthechild/believe-it"
         }
     },
     {
@@ -287,12 +316,40 @@
         "artist_name": "Becky Hill",
         "track_url": "https://music.apple.com/us/album/right-here/1731891564?i=1731892440",
         "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/3d/ca/7a/3dca7ae2-a6e0-e61c-d3b7-55879e9bcc99/24UMGIM00242.rgb.jpg/296x296bb-60.jpg",
-        "rank": 21,
+        "rank": 23,
         "source_name": "apple_music",
         "youtube_url": "https://www.youtube.com/watch?v=SJ7K2Yk5yfM",
         "additional_sources": {
-            "spotify": "https://open.spotify.com/track/2VpKBfkqAZr1iAwwg8AGDO",
-            "apple_music": "https://music.apple.com/us/album/right-here/1731891564?i=1731892440"
+            "apple_music": "https://music.apple.com/us/album/right-here/1731891564?i=1731892440",
+            "spotify": "https://open.spotify.com/track/2VpKBfkqAZr1iAwwg8AGDO"
+        }
+    },
+    {
+        "isrc": "GBUM72402172",
+        "track_name": "One New Change",
+        "artist_name": "Gorgon City",
+        "track_url": "https://soundcloud.com/gorgon-city/one-new-change",
+        "album_cover_url": "https://i1.sndcdn.com/artworks-O0GBujjBwA8k-0-original.jpg",
+        "rank": 24,
+        "source_name": "soundcloud",
+        "youtube_url": "https://www.youtube.com/watch?v=v3vR5B9juVE",
+        "additional_sources": {
+            "apple_music": "https://music.apple.com/us/album/one-new-change/1738461195?i=1738461903",
+            "soundcloud": "https://soundcloud.com/gorgon-city/one-new-change"
+        }
+    },
+    {
+        "isrc": "GBCFB2400153",
+        "track_name": "saving flowers",
+        "artist_name": "salute & Rina Sawayama",
+        "track_url": "https://music.apple.com/us/album/saving-flowers/1732069006?i=1732069098",
+        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/df/43/34/df4334f4-b599-a2aa-0af3-779288222e13/5054429192650.png/296x296bb-60.jpg",
+        "rank": 25,
+        "source_name": "apple_music",
+        "youtube_url": "https://www.youtube.com/watch?v=G353KFZrjTo",
+        "additional_sources": {
+            "apple_music": "https://music.apple.com/us/album/saving-flowers/1732069006?i=1732069098",
+            "spotify": "https://open.spotify.com/track/4ZZO8buYpKMS7gR9koYhD9"
         }
     },
     {
@@ -301,82 +358,12 @@
         "artist_name": "Justice & Tame Impala",
         "track_url": "https://music.apple.com/us/album/neverender/1724935208?i=1724935211",
         "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/c2/19/4b/c2194bc8-63e2-b31f-b872-9611aa5fcded/5056556135845_cover.jpg/296x296bb-60.jpg",
-        "rank": 22,
+        "rank": 26,
         "source_name": "apple_music",
         "youtube_url": "https://www.youtube.com/watch?v=911ahyRrjZ8",
         "additional_sources": {
-            "spotify": "https://open.spotify.com/track/3aQ9MHkMeL7Yu7jpyF62xn",
-            "apple_music": "https://music.apple.com/us/album/neverender/1724935208?i=1724935211"
-        }
-    },
-    {
-        "isrc": "ITFGO2400001",
-        "track_name": "Famax (Edit)",
-        "artist_name": "RAFFA GUIDO",
-        "track_url": "https://music.apple.com/us/album/famax-edit/1728329795?i=1728329797",
-        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/a2/c0/e1/a2c0e148-bf23-1be4-80a9-080e95d448bb/617513995053_cover.jpg/296x296bb-60.jpg",
-        "rank": 23,
-        "source_name": "apple_music",
-        "youtube_url": "https://www.youtube.com/watch?v=4y5wmLJ3Nmw",
-        "additional_sources": {
-            "spotify": "https://open.spotify.com/track/4yhqQAKFiHNCXpxxFVhxRq",
-            "apple_music": "https://music.apple.com/us/album/famax-edit/1728329795?i=1728329797"
-        }
-    },
-    {
-        "isrc": "US38Y2404377",
-        "track_name": "Satellite",
-        "artist_name": "Dimension & Alison Wonderland",
-        "track_url": "https://music.apple.com/us/album/satellite/1732748625?i=1732748719",
-        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/c1/dd/46/c1dd46e8-8be5-66d6-22d0-2e2c62e16398/085365695368.jpg/296x296bb-60.jpg",
-        "rank": 24,
-        "source_name": "apple_music",
-        "youtube_url": "https://www.youtube.com/watch?v=ojBy68xYyLc",
-        "additional_sources": {
-            "spotify": "https://open.spotify.com/track/3tHCG0ISOA0pXscIdNrJml",
-            "apple_music": "https://music.apple.com/us/album/satellite/1732748625?i=1732748719"
-        }
-    },
-    {
-        "isrc": "GBCFB2400292",
-        "track_name": "Kimbara",
-        "artist_name": "Barry Can't Swim",
-        "track_url": "https://music.apple.com/us/album/kimbara/1739798395?i=1739798396",
-        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/ba/c2/fe/bac2fe1b-9996-2a7f-0c1c-a728f415591b/5054429193589.png/296x296bb-60.jpg",
-        "rank": 25,
-        "source_name": "apple_music",
-        "youtube_url": "https://www.youtube.com/watch?v=d2Yb1b8OOh0",
-        "additional_sources": {
-            "spotify": "https://open.spotify.com/track/3iHrGCUXfZ4BoOy615Ydbk",
-            "apple_music": "https://music.apple.com/us/album/kimbara/1739798395?i=1739798396"
-        }
-    },
-    {
-        "isrc": "UK7MC2200081",
-        "track_name": "Baddy On the Floor (feat. Honey Dijon)",
-        "artist_name": "Jamie xx",
-        "track_url": "https://music.apple.com/us/album/baddy-on-the-floor-feat-honey-dijon/1736774386?i=1736774725",
-        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/58/79/46/5879463c-e688-c482-423f-a8dbcb691383/889030028976.png/296x296bb-60.jpg",
-        "rank": 26,
-        "source_name": "apple_music",
-        "youtube_url": "https://www.youtube.com/watch?v=xeKSdJqFM6o",
-        "additional_sources": {
-            "spotify": "https://open.spotify.com/track/3CqaTHbiU2nBy3Ar9RnDHN",
-            "apple_music": "https://music.apple.com/us/album/baddy-on-the-floor-feat-honey-dijon/1736774386?i=1736774725"
-        }
-    },
-    {
-        "isrc": "USAT22313737",
-        "track_name": "Von dutch",
-        "artist_name": "Charli XCX",
-        "track_url": "https://music.apple.com/us/album/von-dutch/1732110349?i=1732110358",
-        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/58/d4/74/58d47475-3797-bad8-9c66-77bfb8cbf352/075679655516.jpg/296x296bb-60.jpg",
-        "rank": 27,
-        "source_name": "apple_music",
-        "youtube_url": "https://www.youtube.com/watch?v=cwZ1L_0QLjw",
-        "additional_sources": {
-            "spotify": "https://open.spotify.com/track/01TnMXIy7mJJQ7E8uy937N",
-            "apple_music": "https://music.apple.com/us/album/von-dutch/1732110349?i=1732110358"
+            "apple_music": "https://music.apple.com/us/album/neverender/1724935208?i=1724935211",
+            "spotify": "https://open.spotify.com/track/3aQ9MHkMeL7Yu7jpyF62xn"
         }
     },
     {
@@ -385,12 +372,113 @@
         "artist_name": "Ti\u00ebsto & Prophecy",
         "track_url": "https://music.apple.com/us/album/my-city/1744858496?i=1744858499",
         "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/57/d8/e0/57d8e05a-0ca5-8741-1d7c-8bb739f173dd/8721093133780.png/296x296bb-60.jpg",
-        "rank": 28,
+        "rank": 27,
         "source_name": "apple_music",
         "youtube_url": "https://www.youtube.com/watch?v=vd2YM9Yj8Es",
         "additional_sources": {
-            "spotify": "https://open.spotify.com/track/5sjvmFMLPjBXDd2XDr9JIm",
-            "apple_music": "https://music.apple.com/us/album/my-city/1744858496?i=1744858499"
+            "apple_music": "https://music.apple.com/us/album/my-city/1744858496?i=1744858499",
+            "spotify": "https://open.spotify.com/track/5sjvmFMLPjBXDd2XDr9JIm"
+        }
+    },
+    {
+        "isrc": "USAT22313737",
+        "track_name": "Von dutch",
+        "artist_name": "Charli xcx",
+        "track_url": "https://music.apple.com/us/album/von-dutch/1732110349?i=1732110358",
+        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/58/d4/74/58d47475-3797-bad8-9c66-77bfb8cbf352/075679655516.jpg/296x296bb-60.jpg",
+        "rank": 28,
+        "source_name": "apple_music",
+        "youtube_url": "https://www.youtube.com/watch?v=RaiRdSlwsks",
+        "additional_sources": {
+            "apple_music": "https://music.apple.com/us/album/von-dutch/1732110349?i=1732110358",
+            "spotify": "https://open.spotify.com/track/01TnMXIy7mJJQ7E8uy937N"
+        }
+    },
+    {
+        "isrc": "GBAHS2400279",
+        "track_name": "places to be",
+        "artist_name": "Fred again.. & Anderson .Paak & CHIKA",
+        "track_url": "https://soundcloud.com/fredagain/fred-again-anderson-paak-chika",
+        "album_cover_url": "https://i1.sndcdn.com/artworks-aTZ8VVSOJwJI-0-original.jpg",
+        "rank": 29,
+        "source_name": "soundcloud",
+        "youtube_url": "https://www.youtube.com/watch?v=0bVFEOb39vk",
+        "additional_sources": {
+            "apple_music": "https://music.apple.com/us/album/places-to-be/1747373137?i=1747373147",
+            "soundcloud": "https://soundcloud.com/fredagain/fred-again-anderson-paak-chika",
+            "spotify": "https://open.spotify.com/track/561pBFcFL2Pwb9HPO9tU8J"
+        }
+    },
+    {
+        "isrc": "USAT22403644",
+        "track_name": "Push",
+        "artist_name": "Skrillex, Hamdi, TAICHU & OFFAIAH",
+        "track_url": "https://soundcloud.com/skrillex/skrillex-hamdi-taichu-offaiah",
+        "album_cover_url": "https://i1.sndcdn.com/artworks-RBTuu7OA6XOt9o3C-8UG9TA-original.jpg",
+        "rank": 30,
+        "source_name": "soundcloud",
+        "youtube_url": "https://www.youtube.com/watch?v=E89B5VEp1pg",
+        "additional_sources": {
+            "apple_music": "https://music.apple.com/us/album/push-feat-offaiah/1747375768?i=1747375769",
+            "soundcloud": "https://soundcloud.com/skrillex/skrillex-hamdi-taichu-offaiah",
+            "spotify": "https://open.spotify.com/track/29OFLlrrfKIEVwbVMTjBYe"
+        }
+    },
+    {
+        "isrc": "GBCEN2400112",
+        "track_name": "PICK UP THE PHONE (feat. Nate Dogg)",
+        "artist_name": "PAWSA",
+        "track_url": "https://soundcloud.com/pawsa/pick-up-the-phone-feat-nate-dogg",
+        "album_cover_url": "https://i1.sndcdn.com/artworks-DsoB7NjFm2bGzjkT-ggeMxA-original.jpg",
+        "rank": 31,
+        "source_name": "soundcloud",
+        "youtube_url": "https://www.youtube.com/watch?v=Gp03sjth0yo",
+        "additional_sources": {
+            "apple_music": "https://music.apple.com/us/album/pick-up-the-phone-feat-nate-dogg/1749275841?i=1749275843",
+            "soundcloud": "https://soundcloud.com/pawsa/pick-up-the-phone-feat-nate-dogg"
+        }
+    },
+    {
+        "isrc": "GBBKS2300320",
+        "track_name": "Back To One",
+        "artist_name": "Peggy Gou",
+        "track_url": "https://music.apple.com/us/album/back-to-one/1735512900?i=1735513158",
+        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/5d/67/1e/5d671e2a-5130-5296-69ac-0457c8a8ed94/191404137574.png/296x296bb-60.jpg",
+        "rank": 32,
+        "source_name": "apple_music",
+        "youtube_url": "https://www.youtube.com/watch?v=imYYKJasqvQ",
+        "additional_sources": {
+            "apple_music": "https://music.apple.com/us/album/back-to-one/1735512900?i=1735513158",
+            "spotify": "https://open.spotify.com/track/1kOg8OXkYhsoaCuDppNyxF"
+        }
+    },
+    {
+        "isrc": "GBUM72311089",
+        "track_name": "Multiply",
+        "artist_name": "Becky Hill",
+        "track_url": "https://soundcloud.com/becky-hill-official/becky-hill-multiply",
+        "album_cover_url": "https://i1.sndcdn.com/artworks-pCgZ27nrtvCk-0-original.jpg",
+        "rank": 33,
+        "source_name": "soundcloud",
+        "youtube_url": "https://www.youtube.com/watch?v=YfFwuPFBwbQ",
+        "additional_sources": {
+            "apple_music": "https://music.apple.com/us/album/multiply/1731891564?i=1731891897",
+            "soundcloud": "https://soundcloud.com/becky-hill-official/becky-hill-multiply"
+        }
+    },
+    {
+        "isrc": "USWB12401323",
+        "track_name": "Chase It (Mmm Da Da Da)",
+        "artist_name": "Bebe Rexha",
+        "track_url": "https://soundcloud.com/beberexha/chase-it-mmm-da-da-da",
+        "album_cover_url": "https://i1.sndcdn.com/artworks-HaSmkeq2UtO5-0-original.jpg",
+        "rank": 34,
+        "source_name": "soundcloud",
+        "youtube_url": "https://www.youtube.com/watch?v=wNTrl8E-eac",
+        "additional_sources": {
+            "apple_music": "https://music.apple.com/us/album/chase-it-mmm-da-da-da/1745604576?i=1745604584",
+            "soundcloud": "https://soundcloud.com/beberexha/chase-it-mmm-da-da-da",
+            "spotify": "https://open.spotify.com/track/08APpCYHGsbJ2N9jhRgLQY"
         }
     }
 ]
