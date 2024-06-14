@@ -155,7 +155,7 @@ def get_youtube_url_by_track_and_artist_name(track_name, artist_name):
     global youtube_count, youtube_cache
     cache_key = f"{track_name}|{artist_name}"
 
-    if cache_key in youtube_cache:
+    if youtube_cache and cache_key in youtube_cache:
         return youtube_cache[cache_key]
 
     youtube_count += 1
@@ -199,6 +199,8 @@ def get_apple_music_album_cover(url_link):
     return url
 
 def read_json_from_file(file_path):
+    if not os.path.exists(file_path):
+        return None
     with open(file_path, "r") as file:
         return json.load(file)
 
