@@ -1,11 +1,221 @@
 [
     {
+        "isrc": "CA5KR2468599",
+        "track_name": "Forever",
+        "artist_name": "Marshmello x Pluko",
+        "track_url": "https://soundcloud.com/marshmellomusic/forever",
+        "album_cover_url": "https://i1.sndcdn.com/artworks-IpRy0dNpTOpalrz9-02zbyw-original.jpg",
+        "rank": 1,
+        "source_name": "soundcloud",
+        "youtube_url": "https://www.youtube.com/watch?v=d3GgUmhEJg8"
+    },
+    {
+        "isrc": "USRE12400353",
+        "track_name": "Music is Better",
+        "artist_name": "R\u00dcF\u00dcS DU SOL",
+        "track_url": "https://soundcloud.com/rufusdusol/music-is-better",
+        "album_cover_url": "https://i1.sndcdn.com/artworks-hklsRbHExOV5-0-original.jpg",
+        "rank": 2,
+        "source_name": "soundcloud",
+        "youtube_url": "https://www.youtube.com/watch?v=GJw18eJvXUE"
+    },
+    {
+        "isrc": "QZQAY2466253",
+        "track_name": "Something To Me",
+        "artist_name": "Josh Baker",
+        "track_url": "https://soundcloud.com/joshbakerdj/something-to-me",
+        "album_cover_url": "https://i1.sndcdn.com/artworks-ou8lXICOgoFu-0-original.jpg",
+        "rank": 3,
+        "source_name": "soundcloud",
+        "youtube_url": "https://www.youtube.com/watch?v=rURv9g2obBE"
+    },
+    {
+        "isrc": "USUYG1557868",
+        "track_name": "A Bar Song (Tipsy) [Remix]",
+        "artist_name": "Shaboozey & David Guetta",
+        "track_url": "https://soundcloud.com/shaboozey/shaboozey-david-guetta-a-bar",
+        "album_cover_url": "https://i1.sndcdn.com/artworks-ygNt3at7iaSY-0-original.jpg",
+        "rank": 4,
+        "source_name": "soundcloud",
+        "youtube_url": "https://www.youtube.com/watch?v=C9xphg5j6bM"
+    },
+    {
+        "isrc": "QM4TX2371595",
+        "track_name": "It's That Time (Fisher Extended Remix)",
+        "artist_name": "Marlon Hoffstadt",
+        "track_url": "https://soundcloud.com/marlonhoffstadt/its-that-time-fisher-extended-remix",
+        "album_cover_url": "https://i1.sndcdn.com/artworks-XTF5L0lxBFnyh9zk-mznblw-original.jpg",
+        "rank": 5,
+        "source_name": "soundcloud",
+        "youtube_url": "https://www.youtube.com/watch?v=GDWdul0nrYw"
+    },
+    {
+        "isrc": "CA5KR2462316",
+        "track_name": "Too Many Questions",
+        "artist_name": "Nero",
+        "track_url": "https://soundcloud.com/nero/too_many_questionswav",
+        "album_cover_url": "https://i1.sndcdn.com/artworks-jqJoONyAEW8bYMPH-yRwWow-original.jpg",
+        "rank": 6,
+        "source_name": "soundcloud",
+        "youtube_url": "https://www.youtube.com/watch?v=kzKAPPr_1Xk"
+    },
+    {
+        "isrc": "USUG12402625",
+        "track_name": "Resonate (ft. Julia Church)",
+        "artist_name": "John Summit & Kaskade",
+        "track_url": "https://soundcloud.com/johnsummit/john-summit-kaskade-resonate-ft-julia-church",
+        "album_cover_url": "https://i1.sndcdn.com/artworks-6kCr6OPVoCYR0SLZ-q6yrQA-original.jpg",
+        "rank": 7,
+        "source_name": "soundcloud",
+        "youtube_url": "https://www.youtube.com/watch?v=LO2Ve8487TA"
+    },
+    {
+        "isrc": "US38Y2413996",
+        "track_name": "I'm Free",
+        "artist_name": "Paris Hilton",
+        "track_url": "https://soundcloud.com/parishilton/im-free",
+        "album_cover_url": "https://i1.sndcdn.com/artworks-wKUknWch2sgd-0-original.jpg",
+        "rank": 8,
+        "source_name": "soundcloud",
+        "youtube_url": "https://www.youtube.com/watch?v=FB1WGcVCkj8"
+    },
+    {
+        "isrc": "QZZ4J2400318",
+        "track_name": "DESIRE",
+        "artist_name": "Odetari",
+        "track_url": "https://soundcloud.com/odetari/desire",
+        "album_cover_url": "https://i1.sndcdn.com/artworks-Kkb5vuSafvcL-0-original.jpg",
+        "rank": 9,
+        "source_name": "soundcloud",
+        "youtube_url": "https://www.youtube.com/watch?v=M7h9oati38Q"
+    },
+    {
+        "isrc": "CA5KR2465569",
+        "track_name": "It's You (C'est Toi)",
+        "artist_name": "Surf Mesa",
+        "track_url": "https://soundcloud.com/surfmesa/its-you-cest-toi",
+        "album_cover_url": "https://i1.sndcdn.com/artworks-fjVkyNVG3Xpfhiey-3B7gHQ-original.jpg",
+        "rank": 10,
+        "source_name": "soundcloud",
+        "youtube_url": "https://www.youtube.com/watch?v=2Vgewl-2_Po"
+    },
+    {
+        "isrc": "US38Y2413066",
+        "track_name": "STEALTH BOMBER",
+        "artist_name": "Whethan & flowdan",
+        "track_url": "https://soundcloud.com/whethan/whethan-flowdan-stealth-bomber",
+        "album_cover_url": "https://i1.sndcdn.com/artworks-zuvb0UlEtt3d-0-original.jpg",
+        "rank": 11,
+        "source_name": "soundcloud",
+        "youtube_url": "https://www.youtube.com/watch?v=oOn1noPOYfg"
+    },
+    {
+        "isrc": "USUS12400313",
+        "track_name": "On or Off (feat. RUG)",
+        "artist_name": "Klingande",
+        "track_url": "https://soundcloud.com/klingande/on-or-off-feat-rug",
+        "album_cover_url": "https://i1.sndcdn.com/artworks-FkiiLy43C3JM-0-original.jpg",
+        "rank": 12,
+        "source_name": "soundcloud",
+        "youtube_url": "https://www.youtube.com/watch?v=UkVoe62q24o"
+    },
+    {
+        "isrc": "USUM72406304",
+        "track_name": "Out of Time (feat. Bea Miller)",
+        "artist_name": "Zedd",
+        "track_url": "https://soundcloud.com/zedd/out-of-time-feat-bea-miller",
+        "album_cover_url": "https://i1.sndcdn.com/artworks-Zhzffigq9ymD-0-original.jpg",
+        "rank": 13,
+        "source_name": "soundcloud",
+        "youtube_url": "https://www.youtube.com/watch?v=n8mJ6H2oeJM"
+    },
+    {
+        "isrc": "GBUM72402261",
+        "track_name": "Breathe You In",
+        "artist_name": "Gorgon City, NORTH",
+        "track_url": "https://soundcloud.com/gorgon-city/breathe-you-in",
+        "album_cover_url": "https://i1.sndcdn.com/artworks-YSPy6tiNNRjs-0-original.jpg",
+        "rank": 14,
+        "source_name": "soundcloud",
+        "youtube_url": "https://www.youtube.com/watch?v=BdL0O5TxEUM"
+    },
+    {
+        "isrc": "GBUM72403421",
+        "track_name": "Tell Me",
+        "artist_name": "HannahLaing",
+        "track_url": "https://soundcloud.com/hannahlaingdj/hannah-laing-fairground-tell-me-teaser-1",
+        "album_cover_url": "https://i1.sndcdn.com/artworks-zfoj9p1pHIqi-0-original.jpg",
+        "rank": 15,
+        "source_name": "soundcloud",
+        "youtube_url": "https://www.youtube.com/watch?v=DdJzuCKff8g"
+    },
+    {
+        "isrc": "GBUM72311090",
+        "track_name": "Outside Of Love (Charlie Boon Remix)",
+        "artist_name": "Becky Hill, Charlie Boon",
+        "track_url": "https://soundcloud.com/becky-hill-official/becky-hill-charlie-boon",
+        "album_cover_url": "https://i1.sndcdn.com/artworks-Mdzqr2WWVvxw-0-original.jpg",
+        "rank": 16,
+        "source_name": "soundcloud",
+        "youtube_url": "https://www.youtube.com/watch?v=CmhAkIjxWTI"
+    },
+    {
+        "isrc": "DEUM72405937",
+        "track_name": "Man In Finance (Six Five)",
+        "artist_name": "Girl On Couch",
+        "track_url": "https://soundcloud.com/girl-on-couch/man-in-finance-six-five",
+        "album_cover_url": "https://i1.sndcdn.com/artworks-uPpq3BD07s3u-0-original.jpg",
+        "rank": 17,
+        "source_name": "soundcloud",
+        "youtube_url": "https://www.youtube.com/watch?v=fGUKw4sS0nM"
+    },
+    {
+        "isrc": "QMJMT2405400",
+        "track_name": "Endless Night",
+        "artist_name": "Maeta",
+        "track_url": "https://soundcloud.com/maetasworld/endless-night",
+        "album_cover_url": "https://i1.sndcdn.com/artworks-6MTnyrYNzKzo-0-original.jpg",
+        "rank": 18,
+        "source_name": "soundcloud",
+        "youtube_url": "https://www.youtube.com/watch?v=u8L24rCl-Wc"
+    },
+    {
+        "isrc": "AULI02457640",
+        "track_name": "Alone",
+        "artist_name": "Tobiahs",
+        "track_url": "https://soundcloud.com/tobiahs/alone",
+        "album_cover_url": "https://i1.sndcdn.com/artworks-QMd5C6jEO8Mk-0-original.jpg",
+        "rank": 19,
+        "source_name": "soundcloud",
+        "youtube_url": "https://www.youtube.com/watch?v=aIybn4OfMPo"
+    },
+    {
+        "isrc": "USA2P2429490",
+        "track_name": "Pretty Low",
+        "artist_name": "Dillon Francis, Galantis, Arden Jones",
+        "track_url": "https://soundcloud.com/dillonfrancis/dillon-francis-galantis-arden",
+        "album_cover_url": "https://i1.sndcdn.com/artworks-GhlhNqHW4EqU-0-original.jpg",
+        "rank": 20,
+        "source_name": "soundcloud",
+        "youtube_url": "https://www.youtube.com/watch?v=CIs0lzdNtp4"
+    },
+    {
+        "isrc": "USUM72406952",
+        "track_name": "Easy Lover",
+        "artist_name": "Seven Lions",
+        "track_url": "https://soundcloud.com/seven-lions/easy-lover",
+        "album_cover_url": "https://i1.sndcdn.com/artworks-S5dVt7QpN2Xy-0-original.jpg",
+        "rank": 21,
+        "source_name": "soundcloud",
+        "youtube_url": "https://www.youtube.com/watch?v=3_mItJR9WP4"
+    },
+    {
         "isrc": "GBAHS2400328",
         "track_name": "BLOW (WHITE GIRL IN TOWN) [feat. Kilo Ali]",
         "artist_name": "SOSA",
         "track_url": "https://soundcloud.com/sosamusicuk/sosa-blow-white-girl-in-town-unreleased",
-        "album_cover_url": "https://i1.sndcdn.com/artworks-w6fmPayZoxuz-0-original.jpg",
-        "rank": 1,
+        "album_cover_url": "https://i1.sndcdn.com/artworks-R6UPIP2vDprL-0-original.jpg",
+        "rank": 22,
         "source_name": "soundcloud",
         "youtube_url": "https://www.youtube.com/watch?v=Hg7T5mEVRKI"
     },
@@ -15,7 +225,7 @@
         "artist_name": "Raffaella Carr\u00e0",
         "track_url": "https://soundcloud.com/jaxomy/raffaella-carra-pedro-jaxomy-agatino-romero-remix",
         "album_cover_url": "https://i1.sndcdn.com/artworks-hP1dHVp39ef0TGsk-SY1QGg-original.jpg",
-        "rank": 2,
+        "rank": 23,
         "source_name": "soundcloud",
         "youtube_url": "https://www.youtube.com/watch?v=HxL19VWL9TM"
     },
@@ -25,7 +235,7 @@
         "artist_name": "The Bloody Beetroots, Steve Aoki",
         "track_url": "https://soundcloud.com/steveaoki/the-bloody-beetroots-steve-aoki-warp-19-westend-cherry-tooth-edit-remix",
         "album_cover_url": "https://i1.sndcdn.com/artworks-My2WdWk3YMISzs1o-1UGPig-original.jpg",
-        "rank": 3,
+        "rank": 24,
         "source_name": "soundcloud",
         "youtube_url": "https://www.youtube.com/watch?v=p4RWSE_8HSs"
     },
@@ -35,7 +245,7 @@
         "artist_name": "Billy Gillies & Betsy",
         "track_url": "https://soundcloud.com/billy-gillies/billy-gillies-fair-demo",
         "album_cover_url": "https://i1.sndcdn.com/artworks-1IcKJZXHBsBWoEzy-2plm2Q-original.jpg",
-        "rank": 4,
+        "rank": 25,
         "source_name": "soundcloud",
         "youtube_url": "https://www.youtube.com/watch?v=IJv75E0oTsU"
     },
@@ -45,7 +255,7 @@
         "artist_name": "Disclosure",
         "track_url": "https://soundcloud.com/disclosuremusic/shes-gone-dance-on",
         "album_cover_url": "https://i1.sndcdn.com/artworks-rUJCOmqAbkPy4gi1-x7OP0w-original.jpg",
-        "rank": 5,
+        "rank": 26,
         "source_name": "soundcloud",
         "youtube_url": "https://www.youtube.com/watch?v=N95i9JjIem8"
     },
@@ -55,7 +265,7 @@
         "artist_name": "Kaleena Zanders",
         "track_url": "https://soundcloud.com/kaleenazanders/looking-for-joy",
         "album_cover_url": "https://i1.sndcdn.com/artworks-oE9Xfs070PKA-0-original.jpg",
-        "rank": 6,
+        "rank": 27,
         "source_name": "soundcloud",
         "youtube_url": "https://www.youtube.com/watch?v=qkY54XFxKno"
     },
@@ -65,7 +275,7 @@
         "artist_name": "Billie Eilish",
         "track_url": "https://soundcloud.com/billieeilish/lamour-de-ma-vie-over-now",
         "album_cover_url": "https://i1.sndcdn.com/artworks-bZ3pg8vQHykl-0-original.jpg",
-        "rank": 7,
+        "rank": 28,
         "source_name": "soundcloud",
         "youtube_url": "https://www.youtube.com/watch?v=_sy-aQ9HSq0"
     },
@@ -75,7 +285,7 @@
         "artist_name": "Fred again.. & Anderson .Paak & CHIKA",
         "track_url": "https://soundcloud.com/fredagain/fred-again-anderson-paak-chika",
         "album_cover_url": "https://i1.sndcdn.com/artworks-aTZ8VVSOJwJI-0-original.jpg",
-        "rank": 8,
+        "rank": 29,
         "source_name": "soundcloud",
         "youtube_url": "https://www.youtube.com/watch?v=0bVFEOb39vk"
     },
@@ -85,7 +295,7 @@
         "artist_name": "PAWSA",
         "track_url": "https://soundcloud.com/pawsa/pick-up-the-phone-feat-nate-dogg",
         "album_cover_url": "https://i1.sndcdn.com/artworks-DsoB7NjFm2bGzjkT-ggeMxA-original.jpg",
-        "rank": 9,
+        "rank": 30,
         "source_name": "soundcloud",
         "youtube_url": "https://www.youtube.com/watch?v=Gp03sjth0yo"
     },
@@ -95,7 +305,7 @@
         "artist_name": "SPAG HEDDY",
         "track_url": "https://soundcloud.com/spagheddy/sonic-beef",
         "album_cover_url": "https://i1.sndcdn.com/artworks-NxIYJEjsBGnBLya1-KoA5Zg-original.jpg",
-        "rank": 10,
+        "rank": 31,
         "source_name": "soundcloud",
         "youtube_url": "https://www.youtube.com/watch?v=5YJ3VtbS7Tw"
     },
@@ -105,7 +315,7 @@
         "artist_name": "John Summit & Sub Focus",
         "track_url": "https://soundcloud.com/johnsummit/john-summit-sub-focus-go-back-ft-julia-church-1",
         "album_cover_url": "https://i1.sndcdn.com/artworks-Q1q3chc0zAUx8qMZ-Ig0X2g-original.jpg",
-        "rank": 11,
+        "rank": 32,
         "source_name": "soundcloud",
         "youtube_url": "https://www.youtube.com/watch?v=o9Bgl8HUFZA"
     },
@@ -115,7 +325,7 @@
         "artist_name": "Subtronics",
         "track_url": "https://soundcloud.com/subtronics/subtronics-sploinky-dub-feat-grech",
         "album_cover_url": "https://i1.sndcdn.com/artworks-uFZnfxqQ6oaI8RMC-wG3TXw-original.jpg",
-        "rank": 12,
+        "rank": 33,
         "source_name": "soundcloud",
         "youtube_url": "https://www.youtube.com/watch?v=eOE1wVr1jvI"
     },
@@ -125,7 +335,7 @@
         "artist_name": "Sam Girling",
         "track_url": "https://soundcloud.com/samwgirling/sam-girling-post-cause-anthem-preview-out-14-june",
         "album_cover_url": "https://i1.sndcdn.com/artworks-zX7AsHroWMMkzdd6-zblj7g-original.jpg",
-        "rank": 13,
+        "rank": 34,
         "source_name": "soundcloud",
         "youtube_url": "https://www.youtube.com/watch?v=U1rFEJ3obj0"
     },
@@ -135,7 +345,7 @@
         "artist_name": "Sultan + Shepard with Elderbrook",
         "track_url": "https://soundcloud.com/sultanshepard/ill-be-here-le-youth-remix",
         "album_cover_url": "https://i1.sndcdn.com/artworks-8eIvnDjBhhNx-0-original.png",
-        "rank": 14,
+        "rank": 35,
         "source_name": "soundcloud",
         "youtube_url": "https://www.youtube.com/watch?v=cfZWqpVGBZg"
     },
@@ -144,8 +354,8 @@
         "track_name": "Guess",
         "artist_name": "charlixcx",
         "track_url": "https://soundcloud.com/charlixcx/guess",
-        "album_cover_url": "https://i1.sndcdn.com/artworks-qQEyUyqSA6F2-0-original.jpg",
-        "rank": 15,
+        "album_cover_url": "https://i1.sndcdn.com/artworks-u19uXLVMAKJx-0-original.jpg",
+        "rank": 36,
         "source_name": "soundcloud",
         "youtube_url": "https://www.youtube.com/watch?v=NfHhsB5V6Tc"
     },
@@ -155,7 +365,7 @@
         "artist_name": "Aluna & Paul Woolford",
         "track_url": "https://soundcloud.com/aluna/aluna-paul-woolford-heatstroke",
         "album_cover_url": "https://i1.sndcdn.com/artworks-4rrO76vZYCDw-0-original.jpg",
-        "rank": 16,
+        "rank": 37,
         "source_name": "soundcloud",
         "youtube_url": "https://www.youtube.com/watch?v=7SyJ1Wa7EgQ"
     },
@@ -165,17 +375,17 @@
         "artist_name": "Don Toliver, ACRAZE",
         "track_url": "https://soundcloud.com/dontoliver/don-toliver-acraze-bandit-club",
         "album_cover_url": "https://i1.sndcdn.com/artworks-yvaXLrwZE4W4-0-original.jpg",
-        "rank": 17,
+        "rank": 38,
         "source_name": "soundcloud",
         "youtube_url": "https://www.youtube.com/watch?v=1WHVyj-Kd-k"
     },
     {
-        "isrc": "NLF712405581",
+        "isrc": "QM24S2400638",
         "track_name": "Belong To You",
         "artist_name": "Ferry Corsten & 22Bullets feat. Couch\u00e9",
         "track_url": "https://soundcloud.com/ferry-corsten/ferry-corsten-22bullets-feat",
         "album_cover_url": "https://i1.sndcdn.com/artworks-G9SzCjoRbyV2-0-original.png",
-        "rank": 18,
+        "rank": 39,
         "source_name": "soundcloud",
         "youtube_url": "https://www.youtube.com/watch?v=zotxzTUqtZI"
     },
@@ -185,7 +395,7 @@
         "artist_name": "David Guetta x MORTEN x Prophecy",
         "track_url": "https://soundcloud.com/davidguetta/david-guetta-x-morten-x",
         "album_cover_url": "https://i1.sndcdn.com/artworks-yngxtGlQxSQ3-0-original.jpg",
-        "rank": 19,
+        "rank": 40,
         "source_name": "soundcloud",
         "youtube_url": "https://www.youtube.com/watch?v=4cPedih1jIs"
     },
@@ -195,7 +405,7 @@
         "artist_name": "Taylor Swift",
         "track_url": "https://soundcloud.com/taylorswiftofficial/fortnight-blond-ish-remix-feat",
         "album_cover_url": "https://i1.sndcdn.com/artworks-JXSVjtcPXTEw-0-original.jpg",
-        "rank": 20,
+        "rank": 41,
         "source_name": "soundcloud",
         "youtube_url": "https://www.youtube.com/watch?v=KJXP13hqf2I"
     },
@@ -205,7 +415,7 @@
         "artist_name": "Skrillex, Hamdi, TAICHU & OFFAIAH",
         "track_url": "https://soundcloud.com/skrillex/skrillex-hamdi-taichu-offaiah",
         "album_cover_url": "https://i1.sndcdn.com/artworks-RBTuu7OA6XOt9o3C-8UG9TA-original.jpg",
-        "rank": 21,
+        "rank": 42,
         "source_name": "soundcloud",
         "youtube_url": "https://www.youtube.com/watch?v=E89B5VEp1pg"
     },
@@ -215,7 +425,7 @@
         "artist_name": "Ti\u00ebsto x Hedex x Basslayerz",
         "track_url": "https://soundcloud.com/tiesto/tiesto-x-hedex-x-basslayerz",
         "album_cover_url": "https://i1.sndcdn.com/artworks-9tf2dUcNbnS4-0-original.jpg",
-        "rank": 22,
+        "rank": 43,
         "source_name": "soundcloud",
         "youtube_url": "https://www.youtube.com/watch?v=8XxOO-V4hEU"
     },
@@ -225,7 +435,7 @@
         "artist_name": "John Summit & Hayla",
         "track_url": "https://soundcloud.com/johnsummit/john-summit-hayla-shiver-cassian-remix",
         "album_cover_url": "https://i1.sndcdn.com/artworks-onJmwhF0E8G2xBsp-sZvuuQ-original.jpg",
-        "rank": 23,
+        "rank": 44,
         "source_name": "soundcloud",
         "youtube_url": "https://www.youtube.com/watch?v=MpEPZ-sTXDM"
     },
@@ -235,7 +445,7 @@
         "artist_name": "Armin van Buuren & Chef'Special",
         "track_url": "https://soundcloud.com/arminvanbuuren/armin-van-buuren-chefspecial",
         "album_cover_url": "https://i1.sndcdn.com/artworks-cSwc456bBWIM-0-original.png",
-        "rank": 24,
+        "rank": 45,
         "source_name": "soundcloud",
         "youtube_url": "https://www.youtube.com/watch?v=67lVFYGMMCA"
     },
@@ -245,7 +455,7 @@
         "artist_name": "Becky Hill",
         "track_url": "https://soundcloud.com/becky-hill-official/becky-hill-multiply",
         "album_cover_url": "https://i1.sndcdn.com/artworks-pCgZ27nrtvCk-0-original.jpg",
-        "rank": 25,
+        "rank": 46,
         "source_name": "soundcloud",
         "youtube_url": "https://www.youtube.com/watch?v=YfFwuPFBwbQ"
     },
@@ -254,8 +464,8 @@
         "track_name": "Voices In My Head (ft. Teddy Bee)",
         "artist_name": "Steve Aoki, Bassjackers feat. Teddy Bee",
         "track_url": "https://soundcloud.com/steveaoki/steve-aoki-bassjackers-feat",
-        "album_cover_url": "https://i1.sndcdn.com/artworks-ffF7cJwtWrxF-0-original.jpg",
-        "rank": 26,
+        "album_cover_url": "https://i1.sndcdn.com/artworks-4Q5YFOBq03ox-0-original.jpg",
+        "rank": 47,
         "source_name": "soundcloud",
         "youtube_url": "https://www.youtube.com/watch?v=lr39889Qm1k"
     },
@@ -265,7 +475,7 @@
         "artist_name": "Vintage Culture, NoMBe",
         "track_url": "https://soundcloud.com/vintageculturemusic/vintage-culture-nombe-pleasure",
         "album_cover_url": "https://i1.sndcdn.com/artworks-bF2O9uIm6jHP-0-original.jpg",
-        "rank": 27,
+        "rank": 48,
         "source_name": "soundcloud",
         "youtube_url": "https://www.youtube.com/watch?v=JxvyISoXa5s"
     },
@@ -275,7 +485,7 @@
         "artist_name": "ODESZA",
         "track_url": "https://soundcloud.com/odesza/behind-the-sun-live",
         "album_cover_url": "https://i1.sndcdn.com/artworks-GHQ2rEr6sADB-0-original.png",
-        "rank": 28,
+        "rank": 49,
         "source_name": "soundcloud",
         "youtube_url": "https://www.youtube.com/watch?v=2ZFi_w3O9KE"
     },
@@ -285,218 +495,8 @@
         "artist_name": "Galantis",
         "track_url": "https://soundcloud.com/wearegalantis/galantis-one-cry-feat-rosa",
         "album_cover_url": "https://i1.sndcdn.com/artworks-7hBUvrS4xxxc-0-original.jpg",
-        "rank": 29,
-        "source_name": "soundcloud",
-        "youtube_url": "https://www.youtube.com/watch?v=vDLZDns8j7M"
-    },
-    {
-        "isrc": "CAUM72400193",
-        "track_name": "Love Bites",
-        "artist_name": "Nelly Furtado",
-        "track_url": "https://soundcloud.com/nellyfurtado/love-bites",
-        "album_cover_url": "https://i1.sndcdn.com/artworks-PLcf0BfzCT7A-0-original.jpg",
-        "rank": 30,
-        "source_name": "soundcloud",
-        "youtube_url": "https://www.youtube.com/watch?v=Kf_TN7i4eUA"
-    },
-    {
-        "isrc": "BEIW12400356",
-        "track_name": "Summer Dream Of Love",
-        "artist_name": "Dimitri Vegas x Darren Styles",
-        "track_url": "https://soundcloud.com/smashthehouse/dimitri-vegas-x-darren-styles-summer-dream-of-love",
-        "album_cover_url": "https://i1.sndcdn.com/artworks-tIylmR97evIVJr0c-sV4Kzg-original.jpg",
-        "rank": 31,
-        "source_name": "soundcloud",
-        "youtube_url": "https://www.youtube.com/watch?v=0310xHYrQXw"
-    },
-    {
-        "isrc": "BEIW12400311",
-        "track_name": "Meet Her At The Love Parade",
-        "artist_name": "Dimitri Vegas & Like Mike x Maddix x Da Hool ft. Kiki Solvej",
-        "track_url": "https://soundcloud.com/dimitrivegasandlikemike/dimitri-vegas-like-mike-maddix-da-hool-ft-kiki-solvej-meet-her-at-the-love-parade",
-        "album_cover_url": "https://i1.sndcdn.com/artworks-KaS402LRNFoNiUrk-jrNKdQ-original.jpg",
-        "rank": 32,
-        "source_name": "soundcloud",
-        "youtube_url": "https://www.youtube.com/watch?v=MSjXSNbMB9o"
-    },
-    {
-        "isrc": "NLF712401971",
-        "track_name": "High On Love",
-        "artist_name": "Armin van Buuren feat. Anne Gudrun",
-        "track_url": "https://soundcloud.com/arminvanbuuren/armin-van-buuren-feat-anne-2",
-        "album_cover_url": "https://i1.sndcdn.com/artworks-V2FqiGtB3EJA-0-original.png",
-        "rank": 33,
-        "source_name": "soundcloud",
-        "youtube_url": "https://www.youtube.com/watch?v=p1J1vdDwPpA"
-    },
-    {
-        "isrc": "USRC12400764",
-        "track_name": "Without You (with HAYLA)",
-        "artist_name": "Kygo",
-        "track_url": "https://soundcloud.com/kygo/without-you",
-        "album_cover_url": "https://i1.sndcdn.com/artworks-kRhYTJB5PR4W-0-original.jpg",
-        "rank": 34,
-        "source_name": "soundcloud",
-        "youtube_url": "https://www.youtube.com/watch?v=w304OXHrDmg"
-    },
-    {
-        "isrc": "GBBKS2400221",
-        "track_name": "Lobster Telephone (Edit)",
-        "artist_name": "Peggy Gou",
-        "track_url": "https://soundcloud.com/peggygou/peggy-gou-lobster-telephone-1",
-        "album_cover_url": "https://i1.sndcdn.com/artworks-MJkxC2ve2kJa-0-original.png",
-        "rank": 35,
-        "source_name": "soundcloud",
-        "youtube_url": "https://www.youtube.com/watch?v=yOdnqOOd2ZI"
-    },
-    {
-        "isrc": "GBCFB1700210",
-        "track_name": "A Moment Apart (camoufly Remix)",
-        "artist_name": "ODESZA",
-        "track_url": "https://soundcloud.com/odesza/a-moment-apart-camoufly-remix",
-        "album_cover_url": "https://i1.sndcdn.com/artworks-75Ut1kGc5loA-0-original.png",
-        "rank": 36,
-        "source_name": "soundcloud",
-        "youtube_url": "https://www.youtube.com/watch?v=qCmp-LGfMsk"
-    },
-    {
-        "isrc": "BEIW12400336",
-        "track_name": "Sun Comes Up (ft. EKKO x Joe Taylor)",
-        "artist_name": "Timmy Trumpet X Sam Feldt",
-        "track_url": "https://soundcloud.com/smashthehouse/timmy-trumpet-x-sam-feldt-sun-comes-up-ft-ekko-x-joe-taylor",
-        "album_cover_url": "https://i1.sndcdn.com/artworks-XeVTmIG6ZyiGzdzW-ZCIeyg-original.jpg",
-        "rank": 37,
-        "source_name": "soundcloud",
-        "youtube_url": "https://www.youtube.com/watch?v=VTmYH8THpEM"
-    },
-    {
-        "isrc": "GBUM72402172",
-        "track_name": "One New Change",
-        "artist_name": "Gorgon City",
-        "track_url": "https://soundcloud.com/gorgon-city/one-new-change",
-        "album_cover_url": "https://i1.sndcdn.com/artworks-O0GBujjBwA8k-0-original.jpg",
-        "rank": 38,
-        "source_name": "soundcloud",
-        "youtube_url": "https://www.youtube.com/watch?v=v3vR5B9juVE"
-    },
-    {
-        "isrc": "NL8RL2416792",
-        "track_name": "HERO",
-        "artist_name": "Adventure Club & Jessica Audiffred",
-        "track_url": "https://soundcloud.com/bassrush/adventure-club-jessica-audiffred-hero",
-        "album_cover_url": "https://i1.sndcdn.com/artworks-QXYqe6VK4OF49FON-xNTG9g-original.jpg",
-        "rank": 39,
-        "source_name": "soundcloud",
-        "youtube_url": "https://www.youtube.com/watch?v=D2XYioFMcmk"
-    },
-    {
-        "isrc": "CA5KR2446537",
-        "track_name": "Torture (feat. DeathbyRomy)",
-        "artist_name": "NGHTMRE & Franky Nuts",
-        "track_url": "https://soundcloud.com/nghtmre/nghtmre-franky-nuts-torture-feat-deathbyromy",
-        "album_cover_url": "https://i1.sndcdn.com/artworks-zQ2sPfrmNyj8QyXX-EQuWCg-original.jpg",
-        "rank": 40,
-        "source_name": "soundcloud",
-        "youtube_url": "https://www.youtube.com/watch?v=ZYyZGPZe5CU"
-    },
-    {
-        "isrc": "USWB12401323",
-        "track_name": "Chase It (Mmm Da Da Da)",
-        "artist_name": "Bebe Rexha",
-        "track_url": "https://soundcloud.com/beberexha/chase-it-mmm-da-da-da",
-        "album_cover_url": "https://i1.sndcdn.com/artworks-HaSmkeq2UtO5-0-original.jpg",
-        "rank": 41,
-        "source_name": "soundcloud",
-        "youtube_url": "https://www.youtube.com/watch?v=wNTrl8E-eac"
-    },
-    {
-        "isrc": "USUS12400263",
-        "track_name": "La Musica",
-        "artist_name": "Benny Benassi, Dubdogz, Mairee",
-        "track_url": "https://soundcloud.com/benny-benassi/benny-benassi-dubdogz-mairee",
-        "album_cover_url": "https://i1.sndcdn.com/artworks-7JzOqdwAuMFP-0-original.jpg",
-        "rank": 42,
-        "source_name": "soundcloud",
-        "youtube_url": "https://www.youtube.com/watch?v=UZ0L-DS-N4g"
-    },
-    {
-        "isrc": "USA2P2424293",
-        "track_name": "MAGNET (with MAX)",
-        "artist_name": "Gryffin, MAX, Disco Lines",
-        "track_url": "https://soundcloud.com/gryffinofficial/gryffin-max-disco-lines-magnet",
-        "album_cover_url": "https://i1.sndcdn.com/artworks-YJz4MZsJYJiy-0-original.jpg",
-        "rank": 43,
-        "source_name": "soundcloud",
-        "youtube_url": "https://www.youtube.com/watch?v=w85UbsN94qk"
-    },
-    {
-        "isrc": "FRX762422912",
-        "track_name": "Heaven",
-        "artist_name": "Sara Landry, Alt8",
-        "track_url": "https://soundcloud.com/sara-landry-dj/heaven",
-        "album_cover_url": "https://i1.sndcdn.com/artworks-qBjAX1xJyYcc-0-original.jpg",
-        "rank": 44,
-        "source_name": "soundcloud",
-        "youtube_url": "https://www.youtube.com/watch?v=ZXyHbqodDT8"
-    },
-    {
-        "isrc": "USA2P2422622",
-        "track_name": "Creep",
-        "artist_name": "Yellow Claw, Police in Paris, Stoltenhoff",
-        "track_url": "https://soundcloud.com/yellowclaw/yellow-claw-stoltenhoff-3",
-        "album_cover_url": "https://i1.sndcdn.com/artworks-pYmZbSmcMUMR-0-original.jpg",
-        "rank": 45,
-        "source_name": "soundcloud",
-        "youtube_url": "https://www.youtube.com/watch?v=0wPqyaIxV54"
-    },
-    {
-        "isrc": "USUM72404923",
-        "track_name": "Believe It",
-        "artist_name": "Louis The Child",
-        "track_url": "https://soundcloud.com/louisthechild/believe-it",
-        "album_cover_url": "https://i1.sndcdn.com/artworks-47olandzVXaG-0-original.jpg",
-        "rank": 46,
-        "source_name": "soundcloud",
-        "youtube_url": "https://www.youtube.com/watch?v=TBx5Hy53Xyw"
-    },
-    {
-        "isrc": "GBTDG1302831",
-        "track_name": "Edge (2024 Version)",
-        "artist_name": "REZZ",
-        "track_url": "https://soundcloud.com/official-rezz/rezz-edge-2024-version",
-        "album_cover_url": "https://i1.sndcdn.com/artworks-um9Z8P5tvl3CDNf5-IhiztQ-original.jpg",
-        "rank": 47,
-        "source_name": "soundcloud",
-        "youtube_url": "https://www.youtube.com/watch?v=9ebn_Mw7anc"
-    },
-    {
-        "isrc": "UKRPL1900784",
-        "track_name": "Trick Daddy",
-        "artist_name": "Eli Brown",
-        "track_url": "https://soundcloud.com/elibrownbeats/trick-daddy-1",
-        "album_cover_url": "https://i1.sndcdn.com/artworks-6i9vgjgrCQVc-0-original.jpg",
-        "rank": 48,
-        "source_name": "soundcloud",
-        "youtube_url": "https://www.youtube.com/watch?v=shSSSiZFZJ8"
-    },
-    {
-        "isrc": "DEUM72405609",
-        "track_name": "Menage A Trois Pt. II",
-        "artist_name": "LIZOT",
-        "track_url": "https://soundcloud.com/lizotofficial/menage-a-trois-pt-ii",
-        "album_cover_url": "https://i1.sndcdn.com/artworks-9kQVlODCbr92-0-original.jpg",
-        "rank": 49,
-        "source_name": "soundcloud",
-        "youtube_url": "https://www.youtube.com/watch?v=KgM-wbaeYso"
-    },
-    {
-        "isrc": "QZNJV2439360",
-        "track_name": "SONG REQUEST",
-        "artist_name": "RAY VOLPE",
-        "track_url": "https://soundcloud.com/rayvolpemusic/song-request",
-        "album_cover_url": "https://i1.sndcdn.com/artworks-UEUvqiRSWrrQYiJp-aXfqPw-original.jpg",
         "rank": 50,
         "source_name": "soundcloud",
-        "youtube_url": "https://www.youtube.com/watch?v=h5bSMPb7pVQ"
+        "youtube_url": "https://www.youtube.com/watch?v=vDLZDns8j7M"
     }
 ]
