@@ -8,6 +8,7 @@ import concurrent.futures
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 from extract import EXTRACT_BASE_PATH, get_local_secrets, write_json_to_file
+import threading
 
 BASE_TRANSFORM_PATH = "docs/files/transform"
 ISRC_CACHE_FILE = "isrc_cache.json"
@@ -18,6 +19,7 @@ GENRES = ["dance"]
 isrc_cache = {}
 youtube_cache = {}
 youtube_count = 0
+youtube_cache_lock = threading.Lock()
 
 def convert_apple_music_raw_export_to_track_type(data):
     tracks = []
@@ -155,8 +157,9 @@ def get_youtube_url_by_track_and_artist_name(track_name, artist_name):
     global youtube_count, youtube_cache
     cache_key = f"{track_name}|{artist_name}"
 
-    if youtube_cache and cache_key in youtube_cache:
-        return youtube_cache[cache_key]
+    with youtube_cache_lock: 
+        if youtube_cache and cache_key in youtube_cache:
+            return youtube_cache[cache_key]
 
     youtube_count += 1
     query = f"{track_name} {artist_name}"
@@ -177,8 +180,9 @@ def get_youtube_url_by_track_and_artist_name(track_name, artist_name):
             write_json_to_file(youtube_cache, YOUTUBE_CACHE_FILE)
             return youtube_url
 
-        youtube_cache[cache_key] = "No video found"
-        write_json_to_file(youtube_cache, YOUTUBE_CACHE_FILE)
+        with youtube_cache_lock: 
+            youtube_cache[cache_key] = "No video found"
+            write_json_to_file(youtube_cache, YOUTUBE_CACHE_FILE)
         return "No video found"
     
     error_msg = f"Error: {response.status_code}, {response.text}"
