@@ -176,58 +176,52 @@
     .overlay {
       position: fixed;
       bottom: 0;
+      left: 0;
+      right: 0;
       width: 100%;
       background-color: rgba(0, 0, 0, 0.8);
       color: white;
       padding: 10px;
       font-size: 16px;
       z-index: 1000;
-      display: flex;
-      justify-content: center;
-      align-items: center;
     }
     
     .overlay-content {
       display: flex;
-      flex-wrap: wrap; 
+      justify-content: space-between;
       align-items: center;
-      width: 100%;
       max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 15px;
     }
     
     .overlay p {
-      margin: 0; 
-      padding: 0; 
+      margin: 0;
+      padding: 0;
       line-height: 1.5;
-      flex: 1; 
-      display: inline-flex; 
-      flex-wrap: wrap; 
+      flex: 1;
     }
     
     .overlay a {
       color: #ccc;
       text-decoration: none;
-      margin-left: 5px;
-      margin-right: 5px; 
     }
     
     .overlay a:hover {
       text-decoration: underline;
     }
     
-    .overlay button {
+    acceptButton {
       background-color: #007bff;
       border: none;
       color: white;
       padding: 5px 10px;
       text-align: center;
       text-decoration: none;
-      display: inline-block;
       font-size: 14px;
-      margin-left: 10px; /* Add some margin to separate from the text */
       cursor: pointer;
-      white-space: nowrap; /* Ensure button does not wrap */
-      flex-shrink: 0; /* Prevent button from shrinking */
+      white-space: nowrap;
+      margin-left: 15px;
     }
   </style>
 </head>
