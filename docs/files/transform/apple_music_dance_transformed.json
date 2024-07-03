@@ -1,21 +1,11 @@
 [
     {
-        "isrc": "USRE12400353",
-        "track_name": "Music is Better",
-        "artist_name": "R\u00dcF\u00dcS DU SOL",
-        "track_url": "https://music.apple.com/us/album/music-is-better/1750986748?i=1750986750",
-        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/85/63/21/856321e7-5256-46a2-6ca4-c0c5c99c0426/054391265548.jpg/296x296bb-60.jpg",
-        "rank": 1,
-        "source_name": "apple_music",
-        "youtube_url": "https://www.youtube.com/watch?v=GJw18eJvXUE"
-    },
-    {
         "isrc": "DEEC33501508",
         "track_name": "Move",
         "artist_name": "Adam Port, Stryv, Keinemusik, Orso & Malachiii",
         "track_url": "https://music.apple.com/us/album/move/1749043131?i=1749043132",
         "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/dd/c4/8b/ddc48b48-4ce6-679f-c4ea-99bcc1e2367d/4251353210455.png/296x296bb-60.jpg",
-        "rank": 2,
+        "rank": 1,
         "source_name": "apple_music",
         "youtube_url": "https://www.youtube.com/watch?v=95dB-ObZ7Ho"
     },
@@ -25,199 +15,29 @@
         "artist_name": "ZERB & The Chainsmokers",
         "track_url": "https://music.apple.com/us/album/addicted-feat-ink/1734260110?i=1734260111",
         "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/0f/df/a1/0fdfa19f-aae2-c601-3c44-9d3e45f80adf/8721056755820.png/296x296bb-60.jpg",
-        "rank": 3,
+        "rank": 2,
         "source_name": "apple_music",
         "youtube_url": "https://www.youtube.com/watch?v=ipG8RowaOA8"
     },
     {
-        "isrc": "USUG12401003",
-        "track_name": "Shiver",
-        "artist_name": "John Summit & HAYLA",
-        "track_url": "https://music.apple.com/us/album/shiver/1728957955?i=1728957956",
-        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/be/7d/23/be7d23e1-ed96-302f-83e7-053cd9b20dbb/193436371179_SHIVERSQUAREFORDELIVERY.jpg/296x296bb-60.jpg",
+        "isrc": "USRE12400353",
+        "track_name": "Music is Better",
+        "artist_name": "R\u00dcF\u00dcS DU SOL",
+        "track_url": "https://music.apple.com/us/album/music-is-better/1750986748?i=1750986750",
+        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/85/63/21/856321e7-5256-46a2-6ca4-c0c5c99c0426/054391265548.jpg/296x296bb-60.jpg",
+        "rank": 3,
+        "source_name": "apple_music",
+        "youtube_url": "https://www.youtube.com/watch?v=GJw18eJvXUE"
+    },
+    {
+        "isrc": "USA2P2420371",
+        "track_name": "She\u2019s Gone, Dance On",
+        "artist_name": "Disclosure",
+        "track_url": "https://music.apple.com/us/album/shes-gone-dance-on/1747616877?i=1747616881",
+        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/8d/84/b5/8d84b571-ed99-869f-0232-2cb0327a43da/196922908866_Cover.jpg/296x296bb-60.jpg",
         "rank": 4,
         "source_name": "apple_music",
-        "youtube_url": "https://www.youtube.com/watch?v=3PyoQ0EBXzs"
-    },
-    {
-        "isrc": "GBEWA2401190",
-        "track_name": "Feel It",
-        "artist_name": "ayokay",
-        "track_url": "https://music.apple.com/us/album/feel-it/1734804331?i=1734804333",
-        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/45/5f/a1/455fa12b-c6f2-e63f-b7c3-acc382c23725/5039060981191.png/296x296bb-60.jpg",
-        "rank": 5,
-        "source_name": "apple_music",
-        "youtube_url": "https://www.youtube.com/watch?v=oxyN5flX9Kg"
-    },
-    {
-        "isrc": "GBCFB2400161",
-        "track_name": "luv stuck",
-        "artist_name": "salute & piri",
-        "track_url": "https://music.apple.com/us/album/luv-stuck/1732069006?i=1732069394",
-        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/df/43/34/df4334f4-b599-a2aa-0af3-779288222e13/5054429192650.png/296x296bb-60.jpg",
-        "rank": 6,
-        "source_name": "apple_music",
-        "youtube_url": "https://www.youtube.com/watch?v=LvpQ2SBG-ug"
-    },
-    {
-        "isrc": "GBCPZ2423192",
-        "track_name": "Sky (Shining Bright)",
-        "artist_name": "KC Lights",
-        "track_url": "https://music.apple.com/us/album/sky-shining-bright/1743233664?i=1743233761",
-        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/b2/c2/74/b2c274b1-20d8-e4f6-4fbb-185666d86052/826194606800.jpg/296x296bb-60.jpg",
-        "rank": 7,
-        "source_name": "apple_music",
-        "youtube_url": "https://www.youtube.com/watch?v=29PCpexZza8"
-    },
-    {
-        "isrc": "GBUM72401679",
-        "track_name": "All That You Need",
-        "artist_name": "Gorgon City & Caroline Byrne",
-        "track_url": "https://music.apple.com/us/album/all-that-you-need/1738461195?i=1738461888",
-        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/2f/51/39/2f51393c-8c86-cf06-a5b2-e2adabbfa618/24UMGIM21053.rgb.jpg/296x296bb-60.jpg",
-        "rank": 8,
-        "source_name": "apple_music",
-        "youtube_url": "https://www.youtube.com/watch?v=UF5VxTbHykE"
-    },
-    {
-        "isrc": "UK7MC2400157",
-        "track_name": "Life",
-        "artist_name": "Jamie xx & Robyn",
-        "track_url": "https://music.apple.com/us/album/life/1746750796?i=1746751572",
-        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/2d/4b/8b/2d4b8b01-d65f-b926-117d-51526878461d/889030035677.png/296x296bb-60.jpg",
-        "rank": 9,
-        "source_name": "apple_music",
-        "youtube_url": "https://www.youtube.com/watch?v=8MkumpJD3fk"
-    },
-    {
-        "isrc": "USUG12401134",
-        "track_name": "Rainy (Devault Remix)",
-        "artist_name": "Dillon Francis, REI AMI & Devault",
-        "track_url": "https://music.apple.com/us/album/rainy-devault-remix/1738133917?i=1738134239",
-        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/9f/5a/c2/9f5ac2f1-aee0-5138-3d44-325a2f3052f5/24UMGIM10882.rgb.jpg/296x296bb-60.jpg",
-        "rank": 10,
-        "source_name": "apple_music",
-        "youtube_url": "https://www.youtube.com/watch?v=9_FA2E-DV-c"
-    },
-    {
-        "isrc": "USUG12402628",
-        "track_name": "Go Back",
-        "artist_name": "John Summit, Sub Focus & Julia Church",
-        "track_url": "https://music.apple.com/us/album/go-back/1745292769?i=1745292770",
-        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/15/4d/ec/154dece1-0b05-3516-a381-894671a5669a/24UMGIM52349.rgb.jpg/296x296bb-60.jpg",
-        "rank": 11,
-        "source_name": "apple_music",
-        "youtube_url": "https://www.youtube.com/watch?v=iFUkhmfuzeI"
-    },
-    {
-        "isrc": "NLF712400101",
-        "track_name": "I Wanna Go",
-        "artist_name": "Autograf",
-        "track_url": "https://music.apple.com/us/album/i-wanna-go/1726586964?i=1726586965",
-        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/9c/97/fe/9c97fea8-ffee-dd82-287c-6b7a12cd2fbf/8718522436734.png/296x296bb-60.jpg",
-        "rank": 12,
-        "source_name": "apple_music",
-        "youtube_url": "https://www.youtube.com/watch?v=Zfp8Wq7Udow"
-    },
-    {
-        "isrc": "GBMVH2300940",
-        "track_name": "mr useless",
-        "artist_name": "Shygirl, SG Lewis & Club Shy",
-        "track_url": "https://music.apple.com/us/album/mr-useless/1725825321?i=1725826047",
-        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/8c/ca/50/8cca5060-55f1-a9df-3ff9-519295f0aa5a/5056556135012_cover.jpg/296x296bb-60.jpg",
-        "rank": 13,
-        "source_name": "apple_music",
-        "youtube_url": "https://www.youtube.com/watch?v=kliUoRjylkQ"
-    },
-    {
-        "isrc": "USUG12403371",
-        "track_name": "Lioness",
-        "artist_name": "Swedish House Mafia & Niki & The Dove",
-        "track_url": "https://music.apple.com/us/album/lioness/1749175516?i=1749175517",
-        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/a5/f5/a3/a5f5a371-3a51-19b2-f15c-a269d03db8fa/24UMGIM58353.rgb.jpg/296x296bb-60.jpg",
-        "rank": 14,
-        "source_name": "apple_music",
-        "youtube_url": "https://www.youtube.com/watch?v=ekXgoQnOCQI"
-    },
-    {
-        "isrc": "USUG12402625",
-        "track_name": "Resonate",
-        "artist_name": "John Summit, Kaskade & Julia Church",
-        "track_url": "https://music.apple.com/us/album/resonate/1748171781?i=1748171797",
-        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/e7/21/67/e721675b-c3a3-9338-bf24-9adb295b7e90/24UMGIM58701.rgb.jpg/296x296bb-60.jpg",
-        "rank": 15,
-        "source_name": "apple_music",
-        "youtube_url": "https://www.youtube.com/watch?v=nUQfBn4i7uo"
-    },
-    {
-        "isrc": "NLF712401951",
-        "track_name": "By Now (feat. Laura Welsh)",
-        "artist_name": "Armin van Buuren & D.O.D",
-        "track_url": "https://music.apple.com/us/album/by-now-feat-laura-welsh/1739816531?i=1739816532",
-        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/66/4a/95/664a953d-e787-0d9c-2ac1-7c59df3cda75/8718522467691.png/296x296bb-60.jpg",
-        "rank": 16,
-        "source_name": "apple_music",
-        "youtube_url": "https://www.youtube.com/watch?v=PqBHKfpMfog"
-    },
-    {
-        "isrc": "USA2P2430008",
-        "track_name": "HEAT",
-        "artist_name": "Tove Lo & SG Lewis",
-        "track_url": "https://music.apple.com/us/album/heat/1749612943?i=1749613191",
-        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/72/c7/df/72c7dfa4-1dcb-aa7a-a976-e591ba943728/00196922982446_Cover.jpg/296x296bb-60.jpg",
-        "rank": 17,
-        "source_name": "apple_music",
-        "youtube_url": "https://www.youtube.com/watch?v=TX5t3xVwvFk"
-    },
-    {
-        "isrc": "USZ4V2400153",
-        "track_name": "Ride Or Die",
-        "artist_name": "Aluna",
-        "track_url": "https://music.apple.com/us/album/ride-or-die/1739664479?i=1739664485",
-        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/79/42/ad/7942ad9e-bb6b-4870-e0cf-69d4041d6a41/2632.jpg/296x296bb-60.jpg",
-        "rank": 18,
-        "source_name": "apple_music",
-        "youtube_url": "https://www.youtube.com/watch?v=U2CRNYtt9bI"
-    },
-    {
-        "isrc": "QZFPL2400078",
-        "track_name": "back2u",
-        "artist_name": "Disco Lines & GUDFELLA",
-        "track_url": "https://music.apple.com/us/album/back2u/1743833095?i=1743833098",
-        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/07/b4/79/07b479a4-9761-8da1-526b-02c5352b5432/24SYMIM11830.rgb.jpg/296x296bb-60.jpg",
-        "rank": 19,
-        "source_name": "apple_music",
-        "youtube_url": "https://www.youtube.com/watch?v=71qd6s_UaTk"
-    },
-    {
-        "isrc": "DEE862400426",
-        "track_name": "Seek Love (On The Beach) [feat. Amanda Wilson & York]",
-        "artist_name": "Alok, Tazi & Samuele Sartini",
-        "track_url": "https://music.apple.com/us/album/seek-love-on-the-beach-feat-amanda-wilson-york/1736802685?i=1736802698",
-        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/5d/63/1f/5d631f33-e1c1-7ab2-69b9-b5a072cf8669/196871959674.jpg/296x296bb-60.jpg",
-        "rank": 20,
-        "source_name": "apple_music",
-        "youtube_url": "https://www.youtube.com/watch?v=K50AcutXo3Q"
-    },
-    {
-        "isrc": "AUNV02400018",
-        "track_name": "Nostalgia",
-        "artist_name": "PNAU",
-        "track_url": "https://music.apple.com/us/album/nostalgia/1735082167?i=1735082174",
-        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/dd/23/a7/dd23a7c6-1944-839e-ea16-cf91cbd23329/196871840156.jpg/296x296bb-60.jpg",
-        "rank": 21,
-        "source_name": "apple_music",
-        "youtube_url": "https://www.youtube.com/watch?v=nY5vGHKxbyE"
-    },
-    {
-        "isrc": "GBUM72400217",
-        "track_name": "Never Be Lonely",
-        "artist_name": "Jax Jones & Zoe Wees",
-        "track_url": "https://music.apple.com/us/album/never-be-lonely/1727350063?i=1727350064",
-        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/62/ba/fe/62bafe08-a872-ef85-29fe-f5e878c12cc9/24UMGIM04446.rgb.jpg/296x296bb-60.jpg",
-        "rank": 22,
-        "source_name": "apple_music",
-        "youtube_url": "https://www.youtube.com/watch?v=4PoRVO741aM"
+        "youtube_url": "https://www.youtube.com/watch?v=N95i9JjIem8"
     },
     {
         "isrc": "US38Y2403431",
@@ -225,9 +45,269 @@
         "artist_name": "Sonny Fodera",
         "track_url": "https://music.apple.com/us/album/mind-still-feat-blythe/1729414512?i=1729414926",
         "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/12/4c/0a/124c0ac8-80a4-ab06-38e7-d8e5800b34dc/197338037492.jpg/296x296bb-60.jpg",
-        "rank": 23,
+        "rank": 5,
         "source_name": "apple_music",
         "youtube_url": "https://www.youtube.com/watch?v=RzIr26qpA7E"
+    },
+    {
+        "isrc": "GBAHS2400279",
+        "track_name": "places to be",
+        "artist_name": "Fred again.., Anderson .Paak & CHIKA",
+        "track_url": "https://music.apple.com/us/album/places-to-be/1747373137?i=1747373147",
+        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/2f/89/3a/2f893a51-765f-a22a-1e2c-23594c37a099/5021732386014.jpg/296x296bb-60.jpg",
+        "rank": 6,
+        "source_name": "apple_music",
+        "youtube_url": "https://www.youtube.com/watch?v=0bVFEOb39vk"
+    },
+    {
+        "isrc": "USQX92401237",
+        "track_name": "Waterfall",
+        "artist_name": "Drove & Dillon Francis",
+        "track_url": "https://music.apple.com/us/album/waterfall/1738280897?i=1738280901",
+        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/88/32/f9/8832f97d-c676-43a4-7d51-7b7e618c0a00/196871955874.jpg/296x296bb-60.jpg",
+        "rank": 7,
+        "source_name": "apple_music",
+        "youtube_url": "https://www.youtube.com/watch?v=gbSo8OAFhAc"
+    },
+    {
+        "isrc": "AUNV02400018",
+        "track_name": "Nostalgia",
+        "artist_name": "PNAU",
+        "track_url": "https://music.apple.com/us/album/nostalgia/1735082167?i=1735082174",
+        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/dd/23/a7/dd23a7c6-1944-839e-ea16-cf91cbd23329/196871840156.jpg/296x296bb-60.jpg",
+        "rank": 8,
+        "source_name": "apple_music",
+        "youtube_url": "https://www.youtube.com/watch?v=nY5vGHKxbyE"
+    },
+    {
+        "isrc": "GBCPZ2422963",
+        "track_name": "Paranoid",
+        "artist_name": "Layton Giordani",
+        "track_url": "https://music.apple.com/us/album/paranoid/1733919601?i=1733919604",
+        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/41/51/bf/4151bfe8-12f7-eba0-970e-09b4f3ffe9c5/826194664497.jpg/296x296bb-60.jpg",
+        "rank": 9,
+        "source_name": "apple_music",
+        "youtube_url": "https://www.youtube.com/watch?v=NqxGeJ63Q2o"
+    },
+    {
+        "isrc": "GBARL2301797",
+        "track_name": "Lovers In A Past Life (LP Giobbi Remix)",
+        "artist_name": "Calvin Harris & Rag'n'Bone Man",
+        "track_url": "https://music.apple.com/us/album/lovers-in-a-past-life-lp-giobbi-remix/1741613366?i=1741613368",
+        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/e3/2c/7d/e32c7d3e-c9a8-4896-9afb-e2528b7adb65/196872016550.jpg/296x296bb-60.jpg",
+        "rank": 10,
+        "source_name": "apple_music",
+        "youtube_url": "https://www.youtube.com/watch?v=IM3ccXiNsM4"
+    },
+    {
+        "isrc": "GBCPZ2423192",
+        "track_name": "Sky (Shining Bright)",
+        "artist_name": "KC Lights",
+        "track_url": "https://music.apple.com/us/album/sky-shining-bright/1743233664?i=1743233761",
+        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/b2/c2/74/b2c274b1-20d8-e4f6-4fbb-185666d86052/826194606800.jpg/296x296bb-60.jpg",
+        "rank": 11,
+        "source_name": "apple_music",
+        "youtube_url": "https://www.youtube.com/watch?v=29PCpexZza8"
+    },
+    {
+        "isrc": "GBCFB2400443",
+        "track_name": "If U Like Me (Edit)",
+        "artist_name": "DJ Seinfeld",
+        "track_url": "https://music.apple.com/us/album/if-u-like-me-edit/1742098438?i=1742098439",
+        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/df/bf/92/dfbf92c4-517e-885b-e9d3-8e1bff55084a/5054429194630.png/296x296bb-60.jpg",
+        "rank": 12,
+        "source_name": "apple_music",
+        "youtube_url": "https://www.youtube.com/watch?v=eX9mKTkireA"
+    },
+    {
+        "isrc": "GBCPZ2323315",
+        "track_name": "No Ones Ready",
+        "artist_name": "Floorplan",
+        "track_url": "https://music.apple.com/us/album/no-ones-ready/1748185493?i=1748186034",
+        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/34/f1/52/34f1527f-75e6-e4bc-857a-64bcd49b8181/826194642990.jpg/296x296bb-60.jpg",
+        "rank": 13,
+        "source_name": "apple_music",
+        "youtube_url": "https://www.youtube.com/watch?v=xwPGO5bFtCA"
+    },
+    {
+        "isrc": "GBHAD2400039",
+        "track_name": "Close Your Eyes",
+        "artist_name": "Matt Sassari, Dillon Francis & James Carter",
+        "track_url": "https://music.apple.com/us/album/close-your-eyes/1743035280?i=1743035291",
+        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/9e/bf/c7/9ebfc76c-e96c-c656-f70c-b348835bee16/cover.jpg/296x296bb-60.jpg",
+        "rank": 14,
+        "source_name": "apple_music",
+        "youtube_url": "https://www.youtube.com/watch?v=RC4nOLN961w"
+    },
+    {
+        "isrc": "USUG12402628",
+        "track_name": "Go Back",
+        "artist_name": "John Summit, Sub Focus & Julia Church",
+        "track_url": "https://music.apple.com/us/album/go-back/1745292769?i=1745292770",
+        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/15/4d/ec/154dece1-0b05-3516-a381-894671a5669a/24UMGIM52349.rgb.jpg/296x296bb-60.jpg",
+        "rank": 15,
+        "source_name": "apple_music",
+        "youtube_url": "https://www.youtube.com/watch?v=iFUkhmfuzeI"
+    },
+    {
+        "isrc": "GBCFB2400755",
+        "track_name": "Girls",
+        "artist_name": "TSHA & Rose Gray",
+        "track_url": "https://music.apple.com/us/album/girls/1749496217?i=1749496459",
+        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/de/ad/3f/dead3fea-3e3c-63d0-ad17-ad4fef95be63/5054429195545.png/296x296bb-60.jpg",
+        "rank": 16,
+        "source_name": "apple_music",
+        "youtube_url": "https://www.youtube.com/watch?v=6KZ2nOpQfs4"
+    },
+    {
+        "isrc": "UK4ZF2400087",
+        "track_name": "Always (Me & You)",
+        "artist_name": "CHANEY",
+        "track_url": "https://music.apple.com/us/album/always-me-you/1731873701?i=1731873702",
+        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/f3/0f/a5/f30fa504-a505-a630-6a8a-4f100c0c0eb8/198391228438.jpg/296x296bb-60.jpg",
+        "rank": 17,
+        "source_name": "apple_music",
+        "youtube_url": "https://www.youtube.com/watch?v=wmgP769pNH8"
+    },
+    {
+        "isrc": "NLF712400101",
+        "track_name": "I Wanna Go",
+        "artist_name": "Autograf",
+        "track_url": "https://music.apple.com/us/album/i-wanna-go/1726586964?i=1726586965",
+        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/9c/97/fe/9c97fea8-ffee-dd82-287c-6b7a12cd2fbf/8718522436734.png/296x296bb-60.jpg",
+        "rank": 18,
+        "source_name": "apple_music",
+        "youtube_url": "https://www.youtube.com/watch?v=Zfp8Wq7Udow"
+    },
+    {
+        "isrc": "CAM372300505",
+        "track_name": "dive /stay/",
+        "artist_name": "Felix Cartal & emma l\u00f8v",
+        "track_url": "https://music.apple.com/us/album/dive-stay/1737044611?i=1737044615",
+        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/c2/cc/ef/c2ccef76-fed5-fccf-f9b8-03411fa232e3/823675299933_Cover.jpg/296x296bb-60.jpg",
+        "rank": 19,
+        "source_name": "apple_music",
+        "youtube_url": "https://www.youtube.com/watch?v=5c4oHx2TxGY"
+    },
+    {
+        "isrc": "FRDKR2400010",
+        "track_name": "Pressure Makes Diamonds",
+        "artist_name": "Folamour",
+        "track_url": "https://music.apple.com/us/album/pressure-makes-diamonds/1748619773?i=1748619793",
+        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/38/62/2a/38622a17-1040-65e9-d8e7-cd146686cef5/cover.jpg/296x296bb-60.jpg",
+        "rank": 20,
+        "source_name": "apple_music",
+        "youtube_url": "https://www.youtube.com/watch?v=JnfyHpK0pl8"
+    },
+    {
+        "isrc": "USUG12401003",
+        "track_name": "Shiver",
+        "artist_name": "John Summit & HAYLA",
+        "track_url": "https://music.apple.com/us/album/shiver/1728957955?i=1728957956",
+        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/be/7d/23/be7d23e1-ed96-302f-83e7-053cd9b20dbb/193436371179_SHIVERSQUAREFORDELIVERY.jpg/296x296bb-60.jpg",
+        "rank": 21,
+        "source_name": "apple_music",
+        "youtube_url": "https://www.youtube.com/watch?v=3PyoQ0EBXzs"
+    },
+    {
+        "isrc": "GBCFB2400659",
+        "track_name": "Feel (feat. Jacob Banks)",
+        "artist_name": "LP Giobbi",
+        "track_url": "https://music.apple.com/us/album/feel-feat-jacob-banks/1744642617?i=1744642619",
+        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/6c/05/3e/6c053e17-3034-c7cd-3798-c24393c11b4e/5054429195743.png/296x296bb-60.jpg",
+        "rank": 22,
+        "source_name": "apple_music",
+        "youtube_url": "https://www.youtube.com/watch?v=_70kZ-jyfr8"
+    },
+    {
+        "isrc": "USUS12400276",
+        "track_name": "Obsession",
+        "artist_name": "Surf Mesa & NKY",
+        "track_url": "https://music.apple.com/us/album/obsession/1745220441?i=1745220891",
+        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/25/cd/3d/25cd3dd5-ba25-2109-e929-a0772c9e7318/196872104141.jpg/296x296bb-60.jpg",
+        "rank": 23,
+        "source_name": "apple_music",
+        "youtube_url": "https://www.youtube.com/watch?v=fn0_0qrOUT4"
+    },
+    {
+        "isrc": "UKRPL1900658",
+        "track_name": "All For You (feat. Joanna Cooke)",
+        "artist_name": "Maur",
+        "track_url": "https://music.apple.com/us/album/all-for-you-feat-joanna-cooke/1733726021?i=1733726359",
+        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/f6/65/cd/f665cde0-56ae-8e53-2e46-da78f6cab8d9/085365688612.jpg/296x296bb-60.jpg",
+        "rank": 24,
+        "source_name": "apple_music",
+        "youtube_url": "https://www.youtube.com/watch?v=1fzM5KT4Jc8"
+    },
+    {
+        "isrc": "USUG12401134",
+        "track_name": "Rainy (Devault Remix)",
+        "artist_name": "Dillon Francis, REI AMI & Devault",
+        "track_url": "https://music.apple.com/us/album/rainy-devault-remix/1738133917?i=1738134239",
+        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/9f/5a/c2/9f5ac2f1-aee0-5138-3d44-325a2f3052f5/24UMGIM10882.rgb.jpg/296x296bb-60.jpg",
+        "rank": 25,
+        "source_name": "apple_music",
+        "youtube_url": "https://www.youtube.com/watch?v=9_FA2E-DV-c"
+    },
+    {
+        "isrc": "NLF712401951",
+        "track_name": "By Now (feat. Laura Welsh)",
+        "artist_name": "Armin van Buuren & D.O.D",
+        "track_url": "https://music.apple.com/us/album/by-now-feat-laura-welsh/1739816531?i=1739816532",
+        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/66/4a/95/664a953d-e787-0d9c-2ac1-7c59df3cda75/8718522467691.png/296x296bb-60.jpg",
+        "rank": 26,
+        "source_name": "apple_music",
+        "youtube_url": "https://www.youtube.com/watch?v=PqBHKfpMfog"
+    },
+    {
+        "isrc": "QZFPL2400078",
+        "track_name": "back2u",
+        "artist_name": "Disco Lines & GUDFELLA",
+        "track_url": "https://music.apple.com/us/album/back2u/1743833095?i=1743833098",
+        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/07/b4/79/07b479a4-9761-8da1-526b-02c5352b5432/24SYMIM11830.rgb.jpg/296x296bb-60.jpg",
+        "rank": 27,
+        "source_name": "apple_music",
+        "youtube_url": "https://www.youtube.com/watch?v=71qd6s_UaTk"
+    },
+    {
+        "isrc": "GBUM72205897",
+        "track_name": "Never Be Alone",
+        "artist_name": "Becky Hill & Sonny Fodera",
+        "track_url": "https://music.apple.com/us/album/never-be-alone/1731891564?i=1731891893",
+        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/3d/ca/7a/3dca7ae2-a6e0-e61c-d3b7-55879e9bcc99/24UMGIM00242.rgb.jpg/296x296bb-60.jpg",
+        "rank": 28,
+        "source_name": "apple_music",
+        "youtube_url": "https://www.youtube.com/watch?v=-p5FeDRqLf0"
+    },
+    {
+        "isrc": "GBEWA2401190",
+        "track_name": "Feel It",
+        "artist_name": "ayokay",
+        "track_url": "https://music.apple.com/us/album/feel-it/1734804331?i=1734804333",
+        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/45/5f/a1/455fa12b-c6f2-e63f-b7c3-acc382c23725/5039060981191.png/296x296bb-60.jpg",
+        "rank": 29,
+        "source_name": "apple_music",
+        "youtube_url": "https://www.youtube.com/watch?v=oxyN5flX9Kg"
+    },
+    {
+        "isrc": "QM24S2403174",
+        "track_name": "Oxygen",
+        "artist_name": "EVAN GIIA & Moore Kismet",
+        "track_url": "https://music.apple.com/us/album/oxygen/1747302637?i=1747302638",
+        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/75/54/46/75544652-533d-bf62-c097-9529ab72837b/193436384506_SABRINAKAUNEEGOXYGENFINAL.jpg/296x296bb-60.jpg",
+        "rank": 30,
+        "source_name": "apple_music",
+        "youtube_url": "https://www.youtube.com/watch?v=uDnW0WdgoIM"
+    },
+    {
+        "isrc": "DEE862400426",
+        "track_name": "Seek Love (On The Beach) [feat. Amanda Wilson & York]",
+        "artist_name": "Alok, Tazi & Samuele Sartini",
+        "track_url": "https://music.apple.com/us/album/seek-love-on-the-beach-feat-amanda-wilson-york/1736802685?i=1736802698",
+        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/5d/63/1f/5d631f33-e1c1-7ab2-69b9-b5a072cf8669/196871959674.jpg/296x296bb-60.jpg",
+        "rank": 31,
+        "source_name": "apple_music",
+        "youtube_url": "https://www.youtube.com/watch?v=K50AcutXo3Q"
     },
     {
         "isrc": "NLF712400690",
@@ -235,7 +315,7 @@
         "artist_name": "NIIKO X SWAE & Mougleta",
         "track_url": "https://music.apple.com/us/album/rain/1730740173?i=1730740174",
         "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/95/e1/18/95e1187b-e919-f196-9050-aeabfcaec481/8718522454639.png/296x296bb-60.jpg",
-        "rank": 24,
+        "rank": 32,
         "source_name": "apple_music",
         "youtube_url": "https://www.youtube.com/watch?v=NxOv5G2fVwY"
     },
@@ -245,29 +325,9 @@
         "artist_name": "Gordo & Jeria",
         "track_url": "https://music.apple.com/us/album/fallin-luv/1738547942?i=1738547945",
         "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/06/9e/e3/069ee383-23b0-5de3-3453-4bc67e6c9746/196871994156.jpg/296x296bb-60.jpg",
-        "rank": 25,
+        "rank": 33,
         "source_name": "apple_music",
         "youtube_url": "https://www.youtube.com/watch?v=pSRX0-vzCsE"
-    },
-    {
-        "isrc": "USQX92401237",
-        "track_name": "Waterfall",
-        "artist_name": "Drove & Dillon Francis",
-        "track_url": "https://music.apple.com/us/album/waterfall/1738280897?i=1738280901",
-        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/88/32/f9/8832f97d-c676-43a4-7d51-7b7e618c0a00/196871955874.jpg/296x296bb-60.jpg",
-        "rank": 26,
-        "source_name": "apple_music",
-        "youtube_url": "https://www.youtube.com/watch?v=gbSo8OAFhAc"
-    },
-    {
-        "isrc": "UKRPL1900658",
-        "track_name": "All For You (feat. Joanna Cooke)",
-        "artist_name": "Maur",
-        "track_url": "https://music.apple.com/us/album/all-for-you-feat-joanna-cooke/1733726021?i=1733726359",
-        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/f6/65/cd/f665cde0-56ae-8e53-2e46-da78f6cab8d9/085365688612.jpg/296x296bb-60.jpg",
-        "rank": 27,
-        "source_name": "apple_music",
-        "youtube_url": "https://www.youtube.com/watch?v=1fzM5KT4Jc8"
     },
     {
         "isrc": "DEE862302298",
@@ -275,49 +335,19 @@
         "artist_name": "iilliaa & Jem Cooke",
         "track_url": "https://music.apple.com/us/album/life-gets-hard-edit/1722619068?i=1722619085",
         "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/54/6d/46/546d4658-24e6-e4be-d849-2321c037ca9f/196871750677.jpg/296x296bb-60.jpg",
-        "rank": 28,
+        "rank": 34,
         "source_name": "apple_music",
         "youtube_url": "https://www.youtube.com/watch?v=odRcv7HzcoM"
     },
     {
-        "isrc": "USUG12402645",
-        "track_name": "Summertime Blues",
-        "artist_name": "Chris Lake, Sammy Virji & Nathan Nicholson",
-        "track_url": "https://music.apple.com/us/album/summertime-blues/1741634636?i=1741634639",
-        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/16/e5/89/16e589be-ba73-4121-f24b-41debea58b4f/24UMGIM35464.rgb.jpg/296x296bb-60.jpg",
-        "rank": 29,
+        "isrc": "GBUM72311089",
+        "track_name": "Multiply",
+        "artist_name": "Becky Hill",
+        "track_url": "https://music.apple.com/us/album/multiply/1731891564?i=1731891897",
+        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/3d/ca/7a/3dca7ae2-a6e0-e61c-d3b7-55879e9bcc99/24UMGIM00242.rgb.jpg/296x296bb-60.jpg",
+        "rank": 35,
         "source_name": "apple_music",
-        "youtube_url": "https://www.youtube.com/watch?v=LmFfiXI0P84"
-    },
-    {
-        "isrc": "GBUM72402261",
-        "track_name": "Breathe You In",
-        "artist_name": "Gorgon City & NORTH",
-        "track_url": "https://music.apple.com/us/album/breathe-you-in/1738461195?i=1738461760",
-        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/2f/51/39/2f51393c-8c86-cf06-a5b2-e2adabbfa618/24UMGIM21053.rgb.jpg/296x296bb-60.jpg",
-        "rank": 30,
-        "source_name": "apple_music",
-        "youtube_url": "https://www.youtube.com/watch?v=HxlhtZHmRts"
-    },
-    {
-        "isrc": "DEA622400985",
-        "track_name": "All the Things She Said",
-        "artist_name": "Robin Schulz, Timmy Trumpet & KOPPY",
-        "track_url": "https://music.apple.com/us/album/all-the-things-she-said/1737007334?i=1737007336",
-        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/08/78/74/08787436-75e6-fe6c-c373-8e4fa4f2efe3/5021732265654.jpg/296x296bb-60.jpg",
-        "rank": 31,
-        "source_name": "apple_music",
-        "youtube_url": "https://www.youtube.com/watch?v=b-Zvl8zwv20"
-    },
-    {
-        "isrc": "CAM372300505",
-        "track_name": "dive /stay/",
-        "artist_name": "Felix Cartal & emma l\u00f8v",
-        "track_url": "https://music.apple.com/us/album/dive-stay/1737044611?i=1737044615",
-        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/c2/cc/ef/c2ccef76-fed5-fccf-f9b8-03411fa232e3/823675299933_Cover.jpg/296x296bb-60.jpg",
-        "rank": 32,
-        "source_name": "apple_music",
-        "youtube_url": "https://www.youtube.com/watch?v=5c4oHx2TxGY"
+        "youtube_url": "https://www.youtube.com/watch?v=YfFwuPFBwbQ"
     },
     {
         "isrc": "GBEWA2400021",
@@ -325,39 +355,49 @@
         "artist_name": "Jerro & Running Touch",
         "track_url": "https://music.apple.com/us/album/fever/1731385596?i=1731385597",
         "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/1f/dd/9a/1fdd9a61-bd65-61c9-8adf-0d3bc9f74378/5039060975190.png/296x296bb-60.jpg",
-        "rank": 33,
+        "rank": 36,
         "source_name": "apple_music",
         "youtube_url": "https://www.youtube.com/watch?v=xyjWQrCxpVM"
     },
     {
-        "isrc": "GBARL2301797",
-        "track_name": "Lovers In A Past Life (LP Giobbi Remix)",
-        "artist_name": "Calvin Harris & Rag'n'Bone Man",
-        "track_url": "https://music.apple.com/us/album/lovers-in-a-past-life-lp-giobbi-remix/1741613366?i=1741613368",
-        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/e3/2c/7d/e32c7d3e-c9a8-4896-9afb-e2528b7adb65/196872016550.jpg/296x296bb-60.jpg",
-        "rank": 34,
+        "isrc": "USUG12403371",
+        "track_name": "Lioness",
+        "artist_name": "Swedish House Mafia & Niki & The Dove",
+        "track_url": "https://music.apple.com/us/album/lioness/1749175516?i=1749175517",
+        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/a5/f5/a3/a5f5a371-3a51-19b2-f15c-a269d03db8fa/24UMGIM58353.rgb.jpg/296x296bb-60.jpg",
+        "rank": 37,
         "source_name": "apple_music",
-        "youtube_url": "https://www.youtube.com/watch?v=IM3ccXiNsM4"
+        "youtube_url": "https://www.youtube.com/watch?v=ekXgoQnOCQI"
     },
     {
-        "isrc": "GBCFB2400443",
-        "track_name": "If U Like Me (Edit)",
-        "artist_name": "DJ Seinfeld",
-        "track_url": "https://music.apple.com/us/album/if-u-like-me-edit/1742098438?i=1742098439",
-        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/df/bf/92/dfbf92c4-517e-885b-e9d3-8e1bff55084a/5054429194630.png/296x296bb-60.jpg",
-        "rank": 35,
+        "isrc": "GBUM72401679",
+        "track_name": "All That You Need",
+        "artist_name": "Gorgon City & Caroline Byrne",
+        "track_url": "https://music.apple.com/us/album/all-that-you-need/1738461195?i=1738461888",
+        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/2f/51/39/2f51393c-8c86-cf06-a5b2-e2adabbfa618/24UMGIM21053.rgb.jpg/296x296bb-60.jpg",
+        "rank": 38,
         "source_name": "apple_music",
-        "youtube_url": "https://www.youtube.com/watch?v=eX9mKTkireA"
+        "youtube_url": "https://www.youtube.com/watch?v=UF5VxTbHykE"
     },
     {
-        "isrc": "UK4ZF2400087",
-        "track_name": "Always (Me & You)",
-        "artist_name": "CHANEY",
-        "track_url": "https://music.apple.com/us/album/always-me-you/1731873701?i=1731873702",
-        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/f3/0f/a5/f30fa504-a505-a630-6a8a-4f100c0c0eb8/198391228438.jpg/296x296bb-60.jpg",
-        "rank": 36,
+        "isrc": "GBUM72400217",
+        "track_name": "Never Be Lonely",
+        "artist_name": "Jax Jones & Zoe Wees",
+        "track_url": "https://music.apple.com/us/album/never-be-lonely/1727350063?i=1727350064",
+        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/62/ba/fe/62bafe08-a872-ef85-29fe-f5e878c12cc9/24UMGIM04446.rgb.jpg/296x296bb-60.jpg",
+        "rank": 39,
         "source_name": "apple_music",
-        "youtube_url": "https://www.youtube.com/watch?v=wmgP769pNH8"
+        "youtube_url": "https://www.youtube.com/watch?v=4PoRVO741aM"
+    },
+    {
+        "isrc": "GBARL2400737",
+        "track_name": "Shivers",
+        "artist_name": "Camden Cox",
+        "track_url": "https://music.apple.com/us/album/shivers/1750952976?i=1750952978",
+        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/7e/a2/8e/7ea28eb9-c2b2-4197-3006-40a166a78d23/196872196504.jpg/296x296bb-60.jpg",
+        "rank": 40,
+        "source_name": "apple_music",
+        "youtube_url": "https://www.youtube.com/watch?v=QK1UfhuW_Lc"
     },
     {
         "isrc": "QZGLM2496266",
@@ -365,19 +405,9 @@
         "artist_name": "Jauz",
         "track_url": "https://music.apple.com/us/album/teardrops/1735241404?i=1735241405",
         "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/c7/f8/8a/c7f88ac0-06ea-d152-980d-b0f4177d8cd1/0.jpg/296x296bb-60.jpg",
-        "rank": 37,
+        "rank": 41,
         "source_name": "apple_music",
         "youtube_url": "https://www.youtube.com/watch?v=ec2cD-AW1Hc"
-    },
-    {
-        "isrc": "GBCFB2400659",
-        "track_name": "Feel (feat. Jacob Banks)",
-        "artist_name": "LP Giobbi",
-        "track_url": "https://music.apple.com/us/album/feel-feat-jacob-banks/1744642617?i=1744642619",
-        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/6c/05/3e/6c053e17-3034-c7cd-3798-c24393c11b4e/5054429195743.png/296x296bb-60.jpg",
-        "rank": 38,
-        "source_name": "apple_music",
-        "youtube_url": "https://www.youtube.com/watch?v=_70kZ-jyfr8"
     },
     {
         "isrc": "USUM72402931",
@@ -385,9 +415,29 @@
         "artist_name": "Seven Lions & ILLENIUM",
         "track_url": "https://music.apple.com/us/album/not-even-love-feat-asdis/1736048757?i=1736048763",
         "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/32/53/dd/3253ddf5-3f2e-c447-69e5-2cbb7ca51311/24UMGIM26713.rgb.jpg/296x296bb-60.jpg",
-        "rank": 39,
+        "rank": 42,
         "source_name": "apple_music",
         "youtube_url": "https://www.youtube.com/watch?v=zk80sRP57Rg"
+    },
+    {
+        "isrc": "USZXT2453422",
+        "track_name": "Find A Way",
+        "artist_name": "Vintage Culture",
+        "track_url": "https://music.apple.com/us/album/find-a-way/1725169738?i=1725169876",
+        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/ae/b8/19/aeb819de-114d-98b7-97da-a6f51b14829e/23SYMIM08764.rgb.jpg/296x296bb-60.jpg",
+        "rank": 43,
+        "source_name": "apple_music",
+        "youtube_url": "https://www.youtube.com/watch?v=AJrBp9oUtLI"
+    },
+    {
+        "isrc": "USZ4V2400153",
+        "track_name": "Ride Or Die",
+        "artist_name": "Aluna",
+        "track_url": "https://music.apple.com/us/album/ride-or-die/1739664479?i=1739664485",
+        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/79/42/ad/7942ad9e-bb6b-4870-e0cf-69d4041d6a41/2632.jpg/296x296bb-60.jpg",
+        "rank": 44,
+        "source_name": "apple_music",
+        "youtube_url": "https://www.youtube.com/watch?v=U2CRNYtt9bI"
     },
     {
         "isrc": "USZ4V2400142",
@@ -395,19 +445,9 @@
         "artist_name": "Diplo & Riva Starr",
         "track_url": "https://music.apple.com/us/album/heaven-or-not-feat-kareen-lomax/1736593206?i=1736593212",
         "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/a2/bf/f0/a2bff082-84e6-0ed0-1efc-e9f7bc486e77/2594.jpg/296x296bb-60.jpg",
-        "rank": 40,
+        "rank": 45,
         "source_name": "apple_music",
         "youtube_url": "https://www.youtube.com/watch?v=alZdgHHNgDE"
-    },
-    {
-        "isrc": "GBCPZ2422963",
-        "track_name": "Paranoid",
-        "artist_name": "Layton Giordani",
-        "track_url": "https://music.apple.com/us/album/paranoid/1733919601?i=1733919604",
-        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/41/51/bf/4151bfe8-12f7-eba0-970e-09b4f3ffe9c5/826194664497.jpg/296x296bb-60.jpg",
-        "rank": 41,
-        "source_name": "apple_music",
-        "youtube_url": "https://www.youtube.com/watch?v=NqxGeJ63Q2o"
     },
     {
         "isrc": "GBARL2400194",
@@ -415,7 +455,7 @@
         "artist_name": "Camden Cox",
         "track_url": "https://music.apple.com/us/album/another/1732538266?i=1732538538",
         "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/e4/5e/e6/e45ee6f1-1d6d-bbf9-c4b8-68a429be7ef8/196871877404.jpg/296x296bb-60.jpg",
-        "rank": 42,
+        "rank": 46,
         "source_name": "apple_music",
         "youtube_url": "https://www.youtube.com/watch?v=TSoG9nVefrs"
     },
@@ -425,9 +465,19 @@
         "artist_name": "Sammy Virji",
         "track_url": "https://music.apple.com/us/album/if-u-need-it/1711713804?i=1711713806",
         "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/42/9a/a7/429aa7b4-820e-c03f-3de4-349f3d185ae0/23UM1IM13809.rgb.jpg/296x296bb-60.jpg",
-        "rank": 43,
+        "rank": 47,
         "source_name": "apple_music",
         "youtube_url": "https://www.youtube.com/watch?v=nT5981HB-EE"
+    },
+    {
+        "isrc": "USA2P2430008",
+        "track_name": "HEAT",
+        "artist_name": "Tove Lo & SG Lewis",
+        "track_url": "https://music.apple.com/us/album/heat/1749612943?i=1749613191",
+        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/72/c7/df/72c7dfa4-1dcb-aa7a-a976-e591ba943728/00196922982446_Cover.jpg/296x296bb-60.jpg",
+        "rank": 48,
+        "source_name": "apple_music",
+        "youtube_url": "https://www.youtube.com/watch?v=TX5t3xVwvFk"
     },
     {
         "isrc": "QZMZ92420283",
@@ -435,19 +485,19 @@
         "artist_name": "Jauz & Nevve",
         "track_url": "https://music.apple.com/us/album/chains/1739826271?i=1739826272",
         "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/28/62/cb/2862cb78-68f8-1bff-cd2f-d2fadb99dee7/0.jpg/296x296bb-60.jpg",
-        "rank": 44,
+        "rank": 49,
         "source_name": "apple_music",
         "youtube_url": "https://www.youtube.com/watch?v=SkM_je41w14"
     },
     {
-        "isrc": "GBHAD2400039",
-        "track_name": "Close Your Eyes",
-        "artist_name": "Matt Sassari, Dillon Francis & James Carter",
-        "track_url": "https://music.apple.com/us/album/close-your-eyes/1743035280?i=1743035291",
-        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/9e/bf/c7/9ebfc76c-e96c-c656-f70c-b348835bee16/cover.jpg/296x296bb-60.jpg",
-        "rank": 45,
+        "isrc": "USWB12401323",
+        "track_name": "Chase It (Mmm Da Da Da)",
+        "artist_name": "Bebe Rexha",
+        "track_url": "https://music.apple.com/us/album/chase-it-mmm-da-da-da/1745604576?i=1745604584",
+        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/6d/8a/a8/6d8aa898-fd5d-6fa4-9140-e06c992f0aea/054391275202.jpg/296x296bb-60.jpg",
+        "rank": 50,
         "source_name": "apple_music",
-        "youtube_url": "https://www.youtube.com/watch?v=RC4nOLN961w"
+        "youtube_url": "https://www.youtube.com/watch?v=wNTrl8E-eac"
     },
     {
         "isrc": "GBCEN2400063",
@@ -455,19 +505,19 @@
         "artist_name": "LF SYSTEM",
         "track_url": "https://music.apple.com/us/album/lift-you-up/1737989915?i=1737989916",
         "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/26/86/59/2686599a-f699-29c9-8896-8b60f04d0e63/196871981699.jpg/296x296bb-60.jpg",
-        "rank": 46,
+        "rank": 51,
         "source_name": "apple_music",
         "youtube_url": "https://www.youtube.com/watch?v=zA6cVaKdr2U"
     },
     {
-        "isrc": "GBUM72205897",
-        "track_name": "Never Be Alone",
-        "artist_name": "Becky Hill & Sonny Fodera",
-        "track_url": "https://music.apple.com/us/album/never-be-alone/1731891564?i=1731891893",
-        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/3d/ca/7a/3dca7ae2-a6e0-e61c-d3b7-55879e9bcc99/24UMGIM00242.rgb.jpg/296x296bb-60.jpg",
-        "rank": 47,
+        "isrc": "USUG12402625",
+        "track_name": "Resonate",
+        "artist_name": "John Summit, Kaskade & Julia Church",
+        "track_url": "https://music.apple.com/us/album/resonate/1748171781?i=1748171797",
+        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/e7/21/67/e721675b-c3a3-9338-bf24-9adb295b7e90/24UMGIM58701.rgb.jpg/296x296bb-60.jpg",
+        "rank": 52,
         "source_name": "apple_music",
-        "youtube_url": "https://www.youtube.com/watch?v=-p5FeDRqLf0"
+        "youtube_url": "https://www.youtube.com/watch?v=nUQfBn4i7uo"
     },
     {
         "isrc": "BEIW12400233",
@@ -475,9 +525,29 @@
         "artist_name": "Dimitri Vegas & Like Mike, Regard & NATTI NATASHA",
         "track_url": "https://music.apple.com/us/album/to-the-beat/1737256243?i=1737256746",
         "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/49/18/0e/49180ea9-fc43-7f42-1384-b54c1c303286/198391629136.jpg/296x296bb-60.jpg",
-        "rank": 48,
+        "rank": 53,
         "source_name": "apple_music",
         "youtube_url": "https://www.youtube.com/watch?v=IeH6t9vrG38"
+    },
+    {
+        "isrc": "DEA622400985",
+        "track_name": "All the Things She Said",
+        "artist_name": "Robin Schulz, Timmy Trumpet & KOPPY",
+        "track_url": "https://music.apple.com/us/album/all-the-things-she-said/1737007334?i=1737007336",
+        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/08/78/74/08787436-75e6-fe6c-c373-8e4fa4f2efe3/5021732265654.jpg/296x296bb-60.jpg",
+        "rank": 54,
+        "source_name": "apple_music",
+        "youtube_url": "https://www.youtube.com/watch?v=b-Zvl8zwv20"
+    },
+    {
+        "isrc": "USUG12402645",
+        "track_name": "Summertime Blues",
+        "artist_name": "Chris Lake, Sammy Virji & Nathan Nicholson",
+        "track_url": "https://music.apple.com/us/album/summertime-blues/1741634636?i=1741634639",
+        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/16/e5/89/16e589be-ba73-4121-f24b-41debea58b4f/24UMGIM35464.rgb.jpg/296x296bb-60.jpg",
+        "rank": 55,
+        "source_name": "apple_music",
+        "youtube_url": "https://www.youtube.com/watch?v=LmFfiXI0P84"
     },
     {
         "isrc": "USUG12402806",
@@ -485,9 +555,19 @@
         "artist_name": "it's murph & Sorana",
         "track_url": "https://music.apple.com/us/album/down-low/1744030910?i=1744030921",
         "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/14/1f/1f/141f1f70-81d5-2f21-15d1-b1b201a63d4b/24UMGIM49088.rgb.jpg/296x296bb-60.jpg",
-        "rank": 49,
+        "rank": 56,
         "source_name": "apple_music",
         "youtube_url": "https://www.youtube.com/watch?v=OBnctSXhbtc"
+    },
+    {
+        "isrc": "GBMVH2300940",
+        "track_name": "mr useless",
+        "artist_name": "Shygirl, SG Lewis & Club Shy",
+        "track_url": "https://music.apple.com/us/album/mr-useless/1725825321?i=1725826047",
+        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/8c/ca/50/8cca5060-55f1-a9df-3ff9-519295f0aa5a/5056556135012_cover.jpg/296x296bb-60.jpg",
+        "rank": 57,
+        "source_name": "apple_music",
+        "youtube_url": "https://www.youtube.com/watch?v=kliUoRjylkQ"
     },
     {
         "isrc": "GBJAJ2400413",
@@ -495,7 +575,7 @@
         "artist_name": "Deeper Purpose, Jalja & LAZY JOE",
         "track_url": "https://music.apple.com/us/album/one-by-one/1735977579?i=1735977581",
         "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/8c/0c/31/8c0c31bb-aec4-5201-47b3-da7e7d2ace2f/5052075031224.png/296x296bb-60.jpg",
-        "rank": 50,
+        "rank": 58,
         "source_name": "apple_music",
         "youtube_url": "https://www.youtube.com/watch?v=WDVm8TYe6sg"
     },
@@ -505,7 +585,7 @@
         "artist_name": "Tobiahs",
         "track_url": "https://music.apple.com/us/album/lifetime/1722564698?i=1722564700",
         "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/83/41/a9/8341a93b-6d9f-883a-7857-a5b3dca6bc71/23SYMIM08853.rgb.jpg/296x296bb-60.jpg",
-        "rank": 51,
+        "rank": 59,
         "source_name": "apple_music",
         "youtube_url": "https://www.youtube.com/watch?v=_ojUPXq1J8c"
     },
@@ -515,39 +595,9 @@
         "artist_name": "Kygo & HAYLA",
         "track_url": "https://music.apple.com/us/album/without-you/1747949161?i=1747950148",
         "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/c0/08/30/c0083014-4172-a1ac-6daf-4542085dbfd0/196872030136.jpg/296x296bb-60.jpg",
-        "rank": 52,
+        "rank": 60,
         "source_name": "apple_music",
         "youtube_url": "https://www.youtube.com/watch?v=w304OXHrDmg"
-    },
-    {
-        "isrc": "GBENL2403882",
-        "track_name": "Insomnia",
-        "artist_name": "Eli & Fur",
-        "track_url": "https://music.apple.com/us/album/insomnia/1733961667?i=1733961676",
-        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/46/77/40/4677408c-263b-36fe-033e-e445b2673bfa/5400863162238_cover.jpg/296x296bb-60.jpg",
-        "rank": 53,
-        "source_name": "apple_music",
-        "youtube_url": "https://www.youtube.com/watch?v=EMvs6Ib2HR4"
-    },
-    {
-        "isrc": "USZXT2453422",
-        "track_name": "Find A Way",
-        "artist_name": "Vintage Culture",
-        "track_url": "https://music.apple.com/us/album/find-a-way/1725169738?i=1725169876",
-        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/ae/b8/19/aeb819de-114d-98b7-97da-a6f51b14829e/23SYMIM08764.rgb.jpg/296x296bb-60.jpg",
-        "rank": 54,
-        "source_name": "apple_music",
-        "youtube_url": "https://www.youtube.com/watch?v=AJrBp9oUtLI"
-    },
-    {
-        "isrc": "GBEWA2401310",
-        "track_name": "Remission",
-        "artist_name": "Kasablanca & Lane 8",
-        "track_url": "https://music.apple.com/us/album/remission/1735923246?i=1735923247",
-        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/04/ce/2b/04ce2b7a-3d9e-912b-184b-7c81e9efe50f/5039060982495.png/296x296bb-60.jpg",
-        "rank": 55,
-        "source_name": "apple_music",
-        "youtube_url": "https://www.youtube.com/watch?v=JU-VpGfZQC4"
     },
     {
         "isrc": "GBAHT2301515",
@@ -555,19 +605,9 @@
         "artist_name": "The Blessed Madonna",
         "track_url": "https://music.apple.com/us/album/happier-feat-clementine-douglas/1721072384?i=1721072870",
         "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/9d/b5/c7/9db5c79b-d70a-d617-a8fa-6599b6094eac/5054197941139.jpg/296x296bb-60.jpg",
-        "rank": 56,
+        "rank": 61,
         "source_name": "apple_music",
         "youtube_url": "https://www.youtube.com/watch?v=6AbEFloifG4"
-    },
-    {
-        "isrc": "QM24S2403174",
-        "track_name": "Oxygen",
-        "artist_name": "EVAN GIIA & Moore Kismet",
-        "track_url": "https://music.apple.com/us/album/oxygen/1747302637?i=1747302638",
-        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/75/54/46/75544652-533d-bf62-c097-9529ab72837b/193436384506_SABRINAKAUNEEGOXYGENFINAL.jpg/296x296bb-60.jpg",
-        "rank": 57,
-        "source_name": "apple_music",
-        "youtube_url": "https://www.youtube.com/watch?v=uDnW0WdgoIM"
     },
     {
         "isrc": "GBJAJ2400531",
@@ -575,7 +615,7 @@
         "artist_name": "CHANEY",
         "track_url": "https://music.apple.com/us/album/i-choose-you/1740974902?i=1740974905",
         "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/eb/98/9c/eb989c3b-5a10-4dd6-82f5-54e3b9376477/5052075031422.png/296x296bb-60.jpg",
-        "rank": 58,
+        "rank": 62,
         "source_name": "apple_music",
         "youtube_url": "https://www.youtube.com/watch?v=j3TyYWXFZUA"
     },
@@ -585,49 +625,29 @@
         "artist_name": "Mau P",
         "track_url": "https://music.apple.com/us/album/on-again/1736836112?i=1736836113",
         "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/5c/e7/3f/5ce73f0a-4843-4f25-00cd-0d49eb2a0e20/8721056815135.png/296x296bb-60.jpg",
-        "rank": 59,
+        "rank": 63,
         "source_name": "apple_music",
         "youtube_url": "https://www.youtube.com/watch?v=OsYwX5WSj0w"
     },
     {
-        "isrc": "USA2P2415020",
-        "track_name": "MAGIC",
-        "artist_name": "Gryffin & babyidontlikeyou",
-        "track_url": "https://music.apple.com/us/album/magic/1740903229?i=1740903237",
-        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/76/ce/70/76ce70f8-0a9a-8d3f-42a8-b778698ddb6a/00196922890604_Cover.jpg/296x296bb-60.jpg",
-        "rank": 60,
+        "isrc": "GBCEN2400027",
+        "track_name": "Closer (feat. Chenai)",
+        "artist_name": "Ben Hemsley",
+        "track_url": "https://music.apple.com/us/album/closer-feat-chenai/1735715173?i=1735715422",
+        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/4f/99/88/4f9988d4-913d-87db-0630-684a2eb56541/196871940276.jpg/296x296bb-60.jpg",
+        "rank": 64,
         "source_name": "apple_music",
-        "youtube_url": "https://www.youtube.com/watch?v=fgmDgWUYFY4"
+        "youtube_url": "https://www.youtube.com/watch?v=my2HZpXDq3w"
     },
     {
-        "isrc": "CA5KR2434567",
-        "track_name": "COME BACK HOME",
-        "artist_name": "OddKidOut, Angrybaby & Nina Sung",
-        "track_url": "https://music.apple.com/us/album/come-back-home/1732736446?i=1732736597",
-        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/53/31/00/533100fd-dfa2-70ca-23a1-afdd0fa1a862/cover.jpg/296x296bb-60.jpg",
-        "rank": 61,
+        "isrc": "GBUM72402261",
+        "track_name": "Breathe You In",
+        "artist_name": "Gorgon City & NORTH",
+        "track_url": "https://music.apple.com/us/album/breathe-you-in/1738461195?i=1738461760",
+        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/2f/51/39/2f51393c-8c86-cf06-a5b2-e2adabbfa618/24UMGIM21053.rgb.jpg/296x296bb-60.jpg",
+        "rank": 65,
         "source_name": "apple_music",
-        "youtube_url": "https://www.youtube.com/watch?v=IHBRJrGZg4A"
-    },
-    {
-        "isrc": "NLRD52339318",
-        "track_name": "Mwaki",
-        "artist_name": "ZERB & Sofiya Nzau",
-        "track_url": "https://music.apple.com/us/album/mwaki/1715015592?i=1715015717",
-        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/2d/68/39/2d683965-8149-029e-f749-c4df9038e32c/8721056104857.png/296x296bb-60.jpg",
-        "rank": 62,
-        "source_name": "apple_music",
-        "youtube_url": "https://www.youtube.com/watch?v=y6iMvNkAQt4"
-    },
-    {
-        "isrc": "NLZ542400382",
-        "track_name": "My City",
-        "artist_name": "Ti\u00ebsto & Prophecy",
-        "track_url": "https://music.apple.com/us/album/my-city/1745160493?i=1745160495",
-        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/f7/85/c5/f785c572-f737-b282-ced6-9afe586d26af/8721093111559.png/296x296bb-60.jpg",
-        "rank": 63,
-        "source_name": "apple_music",
-        "youtube_url": "https://www.youtube.com/watch?v=vd2YM9Yj8Es"
+        "youtube_url": "https://www.youtube.com/watch?v=HxlhtZHmRts"
     },
     {
         "isrc": "GBCFB2400155",
@@ -635,7 +655,7 @@
         "artist_name": "salute & Sam Gellaitry",
         "track_url": "https://music.apple.com/us/album/maybe-its-u/1732069006?i=1732069103",
         "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/df/43/34/df4334f4-b599-a2aa-0af3-779288222e13/5054429192650.png/296x296bb-60.jpg",
-        "rank": 64,
+        "rank": 66,
         "source_name": "apple_music",
         "youtube_url": "https://www.youtube.com/watch?v=vxNVuky-kac"
     },
@@ -645,7 +665,7 @@
         "artist_name": "Louis The Child & Madeon",
         "track_url": "https://music.apple.com/us/album/believe-it/1745614209?i=1745614210",
         "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/aa/13/01/aa13014d-0575-34ba-1a61-5df959746e54/24UMGIM41826.rgb.jpg/296x296bb-60.jpg",
-        "rank": 65,
+        "rank": 67,
         "source_name": "apple_music",
         "youtube_url": "https://www.youtube.com/watch?v=TBx5Hy53Xyw"
     },
@@ -655,7 +675,7 @@
         "artist_name": "Charlotte Plank",
         "track_url": "https://music.apple.com/us/album/nightshift/1741753447?i=1741753448",
         "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/69/89/ec/6989ec2c-b2cc-15e3-6ff1-e6dda00d4c2e/196872020328.jpg/296x296bb-60.jpg",
-        "rank": 66,
+        "rank": 68,
         "source_name": "apple_music",
         "youtube_url": "https://www.youtube.com/watch?v=lMJDsTjOLqw"
     },
@@ -665,19 +685,9 @@
         "artist_name": "Becky Hill",
         "track_url": "https://music.apple.com/us/album/right-here/1731891564?i=1731892440",
         "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/3d/ca/7a/3dca7ae2-a6e0-e61c-d3b7-55879e9bcc99/24UMGIM00242.rgb.jpg/296x296bb-60.jpg",
-        "rank": 67,
+        "rank": 69,
         "source_name": "apple_music",
         "youtube_url": "https://www.youtube.com/watch?v=SJ7K2Yk5yfM"
-    },
-    {
-        "isrc": "GBUM72402172",
-        "track_name": "One New Change",
-        "artist_name": "Gorgon City",
-        "track_url": "https://music.apple.com/us/album/one-new-change/1738461195?i=1738461903",
-        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/2f/51/39/2f51393c-8c86-cf06-a5b2-e2adabbfa618/24UMGIM21053.rgb.jpg/296x296bb-60.jpg",
-        "rank": 68,
-        "source_name": "apple_music",
-        "youtube_url": "https://www.youtube.com/watch?v=v3vR5B9juVE"
     },
     {
         "isrc": "GBCFB2400153",
@@ -685,7 +695,7 @@
         "artist_name": "salute & Rina Sawayama",
         "track_url": "https://music.apple.com/us/album/saving-flowers/1732069006?i=1732069098",
         "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/df/43/34/df4334f4-b599-a2aa-0af3-779288222e13/5054429192650.png/296x296bb-60.jpg",
-        "rank": 69,
+        "rank": 70,
         "source_name": "apple_music",
         "youtube_url": "https://www.youtube.com/watch?v=G353KFZrjTo"
     },
@@ -695,7 +705,7 @@
         "artist_name": "Justice & Tame Impala",
         "track_url": "https://music.apple.com/us/album/neverender/1724935208?i=1724935211",
         "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/c2/19/4b/c2194bc8-63e2-b31f-b872-9611aa5fcded/5056556135845_cover.jpg/296x296bb-60.jpg",
-        "rank": 70,
+        "rank": 71,
         "source_name": "apple_music",
         "youtube_url": "https://www.youtube.com/watch?v=911ahyRrjZ8"
     },
@@ -705,7 +715,7 @@
         "artist_name": "Solardo & Kaleena Zanders",
         "track_url": "https://music.apple.com/us/album/testify/1741414116?i=1741414118",
         "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/f8/46/8d/f8468de1-ed5b-83c3-8406-dad2bd2ee22e/196872040449.jpg/296x296bb-60.jpg",
-        "rank": 71,
+        "rank": 72,
         "source_name": "apple_music",
         "youtube_url": "https://www.youtube.com/watch?v=KBcIK0ipPLY"
     },
@@ -715,19 +725,9 @@
         "artist_name": "Dom Dolla",
         "track_url": "https://music.apple.com/us/album/girl%24/1749336829?i=1749336837",
         "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/9e/50/1c/9e501cdc-eb6c-1e33-25b4-fc11d8762159/196872043785.jpg/296x296bb-60.jpg",
-        "rank": 72,
-        "source_name": "apple_music",
-        "youtube_url": "https://www.youtube.com/watch?v=rNU5vsJmMIY"
-    },
-    {
-        "isrc": "NLF712402037",
-        "track_name": "Yesterday",
-        "artist_name": "Schak, Will Atkinson & Abi Flynn",
-        "track_url": "https://music.apple.com/us/album/yesterday/1739817085?i=1739817086",
-        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/a4/81/d6/a481d619-039c-7045-dde1-30ffda1a0381/8718522463624.png/296x296bb-60.jpg",
         "rank": 73,
         "source_name": "apple_music",
-        "youtube_url": "https://www.youtube.com/watch?v=D3WwQqBQay8"
+        "youtube_url": "https://www.youtube.com/watch?v=rNU5vsJmMIY"
     },
     {
         "isrc": "NLZ542400382",
@@ -740,34 +740,24 @@
         "youtube_url": "https://www.youtube.com/watch?v=vd2YM9Yj8Es"
     },
     {
-        "isrc": "NL8RL2415361",
-        "track_name": "Fever Dream (feat. Annaca)",
-        "artist_name": "Wenzday",
-        "track_url": "https://music.apple.com/us/album/fever-dream-feat-annaca/1740681247?i=1740681248",
-        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/82/3d/96/823d96d3-eb46-cbfb-619e-afbd721883f2/8721056928859.png/296x296bb-60.jpg",
-        "rank": 75,
-        "source_name": "apple_music",
-        "youtube_url": "https://www.youtube.com/watch?v=_oWWB2cqj1g"
-    },
-    {
         "isrc": "GBUM72403103",
         "track_name": "I CAN\u2019T LOSE YOU",
         "artist_name": "Confidence Man",
         "track_url": "https://music.apple.com/us/album/i-cant-lose-you/1749038486?i=1749038492",
         "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/8c/1b/03/8c1b0306-475d-3449-3e7d-4d6a4df8bc43/24UMGIM52602.rgb.jpg/296x296bb-60.jpg",
-        "rank": 76,
+        "rank": 75,
         "source_name": "apple_music",
         "youtube_url": "https://www.youtube.com/watch?v=jYuCk37DSYE"
     },
     {
-        "isrc": "USA2P2420371",
-        "track_name": "She\u2019s Gone, Dance On",
-        "artist_name": "Disclosure",
-        "track_url": "https://music.apple.com/us/album/shes-gone-dance-on/1747616877?i=1747616881",
-        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/8d/84/b5/8d84b571-ed99-869f-0232-2cb0327a43da/196922908866_Cover.jpg/296x296bb-60.jpg",
-        "rank": 77,
+        "isrc": "UK7MC2200081",
+        "track_name": "Baddy On the Floor (feat. Honey Dijon)",
+        "artist_name": "Jamie xx",
+        "track_url": "https://music.apple.com/us/album/baddy-on-the-floor-feat-honey-dijon/1736774386?i=1736774725",
+        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/58/79/46/5879463c-e688-c482-423f-a8dbcb691383/889030028976.png/296x296bb-60.jpg",
+        "rank": 76,
         "source_name": "apple_music",
-        "youtube_url": "https://www.youtube.com/watch?v=N95i9JjIem8"
+        "youtube_url": "https://www.youtube.com/watch?v=xeKSdJqFM6o"
     },
     {
         "isrc": "US23A1580904",
@@ -775,7 +765,7 @@
         "artist_name": "wilo wilde",
         "track_url": "https://music.apple.com/us/album/searching/1740099704?i=1740099705",
         "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/d5/18/2f/d5182ff2-efd8-cc6f-fd88-05375463dfcb/5059449173306.png/296x296bb-60.jpg",
-        "rank": 78,
+        "rank": 77,
         "source_name": "apple_music",
         "youtube_url": "https://www.youtube.com/watch?v=1k9KcrwhySA"
     },
@@ -785,7 +775,7 @@
         "artist_name": "Charli xcx",
         "track_url": "https://music.apple.com/us/album/von-dutch/1732110349?i=1732110358",
         "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/58/d4/74/58d47475-3797-bad8-9c66-77bfb8cbf352/075679655516.jpg/296x296bb-60.jpg",
-        "rank": 79,
+        "rank": 78,
         "source_name": "apple_music",
         "youtube_url": "https://www.youtube.com/watch?v=RaiRdSlwsks"
     },
@@ -795,7 +785,7 @@
         "artist_name": "Cloonee & Morgan Seatree",
         "track_url": "https://music.apple.com/us/album/sippin-yak-morgan-seatree-remix/1742982369?i=1742982689",
         "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/dd/a5/50/dda55054-d7a3-8ef7-3bc2-9fc4090e613a/24UMGIM40936.rgb.jpg/296x296bb-60.jpg",
-        "rank": 80,
+        "rank": 79,
         "source_name": "apple_music",
         "youtube_url": "https://www.youtube.com/watch?v=b4wriKjlUys"
     },
@@ -805,69 +795,9 @@
         "artist_name": "Jason Ross & Kill the Noise",
         "track_url": "https://music.apple.com/us/album/under-pressure-feat-sarah-de-warren/1743043279?i=1743043282",
         "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/c3/c2/02/c3c20296-d665-fb0b-455c-8795a684a34b/5039060992593.png/296x296bb-60.jpg",
-        "rank": 81,
+        "rank": 80,
         "source_name": "apple_music",
         "youtube_url": "https://www.youtube.com/watch?v=CPb9-IuW0GY"
-    },
-    {
-        "isrc": "GBUM72311089",
-        "track_name": "Multiply",
-        "artist_name": "Becky Hill",
-        "track_url": "https://music.apple.com/us/album/multiply/1731891564?i=1731891897",
-        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/3d/ca/7a/3dca7ae2-a6e0-e61c-d3b7-55879e9bcc99/24UMGIM00242.rgb.jpg/296x296bb-60.jpg",
-        "rank": 82,
-        "source_name": "apple_music",
-        "youtube_url": "https://www.youtube.com/watch?v=YfFwuPFBwbQ"
-    },
-    {
-        "isrc": "GBJX32463018",
-        "track_name": "Delirious",
-        "artist_name": "Leftwing : Kody & Raphi",
-        "track_url": "https://music.apple.com/us/album/delirious/1743016390?i=1743016547",
-        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/42/57/c8/4257c8f5-6ecd-0c1f-410e-c54a4f736293/198391905032.jpg/296x296bb-60.jpg",
-        "rank": 83,
-        "source_name": "apple_music",
-        "youtube_url": "https://www.youtube.com/watch?v=SwABmnf73UU"
-    },
-    {
-        "isrc": "USWB12401323",
-        "track_name": "Chase It (Mmm Da Da Da)",
-        "artist_name": "Bebe Rexha",
-        "track_url": "https://music.apple.com/us/album/chase-it-mmm-da-da-da/1745604576?i=1745604584",
-        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/6d/8a/a8/6d8aa898-fd5d-6fa4-9140-e06c992f0aea/054391275202.jpg/296x296bb-60.jpg",
-        "rank": 84,
-        "source_name": "apple_music",
-        "youtube_url": "https://www.youtube.com/watch?v=wNTrl8E-eac"
-    },
-    {
-        "isrc": "UK7MC2200081",
-        "track_name": "Baddy On the Floor (feat. Honey Dijon)",
-        "artist_name": "Jamie xx",
-        "track_url": "https://music.apple.com/us/album/baddy-on-the-floor-feat-honey-dijon/1736774386?i=1736774725",
-        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/58/79/46/5879463c-e688-c482-423f-a8dbcb691383/889030028976.png/296x296bb-60.jpg",
-        "rank": 85,
-        "source_name": "apple_music",
-        "youtube_url": "https://www.youtube.com/watch?v=xeKSdJqFM6o"
-    },
-    {
-        "isrc": "USUS12400276",
-        "track_name": "Obsession",
-        "artist_name": "Surf Mesa & NKY",
-        "track_url": "https://music.apple.com/us/album/obsession/1745220441?i=1745220891",
-        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/25/cd/3d/25cd3dd5-ba25-2109-e929-a0772c9e7318/196872104141.jpg/296x296bb-60.jpg",
-        "rank": 86,
-        "source_name": "apple_music",
-        "youtube_url": "https://www.youtube.com/watch?v=fn0_0qrOUT4"
-    },
-    {
-        "isrc": "NLF712401878",
-        "track_name": "Weekend Love (feat. House Gospel Choir)",
-        "artist_name": "Will Clarke",
-        "track_url": "https://music.apple.com/us/album/weekend-love-feat-house-gospel-choir/1741512742?i=1741512744",
-        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/1f/62/c8/1f62c8db-0bee-0179-be38-1f622aab175a/8718522466663.png/296x296bb-60.jpg",
-        "rank": 87,
-        "source_name": "apple_music",
-        "youtube_url": "https://www.youtube.com/watch?v=l2Q6FremIk4"
     },
     {
         "isrc": "QM6MZ2440782",
@@ -875,9 +805,19 @@
         "artist_name": "Anna Lunoe & Totally Enormous Extinct Dinosaurs",
         "track_url": "https://music.apple.com/us/album/right-here/1740457938?i=1740457955",
         "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/68/8e/a4/688ea4e1-0cd9-fdd7-2f5d-8da66deae84f/198391741517.jpg/296x296bb-60.jpg",
-        "rank": 88,
+        "rank": 81,
         "source_name": "apple_music",
         "youtube_url": "https://www.youtube.com/watch?v=xHFHIUoOhf4"
+    },
+    {
+        "isrc": "UK7MC2400157",
+        "track_name": "Life",
+        "artist_name": "Jamie xx & Robyn",
+        "track_url": "https://music.apple.com/us/album/life/1746750796?i=1746751572",
+        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/2d/4b/8b/2d4b8b01-d65f-b926-117d-51526878461d/889030035677.png/296x296bb-60.jpg",
+        "rank": 82,
+        "source_name": "apple_music",
+        "youtube_url": "https://www.youtube.com/watch?v=8MkumpJD3fk"
     },
     {
         "isrc": "GBCFB2400292",
@@ -885,19 +825,9 @@
         "artist_name": "Barry Can't Swim",
         "track_url": "https://music.apple.com/us/album/kimbara/1739798395?i=1739798396",
         "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/ba/c2/fe/bac2fe1b-9996-2a7f-0c1c-a728f415591b/5054429193589.png/296x296bb-60.jpg",
-        "rank": 89,
+        "rank": 83,
         "source_name": "apple_music",
         "youtube_url": "https://www.youtube.com/watch?v=d2Yb1b8OOh0"
-    },
-    {
-        "isrc": "GBAHS2400279",
-        "track_name": "places to be",
-        "artist_name": "Fred again.., Anderson .Paak & CHIKA",
-        "track_url": "https://music.apple.com/us/album/places-to-be/1747373137?i=1747373147",
-        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/2f/89/3a/2f893a51-765f-a22a-1e2c-23594c37a099/5021732386014.jpg/296x296bb-60.jpg",
-        "rank": 90,
-        "source_name": "apple_music",
-        "youtube_url": "https://www.youtube.com/watch?v=0bVFEOb39vk"
     },
     {
         "isrc": "GBCFB2400455",
@@ -905,19 +835,9 @@
         "artist_name": "TSHA",
         "track_url": "https://music.apple.com/us/album/sweet-devotion-feat-caroline-byrne-edit/1738506759?i=1738507103",
         "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/c6/29/8e/c6298ebe-8cbc-db77-d187-66f187701f2b/5054429194838.png/296x296bb-60.jpg",
-        "rank": 91,
+        "rank": 84,
         "source_name": "apple_music",
         "youtube_url": "https://www.youtube.com/watch?v=Cth46YpJ5JQ"
-    },
-    {
-        "isrc": "QZQAY2435062",
-        "track_name": "In My Soul",
-        "artist_name": "Dombresky",
-        "track_url": "https://music.apple.com/us/album/in-my-soul/1743249158?i=1743249159",
-        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/39/ea/13/39ea133e-47a3-13ce-9cf8-a4f6bcf34057/797885135797_cover.jpg/296x296bb-60.jpg",
-        "rank": 92,
-        "source_name": "apple_music",
-        "youtube_url": "https://www.youtube.com/watch?v=JVIgMmznzOk"
     },
     {
         "isrc": "US23A1582336",
@@ -925,7 +845,7 @@
         "artist_name": "\u232d IceMorph \u232c",
         "track_url": "https://music.apple.com/us/album/we-got-this/1744000680?i=1744000684",
         "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/da/c2/05/dac205ef-1251-f31d-dffb-b93d0b132492/5059449176642.png/296x296bb-60.jpg",
-        "rank": 93,
+        "rank": 85,
         "source_name": "apple_music",
         "youtube_url": "https://www.youtube.com/watch?v=g-hYloE11pM"
     },
@@ -935,7 +855,7 @@
         "artist_name": "Azzecca",
         "track_url": "https://music.apple.com/us/album/its-strange/1744379278?i=1744379281",
         "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/4c/33/6f/4c336ff5-ac66-7f48-1b83-dc5af4ecca9c/cover.jpg/296x296bb-60.jpg",
-        "rank": 94,
+        "rank": 86,
         "source_name": "apple_music",
         "youtube_url": "https://www.youtube.com/watch?v=OPS1ENiM8MA"
     },
@@ -945,7 +865,7 @@
         "artist_name": "Shane Codd",
         "track_url": "https://music.apple.com/us/album/good-to-me-radio-edit/1745153637?i=1745153649",
         "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/a9/e5/c8/a9e5c80d-e5b9-6c66-fa53-8f712599e2b2/085365458253.jpg/296x296bb-60.jpg",
-        "rank": 95,
+        "rank": 87,
         "source_name": "apple_music",
         "youtube_url": "https://www.youtube.com/watch?v=YYfiaW3YgrM"
     },
@@ -955,9 +875,39 @@
         "artist_name": "Jamie xx",
         "track_url": "https://music.apple.com/us/album/treat-each-other-right/1746750796?i=1746751168",
         "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/2d/4b/8b/2d4b8b01-d65f-b926-117d-51526878461d/889030035677.png/296x296bb-60.jpg",
-        "rank": 96,
+        "rank": 88,
         "source_name": "apple_music",
         "youtube_url": "https://www.youtube.com/watch?v=4zTFuKsJqxA"
+    },
+    {
+        "isrc": "UKRPL1900634",
+        "track_name": "Looking For You",
+        "artist_name": "Hyzteria",
+        "track_url": "https://music.apple.com/us/album/looking-for-you/1731884347?i=1731884352",
+        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/c8/5c/91/c85c91ea-ce0b-a7e7-0d91-923e66e49839/197338005712.jpg/296x296bb-60.jpg",
+        "rank": 89,
+        "source_name": "apple_music",
+        "youtube_url": "https://www.youtube.com/watch?v=9i6xd7tAEGE"
+    },
+    {
+        "isrc": "GBCFB2400161",
+        "track_name": "luv stuck",
+        "artist_name": "salute & piri",
+        "track_url": "https://music.apple.com/us/album/luv-stuck/1732069006?i=1732069394",
+        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/df/43/34/df4334f4-b599-a2aa-0af3-779288222e13/5054429192650.png/296x296bb-60.jpg",
+        "rank": 90,
+        "source_name": "apple_music",
+        "youtube_url": "https://www.youtube.com/watch?v=LvpQ2SBG-ug"
+    },
+    {
+        "isrc": "DES232400020",
+        "track_name": "Nobody Knows (feat. Clementine Douglas)",
+        "artist_name": "Ape Drums",
+        "track_url": "https://music.apple.com/us/album/nobody-knows-feat-clementine-douglas/1722618851?i=1722618852",
+        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/08/3a/03/083a0368-0267-b6cf-cbed-8ecc414ee1cf/cover.jpg/296x296bb-60.jpg",
+        "rank": 91,
+        "source_name": "apple_music",
+        "youtube_url": "https://www.youtube.com/watch?v=T29FX3afC8c"
     },
     {
         "isrc": "GBCEN2400112",
@@ -965,7 +915,7 @@
         "artist_name": "PAWSA",
         "track_url": "https://music.apple.com/us/album/pick-up-the-phone-feat-nate-dogg/1749275841?i=1749275843",
         "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/50/d4/a2/50d4a21b-457b-0b5e-04a9-ee8caff91271/196872168358.jpg/296x296bb-60.jpg",
-        "rank": 97,
+        "rank": 92,
         "source_name": "apple_music",
         "youtube_url": "https://www.youtube.com/watch?v=Gp03sjth0yo"
     },
@@ -975,7 +925,7 @@
         "artist_name": "Skrillex, Hamdi & Taichu",
         "track_url": "https://music.apple.com/us/album/push-feat-offaiah/1747375768?i=1747375769",
         "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/e8/5f/11/e85f112f-eacb-7d5d-4f64-a525327ef248/075679645944.jpg/296x296bb-60.jpg",
-        "rank": 98,
+        "rank": 93,
         "source_name": "apple_music",
         "youtube_url": "https://www.youtube.com/watch?v=E89B5VEp1pg"
     },
@@ -985,18 +935,58 @@
         "artist_name": "Peggy Gou",
         "track_url": "https://music.apple.com/us/album/back-to-one/1735512900?i=1735513158",
         "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/5d/67/1e/5d671e2a-5130-5296-69ac-0457c8a8ed94/191404137574.png/296x296bb-60.jpg",
-        "rank": 99,
+        "rank": 94,
         "source_name": "apple_music",
         "youtube_url": "https://www.youtube.com/watch?v=imYYKJasqvQ"
     },
     {
         "isrc": "QM6MZ2439295",
         "track_name": "Qualified",
-        "artist_name": "Jammer, Zed Bias & Mas Tiempo",
+        "artist_name": "Jammer & Zed Bias",
         "track_url": "https://music.apple.com/us/album/qualified/1741826301?i=1741826313",
         "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/0b/db/a4/0bdba4a4-12d5-8b08-5015-8713c935dd7f/198391713453.jpg/296x296bb-60.jpg",
-        "rank": 100,
+        "rank": 95,
         "source_name": "apple_music",
         "youtube_url": "https://www.youtube.com/watch?v=0I8dGbE0G5I"
+    },
+    {
+        "isrc": "US38Y2411494",
+        "track_name": "Shallow Water",
+        "artist_name": "Elderbrook",
+        "track_url": "https://music.apple.com/us/album/shallow-water/1746720414?i=1746720418",
+        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/5b/05/de/5b05de22-6a3d-242b-93d8-7560bade58ef/085365431508.jpg/296x296bb-60.jpg",
+        "rank": 96,
+        "source_name": "apple_music",
+        "youtube_url": "https://www.youtube.com/watch?v=HZ6L_6a7RcQ"
+    },
+    {
+        "isrc": "NLZ542400390",
+        "track_name": "Bidi Bam",
+        "artist_name": "TWENTY SIX & Jenn Morel",
+        "track_url": "https://music.apple.com/us/album/bidi-bam/1744979281?i=1744979508",
+        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/60/c8/fc/60c8fcba-7ba8-5fc0-0c9e-531373f6cea0/5021732372703.jpg/296x296bb-60.jpg",
+        "rank": 97,
+        "source_name": "apple_music",
+        "youtube_url": "https://www.youtube.com/watch?v=HW_XHQD_Z4I"
+    },
+    {
+        "isrc": "USA2P2428438",
+        "track_name": "Voices In My Head (feat. Teddy Bee)",
+        "artist_name": "Steve Aoki & Bassjackers",
+        "track_url": "https://music.apple.com/us/album/voices-in-my-head-feat-teddy-bee/1745791059?i=1745791618",
+        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/ba/3f/9d/ba3f9d63-f829-c199-063a-e3ef469c97ce/196922976018_Cover.jpg/296x296bb-60.jpg",
+        "rank": 98,
+        "source_name": "apple_music",
+        "youtube_url": "https://www.youtube.com/watch?v=lr39889Qm1k"
+    },
+    {
+        "isrc": "GBEWA2403201",
+        "track_name": "One Life",
+        "artist_name": "NAZ & Lewyn",
+        "track_url": "https://music.apple.com/us/album/one-life/1745389982?i=1745389984",
+        "album_cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/52/29/17/52291793-ffc4-ff33-e94e-9abe4b7f9681/cover.jpg/296x296bb-60.jpg",
+        "rank": 99,
+        "source_name": "apple_music",
+        "youtube_url": "https://www.youtube.com/watch?v=MnxUwe4r7rU"
     }
 ]
