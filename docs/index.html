@@ -167,15 +167,69 @@
     .track-column {
       flex: 1;
     }
-    
     .track-headers {
       display: flex;
       justify-content: space-between;
       padding: 10px;
       background-color: #555;
     }
-    </style>
+    .overlay {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      background-color: rgba(0, 0, 0, 0.8);
+      color: white;
+      padding: 10px;
+      font-size: 16px;
+      z-index: 1000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
     
+    .overlay-content {
+      display: flex;
+      flex-wrap: wrap; 
+      align-items: center;
+      width: 100%;
+      max-width: 1200px;
+    }
+    
+    .overlay p {
+      margin: 0; 
+      padding: 0; 
+      line-height: 1.5;
+      flex: 1; 
+      display: inline-flex; 
+      flex-wrap: wrap; 
+    }
+    
+    .overlay a {
+      color: #ccc;
+      text-decoration: none;
+      margin-left: 5px;
+      margin-right: 5px; 
+    }
+    
+    .overlay a:hover {
+      text-decoration: underline;
+    }
+    
+    .overlay button {
+      background-color: #007bff;
+      border: none;
+      color: white;
+      padding: 5px 10px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 14px;
+      margin-left: 10px; /* Add some margin to separate from the text */
+      cursor: pointer;
+      white-space: nowrap; /* Ensure button does not wrap */
+      flex-shrink: 0; /* Prevent button from shrinking */
+    }
+  </style>
 </head>
 <body>
   <div class="container my-2" id="main-content">
@@ -192,7 +246,7 @@
             Last Updated: Loading...
           </div>
           <div class="playlist-description">
-            Tracks seen on more than one curated streaming service, updated every Saturday
+            Tracks seen on more than one curated streaming playlist, updated every Saturday
           </div>
           <div class="track-headers">
             <div class="track-header-info">Track Info</div>
@@ -265,8 +319,16 @@
 </div>
 <div class="row" style="margin-top: 20px;">
   <div class="col-md-12 text-center">
-    <a href="https://www.google.com/policies/privacy/" target="_blank" style="color: #ccc; text-decoration: none; font-size: 0.8rem; margin-bottom: 5px;">YouTube Privacy Policy</a>
+    <a href="https://www.google.com/policies/privacy/" target="_blank" style="color: #ccc; text-decoration: none; font-size: 0.8rem; margin-bottom: 5px;">Google Privacy Policy</a>
   </div>
 </div>
-  </body>
+<div id="tosPrivacyOverlay" class="overlay">
+  <div class="overlay-content">
+    <p>By using Tunemeld, you agree to be bound by the <a href="https://www.youtube.com/t/terms" target="_blank"> YouTube Terms of Service</a>and the <a href="https://www.google.com/policies/privacy/" target="_blank">Google Privacy Policy.</a></p>
+    <button id="acceptButton" class="btn btn-primary btn-sm">I Accept</button>
+  </div>
+</div>
+
+<script src="overlay.js"></script>
+</body>
 </html>
