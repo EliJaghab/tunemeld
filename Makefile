@@ -16,3 +16,9 @@ pull_push:
 	@git push
 	@if [ $$? -ne 0 ]; then echo "Error: Failed to push the changes."; exit 1; fi
 	@echo "Successfully pulled, rebased, and pushed the changes."
+	
+dev:
+	cd backend/backend && wrangler dev --env development src/index.ts
+
+prod:
+	cd backend/backend && wrangler deploy --env production src/index.ts

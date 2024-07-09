@@ -9,7 +9,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
 const API_BASE_URL = window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost' 
   ? 'http://127.0.0.1:8787' 
-  : 'your-production-url';
+  : 'https://tunemeld-worker.elijaghab.workers.dev';
+
 
 async function fetchAndDisplayLastUpdated() {
   try {
