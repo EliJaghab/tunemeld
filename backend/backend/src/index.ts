@@ -20,8 +20,12 @@ export default {
                     return await handleTransformedPlaylist(searchParams, env);
                 case '/api/last-updated':
                     return await handleLastUpdated();
+                case '/':
+                case '/index.html':
+                    return await serveStaticFile('docs/index.html');
                 default:
-                    return new Response('Hello World!', {
+                    return new Response('File not found', {
+                        status: 404,
                         headers: { 'Access-Control-Allow-Origin': '*' }
                     });
             }
@@ -53,7 +57,7 @@ async function fetchFromMongoDB(collection: string, query: object, env: any): Pr
         filter: query,
     };
 
-    console.log('Request Payload:', requestPayload); 
+    console.log('Request Payload:', requestPayload);
 
     const response = await fetch(`${env.MONGO_DATA_API_ENDPOINT}/action/find`, {
         method: 'POST',
@@ -64,13 +68,13 @@ async function fetchFromMongoDB(collection: string, query: object, env: any): Pr
         body: JSON.stringify(requestPayload),
     });
 
-    console.log('MongoDB Response Status:', response.status); // Add logging
+    console.log('MongoDB Response Status:', response.status);
     if (!response.ok) {
         throw new Error(`Failed to fetch from MongoDB. Status: ${response.status}`);
     }
 
     const data = await response.json();
-    console.log('MongoDB Response Data:', data); // Add logging
+    console.log('MongoDB Response Data:', data);
     return data.documents;
 }
 
@@ -113,4 +117,22 @@ async function handleLastUpdated(): Promise<Response> {
             'Access-Control-Allow-Origin': '*',
         },
     });
+}
+
+async function serveStaticFile(filePath: string): Promise<Response> {
+    try {
+        const fileContents = await fetch(`https://<YOUR_BUCKET_URL>/${filePath}`).then(res => res.text());
+        return new Response(fileContents, {
+            headers: {
+                'Content-Type': 'text/html',
+                'Access-Control-Allow-Origin': '*',
+            },
+        });
+    } catch (error) {
+        console.error('Error serving static file:', error);
+        return new Response('Error serving static file', {
+            status: 500,
+            headers: { 'Access-Control-Allow-Origin': '*' }
+        });
+    }
 }
