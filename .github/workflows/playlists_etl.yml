@@ -26,14 +26,17 @@ jobs:
       - name: Run extract
         env:
           X_RAPIDAPI_KEY: ${{ secrets.X_RAPIDAPI_KEY }}
+          MONGO_URI: ${{ secrets.MONGO_URI }}
         run: python playlist_etl/extract.py
 
       - name: Run transform
         env:
-          spotify_client_id: ${{ secrets.SPOTIFY_CLIENT_ID }}
-          spotify_client_secret: ${{ secrets.SPOTIFY_CLIENT_SECRET }}
+          SPOTIFY_CLIENT_ID: ${{ secrets.SPOTIFY_CLIENT_ID }}
+          SPOTIFY_CLIENT_SECRET: ${{ secrets.SPOTIFY_CLIENT_SECRET }}
           GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
         run: python playlist_etl/transform.py
 
       - name: Run gold
+        env:
+          MONGO_URI: ${{ secrets.MONGO_URI }}
         run: python playlist_etl/aggregator.py
