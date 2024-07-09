@@ -9,7 +9,7 @@ node_compat = true
 
 [env.production]
 workers_dev = false
-route = "tunemeld.com/*"
+route = "api.tunemeld.com/*" 
 
 [[env.production.kv_namespaces]]
 binding = "MONGO_URI"

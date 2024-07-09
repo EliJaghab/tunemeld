@@ -20,11 +20,8 @@ export default {
                     return await handleTransformedPlaylist(searchParams, env);
                 case '/api/last-updated':
                     return await handleLastUpdated();
-                case '/':
-                case '/index.html':
-                    return await serveStaticFile('docs/index.html');
                 default:
-                    return new Response('File not found', {
+                    return new Response('Not Found', {
                         status: 404,
                         headers: { 'Access-Control-Allow-Origin': '*' }
                     });
@@ -57,7 +54,7 @@ async function fetchFromMongoDB(collection: string, query: object, env: any): Pr
         filter: query,
     };
 
-    console.log('Request Payload:', requestPayload);
+    console.log('Request Payload:', requestPayload); 
 
     const response = await fetch(`${env.MONGO_DATA_API_ENDPOINT}/action/find`, {
         method: 'POST',
@@ -117,22 +114,4 @@ async function handleLastUpdated(): Promise<Response> {
             'Access-Control-Allow-Origin': '*',
         },
     });
-}
-
-async function serveStaticFile(filePath: string): Promise<Response> {
-    try {
-        const fileContents = await fetch(`https://<YOUR_BUCKET_URL>/${filePath}`).then(res => res.text());
-        return new Response(fileContents, {
-            headers: {
-                'Content-Type': 'text/html',
-                'Access-Control-Allow-Origin': '*',
-            },
-        });
-    } catch (error) {
-        console.error('Error serving static file:', error);
-        return new Response('Error serving static file', {
-            status: 500,
-            headers: { 'Access-Control-Allow-Origin': '*' }
-        });
-    }
 }
