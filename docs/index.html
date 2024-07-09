@@ -9,221 +9,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css">
   <title>tunemeld</title>
-  <style>
-    a {
-      color: white;
-    }
-    body {
-      background-color: #333;
-      color: white;
-    }
-    h1 {
-      font-family: 'DM Sans', sans-serif;
-      font-weight: 600;
-    }
-    #main-content {
-      transition: opacity 2s ease-in-out;
-      opacity: 1;
-    }
-    .album-cover {
-      width: 50px;
-      height: 50px;
-      margin-right: 5px;
-    }
-    .track-item-content {
-      display: flex;
-      align-items: center;
-      padding: 10px;
-      background-color: #444;
-      color: white;
-    }
-    .track-number {
-      margin-right: 10px;
-      font-size: 20px;
-      line-height: 40px;
-      width: 50px;
-      text-align: center;
-    }
-    .track-info {
-      flex: 3;
-      padding: 0 10px;
-    }
-    .track-column {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      width: 150px;
-    }
-    .column-header {
-      font-weight: bold;
-      text-align: center;
-    }
-    .source-icons, .external-links {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 5px;
-    }
-    .track-list-item {
-      background-color: #444;
-      color: white;
-      padding: 5px 0;
-    }
-    .username {
-      font-size: 12px;
-      margin: 0;
-    }
-    .track-title {
-      font-weight: 400;
-      margin: 0;
-      color: white;
-    }
-    .playlist {
-      overflow-y: auto;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      padding: 5px;
-      margin: 5px 0;
-      width: 100%;
-    }
-    .playlist-title {
-      text-align: center;
-      font-weight: bold;
-      margin-bottom: 5px;
-    }
-    .source-icon {
-      width: 24px;
-      height: 24px;
-    }
-    .container {
-      max-width: 100%;
-      max-width: 1200px;
-      max-width: 75rem;
-      max-width: 90vw;
-    }
-    .row {
-      margin: 0;
-    }
-    .col-md-4,
-    .col-sm-12 {
-      padding: 0 5px;
-    }
-    .playlist-description {
-      text-align: center;
-      font-family: 'DM Sans', sans-serif;
-      font-weight: 400;
-      font-size: 14px;
-      color: #ccc;
-      margin-bottom: 10px;
-    }
-    #soundcloud-link {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      color: white;
-      font-family: 'DM Sans', sans-serif;
-      font-weight: 600;
-      text-decoration: none;
-      background-color: #444;
-      padding: 3px 8px;
-      border-radius: 5px;
-      display: flex;
-      align-items: center;
-      font-size: 12px;
-      transition: background-color 0.3s ease;
-    }
-    #soundcloud-link:hover {
-      background-color: #555;
-    }
-    #soundcloud-logo {
-      width: 20px;
-      height: 20px;
-      margin-right: 5px;
-    }
-    .track-header {
-      font-weight: bold;
-      text-align: left;
-      flex: 1;
-      width: 150px;
-    }
-    
-    .track-header-info {
-      composes: track-header;
-      margin-left: 12%;
-    }
-    
-    .track-header-seen-on {
-      composes: track-header;
-      margin-left: 40%; 
-    }
-    
-    .track-header-external-links {
-      composes: track-header;
-      margin-right: 5%;
-    }
-    
-    .track-column {
-      flex: 1;
-    }
-    .track-headers {
-      display: flex;
-      justify-content: space-between;
-      padding: 10px;
-      background-color: #555;
-    }
-    .overlay {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      width: 100%;
-      background-color: rgba(0, 0, 0, 0.8);
-      color: white;
-      padding: 10px;
-      font-size: 16px;
-      z-index: 1000;
-    }
-    
-    .overlay-content {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 15px;
-    }
-    
-    .overlay p {
-      margin: 0;
-      padding: 0;
-      line-height: 1.5;
-      flex: 1;
-    }
-    
-    .overlay a {
-      color: #ccc;
-      text-decoration: none;
-    }
-    
-    .overlay a:hover {
-      text-decoration: underline;
-    }
-    
-    acceptButton {
-      background-color: #007bff;
-      border: none;
-      color: white;
-      padding: 5px 10px;
-      text-align: center;
-      text-decoration: none;
-      font-size: 14px;
-      cursor: pointer;
-      white-space: nowrap;
-      margin-left: 15px;
-    }
-  </style>
 </head>
 <body>
   <div class="container my-2" id="main-content">
@@ -232,6 +19,12 @@
       <img src="./images/soundcloud_logo.png" alt="SoundCloud" id="soundcloud-logo" />
       Eli's SoundCloud
     </a>
+    <div class="text-center mb-3">
+      <select id="genre-selector" class="custom-select" style="width: 200px;">
+        <option value="dance">Dance</option>
+        <option value="rap" selected>Rap</option>
+      </select>
+    </div>
     <div class="row">
       <div class="col-md-12">
         <div class="playlist">
@@ -247,8 +40,7 @@
             <div class="track-header-seen-on">Seen On</div>
             <div class="track-header-external-links">External</div>
           </div>
-            <div id="aggregated-data-placeholder"></div>
-          </div>
+          <div id="aggregated-data-placeholder"></div>
         </div>
       </div>
     </div>
@@ -256,16 +48,9 @@
       <div class="col-md-4 col-sm-12">
         <div class="playlist">
           <div class="playlist-title">
-            <a
-              href="https://soundcloud.com/soundcloud-the-peak/sets/on-the-up-new-edm-hits"
-              target="_blank"
-            >
-              <img
-                src="./images/soundcloud_logo.png"
-                alt="SoundCloud"
-                class="source-icon"
-              />
-              New EDM Hits: On The Up
+            <a id="soundcloud-playlist-link" target="_blank">
+              <img src="./images/soundcloud_logo.png" alt="SoundCloud" class="source-icon" />
+              <span id="soundcloud-playlist-title">SoundCloud Playlist</span>
             </a>
           </div>
           <div id="soundcloud-data-placeholder"></div>
@@ -274,16 +59,9 @@
       <div class="col-md-4 col-sm-12">
         <div class="playlist">
           <div class="playlist-title">
-            <a
-              href="https://music.apple.com/us/playlist/dancexl/pl.6bf4415b83ce4f3789614ac4c3675740"
-              target="_blank"
-            >
-              <img
-                src="./images/apple_music_logo.png"
-                alt="Apple Music"
-                class="source-icon"
-              />
-              danceXL
+            <a id="apple-music-playlist-link" target="_blank">
+              <img src="./images/apple_music_logo.png" alt="Apple Music" class="source-icon" />
+              <span id="apple-music-playlist-title">Apple Music Playlist</span>
             </a>
           </div>
           <div id="apple-music-data-placeholder"></div>
@@ -292,37 +70,29 @@
       <div class="col-md-4 col-sm-12">
         <div class="playlist">
           <div class="playlist-title">
-            <a
-              href="https://open.spotify.com/playlist/37i9dQZF1DX4dyzvuaRJ0n"
-              target="_blank"
-            >
-              <img
-                src="./images/spotify_logo.png"
-                alt="Spotify"
-                class="source-icon"
-              />
-              mint
+            <a id="spotify-playlist-link" target="_blank">
+              <img src="./images/spotify_logo.png" alt="Spotify" class="source-icon" />
+              <span id="spotify-playlist-title">Spotify Playlist</span>
             </a>
           </div>
           <div id="spotify-data-placeholder"></div>
         </div>
       </div>
     </div>
-    <script src="main.js"></script>
   </div>
-</div>
-<div class="row" style="margin-top: 20px;">
-  <div class="col-md-12 text-center">
-    <a href="https://www.google.com/policies/privacy/" target="_blank" style="color: #ccc; text-decoration: none; font-size: 0.8rem; margin-bottom: 5px;">Google Privacy Policy</a>
+  <div class="row" style="margin-top: 20px;">
+    <div class="col-md-12 text-center">
+      <a href="https://www.google.com/policies/privacy/" target="_blank" style="color: #ccc; text-decoration: none; font-size: 0.8rem; margin-bottom: 5px;">Google Privacy Policy</a>
+    </div>
   </div>
-</div>
-<div id="tosPrivacyOverlay" class="overlay">
-  <div class="overlay-content">
-    <p>By using Tunemeld, you agree to be bound by the <a href="https://www.youtube.com/t/terms" target="_blank"> YouTube Terms of Service</a>and the <a href="https://www.google.com/policies/privacy/" target="_blank">Google Privacy Policy.</a></p>
-    <button id="acceptButton" class="btn btn-primary btn-sm">I Accept</button>
+  <div id="tosPrivacyOverlay" class="overlay">
+    <div class="overlay-content">
+      <p>By using Tunemeld, you agree to be bound by the <a href="https://www.youtube.com/t/terms" target="_blank">YouTube Terms of Service</a> and the <a href="https://www.google.com/policies/privacy/" target="_blank">Google Privacy Policy</a>.</p>
+      <button id="acceptButton" class="btn btn-primary btn-sm">I Accept</button>
+    </div>
   </div>
-</div>
 
-<script src="overlay.js"></script>
+  <script src="main.js"></script>
+  <script src="overlay.js"></script>
 </body>
 </html>

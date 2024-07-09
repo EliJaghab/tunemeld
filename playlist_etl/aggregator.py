@@ -1,44 +1,27 @@
-"""
-This file takes 3 json files of playlists and combines 
-them to identify overlapping tracks on different services.
-
-Below is an example of what one entry in the aggregated playlist 
-looks like when a track is seen on all three platforms.
-Note: Its source is duplicated in the additional sources key.
-    {
-    "isrc": "USUG12402645",
-    "name": "Summertime Blues",
-    "artist": "Chris Lake, Sammy Virji, Nathan Nicholson",
-    "track_url": "https://soundcloud.com/chrislake/chris-lake-sammy-virji-nathan",
-    "rank": 4,
-    "album_url": "https://i1.sndcdn.com/artworks-p4XAkRuaHNhD-0-original.jpg",
-    "source_name": "soundcloud"
-    "additional_sources":
-        {
-            "apple_music": "www.apple_music_link.com",
-            "soundcloud"" "soundcloud_link.com",
-            "spotify": "spotify_link.com"
-        }
-},
-"""
-
-import os
-
+import collections
 from typing import Dict, List
 
-from extract import write_json_to_file
-from transform import read_json_from_file
-import collections
+from extract import PLAYLIST_GENRES
+from utils import (
+    clear_collection,
+    get_mongo_client,
+    insert_data_to_mongo,
+    read_data_from_mongo,
+    set_secrets,
+)
+
+AGGREGATED_DATA_COLLECTION = "aggregated_playlists"
+TRANSFORMED_DATA_COLLECTION = "transformed_playlists"
 
 
 def aggregate_tracks_by_isrc(services):
     track_aggregate = collections.defaultdict(dict)
 
     for service in services:
-        for track in service:
+        for track in service["tracks"]:
             isrc = track["isrc"]
-            service = track["source_name"]
-            track_aggregate[isrc][service] = track
+            source = track["source_name"]
+            track_aggregate[isrc][source] = track
 
     filtered_aggregate = {}
     for isrc, sources in track_aggregate.items():
@@ -51,29 +34,22 @@ def aggregate_tracks_by_isrc(services):
 def consolidate_tracks(tracks_by_isrc):
     consolidated_tracks = []
 
-    rank_priority = ["apple_music", "soundcloud", "spotify"]
-    default_source_priority = ["soundcloud", "apple_music", "spotify"]
+    rank_priority = ["AppleMusic", "SoundCloud", "Spotify"]
+    default_source_priority = ["SoundCloud", "AppleMusic", "Spotify"]
 
     for track in tracks_by_isrc.values():
-
-        primary_rank_source = None
-        for rank_source in rank_priority:
-            if rank_source in track:
-                primary_rank_source = rank_source
-                break
-
-        primary_source = None
-        for source in default_source_priority:
-            if source in track:
-                primary_source = source
-                break
+        primary_rank_source = next(
+            (rank_source for rank_source in rank_priority if rank_source in track), None
+        )
+        primary_source = next(
+            (source for source in default_source_priority if source in track), None
+        )
 
         new_track_entry = track[primary_source].copy()
         new_track_entry["rank"] = track[primary_rank_source]["rank"]
-        new_track_entry["additional_sources"] = {}
-
-        for source, details in track.items():
-            new_track_entry["additional_sources"][source] = details["track_url"]
+        new_track_entry["additional_sources"] = {
+            source: details["track_url"] for source, details in track.items()
+        }
 
         consolidated_tracks.append(new_track_entry)
 
@@ -85,21 +61,31 @@ def consolidate_tracks(tracks_by_isrc):
     return consolidated_tracks
 
 
-def read_json_files_from_directory() -> List[Dict]:
-    all_data = []
-    transformed_files_directory = "docs/files/transform"
-    for filename in os.listdir(transformed_files_directory):
-        if filename.endswith(".json"):
-            file_path = os.path.join(transformed_files_directory, filename)
-            data = read_json_from_file(file_path)
-            all_data.append(data)
-    return all_data
+def read_transformed_data_from_mongo(client, genre: str) -> List[Dict]:
+    print(f"Reading transformed data for genre: {genre} from MongoDB...")
+    data = read_data_from_mongo(client, TRANSFORMED_DATA_COLLECTION)
+    filtered_data = [doc for doc in data if doc["genre_name"] == genre]
+    print(f"Found {len(filtered_data)} documents for genre: {genre}.")
+    return filtered_data
 
 
 if __name__ == "__main__":
-    loaded_data = read_json_files_from_directory()
-    tracks_by_isrc = aggregate_tracks_by_isrc(loaded_data)
-    consolidated = consolidate_tracks(tracks_by_isrc)
-    base_path = "docs/files/aggregated"
-    os.makedirs(base_path, exist_ok=True)
-    write_json_to_file(consolidated, f"{base_path}/danceplaylist_gold.json")
+    print("Setting secrets...")
+    set_secrets()
+    mongo_client = get_mongo_client()
+
+    print(f"Clearing collection: {AGGREGATED_DATA_COLLECTION}")
+    clear_collection(mongo_client, AGGREGATED_DATA_COLLECTION)
+
+    for genre in PLAYLIST_GENRES:
+        print(f"Processing genre: {genre}...")
+        transformed_data = read_transformed_data_from_mongo(mongo_client, genre)
+        tracks_by_isrc = aggregate_tracks_by_isrc(transformed_data)
+        consolidated_tracks = consolidate_tracks(tracks_by_isrc)
+        document = {
+            "service_name": "aggregated",
+            "genre_name": genre,
+            "tracks": consolidated_tracks,
+        }
+        insert_data_to_mongo(mongo_client, AGGREGATED_DATA_COLLECTION, document)
+        print(f"Aggregation and consolidation completed for genre: {genre}.")

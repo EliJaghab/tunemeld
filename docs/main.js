@@ -1,215 +1,177 @@
-(function () {
-  'use strict';
+document.addEventListener('DOMContentLoaded', function () {
+  fetchAndDisplayLastUpdated();
+  initializePlaylists('rap'); // Initially load 'rap' genre, as selected in the dropdown
 
-  document.addEventListener('DOMContentLoaded', function () {
-    fetchAndDisplayLastUpdated();
-    initializePlaylists('dance');
+  document.getElementById('genre-selector').addEventListener('change', function (event) {
+    initializePlaylists(event.target.value);
   });
+});
 
-  function fetchAndDisplayLastUpdated() {
-    fetch('./files/last-updated.txt')
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(
-            `Failed to fetch last-updated.txt. Status: ${response.status}`,
-          );
-        }
-        return response.text();
-      })
-      .then((lastUpdatedDate) => {
-        const utcDate = new Date(lastUpdatedDate.trim());
-        const etDate = new Date(
-          utcDate.toLocaleString('en-US', { timeZone: 'America/New_York' }),
-        );
-        const formattedDate = etDate.toLocaleString('en-US', {
-          month: 'long',
-          day: 'numeric',
-          year: 'numeric',
-          hour: 'numeric',
-          minute: '2-digit',
-          timeZoneName: 'short',
-        });
+const API_BASE_URL = window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost' 
+  ? 'http://127.0.0.1:8787' 
+  : 'your-production-url';
 
-        const lastUpdatedElement = document.getElementById('last-updated');
-        if (lastUpdatedElement) {
-          lastUpdatedElement.textContent = `Last Updated - ${formattedDate}`;
-        }
-      })
-      .catch((error) =>
-        console.error('Error fetching last updated date:', error),
-      );
-  }
-
-  function initializePlaylists(genre) {
-    const config = {
-      dance: {
-        Aggregated: './files/aggregated/danceplaylist_gold.json',
-        AppleMusic: './files/transform/apple_music_dance_transformed.json',
-        SoundCloud: './files/transform/soundcloud_dance_transformed.json',
-        Spotify: './files/transform/spotify_dance_transformed.json',
-      },
-    };
-
-    const playlistConfigs = config[genre];
-
-    if (playlistConfigs) {
-      fetchAndDisplayData(
-        playlistConfigs.AppleMusic,
-        'apple-music-data-placeholder',
-      );
-      fetchAndDisplayData(
-        playlistConfigs.SoundCloud,
-        'soundcloud-data-placeholder',
-      );
-      fetchAndDisplayData(playlistConfigs.Spotify, 'spotify-data-placeholder');
-      fetchAndDisplayData(
-        playlistConfigs.Aggregated,
-        'aggregated-data-placeholder',
-        true,
-      );
-    } else {
-      console.error(`No playlist configurations found for genre: ${genre}`);
+async function fetchAndDisplayLastUpdated() {
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/last-updated`);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch last-updated. Status: ${response.status}`);
     }
+    const lastUpdated = await response.json();
+    const lastUpdatedDate = new Date(lastUpdated.lastUpdated);
+    const formattedDate = lastUpdatedDate.toLocaleString('en-US', {
+      month: 'long',
+      day: 'numeric',
+      year: 'numeric',
+      hour: 'numeric',
+      minute: '2-digit',
+      timeZoneName: 'short',
+    });
+    document.getElementById('last-updated').textContent = `Last Updated - ${formattedDate}`;
+  } catch (error) {
+    console.error('Error fetching last updated date:', error);
   }
+}
 
-  function fetchAndDisplayData(filename, placeholderId, isAggregated = false) {
-    console.log(`Fetching data from ${filename}...`);
-
-    fetch(filename)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(
-            `Failed to fetch ${filename}. Status: ${response.status}`,
-          );
-        }
-        return response.json();
-      })
-      .then((data) => {
-        console.log(`Data fetched. Processing...`);
-        displayData(data, placeholderId, isAggregated);
-      })
-      .catch((error) => {
-        console.error(`Error fetching and displaying data:`, error);
-      });
+async function initializePlaylists(genre) {
+  try {
+    await fetchAndDisplayData(`${API_BASE_URL}/api/transformed-playlist?genre=${genre}&service=AppleMusic`, 'apple-music-data-placeholder');
+    await fetchAndDisplayData(`${API_BASE_URL}/api/transformed-playlist?genre=${genre}&service=SoundCloud`, 'soundcloud-data-placeholder');
+    await fetchAndDisplayData(`${API_BASE_URL}/api/transformed-playlist?genre=${genre}&service=Spotify`, 'spotify-data-placeholder');
+    await fetchAndDisplayData(`${API_BASE_URL}/api/aggregated-playlist?genre=${genre}`, 'aggregated-data-placeholder', true);
+  } catch (error) {
+    console.error('Error initializing playlists:', error);
   }
+}
 
-  function displayData(data, placeholderId, isAggregated = false) {
-    const placeholder = document.getElementById(placeholderId);
-    if (!placeholder) {
-      console.error(`Placeholder with ID ${placeholderId} not found.`);
-      return;
+async function fetchAndDisplayData(url, placeholderId, isAggregated = false) {
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch ${url}. Status: ${response.status}`);
     }
+    const data = await response.json();
+    displayData(data, placeholderId, isAggregated);
+  } catch (error) {
+    console.error('Error fetching and displaying data:', error);
+  }
+}
 
-    placeholder.innerHTML = '';
-
-    data.forEach((track, _) => {
+function displayData(data, placeholderId, isAggregated = false) {
+  const placeholder = document.getElementById(placeholderId);
+  if (!placeholder) {
+    console.error(`Placeholder with ID ${placeholderId} not found.`);
+    return;
+  }
+  placeholder.innerHTML = '';
+  data.forEach((playlist) => {
+    playlist.tracks.forEach((track) => {
       const card = createCard(track, isAggregated);
       placeholder.appendChild(card);
     });
+  });
+}
+
+function createCard(track, isAggregated) {
+  const card = document.createElement('div');
+  card.className = 'card my-1';
+  const cardBody = document.createElement('div');
+  cardBody.className = 'card-body track-item-content';
+
+  const trackNumber = document.createElement('div');
+  trackNumber.className = 'track-number';
+  trackNumber.textContent = track.rank || '';
+
+  const albumCover = document.createElement('img');
+  albumCover.className = 'album-cover';
+  albumCover.src = track.album_cover_url || ''; // Ensure the URL is not undefined
+  albumCover.alt = 'Album Cover';
+
+  const trackInfo = document.createElement('div');
+  trackInfo.className = 'track-info';
+  const trackTitle = document.createElement('a');
+  trackTitle.className = 'track-title';
+  trackTitle.href = track.track_url || '#'; // Ensure the URL is not undefined
+  trackTitle.textContent = track.track_name || 'Unknown Track';
+
+  const artistNameElement = document.createElement('span');
+  artistNameElement.className = 'artist-name';
+  artistNameElement.textContent = track.artist_name || 'Unknown Artist';
+
+  trackInfo.appendChild(trackTitle);
+  trackInfo.appendChild(document.createElement('br'));
+  trackInfo.appendChild(artistNameElement);
+
+  cardBody.appendChild(trackNumber);
+  cardBody.appendChild(albumCover);
+  cardBody.appendChild(trackInfo);
+
+  if (isAggregated) {
+    const seenOnColumn = document.createElement('div');
+    seenOnColumn.className = 'track-column source-icons';
+    displaySources(seenOnColumn, track);
+    cardBody.appendChild(seenOnColumn);
   }
 
-  function createCard(track, isAggregated) {
-    const card = document.createElement('div');
-    card.className = 'card my-1';
-
-    const cardBody = document.createElement('div');
-    cardBody.className = 'card-body track-item-content';
-
-    const trackNumber = document.createElement('div');
-    trackNumber.className = 'track-number';
-    trackNumber.textContent = track.rank;
-
-    const albumCover = document.createElement('img');
-    albumCover.className = 'album-cover';
-    albumCover.src = track.album_cover_url;
-    albumCover.alt = 'Album Cover';
-
-    const trackInfo = document.createElement('div');
-    trackInfo.className = 'track-info';
-
-    const trackTitle = document.createElement('a');
-    trackTitle.className = 'track-title';
-    trackTitle.href = track.track_url;
-    trackTitle.textContent = track.track_name;
-
-    const artistNameElement = document.createElement('span');
-    artistNameElement.className = 'artist-name';
-    artistNameElement.textContent = track.artist_name;
-
-    trackInfo.appendChild(trackTitle);
-    trackInfo.appendChild(document.createElement('br'));
-    trackInfo.appendChild(artistNameElement);
-
-    cardBody.appendChild(trackNumber);
-    cardBody.appendChild(albumCover);
-    cardBody.appendChild(trackInfo);
-
-    if (isAggregated) {
-      const seenOnColumn = document.createElement('div');
-      seenOnColumn.className = 'track-column source-icons';
-      displaySources(seenOnColumn, track);
-      cardBody.appendChild(seenOnColumn);
-    }
-
-    const externalLinksColumn = document.createElement('div');
-    externalLinksColumn.className = 'track-column external-links';
-    if (track.youtube_url) {
-      const youtubeLink = createSourceLink('youtube', track.youtube_url);
-      externalLinksColumn.appendChild(youtubeLink);
-    }
-    cardBody.appendChild(externalLinksColumn);
-
-    card.appendChild(cardBody);
-    return card;
+  const externalLinksColumn = document.createElement('div');
+  externalLinksColumn.className = 'track-column external-links';
+  if (track.youtube_url) {
+    const youtubeLink = createSourceLink('youtube', track.youtube_url);
+    externalLinksColumn.appendChild(youtubeLink);
   }
 
-  function displaySources(cardBody, track) {
-    const sourcesContainer = document.createElement('div');
-    sourcesContainer.className = 'track-sources';
+  cardBody.appendChild(externalLinksColumn);
+  card.appendChild(cardBody);
+  return card;
+}
 
-    const allSources = {
-      ...track.additional_sources,
-      [track.source]: track.link,
-    };
+function displaySources(cardBody, track) {
+  const sourcesContainer = document.createElement('div');
+  sourcesContainer.className = 'track-sources';
+  const allSources = {
+    ...track.additional_sources,
+    [track.source_name]: track.track_url,
+  };
+  Object.keys(allSources).forEach((source) => {
+    const sourceLink = allSources[source];
+    const linkElement = createSourceLink(source, sourceLink);
+    sourcesContainer.appendChild(linkElement);
+  });
+  cardBody.appendChild(sourcesContainer);
+}
 
-    Object.keys(allSources).forEach((source) => {
-      const sourceLink = allSources[source];
-      const linkElement = createSourceLink(source, sourceLink);
-      sourcesContainer.appendChild(linkElement);
-    });
-
-    cardBody.appendChild(sourcesContainer);
+function createSourceLink(source, sourceLink) {
+  if (!sourceLink) {
+    console.warn(`No Link available for source: ${source}`);
+    return document.createTextNode('');
   }
 
-  function createSourceLink(source, sourceLink) {
-    const sourceIcon = document.createElement('img');
-    const linkElement = document.createElement('a');
-    linkElement.href = sourceLink;
-    linkElement.target = '_blank';
-
-    sourceIcon.className = 'source-icon';
-    switch (source) {
-      case 'soundcloud':
-        sourceIcon.src = './images/soundcloud_logo.png';
-        sourceIcon.alt = 'SoundCloud';
-        break;
-      case 'spotify':
-        sourceIcon.src = './images/spotify_logo.png';
-        sourceIcon.alt = 'Spotify';
-        break;
-      case 'apple_music':
-        sourceIcon.src = './images/apple_music_logo.png';
-        sourceIcon.alt = 'Apple Music';
-        break;
-      case 'youtube':
-          sourceIcon.src = './images/youtube_logo.png';
-          sourceIcon.alt = 'YouTube';
-          break;
-      default:
-        return document.createTextNode('');
-      }
-
-    linkElement.appendChild(sourceIcon);
-    return linkElement;
+  const sourceIcon = document.createElement('img');
+  const linkElement = document.createElement('a');
+  linkElement.href = sourceLink;
+  linkElement.target = '_blank';
+  sourceIcon.className = 'source-icon';
+  switch (source) {
+    case 'SoundCloud':
+      sourceIcon.src = 'images/soundcloud_logo.png'; 
+      sourceIcon.alt = 'SoundCloud';
+      break;
+    case 'Spotify':
+      sourceIcon.src = 'images/spotify_logo.png';
+      sourceIcon.alt = 'Spotify';
+      break;
+    case 'AppleMusic':
+      sourceIcon.src = 'images/apple_music_logo.png'; 
+      sourceIcon.alt = 'Apple Music';
+      break;
+    case 'YouTube':
+      sourceIcon.src = 'images/youtube_logo.png';
+      sourceIcon.alt = 'YouTube';
+      break;
+    default:
+      console.log(source)
+      return document.createTextNode(''); 
   }
-})();
+  linkElement.appendChild(sourceIcon);
+  return linkElement;
+}
