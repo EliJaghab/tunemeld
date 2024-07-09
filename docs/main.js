@@ -7,9 +7,9 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 });
 
-const API_BASE_URL = window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost' 
-  ? 'http://127.0.0.1:8787' 
-  : 'https://tunemeld-worker.elijaghab.workers.dev';
+const API_BASE_URL = window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost'
+  ? 'http://127.0.0.1:8787'
+  : 'https://tunemeld.com';
 
 
 async function fetchAndDisplayLastUpdated() {

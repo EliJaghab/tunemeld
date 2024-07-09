@@ -1,37 +1,43 @@
 export default {
     async fetch(request: Request, env: any): Promise<Response> {
-        console.log('MONGO_DATA_API_ENDPOINT:', env.MONGO_DATA_API_ENDPOINT);  // For debugging
-        console.log('MONGO_DATA_API_KEY:', env.MONGO_DATA_API_KEY);  // For debugging
+        const url = new URL(request.url);
+        const pathname = url.pathname;
 
-        if (request.method === 'OPTIONS') {
-            return handleOptions(request);
-        }
+        // Only handle requests that start with /api/
+        if (pathname.startsWith('/api/')) {
+            console.log('MONGO_DATA_API_ENDPOINT:', env.MONGO_DATA_API_ENDPOINT);  // For debugging
+            console.log('MONGO_DATA_API_KEY:', env.MONGO_DATA_API_KEY);  // For debugging
 
-        try {
-            const url = new URL(request.url);
-            const pathname = url.pathname;
-            const searchParams = url.searchParams;
-
-            switch (pathname) {
-                case '/api/aggregated-playlist':
-                    return await handleAggregatedPlaylist(searchParams, env);
-                case '/api/transformed-playlist':
-                    return await handleTransformedPlaylist(searchParams, env);
-                case '/api/last-updated':
-                    return await handleLastUpdated();
-                default:
-                    return new Response('Not Found', {
-                        status: 404,
-                        headers: { 'Access-Control-Allow-Origin': '*' }
-                    });
+            if (request.method === 'OPTIONS') {
+                return handleOptions(request);
             }
-        } catch (error) {
-            console.error('Error handling request:', error);
-            return new Response(`Error: ${error.message}`, {
-                status: 500,
-                headers: { 'Access-Control-Allow-Origin': '*' }
-            });
+
+            try {
+                const searchParams = url.searchParams;
+                switch (pathname) {
+                    case '/api/aggregated-playlist':
+                        return await handleAggregatedPlaylist(searchParams, env);
+                    case '/api/transformed-playlist':
+                        return await handleTransformedPlaylist(searchParams, env);
+                    case '/api/last-updated':
+                        return await handleLastUpdated();
+                    default:
+                        return new Response('Not Found', {
+                            status: 404,
+                            headers: { 'Access-Control-Allow-Origin': '*' }
+                        });
+                }
+            } catch (error) {
+                console.error('Error handling request:', error);
+                return new Response(`Error: ${error.message}`, {
+                    status: 500,
+                    headers: { 'Access-Control-Allow-Origin': '*' }
+                });
+            }
         }
+
+        // Pass through non-API requests to the origin (GitHub Pages)
+        return fetch(request);
     },
 };
 
