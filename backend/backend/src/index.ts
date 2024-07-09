@@ -1,9 +1,8 @@
-import { config } from 'dotenv';
-
-config();
-
 export default {
     async fetch(request: Request, env: any): Promise<Response> {
+        console.log('MONGO_DATA_API_ENDPOINT:', env.MONGO_DATA_API_ENDPOINT);  // For debugging
+        console.log('MONGO_DATA_API_KEY:', env.MONGO_DATA_API_KEY);  // For debugging
+
         if (request.method === 'OPTIONS') {
             return handleOptions(request);
         }
@@ -54,9 +53,11 @@ async function fetchFromMongoDB(collection: string, query: object, env: any): Pr
         filter: query,
     };
 
-    console.log('Request Payload:', requestPayload); 
+    const url = `${env.MONGO_DATA_API_ENDPOINT}/action/find`;
 
-    const response = await fetch(`${env.MONGO_DATA_API_ENDPOINT}/action/find`, {
+    console.log('Request Payload:', requestPayload);
+
+    const response = await fetch(url, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
