@@ -1,20 +1,24 @@
 document.addEventListener('DOMContentLoaded', function () {
-  const initialGenre = 'dance';
+  const genreSelector = document.getElementById('genre-selector');
+  const initialGenre = genreSelector.value;  
   fetchAndDisplayLastUpdated(initialGenre);
   initializePlaylists(initialGenre);
 
-  document.getElementById('genre-selector').addEventListener('change', function (event) {
+  genreSelector.addEventListener('change', function (event) {
     const selectedGenre = event.target.value;
     fetchAndDisplayLastUpdated(selectedGenre);
     initializePlaylists(selectedGenre);
   });
 });
 
+
 /*
+--- for development use ---
 const API_BASE_URL = window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost'
   ? 'http://127.0.0.1:8787'
   : 'https://tunemeld.com';
 */
+
 const API_BASE_URL = 'https://tunemeld.com';
 
   async function fetchAndDisplayLastUpdated(genre) {
