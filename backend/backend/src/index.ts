@@ -3,11 +3,7 @@ export default {
         const url = new URL(request.url);
         const pathname = url.pathname;
 
-        // Only handle requests that start with /api/
         if (pathname.startsWith('/api/')) {
-            console.log('MONGO_DATA_API_ENDPOINT:', env.MONGO_DATA_API_ENDPOINT);  // For debugging
-            console.log('MONGO_DATA_API_KEY:', env.MONGO_DATA_API_KEY);  // For debugging
-
             if (request.method === 'OPTIONS') {
                 return handleOptions(request);
             }
@@ -20,7 +16,7 @@ export default {
                     case '/api/transformed-playlist':
                         return await handleTransformedPlaylist(searchParams, env);
                     case '/api/last-updated':
-                        return await handleLastUpdated();
+                        return await handleLastUpdated(searchParams, env);
                     default:
                         return new Response('Not Found', {
                             status: 404,
@@ -36,7 +32,6 @@ export default {
             }
         }
 
-        // Pass through non-API requests to the origin (GitHub Pages)
         return fetch(request);
     },
 };
@@ -113,9 +108,19 @@ async function handleTransformedPlaylist(searchParams: URLSearchParams, env: any
     });
 }
 
-async function handleLastUpdated(): Promise<Response> {
-    const data = { lastUpdated: new Date().toISOString() };
-    return new Response(JSON.stringify(data), {
+async function handleLastUpdated(searchParams: URLSearchParams, env: any): Promise<Response> {
+    const genre = searchParams.get('genre');
+    if (!genre) {
+        return new Response('Genre is required', { status: 400, headers: { 'Access-Control-Allow-Origin': '*' } });
+    }
+
+    const data = await fetchFromMongoDB('aggregated_playlists', { genre_name: genre }, env);
+    if (data.length === 0) {
+        return new Response('No data found for the specified genre', { status: 404, headers: { 'Access-Control-Allow-Origin': '*' } });
+    }
+
+    const lastUpdated = data[0].insert_timestamp;
+    return new Response(JSON.stringify({ lastUpdated }), {
         headers: {
             'Content-Type': 'application/json',
             'Access-Control-Allow-Origin': '*',

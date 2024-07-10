@@ -1,9 +1,12 @@
 document.addEventListener('DOMContentLoaded', function () {
-  fetchAndDisplayLastUpdated();
-  initializePlaylists('rap'); // Initially load 'rap' genre, as selected in the dropdown
+  const initialGenre = 'dance';
+  fetchAndDisplayLastUpdated(initialGenre);
+  initializePlaylists(initialGenre); // Initially load 'rap' genre, as selected in the dropdown
 
   document.getElementById('genre-selector').addEventListener('change', function (event) {
-    initializePlaylists(event.target.value);
+    const selectedGenre = event.target.value;
+    fetchAndDisplayLastUpdated(selectedGenre);
+    initializePlaylists(selectedGenre);
   });
 });
 
@@ -12,27 +15,27 @@ const API_BASE_URL = window.location.hostname === '127.0.0.1' || window.location
   : 'https://tunemeld.com';
 
 
-async function fetchAndDisplayLastUpdated() {
-  try {
-    const response = await fetch(`${API_BASE_URL}/api/last-updated`);
-    if (!response.ok) {
-      throw new Error(`Failed to fetch last-updated. Status: ${response.status}`);
+  async function fetchAndDisplayLastUpdated(genre) {
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/last-updated?genre=${genre}`);
+      if (!response.ok) {
+        throw new Error(`Failed to fetch last-updated. Status: ${response.status}`);
+      }
+      const lastUpdated = await response.json();
+      const lastUpdatedDate = new Date(lastUpdated.lastUpdated);
+      const formattedDate = lastUpdatedDate.toLocaleString('en-US', {
+        month: 'long',
+        day: 'numeric',
+        year: 'numeric',
+        hour: 'numeric',
+        minute: '2-digit',
+        timeZoneName: 'short',
+      });
+      document.getElementById('last-updated').textContent = `Last Updated - ${formattedDate}`;
+    } catch (error) {
+      console.error('Error fetching last updated date:', error);
     }
-    const lastUpdated = await response.json();
-    const lastUpdatedDate = new Date(lastUpdated.lastUpdated);
-    const formattedDate = lastUpdatedDate.toLocaleString('en-US', {
-      month: 'long',
-      day: 'numeric',
-      year: 'numeric',
-      hour: 'numeric',
-      minute: '2-digit',
-      timeZoneName: 'short',
-    });
-    document.getElementById('last-updated').textContent = `Last Updated - ${formattedDate}`;
-  } catch (error) {
-    console.error('Error fetching last updated date:', error);
   }
-}
 
 async function initializePlaylists(genre) {
   try {
