@@ -8,21 +8,33 @@ export default {
                 return handleOptions(request);
             }
 
+            const cache = caches.default;
+            let response = await cache.match(request);
+            if (response) {
+                return response;
+            }
+
             try {
                 const searchParams = url.searchParams;
                 switch (pathname) {
                     case '/api/aggregated-playlist':
-                        return await handleAggregatedPlaylist(searchParams, env);
+                        response = await handleAggregatedPlaylist(searchParams, env);
+                        break;
                     case '/api/transformed-playlist':
-                        return await handleTransformedPlaylist(searchParams, env);
+                        response = await handleTransformedPlaylist(searchParams, env);
+                        break;
                     case '/api/last-updated':
-                        return await handleLastUpdated(searchParams, env);
+                        response = await handleLastUpdated(searchParams, env);
+                        break;
                     default:
-                        return new Response('Not Found', {
+                        response = new Response('Not Found', {
                             status: 404,
                             headers: { 'Access-Control-Allow-Origin': '*' }
                         });
                 }
+
+                await cache.put(request, response.clone());
+                return response;
             } catch (error) {
                 console.error('Error handling request:', error);
                 return new Response(`Error: ${error.message}`, {
@@ -84,6 +96,11 @@ async function handleAggregatedPlaylist(searchParams: URLSearchParams, env: any)
     }
 
     const data = await fetchFromMongoDB('aggregated_playlists', { genre_name: genre }, env);
+
+    for (const track of data) {
+        await cacheImage(track.album_cover_url);
+    }
+
     return new Response(JSON.stringify(data), {
         headers: {
             'Content-Type': 'application/json',
@@ -100,6 +117,12 @@ async function handleTransformedPlaylist(searchParams: URLSearchParams, env: any
     }
 
     const data = await fetchFromMongoDB('transformed_playlists', { genre_name: genre, service_name: service }, env);
+
+    // Cache album cover URLs
+    for (const track of data) {
+        await cacheImage(track.album_cover_url);
+    }
+
     return new Response(JSON.stringify(data), {
         headers: {
             'Content-Type': 'application/json',
@@ -126,4 +149,15 @@ async function handleLastUpdated(searchParams: URLSearchParams, env: any): Promi
             'Access-Control-Allow-Origin': '*',
         },
     });
+}
+
+async function cacheImage(url: string): Promise<void> {
+    const cache = caches.default;
+    let response = await cache.match(url);
+    if (!response) {
+        response = await fetch(url);
+        if (response.ok) {
+            await cache.put(url, response.clone());
+        }
+    }
 }
