@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', function () {
   const initialGenre = 'dance';
   fetchAndDisplayLastUpdated(initialGenre);
-  initializePlaylists(initialGenre); // Initially load 'rap' genre, as selected in the dropdown
+  initializePlaylists(initialGenre);
 
   document.getElementById('genre-selector').addEventListener('change', function (event) {
     const selectedGenre = event.target.value;
