@@ -14,24 +14,22 @@
 </head>
 <body>
   <div class="container my-2" id="main-content">
-    <h1 class="text-center" style="margin-bottom: 10px">tunemeld</h1>
+    <h1 class="text-center main-title">tunemeld</h1>
     <a href="https://soundcloud.com/elijaghab" target="_blank" id="soundcloud-link">
       <img src="./images/soundcloud_logo.png" alt="SoundCloud" id="soundcloud-logo" />
       Eli's SoundCloud
     </a>
     <div class="text-center mb-3">
-      <select id="genre-selector" class="custom-select" style="width: 200px;">
+      <select id="genre-selector" class="custom-select genre-selector">
         <option value="dance">Dance</option>
-        <option value="rap" selected>Dance</option>
+        <option value="rap" selected>Rap</option>
       </select>
     </div>
     <div class="row">
       <div class="col-md-12">
         <div class="playlist">
           <div class="playlist-title">Aggregated Playlist</div>
-          <div id="last-updated" style="text-align: center; font-family: 'DM Sans', sans-serif; font-size: 0.6rem; color: #ccc;">
-            Last Updated: Loading...
-          </div>
+          <div id="last-updated" class="last-updated">Last Updated: Loading...</div>
           <div class="playlist-description">
             Tracks seen on more than one curated streaming playlist, updated every Saturday
           </div>
@@ -80,19 +78,25 @@
       </div>
     </div>
   </div>
-  <div class="row" style="margin-top: 20px;">
+  <div class="row footer-row">
     <div class="col-md-12 text-center">
-      <a href="https://www.google.com/policies/privacy/" target="_blank" style="color: #ccc; text-decoration: none; font-size: 0.8rem; margin-bottom: 5px;">Google Privacy Policy</a>
-    </div>
-  </div>
-  <div id="tosPrivacyOverlay" class="overlay">
-    <div class="overlay-content">
-      <p>By using Tunemeld, you agree to be bound by the <a href="https://www.youtube.com/t/terms" target="_blank">YouTube Terms of Service</a> and the <a href="https://www.google.com/policies/privacy/" target="_blank">Google Privacy Policy</a>.</p>
-      <button id="acceptButton" class="btn btn-primary btn-sm">I Accept</button>
+      <a href="https://www.youtube.com/t/terms" target="_blank" class="footer-link">YouTube Terms of Service</a>
+      <br>
+      <a href="https://www.google.com/policies/privacy/" target="_blank" class="footer-link">Google Privacy Policy</a>
+      <br>
+      <a href="privacy-policy.html" target="_blank" class="footer-link">Privacy Policy</a>
+      <br>
+      <a href="terms-of-use.html" target="_blank" class="footer-link">Terms of Use</a>
     </div>
   </div>
 
-  <script src="main.js"></script>
+  <div id="tosPrivacyOverlay" class="overlay">
+    <div class="overlay-content">
+      <p>By using Tunemeld, you agree to be bound by the <a href="https://www.youtube.com/t/terms" target="_blank">YouTube Terms of Service</a> and the <a href="https://www.google.com/policies/privacy/" target="_blank">Google Privacy Policy</a>.</p>
+      <button id="acceptButton" class="btn btn-primary btn-sm acceptButton">I Accept</button>
+    </div>
+  </div>
+
   <script src="overlay.js"></script>
 </body>
 </html>
