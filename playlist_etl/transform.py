@@ -215,20 +215,24 @@ def get_youtube_url_by_track_and_artist_name(track_name, artist_name, mongo_clie
 
     if response.status_code == 200:
         data = response.json()
-        video_id = data["items"][0]["id"].get("videoId")
-        if video_id:
-            youtube_url = f"https://www.youtube.com/watch?v={video_id}"
-            print(
-                f"Updating YouTube cache for {track_name} by {artist_name} with URL {youtube_url}"
-            )
-            update_cache_in_mongo(mongo_client, YOUTUBE_CACHE_COLLECTION, cache_key, youtube_url)
-            return youtube_url
-
+        if data["items"]:
+            video_id = data["items"][0]["id"].get("videoId")
+            if video_id:
+                youtube_url = f"https://www.youtube.com/watch?v={video_id}"
+                print(
+                    f"Updating YouTube cache for {track_name} by {artist_name} with URL {youtube_url}"
+                )
+                update_cache_in_mongo(mongo_client, YOUTUBE_CACHE_COLLECTION, cache_key, youtube_url)
+                return youtube_url
         print(f"No video found for {track_name} by {artist_name}")
-        return "No video found"
+        return None
+    else:
+        print(f"Error: {response.status_code}, {response.text}")
+        if response.status_code == 403 and "quotaExceeded" in response.text:
+            return None
+        return None
 
-    error_msg = f"Error: {response.status_code}, {response.text}"
-    return error_msg
+    return None
 
 
 def get_apple_music_album_cover(url_link, mongo_client):
