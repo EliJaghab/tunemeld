@@ -126,7 +126,7 @@ function createCard(track, isAggregated) {
   const externalLinksColumn = document.createElement('div');
   externalLinksColumn.className = 'track-column external-links';
   if (track.youtube_url) {
-    const youtubeLink = createSourceLink('youtube', track.youtube_url);
+    const youtubeLink = createSourceLink('YouTube', track.youtube_url);
     externalLinksColumn.appendChild(youtubeLink);
   }
 
