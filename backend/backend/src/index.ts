@@ -32,15 +32,14 @@ export default {
                             headers: { 'Access-Control-Allow-Origin': '*' }
                         });
                 }
+                
+                if (response.status === 200) {
+                    await cache.put(request, response.clone());
+                }
 
-                await cache.put(request, response.clone());
                 return response;
             } catch (error) {
-                console.error('Error handling request:', error);
-                return new Response(`Error: ${error.message}`, {
-                    status: 500,
-                    headers: { 'Access-Control-Allow-Origin': '*' }
-                });
+                return handleError(error);
             }
         }
 
@@ -57,8 +56,6 @@ function handleOptions(request: Request): Response {
 }
 
 async function fetchFromMongoDB(collection: string, query: object, env: any): Promise<any[]> {
-    console.log('Fetching from MongoDB:', collection, query);
-
     const requestPayload = {
         dataSource: 'tunemeld',
         database: 'playlist_etl',
@@ -68,25 +65,26 @@ async function fetchFromMongoDB(collection: string, query: object, env: any): Pr
 
     const url = `${env.MONGO_DATA_API_ENDPOINT}/action/find`;
 
-    console.log('Request Payload:', requestPayload);
+    try {
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'api-key': env.MONGO_DATA_API_KEY,
+            },
+            body: JSON.stringify(requestPayload),
+        });
 
-    const response = await fetch(url, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'api-key': env.MONGO_DATA_API_KEY,
-        },
-        body: JSON.stringify(requestPayload),
-    });
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`Failed to fetch from MongoDB. Status: ${response.status}, Response: ${errorText}`);
+        }
 
-    console.log('MongoDB Response Status:', response.status);
-    if (!response.ok) {
-        throw new Error(`Failed to fetch from MongoDB. Status: ${response.status}`);
+        const data = await response.json();
+        return data.documents;
+    } catch (error) {
+        throw new Error(`Error fetching from MongoDB: ${error.message}`);
     }
-
-    const data = await response.json();
-    console.log('MongoDB Response Data:', data);
-    return data.documents;
 }
 
 async function handleAggregatedPlaylist(searchParams: URLSearchParams, env: any): Promise<Response> {
@@ -95,40 +93,30 @@ async function handleAggregatedPlaylist(searchParams: URLSearchParams, env: any)
         return new Response('Genre is required', { status: 400, headers: { 'Access-Control-Allow-Origin': '*' } });
     }
 
-    const data = await fetchFromMongoDB('aggregated_playlists', { genre_name: genre }, env);
-
-    for (const track of data) {
-        await cacheImage(track.album_cover_url);
+    try {
+        const data = await fetchFromMongoDB('aggregated_playlists', { genre_name: genre }, env);
+        await cacheAlbumCovers(data);
+        return createJsonResponse(data);
+    } catch (error) {
+        return handleError(error);
     }
-
-    return new Response(JSON.stringify(data), {
-        headers: {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*',
-        },
-    });
 }
 
 async function handleTransformedPlaylist(searchParams: URLSearchParams, env: any): Promise<Response> {
     const genre = searchParams.get('genre');
     const service = searchParams.get('service');
+
     if (!genre || !service) {
         return new Response('Genre and service are required', { status: 400, headers: { 'Access-Control-Allow-Origin': '*' } });
     }
 
-    const data = await fetchFromMongoDB('transformed_playlists', { genre_name: genre, service_name: service }, env);
-
-    // Cache album cover URLs
-    for (const track of data) {
-        await cacheImage(track.album_cover_url);
+    try {
+        const data = await fetchFromMongoDB('transformed_playlists', { genre_name: genre, service_name: service }, env);
+        await cacheAlbumCovers(data);
+        return createJsonResponse(data);
+    } catch (error) {
+        return handleError(error);
     }
-
-    return new Response(JSON.stringify(data), {
-        headers: {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*',
-        },
-    });
 }
 
 async function handleLastUpdated(searchParams: URLSearchParams, env: any): Promise<Response> {
@@ -137,18 +125,25 @@ async function handleLastUpdated(searchParams: URLSearchParams, env: any): Promi
         return new Response('Genre is required', { status: 400, headers: { 'Access-Control-Allow-Origin': '*' } });
     }
 
-    const data = await fetchFromMongoDB('aggregated_playlists', { genre_name: genre }, env);
-    if (data.length === 0) {
-        return new Response('No data found for the specified genre', { status: 404, headers: { 'Access-Control-Allow-Origin': '*' } });
-    }
+    try {
+        const data = await fetchFromMongoDB('aggregated_playlists', { genre_name: genre }, env);
+        if (data.length === 0) {
+            return new Response('No data found for the specified genre', { status: 404, headers: { 'Access-Control-Allow-Origin': '*' } });
+        }
 
-    const lastUpdated = data[0].insert_timestamp;
-    return new Response(JSON.stringify({ lastUpdated }), {
-        headers: {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*',
-        },
-    });
+        const lastUpdated = data[0].insert_timestamp;
+        return createJsonResponse({ lastUpdated });
+    } catch (error) {
+        return handleError(error);
+    }
+}
+
+async function cacheAlbumCovers(tracks: any[]): Promise<void> {
+    for (const track of tracks) {
+        if (track.album_cover_url) {
+            await cacheImage(track.album_cover_url);
+        }
+    }
 }
 
 async function cacheImage(url: string): Promise<void> {
@@ -160,4 +155,21 @@ async function cacheImage(url: string): Promise<void> {
             await cache.put(url, response.clone());
         }
     }
+}
+
+function createJsonResponse(data: any): Response {
+    return new Response(JSON.stringify(data), {
+        headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+        },
+    });
+}
+
+function handleError(error: Error): Response {
+    console.error('Error handling request:', error);
+    return new Response(`Error: ${error.message}`, {
+        status: 500,
+        headers: { 'Access-Control-Allow-Origin': '*' }
+    });
 }
