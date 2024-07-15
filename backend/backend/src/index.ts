@@ -99,6 +99,10 @@ async function handleHeaderArt(searchParams: URLSearchParams, env: any): Promise
     try {
         const data = await fetchFromMongoDB('raw_playlists', { genre_name: genre }, env);
         const formattedData = formatPlaylistData(data);
+
+        // Cache images
+        await cacheAlbumCovers(Object.values(formattedData));
+
         return createJsonResponse(formattedData);
     } catch (error) {
         return handleError(error);
@@ -175,8 +179,8 @@ async function handleLastUpdated(searchParams: URLSearchParams, env: any): Promi
 
 async function cacheAlbumCovers(tracks: any[]): Promise<void> {
     for (const track of tracks) {
-        if (track.album_cover_url) {
-            await cacheImage(track.album_cover_url);
+        if (track.playlist_cover_url) {
+            await cacheImage(track.playlist_cover_url);
         }
     }
 }
