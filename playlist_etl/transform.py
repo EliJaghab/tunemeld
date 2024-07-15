@@ -24,7 +24,7 @@ YOUTUBE_CACHE_COLLECTION = "youtube_cache"
 ISRC_CACHE_COLLECTION = "isrc_cache"
 APPLE_MUSIC_ALBUM_COVER_CACHE_COLLECTION = "apple_music_album_cover_cache"
 
-MAX_THREADS = 1
+MAX_THREADS = 50
 
 
 class Track:
@@ -232,9 +232,6 @@ def get_youtube_url_by_track_and_artist_name(track_name, artist_name, mongo_clie
             return None
         return None
 
-    return None
-
-
 def get_apple_music_album_cover(url_link, mongo_client):
     cache_key = url_link
     album_cover_cache = read_cache_from_mongo(
@@ -293,7 +290,7 @@ def transform_playlists(mongo_client):
             concurrent.futures.wait(futures)
 
         print("Setting YouTube URLs for all tracks")
-        with concurrent.futures.ThreadPoolExecutor(max_workers=MAX_THREADS) as executor:
+        with concurrent.futures.ThreadPoolExecutor(max_workers=1) as executor:
             futures = [executor.submit(track.set_youtube_url, mongo_client) for track in all_tracks]
             concurrent.futures.wait(futures)
 

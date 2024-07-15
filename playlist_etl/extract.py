@@ -1,7 +1,11 @@
 import os
-from urllib.parse import quote
-
+import re
 import requests
+from bs4 import BeautifulSoup
+from urllib.parse import quote, urlparse
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.chrome.options import Options
 from utils import clear_collection, get_mongo_client, insert_data_to_mongo, set_secrets
 
 PLAYLIST_GENRES = ["dance", "rap"]
@@ -11,27 +15,43 @@ SERVICE_CONFIGS = {
         "base_url": "https://apple-music24.p.rapidapi.com/playlist1/",
         "host": "apple-music24.p.rapidapi.com",
         "param_key": "url",
+        "playlist_base_url": "https://music.apple.com/us/playlist/",
         "links": {
-            "dance": "https://music.apple.com/us/playlist/dancexl/pl.6bf4415b83ce4f3789614ac4c3675740",  # noqa: E501
-            "rap": "https://music.apple.com/us/playlist/rap-life/pl.abe8ba42278f4ef490e3a9fc5ec8e8c5",  # noqa: E501
+            "dance": (
+                "https://music.apple.com/us/playlist/dancexl/pl.6bf4415b83ce4f3789614ac4c3675740"
+            ),
+            "rap": (
+                "https://music.apple.com/us/playlist/rap-life/pl.abe8ba42278f4ef490e3a9fc5ec8e8c5"
+            ),
         },
     },
     "SoundCloud": {
         "base_url": "https://soundcloud-scraper.p.rapidapi.com/v1/playlist/tracks",
         "host": "soundcloud-scraper.p.rapidapi.com",
         "param_key": "playlist",
+        "playlist_base_url": "https://soundcloud.com/",
         "links": {
-            "dance": "https://soundcloud.com/soundcloud-the-peak/sets/on-the-up-new-edm-hits",  # noqa: E501
-            "rap": "https://soundcloud.com/soundcloud-hustle/sets/drippin-best-rap-right-now",  # noqa: E501
+            "dance": (
+                "https://soundcloud.com/soundcloud-the-peak/sets/on-the-up-new-edm-hits"
+            ),
+            "rap": (
+                "https://soundcloud.com/soundcloud-hustle/sets/drippin-best-rap-right-now"
+            ),
         },
     },
     "Spotify": {
         "base_url": "https://spotify23.p.rapidapi.com/playlist_tracks/",
         "host": "spotify23.p.rapidapi.com",
         "param_key": "id",
-        "links": {"dance": "37i9dQZF1DX4dyzvuaRJ0n", "rap": "37i9dQZF1DX0XUsuxWHRQd"},
+        "playlist_base_url": "https://open.spotify.com/playlist/",
+        "links": {
+            "dance": "37i9dQZF1DX4dyzvuaRJ0n",
+            "rap": "37i9dQZF1DX0XUsuxWHRQd",
+        },
     },
 }
+DEBUG_MODE = False
+NO_RAPID = False
 
 
 class RapidAPIClient:
@@ -48,6 +68,10 @@ class RapidAPIClient:
 
 
 def get_json_response(url, host, api_key):
+    if DEBUG_MODE or NO_RAPID:
+        print("Debug Mode: not requesting RapidAPI")
+        return {}
+
     headers = {
         "X-RapidAPI-Key": api_key,
         "X-RapidAPI-Host": host,
@@ -83,13 +107,106 @@ class AppleMusicFetcher(Extractor):
         url = f"{self.base_url}?{self.param_key}={self.playlist_param}"
         return get_json_response(url, self.host, self.api_key)
 
+    def extract_playlist_details(self, doc):
+        title_tag = doc.select_one('a.click-action')
+        title = title_tag.get_text(strip=True) if title_tag else "Unknown"
+
+        subtitle_tag = doc.select_one('h1')
+        subtitle = subtitle_tag.get_text(strip=True) if subtitle_tag else "Unknown"
+
+        m3u8_tag = doc.find("amp-ambient-video", {"class": "editorial-video"})
+        m3u8_url = m3u8_tag["src"] if m3u8_tag and m3u8_tag.get("src") else None
+
+        playlist_cover_description_tag = doc.find('p', {'data-testid': 'truncate-text'})
+        playlist_cover_description_text = playlist_cover_description_tag.get_text(
+            strip=True) if playlist_cover_description_tag else None
+
+        return {
+            'title': title,
+            'subtitle': subtitle,
+            'playlist_cover_description_text': playlist_cover_description_text,
+            'm3u8_url': m3u8_url
+        }
+
+    def set_playlist_details(self):
+        url = f"https://music.apple.com/us/playlist/{self.playlist_param}"
+
+        response = requests.get(url)
+        response.raise_for_status()
+        doc = BeautifulSoup(response.text, "html.parser")
+
+        title_tag = doc.select_one('a.click-action')
+        title = title_tag.get_text(strip=True) if title_tag else "Unknown"
+
+        subtitle_tag = doc.select_one('h1')
+        subtitle = subtitle_tag.get_text(strip=True) if subtitle_tag else "Unknown"
+
+        stream_tag = doc.find("amp-ambient-video", {"class": "editorial-video"})
+        playlist_stream_url = stream_tag["src"] if stream_tag and stream_tag.get("src") else None
+
+        playlist_cover_description_tag = doc.find('p', {'data-testid': 'truncate-text'})
+        playlist_cover_description_text = playlist_cover_description_tag.get_text(
+            strip=True) if playlist_cover_description_tag else None
+
+        cover_url = self.get_cover_url_with_selenium(url)
+
+        self.playlist_name = f"{subtitle} {title}"
+        self.playlist_cover_url = cover_url
+        self.playlist_cover_description_text = playlist_cover_description_text
+        self.playlist_stream_url = playlist_stream_url
+
+    def get_cover_url_with_selenium(self, url):
+        chrome_options = Options()
+        chrome_options.add_argument("--headless")
+        chrome_service = Service()  # Use default ChromeDriver path
+        driver = webdriver.Chrome(service=chrome_service, options=chrome_options)
+
+        driver.get(url)
+        driver.implicitly_wait(10)
+        html_content = driver.page_source
+        driver.quit()
+
+        doc = BeautifulSoup(html_content, "html.parser")
+
+        print("Searching within amp-ambient-video tags:")
+        m3u8_links = set()
+        amp_ambient_video_tags = doc.find_all('amp-ambient-video')
+        for tag in amp_ambient_video_tags:
+            if 'src' in tag.attrs:
+                links = re.findall(r'https?://\S+\.m3u8', tag['src'])
+                if links:
+                    print(f"Found links in tag {tag.name}: {links}")
+                    m3u8_links.update(links)
+
+        playlist_stream_url = next(iter(m3u8_links), None)
+
+        return playlist_stream_url
+
 
 class SoundCloudFetcher(Extractor):
     def get_playlist(self):
         url = f"{self.base_url}?{self.param_key}={self.playlist_param}"
         return get_json_response(url, self.host, self.api_key)
 
+    def set_playlist_details(self):
+        url = self.config["links"]["dance"]
+        parsed_url = urlparse(url)
+        clean_url = f"{parsed_url.netloc}{parsed_url.path}"
 
+        response = requests.get(f"https://{clean_url}")
+        response.raise_for_status()
+        doc = BeautifulSoup(response.text, "html.parser")
+
+        playlist_name_tag = doc.find("meta", {"property": "og:title"})
+        self.playlist_name = playlist_name_tag["content"] if playlist_name_tag else "Unknown"
+
+        description_tag = doc.find("meta", {"name": "description"})
+        self.playlist_cover_description_text = description_tag["content"] if description_tag else (
+            "No description available"
+        )
+
+        playlist_cover_url_tag = doc.find("meta", {"property": "og:image"})
+        self.playlist_cover_url = playlist_cover_url_tag["content"] if playlist_cover_url_tag else None
 class SpotifyFetcher(Extractor):
     def get_playlist(self, offset=0, limit=100):
         url = (
@@ -97,6 +214,24 @@ class SpotifyFetcher(Extractor):
             f"offset={offset}&limit={limit}"
         )
         return get_json_response(url, self.host, self.api_key)
+
+    def set_playlist_details(self):
+        url = f"https://open.spotify.com/playlist/{self.playlist_param}"
+        response = requests.get(url)
+        response.raise_for_status()
+        doc = BeautifulSoup(response.text, "html.parser")
+
+        playlist_name_tag = doc.find("meta", {"property": "og:title"})
+        self.playlist_name = playlist_name_tag["content"] if playlist_name_tag else "Unknown"
+
+        description_div = doc.find(
+            "span", class_="Type__TypeElement-sc-goli3j-0 kmjYak G_f5DJd2sgHWeto5cwbi"
+        )
+        self.playlist_cover_description_text = description_div.get_text(
+            strip=True) if description_div else "No description available"
+
+        playlist_cover_url_tag = doc.find("meta", {"property": "og:image"})
+        self.playlist_cover_url = playlist_cover_url_tag["content"] if playlist_cover_url_tag else None
 
 
 def run_extraction(mongo_client, client, service_name, genre):
@@ -109,22 +244,35 @@ def run_extraction(mongo_client, client, service_name, genre):
     else:
         raise ValueError(f"Unknown service: {service_name}")
 
+    extractor.set_playlist_details()
     playlist_data = extractor.get_playlist()
+
+    playlist_url = SERVICE_CONFIGS[service_name]["links"][genre]
+
     document = {
         "service_name": service_name,
         "genre_name": genre,
+        "playlist_url": playlist_url,
         "data_json": playlist_data,
+        "playlist_name": extractor.playlist_name,
+        "playlist_cover_url": extractor.playlist_cover_url,
+        "playlist_cover_description_text": extractor.playlist_cover_description_text,
     }
-    insert_data_to_mongo(mongo_client, "raw_playlists", document)
 
+    if not DEBUG_MODE:
+        insert_data_to_mongo(mongo_client, "raw_playlists", document)
+    else:
+        print("Debug Mode: not updating mongo")
 
 if __name__ == "__main__":
     set_secrets()
     client = RapidAPIClient()
     mongo_client = get_mongo_client()
 
-    # Clear the collection before starting the extraction process
-    clear_collection(mongo_client, "raw_playlists")
+    if DEBUG_MODE:
+        print("Debug Mode: not clearing mongo")
+    else:
+        clear_collection(mongo_client, "raw_playlists")
 
     for service_name, config in SERVICE_CONFIGS.items():
         for genre in PLAYLIST_GENRES:

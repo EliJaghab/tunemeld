@@ -26,6 +26,9 @@ export default {
                     case '/api/last-updated':
                         response = await handleLastUpdated(searchParams, env);
                         break;
+                    case '/api/header-art':
+                        response = await handleHeaderArt(searchParams, env);
+                        break;
                     default:
                         response = new Response('Not Found', {
                             status: 404,
@@ -85,6 +88,38 @@ async function fetchFromMongoDB(collection: string, query: object, env: any): Pr
     } catch (error) {
         throw new Error(`Error fetching from MongoDB: ${error.message}`);
     }
+}
+
+async function handleHeaderArt(searchParams: URLSearchParams, env: any): Promise<Response> {
+    const genre = searchParams.get('genre');
+    if (!genre) {
+        return new Response('Genre is required', { status: 400, headers: { 'Access-Control-Allow-Origin': '*' } });
+    }
+
+    try {
+        const data = await fetchFromMongoDB('raw_playlists', { genre_name: genre }, env);
+        const formattedData = formatPlaylistData(data);
+        return createJsonResponse(formattedData);
+    } catch (error) {
+        return handleError(error);
+    }
+}
+
+function formatPlaylistData(data: any[]): any {
+    const result: any = {};
+
+    data.forEach(item => {
+        if (!result[item.service_name]) {
+            result[item.service_name] = {
+                playlist_cover_url: item.playlist_cover_url,
+                playlist_cover_description_text: item.playlist_cover_description_text,
+                playlist_name: item.playlist_name,
+                playlist_url: item.playlist_url
+            };
+        }
+    });
+
+    return result;
 }
 
 async function handleAggregatedPlaylist(searchParams: URLSearchParams, env: any): Promise<Response> {

@@ -19,6 +19,32 @@
       <img src="./images/soundcloud_logo.png" alt="SoundCloud" id="soundcloud-logo" />
       Eli's SoundCloud
     </a>
+    <section id="header-art" class="header-art-section">
+      <div id="applemusic" class="service">
+        <a id="applemusic-cover-link" href="#" target="_blank">
+          <div id="applemusic-video-container" class="video-container">
+            <video id="applemusic-video" muted autoplay loop playsinline controlsList="nodownload nofullscreen noremoteplayback"></video>
+          </div>
+        </a>
+        <div id="applemusic-description" class="description"></div>
+        <a id="applemusic-playlist-title" class="playlist-title" href="#" target="_blank"></a>
+      </div>
+      <div id="soundcloud" class="service">
+        <a id="soundcloud-cover-link" href="#" target="_blank">
+          <div id="soundcloud-image-placeholder" class="image-placeholder"></div>
+        </a>
+        <div id="soundcloud-description" class="description"></div>
+        <a id="soundcloud-playlist-title" class="playlist-title" href="#" target="_blank"></a>
+      </div>
+      <div id="spotify" class="service">
+        <a id="spotify-cover-link" href="#" target="_blank">
+          <div id="spotify-image-placeholder" class="image-placeholder"></div>
+        </a>
+        <div id="spotify-description" class="description"></div>
+        <a id="spotify-playlist-title" class="playlist-title" href="#" target="_blank"></a>
+      </div>
+    </section>
+
     <div class="text-center mb-3">
       <select id="genre-selector" class="custom-select genre-selector">
         <option value="dance">Dance</option>
@@ -62,7 +88,7 @@
               <span id="apple-music-playlist-title">Apple Music Playlist</span>
             </a>
           </div>
-          <div id="apple-music-data-placeholder"></div>
+          <div id="applemusic-data-placeholder"></div>
         </div>
       </div>
       <div class="col-md-4 col-sm-12">
@@ -97,6 +123,9 @@
     </div>
   </div>
   <script src="main.js"></script>
+  <script src="header.js"></script>
+  <script src="playlist.js"></script>
   <script src="overlay.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 </body>
 </html>
