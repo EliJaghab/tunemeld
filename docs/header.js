@@ -45,26 +45,31 @@ async function fetchAndDisplayLastUpdated(genre) {
       const titleElement = document.getElementById(`${service.toLowerCase()}-playlist-title`);
       const coverLinkElement = document.getElementById(`${service.toLowerCase()}-cover-link`);
       
+      console.log(`Checking elements for ${service}:`);
+      console.log('imagePlaceholder:', imagePlaceholder);
+      console.log('descriptionElement:', descriptionElement);
+      console.log('titleElement:', titleElement);
+      console.log('coverLinkElement:', coverLinkElement);
+  
       if (data[service]) {
         const playlistCoverUrl = data[service].playlist_cover_url;
         const playlistUrl = data[service].playlist_url;
   
         if (service === 'AppleMusic' && playlistCoverUrl.endsWith('.m3u8')) {
+          console.log('Apple Music video URL:', playlistCoverUrl);
           displayAppleMusicVideo(playlistCoverUrl);
         } else {
-          imagePlaceholder.style.backgroundImage = `url('${playlistCoverUrl}')`;
+          if (imagePlaceholder) imagePlaceholder.style.backgroundImage = `url('${playlistCoverUrl}')`;
         }
   
-        descriptionElement.textContent = data[service].playlist_cover_description_text;
+        if (descriptionElement) descriptionElement.textContent = data[service].playlist_cover_description_text;
   
         if (titleElement) {
           titleElement.textContent = data[service].playlist_name;
           titleElement.href = playlistUrl;
         }
   
-        if (coverLinkElement) {
-          coverLinkElement.href = playlistUrl;
-        }
+        if (coverLinkElement) coverLinkElement.href = playlistUrl;
       }
     });
   
