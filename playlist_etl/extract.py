@@ -5,6 +5,9 @@ from urllib.parse import quote, urlparse
 
 import requests
 from bs4 import BeautifulSoup
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.chrome.options import Options
 from unidecode import unidecode
 from utils import clear_collection, get_mongo_client, insert_data_to_mongo, set_secrets
 
@@ -124,14 +127,38 @@ class AppleMusicFetcher(Extractor):
             else None
         )
 
-        cover_url_tag = doc.find("meta", {"property": "og:image"})
-        cover_url = cover_url_tag["content"] if cover_url_tag else None
-
         self.playlist_url = url
         self.playlist_name = f"{subtitle} {title}"
-        self.playlist_cover_url = cover_url
+        self.playlist_cover_url = self.get_cover_url_with_selenium(url)
         self.playlist_cover_description_text = playlist_cover_description_text
         self.playlist_stream_url = playlist_stream_url
+    
+    def get_cover_url_with_selenium(self, url):
+        chrome_options = Options()
+        chrome_options.add_argument("--headless")
+        chrome_service = Service()  # Use default ChromeDriver path
+        driver = webdriver.Chrome(service=chrome_service, options=chrome_options)
+
+        driver.get(url)
+        driver.implicitly_wait(3)
+        html_content = driver.page_source
+        driver.quit()
+
+        doc = BeautifulSoup(html_content, "html.parser")
+
+        print("Searching within amp-ambient-video tags:")
+        m3u8_links = set()
+        amp_ambient_video_tags = doc.find_all('amp-ambient-video')
+        for tag in amp_ambient_video_tags:
+            if 'src' in tag.attrs:
+                links = re.findall(r'https?://\S+\.m3u8', tag['src'])
+                if links:
+                    print(f"Found links in tag {tag.name}: {links}")
+                    m3u8_links.update(links)
+
+        playlist_stream_url = next(iter(m3u8_links), None)
+
+        return playlist_stream_url
 
 
 class SoundCloudFetcher(Extractor):
@@ -158,8 +185,6 @@ class SoundCloudFetcher(Extractor):
         self.playlist_cover_url = playlist_cover_url_tag["content"] if playlist_cover_url_tag else None
 
         self.playlist_url = url
-
-
 class SpotifyFetcher(Extractor):
     def get_playlist(self, offset=0, limit=100):
         url = f"{self.base_url}?{self.param_key}={self.playlist_param}&offset={offset}&limit={limit}"

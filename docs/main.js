@@ -30,7 +30,36 @@ async function updateGenreData(genre) {
     await fetchAndDisplayLastUpdated(genre);
     await fetchAndDisplayHeaderArt(genre);
     await fetchAndDisplayPlaylists(genre);
+    resetCollapseStates(); // Reset the collapse states
+    addToggleEventListeners(); // Add event listeners for toggle buttons
   } catch (error) {
     console.error('Error updating genre data:', error);
   }
+}
+
+function resetCollapseStates() {
+  document.querySelectorAll('.playlist-content').forEach(content => {
+    content.classList.remove('collapsed');
+  });
+  document.querySelectorAll('.collapse-button').forEach(button => {
+    button.textContent = '▼';
+  });
+}
+
+function addToggleEventListeners() {
+  document.querySelectorAll('.collapse-button').forEach(button => {
+    button.removeEventListener('click', toggleCollapse);
+  });
+
+  document.querySelectorAll('.collapse-button').forEach(button => {
+    button.addEventListener('click', toggleCollapse);
+  });
+}
+
+function toggleCollapse(event) {
+  const button = event.currentTarget;
+  const targetId = button.getAttribute('data-target');
+  const content = document.querySelector(`${targetId} .playlist-content`);
+  content.classList.toggle('collapsed');
+  button.textContent = content.classList.contains('collapsed') ? '▲' : '▼';
 }

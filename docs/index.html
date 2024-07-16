@@ -13,7 +13,7 @@
   <title>tunemeld</title>
 </head>
 <body>
-  <div class="container my-2" id="main-content">
+  <div class="container" id="main-content">
     <h1 class="text-center main-title">tunemeld</h1>
     <a href="https://soundcloud.com/elijaghab" target="_blank" id="soundcloud-link">
       <img src="./images/soundcloud_logo.png" alt="SoundCloud" id="soundcloud-logo" />
@@ -51,59 +51,78 @@
         <option value="rap" selected>Rap</option>
       </select>
     </div>
-    <div class="row">
-      <div class="col-md-12">
-        <div class="playlist">
-          <div class="playlist-title">Aggregated Playlist</div>
-          <div id="last-updated" class="last-updated">Last Updated: Loading...</div>
-          <div class="playlist-description">
-            Tracks seen on more than one curated streaming playlist, updated every Saturday
-          </div>
-          <div class="track-headers">
-            <div class="track-header-info">Track Info</div>
-            <div class="track-header-seen-on">Seen On</div>
-            <div class="track-header-external-links">External</div>
-          </div>
-          <div id="aggregated-data-placeholder"></div>
+    
+    <div class="playlist aggregated-playlist" id="aggregated-playlist">
+      <div class="playlist-header">
+        <div class="playlist-title">Aggregated Playlist</div>
+        <button class="collapse-button" data-target="#aggregated-playlist">▼</button>
+      </div>
+      <div class="playlist-content">
+        <div id="last-updated" class="last-updated">Last Updated: Loading...</div>
+        <div class="playlist-description">
+          Tracks seen on more than one curated streaming playlist, updated every Saturday
         </div>
+        <div class="track-headers">
+          <div class="track-header-info">Track Info</div>
+          <div class="track-header-seen-on">Seen On</div>
+          <div class="track-header-external-links">External</div>
+        </div>
+        <div id="aggregated-data-placeholder"></div>
       </div>
     </div>
-    <div class="row">
-      <div class="col-md-4 col-sm-12">
-        <div class="playlist">
-          <div class="playlist-title">
-            <a id="soundcloud-playlist-link" target="_blank">
-              <img src="./images/soundcloud_logo.png" alt="SoundCloud" class="source-icon" />
-              <span id="soundcloud-playlist-title">SoundCloud Playlist</span>
-            </a>
+    
+    <div class="playlist-section">
+      <div class="playlist-column">
+        <div class="playlist" id="soundcloud-playlist">
+          <div class="playlist-header">
+            <div class="playlist-title">
+              <a id="soundcloud-playlist-link" target="_blank">
+                <img src="./images/soundcloud_logo.png" alt="SoundCloud" class="source-icon" />
+                <span id="soundcloud-playlist-title">SoundCloud Playlist</span>
+              </a>
+            </div>
+            <button class="collapse-button" data-target="#soundcloud-playlist">▼</button>
           </div>
-          <div id="soundcloud-data-placeholder"></div>
+          <div class="playlist-content">
+            <div id="soundcloud-data-placeholder"></div>
+          </div>
         </div>
       </div>
-      <div class="col-md-4 col-sm-12">
-        <div class="playlist">
-          <div class="playlist-title">
-            <a id="apple-music-playlist-link" target="_blank">
-              <img src="./images/apple_music_logo.png" alt="Apple Music" class="source-icon" />
-              <span id="apple-music-playlist-title">Apple Music Playlist</span>
-            </a>
+      <div class="playlist-column">
+        <div class="playlist" id="apple-music-playlist">
+          <div class="playlist-header">
+            <div class="playlist-title">
+              <a id="apple-music-playlist-link" target="_blank">
+                <img src="./images/apple_music_logo.png" alt="Apple Music" class="source-icon" />
+                <span id="apple-music-playlist-title">Apple Music Playlist</span>
+              </a>
+            </div>
+            <button class="collapse-button" data-target="#apple-music-playlist">▼</button>
           </div>
-          <div id="applemusic-data-placeholder"></div>
+          <div class="playlist-content">
+            <div id="applemusic-data-placeholder"></div>
+          </div>
         </div>
       </div>
-      <div class="col-md-4 col-sm-12">
-        <div class="playlist">
-          <div class="playlist-title">
-            <a id="spotify-playlist-link" target="_blank">
-              <img src="./images/spotify_logo.png" alt="Spotify" class="source-icon" />
-              <span id="spotify-playlist-title">Spotify Playlist</span>
-            </a>
+      <div class="playlist-column">
+        <div class="playlist" id="spotify-playlist">
+          <div class="playlist-header">
+            <div class="playlist-title">
+              <a id="spotify-playlist-link" target="_blank">
+                <img src="./images/spotify_logo.png" alt="Spotify" class="source-icon" />
+                <span id="spotify-playlist-title">Spotify Playlist</span>
+              </a>
+            </div>
+            <button class="collapse-button" data-target="#spotify-playlist">▼</button>
           </div>
-          <div id="spotify-data-placeholder"></div>
+          <div class="playlist-content">
+            <div id="spotify-data-placeholder"></div>
+          </div>
         </div>
       </div>
     </div>
   </div>
+  
   <div class="row footer-row">
     <div class="col-md-12 text-center">
       <a href="https://www.youtube.com/t/terms" target="_blank" class="footer-link">YouTube Terms of Service</a>
