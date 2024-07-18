@@ -11,7 +11,7 @@ from selenium.webdriver.chrome.options import Options
 from unidecode import unidecode
 from utils import clear_collection, get_mongo_client, insert_data_to_mongo, set_secrets
 
-PLAYLIST_GENRES = ["dance", "rap"]
+PLAYLIST_GENRES = ["country", "dance", "pop", "rap"]
 
 SERVICE_CONFIGS = {
     "AppleMusic": {
@@ -20,7 +20,9 @@ SERVICE_CONFIGS = {
         "param_key": "url",
         "playlist_base_url": "https://music.apple.com/us/playlist/",
         "links": {
+            "country": "https://music.apple.com/us/playlist/todays-country/pl.87bb5b36a9bd49db8c975607452bfa2b",
             "dance": "https://music.apple.com/us/playlist/dancexl/pl.6bf4415b83ce4f3789614ac4c3675740",
+            "pop": "https://music.apple.com/us/playlist/a-list-pop/pl.5ee8333dbe944d9f9151e97d92d1ead9",
             "rap": "https://music.apple.com/us/playlist/rap-life/pl.abe8ba42278f4ef490e3a9fc5ec8e8c5",
         },
     },
@@ -30,7 +32,9 @@ SERVICE_CONFIGS = {
         "param_key": "playlist",
         "playlist_base_url": "https://soundcloud.com/",
         "links": {
+            "country": "https://soundcloud.com/soundcloud-shine/sets/backroads-best-country-now",
             "dance": "https://soundcloud.com/soundcloud-the-peak/sets/on-the-up-new-edm-hits",
+            "pop": "https://soundcloud.com/soundcloud-shine/sets/ear-candy-fresh-pop-picks",
             "rap": "https://soundcloud.com/soundcloud-hustle/sets/drippin-best-rap-right-now",
         },
     },
@@ -40,15 +44,16 @@ SERVICE_CONFIGS = {
         "param_key": "id",
         "playlist_base_url": "https://open.spotify.com/playlist/",
         "links": {
+            "country": "https://open.spotify.com/playlist/37i9dQZF1DX1lVhptIYRda",
             "dance": "https://open.spotify.com/playlist/37i9dQZF1DX4dyzvuaRJ0n",
+            "pop": "https://open.spotify.com/playlist/37i9dQZF1DXcBWIGoYBM5M",
             "rap": "https://open.spotify.com/playlist/37i9dQZF1DX0XUsuxWHRQd",
         },
     },
 }
 
 DEBUG_MODE = False
-NO_RAPID = True
-
+NO_RAPID = False
 
 class RapidAPIClient:
     def __init__(self):
