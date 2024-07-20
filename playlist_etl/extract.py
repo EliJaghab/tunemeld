@@ -5,11 +5,8 @@ from urllib.parse import quote, urlparse
 
 import requests
 from bs4 import BeautifulSoup
-from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.chrome.options import Options
 from unidecode import unidecode
-from utils import clear_collection, get_mongo_client, insert_data_to_mongo, set_secrets
+from utils import clear_collection, get_mongo_client, get_selenium_webdriver, insert_or_update_data_to_mongo, set_secrets
 
 PLAYLIST_GENRES = ["country", "dance", "pop", "rap"]
 
@@ -138,12 +135,8 @@ class AppleMusicFetcher(Extractor):
         self.playlist_cover_description_text = playlist_cover_description_text
         self.playlist_stream_url = playlist_stream_url
     
-    def get_cover_url_with_selenium(self, url):
-        chrome_options = Options()
-        chrome_options.add_argument("--headless")
-        chrome_service = Service()  # Use default ChromeDriver path
-        driver = webdriver.Chrome(service=chrome_service, options=chrome_options)
-
+    def get_cover_url_with_selenium(self, url: str) -> str:
+        driver = get_selenium_webdriver()
         driver.get(url)
         driver.implicitly_wait(3)
         html_content = driver.page_source
@@ -153,18 +146,18 @@ class AppleMusicFetcher(Extractor):
 
         print("Searching within amp-ambient-video tags:")
         m3u8_links = set()
-        amp_ambient_video_tags = doc.find_all('amp-ambient-video')
-        for tag in amp_ambient_video_tags:
-            if 'src' in tag.attrs:
-                links = re.findall(r'https?://\S+\.m3u8', tag['src'])
-                if links:
-                    print(f"Found links in tag {tag.name}: {links}")
-                    m3u8_links.update(links)
+        all_tags = doc.find_all()
+        for tag in all_tags:
+            for attr in tag.attrs:
+                if isinstance(tag[attr], str):
+                    links = re.findall(r'https?://\S+\.m3u8', tag[attr])
+                    if links:
+                        print(f"Found links in tag {tag.name} (attribute {attr}): {links}")
+                        m3u8_links.update(links)
 
         playlist_stream_url = next(iter(m3u8_links), None)
 
         return playlist_stream_url
-
 
 class SoundCloudFetcher(Extractor):
     def get_playlist(self):
@@ -237,7 +230,7 @@ def run_extraction(mongo_client, client, service_name, genre):
     }
 
     if not DEBUG_MODE:
-        insert_data_to_mongo(mongo_client, "raw_playlists", document)
+        insert_or_update_data_to_mongo(mongo_client, "raw_playlists", document)
     else:
         print("Debug Mode: not updating mongo")
 
