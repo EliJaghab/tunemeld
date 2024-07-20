@@ -6,12 +6,11 @@ from urllib.parse import unquote
 import requests
 from bs4 import BeautifulSoup
 from extract import PLAYLIST_GENRES, SERVICE_CONFIGS
-from spotipy import Spotify
-from spotipy.oauth2 import SpotifyClientCredentials
 from utils import (
     clear_collection,
     get_mongo_client,
-    insert_data_to_mongo,
+    get_spotify_client,
+    insert_or_update_data_to_mongo,
     read_cache_from_mongo,
     read_data_from_mongo,
     set_secrets,
@@ -25,7 +24,6 @@ ISRC_CACHE_COLLECTION = "isrc_cache"
 APPLE_MUSIC_ALBUM_COVER_CACHE_COLLECTION = "apple_music_album_cover_cache"
 
 MAX_THREADS = 50
-
 
 class Track:
     def __init__(
@@ -56,9 +54,9 @@ class Track:
     def from_dict(data):
         return Track(**data)
 
-    def set_isrc(self, mongo_client):
+    def set_isrc(self, spotify_client, mongo_client):
         if not self.isrc:
-            self.isrc = get_isrc_from_spotify_api(self.track_name, self.artist_name, mongo_client)
+            self.isrc = get_isrc_from_spotify_api(self.track_name, self.artist_name, spotify_client, mongo_client)
 
     def set_youtube_url(self, mongo_client):
         if not self.youtube_url:
@@ -149,7 +147,7 @@ def convert_spotify_raw_export_to_track_type(data, genre_name):
     return tracks
 
 
-def get_isrc_from_spotify_api(track_name, artist_name, mongo_client):
+def get_isrc_from_spotify_api(track_name, artist_name, spotify_client, mongo_client):
     cache_key = f"{track_name}|{artist_name}"
     isrc_cache = read_cache_from_mongo(mongo_client, ISRC_CACHE_COLLECTION)
 
@@ -158,20 +156,10 @@ def get_isrc_from_spotify_api(track_name, artist_name, mongo_client):
         return isrc_cache[cache_key]
 
     print(f"ISRC Spotify Lookup Cache miss for {track_name} by {artist_name}")
-    client_id = os.getenv("SPOTIFY_CLIENT_ID")
-    client_secret = os.getenv("SPOTIFY_CLIENT_SECRET")
-    if not client_id or not client_secret:
-        raise ValueError("Spotify client ID or client secret not found.")
-
-    spotify = Spotify(
-        client_credentials_manager=SpotifyClientCredentials(
-            client_id=client_id, client_secret=client_secret
-        )
-    )
 
     def search_spotify(query):
         try:
-            results = spotify.search(q=query, type="track", limit=1)
+            results = spotify_client.search(q=query, type="track", limit=1)
             tracks = results["tracks"]["items"]
             if tracks:
                 return tracks[0]["external_ids"]["isrc"]
@@ -266,6 +254,7 @@ def transform_playlists(mongo_client):
     raw_playlists = read_data_from_mongo(mongo_client, RAW_PLAYLISTS_COLLECTION)
     print(f"Raw playlists from MongoDB: {len(raw_playlists)} documents found")
 
+    spotify_client = get_spotify_client()
     for genre in PLAYLIST_GENRES:
         print(f"Processing genre: {genre}")
         all_tracks = []
@@ -286,7 +275,7 @@ def transform_playlists(mongo_client):
 
         print("Setting ISRCs for all tracks")
         with concurrent.futures.ThreadPoolExecutor(max_workers=MAX_THREADS) as executor:
-            futures = [executor.submit(track.set_isrc, mongo_client) for track in all_tracks]
+            futures = [executor.submit(track.set_isrc, spotify_client, mongo_client) for track in all_tracks]
             concurrent.futures.wait(futures)
 
         print("Setting YouTube URLs for all tracks")
@@ -328,7 +317,7 @@ def process_tracks(tracks, source_name, genre, mongo_client):
         "playlist_url": playlist_url,
         "tracks": [track.to_dict() for track in sorted_tracks],
     }
-    insert_data_to_mongo(mongo_client, TRANSFORMED_DATA_COLLECTION, document)
+    insert_or_update_data_to_mongo(mongo_client, TRANSFORMED_DATA_COLLECTION, document)
     print(f"Inserted {len(filtered_tracks)} tracks for {source_name} in genre {genre}")
 
 
