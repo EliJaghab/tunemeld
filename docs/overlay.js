@@ -1,16 +1,14 @@
-// Get the overlay
+
 var overlay = document.getElementById("tosPrivacyOverlay");
 
-// Get the button that accepts the terms
+
 var acceptButton = document.getElementById("acceptButton");
 
-// When the user clicks the button, hide the overlay and set a cookie
 acceptButton.onclick = function() {
   overlay.style.display = "none";
   document.cookie = "tosPrivacyAccepted=true; path=/";
 }
 
-// Check if the cookie exists
 function checkCookie() {
   var name = "tosPrivacyAccepted=";
   var decodedCookie = decodeURIComponent(document.cookie);
