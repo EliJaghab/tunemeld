@@ -27,14 +27,30 @@ const API_BASE_URL = getApiBaseUrl();
 
 async function updateGenreData(genre) {
   try {
+    showSkeletonLoaders(); 
     await fetchAndDisplayLastUpdated(genre);
     await fetchAndDisplayHeaderArt(genre);
     await fetchAndDisplayPlaylists(genre);
-    resetCollapseStates(); // Reset the collapse states
-    addToggleEventListeners(); // Add event listeners for toggle buttons
+    hideSkeletonLoaders(); 
+    resetCollapseStates(); 
+    addToggleEventListeners(); 
   } catch (error) {
     console.error('Error updating genre data:', error);
   }
+}
+
+function showSkeletonLoaders() {
+  document.querySelectorAll('.skeleton, .skeleton-text').forEach(el => {
+    el.classList.add('loading');
+  });
+}
+
+function hideSkeletonLoaders() {
+  document.querySelectorAll('.skeleton, .skeleton-text').forEach(el => {
+    el.classList.remove('loading');
+    el.classList.remove('skeleton');
+    el.classList.remove('skeleton-text');
+  });
 }
 
 function resetCollapseStates() {
