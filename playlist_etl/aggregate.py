@@ -5,7 +5,7 @@ from extract import PLAYLIST_GENRES
 from utils import (
     clear_collection,
     get_mongo_client,
-    insert_data_to_mongo,
+    insert_or_update_data_to_mongo,
     read_data_from_mongo,
     set_secrets,
 )
@@ -87,5 +87,5 @@ if __name__ == "__main__":
             "genre_name": genre,
             "tracks": consolidated_tracks,
         }
-        insert_data_to_mongo(mongo_client, AGGREGATED_DATA_COLLECTION, document)
+        insert_or_update_data_to_mongo(mongo_client, AGGREGATED_DATA_COLLECTION, document)
         print(f"Aggregation and consolidation completed for genre: {genre}.")
