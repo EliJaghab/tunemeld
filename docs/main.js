@@ -2,12 +2,23 @@ document.addEventListener('DOMContentLoaded', initializeApp);
 
 function initializeApp() {
   const genreSelector = document.getElementById('genre-selector');
-  const initialGenre = genreSelector.value;
-  updateGenreData(initialGenre);
+  const rankSelector = document.getElementById('rank-selector');
+  
+  let currentGenre = genreSelector.value || 'pop';
+  let currentRank = rankSelector.value || 'default';
+  
+  updateGenreData(currentGenre, currentRank, true);
 
-  genreSelector.addEventListener('change', function (event) {
-    const selectedGenre = event.target.value;
-    updateGenreData(selectedGenre);
+  genreSelector.addEventListener('change', function () {
+    currentGenre = genreSelector.value;
+    currentRank = rankSelector.value;
+    updateGenreData(currentGenre, currentRank, true);
+  });
+
+  rankSelector.addEventListener('change', function () {
+    const newRank = rankSelector.value;
+    currentRank = newRank;
+    updateMainPlaylist(currentGenre, currentRank);
   });
 }
 
@@ -25,57 +36,45 @@ function getApiBaseUrl() {
 
 const API_BASE_URL = getApiBaseUrl();
 
-async function updateGenreData(genre) {
+async function updateGenreData(genre, rank, updateAll = false) {
   try {
-    showSkeletonLoaders(); 
-    await fetchAndDisplayLastUpdated(genre);
-    await fetchAndDisplayHeaderArt(genre);
-    await fetchAndDisplayPlaylists(genre);
-    hideSkeletonLoaders(); 
-    resetCollapseStates(); 
-    addToggleEventListeners(); 
+    showSkeletonLoaders();
+    if (updateAll) {
+      await fetchAndDisplayLastUpdated(genre);
+      await fetchAndDisplayHeaderArt(genre);
+      await fetchAndDisplayPlaylists(genre);
+    }
+    await updateMainPlaylist(genre, rank);
+    hideSkeletonLoaders();
+    resetCollapseStates();
+    addToggleEventListeners();
   } catch (error) {
     console.error('Error updating genre data:', error);
   }
 }
 
-function showSkeletonLoaders() {
-  document.querySelectorAll('.skeleton, .skeleton-text').forEach(el => {
-    el.classList.add('loading');
-  });
+async function updateMainPlaylist(genre, rank) {
+  try {
+    const url = `${API_BASE_URL}/api/main-playlist?genre=${genre}`;
+    await fetchAndDisplayData(url, 'main-playlist-data-placeholder', true, rank);
+  } catch (error) {
+    console.error('Error updating main playlist:', error);
+  }
 }
 
-function hideSkeletonLoaders() {
-  document.querySelectorAll('.skeleton, .skeleton-text').forEach(el => {
-    el.classList.remove('loading');
-    el.classList.remove('skeleton');
-    el.classList.remove('skeleton-text');
-  });
+async function fetchAndDisplayLastUpdated(genre) {
+  const url = `${API_BASE_URL}/api/last-updated?genre=${genre}`;
+  await fetchAndDisplayData(url, 'last-updated');
 }
 
-function resetCollapseStates() {
-  document.querySelectorAll('.playlist-content').forEach(content => {
-    content.classList.remove('collapsed');
-  });
-  document.querySelectorAll('.collapse-button').forEach(button => {
-    button.textContent = '▼';
-  });
+async function fetchAndDisplayHeaderArt(genre) {
+  const url = `${API_BASE_URL}/api/header-art?genre=${genre}`;
+  await fetchAndDisplayData(url, 'header-art');
 }
 
-function addToggleEventListeners() {
-  document.querySelectorAll('.collapse-button').forEach(button => {
-    button.removeEventListener('click', toggleCollapse);
-  });
-
-  document.querySelectorAll('.collapse-button').forEach(button => {
-    button.addEventListener('click', toggleCollapse);
-  });
-}
-
-function toggleCollapse(event) {
-  const button = event.currentTarget;
-  const targetId = button.getAttribute('data-target');
-  const content = document.querySelector(`${targetId} .playlist-content`);
-  content.classList.toggle('collapsed');
-  button.textContent = content.classList.contains('collapsed') ? '▲' : '▼';
+async function fetchAndDisplayPlaylists(genre) {
+  const services = ['AppleMusic', 'SoundCloud', 'Spotify'];
+  for (const service of services) {
+    await fetchAndDisplayData(`${API_BASE_URL}/api/service-playlist?genre=${genre}&service=${service}`, `${service.toLowerCase()}-data-placeholder`);
+  }
 }

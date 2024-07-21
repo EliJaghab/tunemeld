@@ -17,11 +17,11 @@ export default {
             try {
                 const searchParams = url.searchParams;
                 switch (pathname) {
-                    case '/api/aggregated-playlist':
-                        response = await handleAggregatedPlaylist(searchParams, env);
+                    case '/api/service-playlist':
+                        response = await handleServicePlaylist(searchParams, env);
                         break;
-                    case '/api/transformed-playlist':
-                        response = await handleTransformedPlaylist(searchParams, env);
+                    case '/api/main-playlist':
+                        response = await handleMainPlaylist(searchParams, env);
                         break;
                     case '/api/last-updated':
                         response = await handleLastUpdated(searchParams, env);
@@ -126,14 +126,14 @@ function formatPlaylistData(data: any[]): any {
     return result;
 }
 
-async function handleAggregatedPlaylist(searchParams: URLSearchParams, env: any): Promise<Response> {
+async function handleMainPlaylist(searchParams: URLSearchParams, env: any): Promise<Response> {
     const genre = searchParams.get('genre');
     if (!genre) {
         return new Response('Genre is required', { status: 400, headers: { 'Access-Control-Allow-Origin': '*' } });
     }
 
     try {
-        const data = await fetchFromMongoDB('aggregated_playlists', { genre_name: genre }, env);
+        const data = await fetchFromMongoDB('view_counts_playlists', { genre_name: genre }, env);
         await cacheAlbumCovers(data);
         return createJsonResponse(data);
     } catch (error) {
@@ -141,7 +141,7 @@ async function handleAggregatedPlaylist(searchParams: URLSearchParams, env: any)
     }
 }
 
-async function handleTransformedPlaylist(searchParams: URLSearchParams, env: any): Promise<Response> {
+async function handleServicePlaylist(searchParams: URLSearchParams, env: any): Promise<Response> {
     const genre = searchParams.get('genre');
     const service = searchParams.get('service');
 
@@ -165,7 +165,7 @@ async function handleLastUpdated(searchParams: URLSearchParams, env: any): Promi
     }
 
     try {
-        const data = await fetchFromMongoDB('aggregated_playlists', { genre_name: genre }, env);
+        const data = await fetchFromMongoDB('view_counts_playlists', { genre_name: genre }, env);
         if (data.length === 0) {
             return new Response('No data found for the specified genre', { status: 404, headers: { 'Access-Control-Allow-Origin': '*' } });
         }

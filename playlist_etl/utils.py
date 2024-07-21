@@ -2,13 +2,14 @@ import os
 from datetime import datetime, timezone
 
 from dotenv import load_dotenv
+from fp.fp import FreeProxy
 from pymongo import MongoClient
 from spotipy import Spotify
 from spotipy.oauth2 import SpotifyClientCredentials
 from selenium import webdriver
-from webdriver_manager.chrome import ChromeDriverManager
-from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.chrome.options import Options
+
 
 PLAYLIST_ETL_COLLECTION_NAME = "playlist_etl"
 
@@ -88,12 +89,16 @@ def collection_is_empty(collection_name, mongo_client) -> bool:
     db = mongo_client[PLAYLIST_ETL_COLLECTION_NAME]
     return not read_data_from_mongo(mongo_client, collection_name)
 
-def get_selenium_webdriver():
-    chrome_options = Options()
-    chrome_options.add_argument("--headless")
-    chrome_options.add_argument("--no-sandbox")
-    chrome_options.add_argument("--disable-dev-shm-usage")
+def get_selenium_webdriver(use_proxy: bool = False):    
+    options = Options()
+    options.add_argument('--headless')  # Run in headless mode
+    options.add_argument('--disable-gpu')  # Disable GPU acceleration
+    options.add_argument('--no-sandbox')  # Bypass OS security model
     
-    service = ChromeService(ChromeDriverManager().install())
-    driver = webdriver.Chrome(service=service, options=chrome_options)
+    if use_proxy:
+        proxy = FreeProxy().get()
+        logging.info(f"Using proxy: {proxy}")
+        options.add_argument(f'--proxy-server={proxy}')
+    
+    driver = webdriver.Chrome(options=options)
     return driver

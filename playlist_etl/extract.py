@@ -197,8 +197,8 @@ class SpotifyFetcher(Extractor):
         playlist_name_tag = doc.find("meta", {"property": "og:title"})
         self.playlist_name = playlist_name_tag["content"] if playlist_name_tag else "Unknown"
 
-        description_div = doc.find("span", class_="Type__TypeElement-sc-goli3j-0 kmjYak G_f5DJd2sgHWeto5cwbi")
-        self.playlist_cover_description_text = description_div.get_text(strip=True) if description_div else "No description available"
+        description_div = doc.find(lambda tag: tag.name == "div" and "Cover:" in tag.get_text(strip=True))
+        self.playlist_cover_description_text = description_div.get_text(strip=True).replace("Spotify", " ") if description_div else "No description available"
 
         playlist_cover_url_tag = doc.find("meta", {"property": "og:image"})
         self.playlist_cover_url = playlist_cover_url_tag["content"] if playlist_cover_url_tag else None

@@ -11,6 +11,7 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="header.css">
+  <link rel="stylesheet" href="playlist.css">
   <title>tunemeld</title>
 </head>
 <body>
@@ -52,11 +53,16 @@
         <option value="pop"selected>Pop</option>
         <option value="rap">Rap</option>
       </select>
+      <select id="rank-selector" class="custom-select genre-selector">
+        <option value="default">Default</option>
+        <option value="spotify_view_count">Spotify View Count</option>
+        <option value="spotify_relative_view_count">Spotify Relative View Count</option>
+      </select>
     </div>
-    <div class="playlist aggregated-playlist" id="aggregated-playlist">
+    <div class="playlist main-playlist" id="main-playlist">
       <div class="playlist-header">
         <div class="playlist-title">Aggregated Playlist</div>
-        <button class="collapse-button" data-target="#aggregated-playlist">▼</button>
+        <button class="collapse-button" data-target="#main-playlist">▼</button>
       </div>
       <div class="playlist-content">
         <div id="last-updated" class="last-updated">Last Updated: Loading...</div>
@@ -65,13 +71,13 @@
         </div>
         <div class="track-headers">
           <div class="track-header-info">Track Info</div>
+          <div class="track-header-stat">Stat</div>
           <div class="track-header-seen-on">Seen On</div>
           <div class="track-header-external-links">External</div>
         </div>
-        <div id="aggregated-data-placeholder"></div>
+        <div id="main-playlist-data-placeholder"></div>
       </div>
     </div>
-    
     <div class="playlist-section">
       <div class="playlist-column">
         <div class="playlist" id="soundcloud-playlist">
