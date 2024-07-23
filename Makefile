@@ -1,21 +1,21 @@
 .PHONY: extract transform aggregate format_all lint fix pull_push dev prod invalidate_cache
 
-# Extract data
 extract:
 	@echo "Running extract..."
 	python playlist_etl/extract.py
 
-# Transform data
 transform:
 	@echo "Running transform..."
 	python playlist_etl/transform.py
 
-# Aggregate data
 aggregate:
 	@echo "Running aggregate..."
 	python playlist_etl/aggregate.py
 
-# Combined linting and formatting target
+view_count:
+	@echo "Running view counts..."
+	python playlist_etl/view_count.py
+
 format_all:
 	@echo "Linting code with tox..."
 	tox -e lint
