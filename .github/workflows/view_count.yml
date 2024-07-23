@@ -1,9 +1,8 @@
-name: playlists_etl
+name: update_view_counts
 
 on:
   schedule:
     - cron: '0 2 * * *'
-'
   workflow_dispatch:
 
 jobs:
