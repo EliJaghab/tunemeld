@@ -67,10 +67,11 @@
   width: 100%;
   border-collapse: collapse;
   margin-top: 10px;
+  border: none;
 }
 
 .playlist-table th, .playlist-table td {
-  border: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
   padding: 5px;
   text-align: left;
   vertical-align: middle;
