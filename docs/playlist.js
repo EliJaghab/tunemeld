@@ -79,7 +79,8 @@ function createTableRow(track, isAggregated, currentRank) {
   trackInfoCell.appendChild(trackInfoDiv);
 
   const statCell = document.createElement('td');
-  statCell.className = 'stat';
+  statCell.className = 'spotify-view-count';
+  statCell.textContent = track.view_count_data_json.Spotify.current_count_json.current_view_count.toLocaleString()
   
   const seenOnCell = document.createElement('td');
   seenOnCell.className = 'seen-on';

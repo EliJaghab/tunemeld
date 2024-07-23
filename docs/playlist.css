@@ -94,11 +94,12 @@
 }
 
 .playlist-table th.info, .playlist-table td.info {
-  width: 30%;
+  width: 10%;
 }
 
-.playlist-table th.stat, .playlist-table td.stat {
+.playlist-table th.stat, .playlist-table td.spotify-view-count {
   width: 10%;
+  text-align: center;
 }
 
 .playlist-table th.seen-on, .playlist-table td.seen-on {
