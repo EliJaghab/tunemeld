@@ -35,36 +35,34 @@ function displayData(data, placeholderId, isAggregated = false, rank = 'rank') {
 
   data.forEach((playlist) => {
     playlist.tracks.forEach((track) => {
-      const card = createCard(track, isAggregated, rank);
-      placeholder.appendChild(card);
+      const row = isAggregated ? createTableRow(track, isAggregated, rank) : createSmallPlaylistTableRow(track);
+      placeholder.appendChild(row);
     });
   });
 }
 
-function createCard(track, isAggregated, currentRank) {
-  const card = document.createElement('div');
-  card.className = 'card my-1';
-  const cardBody = document.createElement('div');
-  cardBody.className = 'card-body track-item-content';
+function createTableRow(track, isAggregated, currentRank) {
+  const row = document.createElement('tr');
+  
+  const rankCell = document.createElement('td');
+  rankCell.className = 'rank';
+  rankCell.textContent = currentRank === 'default' ? track.rank || '' : 
+                          currentRank === 'spotify_view_count' ? track.spotify_total_view_count_rank : 
+                          track.spotify_relative_view_count_rank;
 
-  const trackNumber = document.createElement('div');
-  trackNumber.className = 'track-number';
-
-  if (currentRank === 'default') {
-    trackNumber.textContent = track.rank || '';
-  } else if (currentRank === 'spotify_view_count') {
-    trackNumber.textContent = track.spotify_total_view_count_rank;
-  } else if (currentRank === 'spotify_relative_view_count') {
-    trackNumber.textContent = track.spotify_relative_view_count_rank;
-  }
-
+  const coverCell = document.createElement('td');
+  coverCell.className = 'cover';
   const albumCover = document.createElement('img');
   albumCover.className = 'album-cover';
   albumCover.src = track.album_cover_url || '';
   albumCover.alt = 'Album Cover';
+  coverCell.appendChild(albumCover);
 
-  const trackInfo = document.createElement('div');
-  trackInfo.className = 'track-info';
+  const trackInfoCell = document.createElement('td');
+  trackInfoCell.className = 'info';
+  const trackInfoDiv = document.createElement('div');
+  trackInfoDiv.className = 'track-info-div';
+
   const trackTitle = document.createElement('a');
   trackTitle.className = 'track-title';
   trackTitle.href = track.track_url || '#';
@@ -74,34 +72,90 @@ function createCard(track, isAggregated, currentRank) {
   artistNameElement.className = 'artist-name';
   artistNameElement.textContent = track.artist_name || 'Unknown Artist';
 
-  trackInfo.appendChild(trackTitle);
-  trackInfo.appendChild(document.createElement('br'));
-  trackInfo.appendChild(artistNameElement);
+  trackInfoDiv.appendChild(trackTitle);
+  trackInfoDiv.appendChild(document.createElement('br'));
+  trackInfoDiv.appendChild(artistNameElement);
 
-  cardBody.appendChild(trackNumber);
-  cardBody.appendChild(albumCover);
-  cardBody.appendChild(trackInfo);
+  trackInfoCell.appendChild(trackInfoDiv);
 
+  const statCell = document.createElement('td');
+  statCell.className = 'stat';
+  
+  const seenOnCell = document.createElement('td');
+  seenOnCell.className = 'seen-on';
   if (isAggregated) {
-    const seenOnColumn = document.createElement('div');
-    seenOnColumn.className = 'track-column source-icons';
-    displaySources(seenOnColumn, track);
-    cardBody.appendChild(seenOnColumn);
+    displaySources(seenOnCell, track);
   }
 
-  const externalLinksColumn = document.createElement('div');
-  externalLinksColumn.className = 'track-column external-links';
+  const externalLinksCell = document.createElement('td');
+  externalLinksCell.className = 'external';
   if (track.youtube_url) {
     const youtubeLink = createSourceLink('YouTube', track.youtube_url);
-    externalLinksColumn.appendChild(youtubeLink);
+    externalLinksCell.appendChild(youtubeLink);
   }
 
-  cardBody.appendChild(externalLinksColumn);
-  card.appendChild(cardBody);
-  return card;
+  row.appendChild(rankCell);
+  row.appendChild(coverCell);
+  row.appendChild(trackInfoCell);
+  row.appendChild(statCell);
+  row.appendChild(seenOnCell);
+  row.appendChild(externalLinksCell);
+
+  return row;
 }
 
-function displaySources(cardBody, track) {
+function createSmallPlaylistTableRow(track) {
+  const row = document.createElement('tr');
+
+  const rankCell = document.createElement('td');
+  rankCell.className = 'rank';
+  rankCell.textContent = track.rank || '';
+
+  const coverCell = document.createElement('td');
+  coverCell.className = 'cover';
+  const albumCover = document.createElement('img');
+  albumCover.className = 'album-cover';
+  albumCover.src = track.album_cover_url || '';
+  albumCover.alt = 'Album Cover';
+  coverCell.appendChild(albumCover);
+
+  const trackInfoCell = document.createElement('td');
+  trackInfoCell.className = 'info';
+  const trackInfoDiv = document.createElement('div');
+  trackInfoDiv.className = 'track-info-div';
+
+  const trackTitle = document.createElement('a');
+  trackTitle.className = 'track-title';
+  trackTitle.href = track.track_url || '#';
+  trackTitle.textContent = track.track_name || 'Unknown Track';
+
+  const artistNameElement = document.createElement('span');
+  artistNameElement.className = 'artist-name';
+  artistNameElement.textContent = track.artist_name || 'Unknown Artist';
+
+  trackInfoDiv.appendChild(trackTitle);
+  trackInfoDiv.appendChild(document.createElement('br'));
+  trackInfoDiv.appendChild(artistNameElement);
+
+  trackInfoCell.appendChild(trackInfoDiv);
+
+  const externalLinksCell = document.createElement('td');
+  externalLinksCell.className = 'external';
+  if (track.youtube_url) {
+    const youtubeLink = createSourceLink('YouTube', track.youtube_url);
+    externalLinksCell.appendChild(youtubeLink);
+  }
+
+  row.appendChild(rankCell);
+  row.appendChild(coverCell);
+  row.appendChild(trackInfoCell);
+  row.appendChild(externalLinksCell);
+
+  return row;
+}
+
+
+function displaySources(cell, track) {
   const sourcesContainer = document.createElement('div');
   sourcesContainer.className = 'track-sources';
   const allSources = {
@@ -113,7 +167,7 @@ function displaySources(cardBody, track) {
     const linkElement = createSourceLink(source, sourceLink);
     sourcesContainer.appendChild(linkElement);
   });
-  cardBody.appendChild(sourcesContainer);
+  cell.appendChild(sourcesContainer);
 }
 
 function createSourceLink(source, sourceLink) {
@@ -150,6 +204,7 @@ function createSourceLink(source, sourceLink) {
   linkElement.appendChild(sourceIcon);
   return linkElement;
 }
+
 
 function showSkeletonLoaders() {
   document.querySelectorAll('.skeleton, .skeleton-text').forEach(el => {

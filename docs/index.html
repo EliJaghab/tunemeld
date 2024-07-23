@@ -69,13 +69,19 @@
         <div class="playlist-description">
           Tracks seen on more than one curated streaming playlist, updated every Saturday
         </div>
-        <div class="track-headers">
-          <div class="track-header-info">Track Info</div>
-          <div class="track-header-stat">Stat</div>
-          <div class="track-header-seen-on">Seen On</div>
-          <div class="track-header-external-links">External</div>
-        </div>
-        <div id="main-playlist-data-placeholder"></div>
+        <table class="playlist-table">
+          <thead>
+            <tr>
+              <th>Rank</th>
+              <th>Cover</th>
+              <th>Info</th>
+              <th>Stat</th>
+              <th>Seen On</th>
+              <th>External</th>
+            </tr>
+          </thead>
+          <tbody id="main-playlist-data-placeholder"></tbody>
+        </table>
       </div>
     </div>
     <div class="playlist-section">
@@ -91,7 +97,17 @@
             <button class="collapse-button" data-target="#soundcloud-playlist">▼</button>
           </div>
           <div class="playlist-content">
-            <div id="soundcloud-data-placeholder"></div>
+            <table class="playlist-table">
+              <thead>
+                <tr>
+                  <th>Rank</th>
+                  <th>Cover</th>
+                  <th>Info</th>
+                  <th>External</th>
+                </tr>
+              </thead>
+              <tbody id="soundcloud-data-placeholder"></tbody>
+            </table>
           </div>
         </div>
       </div>
@@ -107,7 +123,17 @@
             <button class="collapse-button" data-target="#apple-music-playlist">▼</button>
           </div>
           <div class="playlist-content">
-            <div id="applemusic-data-placeholder"></div>
+            <table class="playlist-table">
+              <thead>
+                <tr>
+                  <th>Rank</th>
+                  <th>Cover</th>
+                  <th>Info</th>
+                  <th>External</th>
+                </tr>
+              </thead>
+              <tbody id="applemusic-data-placeholder"></tbody>
+            </table>
           </div>
         </div>
       </div>
@@ -123,12 +149,21 @@
             <button class="collapse-button" data-target="#spotify-playlist">▼</button>
           </div>
           <div class="playlist-content">
-            <div id="spotify-data-placeholder"></div>
+            <table class="playlist-table">
+              <thead>
+                <tr>
+                  <th>Rank</th>
+                  <th>Cover</th>
+                  <th>Info</th>
+                  <th>External</th>
+                </tr>
+              </thead>
+              <tbody id="spotify-data-placeholder"></tbody>
+            </table>
           </div>
         </div>
       </div>
     </div>
-  </div>
   
   <div class="row footer-row">
     <div class="col-md-12 text-center">
