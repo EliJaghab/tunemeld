@@ -1,4 +1,5 @@
 beautifulsoup4==4.12.3
+free-proxy==1.1.1
 pymongo==4.8.0
 python-dotenv==1.0.0
 requests==2.32.2
