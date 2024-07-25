@@ -29,14 +29,12 @@ function displayData(data, placeholderId, isAggregated = false) {
   });
 }
 
-function createTableRow(track, isAggregated, currentRank) {
+function createTableRow(track, isAggregated) {
   const row = document.createElement('tr');
   
   const rankCell = document.createElement('td');
   rankCell.className = 'rank';
-  rankCell.textContent = currentRank === 'default' ? track.rank || '' : 
-                          currentRank === 'spotify_view_count' ? track.spotify_total_view_count_rank : 
-                          track.spotify_relative_view_count_rank;
+  rankCell.textContent = track.rank;
 
   const coverCell = document.createElement('td');
   coverCell.className = 'cover';
