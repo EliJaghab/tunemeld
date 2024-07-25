@@ -9,6 +9,7 @@ from spotipy.oauth2 import SpotifyClientCredentials
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.options import Options
+import logging
 
 
 PLAYLIST_ETL_COLLECTION_NAME = "playlist_etl"
@@ -88,17 +89,31 @@ def clear_collection(client, collection_name):
 def collection_is_empty(collection_name, mongo_client) -> bool:
     db = mongo_client[PLAYLIST_ETL_COLLECTION_NAME]
     return not read_data_from_mongo(mongo_client, collection_name)
+class WebDriverManager:
+    def __init__(self):
+        self.driver = self._create_webdriver(use_proxy=False)
 
-def get_selenium_webdriver(use_proxy: bool = False):    
-    options = Options()
-    options.add_argument('--headless')  # Run in headless mode
-    options.add_argument('--disable-gpu')  # Disable GPU acceleration
-    options.add_argument('--no-sandbox')  # Bypass OS security model
-    
-    if use_proxy:
-        proxy = FreeProxy().get()
-        logging.info(f"Using proxy: {proxy}")
-        options.add_argument(f'--proxy-server={proxy}')
-    
-    driver = webdriver.Chrome(options=options)
-    return driver
+    def _create_webdriver(self, use_proxy: bool):
+        options = Options()
+        options.add_argument('--headless')
+        options.add_argument('--disable-gpu')
+        options.add_argument('--no-sandbox')
+
+        if use_proxy:
+            proxy = FreeProxy().get()
+            logging.info(f"Using proxy: {proxy}")
+            options.add_argument(f'--proxy-server={proxy}')
+
+        driver = webdriver.Chrome(options=options)
+        return driver
+
+    def reset_driver(self, use_proxy: bool):
+        self.driver.quit()
+        self.driver = self._create_webdriver(use_proxy)
+
+    def get_driver(self):
+        return self.driver
+
+    def close_driver(self):
+        if self.driver:
+            self.driver.quit()

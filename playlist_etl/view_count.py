@@ -5,8 +5,6 @@ from datetime import datetime
 import logging
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import TimeoutException, NoSuchElementException
-from utils import Spotify, get_selenium_webdriver
-
 from utils import (
     MongoClient,
     Spotify,
@@ -16,7 +14,8 @@ from utils import (
     get_spotify_client,
     insert_or_update_data_to_mongo,
     set_secrets,
-    read_data_from_mongo
+    read_data_from_mongo,
+    WebDriverManager
 )
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -33,7 +32,7 @@ def initialize_new_view_count_playlists(mongo_client: MongoClient) -> None:
         for playlist in aggregated_playlists:
             insert_or_update_data_to_mongo(mongo_client, VIEW_COUNTS_COLLECTION, playlist)
 
-def update_view_counts(playlists: List[Dict], mongo_client: MongoClient):
+def update_view_counts(playlists: List[Dict], mongo_client: MongoClient, webdriver_manager: WebDriverManager):
     for playlist in playlists:
         logging.info(f"updating view counts for {playlist['genre_name']}")
         for track in playlist["tracks"]:
@@ -42,7 +41,7 @@ def update_view_counts(playlists: List[Dict], mongo_client: MongoClient):
                     track["view_count_data_json"] = {}
                     track["view_count_data_json"][service_name] = {}
                 
-                current_view_count = get_view_count(track["isrc"], service_name)
+                current_view_count = get_view_count(track["isrc"], service_name, webdriver_manager)
                 if "initial_count_json" not in track["view_count_data_json"][service_name]:
                     track["view_count_data_json"][service_name]["initial_count_json"] = {
                         "initial_timestamp": CURRENT_TIMESTAMP,
@@ -71,18 +70,17 @@ def update_view_counts(playlists: List[Dict], mongo_client: MongoClient):
 
         insert_or_update_data_to_mongo(mongo_client, VIEW_COUNTS_COLLECTION, playlist)
     
-def get_view_count(isrc: str, service_name: str) -> int:
+def get_view_count(isrc: str, service_name: str, webdriver_manager: WebDriverManager) -> int:
     match service_name:
         case "Spotify":
-            return get_spotify_track_view_count(isrc, spotify_client)
+            return get_spotify_track_view_count(isrc, spotify_client, webdriver_manager)
         case _:
             raise ValueError("Unexpected service name")
-  
-def get_spotify_track_view_count(isrc: str, spotify_client: Spotify) -> int:
+
+def get_spotify_track_view_count(isrc: str, spotify_client: Spotify, webdriver_manager: WebDriverManager) -> int:
     url = get_spotify_track_url(isrc, spotify_client)
     xpath = "//span[contains(@class, 'encore-text') and contains(@class, 'encore-text-body-small') and contains(@class, 'RANLXG3qKB61Bh3') and @data-testid='playcount']"
-    play_count_info = find_element_by_xpath(url, xpath)
-    print(play_count_info)
+    play_count_info = find_element_by_xpath(url, xpath, webdriver_manager)
     if not play_count_info:
         raise ValueError(f"Could not find play count for {isrc}")
     play_count = int(play_count_info.replace(",", ""))
@@ -99,13 +97,11 @@ def get_spotify_track_url(isrc: str, spotify_client: Spotify) -> str:
         return track_url
     raise ValueError(f"Could not find track for ISRC: {isrc}")
 
-def find_element_by_xpath(url: str, xpath: str, retries: int = 3, retry_delay: int = 2) -> str:
+def find_element_by_xpath(url: str, xpath: str, webdriver_manager: WebDriverManager, retries: int = 3, retry_delay: int = 2) -> str:
     logging.info(f"Attempting to find element on URL: {url} using XPath: {xpath}")
     
-    def attempt_find_element(use_proxy: bool) -> str:
-        driver = None
+    def attempt_find_element(driver) -> str:
         try:
-            driver = get_selenium_webdriver(use_proxy)
             driver.implicitly_wait(2)
             logging.info(f"Navigating to URL: {url}")
             driver.get(url)
@@ -137,19 +133,18 @@ def find_element_by_xpath(url: str, xpath: str, retries: int = 3, retry_delay: i
         except Exception as e:
             logging.error(f"An error occurred: {str(e)}")
             return f"An error occurred: {str(e)}"
-        finally:
-            if driver:
-                logging.info("Closing Selenium WebDriver")
-                driver.quit()
     
-    # First attempt without proxy
-    result = attempt_find_element(use_proxy=False)
+    driver = webdriver_manager.get_driver()
+    result = attempt_find_element(driver)
     if "An error occurred" in result or result in ["Timed out waiting for element", "Element not found on the page", "Element not found"]:
         logging.info("Initial attempt failed, retrying with proxy")
+        webdriver_manager.reset_driver(use_proxy=True)
         
         attempt = 1
         while attempt < retries:
-            result = attempt_find_element(use_proxy=True)
+            driver = webdriver_manager.get_driver()
+            result = attempt_find_element(driver)
+            
             if not ("An error occurred" in result or result in ["Timed out waiting for element", "Element not found on the page", "Element not found"]):
                 return result
             
@@ -171,4 +166,6 @@ if __name__ == "__main__":
     initialize_new_view_count_playlists(mongo_client)
     spotify_client = get_spotify_client()
     view_counts_playlists = read_data_from_mongo(mongo_client, VIEW_COUNTS_COLLECTION)
-    update_view_counts(view_counts_playlists, mongo_client)
+    webdriver_manager = WebDriverManager()
+    update_view_counts(view_counts_playlists, mongo_client, webdriver_manager)
+    webdriver_manager.close_driver()
