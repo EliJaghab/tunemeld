@@ -56,17 +56,6 @@ def update_view_counts(playlists: List[Dict], mongo_client: MongoClient, webdriv
                 initial_view_count = track["view_count_data_json"][service_name]["initial_count_json"]["initial_view_count"]
                 percentage_change = calculate_percentage_change(initial_view_count, current_view_count)
                 track["view_count_data_json"][service_name]["percentage_change"] = percentage_change
-        
-        for service_name in SERVICE_NAMES:         
-            playlist["tracks"].sort(key=lambda t: t["view_count_data_json"][service_name]["percentage_change"], reverse=True)
-
-            for rank, track in enumerate(playlist["tracks"], start=1):
-                track[f"{service_name.lower()}_relative_view_count_rank"] = rank
-            
-            playlist["tracks"].sort(key=lambda t: t["view_count_data_json"][service_name]["current_count_json"]["current_view_count"], reverse=True)
-
-            for rank, track in enumerate(playlist["tracks"], start=1):
-                track[f"{service_name.lower()}_total_view_count_rank"] = rank
 
         insert_or_update_data_to_mongo(mongo_client, VIEW_COUNTS_COLLECTION, playlist)
     

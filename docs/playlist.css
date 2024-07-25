@@ -81,11 +81,12 @@
   text-align: center;
   background-color: #555;
   color: white;
+  position: relative; /* For positioning sort buttons */
 }
 
 .playlist-table th.rank, .playlist-table td.rank {
   text-align: center;
-  width: 0%;
+  width: 2%;
 }
 
 .playlist-table th.cover, .playlist-table td.cover {
@@ -218,4 +219,34 @@
 .album-cover {
   width: 60px;
   height: 60px;
+}
+
+.sortable-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.sortable-header .title {
+  margin-right: 5px; /* Space between text and the button */
+}
+
+.sort-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  position: absolute;
+  right: 0;
+}
+
+.sort-button i {
+  display: none;
+}
+
+.sort-button[data-order="asc"] .fa-sort-up,
+.sort-button[data-order="desc"] .fa-sort-down {
+  display: inline;
 }

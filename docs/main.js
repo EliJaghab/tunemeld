@@ -1,24 +1,27 @@
 document.addEventListener('DOMContentLoaded', initializeApp);
 
+document.addEventListener('DOMContentLoaded', initializeApp);
+
 function initializeApp() {
   const genreSelector = document.getElementById('genre-selector');
-  const rankSelector = document.getElementById('rank-selector');
   
   let currentGenre = genreSelector.value || 'pop';
-  let currentRank = rankSelector.value || 'default';
   
-  updateGenreData(currentGenre, currentRank, true);
+  updateGenreData(currentGenre, true);
 
   genreSelector.addEventListener('change', function () {
     currentGenre = genreSelector.value;
-    currentRank = rankSelector.value;
-    updateGenreData(currentGenre, currentRank, true);
+    updateGenreData(currentGenre, true);
   });
 
-  rankSelector.addEventListener('change', function () {
-    const newRank = rankSelector.value;
-    currentRank = newRank;
-    updateMainPlaylist(currentGenre, currentRank);
+  document.querySelectorAll('.sort-button').forEach(button => {
+    button.addEventListener('click', function () {
+      const column = button.getAttribute('data-column');
+      const order = button.getAttribute('data-order');
+      const newOrder = order === 'desc' ? 'asc' : 'desc';
+      button.setAttribute('data-order', newOrder);
+      sortTable(column, newOrder);
+    });
   });
 }
 
@@ -36,7 +39,7 @@ function getApiBaseUrl() {
 
 const API_BASE_URL = getApiBaseUrl();
 
-async function updateGenreData(genre, rank, updateAll = false) {
+async function updateGenreData(genre, updateAll = false) {
   try {
     showSkeletonLoaders();
     if (updateAll) {
@@ -44,7 +47,8 @@ async function updateGenreData(genre, rank, updateAll = false) {
       await fetchAndDisplayHeaderArt(genre);
       await fetchAndDisplayPlaylists(genre);
     }
-    await updateMainPlaylist(genre, rank);
+    await updateMainPlaylist(genre);
+    sortTable('rank', 'asc');
     hideSkeletonLoaders();
     resetCollapseStates();
     addToggleEventListeners();
@@ -53,10 +57,10 @@ async function updateGenreData(genre, rank, updateAll = false) {
   }
 }
 
-async function updateMainPlaylist(genre, rank) {
+async function updateMainPlaylist(genre) {
   try {
     const url = `${API_BASE_URL}/api/main-playlist?genre=${genre}`;
-    await fetchAndDisplayData(url, 'main-playlist-data-placeholder', true, rank);
+    await fetchAndDisplayData(url, 'main-playlist-data-placeholder', true);
   } catch (error) {
     console.error('Error updating main playlist:', error);
   }

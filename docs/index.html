@@ -9,6 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="header.css">
   <link rel="stylesheet" href="playlist.css">
@@ -56,12 +57,6 @@
             <option value="pop" selected>Pop</option>
             <option value="rap">Rap</option>
           </select>
-          <label for="rank-selector" class="mr-2">Rank</label>
-          <select id="rank-selector" class="custom-select genre-selector">
-            <option value="default">Default</option>
-            <option value="spotify_view_count">Spotify View Count</option>
-            <option value="spotify_relative_view_count">Spotify Relative View Count</option>
-          </select>
         </div>
       </div>
     </div>
@@ -78,10 +73,26 @@
         <table class="playlist-table">
           <thead>
             <tr>
-              <th>Rank</th>
+              <th>
+                <div class="sortable-header">
+                  <span class="title">Rank</span>
+                  <button class="sort-button" data-column="rank" data-order="desc">
+                    <i class="fa fa-sort-up"></i>
+                    <i class="fa fa-sort-down"></i>
+                  </button>
+                </div>
+              </th>
               <th>Cover</th>
               <th>Info</th>
-              <th>Spotify Views</th>
+              <th>
+                <div class="sortable-header">
+                  <span class="title">Spotify Views</span>
+                  <button class="sort-button" data-column="spotify_views" data-order="desc">
+                    <i class="fa fa-sort-up"></i>
+                    <i class="fa fa-sort-down"></i>
+                  </button>
+                </div>
+              </th>
               <th>Seen On</th>
               <th>YT</th>
             </tr>

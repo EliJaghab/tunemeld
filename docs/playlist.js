@@ -1,17 +1,19 @@
-async function fetchAndDisplayData(url, placeholderId, isAggregated = false, rank = 'rank') {
+async function fetchAndDisplayData(url, placeholderId, isAggregated = false) {
   try {
     const response = await fetch(url);
     if (!response.ok) {
       throw new Error(`Failed to fetch ${url}. Status: ${response.status}`);
     }
     const data = await response.json();
-    displayData(data, placeholderId, isAggregated, rank);
+    playlistData = data;
+    displayData(data, placeholderId, isAggregated);
   } catch (error) {
     console.error('Error fetching and displaying data:', error);
   }
 }
 
-function displayData(data, placeholderId, isAggregated = false, rank = 'rank') {
+
+function displayData(data, placeholderId, isAggregated = false) {
   const placeholder = document.getElementById(placeholderId);
   if (!placeholder) {
     console.error(`Placeholder with ID ${placeholderId} not found.`);
@@ -20,22 +22,8 @@ function displayData(data, placeholderId, isAggregated = false, rank = 'rank') {
   placeholder.innerHTML = '';
 
   data.forEach(playlist => {
-    switch (rank) {
-      case 'spotify_view_count':
-        playlist.tracks.sort((a, b) => a.spotify_total_view_count_rank - b.spotify_total_view_count_rank);
-        break;
-      case 'spotify_relative_view_count':
-        playlist.tracks.sort((a, b) => a.spotify_relative_view_count_rank - b.spotify_relative_view_count_rank);
-        break;
-      default:
-        playlist.tracks.sort((a, b) => a.rank - b.rank);
-        break;
-    }
-  });
-
-  data.forEach((playlist) => {
-    playlist.tracks.forEach((track) => {
-      const row = isAggregated ? createTableRow(track, isAggregated, rank) : createSmallPlaylistTableRow(track);
+    playlist.tracks.forEach(track => {
+      const row = isAggregated ? createTableRow(track, isAggregated) : createSmallPlaylistTableRow(track);
       placeholder.appendChild(row);
     });
   });
@@ -155,7 +143,6 @@ function createSmallPlaylistTableRow(track) {
   return row;
 }
 
-
 function displaySources(cell, track) {
   const sourcesContainer = document.createElement('div');
   sourcesContainer.className = 'track-sources';
@@ -206,6 +193,23 @@ function createSourceLink(source, sourceLink) {
   return linkElement;
 }
 
+let playlistData = [];
+
+function sortTable(column, order) {
+  const sortedData = playlistData.map(playlist => {
+    playlist.tracks.sort((a, b) => {
+      if (column === 'rank') {
+        return order === 'asc' ? a.rank - b.rank : b.rank - a.rank;
+      } else if (column === 'spotify_views') {
+        return order === 'asc' ? a.spotify_total_view_count_rank - b.spotify_total_view_count_rank : b.spotify_total_view_count_rank - a.spotify_total_view_count_rank;
+      }
+      return 0;
+    });
+    return playlist;
+  });
+
+  displayData(sortedData, 'main-playlist-data-placeholder', true);
+}
 
 function showSkeletonLoaders() {
   document.querySelectorAll('.skeleton, .skeleton-text').forEach(el => {
