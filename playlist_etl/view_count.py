@@ -50,7 +50,7 @@ def update_view_counts(
 
             for service_name in SERVICE_NAMES:
                 service_url_key = f"{service_name}_url".lower()
-                if not service_url_key in track:
+                if not service_url_key in track or not track[service_url_key]:
                     track[service_url_key] = get_service_url(
                         service_name, track, spotify_client, mongo_client
                     )

@@ -12,11 +12,13 @@ from spotipy.oauth2 import SpotifyClientCredentials
 
 PLAYLIST_ETL_COLLECTION_NAME = "playlist_etl"
 
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
+
 
 def set_secrets():
     if not os.getenv("GITHUB_ACTIONS"):
         env_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".env"))
-        print("env_path" + env_path)
+        logging.info("env_path" + env_path)
         load_dotenv(dotenv_path=env_path)
 
 
@@ -50,12 +52,12 @@ def insert_or_update_data_to_mongo(client, collection_name, document):
         if existing_document:
             document["update_timestamp"] = datetime.now(timezone.utc)
             result = collection.replace_one({"_id": document["_id"]}, document)
-            print(f"Data updated for id: {document['_id']}")
+            logging.info(f"Data updated for id: {document['_id']}")
             return
 
     document["insert_timestamp"] = datetime.now(timezone.utc)
     result = collection.insert_one(document)
-    print(f"Data inserted with id: {result.inserted_id}")
+    logging.info(f"Data inserted with id: {result.inserted_id}")
 
 
 def read_cache_from_mongo(mongo_client, collection_name):
@@ -68,7 +70,9 @@ def read_cache_from_mongo(mongo_client, collection_name):
 
 
 def update_cache_in_mongo(mongo_client, collection_name, key, value):
-    print(f"Updating cache in collection: {collection_name} for key: {key} with value: {value}")
+    logging.info(
+        f"Updating cache in collection: {collection_name} for key: {key} with value: {value}"
+    )
     db = mongo_client[PLAYLIST_ETL_COLLECTION_NAME]
     collection = db[collection_name]
     collection.replace_one({"key": key}, {"key": key, "value": value}, upsert=True)
@@ -84,7 +88,7 @@ def clear_collection(client, collection_name):
     db = client[PLAYLIST_ETL_COLLECTION_NAME]
     collection = db[collection_name]
     collection.delete_many({})
-    print(f"Cleared collection: {collection_name}")
+    logging.info(f"Cleared collection: {collection_name}")
 
 
 def collection_is_empty(collection_name, mongo_client) -> bool:
