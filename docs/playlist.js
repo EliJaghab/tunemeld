@@ -196,12 +196,17 @@ let playlistData = [];
 function sortTable(column, order) {
   const sortedData = playlistData.map(playlist => {
     playlist.tracks.sort((a, b) => {
+      let aValue, bValue;
+
       if (column === 'rank') {
-        return order === 'asc' ? a.rank - b.rank : b.rank - a.rank;
+        aValue = a.rank;
+        bValue = b.rank;
       } else if (column === 'spotify_views') {
-        return order === 'asc' ? a.spotify_total_view_count_rank - b.spotify_total_view_count_rank : b.spotify_total_view_count_rank - a.spotify_total_view_count_rank;
+        aValue = a.view_count_data_json.Spotify.current_count_json.current_view_count;
+        bValue = b.view_count_data_json.Spotify.current_count_json.current_view_count;
       }
-      return 0;
+
+      return order === 'asc' ? aValue - bValue : bValue - aValue;
     });
     return playlist;
   });
