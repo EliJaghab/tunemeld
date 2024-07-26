@@ -222,7 +222,7 @@ def get_youtube_url_by_track_and_artist_name(track_name, artist_name, mongo_clie
     else:
         print(f"Error: {response.status_code}, {response.text}")
         if response.status_code == 403 and "quotaExceeded" in response.text:
-            return None
+            raise ValueError(f"Could not get Youtube URL for {track_name} {artist_name}")
         return None
 
 

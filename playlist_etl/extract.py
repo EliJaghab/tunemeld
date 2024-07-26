@@ -7,9 +7,9 @@ import requests
 from bs4 import BeautifulSoup
 from unidecode import unidecode
 from utils import (
+    WebDriverManager,
     clear_collection,
     get_mongo_client,
-    WebDriverManager,
     insert_or_update_data_to_mongo,
     set_secrets,
 )
@@ -248,7 +248,7 @@ def run_extraction(mongo_client, client, service_name, genre):
     document = {
         "service_name": service_name,
         "genre_name": genre,
-        "playlist_url": extractor.playlist_url, 
+        "playlist_url": extractor.playlist_url,
         "data_json": playlist_data,
         "playlist_name": extractor.playlist_name,
         "playlist_cover_url": extractor.playlist_cover_url,
