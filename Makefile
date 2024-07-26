@@ -1,4 +1,4 @@
-.PHONY: extract transform aggregate format_all lint fix pull_push dev prod invalidate_cache
+.PHONY: extract transform aggregate format lint fix pull_push dev prod invalidate_cache
 
 extract:
 	@echo "Running extract..."
@@ -16,14 +16,9 @@ view_count:
 	@echo "Running view counts..."
 	python playlist_etl/view_count.py
 
-format_all:
-	@echo "Linting code with tox..."
-	tox -e lint
-	@echo "Formatting code with tox..."
-	tox -e format
-
-fix: format_all
-	@echo "Automatically fixing code style issues..."
+format:
+	@echo "Running tox to lint and format code..."
+	tox
 
 pull_push:
 	@git pull --rebase

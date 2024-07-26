@@ -6,7 +6,13 @@ from urllib.parse import quote, urlparse
 import requests
 from bs4 import BeautifulSoup
 from unidecode import unidecode
-from utils import clear_collection, get_mongo_client, get_selenium_webdriver, insert_or_update_data_to_mongo, set_secrets
+from utils import (
+    clear_collection,
+    get_mongo_client,
+    WebDriverManager,
+    insert_or_update_data_to_mongo,
+    set_secrets,
+)
 
 PLAYLIST_GENRES = ["country", "dance", "pop", "rap"]
 
@@ -51,6 +57,7 @@ SERVICE_CONFIGS = {
 
 DEBUG_MODE = False
 NO_RAPID = False
+
 
 class RapidAPIClient:
     def __init__(self):
@@ -102,6 +109,9 @@ class Extractor:
 
 
 class AppleMusicFetcher(Extractor):
+    def __init__(self):
+        self.driver = WebDriverManager().get_driver()
+
     def get_playlist(self):
         url = f"{self.base_url}?{self.param_key}={self.playlist_param}"
         return get_json_response(url, self.host, self.api_key)
@@ -113,16 +123,16 @@ class AppleMusicFetcher(Extractor):
         response.raise_for_status()
         doc = BeautifulSoup(response.text, "html.parser")
 
-        title_tag = doc.select_one('a.click-action')
+        title_tag = doc.select_one("a.click-action")
         title = title_tag.get_text(strip=True) if title_tag else "Unknown"
 
-        subtitle_tag = doc.select_one('h1')
+        subtitle_tag = doc.select_one("h1")
         subtitle = subtitle_tag.get_text(strip=True) if subtitle_tag else "Unknown"
 
         stream_tag = doc.find("amp-ambient-video", {"class": "editorial-video"})
         playlist_stream_url = stream_tag["src"] if stream_tag and stream_tag.get("src") else None
 
-        playlist_cover_description_tag = doc.find('p', {'data-testid': 'truncate-text'})
+        playlist_cover_description_tag = doc.find("p", {"data-testid": "truncate-text"})
         playlist_cover_description_text = (
             unidecode(html.unescape(playlist_cover_description_tag.get_text(strip=True)))
             if playlist_cover_description_tag
@@ -134,13 +144,12 @@ class AppleMusicFetcher(Extractor):
         self.playlist_cover_url = self.get_cover_url_with_selenium(url)
         self.playlist_cover_description_text = playlist_cover_description_text
         self.playlist_stream_url = playlist_stream_url
-    
+
     def get_cover_url_with_selenium(self, url: str) -> str:
-        driver = get_selenium_webdriver()
-        driver.get(url)
-        driver.implicitly_wait(3)
-        html_content = driver.page_source
-        driver.quit()
+        self.driver.get(url)
+        self.driver.implicitly_wait(3)
+        html_content = self.driver.page_source
+        self.driver.close_driver()
 
         doc = BeautifulSoup(html_content, "html.parser")
 
@@ -150,7 +159,7 @@ class AppleMusicFetcher(Extractor):
         for tag in all_tags:
             for attr in tag.attrs:
                 if isinstance(tag[attr], str):
-                    links = re.findall(r'https?://\S+\.m3u8', tag[attr])
+                    links = re.findall(r"https?://\S+\.m3u8", tag[attr])
                     if links:
                         print(f"Found links in tag {tag.name} (attribute {attr}): {links}")
                         m3u8_links.update(links)
@@ -158,6 +167,7 @@ class AppleMusicFetcher(Extractor):
         playlist_stream_url = next(iter(m3u8_links), None)
 
         return playlist_stream_url
+
 
 class SoundCloudFetcher(Extractor):
     def get_playlist(self):
@@ -177,15 +187,23 @@ class SoundCloudFetcher(Extractor):
         self.playlist_name = playlist_name_tag["content"] if playlist_name_tag else "Unknown"
 
         description_tag = doc.find("meta", {"name": "description"})
-        self.playlist_cover_description_text = description_tag["content"] if description_tag else "No description available"
+        self.playlist_cover_description_text = (
+            description_tag["content"] if description_tag else "No description available"
+        )
 
         playlist_cover_url_tag = doc.find("meta", {"property": "og:image"})
-        self.playlist_cover_url = playlist_cover_url_tag["content"] if playlist_cover_url_tag else None
+        self.playlist_cover_url = (
+            playlist_cover_url_tag["content"] if playlist_cover_url_tag else None
+        )
 
         self.playlist_url = url
+
+
 class SpotifyFetcher(Extractor):
     def get_playlist(self, offset=0, limit=100):
-        url = f"{self.base_url}?{self.param_key}={self.playlist_param}&offset={offset}&limit={limit}"
+        url = (
+            f"{self.base_url}?{self.param_key}={self.playlist_param}&offset={offset}&limit={limit}"
+        )
         return get_json_response(url, self.host, self.api_key)
 
     def set_playlist_details(self):
@@ -197,11 +215,19 @@ class SpotifyFetcher(Extractor):
         playlist_name_tag = doc.find("meta", {"property": "og:title"})
         self.playlist_name = playlist_name_tag["content"] if playlist_name_tag else "Unknown"
 
-        description_div = doc.find(lambda tag: tag.name == "div" and "Cover:" in tag.get_text(strip=True))
-        self.playlist_cover_description_text = description_div.get_text(strip=True).replace("Spotify", " ") if description_div else "No description available"
+        description_div = doc.find(
+            lambda tag: tag.name == "div" and "Cover:" in tag.get_text(strip=True)
+        )
+        self.playlist_cover_description_text = (
+            description_div.get_text(strip=True).replace("Spotify", " ")
+            if description_div
+            else "No description available"
+        )
 
         playlist_cover_url_tag = doc.find("meta", {"property": "og:image"})
-        self.playlist_cover_url = playlist_cover_url_tag["content"] if playlist_cover_url_tag else None
+        self.playlist_cover_url = (
+            playlist_cover_url_tag["content"] if playlist_cover_url_tag else None
+        )
 
         self.playlist_url = url
 
@@ -222,7 +248,7 @@ def run_extraction(mongo_client, client, service_name, genre):
     document = {
         "service_name": service_name,
         "genre_name": genre,
-        "playlist_url": extractor.playlist_url,  # Use the URL set in set_playlist_details
+        "playlist_url": extractor.playlist_url, 
         "data_json": playlist_data,
         "playlist_name": extractor.playlist_name,
         "playlist_cover_url": extractor.playlist_cover_url,

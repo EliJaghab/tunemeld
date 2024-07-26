@@ -25,6 +25,7 @@ APPLE_MUSIC_ALBUM_COVER_CACHE_COLLECTION = "apple_music_album_cover_cache"
 
 MAX_THREADS = 50
 
+
 class Track:
     def __init__(
         self,
@@ -56,7 +57,9 @@ class Track:
 
     def set_isrc(self, spotify_client, mongo_client):
         if not self.isrc:
-            self.isrc = get_isrc_from_spotify_api(self.track_name, self.artist_name, spotify_client, mongo_client)
+            self.isrc = get_isrc_from_spotify_api(
+                self.track_name, self.artist_name, spotify_client, mongo_client
+            )
 
     def set_youtube_url(self, mongo_client):
         if not self.youtube_url:
@@ -210,7 +213,9 @@ def get_youtube_url_by_track_and_artist_name(track_name, artist_name, mongo_clie
                 print(
                     f"Updating YouTube cache for {track_name} by {artist_name} with URL {youtube_url}"
                 )
-                update_cache_in_mongo(mongo_client, YOUTUBE_CACHE_COLLECTION, cache_key, youtube_url)
+                update_cache_in_mongo(
+                    mongo_client, YOUTUBE_CACHE_COLLECTION, cache_key, youtube_url
+                )
                 return youtube_url
         print(f"No video found for {track_name} by {artist_name}")
         return None
@@ -219,6 +224,7 @@ def get_youtube_url_by_track_and_artist_name(track_name, artist_name, mongo_clie
         if response.status_code == 403 and "quotaExceeded" in response.text:
             return None
         return None
+
 
 def get_apple_music_album_cover(url_link, mongo_client):
     cache_key = url_link
@@ -275,7 +281,10 @@ def transform_playlists(mongo_client):
 
         print("Setting ISRCs for all tracks")
         with concurrent.futures.ThreadPoolExecutor(max_workers=MAX_THREADS) as executor:
-            futures = [executor.submit(track.set_isrc, spotify_client, mongo_client) for track in all_tracks]
+            futures = [
+                executor.submit(track.set_isrc, spotify_client, mongo_client)
+                for track in all_tracks
+            ]
             concurrent.futures.wait(futures)
 
         print("Setting YouTube URLs for all tracks")

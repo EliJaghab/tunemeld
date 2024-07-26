@@ -1,16 +1,14 @@
+import logging
 import os
 from datetime import datetime, timezone
 
 from dotenv import load_dotenv
 from fp.fp import FreeProxy
 from pymongo import MongoClient
-from spotipy import Spotify
-from spotipy.oauth2 import SpotifyClientCredentials
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.chrome.options import Options
-import logging
-
+from spotipy import Spotify
+from spotipy.oauth2 import SpotifyClientCredentials
 
 PLAYLIST_ETL_COLLECTION_NAME = "playlist_etl"
 
@@ -21,11 +19,13 @@ def set_secrets():
         print("env_path" + env_path)
         load_dotenv(dotenv_path=env_path)
 
+
 def get_mongo_client():
     mongo_uri = os.getenv("MONGO_URI")
     if not mongo_uri:
         raise Exception("MONGO_URI environment variable not set")
     return MongoClient(mongo_uri)
+
 
 def get_spotify_client() -> Spotify:
     client_id = os.getenv("SPOTIFY_CLIENT_ID")
@@ -45,11 +45,11 @@ def insert_or_update_data_to_mongo(client, collection_name, document):
     db = client[PLAYLIST_ETL_COLLECTION_NAME]
     collection = db[collection_name]
     if "_id" in document:
-        existing_document = collection.find_one({'_id': document['_id']})
-        
+        existing_document = collection.find_one({"_id": document["_id"]})
+
         if existing_document:
             document["update_timestamp"] = datetime.now(timezone.utc)
-            result = collection.replace_one({'_id': document['_id']}, document)
+            result = collection.replace_one({"_id": document["_id"]}, document)
             print(f"Data updated for id: {document['_id']}")
             return
 
@@ -85,24 +85,27 @@ def clear_collection(client, collection_name):
     collection = db[collection_name]
     collection.delete_many({})
     print(f"Cleared collection: {collection_name}")
-    
+
+
 def collection_is_empty(collection_name, mongo_client) -> bool:
     db = mongo_client[PLAYLIST_ETL_COLLECTION_NAME]
     return not read_data_from_mongo(mongo_client, collection_name)
+
+
 class WebDriverManager:
     def __init__(self):
         self.driver = self._create_webdriver(use_proxy=False)
 
     def _create_webdriver(self, use_proxy: bool):
         options = Options()
-        options.add_argument('--headless')
-        options.add_argument('--disable-gpu')
-        options.add_argument('--no-sandbox')
+        options.add_argument("--headless")
+        options.add_argument("--disable-gpu")
+        options.add_argument("--no-sandbox")
 
         if use_proxy:
             proxy = FreeProxy().get()
             logging.info(f"Using proxy: {proxy}")
-            options.add_argument(f'--proxy-server={proxy}')
+            options.add_argument(f"--proxy-server={proxy}")
 
         driver = webdriver.Chrome(options=options)
         return driver
