@@ -56,7 +56,7 @@ SERVICE_CONFIGS = {
 }
 
 DEBUG_MODE = False
-NO_RAPID = True
+NO_RAPID = False
 
 
 class RapidAPIClient:
