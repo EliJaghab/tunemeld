@@ -56,7 +56,7 @@ SERVICE_CONFIGS = {
 }
 
 DEBUG_MODE = False
-NO_RAPID = False
+NO_RAPID = True
 
 
 class RapidAPIClient:
@@ -109,7 +109,8 @@ class Extractor:
 
 
 class AppleMusicFetcher(Extractor):
-    def __init__(self):
+    def __init__(self, client, service_name, genre):
+        super().__init__(client, service_name, genre)
         self.driver = WebDriverManager().get_driver()
 
     def get_playlist(self):
@@ -149,7 +150,7 @@ class AppleMusicFetcher(Extractor):
         self.driver.get(url)
         self.driver.implicitly_wait(3)
         html_content = self.driver.page_source
-        self.driver.close_driver()
+        self.driver.quit()
 
         doc = BeautifulSoup(html_content, "html.parser")
 
@@ -170,6 +171,9 @@ class AppleMusicFetcher(Extractor):
 
 
 class SoundCloudFetcher(Extractor):
+    def __init__(self, client, service_name, genre):
+        super().__init__(client, service_name, genre)
+        
     def get_playlist(self):
         url = f"{self.base_url}?{self.param_key}={self.playlist_param}"
         return get_json_response(url, self.host, self.api_key)
@@ -200,6 +204,9 @@ class SoundCloudFetcher(Extractor):
 
 
 class SpotifyFetcher(Extractor):
+    def __init__(self, client, service_name, genre):
+        super().__init__(client, service_name, genre)
+        
     def get_playlist(self, offset=0, limit=100):
         url = (
             f"{self.base_url}?{self.param_key}={self.playlist_param}&offset={offset}&limit={limit}"
