@@ -145,7 +145,7 @@ def find_element_by_xpath(
     url: str,
     xpath: str,
     webdriver_manager: WebDriverManager,
-    retries: int = 3,
+    retries: int = 2,
     retry_delay: int = 2,
 ) -> str:
     logging.info(f"Attempting to find element on URL: {url} using XPath: {xpath}")
