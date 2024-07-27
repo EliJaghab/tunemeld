@@ -226,7 +226,6 @@ def calculate_percentage_change(initial_count: int, current_count: int) -> float
 if __name__ == "__main__":
     set_secrets()
     mongo_client = get_mongo_client()
-    clear_collection(mongo_client, VIEW_COUNTS_COLLECTION)
     initialize_new_view_count_playlists(mongo_client)
     spotify_client = get_spotify_client()
     view_counts_playlists = read_data_from_mongo(mongo_client, VIEW_COUNTS_COLLECTION)
