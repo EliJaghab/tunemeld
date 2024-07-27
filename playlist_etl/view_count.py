@@ -109,7 +109,7 @@ def get_view_count(track: dict, service_name: str, webdriver_manager: WebDriverM
 
 
 def get_spotify_track_view_count(url: str, webdriver_manager: WebDriverManager) -> int:
-    xpath = "//span[contains(@class, 'encore-text') and contains(@class, 'encore-text-body-small') and contains(@class, 'RANLXG3qKB61Bh3') and @data-testid='playcount']"
+    xpath = "//*[contains(concat( ' ', @class, ' ' ), concat( ' ', 'RANLXG3qKB61Bh33I0r2', ' '' ))]"
     play_count_info = find_element_by_xpath(url, xpath, webdriver_manager)
     if not play_count_info:
         raise ValueError(f"Could not find play count for {url}")
@@ -150,11 +150,11 @@ def find_element_by_xpath(
 ) -> str:
     logging.info(f"Attempting to find element on URL: {url} using XPath: {xpath}")
 
-    def attempt_find_element(driver) -> str:
+    def attempt_find_element() -> str:
         try:
             driver.implicitly_wait(2)
             logging.info(f"Navigating to URL: {url}")
-            driver.get(url)
+            webdriver_manager.get(url)
 
             timeout = 5
             max_timeout = 15
