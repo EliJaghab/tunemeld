@@ -1,4 +1,5 @@
 import html
+import logging
 import os
 import re
 from urllib.parse import quote, urlparse
@@ -58,11 +59,12 @@ SERVICE_CONFIGS = {
 DEBUG_MODE = False
 NO_RAPID = False
 
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
 class RapidAPIClient:
     def __init__(self):
         self.api_key = self._get_api_key()
-        print(f"apiKey: {self.api_key}")
+        logging.info(f"apiKey: {self.api_key}")
 
     @staticmethod
     def _get_api_key():
@@ -74,7 +76,7 @@ class RapidAPIClient:
 
 def get_json_response(url, host, api_key):
     if DEBUG_MODE or NO_RAPID:
-        print("Debug Mode: not requesting RapidAPI")
+        logging.info("Debug Mode: not requesting RapidAPI")
         return {}
 
     headers = {
@@ -154,7 +156,7 @@ class AppleMusicFetcher(Extractor):
 
         doc = BeautifulSoup(html_content, "html.parser")
 
-        print("Searching within amp-ambient-video tags:")
+        logging.info("Searching within amp-ambient-video tags:")
         m3u8_links = set()
         all_tags = doc.find_all()
         for tag in all_tags:
@@ -162,7 +164,7 @@ class AppleMusicFetcher(Extractor):
                 if isinstance(tag[attr], str):
                     links = re.findall(r"https?://\S+\.m3u8", tag[attr])
                     if links:
-                        print(f"Found links in tag {tag.name} (attribute {attr}): {links}")
+                        logging.info(f"Found links in tag {tag.name} (attribute {attr}): {links}")
                         m3u8_links.update(links)
 
         playlist_stream_url = next(iter(m3u8_links), None)
@@ -265,7 +267,7 @@ def run_extraction(mongo_client, client, service_name, genre):
     if not DEBUG_MODE:
         insert_or_update_data_to_mongo(mongo_client, "raw_playlists", document)
     else:
-        print("Debug Mode: not updating mongo")
+        logging.info("Debug Mode: not updating mongo")
 
 
 if __name__ == "__main__":
@@ -274,13 +276,13 @@ if __name__ == "__main__":
     mongo_client = get_mongo_client()
 
     if DEBUG_MODE:
-        print("Debug Mode: not clearing mongo")
+        logging.info("Debug Mode: not clearing mongo")
     else:
         clear_collection(mongo_client, "raw_playlists")
 
     for service_name, config in SERVICE_CONFIGS.items():
         for genre in PLAYLIST_GENRES:
-            print(
+            logging.info(
                 f"Retrieving {genre} from {service_name} with credential "
                 f"{config['links'][genre]}"
             )

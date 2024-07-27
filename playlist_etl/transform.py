@@ -1,4 +1,5 @@
 import concurrent.futures
+import logging
 import os
 import re
 from urllib.parse import unquote
@@ -25,6 +26,7 @@ APPLE_MUSIC_ALBUM_COVER_CACHE_COLLECTION = "apple_music_album_cover_cache"
 
 MAX_THREADS = 50
 
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
 class Track:
     def __init__(
@@ -73,7 +75,7 @@ class Track:
 
 
 def convert_to_track_objects(data, service_name, genre_name):
-    print(f"Converting data to track objects for {service_name} and genre {genre_name}")
+    logging.info(f"Converting data to track objects for {service_name} and genre {genre_name}")
     match service_name:
         case "AppleMusic":
             return convert_apple_music_raw_export_to_track_type(data, genre_name)
@@ -86,7 +88,7 @@ def convert_to_track_objects(data, service_name, genre_name):
 
 
 def convert_apple_music_raw_export_to_track_type(data, genre_name):
-    print(f"Converting Apple Music data for genre {genre_name}")
+    logging.info(f"Converting Apple Music data for genre {genre_name}")
     tracks = []
     for key, track_data in data["album_details"].items():
         if key.isdigit():
@@ -100,7 +102,7 @@ def convert_apple_music_raw_export_to_track_type(data, genre_name):
 
 
 def convert_soundcloud_raw_export_to_track_type(data, genre_name):
-    print(f"Converting SoundCloud data for genre {genre_name}")
+    logging.info(f"Converting SoundCloud data for genre {genre_name}")
     tracks = []
     for i, item in enumerate(data["tracks"]["items"]):
         track_name = item["title"]
@@ -127,7 +129,7 @@ def convert_soundcloud_raw_export_to_track_type(data, genre_name):
 
 
 def convert_spotify_raw_export_to_track_type(data, genre_name):
-    print(f"Converting Spotify data for genre {genre_name}")
+    logging.info(f"Converting Spotify data for genre {genre_name}")
     tracks = []
     for rank, item in enumerate(data["items"]):
         track_info = item["track"]
@@ -155,10 +157,10 @@ def get_isrc_from_spotify_api(track_name, artist_name, spotify_client, mongo_cli
     isrc_cache = read_cache_from_mongo(mongo_client, ISRC_CACHE_COLLECTION)
 
     if cache_key in isrc_cache:
-        print(f"Cache hit for ISRC: {cache_key}")
+        logging.info(f"Cache hit for ISRC: {cache_key}")
         return isrc_cache[cache_key]
 
-    print(f"ISRC Spotify Lookup Cache miss for {track_name} by {artist_name}")
+    logging.info(f"ISRC Spotify Lookup Cache miss for {track_name} by {artist_name}")
 
     def search_spotify(query):
         try:
@@ -168,7 +170,7 @@ def get_isrc_from_spotify_api(track_name, artist_name, spotify_client, mongo_cli
                 return tracks[0]["external_ids"]["isrc"]
             return None
         except Exception as e:
-            print(f"Error searching Spotify with query '{query}': {e}")
+            logging.info(f"Error searching Spotify with query '{query}': {e}")
             return None
 
     track_name_no_parens = re.sub(r"\([^()]*\)", "", track_name.lower())
@@ -181,11 +183,11 @@ def get_isrc_from_spotify_api(track_name, artist_name, spotify_client, mongo_cli
     for query in queries:
         isrc = search_spotify(query)
         if isrc:
-            print(f"Found ISRC for {track_name} by {artist_name}: {isrc}")
+            logging.info(f"Found ISRC for {track_name} by {artist_name}: {isrc}")
             update_cache_in_mongo(mongo_client, ISRC_CACHE_COLLECTION, cache_key, isrc)
             return isrc
 
-    print(f"No track found on Spotify using queries: {queries} for {track_name} by {artist_name}")
+    logging.info(f"No track found on Spotify using queries: {queries} for {track_name} by {artist_name}")
     return None
 
 
@@ -210,17 +212,17 @@ def get_youtube_url_by_track_and_artist_name(track_name, artist_name, mongo_clie
             video_id = data["items"][0]["id"].get("videoId")
             if video_id:
                 youtube_url = f"https://www.youtube.com/watch?v={video_id}"
-                print(
+                logging.info(
                     f"Updating YouTube cache for {track_name} by {artist_name} with URL {youtube_url}"
                 )
                 update_cache_in_mongo(
                     mongo_client, YOUTUBE_CACHE_COLLECTION, cache_key, youtube_url
                 )
                 return youtube_url
-        print(f"No video found for {track_name} by {artist_name}")
+        logging.info(f"No video found for {track_name} by {artist_name}")
         return None
     else:
-        print(f"Error: {response.status_code}, {response.text}")
+        logging.info(f"Error: {response.status_code}, {response.text}")
         if response.status_code == 403 and "quotaExceeded" in response.text:
             raise ValueError(f"Could not get Youtube URL for {track_name} {artist_name}")
         return None
@@ -235,7 +237,7 @@ def get_apple_music_album_cover(url_link, mongo_client):
     if cache_key in album_cover_cache:
         return album_cover_cache[cache_key]
 
-    print(f"Apple Music Album Cover Cache miss for URL: {url_link}")
+    logging.info(f"Apple Music Album Cover Cache miss for URL: {url_link}")
     response = requests.get(url_link, timeout=30)
     response.raise_for_status()
     doc = BeautifulSoup(response.text, "html.parser")
@@ -256,30 +258,30 @@ def get_apple_music_album_cover(url_link, mongo_client):
 
 
 def transform_playlists(mongo_client):
-    print("Reading raw playlists from MongoDB")
+    logging.info("Reading raw playlists from MongoDB")
     raw_playlists = read_data_from_mongo(mongo_client, RAW_PLAYLISTS_COLLECTION)
-    print(f"Raw playlists from MongoDB: {len(raw_playlists)} documents found")
+    logging.info(f"Raw playlists from MongoDB: {len(raw_playlists)} documents found")
 
     spotify_client = get_spotify_client()
     for genre in PLAYLIST_GENRES:
-        print(f"Processing genre: {genre}")
+        logging.info(f"Processing genre: {genre}")
         all_tracks = []
         genre_playlists = [doc for doc in raw_playlists if doc["genre_name"] == genre]
-        print(f"Found {len(genre_playlists)} playlists for genre {genre}")
+        logging.info(f"Found {len(genre_playlists)} playlists for genre {genre}")
 
         for document in genre_playlists:
             service_name = document["service_name"]
             data = document["data_json"]
-            print(f"Processing {service_name} playlist for genre {genre}")
+            logging.info(f"Processing {service_name} playlist for genre {genre}")
             tracks = convert_to_track_objects(data, service_name, genre)
-            print(f"Converted {len(tracks)} tracks for {service_name} in genre {genre}")
+            logging.info(f"Converted {len(tracks)} tracks for {service_name} in genre {genre}")
             all_tracks.extend(tracks)
 
         if not all_tracks:
-            print(f"No tracks found for genre {genre}")
+            logging.info(f"No tracks found for genre {genre}")
             continue
 
-        print("Setting ISRCs for all tracks")
+        logging.info("Setting ISRCs for all tracks")
         with concurrent.futures.ThreadPoolExecutor(max_workers=MAX_THREADS) as executor:
             futures = [
                 executor.submit(track.set_isrc, spotify_client, mongo_client)
@@ -287,12 +289,12 @@ def transform_playlists(mongo_client):
             ]
             concurrent.futures.wait(futures)
 
-        print("Setting YouTube URLs for all tracks")
+        logging.info("Setting YouTube URLs for all tracks")
         with concurrent.futures.ThreadPoolExecutor(max_workers=1) as executor:
             futures = [executor.submit(track.set_youtube_url, mongo_client) for track in all_tracks]
             concurrent.futures.wait(futures)
 
-        print("Setting Apple Music album cover URLs for applicable tracks")
+        logging.info("Setting Apple Music album cover URLs for applicable tracks")
         with concurrent.futures.ThreadPoolExecutor(max_workers=MAX_THREADS) as executor:
             futures = [
                 executor.submit(track.set_apple_music_album_cover_url, mongo_client)
@@ -301,24 +303,24 @@ def transform_playlists(mongo_client):
             ]
             concurrent.futures.wait(futures)
 
-        print(f"Processing tracks by source and genre for {genre}")
+        logging.info(f"Processing tracks by source and genre for {genre}")
         for source in SERVICE_CONFIGS.keys():
             process_tracks(all_tracks, source, genre, mongo_client)
 
 
 def process_tracks(tracks, source_name, genre, mongo_client):
-    print(f"Processing {source_name} tracks for genre {genre}")
+    logging.info(f"Processing {source_name} tracks for genre {genre}")
     filtered_tracks = [
         track
         for track in tracks
         if track.source_name.lower() == source_name.lower() and track.genre_name == genre
     ]
     if not filtered_tracks:
-        print(f"No tracks found for {source_name} in genre {genre}")
+        logging.info(f"No tracks found for {source_name} in genre {genre}")
         return
 
     sorted_tracks = sorted(filtered_tracks, key=lambda x: x.rank)
-    print(f"Filtered and sorted {len(filtered_tracks)} tracks for {source_name} in genre {genre}")
+    logging.info(f"Filtered and sorted {len(filtered_tracks)} tracks for {source_name} in genre {genre}")
     playlist_url = SERVICE_CONFIGS[source_name]["links"][genre]
     document = {
         "service_name": source_name,
@@ -327,14 +329,14 @@ def process_tracks(tracks, source_name, genre, mongo_client):
         "tracks": [track.to_dict() for track in sorted_tracks],
     }
     insert_or_update_data_to_mongo(mongo_client, TRANSFORMED_DATA_COLLECTION, document)
-    print(f"Inserted {len(filtered_tracks)} tracks for {source_name} in genre {genre}")
+    logging.info(f"Inserted {len(filtered_tracks)} tracks for {source_name} in genre {genre}")
 
 
 if __name__ == "__main__":
-    print("Starting transform")
+    logging.info("Starting transform")
     set_secrets()
     mongo_client = get_mongo_client()
-    print("Clearing transformed playlists collection")
+    logging.info("Clearing transformed playlists collection")
     clear_collection(mongo_client, TRANSFORMED_DATA_COLLECTION)
     transform_playlists(mongo_client)
-    print("Transform completed")
+    logging.info("Transform completed")
