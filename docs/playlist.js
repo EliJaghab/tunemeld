@@ -64,9 +64,13 @@ function createTableRow(track, isAggregated) {
 
   trackInfoCell.appendChild(trackInfoDiv);
 
-  const statCell = document.createElement('td');
-  statCell.className = 'spotify-view-count';
-  statCell.textContent = track.view_count_data_json.Spotify.current_count_json.current_view_count.toLocaleString()
+  const youtubeStatCell = document.createElement('td');
+  youtubeStatCell.className = 'youtube-view-count';
+  youtubeStatCell.textContent = track.view_count_data_json.Youtube.current_count_json.current_view_count.toLocaleString()
+
+  const spotifyStatCell = document.createElement('td');
+  spotifyStatCell.className = 'spotify-view-count';
+  spotifyStatCell.textContent = track.view_count_data_json.Spotify.current_count_json.current_view_count.toLocaleString()
   
   const seenOnCell = document.createElement('td');
   seenOnCell.className = 'seen-on';
@@ -84,7 +88,8 @@ function createTableRow(track, isAggregated) {
   row.appendChild(rankCell);
   row.appendChild(coverCell);
   row.appendChild(trackInfoCell);
-  row.appendChild(statCell);
+  row.appendChild(youtubeStatCell);
+  row.appendChild(spotifyStatCell);
   row.appendChild(seenOnCell);
   row.appendChild(externalLinksCell);
 
@@ -204,6 +209,9 @@ function sortTable(column, order) {
       } else if (column === 'spotify_views') {
         aValue = a.view_count_data_json.Spotify.current_count_json.current_view_count;
         bValue = b.view_count_data_json.Spotify.current_count_json.current_view_count;
+      } else if (column === 'youtube_views') {
+        aValue = a.view_count_data_json.Youtube.current_count_json.current_view_count;
+        bValue = b.view_count_data_json.Youtube.current_count_json.current_view_count;
       }
 
       return order === 'asc' ? aValue - bValue : bValue - aValue;
