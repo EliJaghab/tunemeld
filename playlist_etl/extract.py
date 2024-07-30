@@ -61,6 +61,7 @@ NO_RAPID = False
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
+
 class RapidAPIClient:
     def __init__(self):
         self.api_key = self._get_api_key()
@@ -153,17 +154,20 @@ class AppleMusicFetcher(Extractor):
         src_attribute = self.webdriver_manager.find_element_by_xpath(url, xpath, attribute="src")
 
         if src_attribute == "Element not found" or "An error occurred" in src_attribute:
-            raise ValueError(f"Could not find amp-ambient-video src attribute for Apple Music {self.genre}")
+            raise ValueError(
+                f"Could not find amp-ambient-video src attribute for Apple Music {self.genre}"
+            )
 
-        if src_attribute.endswith('.m3u8'):
+        if src_attribute.endswith(".m3u8"):
             return src_attribute
         else:
             raise ValueError(f"Found src attribute, but it's not an m3u8 URL: {src_attribute}")
 
+
 class SoundCloudFetcher(Extractor):
     def __init__(self, client, service_name, genre):
         super().__init__(client, service_name, genre)
-        
+
     def get_playlist(self):
         url = f"{self.base_url}?{self.param_key}={self.playlist_param}"
         return get_json_response(url, self.host, self.api_key)
@@ -196,7 +200,7 @@ class SoundCloudFetcher(Extractor):
 class SpotifyFetcher(Extractor):
     def __init__(self, client, service_name, genre):
         super().__init__(client, service_name, genre)
-        
+
     def get_playlist(self, offset=0, limit=100):
         url = (
             f"{self.base_url}?{self.param_key}={self.playlist_param}&offset={offset}&limit={limit}"

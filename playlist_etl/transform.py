@@ -28,6 +28,7 @@ MAX_THREADS = 50
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
+
 class Track:
     def __init__(
         self,
@@ -187,7 +188,9 @@ def get_isrc_from_spotify_api(track_name, artist_name, spotify_client, mongo_cli
             update_cache_in_mongo(mongo_client, ISRC_CACHE_COLLECTION, cache_key, isrc)
             return isrc
 
-    logging.info(f"No track found on Spotify using queries: {queries} for {track_name} by {artist_name}")
+    logging.info(
+        f"No track found on Spotify using queries: {queries} for {track_name} by {artist_name}"
+    )
     return None
 
 
@@ -320,7 +323,9 @@ def process_tracks(tracks, source_name, genre, mongo_client):
         return
 
     sorted_tracks = sorted(filtered_tracks, key=lambda x: x.rank)
-    logging.info(f"Filtered and sorted {len(filtered_tracks)} tracks for {source_name} in genre {genre}")
+    logging.info(
+        f"Filtered and sorted {len(filtered_tracks)} tracks for {source_name} in genre {genre}"
+    )
     playlist_url = SERVICE_CONFIGS[source_name]["links"][genre]
     document = {
         "service_name": source_name,

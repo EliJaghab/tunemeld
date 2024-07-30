@@ -1,10 +1,9 @@
 import logging
 import time
 from collections import defaultdict
+from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime
 from typing import Dict, List
-from concurrent.futures import ThreadPoolExecutor
-
 
 import requests
 from bs4 import BeautifulSoup
@@ -23,7 +22,7 @@ from utils import (
 
 logging.basicConfig(
     level=logging.INFO,
-    format="%(asctime)s - %(levelname)s - %(filename)s:%(lineno)d - %(funcName)s() - %(message)s"
+    format="%(asctime)s - %(levelname)s - %(filename)s:%(lineno)d - %(funcName)s() - %(message)s",
 )
 
 AGGREGATED_DATA_COLLECTION = "aggregated_playlists"
@@ -39,19 +38,16 @@ def initialize_new_view_count_playlists(mongo_client: MongoClient) -> None:
             insert_or_update_data_to_mongo(mongo_client, VIEW_COUNTS_COLLECTION, playlist)
 
 
-
 def update_service_view_count(
     track: Dict,
     service_name: str,
     spotify_client: Spotify,
     mongo_client: MongoClient,
-    webdriver_manager: WebDriverManager
+    webdriver_manager: WebDriverManager,
 ) -> Dict:
     service_url_key = f"{service_name}_url".lower()
     if service_url_key not in track or not track[service_url_key]:
-        track[service_url_key] = get_service_url(
-            service_name, track, spotify_client, mongo_client
-        )
+        track[service_url_key] = get_service_url(service_name, track, spotify_client, mongo_client)
 
     if "view_count_data_json" not in track:
         track["view_count_data_json"] = defaultdict(dict)
@@ -68,22 +64,21 @@ def update_service_view_count(
         "current_view_count": current_view_count,
     }
 
-    initial_view_count = track["view_count_data_json"][service_name][
-        "initial_count_json"
-    ]["initial_view_count"]
-    percentage_change = calculate_percentage_change(
-        initial_view_count, current_view_count
-    )
+    initial_view_count = track["view_count_data_json"][service_name]["initial_count_json"][
+        "initial_view_count"
+    ]
+    percentage_change = calculate_percentage_change(initial_view_count, current_view_count)
     track["view_count_data_json"][service_name]["percentage_change"] = percentage_change
 
     return track
+
 
 def update_view_counts(
     playlists: List[Dict],
     mongo_client: MongoClient,
     webdriver_manager: WebDriverManager,
     spotify_client: Spotify,
-    max_workers: int = 1
+    max_workers: int = 1,
 ):
     for playlist in playlists:
         logging.info(f"Updating view counts for {playlist['genre_name']}")
@@ -97,7 +92,7 @@ def update_view_counts(
                         service_name,
                         spotify_client,
                         mongo_client,
-                        webdriver_manager
+                        webdriver_manager,
                     )
                     futures.append((future, track))
 
@@ -106,6 +101,7 @@ def update_view_counts(
                 track.update(updated_track)
 
         insert_or_update_data_to_mongo(mongo_client, VIEW_COUNTS_COLLECTION, playlist)
+
 
 def get_service_url(
     service_name: str,
@@ -137,7 +133,7 @@ def get_view_count(track: dict, service_name: str, webdriver_manager: WebDriverM
 def get_spotify_track_view_count(url: str, webdriver_manager: WebDriverManager) -> int:
     xpaths = [
         '//*[contains(concat( " ", @class, " " ), concat( " ", "RANLXG3qKB61Bh33I0r2", " " ))]',
-        "//span[contains(@class, 'encore-text') and contains(@class, 'encore-text-body-small') and contains(@class, 'RANLXG3qKB61Bh3') and @data-testid='playcount']"
+        "//span[contains(@class, 'encore-text') and contains(@class, 'encore-text-body-small') and contains(@class, 'RANLXG3qKB61Bh3') and @data-testid='playcount']",
     ]
 
     for xpath in xpaths:
@@ -151,6 +147,7 @@ def get_spotify_track_view_count(url: str, webdriver_manager: WebDriverManager) 
             print(f"Error with xpath {xpath}: {e}")
 
     raise ValueError(f"Could not find play count for {url}")
+
 
 def get_youtube_track_view_count(url: str, webdriver_manager: WebDriverManager) -> int:
     response = requests.get(url)
@@ -174,6 +171,7 @@ def get_spotify_track_url_by_isrc(isrc: str, spotify_client: Spotify) -> str:
         logging.info(f"Found track URL: {track_url}")
         return track_url
     raise ValueError(f"Could not find track for ISRC: {isrc}")
+
 
 def calculate_percentage_change(initial_count: int, current_count: int) -> float:
     if initial_count == 0:
