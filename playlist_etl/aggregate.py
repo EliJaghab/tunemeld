@@ -2,6 +2,7 @@ import collections
 from typing import Dict, List
 
 from extract import PLAYLIST_GENRES
+from view_count import VIEW_COUNTS_COLLECTION
 from utils import (
     clear_collection,
     get_mongo_client,
@@ -89,3 +90,5 @@ if __name__ == "__main__":
         }
         insert_or_update_data_to_mongo(mongo_client, AGGREGATED_DATA_COLLECTION, document)
         print(f"Aggregation and consolidation completed for genre: {genre}.")
+    
+    clear_collection(mongo_client, VIEW_COUNTS_COLLECTION)

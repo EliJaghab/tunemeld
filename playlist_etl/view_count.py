@@ -3,17 +3,16 @@ import time
 from collections import defaultdict
 from datetime import datetime
 from typing import Dict, List
+from concurrent.futures import ThreadPoolExecutor
+
 
 import requests
 from bs4 import BeautifulSoup
-from selenium.common.exceptions import NoSuchElementException, TimeoutException
-from selenium.webdriver.common.by import By
 from transform import get_youtube_url_by_track_and_artist_name
 from utils import (
     MongoClient,
     Spotify,
     WebDriverManager,
-    clear_collection,
     collection_is_empty,
     get_mongo_client,
     get_spotify_client,
@@ -22,8 +21,10 @@ from utils import (
     set_secrets,
 )
 
-logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
-
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(filename)s:%(lineno)d - %(funcName)s() - %(message)s"
+)
 
 AGGREGATED_DATA_COLLECTION = "aggregated_playlists"
 VIEW_COUNTS_COLLECTION = "view_counts_playlists"
@@ -38,48 +39,73 @@ def initialize_new_view_count_playlists(mongo_client: MongoClient) -> None:
             insert_or_update_data_to_mongo(mongo_client, VIEW_COUNTS_COLLECTION, playlist)
 
 
+
+def update_service_view_count(
+    track: Dict,
+    service_name: str,
+    spotify_client: Spotify,
+    mongo_client: MongoClient,
+    webdriver_manager: WebDriverManager
+) -> Dict:
+    service_url_key = f"{service_name}_url".lower()
+    if service_url_key not in track or not track[service_url_key]:
+        track[service_url_key] = get_service_url(
+            service_name, track, spotify_client, mongo_client
+        )
+
+    if "view_count_data_json" not in track:
+        track["view_count_data_json"] = defaultdict(dict)
+
+    current_view_count = get_view_count(track, service_name, webdriver_manager)
+    if "initial_count_json" not in track["view_count_data_json"][service_name]:
+        track["view_count_data_json"][service_name]["initial_count_json"] = {
+            "initial_timestamp": CURRENT_TIMESTAMP,
+            "initial_view_count": current_view_count,
+        }
+
+    track["view_count_data_json"][service_name]["current_count_json"] = {
+        "current_timestamp": CURRENT_TIMESTAMP,
+        "current_view_count": current_view_count,
+    }
+
+    initial_view_count = track["view_count_data_json"][service_name][
+        "initial_count_json"
+    ]["initial_view_count"]
+    percentage_change = calculate_percentage_change(
+        initial_view_count, current_view_count
+    )
+    track["view_count_data_json"][service_name]["percentage_change"] = percentage_change
+
+    return track
+
 def update_view_counts(
     playlists: List[Dict],
     mongo_client: MongoClient,
     webdriver_manager: WebDriverManager,
     spotify_client: Spotify,
+    max_workers: int = 1
 ):
     for playlist in playlists:
-        logging.info(f"updating view counts for {playlist['genre_name']}")
-        for track in playlist["tracks"]:
-
-            for service_name in SERVICE_NAMES:
-                service_url_key = f"{service_name}_url".lower()
-                if not service_url_key in track or not track[service_url_key]:
-                    track[service_url_key] = get_service_url(
-                        service_name, track, spotify_client, mongo_client
+        logging.info(f"Updating view counts for {playlist['genre_name']}")
+        with ThreadPoolExecutor(max_workers=max_workers) as executor:
+            futures = []
+            for track in playlist["tracks"]:
+                for service_name in SERVICE_NAMES:
+                    future = executor.submit(
+                        update_service_view_count,
+                        track,
+                        service_name,
+                        spotify_client,
+                        mongo_client,
+                        webdriver_manager
                     )
+                    futures.append((future, track))
 
-                if "view_count_data_json" not in track:
-                    track["view_count_data_json"] = defaultdict(dict)
-
-                current_view_count = get_view_count(track, service_name, webdriver_manager)
-                if "initial_count_json" not in track["view_count_data_json"][service_name]:
-                    track["view_count_data_json"][service_name]["initial_count_json"] = {
-                        "initial_timestamp": CURRENT_TIMESTAMP,
-                        "initial_view_count": current_view_count,
-                    }
-
-                track["view_count_data_json"][service_name]["current_count_json"] = {
-                    "current_timestamp": CURRENT_TIMESTAMP,
-                    "current_view_count": current_view_count,
-                }
-
-                initial_view_count = track["view_count_data_json"][service_name][
-                    "initial_count_json"
-                ]["initial_view_count"]
-                percentage_change = calculate_percentage_change(
-                    initial_view_count, current_view_count
-                )
-                track["view_count_data_json"][service_name]["percentage_change"] = percentage_change
+            for future, track in futures:
+                updated_track = future.result()
+                track.update(updated_track)
 
         insert_or_update_data_to_mongo(mongo_client, VIEW_COUNTS_COLLECTION, playlist)
-
 
 def get_service_url(
     service_name: str,
@@ -109,13 +135,22 @@ def get_view_count(track: dict, service_name: str, webdriver_manager: WebDriverM
 
 
 def get_spotify_track_view_count(url: str, webdriver_manager: WebDriverManager) -> int:
-    xpath = "//*[contains(concat( ' ', @class, ' ' ), concat( ' ', 'RANLXG3qKB61Bh33I0r2', ' '' ))]"
-    play_count_info = find_element_by_xpath(url, xpath, webdriver_manager)
-    if not play_count_info:
-        raise ValueError(f"Could not find play count for {url}")
-    play_count = int(play_count_info.replace(",", ""))
-    return play_count
+    xpaths = [
+        '//*[contains(concat( " ", @class, " " ), concat( " ", "RANLXG3qKB61Bh33I0r2", " " ))]',
+        "//span[contains(@class, 'encore-text') and contains(@class, 'encore-text-body-small') and contains(@class, 'RANLXG3qKB61Bh3') and @data-testid='playcount']"
+    ]
 
+    for xpath in xpaths:
+        try:
+            play_count_info = webdriver_manager.find_element_by_xpath(url, xpath)
+            if play_count_info:
+                play_count = int(play_count_info.replace(",", ""))
+                logging.info(play_count)
+                return play_count
+        except Exception as e:
+            print(f"Error with xpath {xpath}: {e}")
+
+    raise ValueError(f"Could not find play count for {url}")
 
 def get_youtube_track_view_count(url: str, webdriver_manager: WebDriverManager) -> int:
     response = requests.get(url)
@@ -140,83 +175,6 @@ def get_spotify_track_url_by_isrc(isrc: str, spotify_client: Spotify) -> str:
         return track_url
     raise ValueError(f"Could not find track for ISRC: {isrc}")
 
-
-def find_element_by_xpath(
-    url: str,
-    xpath: str,
-    webdriver_manager: WebDriverManager,
-    retries: int = 2,
-    retry_delay: int = 2,
-) -> str:
-    logging.info(f"Attempting to find element on URL: {url} using XPath: {xpath}")
-
-    def attempt_find_element() -> str:
-        try:
-            driver.implicitly_wait(2)
-            logging.info(f"Navigating to URL: {url}")
-            webdriver_manager.get(url)
-
-            timeout = 5
-            max_timeout = 15
-            start_time = time.time()
-
-            while time.time() - start_time < max_timeout:
-                try:
-                    element = driver.find_element(By.XPATH, xpath)
-                    if element and element.is_displayed():
-                        element_text = element.text
-                        logging.info(f"Successfully found element text: {element_text}")
-                        return element_text
-                except NoSuchElementException:
-                    logging.info("Element not found yet, retrying...")
-                    time.sleep(0.5)
-
-            logging.warning("Element not found even after waiting")
-            return "Element not found"
-
-        except TimeoutException:
-            logging.error("Timed out waiting for element")
-            return "Timed out waiting for element"
-        except NoSuchElementException:
-            logging.error("Element not found on the page")
-            return "Element not found on the page"
-        except Exception as e:
-            logging.error(f"An error occurred: {str(e)}")
-            return f"An error occurred: {str(e)}"
-
-    driver = webdriver_manager.get_driver()
-    result = attempt_find_element(driver)
-    if "An error occurred" in result or result in [
-        "Timed out waiting for element",
-        "Element not found on the page",
-        "Element not found",
-    ]:
-        logging.info("Initial attempt failed, retrying with proxy")
-        webdriver_manager.reset_driver(use_proxy=True)
-
-        attempt = 1
-        while attempt < retries:
-            driver = webdriver_manager.get_driver()
-            result = attempt_find_element(driver)
-
-            if not (
-                "An error occurred" in result
-                or result
-                in [
-                    "Timed out waiting for element",
-                    "Element not found on the page",
-                    "Element not found",
-                ]
-            ):
-                return result
-
-            logging.info(f"Retrying with proxy... (attempt {attempt+1} of {retries})")
-            time.sleep(retry_delay)
-            attempt += 1
-
-    return result
-
-
 def calculate_percentage_change(initial_count: int, current_count: int) -> float:
     if initial_count == 0:
         return 0.0
@@ -229,6 +187,6 @@ if __name__ == "__main__":
     initialize_new_view_count_playlists(mongo_client)
     spotify_client = get_spotify_client()
     view_counts_playlists = read_data_from_mongo(mongo_client, VIEW_COUNTS_COLLECTION)
-    webdriver_manager = WebDriverManager()
+    webdriver_manager = WebDriverManager(use_proxy=True)
     update_view_counts(view_counts_playlists, mongo_client, webdriver_manager, spotify_client)
-    webdriver_manager.close_driver()
+    webdriver_manager.close_all_drivers()

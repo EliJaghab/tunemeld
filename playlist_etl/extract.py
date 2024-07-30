@@ -113,7 +113,7 @@ class Extractor:
 class AppleMusicFetcher(Extractor):
     def __init__(self, client, service_name, genre):
         super().__init__(client, service_name, genre)
-        self.driver = WebDriverManager().get_driver()
+        self.webdriver_manager = WebDriverManager()
 
     def get_playlist(self):
         url = f"{self.base_url}?{self.param_key}={self.playlist_param}"
@@ -144,33 +144,21 @@ class AppleMusicFetcher(Extractor):
 
         self.playlist_url = url
         self.playlist_name = f"{subtitle} {title}"
-        self.playlist_cover_url = self.get_cover_url_with_selenium(url)
+        self.playlist_cover_url = self.get_cover_url(url)
         self.playlist_cover_description_text = playlist_cover_description_text
         self.playlist_stream_url = playlist_stream_url
 
-    def get_cover_url_with_selenium(self, url: str) -> str:
-        self.driver.get(url)
-        self.driver.implicitly_wait(3)
-        html_content = self.driver.page_source
-        self.driver.quit()
+    def get_cover_url(self, url: str) -> str:
+        xpath = "//amp-ambient-video"
+        src_attribute = self.webdriver_manager.find_element_by_xpath(url, xpath, attribute="src")
 
-        doc = BeautifulSoup(html_content, "html.parser")
+        if src_attribute == "Element not found" or "An error occurred" in src_attribute:
+            raise ValueError(f"Could not find amp-ambient-video src attribute for Apple Music {self.genre}")
 
-        logging.info("Searching within amp-ambient-video tags:")
-        m3u8_links = set()
-        all_tags = doc.find_all()
-        for tag in all_tags:
-            for attr in tag.attrs:
-                if isinstance(tag[attr], str):
-                    links = re.findall(r"https?://\S+\.m3u8", tag[attr])
-                    if links:
-                        logging.info(f"Found links in tag {tag.name} (attribute {attr}): {links}")
-                        m3u8_links.update(links)
-
-        playlist_stream_url = next(iter(m3u8_links), None)
-
-        return playlist_stream_url
-
+        if src_attribute.endswith('.m3u8'):
+            return src_attribute
+        else:
+            raise ValueError(f"Found src attribute, but it's not an m3u8 URL: {src_attribute}")
 
 class SoundCloudFetcher(Extractor):
     def __init__(self, client, service_name, genre):
