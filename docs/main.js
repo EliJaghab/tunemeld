@@ -1,17 +1,23 @@
 document.addEventListener('DOMContentLoaded', initializeApp);
 
-document.addEventListener('DOMContentLoaded', initializeApp);
-
 function initializeApp() {
   const genreSelector = document.getElementById('genre-selector');
+  const viewCountTypeSelector = document.getElementById('view-count-type-selector');
   
   let currentGenre = genreSelector.value || 'pop';
+  let viewCountType = viewCountTypeSelector.value || 'total-view-count';
   
-  updateGenreData(currentGenre, true);
+  updateGenreData(currentGenre, viewCountType, true);
 
   genreSelector.addEventListener('change', function () {
     currentGenre = genreSelector.value;
-    updateGenreData(currentGenre, true);
+    updateGenreData(currentGenre, viewCountType, true);
+  });
+
+
+  viewCountTypeSelector.addEventListener('change', function () {
+    viewCountType = viewCountTypeSelector.value;
+    updateGenreData(currentGenre, viewCountType, true);
   });
 
   document.querySelectorAll('.sort-button').forEach(button => {
@@ -39,7 +45,7 @@ function getApiBaseUrl() {
 
 const API_BASE_URL = getApiBaseUrl();
 
-async function updateGenreData(genre, updateAll = false) {
+async function updateGenreData(genre, viewCountType, updateAll = false) {
   try {
     showSkeletonLoaders();
     if (updateAll) {
@@ -47,8 +53,8 @@ async function updateGenreData(genre, updateAll = false) {
       await fetchAndDisplayHeaderArt(genre);
       await fetchAndDisplayPlaylists(genre);
     }
-    await updateMainPlaylist(genre);
-    sortTable('rank', 'asc');
+    await updateMainPlaylist(genre, viewCountType);
+    sortTable('rank', 'asc', 'total-view-count');
     hideSkeletonLoaders();
     resetCollapseStates();
     addToggleEventListeners();
@@ -57,10 +63,10 @@ async function updateGenreData(genre, updateAll = false) {
   }
 }
 
-async function updateMainPlaylist(genre) {
+async function updateMainPlaylist(genre, viewCountType) {
   try {
     const url = `${API_BASE_URL}/api/main-playlist?genre=${genre}`;
-    await fetchAndDisplayData(url, 'main-playlist-data-placeholder', true);
+    await fetchAndDisplayData(url, 'main-playlist-data-placeholder', true, viewCountType);
   } catch (error) {
     console.error('Error updating main playlist:', error);
   }

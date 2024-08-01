@@ -1,4 +1,4 @@
-async function fetchAndDisplayData(url, placeholderId, isAggregated = false) {
+async function fetchAndDisplayData(url, placeholderId, isAggregated = false, viewCountType) {
   try {
     const response = await fetch(url);
     if (!response.ok) {
@@ -6,30 +6,30 @@ async function fetchAndDisplayData(url, placeholderId, isAggregated = false) {
     }
     const data = await response.json();
     playlistData = data;
-    displayData(data, placeholderId, isAggregated);
+    displayData(data, placeholderId, isAggregated, viewCountType);
   } catch (error) {
     console.error('Error fetching and displaying data:', error);
   }
 }
 
 
-function displayData(data, placeholderId, isAggregated = false) {
+function displayData(data, placeholderId, isAggregated = false, viewCountType) {
+  
   const placeholder = document.getElementById(placeholderId);
   if (!placeholder) {
     console.error(`Placeholder with ID ${placeholderId} not found.`);
     return;
   }
   placeholder.innerHTML = '';
-
   data.forEach(playlist => {
     playlist.tracks.forEach(track => {
-      const row = isAggregated ? createTableRow(track, isAggregated) : createSmallPlaylistTableRow(track);
+      const row = isAggregated ? createTableRow(track, isAggregated, viewCountType) : createSmallPlaylistTableRow(track);
       placeholder.appendChild(row);
     });
   });
 }
 
-function createTableRow(track, isAggregated) {
+function createTableRow(track, isAggregated, viewCountType) {  
   const row = document.createElement('tr');
   
   const rankCell = document.createElement('td');
@@ -88,12 +88,48 @@ function createTableRow(track, isAggregated) {
   row.appendChild(rankCell);
   row.appendChild(coverCell);
   row.appendChild(trackInfoCell);
-  row.appendChild(youtubeStatCell);
-  row.appendChild(spotifyStatCell);
+  if (isAggregated) {
+    displayViewCounts(track, row, viewCountType)
+  }
   row.appendChild(seenOnCell);
   row.appendChild(externalLinksCell);
 
   return row;
+}
+
+function displayViewCounts(track, row, viewCountType) {
+  const youtubeStatCell = document.createElement('td');
+  youtubeStatCell.className = 'youtube-view-count';
+
+  const spotifyStatCell = document.createElement('td');
+  spotifyStatCell.className = 'spotify-view-count';
+
+  const youtubeCurrentViewCount = track.view_count_data_json.Youtube.current_count_json.current_view_count;
+  const youtubeInitialViewCount = track.view_count_data_json.Youtube.initial_count_json.initial_view_count;
+  const spotifyCurrentViewCount = track.view_count_data_json.Spotify.current_count_json.current_view_count;
+  const spotifyInitialViewCount = track.view_count_data_json.Spotify.initial_count_json.initial_view_count;
+
+  switch (viewCountType) {
+    case "total-view-count":
+      youtubeStatCell.textContent = youtubeCurrentViewCount.toLocaleString();
+      spotifyStatCell.textContent = spotifyCurrentViewCount.toLocaleString();
+      break;
+
+    case "weekly-view-count":
+      const youtubeWeeklyViewCount = youtubeCurrentViewCount - youtubeInitialViewCount;
+      const spotifyWeeklyViewCount = spotifyCurrentViewCount - spotifyInitialViewCount;
+
+      youtubeStatCell.textContent = youtubeWeeklyViewCount.toLocaleString();
+      spotifyStatCell.textContent = spotifyWeeklyViewCount.toLocaleString();
+      break;
+
+    default:
+      console.error("Unknown view count type:", viewCountType);
+      return;
+  }
+
+  row.appendChild(youtubeStatCell);
+  row.appendChild(spotifyStatCell);
 }
 
 function createSmallPlaylistTableRow(track) {
@@ -198,7 +234,7 @@ function createSourceLink(source, sourceLink) {
 
 let playlistData = [];
 
-function sortTable(column, order) {
+function sortTable(column, order, viewCountType) {
   const sortedData = playlistData.map(playlist => {
     playlist.tracks.sort((a, b) => {
       let aValue, bValue;
@@ -207,11 +243,11 @@ function sortTable(column, order) {
         aValue = a.rank;
         bValue = b.rank;
       } else if (column === 'spotify_views') {
-        aValue = a.view_count_data_json.Spotify.current_count_json.current_view_count;
-        bValue = b.view_count_data_json.Spotify.current_count_json.current_view_count;
+        aValue = getViewCount(a, 'Spotify', viewCountType);
+        bValue = getViewCount(b, 'Spotify', viewCountType);
       } else if (column === 'youtube_views') {
-        aValue = a.view_count_data_json.Youtube.current_count_json.current_view_count;
-        bValue = b.view_count_data_json.Youtube.current_count_json.current_view_count;
+        aValue = getViewCount(a, 'Youtube', viewCountType);
+        bValue = getViewCount(b, 'Youtube', viewCountType);
       }
 
       return order === 'asc' ? aValue - bValue : bValue - aValue;
@@ -219,7 +255,21 @@ function sortTable(column, order) {
     return playlist;
   });
 
-  displayData(sortedData, 'main-playlist-data-placeholder', true);
+  displayData(sortedData, 'main-playlist-data-placeholder', true, viewCountType);
+}
+
+function getViewCount(track, platform, viewCountType) {
+  const currentCount = track.view_count_data_json[platform].current_count_json.current_view_count;
+  const initialCount = track.view_count_data_json[platform].initial_count_json.initial_view_count;
+
+  if (viewCountType === "total-view-count") {
+    return currentCount;
+  } else if (viewCountType === "weekly-view-count") {
+    return currentCount - initialCount;
+  } else {
+    console.error("Unknown view count type:", viewCountType);
+    return 0; // or some default value
+  }
 }
 
 function showSkeletonLoaders() {
