@@ -268,7 +268,7 @@ function getViewCount(track, platform, viewCountType) {
     return currentCount - initialCount;
   } else {
     console.error("Unknown view count type:", viewCountType);
-    return 0; // or some default value
+    return 0; 
   }
 }
 

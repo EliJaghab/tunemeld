@@ -6,6 +6,8 @@ function initializeApp() {
   
   let currentGenre = genreSelector.value || 'pop';
   let viewCountType = viewCountTypeSelector.value || 'total-view-count';
+  let currentColumn = 'rank';
+  let currentOrder = 'asc'; 
   
   updateGenreData(currentGenre, viewCountType, true);
 
@@ -17,7 +19,7 @@ function initializeApp() {
 
   viewCountTypeSelector.addEventListener('change', function () {
     viewCountType = viewCountTypeSelector.value;
-    updateGenreData(currentGenre, viewCountType, true);
+    sortTable(currentColumn, currentOrder, viewCountType);
   });
 
   document.querySelectorAll('.sort-button').forEach(button => {
@@ -26,7 +28,9 @@ function initializeApp() {
       const order = button.getAttribute('data-order');
       const newOrder = order === 'desc' ? 'asc' : 'desc';
       button.setAttribute('data-order', newOrder);
-      sortTable(column, newOrder);
+      currentColumn = column; 
+      currentOrder = newOrder;
+      sortTable(currentColumn, currentOrder, viewCountType);
     });
   });
 }
