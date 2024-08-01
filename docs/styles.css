@@ -57,7 +57,7 @@ body {
   margin-top: 20px;
 }
 
-.genre-selector {
+.selector {
   width: 200px;
 }
 
@@ -148,6 +148,10 @@ h1 {
 
 .align-items-center {
   align-items: center;
+}
+
+.custom-select {
+  display: inline-block;
 }
 
 .justify-content-center {

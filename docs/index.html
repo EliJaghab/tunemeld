@@ -5,14 +5,14 @@
     <meta property="og:image" content="chicken.png" />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"/>
+    <link
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,600&display=swap"
+    rel="stylesheet"
+  />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,600&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" /> 
     <link rel="stylesheet" href="styles.css" />
     <link rel="stylesheet" href="header.css" />
     <link rel="stylesheet" href="playlist.css" />
@@ -59,14 +59,21 @@
         </div>
       </section>
       <div class="text-center mb-3">
-        <div class="text-center mb-3">
-          <div class="d-flex justify-content-center align-items-center">
+        <div class="d-flex justify-content-center">
+          <div class="d-flex align-items-center mr-4">
             <label for="genre-selector" class="mr-2">Genre</label>
-            <select id="genre-selector" class="custom-select genre-selector mr-4">
+            <select id="genre-selector" class="custom-select selector">
               <option value="country">Country</option>
               <option value="dance">Dance</option>
               <option value="pop" selected>Pop</option>
               <option value="rap">Rap</option>
+            </select>
+          </div>
+          <div class="d-flex align-items-center">
+            <label for="view-count-type-selector" class="mr-2">View Count Type</label>
+            <select id="view-count-type-selector" class="custom-select selector">
+              <option value="total-view-count">Total View Count</option>
+              <option value="weekly-view-count">Weekly View Count</option>
             </select>
           </div>
         </div>
