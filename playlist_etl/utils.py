@@ -109,15 +109,12 @@ def collection_is_empty(collection_name, mongo_client) -> bool:
 
 
 class WebDriverManager:
-    def __init__(self, pool_size=1, use_proxy=False):
-        self.pool_size = pool_size
+    def __init__(self, use_proxy=False, max_visits=15):
         self.use_proxy = use_proxy
-        self.driver_pool = Queue(maxsize=pool_size)
+        self.max_visits = max_visits
+        self.visits_counter = 0
         self.lock = Lock()
-
-        for _ in range(pool_size):
-            driver = self._create_webdriver(use_proxy)
-            self.driver_pool.put(driver)
+        self.driver = self._create_webdriver(use_proxy)
 
     def _create_webdriver(self, use_proxy: bool):
         options = Options()
@@ -133,82 +130,49 @@ class WebDriverManager:
         driver = webdriver.Chrome(options=options)
         return driver
 
-    def get_driver(self):
-        with self.lock:
-            driver = self.driver_pool.get()
-        return driver
-
-    def return_driver(self, driver):
-        with self.lock:
-            self.driver_pool.put(driver)
+    def _restart_driver(self):
+        logging.info("Restarting WebDriver to clear memory/cache.")
+        self.driver.quit()
+        self.driver = self._create_webdriver(self.use_proxy)
+        self.visits_counter = 0
 
     def find_element_by_xpath(
         self, url: str, xpath: str, attribute: str = None, retries: int = 5, retry_delay: int = 10
     ) -> str:
         logging.info(f"Attempting to find element on URL: {url} using XPath: {xpath}")
 
-        driver = self.get_driver()
+        if self.visits_counter >= self.max_visits:
+            self._restart_driver()
+
         try:
-            for attempt in range(retries):
-                try:
-                    logging.info(f"Navigating to URL: {url}")
-                    driver.get(url)
+            logging.info(f"Navigating to URL: {url}")
+            self.driver.get(url)
+            self.visits_counter += 1
 
-                    wait = WebDriverWait(driver, 10)
-                    element = wait.until(EC.presence_of_element_located((By.XPATH, xpath)))
+            wait = WebDriverWait(self.driver, 10)
+            element = wait.until(EC.presence_of_element_located((By.XPATH, xpath)))
 
-                    if attribute:
-                        return element.get_attribute(attribute)
-                    else:
-                        return element.text
+            if attribute:
+                return element.get_attribute(attribute)
+            else:
+                return element.text
 
-                except (NoSuchElementException, TimeoutException) as e:
-                    logging.warning(f"Attempt {attempt + 1} failed: {str(e)}")
-                    # Check for rate limiting or access restrictions
-                    page_source = driver.page_source
-                    if (
-                        "rate limit" in page_source.lower()
-                        or "access denied" in page_source.lower()
-                    ):
-                        logging.error("Rate limiting or access restriction detected.")
-                        return "Rate limiting or access restriction detected."
+        except (NoSuchElementException, TimeoutException) as e:
+            logging.warning(f"Element not found: {str(e)}")
+            return "Element not found"
 
-                    if attempt < retries - 1:
-                        logging.info(f"Retrying in {retry_delay} seconds...")
-                        time.sleep(retry_delay)
-                    else:
-                        logging.error("Element not found after all retries")
-                        return "Element not found"
+        except InvalidSelectorException as e:
+            logging.error(f"Invalid selector: {str(e)}")
+            return f"An error occurred: {str(e)}"
 
-                except InvalidSelectorException as e:
-                    logging.error(f"Invalid selector: {str(e)}")
-                    return f"An error occurred: {str(e)}"
+        except WebDriverException as e:
+            logging.error(f"WebDriverException occurred: {str(e)}")
+            return f"WebDriver error occurred: {str(e)}"
 
-                except WebDriverException as e:
-                    logging.error(f"WebDriverException occurred: {str(e)}")
-                    return f"WebDriver error occurred: {str(e)}"
+        except Exception as e:
+            logging.error(f"An unexpected error occurred: {str(e)}")
+            return f"An unexpected error occurred: {str(e)}"
 
-                except Exception as e:
-                    logging.error(f"An unexpected error occurred: {str(e)}")
-                    return f"An unexpected error occurred: {str(e)}"
-
-            return "Element not found after all retries"
-        finally:
-            self.return_driver(driver)
-
-    def reset_driver(self, use_proxy: bool):
-        with self.lock:
-            while not self.driver_pool.empty():
-                driver = self.driver_pool.get()
-                driver.quit()
-
-            self.use_proxy = use_proxy
-            for _ in range(self.pool_size):
-                driver = self._create_webdriver(use_proxy)
-                self.driver_pool.put(driver)
-
-    def close_all_drivers(self):
-        with self.lock:
-            while not self.driver_pool.empty():
-                driver = self.driver_pool.get()
-                driver.quit()
+    def close_driver(self):
+        if self.driver:
+            self.driver.quit()
