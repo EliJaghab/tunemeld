@@ -3,6 +3,7 @@ flake8==7.1.0
 free-proxy==1.1.1
 pymongo==4.8.0
 python-dotenv==1.0.0
+psutil=6.0.0
 requests==2.32.2
 selenium==4.22.0
 spotipy==2.23.0

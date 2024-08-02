@@ -7,6 +7,7 @@ from threading import Lock
 
 from dotenv import load_dotenv
 from fp.fp import FreeProxy
+import psutil
 from pymongo import MongoClient
 from selenium import webdriver
 from selenium.common.exceptions import (
@@ -109,9 +110,10 @@ def collection_is_empty(collection_name, mongo_client) -> bool:
 
 
 class WebDriverManager:
-    def __init__(self, use_proxy=False, max_visits=15):
+    def __init__(self, use_proxy=False, max_visits=15, memory_threshold_percent=75):
         self.use_proxy = use_proxy
         self.max_visits = max_visits
+        self.memory_threshold_percent = memory_threshold_percent
         self.visits_counter = 0
         self.lock = Lock()
         self.driver = self._create_webdriver(use_proxy)
@@ -136,12 +138,20 @@ class WebDriverManager:
         self.driver = self._create_webdriver(self.use_proxy)
         self.visits_counter = 0
 
+    def _check_memory_usage(self):
+        memory = psutil.virtual_memory()
+        available_memory_mb = memory.available / (1024 * 1024)
+        memory_threshold_mb = (available_memory_mb * (self.memory_threshold_percent / 100))
+        logging.info(f"Available Memory: {available_memory_mb:.2f} MB")
+        logging.info(f"Memory Threshold: {memory_threshold_mb:.2f} MB")
+        return available_memory_mb < memory_threshold_mb
+
     def find_element_by_xpath(
         self, url: str, xpath: str, attribute: str = None, retries: int = 5, retry_delay: int = 10
     ) -> str:
         logging.info(f"Attempting to find element on URL: {url} using XPath: {xpath}")
 
-        if self.visits_counter >= self.max_visits:
+        if self.visits_counter >= self.max_visits or self._check_memory_usage():
             self._restart_driver()
 
         try:
