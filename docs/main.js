@@ -3,37 +3,105 @@ document.addEventListener('DOMContentLoaded', initializeApp);
 function initializeApp() {
   const genreSelector = document.getElementById('genre-selector');
   const viewCountTypeSelector = document.getElementById('view-count-type-selector');
-  
+
   let currentGenre = genreSelector.value || 'pop';
   let viewCountType = viewCountTypeSelector.value || 'total-view-count';
-  let currentColumn = 'rank';
-  let currentOrder = 'asc'; 
-  
+
   updateGenreData(currentGenre, viewCountType, true);
 
+  setupGenreSelector(genreSelector);
+  setupViewCountTypeSelector(viewCountTypeSelector);
+  setupBodyClickListener();
+  setupSortButtons();
+  setupClosePlayerButton();
+}
+
+function setupGenreSelector(genreSelector) {
   genreSelector.addEventListener('change', function () {
-    currentGenre = genreSelector.value;
-    updateGenreData(currentGenre, viewCountType, true);
+    const currentGenre = genreSelector.value;
+    updateGenreData(currentGenre, getCurrentViewCountType(), true);
   });
+}
 
-
+function setupViewCountTypeSelector(viewCountTypeSelector) {
   viewCountTypeSelector.addEventListener('change', function () {
-    viewCountType = viewCountTypeSelector.value;
-    sortTable(currentColumn, currentOrder, viewCountType);
+    const viewCountType = viewCountTypeSelector.value;
+    sortTable(getCurrentColumn(), getCurrentOrder(), viewCountType);
   });
+}
 
+function setupBodyClickListener() {
+  const body = document.body;
+  if (!body) {
+    console.error("Body element not found.");
+    return;
+  }
+
+  body.addEventListener('click', (event) => {
+    const link = event.target.closest('a');
+    if (link) {
+      handleLinkClick(event, link);
+    }
+  });
+}
+
+function setupSortButtons() {
   document.querySelectorAll('.sort-button').forEach(button => {
     button.addEventListener('click', function () {
       const column = button.getAttribute('data-column');
       const order = button.getAttribute('data-order');
       const newOrder = order === 'desc' ? 'asc' : 'desc';
       button.setAttribute('data-order', newOrder);
-      currentColumn = column; 
-      currentOrder = newOrder;
-      sortTable(currentColumn, currentOrder, viewCountType);
+      setCurrentColumn(column);
+      setCurrentOrder(newOrder);
+      sortTable(column, newOrder, getCurrentViewCountType());
     });
   });
 }
+
+function setupClosePlayerButton() {
+  const closePlayerButton = document.getElementById('close-player-button');
+  if (closePlayerButton) {
+    closePlayerButton.addEventListener('click', closePlayer);
+  } else {
+    console.error("Close player button not found.");
+  }
+}
+
+function handleLinkClick(event, link) {
+  console.log('Link clicked:', link.href);
+  const url = link.href;
+  if (isSoundCloudLink(url)) {
+    event.preventDefault();
+    openPlayer(url);
+    
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  }
+}
+
+function getCurrentViewCountType() {
+  return document.getElementById('view-count-type-selector').value || 'total-view-count';
+}
+
+function getCurrentColumn() {
+  return document.querySelector('.sort-button[data-order]').getAttribute('data-column') || 'rank';
+}
+
+function getCurrentOrder() {
+  return document.querySelector('.sort-button[data-order]').getAttribute('data-order') || 'asc';
+}
+
+function setCurrentColumn(column) {
+  document.querySelector('.sort-button[data-column]').setAttribute('data-column', column);
+}
+
+function setCurrentOrder(order) {
+  document.querySelector('.sort-button[data-order]').setAttribute('data-order', order);
+}
+
 
 const useProdBackend = true;
 
