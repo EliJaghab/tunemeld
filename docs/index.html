@@ -58,6 +58,18 @@
           <a id="spotify-playlist-title" class="playlist-title skeleton-text" href="#" target="_blank"></a>
         </div>
       </section>
+      <section>
+        <div id="player-container" style="display: none">
+          <div id="player-content">
+            <div id="soundcloud-player-placeholder"></div>
+            <button id="close-player-button">Close Player</button>
+            <div id="volume-control">
+              <label for="volume-slider">Volume:</label>
+              <input type="range" id="volume-slider" min="0" max="100" value="100" />
+            </div>
+          </div>
+        </div>
+      </section>
       <div class="text-center mb-3">
         <div class="d-flex justify-content-center">
           <div class="d-flex align-items-center mr-4">
@@ -235,11 +247,14 @@
           <button id="acceptButton" class="btn btn-primary btn-sm acceptButton">I Accept</button>
         </div>
       </div>
+      
       <script src="main.js"></script>
       <script src="header.js"></script>
       <script src="playlist.js"></script>
       <script src="overlay.js"></script>
+      <script src="soundcloud_player.js"></script>
       <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+      <script src="https://w.soundcloud.com/player/api.js"></script>
     </div>
   </body>
 </html>
