@@ -187,4 +187,3 @@ if __name__ == "__main__":
     view_counts_playlists = read_data_from_mongo(mongo_client, VIEW_COUNTS_COLLECTION)
     webdriver_manager = WebDriverManager(use_proxy=True)
     update_view_counts(view_counts_playlists, mongo_client, webdriver_manager, spotify_client)
-    webdriver_manager.close_all_drivers()
