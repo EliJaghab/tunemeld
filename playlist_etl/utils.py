@@ -110,12 +110,10 @@ def collection_is_empty(collection_name, mongo_client) -> bool:
 
 
 class WebDriverManager:
-    def __init__(self, use_proxy=False, max_visits=15, memory_threshold_percent=75):
+    def __init__(self, use_proxy=False, memory_threshold_percent=75):
         self.use_proxy = use_proxy
-        self.max_visits = max_visits
         self.memory_threshold_percent = memory_threshold_percent
         self.visits_counter = 0
-        self.lock = Lock()
         self.driver = self._create_webdriver(use_proxy)
 
     def _create_webdriver(self, use_proxy: bool):
@@ -149,39 +147,75 @@ class WebDriverManager:
     def find_element_by_xpath(
         self, url: str, xpath: str, attribute: str = None, retries: int = 5, retry_delay: int = 10
     ) -> str:
+        def _attempt_find_element() -> str:
+            try:
+                self.driver.implicitly_wait(2)
+                logging.info(f"Navigating to URL: {url}")
+                self.driver.get(url)
+
+                timeout = 5
+                max_timeout = 15
+                start_time = time.time()
+
+                while time.time() - start_time < max_timeout:
+                    try:
+                        element = self.driver.find_element(By.XPATH, xpath)
+                        if element and element.is_displayed():
+                            if attribute:
+                                element_value = element.get_attribute(attribute)
+                                logging.info(f"Successfully found element attribute: {element_value}")
+                                return element_value
+                            else:
+                                element_text = element.text
+                                logging.info(f"Successfully found element text: {element_text}")
+                                return element_text
+                    except NoSuchElementException:
+                        logging.info("Element not found yet, retrying...")
+                        time.sleep(0.5)
+
+                logging.warning("Element not found even after waiting")
+                return "Element not found"
+
+            except TimeoutException:
+                logging.error("Timed out waiting for element")
+                return "Timed out waiting for element"
+            except NoSuchElementException:
+                logging.error("Element not found on the page")
+                return "Element not found on the page"
+            except Exception as e:
+                logging.error(f"An error occurred: {str(e)}")
+                return f"An error occurred: {str(e)}"
+
         logging.info(f"Attempting to find element on URL: {url} using XPath: {xpath}")
 
-        if self.visits_counter >= self.max_visits or self._check_memory_usage():
+        result = _attempt_find_element()
+        if "An error occurred" in result or result in [
+            "Timed out waiting for element",
+            "Element not found on the page",
+            "Element not found",
+        ]:
+            logging.info("Initial attempt failed, retrying with proxy")
             self._restart_driver()
 
-        try:
-            logging.info(f"Navigating to URL: {url}")
-            self.driver.get(url)
-            self.visits_counter += 1
+            attempt = 1
+            while attempt < retries:
+                result = _attempt_find_element()
 
-            wait = WebDriverWait(self.driver, 10)
-            element = wait.until(EC.presence_of_element_located((By.XPATH, xpath)))
+                if not (
+                    "An error occurred" in result
+                    or result in [
+                        "Timed out waiting for element",
+                        "Element not found on the page",
+                        "Element not found",
+                    ]
+                ):
+                    return result
 
-            if attribute:
-                return element.get_attribute(attribute)
-            else:
-                return element.text
+                logging.info(f"Retrying with proxy... (attempt {attempt + 1} of {retries})")
+                time.sleep(retry_delay)
+                attempt += 1
 
-        except (NoSuchElementException, TimeoutException) as e:
-            logging.warning(f"Element not found: {str(e)}")
-            return "Element not found"
-
-        except InvalidSelectorException as e:
-            logging.error(f"Invalid selector: {str(e)}")
-            return f"An error occurred: {str(e)}"
-
-        except WebDriverException as e:
-            logging.error(f"WebDriverException occurred: {str(e)}")
-            return f"WebDriver error occurred: {str(e)}"
-
-        except Exception as e:
-            logging.error(f"An unexpected error occurred: {str(e)}")
-            return f"An unexpected error occurred: {str(e)}"
+        return result
 
     def close_driver(self):
         if self.driver:
