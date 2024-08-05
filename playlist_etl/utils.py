@@ -5,9 +5,9 @@ from datetime import datetime, timezone
 from queue import Queue
 from threading import Lock
 
+import psutil
 from dotenv import load_dotenv
 from fp.fp import FreeProxy
-import psutil
 from pymongo import MongoClient
 from selenium import webdriver
 from selenium.common.exceptions import (
@@ -139,7 +139,7 @@ class WebDriverManager:
     def _check_memory_usage(self):
         memory = psutil.virtual_memory()
         available_memory_mb = memory.available / (1024 * 1024)
-        memory_threshold_mb = (available_memory_mb * (self.memory_threshold_percent / 100))
+        memory_threshold_mb = available_memory_mb * (self.memory_threshold_percent / 100)
         logging.info(f"Available Memory: {available_memory_mb:.2f} MB")
         logging.info(f"Memory Threshold: {memory_threshold_mb:.2f} MB")
         return available_memory_mb < memory_threshold_mb
@@ -163,7 +163,9 @@ class WebDriverManager:
                         if element and element.is_displayed():
                             if attribute:
                                 element_value = element.get_attribute(attribute)
-                                logging.info(f"Successfully found element attribute: {element_value}")
+                                logging.info(
+                                    f"Successfully found element attribute: {element_value}"
+                                )
                                 return element_value
                             else:
                                 element_text = element.text
@@ -203,7 +205,8 @@ class WebDriverManager:
 
                 if not (
                     "An error occurred" in result
-                    or result in [
+                    or result
+                    in [
                         "Timed out waiting for element",
                         "Element not found on the page",
                         "Element not found",
