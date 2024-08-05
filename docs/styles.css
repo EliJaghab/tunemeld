@@ -187,6 +187,8 @@ label {
   }
 
   .last-updated {
+    display: flex;
+    justify-content: center;
     font-size: 0.8rem;
   }
 
@@ -215,7 +217,9 @@ label {
   }
 
   .last-updated {
+    display: flex;
     font-size: 0.6rem;
+    justify-content: center;
   }
 
   #soundcloud-link {
