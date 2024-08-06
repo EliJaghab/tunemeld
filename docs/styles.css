@@ -183,6 +183,7 @@ label {
 @media screen and (min-width: 769px) {
   .main-title {
     font-size: 2.5rem;
+    margin-top: 20px;
     margin-bottom: 20px;
   }
 
@@ -213,7 +214,8 @@ label {
 
   .main-title {
     font-size: 2rem;
-    margin-bottom: 15px;
+    margin-top: 7px;
+    margin-bottom: 7px;
   }
 
   .last-updated {
