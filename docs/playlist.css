@@ -123,16 +123,6 @@
   text-align: center;
 }
 
-.service {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  justify-content: space-between;
-  margin: 0 1rem;
-  max-width: 300px;
-  text-align: center;
-}
-
 .source-icon {
   height: 24px;
   width: 24px;
