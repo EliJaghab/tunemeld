@@ -182,24 +182,6 @@
   margin: 0;
 }
 
-.video-container {
-  background-color: #000;
-  border-radius: 10px;
-  padding-bottom: 100%;
-  position: relative;
-  width: 100%;
-}
-
-.video-container video {
-  border-radius: 10px;
-  height: 100%;
-  left: 0;
-  object-fit: cover;
-  position: absolute;
-  top: 0;
-  width: 100%;
-}
-
 .collapse-button {
   background-color: #555;
   border: none;
