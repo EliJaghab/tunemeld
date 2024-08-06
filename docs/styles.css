@@ -9,6 +9,16 @@ a {
   color: white;
 }
 
+.logo-title {
+  display: flex;
+  align-items: flex-start; /* Align items at the start of the container */
+}
+
+img#tunemeld-logo {
+  width: 12%;
+  margin-top: 5px; /* Adjust this value to change the height */
+}
+
 h1 {
   font-family: 'DM Sans', sans-serif;
   font-weight: 600;
@@ -17,7 +27,7 @@ h1 {
 /* Container */
 .container {
   margin: 0 auto;
-  max-width: 1140px;
+  max-width: 90%;
   padding: 0 15px;
   width: 100%;
   box-sizing: border-box;
@@ -109,23 +119,19 @@ h1 {
   color: #4667f9;
 }
 
-/* SoundCloud Link */
 #soundcloud-link {
-  align-items: center;
   background-color: #444;
   border-radius: 5px;
-  color: white;
-  display: flex;
   font-family: 'DM Sans', sans-serif;
-  font-size: 12px;
-  font-weight: 600;
   padding: 3px 8px;
-  position: absolute;
-  right: 10px;
-  text-decoration: none;
-  top: 10px;
   transition: background-color 0.3s ease;
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+  margin-top: 10px;
+  text-decoration: none;
 }
+
 
 #soundcloud-link:hover {
   background-color: #555;
@@ -182,9 +188,8 @@ label {
 /* Desktop Styles */
 @media screen and (min-width: 769px) {
   .main-title {
-    font-size: 2.5rem;
-    margin-top: 20px;
-    margin-bottom: 20px;
+    font-size: 3.0rem;
+    margin-top: 35px; /* Adjust this value to change the height */
   }
 
   .last-updated {
@@ -209,13 +214,14 @@ label {
   }
 
   .container {
-    padding: 0 10px;
+    padding: 0px;
   }
 
   .main-title {
     font-size: 2rem;
     margin-top: 7px;
-    margin-bottom: 7px;
+    margin-top: 10px; /* Adjust this value to change the height */
+
   }
 
   .last-updated {
@@ -266,6 +272,7 @@ label {
   }
 
   .main-title {
+    margin-top: 10px; /* Adjust this value to change the height */
     font-size: 1.5rem;
   }
 
