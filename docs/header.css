@@ -76,7 +76,7 @@
 
 .skeleton {
   background-color: #2e2e2e;
-  border-radius: 4px;
+  border-radius: 5px;
   overflow: hidden;
   position: relative;
 }
@@ -94,7 +94,7 @@
 
 .skeleton-text {
   background: #3c3c3c;
-  border-radius: 4px;
+  border-radius: 5px;
   height: 20px;
   margin-bottom: 10px;
 }
