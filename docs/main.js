@@ -69,17 +69,26 @@ function setupClosePlayerButton() {
 }
 
 function handleLinkClick(event, link) {
-  console.log('Link clicked:', link.href);
   const url = link.href;
+  let serviceType = 'none';
+
   if (isSoundCloudLink(url)) {
+    serviceType = 'soundcloud';
+  } else if (isSpotifyLink(url)) {
+    serviceType = 'spotify';
+  }
+
+  if (serviceType !== 'none') {
     event.preventDefault();
-    openPlayer(url);
+    openPlayer(url, serviceType);
     
     window.scrollTo({
       top: 0,
       behavior: 'smooth'
     });
   }
+
+  return serviceType;
 }
 
 function getCurrentViewCountType() {
