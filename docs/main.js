@@ -70,13 +70,18 @@ function setupClosePlayerButton() {
 
 function handleLinkClick(event, link) {
   const url = link.href;
+  console.log("Clicked URL:", url);
   let serviceType = 'none';
 
   if (isSoundCloudLink(url)) {
     serviceType = 'soundcloud';
   } else if (isSpotifyLink(url)) {
     serviceType = 'spotify';
+  } else if (isAppleMusicLink(url)) {
+    serviceType = 'applemusic';
   }
+
+  console.log("Detected service type:", serviceType);
 
   if (serviceType !== 'none') {
     event.preventDefault();
@@ -86,6 +91,8 @@ function handleLinkClick(event, link) {
       top: 0,
       behavior: 'smooth'
     });
+  } else {
+    console.log("No matching service type found, link will behave normally");
   }
 
   return serviceType;

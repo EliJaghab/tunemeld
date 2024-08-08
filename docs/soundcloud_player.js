@@ -21,6 +21,12 @@ function openPlayer(url, serviceType) {
     iframe.allow = 'encrypted-media';
     iframe.height = '80';
     volumeControl.style.display = 'none'; // Spotify doesn't allow volume control
+  } else if (serviceType === 'applemusic') {
+    const appleMusicId = getAppleMusicId(url);
+    iframe.src = `https://embed.music.apple.com/us/album/${appleMusicId}`;
+    iframe.allow = 'autoplay *; encrypted-media *;';
+    iframe.height = '450';
+    volumeControl.style.display = 'none';
   }
 
   placeholder.appendChild(iframe);
@@ -32,6 +38,14 @@ function openPlayer(url, serviceType) {
     displayAndSetVolume();
     setupVolumeControl();
   }
+}
+
+function isAppleMusicLink(url) {
+  console.log("Checking if Apple Music link:", url);
+  const appleMusicPattern = /^https:\/\/music\.apple\.com\//;
+  const result = appleMusicPattern.test(url);
+  console.log("Is Apple Music link:", result);
+  return result;
 }
 
 function isSoundCloudLink(url) {
@@ -47,6 +61,11 @@ function isSpotifyLink(url) {
 function getSpotifyTrackId(url) {
   const match = url.match(/\/(track|album|playlist)\/([a-zA-Z0-9]+)/);
   return match ? `${match[1]}/${match[2]}` : '';
+}
+
+function getAppleMusicId(url) {
+  const match = url.match(/\/album\/[^\/]+\/(\d+)\?i=(\d+)/);
+  return match ? `${match[1]}?i=${match[2]}` : '';
 }
 
 function displayAndSetVolume() {
