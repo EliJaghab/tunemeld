@@ -195,6 +195,10 @@ label {
     margin-top: 35px; 
   }
 
+  #main-content {
+    max-width: 70rem;
+  }
+
   .last-updated {
     display: flex;
     justify-content: center;
