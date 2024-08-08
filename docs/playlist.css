@@ -6,6 +6,7 @@
 .playlist {
   border: 1px solid #ccc;
   border-radius: 10px;
+  margin-top: 10px;
   margin-bottom: 20px;
   overflow-y: auto;
   padding: 5px;
@@ -195,6 +196,7 @@
 }
 
 .album-cover {
+  border-radius: 5px;
   width: 60px;
   height: 60px;
 }
