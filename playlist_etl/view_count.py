@@ -132,7 +132,6 @@ def get_view_count(track: dict, service_name: str, webdriver_manager: WebDriverM
 
 def get_spotify_track_view_count(url: str, webdriver_manager: WebDriverManager) -> int:
     xpaths = [
-        '//*[contains(concat( " ", @class, " " ), concat( " ", "RANLXG3qKB61Bh33I0r2", " " ))]',
         "//span[contains(@class, 'encore-text') and contains(@class, 'encore-text-body-small') and contains(@class, 'RANLXG3qKB61Bh3') and @data-testid='playcount']",
     ]
 
