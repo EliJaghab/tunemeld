@@ -116,25 +116,20 @@
 }
 
 /* Desktop Styles */
-@media screen and (min-width: 769px) {
-  .description {
-    font-size: .9rem;
-  }
-}
-
 @media screen and (max-width: 768px) {
   .header-title {
     font-weight: bold;
     text-align: center;
     font-size: 0.7rem;
     width: 100%;
-    padding: .2rem;
+    padding: 0.2rem;
   }
 
   .description {
     font-size: 0.7rem;
   }
 }
+
 
 
 

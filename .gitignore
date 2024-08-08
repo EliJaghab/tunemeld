@@ -2,7 +2,7 @@
 api_credentials.sh
 .cache
 isrc_cache.json
-.DS_Store
+*.DS_Store
 __pycache__/
 *.py[cod]
 *.egg
