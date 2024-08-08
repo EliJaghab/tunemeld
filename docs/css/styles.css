@@ -210,6 +210,7 @@ label {
 @media screen and (max-width: 480px) {
   body {
     font-size: 14px;
+    margin-top: 9px;
   }
 
   .container {
@@ -218,7 +219,7 @@ label {
 
   .main-title {
     font-size: 2rem;
-    margin-top: 45px;
+    margin-top: 9px;
   }
 
   .last-updated {
@@ -228,6 +229,8 @@ label {
   }
 
   #soundcloud-link {
+    margin-top: 0px;
+    margin-right: 6px;
     font-size: 10px;
     padding: 2px 6px;
   }
