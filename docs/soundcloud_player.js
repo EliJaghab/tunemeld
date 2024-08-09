@@ -14,38 +14,31 @@ function openPlayer(url, serviceType) {
     iframe.src = `https://w.soundcloud.com/player/?url=${encodeURIComponent(url)}&auto_play=true`;
     iframe.allow = 'autoplay';
     iframe.height = '166';
-    volumeControl.style.display = 'block';
+    volumeControl.style.display = 'block';  // Show volume control for SoundCloud
+    displayAndSetVolume();
+    setupVolumeControl();
   } else if (serviceType === 'spotify') {
     const spotifyId = getSpotifyTrackId(url);
     iframe.src = `https://open.spotify.com/embed/${spotifyId}`;
     iframe.allow = 'encrypted-media';
     iframe.height = '80';
-    volumeControl.style.display = 'none'; // Spotify doesn't allow volume control
+    volumeControl.style.display = 'none';  // Hide volume control for Spotify
   } else if (serviceType === 'applemusic') {
     const appleMusicId = getAppleMusicId(url);
     iframe.src = `https://embed.music.apple.com/us/album/${appleMusicId}`;
     iframe.allow = 'autoplay *; encrypted-media *;';
     iframe.height = '450';
-    volumeControl.style.display = 'none';
+    volumeControl.style.display = 'none';  // Hide volume control for Apple Music
   }
 
   placeholder.appendChild(iframe);
 
-  playerContainer.style.display = 'flex';
   closeButton.style.display = 'block';
-
-  if (serviceType === 'soundcloud') {
-    displayAndSetVolume();
-    setupVolumeControl();
-  }
 }
 
 function isAppleMusicLink(url) {
-  console.log("Checking if Apple Music link:", url);
   const appleMusicPattern = /^https:\/\/music\.apple\.com\//;
-  const result = appleMusicPattern.test(url);
-  console.log("Is Apple Music link:", result);
-  return result;
+  return appleMusicPattern.test(url);
 }
 
 function isSoundCloudLink(url) {
@@ -71,16 +64,16 @@ function getAppleMusicId(url) {
 function displayAndSetVolume() {
   const volumeControl = document.getElementById('volume-control');
   const volumeSlider = document.getElementById('volume-slider');
-  
+
   if (volumeControl) {
     volumeControl.style.display = 'block';
   } else {
     console.error('Volume control not found');
   }
-  
+
   if (volumeSlider) {
-    volumeSlider.value = 40;
-    setVolume(40);
+    volumeSlider.value = 60; 
+    setVolume(80);
   } else {
     console.error('Volume slider not found');
   }
@@ -101,7 +94,7 @@ function setVolume(volume) {
   const iframe = document.querySelector('#service-player-placeholder iframe');
   if (iframe) {
     const widget = SC.Widget(iframe);
-    widget.setVolume(volume);
+    widget.setVolume(volume); 
   } else {
     console.error('SoundCloud iframe not found for volume setting');
   }
@@ -119,27 +112,9 @@ function closePlayer() {
   if (playerContainer) playerContainer.style.display = 'none';
 }
 
-function handleLinkClick(event, link) {
-  const url = link.href;
-  let serviceType = 'none';
-
-  if (isSoundCloudLink(url)) {
-    serviceType = 'soundcloud';
-  } else if (isSpotifyLink(url)) {
-    serviceType = 'spotify';
-  }
-
-  if (serviceType !== 'none') {
-    event.preventDefault();
-    openPlayer(url, serviceType);
-    
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth'
-    });
-  }
-
-  return serviceType;
-}
-
 document.getElementById('close-player-button').addEventListener('click', closePlayer);
+
+document.addEventListener('DOMContentLoaded', function() {
+  const volumeControl = document.getElementById('volume-control');
+  volumeControl.style.display = 'none';
+});

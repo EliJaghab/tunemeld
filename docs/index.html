@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <link rel="icon" href="chicken.png" type="image/x-icon" />
+    <link rel="icon" href="images/tunemeld.png" type="image/x-icon" />
     <meta property="og:image" content="images/tunemeld.png" />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="css/styles.css" />
     <link rel="stylesheet" href="css/header.css" />
     <link rel="stylesheet" href="css/playlist.css" />
+    <link rel="stylesheet" href="css/soundcloud_player.css" />
     <title>tunemeld</title>
   </head>
   <body>
@@ -60,8 +61,7 @@
           <div id="spotify-description" class="description skeleton-text"></div>
         </div>
       </section>
-      <section>
-        <div id="player-container" style="display: none">
+        <div id="player-container">
           <div id="player-content">
             <div id="service-player-placeholder"></div>
             <div id="volume-control">
@@ -70,8 +70,7 @@
             </div>
             <button id="close-player-button">Close Player</button>
           </div>
-        </div>
-      </section>
+        </div>    
       <div class="d-flex justify-content-center mr-4">
         <select id="genre-selector" class="custom-select selector">
           <option value="country">Country</option>
