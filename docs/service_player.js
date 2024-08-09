@@ -38,8 +38,6 @@ function openPlayer(url, serviceType) {
   }
 
   placeholder.appendChild(iframe);
-
-  playerContainer.style.display = 'flex';
   closeButton.style.display = 'block';
 }
 
