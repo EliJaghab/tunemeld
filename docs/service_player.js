@@ -29,12 +29,20 @@ function openPlayer(url, serviceType) {
     iframe.allow = 'autoplay *; encrypted-media *;';
     iframe.height = '450';
     volumeControl.style.display = 'none';  // Hide volume control for Apple Music
+  } else if (serviceType === 'youtube') {
+    iframe.src = `https://www.youtube.com/embed/${getYouTubeVideoId(url)}?autoplay=1`;
+    iframe.allow = 'autoplay; encrypted-media';
+    iframe.referrerPolicy = 'no-referrer-when-downgrade';  // Add referrer policy
+    iframe.height = '315';
+    volumeControl.style.display = 'none';
   }
 
   placeholder.appendChild(iframe);
 
+  playerContainer.style.display = 'flex';
   closeButton.style.display = 'block';
 }
+
 
 function isAppleMusicLink(url) {
   const appleMusicPattern = /^https:\/\/music\.apple\.com\//;
@@ -51,6 +59,11 @@ function isSpotifyLink(url) {
   return spotifyPattern.test(url);
 }
 
+function isYouTubeLink(url) {
+  const youtubePattern = /^https:\/\/(www\.)?youtube\.com\/watch\?v=[a-zA-Z0-9_-]+/;
+  return youtubePattern.test(url);
+}
+
 function getSpotifyTrackId(url) {
   const match = url.match(/\/(track|album|playlist)\/([a-zA-Z0-9]+)/);
   return match ? `${match[1]}/${match[2]}` : '';
@@ -60,6 +73,12 @@ function getAppleMusicId(url) {
   const match = url.match(/\/album\/[^\/]+\/(\d+)\?i=(\d+)/);
   return match ? `${match[1]}?i=${match[2]}` : '';
 }
+
+function getYouTubeVideoId(url) {
+  const match = url.match(/v=([a-zA-Z0-9_-]+)/);
+  return match ? match[1] : '';
+}
+
 
 function displayAndSetVolume() {
   const volumeControl = document.getElementById('volume-control');

@@ -73,12 +73,20 @@ function handleLinkClick(event, link) {
   console.log("Clicked URL:", url);
   let serviceType = 'none';
 
+  // Additional debug to ensure URL is being checked properly
+  console.log("Checking SoundCloud link:", isSoundCloudLink(url));
+  console.log("Checking Spotify link:", isSpotifyLink(url));
+  console.log("Checking Apple Music link:", isAppleMusicLink(url));
+  console.log("Checking YouTube link:", isYouTubeLink(url));
+
   if (isSoundCloudLink(url)) {
     serviceType = 'soundcloud';
   } else if (isSpotifyLink(url)) {
     serviceType = 'spotify';
   } else if (isAppleMusicLink(url)) {
     serviceType = 'applemusic';
+  } else if (isYouTubeLink(url)) {
+    serviceType = 'youtube';
   }
 
   console.log("Detected service type:", serviceType);
