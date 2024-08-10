@@ -145,7 +145,8 @@ def get_spotify_track_view_count(url: str, webdriver_manager: WebDriverManager) 
         except Exception as e:
             print(f"Error with xpath {xpath}: {e}")
 
-    raise ValueError(f"Could not find play count for {url}")
+    logging.info(f"Could not find play count for {url}")
+    return 0
 
 
 def get_youtube_track_view_count(url: str, webdriver_manager: WebDriverManager) -> int:
