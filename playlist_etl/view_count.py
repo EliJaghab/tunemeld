@@ -158,7 +158,9 @@ def get_youtube_track_view_count(url: str, webdriver_manager: WebDriverManager) 
     view_count_tag = soup.find("meta", itemprop="interactionCount")
     if view_count_tag:
         return int(view_count_tag.get("content"))
-    raise ValueError(f"Could not get view count for url {url}")
+    
+    logging.info(f"Could not find play count for {url}")
+    return 0
 
 
 def get_spotify_track_url_by_isrc(isrc: str, spotify_client: Spotify) -> str:
