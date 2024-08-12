@@ -18,8 +18,12 @@ jobs:
         with:
           python-version: '3.x'
 
-      - name: Install dependencies
+      - name: Create virtual environment
+        run: python -m venv venv
+
+      - name: Activate virtual environment and install dependencies
         run: |
+          source venv/bin/activate
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
@@ -37,4 +41,6 @@ jobs:
           MONGO_URI: ${{ secrets.MONGO_URI }}
           SPOTIFY_CLIENT_ID: ${{ secrets.SPOTIFY_CLIENT_ID }}
           SPOTIFY_CLIENT_SECRET: ${{ secrets.SPOTIFY_CLIENT_SECRET }}
-        run: make view_count
+        run: |
+          source venv/bin/activate
+          make view_count

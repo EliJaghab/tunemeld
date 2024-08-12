@@ -1,55 +1,43 @@
-.PHONY: extract transform aggregate view_count format lint fix pull_push dev prod invalidate_cache test setup_env activate
+.PHONY: extract transform aggregate view_count format lint fix pull_push dev prod invalidate_cache test setup_env activate install_deps
 
 # Automatically detect the project root
 PROJECT_ROOT := $(shell pwd)
 
-# Set the virtual environment directory
+# Set the virtual environment directory (use system Python in CI)
 VENV := $(PROJECT_ROOT)/venv
 
 # Add PYTHONPATH to include the project root and ensure it's used in the venv
 export PYTHONPATH := $(PROJECT_ROOT)
 
-# Ensure the virtual environment is created
-create_venv:
-	@if [ ! -d "$(VENV)" ]; then \
-		echo "Creating virtual environment..."; \
-		python3 -m venv $(VENV); \
-	fi
-
-# Ensure the virtual environment is activated
-activate: create_venv
-	@echo "Activating virtual environment..."
-	@source $(VENV)/bin/activate
-
 # Command to setup environment paths
-setup_env: create_venv
+setup_env:
 	@echo "Setting up environment paths..."
 	@echo "Project root: $(PWD)"
 	@echo "Virtual environment: $(VENV)"
 	@echo "PYTHONPATH: $(PYTHONPATH)"
-	@mkdir -p $(VENV)/lib/python3.10/site-packages
+	@mkdir -p $(VENV)/lib/python3.10/site-packages || true
 	@echo "Creating sitecustomize.py to set PYTHONPATH in venv..."
-	@echo 'import sys; sys.path.insert(0, "$(PYTHONPATH)")' > $(VENV)/lib/python3.10/site-packages/sitecustomize.py
+	@echo 'import sys; sys.path.insert(0, "$(PYTHONPATH)")' > $(VENV)/lib/python3.10/site-packages/sitecustomize.py || true
 
 extract: setup_env
 	@echo "Running extract..."
-	$(VENV)/bin/python playlist_etl/extract.py
+	python playlist_etl/extract.py
 
 transform: setup_env
 	@echo "Running transform..."
-	$(VENV)/bin/python playlist_etl/transform.py
+	python playlist_etl/transform.py
 
 aggregate: setup_env
 	@echo "Running aggregate..."
-	$(VENV)/bin/python playlist_etl/aggregate.py
+	python playlist_etl/aggregate.py
 
 view_count: setup_env
 	@echo "Running view counts..."
-	$(VENV)/bin/python playlist_etl/view_count.py
+	python playlist_etl/view_count.py
 
 format: setup_env
 	@echo "Running tox to lint and format code..."
-	$(VENV)/bin/tox
+	tox
 
 pull_push: setup_env
 	@git pull --rebase
@@ -75,4 +63,4 @@ invalidate_cache: setup_env
 
 test: setup_env
 	@echo "Running tests..."
-	$(VENV)/bin/python -m unittest discover tests/
+	python -m unittest discover tests/
