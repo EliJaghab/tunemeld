@@ -209,7 +209,7 @@
 }
 
 .sortable-header .title {
-  margin-right: 5px; /* Space between text and the button */
+  margin-right: 5px;
 }
 
 .sort-button {
@@ -217,21 +217,35 @@
   border: none;
   cursor: pointer;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  position: absolute;
-  right: 0;
+  line-height: 1; 
+  padding: 0; 
+  padding-left: 5px;
 }
 
 .sort-button i {
-  display: none;
+  display: block; 
+  margin: 0;
+  padding: 0; 
+  line-height: 1;
+  color: black;
 }
 
-.sort-button[data-order="asc"] .fa-sort-up,
+.sort-button i + i {
+  margin-top: -10px;
+} 
+
+.sort-button[data-order="asc"] .fa-sort-up {
+  display: inline;
+  color: lightskyblue;
+}
+
 .sort-button[data-order="desc"] .fa-sort-down {
   display: inline;
+  color: lightskyblue; 
 }
 
-/* Media query to stack playlists vertically on smaller screens */
 @media screen and (max-width: 768px) {
   .playlist-section {
     flex-direction: column; /* Stack playlists vertically */
