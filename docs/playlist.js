@@ -1,3 +1,62 @@
+import { API_BASE_URL } from './config.js';
+import { getCurrentViewCountType, setCurrentColumn, setCurrentOrder } from './selectors.js';
+
+export async function fetchAndDisplayLastUpdated(genre) {
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/last-updated?genre=${genre}`);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch last-updated. Status: ${response.status}`);
+    }
+    const lastUpdated = await response.json();
+    displayLastUpdated(lastUpdated);
+  } catch (error) {
+    console.error('Error fetching last updated date:', error);
+  }
+}
+
+function displayLastUpdated(lastUpdated) {
+  const lastUpdatedDate = new Date(lastUpdated.lastUpdated);
+  const formattedDate = lastUpdatedDate.toLocaleString('en-US', {
+    month: 'long',
+    day: 'numeric',
+    year: 'numeric',
+    hour: 'numeric',
+    minute: '2-digit',
+    timeZoneName: 'short',
+  });
+  document.getElementById('last-updated').textContent = `Last Updated - ${formattedDate}`;
+}
+
+export function setupSortButtons() {
+  document.querySelectorAll('.sort-button').forEach(button => {
+    button.addEventListener('click', function () {
+      const column = button.getAttribute('data-column');
+      const order = button.getAttribute('data-order');
+      const newOrder = order === 'desc' ? 'asc' : 'desc';
+      button.setAttribute('data-order', newOrder);
+      setCurrentColumn(column);
+      setCurrentOrder(newOrder);
+      sortTable(column, newOrder, getCurrentViewCountType());
+    });
+  });
+}
+
+export async function updateMainPlaylist(genre, viewCountType) {
+  try {
+    const url = `${API_BASE_URL}/api/main-playlist?genre=${genre}`;
+    await fetchAndDisplayData(url, 'main-playlist-data-placeholder', true, viewCountType);
+  } catch (error) {
+    console.error('Error updating main playlist:', error);
+  }
+}
+
+export async function fetchAndDisplayPlaylists(genre) {
+  const services = ['AppleMusic', 'SoundCloud', 'Spotify'];
+  for (const service of services) {
+    await fetchAndDisplayData(`${API_BASE_URL}/api/service-playlist?genre=${genre}&service=${service}`, `${service.toLowerCase()}-data-placeholder`);
+  }
+}
+
 async function fetchAndDisplayData(url, placeholderId, isAggregated = false, viewCountType) {
   try {
     const response = await fetch(url);
@@ -234,7 +293,7 @@ function createSourceLink(source, sourceLink) {
 
 let playlistData = [];
 
-function sortTable(column, order, viewCountType) {
+export function sortTable(column, order, viewCountType) {
   const sortedData = playlistData.map(playlist => {
     playlist.tracks.sort((a, b) => {
       let aValue, bValue;
@@ -272,21 +331,7 @@ function getViewCount(track, platform, viewCountType) {
   }
 }
 
-function showSkeletonLoaders() {
-  document.querySelectorAll('.skeleton, .skeleton-text').forEach(el => {
-    el.classList.add('loading');
-  });
-}
-
-function hideSkeletonLoaders() {
-  document.querySelectorAll('.skeleton, .skeleton-text').forEach(el => {
-    el.classList.remove('loading');
-    el.classList.remove('skeleton');
-    el.classList.remove('skeleton-text');
-  });
-}
-
-function resetCollapseStates() {
+export function resetCollapseStates() {
   document.querySelectorAll('.playlist-content').forEach(content => {
     content.classList.remove('collapsed');
   });
@@ -295,7 +340,7 @@ function resetCollapseStates() {
   });
 }
 
-function addToggleEventListeners() {
+export function addToggleEventListeners() {
   document.querySelectorAll('.collapse-button').forEach(button => {
     button.removeEventListener('click', toggleCollapse);
   });

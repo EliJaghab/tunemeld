@@ -61,16 +61,16 @@
           <div id="spotify-description" class="description skeleton-text"></div>
         </div>
       </section>
-        <div id="player-container">
-          <div id="player-content">
-            <div id="service-player-placeholder"></div>
-            <div id="volume-control">
-              <label for="volume-slider">Volume:</label>
-              <input type="range" id="volume-slider" min="0" max="100" value="100" />
-            </div>
-            <button id="close-player-button">Close Player</button>
+      <div id="player-container">
+        <div id="player-content">
+          <div id="service-player-placeholder"></div>
+          <div id="volume-control">
+            <label for="volume-slider">Volume:</label>
+            <input type="range" id="volume-slider" min="0" max="100" value="100" />
           </div>
-        </div>    
+          <button id="close-player-button">Close Player</button>
+        </div>
+      </div>
       <div class="d-flex justify-content-center mr-4">
         <select id="genre-selector" class="custom-select selector">
           <option value="country">Country</option>
@@ -244,11 +244,7 @@
         </div>
       </div>
 
-      <script src="main.js"></script>
-      <script src="header.js"></script>
-      <script src="playlist.js"></script>
-      <script src="overlay.js"></script>
-      <script src="service_player.js"></script>
+      <script type="module" src="./main.js"></script>
       <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
       <script src="https://w.soundcloud.com/player/api.js"></script>
       <script src="https://open.spotify.com/embed-podcast/iframe-api/v1" async></script>

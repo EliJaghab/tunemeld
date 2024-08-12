@@ -1,19 +1,19 @@
-.player_container {
+#player_container {
     width: 100%;
     display: none;
     flex: none;
 }
 
-.player_content {
+#player_content {
     display: none;
     width: 100%;
 }
 
-.service-player-placeholder {
+#service-player-placeholder {
     width: 100%;
 }
 
-.volume_control {
+#volume-control {
     display: none;
 }
 

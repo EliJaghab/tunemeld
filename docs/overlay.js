@@ -1,7 +1,6 @@
 
 var overlay = document.getElementById("tosPrivacyOverlay");
 
-
 var acceptButton = document.getElementById("acceptButton");
 
 acceptButton.onclick = function() {
