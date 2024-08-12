@@ -51,10 +51,10 @@ pull_push: setup_env
 	@echo "Successfully pulled, rebased, and pushed the changes."
 
 dev: setup_env
-	cd backend/backend && $(VENV)/bin/wrangler dev --env development src/index.ts
+	cd backend/backend && wrangler dev --env development src/index.ts
 
 prod: setup_env
-	cd backend/backend && $(VENV)/bin/wrangler deploy --env production src/index.ts
+	cd backend/backend && wrangler deploy --env production src/index.ts
 
 invalidate_cache: setup_env
 	@set -o allexport; source .env; set +o allexport; \
