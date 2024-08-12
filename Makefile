@@ -9,13 +9,20 @@ VENV := $(PROJECT_ROOT)/venv
 # Add PYTHONPATH to include the project root and ensure it's used in the venv
 export PYTHONPATH := $(PROJECT_ROOT)
 
+# Ensure the virtual environment is created
+create_venv:
+	@if [ ! -d "$(VENV)" ]; then \
+		echo "Creating virtual environment..."; \
+		python3 -m venv $(VENV); \
+	fi
+
 # Ensure the virtual environment is activated
-activate:
+activate: create_venv
 	@echo "Activating virtual environment..."
 	@source $(VENV)/bin/activate
 
 # Command to setup environment paths
-setup_env:
+setup_env: create_venv
 	@echo "Setting up environment paths..."
 	@echo "Project root: $(PWD)"
 	@echo "Virtual environment: $(VENV)"
@@ -23,7 +30,6 @@ setup_env:
 	@mkdir -p $(VENV)/lib/python3.10/site-packages
 	@echo "Creating sitecustomize.py to set PYTHONPATH in venv..."
 	@echo 'import sys; sys.path.insert(0, "$(PYTHONPATH)")' > $(VENV)/lib/python3.10/site-packages/sitecustomize.py
-
 
 extract: setup_env
 	@echo "Running extract..."
