@@ -1,5 +1,6 @@
+/* Description Styling */
 .description {
-  color: #ccc;
+  color: var(--text-color);
   cursor: pointer;
   display: -webkit-box;
   height: 2.7rem;
@@ -20,9 +21,10 @@
   white-space: normal;
 }
 
+/* Header Art Section */
 .header-art-section {
   align-items: stretch;
-  background-color: #222;
+  background-color: var(--container-background);
   border-radius: 10px;
   display: flex;
   justify-content: space-around;
@@ -36,8 +38,10 @@
   font-size: 1.2rem;
   width: 100%;
   padding: .2rem;
+  color: var(--text-color);
 }
 
+/* Image and Video Containers */
 .image-placeholder,
 .video-container {
   position: relative;
@@ -64,6 +68,7 @@
   justify-content: center;
 }
 
+/* Service Styling */
 .service {
   display: flex;
   flex: 1;
@@ -73,6 +78,7 @@
   max-width: 300px;
 }
 
+/* Skeleton Loader */
 .skeleton {
   background-color: #2e2e2e;
   border-radius: 5px;
@@ -103,6 +109,7 @@
   display: none;
 }
 
+/* Shimmer Animation */
 @keyframes shimmer {
   0% {
       transform: translateX(-100%);
@@ -123,14 +130,11 @@
     font-size: 0.7rem;
     width: 100%;
     padding: 0.2rem;
+    color: var(--text-color);
   }
 
   .description {
     font-size: 0.7rem;
+    color: var(--text-color);
   }
 }
-
-
-
-
-

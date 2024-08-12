@@ -4,7 +4,7 @@
 }
 
 .playlist {
-  border: 1px solid #ccc;
+  border: 1px solid var(--container-background);
   border-radius: 10px;
   margin-top: 10px;
   margin-bottom: 20px;
@@ -28,7 +28,7 @@
 }
 
 .playlist-description {
-  color: #ccc;
+  color: var(--text-color);
   font-family: 'DM Sans', sans-serif;
   font-size: 14px;
   font-weight: 400;
@@ -44,22 +44,22 @@
 }
 
 .playlist-link {
-  background-color: #444;
+  background-color: var(--soundcloud-link-background);
   border-radius: 5px;
-  color: #fff;
+  color: var(--text-color);
   padding: 0.5rem 1rem;
   text-decoration: none;
   transition: background-color 0.3s ease;
 }
 
 .playlist-link:hover {
-  background-color: #555;
+  background-color: var(--soundcloud-link-hover);
 }
 
 .playlist-section {
   display: flex;
   justify-content: space-between;
-  flex-wrap: wrap; /* Allows items to wrap */
+  flex-wrap: wrap;
   margin: 0;
   padding: 0;
   width: 100%;
@@ -73,7 +73,7 @@
 }
 
 .playlist-table th, .playlist-table td {
-  border-bottom: 1px solid #ccc;
+  border-bottom: 1px solid var(--container-background);
   padding: 5px;
   text-align: left;
   vertical-align: middle;
@@ -81,9 +81,9 @@
 
 .playlist-table th {
   text-align: center;
-  background-color: #555;
-  color: white;
-  position: relative; /* For positioning sort buttons */
+  background-color: var(--btn-background);
+  color: var(--text-color);
+  position: relative;
 }
 
 .playlist-table th.rank, .playlist-table td.rank {
@@ -123,6 +123,7 @@
 .playlist-title {
   font-weight: bold;
   text-align: center;
+  color: var(--text-color);
 }
 
 .source-icon {
@@ -152,15 +153,15 @@
 
 .track-item-content {
   align-items: center;
-  background-color: #444;
-  color: white;
+  background-color: var(--soundcloud-link-background);
+  color: var(--text-color);
   display: flex;
   padding: 0px;
 }
 
 .track-list-item {
-  background-color: #444;
-  color: white;
+  background-color: var(--soundcloud-link-background);
+  color: var(--text-color);
   padding: 5px 0;
 }
 
@@ -172,6 +173,7 @@
   margin-right: 10px;
   text-align: center;
   width: 50px;
+  color: var(--text-color);
 }
 
 .track-sources {
@@ -181,13 +183,14 @@
 .username {
   font-size: 12px;
   margin: 0;
+  color: var(--text-color);
 }
 
 .collapse-button {
-  background-color: #555;
+  background-color: var(--btn-background);
   border: none;
   border-radius: 5px;
-  color: white;
+  color: var(--text-color);
   cursor: pointer;
   font-size: .8rem;
   padding: 3px 8px;
@@ -210,6 +213,7 @@
 
 .sortable-header .title {
   margin-right: 5px;
+  color: var(--text-color);
 }
 
 .sort-button {
@@ -229,7 +233,7 @@
   margin: 0;
   padding: 0; 
   line-height: 1;
-  color: black;
+  color: var(--text-color);
 }
 
 .sort-button i + i {
@@ -248,11 +252,11 @@
 
 @media screen and (max-width: 768px) {
   .playlist-section {
-    flex-direction: column; /* Stack playlists vertically */
-    align-items: center; /* Center playlists horizontally */
+    flex-direction: column;
+    align-items: center;
   }
   
   .playlist-column {
-    width: 100%; /* Ensure playlists take full width on smaller screens */
+    width: 100%;
   }
 }

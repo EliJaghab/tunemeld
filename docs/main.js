@@ -1,6 +1,6 @@
 import { setupSortButtons } from './playlist.js';
 import { setupGenreSelector, setupViewCountTypeSelector, updateGenreData } from './selectors.js';
-import { setupBodyClickListener, setupClosePlayerButton} from './servicePlayer.js';
+import { setupBodyClickListener, setupClosePlayerButton } from './servicePlayer.js';
 
 document.addEventListener('DOMContentLoaded', initializeApp);
 
@@ -19,4 +19,39 @@ function initializeApp() {
   setupSortButtons();
   setupClosePlayerButton();
   
+  // Initialize theme based on user time and preferences
+  applyStoredTheme();
+  setupThemeToggle();
+}
+
+function applyStoredTheme() {
+  const storedTheme = localStorage.getItem('theme');
+  if (storedTheme) {
+    document.body.classList.toggle('dark-mode', storedTheme === 'dark');
+  } else {
+    applyThemeBasedOnTime();
+  }
+}
+
+function applyThemeBasedOnTime() {
+  const hour = new Date().getHours(); // Get current hour in user's local time
+  const isDarkMode = (hour >= 19 || hour < 7); // 7 PM to 7 AM is considered dark mode
+
+  if (isDarkMode) {
+    document.body.classList.add('dark-mode');
+  } else {
+    document.body.classList.remove('dark-mode');
+  }
+}
+
+function toggleTheme() {
+  const isDarkMode = document.body.classList.toggle('dark-mode');
+  localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
+}
+
+function setupThemeToggle() {
+  const themeToggleButton = document.getElementById('theme-toggle-button');
+  if (themeToggleButton) {
+    themeToggleButton.addEventListener('click', toggleTheme);
+  }
 }
