@@ -6,6 +6,7 @@ from urllib.parse import quote, urlparse
 import requests
 from bs4 import BeautifulSoup
 from unidecode import unidecode
+
 from playlist_etl.utils import (
     WebDriverManager,
     clear_collection,

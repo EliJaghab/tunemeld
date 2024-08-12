@@ -1,7 +1,9 @@
+import logging
+import unittest
+
 from playlist_etl.utils import WebDriverManager
 from playlist_etl.view_count import SPOTIFY_VIEW_COUNT_XPATH
-import unittest
-import logging
+
 
 class TestWebDriverManager(unittest.TestCase):
 
@@ -17,9 +19,10 @@ class TestWebDriverManager(unittest.TestCase):
         # Close the WebDriver after the test
         self.webdriver_manager.close_driver()
 
+
 if __name__ == "__main__":
     # Set up logging to print out information
     logging.basicConfig(level=logging.INFO)
-    
+
     # Run the tests
     unittest.main()

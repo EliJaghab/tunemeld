@@ -131,15 +131,13 @@ class WebDriverManager:
                     if element and element.is_displayed():
                         if attribute:
                             element_value = element.get_attribute(attribute)
-                            logging.info(
-                                f"Successfully found element attribute: {element_value}"
-                            )
+                            logging.info(f"Successfully found element attribute: {element_value}")
                             return element_value
                         else:
                             element_text = element.text
                             logging.info(f"Successfully found element text: {element_text}")
                             return element_text
-                
+
                 logging.warning("Element not found even after waiting")
                 return "Element not found"
 
@@ -198,9 +196,9 @@ class WebDriverManager:
     def _is_rate_limit_issue(self, error_message: str) -> bool:
         rate_limit_keywords = [
             "429",  # HTTP status code for too many requests
-            "rate limit", 
+            "rate limit",
             "too many requests",
-            "quota exceeded"
+            "quota exceeded",
         ]
         return any(keyword in error_message.lower() for keyword in rate_limit_keywords)
 

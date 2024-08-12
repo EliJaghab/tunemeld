@@ -6,6 +6,7 @@ from typing import Dict, List
 
 import requests
 from bs4 import BeautifulSoup
+
 from playlist_etl.transform import get_youtube_url_by_track_and_artist_name
 from playlist_etl.utils import (
     MongoClient,
@@ -154,6 +155,7 @@ def get_youtube_track_view_count(url: str, webdriver_manager: WebDriverManager) 
         return int(view_count_tag.get("content"))
 
     raise ValueError(f"Could not find play count for {url}")
+
 
 def get_spotify_track_url_by_isrc(isrc: str, spotify_client: Spotify) -> str:
     logging.info(f"Searching for track with ISRC: {isrc}")
