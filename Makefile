@@ -17,11 +17,13 @@ activate:
 # Command to setup environment paths
 setup_env:
 	@echo "Setting up environment paths..."
-	@echo "Project root: $(PROJECT_ROOT)"
+	@echo "Project root: $(PWD)"
 	@echo "Virtual environment: $(VENV)"
 	@echo "PYTHONPATH: $(PYTHONPATH)"
+	@mkdir -p $(VENV)/lib/python3.10/site-packages
 	@echo "Creating sitecustomize.py to set PYTHONPATH in venv..."
-	@echo "import sys; sys.path.insert(0, '$(PROJECT_ROOT)')" > $(VENV)/lib/python3.10/site-packages/sitecustomize.py
+	@echo 'import sys; sys.path.insert(0, "$(PYTHONPATH)")' > $(VENV)/lib/python3.10/site-packages/sitecustomize.py
+
 
 extract: setup_env
 	@echo "Running extract..."
