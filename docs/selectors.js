@@ -1,3 +1,24 @@
+import { fetchAndDisplayHeaderArt, hideSkeletonLoaders, showSkeletonLoaders  } from './header.js';
+import { addToggleEventListeners, fetchAndDisplayLastUpdated, fetchAndDisplayPlaylists, resetCollapseStates, setupSortButtons, sortTable, updateMainPlaylist } from './playlist.js';
+
+export async function updateGenreData(genre, viewCountType, updateAll = false) {
+    try {
+      showSkeletonLoaders();
+      if (updateAll) {
+        await fetchAndDisplayLastUpdated(genre);
+        await fetchAndDisplayHeaderArt(genre);
+        await fetchAndDisplayPlaylists(genre);
+      }
+      await updateMainPlaylist(genre, viewCountType);
+      sortTable('rank', 'asc', 'total-view-count');
+      hideSkeletonLoaders();
+      resetCollapseStates();
+      addToggleEventListeners();
+    } catch (error) {
+      console.error('Error updating genre data:', error);
+    }
+  }
+
 export function setupGenreSelector(genreSelector) {
     genreSelector.addEventListener('change', function () {
       const currentGenre = genreSelector.value;
