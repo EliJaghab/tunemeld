@@ -2,8 +2,6 @@ import logging
 import os
 import time
 from datetime import datetime, timezone
-from queue import Queue
-from threading import Lock
 
 import psutil
 from dotenv import load_dotenv
@@ -113,8 +111,107 @@ class WebDriverManager:
     def __init__(self, use_proxy=False, memory_threshold_percent=75):
         self.use_proxy = use_proxy
         self.memory_threshold_percent = memory_threshold_percent
-        self.visits_counter = 0
         self.driver = self._create_webdriver(use_proxy)
+
+    def find_element_by_xpath(
+        self, url: str, xpath: str, attribute: str = None, retries: int = 5, retry_delay: int = 10
+    ) -> str:
+        def _attempt_find_element() -> str:
+            try:
+                self.driver.implicitly_wait(5)
+                logging.info(f"Navigating to URL: {url}")
+                self.driver.get(url)
+
+                max_timeout = 15
+                start_time = time.time()
+
+                while time.time() - start_time < max_timeout:
+
+                    element = self.driver.find_element(By.XPATH, xpath)
+                    if element and element.is_displayed():
+                        if attribute:
+                            element_value = element.get_attribute(attribute)
+                            logging.info(
+                                f"Successfully found element attribute: {element_value}"
+                            )
+                            return element_value
+                        else:
+                            element_text = element.text
+                            logging.info(f"Successfully found element text: {element_text}")
+                            return element_text
+                
+                logging.warning("Element not found even after waiting")
+                return "Element not found"
+
+            except TimeoutException:
+                logging.error("Timed out waiting for element")
+                return "Timed out waiting for element"
+            except NoSuchElementException:
+                logging.error("Element not found on the page")
+                return "Element not found on the page"
+            except Exception as e:
+                error_message = str(e)
+                logging.error(f"An error occurred: {error_message}")
+
+                if self._is_rate_limit_issue(error_message):
+                    logging.info("Rate limit detected, switching proxy and retrying...")
+                    self._restart_driver(new_proxy=True)
+                    return "Rate limit detected, retrying with new proxy..."
+
+                return f"An error occurred: {error_message}"
+
+        logging.info(f"Attempting to find element on URL: {url} using XPath: {xpath}")
+
+        result = self._retry_with_backoff(retries, retry_delay, _attempt_find_element)
+
+        if self._is_error_occurred(result):
+            self._restart_driver()
+
+            # Retry again after restarting the driver
+            result = self._retry_with_backoff(retries, retry_delay, _attempt_find_element)
+
+        return result
+
+    def _retry_with_backoff(self, retries: int, retry_delay: int, action):
+        attempt = 1
+        while attempt <= retries:
+            result = action()
+
+            if not self._is_error_occurred(result):
+                return result
+
+            logging.info(f"Retrying... (attempt {attempt + 1} of {retries})")
+            time.sleep(retry_delay)
+            attempt += 1
+
+        return result
+
+    def _is_error_occurred(self, result: str) -> bool:
+        error_conditions = [
+            "An error occurred",
+            "Timed out waiting for element",
+            "Element not found on the page",
+            "Element not found",
+        ]
+        return any(condition in result for condition in error_conditions)
+
+    def _is_rate_limit_issue(self, error_message: str) -> bool:
+        rate_limit_keywords = [
+            "429",  # HTTP status code for too many requests
+            "rate limit", 
+            "too many requests",
+            "quota exceeded"
+        ]
+        return any(keyword in error_message.lower() for keyword in rate_limit_keywords)
+
+    def _restart_driver(self, new_proxy=False):
+        logging.info("Restarting WebDriver to clear memory/cache.")
+        self.driver.quit()
+
+        if new_proxy:
+            self.driver = self._create_webdriver(use_proxy=True)
+        else:
+            self.driver = self._create_webdriver(self.use_proxy)
 
     def _create_webdriver(self, use_proxy: bool):
         options = Options()
@@ -130,12 +227,6 @@ class WebDriverManager:
         driver = webdriver.Chrome(options=options)
         return driver
 
-    def _restart_driver(self):
-        logging.info("Restarting WebDriver to clear memory/cache.")
-        self.driver.quit()
-        self.driver = self._create_webdriver(self.use_proxy)
-        self.visits_counter = 0
-
     def _check_memory_usage(self):
         memory = psutil.virtual_memory()
         available_memory_mb = memory.available / (1024 * 1024)
@@ -143,82 +234,6 @@ class WebDriverManager:
         logging.info(f"Available Memory: {available_memory_mb:.2f} MB")
         logging.info(f"Memory Threshold: {memory_threshold_mb:.2f} MB")
         return available_memory_mb < memory_threshold_mb
-
-    def find_element_by_xpath(
-        self, url: str, xpath: str, attribute: str = None, retries: int = 5, retry_delay: int = 10
-    ) -> str:
-        def _attempt_find_element() -> str:
-            try:
-                self.driver.implicitly_wait(2)
-                logging.info(f"Navigating to URL: {url}")
-                self.driver.get(url)
-
-                timeout = 5
-                max_timeout = 15
-                start_time = time.time()
-
-                while time.time() - start_time < max_timeout:
-                    try:
-                        element = self.driver.find_element(By.XPATH, xpath)
-                        if element and element.is_displayed():
-                            if attribute:
-                                element_value = element.get_attribute(attribute)
-                                logging.info(
-                                    f"Successfully found element attribute: {element_value}"
-                                )
-                                return element_value
-                            else:
-                                element_text = element.text
-                                logging.info(f"Successfully found element text: {element_text}")
-                                return element_text
-                    except NoSuchElementException:
-                        logging.info("Element not found yet, retrying...")
-                        time.sleep(0.5)
-
-                logging.warning("Element not found even after waiting")
-                return "Element not found"
-
-            except TimeoutException:
-                logging.error("Timed out waiting for element")
-                return "Timed out waiting for element"
-            except NoSuchElementException:
-                logging.error("Element not found on the page")
-                return "Element not found on the page"
-            except Exception as e:
-                logging.error(f"An error occurred: {str(e)}")
-                return f"An error occurred: {str(e)}"
-
-        logging.info(f"Attempting to find element on URL: {url} using XPath: {xpath}")
-
-        result = _attempt_find_element()
-        if "An error occurred" in result or result in [
-            "Timed out waiting for element",
-            "Element not found on the page",
-            "Element not found",
-        ]:
-            logging.info("Initial attempt failed, retrying with proxy")
-            self._restart_driver()
-
-            attempt = 1
-            while attempt < retries:
-                result = _attempt_find_element()
-
-                if not (
-                    "An error occurred" in result
-                    or result
-                    in [
-                        "Timed out waiting for element",
-                        "Element not found on the page",
-                        "Element not found",
-                    ]
-                ):
-                    return result
-
-                logging.info(f"Retrying with proxy... (attempt {attempt + 1} of {retries})")
-                time.sleep(retry_delay)
-                attempt += 1
-
-        return result
 
     def close_driver(self):
         if self.driver:

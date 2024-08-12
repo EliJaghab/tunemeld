@@ -6,8 +6,8 @@ from urllib.parse import unquote
 
 import requests
 from bs4 import BeautifulSoup
-from extract import PLAYLIST_GENRES, SERVICE_CONFIGS
-from utils import (
+from playlist_etl.extract import PLAYLIST_GENRES, SERVICE_CONFIGS
+from playlist_etl.utils import (
     clear_collection,
     get_mongo_client,
     get_spotify_client,

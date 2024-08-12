@@ -1,5 +1,4 @@
 import logging
-import time
 from collections import defaultdict
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime
@@ -7,8 +6,8 @@ from typing import Dict, List
 
 import requests
 from bs4 import BeautifulSoup
-from transform import get_youtube_url_by_track_and_artist_name
-from utils import (
+from playlist_etl.transform import get_youtube_url_by_track_and_artist_name
+from playlist_etl.utils import (
     MongoClient,
     Spotify,
     WebDriverManager,
@@ -29,6 +28,7 @@ AGGREGATED_DATA_COLLECTION = "aggregated_playlists"
 VIEW_COUNTS_COLLECTION = "view_counts_playlists"
 CURRENT_TIMESTAMP = datetime.now().isoformat()
 SERVICE_NAMES = ["Spotify", "Youtube"]
+SPOTIFY_VIEW_COUNT_XPATH = "//span[contains(@class, 'encore-text') and contains(@class, 'encore-text-body-small') and contains(@class, 'RANLXG3qKB61Bh3') and @data-testid='playcount']"
 
 
 def initialize_new_view_count_playlists(mongo_client: MongoClient) -> None:
@@ -131,22 +131,16 @@ def get_view_count(track: dict, service_name: str, webdriver_manager: WebDriverM
 
 
 def get_spotify_track_view_count(url: str, webdriver_manager: WebDriverManager) -> int:
-    xpaths = [
-        "//span[contains(@class, 'encore-text') and contains(@class, 'encore-text-body-small') and contains(@class, 'RANLXG3qKB61Bh3') and @data-testid='playcount']",
-    ]
+    try:
+        play_count_info = webdriver_manager.find_element_by_xpath(url, SPOTIFY_VIEW_COUNT_XPATH)
+        if play_count_info:
+            play_count = int(play_count_info.replace(",", ""))
+            logging.info(play_count)
+            return play_count
+    except Exception as e:
+        print(f"Error with xpath {SPOTIFY_VIEW_COUNT_XPATH}: {e}")
 
-    for xpath in xpaths:
-        try:
-            play_count_info = webdriver_manager.find_element_by_xpath(url, xpath)
-            if play_count_info:
-                play_count = int(play_count_info.replace(",", ""))
-                logging.info(play_count)
-                return play_count
-        except Exception as e:
-            print(f"Error with xpath {xpath}: {e}")
-
-    logging.info(f"Could not find play count for {url}")
-    return 0
+    raise ValueError(f"Could not find play count for {url}")
 
 
 def get_youtube_track_view_count(url: str, webdriver_manager: WebDriverManager) -> int:
@@ -159,9 +153,7 @@ def get_youtube_track_view_count(url: str, webdriver_manager: WebDriverManager) 
     if view_count_tag:
         return int(view_count_tag.get("content"))
 
-    logging.info(f"Could not find play count for {url}")
-    return 0
-
+    raise ValueError(f"Could not find play count for {url}")
 
 def get_spotify_track_url_by_isrc(isrc: str, spotify_client: Spotify) -> str:
     logging.info(f"Searching for track with ISRC: {isrc}")
@@ -187,5 +179,5 @@ if __name__ == "__main__":
     initialize_new_view_count_playlists(mongo_client)
     spotify_client = get_spotify_client()
     view_counts_playlists = read_data_from_mongo(mongo_client, VIEW_COUNTS_COLLECTION)
-    webdriver_manager = WebDriverManager(use_proxy=True)
+    webdriver_manager = WebDriverManager(use_proxy=False)
     update_view_counts(view_counts_playlists, mongo_client, webdriver_manager, spotify_client)

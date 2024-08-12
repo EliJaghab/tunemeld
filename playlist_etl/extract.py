@@ -1,13 +1,12 @@
 import html
 import logging
 import os
-import re
 from urllib.parse import quote, urlparse
 
 import requests
 from bs4 import BeautifulSoup
 from unidecode import unidecode
-from utils import (
+from playlist_etl.utils import (
     WebDriverManager,
     clear_collection,
     get_mongo_client,
