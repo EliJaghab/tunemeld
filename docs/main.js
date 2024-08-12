@@ -1,6 +1,7 @@
 import { setupSortButtons } from './playlist.js';
 import { setupGenreSelector, setupViewCountTypeSelector, updateGenreData } from './selectors.js';
 import { setupBodyClickListener, setupClosePlayerButton } from './servicePlayer.js';
+import { initializeTosPrivacyOverlay } from './tosPrivacy.js';  // Import the new file
 
 document.addEventListener('DOMContentLoaded', initializeApp);
 
@@ -22,6 +23,7 @@ function initializeApp() {
   // Initialize theme based on user time and preferences
   applyStoredTheme();
   setupThemeToggle();
+  initializeTosPrivacyOverlay();
 }
 
 function applyStoredTheme() {
