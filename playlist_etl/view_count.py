@@ -128,7 +128,7 @@ def get_view_count(track: dict, service_name: str, webdriver_manager: WebDriverM
         case "Spotify":
             return get_spotify_track_view_count(track["spotify_url"], webdriver_manager)
         case "Youtube":
-            return get_youtube_track_view_count(track["youtube_url"])
+            return get_youtube_track_view_count(track["youtube_url"], webdriver_manager)
         case _:
             raise ValueError("Unexpected service name")
 
@@ -146,50 +146,23 @@ def get_spotify_track_view_count(url: str, webdriver_manager: WebDriverManager) 
     raise ValueError(f"Could not find play count for {url}")
 
 
-def get_youtube_track_view_count(url: str, retries: int = 10, backoff_factor: float = 1.5) -> int:
-    def fetch_view_count(url: str) -> int:
-        response = requests.get(url)
-        logging.info(f"Received response with status code {response.status_code} for {url}")
-        logging.info(f"Response headers: {response.headers}")
-        logging.info(f"Response text: {response.text[:1000]}")  # Log the first 1000 characters of the response
+def get_youtube_track_view_count(url: str, webdriver_manager: WebDriverManager) -> int:
+    YOUTUBE_VIEW_COUNT_XPATH = "//meta[@itemprop='interactionCount']"
 
-        if response.status_code == 429:
-            logging.error(f"Rate limited by YouTube for {url}. Status code: 429. Headers: {response.headers}")
-            raise ValueError(f"Rate limited by YouTube for {url}")
-
-        if response.status_code != 200:
-            logging.error(f"Error fetching page content for {url}. Status code: {response.status_code}. Response text: {response.text[:1000]}")
-            raise ValueError(f"Failed to fetch page content for {url}. Status code: {response.status_code}")
-
-        soup = BeautifulSoup(response.text, "html.parser")
-        view_count_tag = soup.find("meta", itemprop="interactionCount")
-        if view_count_tag:
-            view_count = int(view_count_tag.get("content"))
-            logging.info(f"View count for {url}: {view_count}")
-            return view_count
-
-        logging.warning(f"Could not find play count tag for {url}")
-        raise ValueError(f"Could not find play count for {url}")
-
-    def exponential_backoff(attempt: int) -> float:
-        return backoff_factor * (2 ** (attempt - 1))
-
-    attempt = 0
-    while attempt < retries:
-        try:
-            return fetch_view_count(url)
-        except (RequestException, ValueError) as e:
-            attempt += 1
-            logging.warning(f"Attempt {attempt} failed for {url}: {e}")
-            if attempt < retries:
-                sleep_time = exponential_backoff(attempt)
-                logging.info(f"Retrying in {sleep_time} seconds... (Attempt {attempt}/{retries})")
-                time.sleep(sleep_time)
-            else:
-                logging.error(f"Fatal error: failed to retrieve view count after {retries} attempts for {url}")
-                raise ValueError(f"Failed to retrieve view count after {retries} attempts for {url}")
-
-
+    # Attempt to retrieve the view count from the YouTube page
+    view_count = webdriver_manager.find_element_by_xpath(url, YOUTUBE_VIEW_COUNT_XPATH, attribute="content")
+    
+    if "Element not found" in view_count or "Timed out waiting for element" in view_count:
+        logging.error(f"Failed to retrieve view count for {url} after multiple attempts.")
+        raise ValueError(f"Failed to retrieve view count for {url}")
+    
+    try:
+        view_count = int(view_count)
+        logging.info(f"View count for {url}: {view_count}")
+        return view_count
+    except ValueError:
+        logging.error(f"Unexpected value for view count: {view_count}")
+        raise ValueError(f"Unexpected value for view count: {view_count}")
 
 
 def get_spotify_track_url_by_isrc(isrc: str, spotify_client: Spotify) -> str:
