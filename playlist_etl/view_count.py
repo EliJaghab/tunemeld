@@ -1,12 +1,11 @@
 import logging
-import time
+import os
 from collections import defaultdict
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime
 from typing import Dict, List
 
 import requests
-from bs4 import BeautifulSoup
 from requests.exceptions import RequestException
 
 from playlist_etl.transform import get_youtube_url_by_track_and_artist_name
@@ -30,7 +29,7 @@ logging.basicConfig(
 AGGREGATED_DATA_COLLECTION = "aggregated_playlists"
 VIEW_COUNTS_COLLECTION = "view_counts_playlists"
 CURRENT_TIMESTAMP = datetime.now().isoformat()
-SERVICE_NAMES = ["Youtube"]
+SERVICE_NAMES = ["Spotify", "Youtube"]
 SPOTIFY_VIEW_COUNT_XPATH = "//span[contains(@class, 'encore-text') and contains(@class, 'encore-text-body-small') and contains(@class, 'RANLXG3qKB61Bh3') and @data-testid='playcount']"
 
 
@@ -128,7 +127,7 @@ def get_view_count(track: dict, service_name: str, webdriver_manager: WebDriverM
         case "Spotify":
             return get_spotify_track_view_count(track["spotify_url"], webdriver_manager)
         case "Youtube":
-            return get_youtube_track_view_count(track["youtube_url"], webdriver_manager)
+            return get_youtube_track_view_count(track["youtube_url"])
         case _:
             raise ValueError("Unexpected service name")
 
@@ -146,25 +145,30 @@ def get_spotify_track_view_count(url: str, webdriver_manager: WebDriverManager) 
     raise ValueError(f"Could not find play count for {url}")
 
 
-def get_youtube_track_view_count(url: str, webdriver_manager: WebDriverManager) -> int:
-    YOUTUBE_VIEW_COUNT_XPATH = "//div[@id='tooltip' and contains(@class, 'style-scope') and contains(@class, 'tp-yt-paper-tooltip')]"
-"
+def get_youtube_track_view_count(youtube_url: str) -> int:
+    video_id = youtube_url.split("v=")[-1]
 
+    api_key = os.getenv("GOOGLE_API_KEY")
+    youtube_api_url = (
+        f"https://www.googleapis.com/youtube/v3/videos?part=statistics&id={video_id}&key={api_key}"
+    )
 
-    # Attempt to retrieve the view count from the YouTube page
-    view_count = webdriver_manager.find_element_by_xpath(url, YOUTUBE_VIEW_COUNT_XPATH, attribute="content")
-    
-    if "Element not found" in view_count or "Timed out waiting for element" in view_count:
-        logging.error(f"Failed to retrieve view count for {url} after multiple attempts.")
-        raise ValueError(f"Failed to retrieve view count for {url}")
-    
-    try:
-        view_count = int(view_count)
-        logging.info(f"View count for {url}: {view_count}")
-        return view_count
-    except ValueError:
-        logging.error(f"Unexpected value for view count: {view_count}")
-        raise ValueError(f"Unexpected value for view count: {view_count}")
+    response = requests.get(youtube_api_url)
+
+    if response.status_code == 200:
+        data = response.json()
+        if data["items"]:
+            view_count = data["items"][0]["statistics"]["viewCount"]
+            logging.info(f"Video ID {video_id} has {view_count} views.")
+            return int(view_count)
+        else:
+            logging.info(f"No data found for video ID {video_id}")
+            return 0
+    else:
+        logging.error(f"Error: {response.status_code}, {response.text}")
+        if response.status_code == 403 and "quotaExceeded" in response.text:
+            raise ValueError(f"Quota exceeded: Could not get view count for {youtube_url}")
+        raise ValueError(f"Failed to retrieve view count for {youtube_url}")
 
 
 def get_spotify_track_url_by_isrc(isrc: str, spotify_client: Spotify) -> str:

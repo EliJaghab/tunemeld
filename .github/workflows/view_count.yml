@@ -38,6 +38,7 @@ jobs:
 
       - name: Run view counts
         env:
+          GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
           MONGO_URI: ${{ secrets.MONGO_URI }}
           SPOTIFY_CLIENT_ID: ${{ secrets.SPOTIFY_CLIENT_ID }}
           SPOTIFY_CLIENT_SECRET: ${{ secrets.SPOTIFY_CLIENT_SECRET }}

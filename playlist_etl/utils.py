@@ -173,7 +173,6 @@ class WebDriverManager:
 
         return result
 
-
     def _retry_with_backoff(self, retries: int, retry_delay: int, action):
         attempt = 1
         while attempt <= retries:
