@@ -146,7 +146,7 @@ def get_spotify_track_view_count(url: str, webdriver_manager: WebDriverManager) 
     raise ValueError(f"Could not find play count for {url}")
 
 
-def get_youtube_track_view_count(url: str, retries: int = 10, backoff_factor: float = 10) -> int:
+def get_youtube_track_view_count(url: str, retries: int = 10, backoff_factor: float = 1.5) -> int:
     def fetch_view_count(url: str) -> int:
         response = requests.get(url)
         logging.debug(f"Received response with status code {response.status_code} for {url}")
