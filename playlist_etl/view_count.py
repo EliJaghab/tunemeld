@@ -149,9 +149,9 @@ def get_spotify_track_view_count(url: str, webdriver_manager: WebDriverManager) 
 def get_youtube_track_view_count(url: str, retries: int = 10, backoff_factor: float = 1.5) -> int:
     def fetch_view_count(url: str) -> int:
         response = requests.get(url)
-        logging.debug(f"Received response with status code {response.status_code} for {url}")
-        logging.debug(f"Response headers: {response.headers}")
-        logging.debug(f"Response text: {response.text[:1000]}")  # Log the first 1000 characters of the response
+        logging.info(f"Received response with status code {response.status_code} for {url}")
+        logging.info(f"Response headers: {response.headers}")
+        logging.info(f"Response text: {response.text[:1000]}")  # Log the first 1000 characters of the response
 
         if response.status_code == 429:
             logging.error(f"Rate limited by YouTube for {url}. Status code: 429. Headers: {response.headers}")
