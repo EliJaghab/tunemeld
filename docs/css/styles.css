@@ -258,8 +258,8 @@ label {
   }
 
   #soundcloud-link {
-    margin-top: 0px;
-    margin-right: 6px;
+    margin-top: 28px;
+    margin-right: 5px;
     font-size: 10px;
     padding: 2px 6px;
   }
@@ -282,4 +282,122 @@ label {
   .footer-link {
     font-size: 0.7rem;
   }
+}
+
+:root {
+  --toggle-width: 45px;
+  --toggle-height: 20px;
+  --toggle-border-radius: calc(var(--toggle-height) / 2);
+  --toggle-background: #ebebeb;
+  --toggle-background-checked: #242424;
+  --toggle-shadow: inset 0px 3px 7px rgba(0, 0, 0, 0.3), inset 0px -3px 7px rgba(255, 255, 255, 0.4);
+  --toggle-ball-size: calc(var(--toggle-height) - 4px); /* Slightly smaller than height for padding */
+  --ball-position-offset: 2px; /* Reduced offset to fill more space */
+  --sun-icon-size: calc(var(--toggle-height) / 2);
+  --moon-icon-size: calc(var(--toggle-height) / 2);
+  --gooey-effect-size: calc(var(--toggle-ball-size) + 10px); /* Size when clicked */
+  --moon-color: #800080; /* Purple color for the moon */
+}
+
+.theme-toggle-container {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  z-index: 1000;
+}
+
+#theme-toggle-button {
+  display: none;
+}
+
+.theme-toggle {
+  width: var(--toggle-width);
+  height: var(--toggle-height);
+  position: relative;
+  display: block;
+  background: var(--toggle-background);
+  border-radius: var(--toggle-border-radius);
+  box-shadow: var(--toggle-shadow);
+  cursor: pointer;
+}
+
+.theme-toggle:after {
+  content: "";
+  width: var(--toggle-ball-size);
+  height: var(--toggle-ball-size);
+  position: absolute;
+  top: var(--ball-position-offset);
+  left: var(--ball-position-offset);
+  background: linear-gradient(180deg, #ffcc89, #d8860b);
+  border-radius: 50%;
+  box-shadow: 0px 3px 7px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+.theme-toggle img {
+  position: absolute;
+  width: var(--sun-icon-size);
+  height: var(--sun-icon-size);
+  top: calc((var(--toggle-height) - var(--sun-icon-size)) / 2); /* Centered vertically */
+  z-index: 101; /* Ensure the icons are on top */
+  transition: opacity 0.3s ease;
+}
+
+.theme-toggle .sun path {
+  fill: var(--sun-color); /* Apply white color to the sun */
+}
+
+.theme-toggle .sun {
+  left: calc(var(--ball-position-offset) + 3px); /* Adjust for the position */
+  fill: #fff;
+}
+
+.theme-toggle .moon {
+  right: calc(var(--ball-position-offset) + 3px); /* Adjust for the position */
+  fill: var(--moon-color);
+  opacity: 0;
+}
+
+#theme-toggle-button:checked + .theme-toggle {
+  background: var(--toggle-background-checked);
+}
+
+#theme-toggle-button:checked + .theme-toggle:after {
+  left: calc(var(--toggle-width) - var(--toggle-ball-size) - var(--ball-position-offset));
+  background: linear-gradient(180deg, #777, #3a3a3a);
+}
+
+#theme-toggle-button:checked + .theme-toggle .sun {
+  opacity: 0;
+}
+
+#theme-toggle-button:checked + .theme-toggle .moon {
+  opacity: 1;
+}
+
+.theme-toggle:active:after {
+  width: var(--gooey-effect-size); /* Gooey effect when clicked */
+}
+
+#theme-toggle-button:active + .theme-toggle:after {
+  width: var(--gooey-effect-size);
+  left: calc(var(--ball-position-offset) + 2px); /* Adjusts for gooey effect on both sides */
+}
+
+#theme-toggle-button:checked:active + .theme-toggle:after {
+  width: var(--gooey-effect-size);
+  left: calc(var(--toggle-width) - var(--toggle-ball-size) - var(--gooey-effect-size)  2px);
+}
+
+.background {
+  width: 100vw;
+  height: 100vh;
+  background: #fff;
+  z-index: -1;
+  position: absolute;
+  transition: 0.3s;
+}
+
+#theme-toggle-button:checked + .theme-toggle + .background {
+  background: #242424;
 }
