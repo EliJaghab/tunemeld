@@ -1,8 +1,8 @@
 import logging
+import time
 from collections import defaultdict
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime
-import time
 from typing import Dict, List
 
 import requests
@@ -30,7 +30,7 @@ logging.basicConfig(
 AGGREGATED_DATA_COLLECTION = "aggregated_playlists"
 VIEW_COUNTS_COLLECTION = "view_counts_playlists"
 CURRENT_TIMESTAMP = datetime.now().isoformat()
-SERVICE_NAMES = ["Spotify", "Youtube"]
+SERVICE_NAMES = ["Youtube"]
 SPOTIFY_VIEW_COUNT_XPATH = "//span[contains(@class, 'encore-text') and contains(@class, 'encore-text-body-small') and contains(@class, 'RANLXG3qKB61Bh3') and @data-testid='playcount']"
 
 
@@ -146,7 +146,7 @@ def get_spotify_track_view_count(url: str, webdriver_manager: WebDriverManager) 
     raise ValueError(f"Could not find play count for {url}")
 
 
-def get_youtube_track_view_count(url: str, retries: int = 3, backoff_factor: float = 0.5) -> int:
+def get_youtube_track_view_count(url: str, retries: int = 3, backoff_factor: float = 3) -> int:
     def fetch_view_count(url: str) -> int:
         response = requests.get(url)
         if response.status_code != 200:
