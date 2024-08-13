@@ -150,21 +150,24 @@ def get_youtube_track_view_count(url: str, retries: int = 10, backoff_factor: fl
     def fetch_view_count(url: str) -> int:
         response = requests.get(url)
         logging.debug(f"Received response with status code {response.status_code} for {url}")
-        
+        logging.debug(f"Response headers: {response.headers}")
+        logging.debug(f"Response text: {response.text[:1000]}")  # Log the first 1000 characters of the response
+
         if response.status_code == 429:
-            raise ValueError(f"Rate limited by YouTube for {url}. Status code: 429")
-        
+            logging.error(f"Rate limited by YouTube for {url}. Status code: 429. Headers: {response.headers}")
+            raise ValueError(f"Rate limited by YouTube for {url}")
+
         if response.status_code != 200:
-            logging.error(f"Error fetching page content for {url}. Status code: {response.status_code}. Response text: {response.text}")
+            logging.error(f"Error fetching page content for {url}. Status code: {response.status_code}. Response text: {response.text[:1000]}")
             raise ValueError(f"Failed to fetch page content for {url}. Status code: {response.status_code}")
-        
+
         soup = BeautifulSoup(response.text, "html.parser")
         view_count_tag = soup.find("meta", itemprop="interactionCount")
         if view_count_tag:
             view_count = int(view_count_tag.get("content"))
             logging.info(f"View count for {url}: {view_count}")
             return view_count
-        
+
         logging.warning(f"Could not find play count tag for {url}")
         raise ValueError(f"Could not find play count for {url}")
 
@@ -185,6 +188,7 @@ def get_youtube_track_view_count(url: str, retries: int = 10, backoff_factor: fl
             else:
                 logging.error(f"Fatal error: failed to retrieve view count after {retries} attempts for {url}")
                 raise ValueError(f"Failed to retrieve view count after {retries} attempts for {url}")
+
 
 
 
