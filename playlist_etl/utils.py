@@ -118,7 +118,7 @@ class WebDriverManager:
     ) -> str:
         def _attempt_find_element() -> str:
             try:
-                self.driver.implicitly_wait(5)
+                self.driver.implicitly_wait(8)
                 logging.info(f"Navigating to URL: {url}")
                 self.driver.get(url)
 

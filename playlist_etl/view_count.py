@@ -147,7 +147,9 @@ def get_spotify_track_view_count(url: str, webdriver_manager: WebDriverManager) 
 
 
 def get_youtube_track_view_count(url: str, webdriver_manager: WebDriverManager) -> int:
-    YOUTUBE_VIEW_COUNT_XPATH = "//meta[@itemprop='interactionCount']"
+    YOUTUBE_VIEW_COUNT_XPATH = "//div[@id='tooltip' and contains(@class, 'style-scope') and contains(@class, 'tp-yt-paper-tooltip')]"
+"
+
 
     # Attempt to retrieve the view count from the YouTube page
     view_count = webdriver_manager.find_element_by_xpath(url, YOUTUBE_VIEW_COUNT_XPATH, attribute="content")
