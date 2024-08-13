@@ -6,6 +6,7 @@ from typing import Dict, List
 
 import requests
 from bs4 import BeautifulSoup
+from requests.exceptions import RequestException
 
 from playlist_etl.transform import get_youtube_url_by_track_and_artist_name
 from playlist_etl.utils import (
@@ -28,7 +29,7 @@ logging.basicConfig(
 AGGREGATED_DATA_COLLECTION = "aggregated_playlists"
 VIEW_COUNTS_COLLECTION = "view_counts_playlists"
 CURRENT_TIMESTAMP = datetime.now().isoformat()
-SERVICE_NAMES = ["Spotify", "Youtube"]
+SERVICE_NAMES = ["Youtube"]
 SPOTIFY_VIEW_COUNT_XPATH = "//span[contains(@class, 'encore-text') and contains(@class, 'encore-text-body-small') and contains(@class, 'RANLXG3qKB61Bh3') and @data-testid='playcount']"
 
 
@@ -126,7 +127,7 @@ def get_view_count(track: dict, service_name: str, webdriver_manager: WebDriverM
         case "Spotify":
             return get_spotify_track_view_count(track["spotify_url"], webdriver_manager)
         case "Youtube":
-            return get_youtube_track_view_count(track["youtube_url"], webdriver_manager)
+            return get_youtube_track_view_count(track["youtube_url"])
         case _:
             raise ValueError("Unexpected service name")
 
@@ -144,17 +145,36 @@ def get_spotify_track_view_count(url: str, webdriver_manager: WebDriverManager) 
     raise ValueError(f"Could not find play count for {url}")
 
 
-def get_youtube_track_view_count(url: str, webdriver_manager: WebDriverManager) -> int:
-    response = requests.get(url)
-    if response.status_code != 200:
-        raise ValueError(f"Failed to fetch page content for {url}")
+def get_youtube_track_view_count(url: str, retries: int = 3, backoff_factor: float = 0.5) -> int:
+    def fetch_view_count(url: str) -> int:
+        response = requests.get(url)
+        if response.status_code != 200:
+            raise ValueError(f"Failed to fetch page content for {url}")
 
-    soup = BeautifulSoup(response.text, "html.parser")
-    view_count_tag = soup.find("meta", itemprop="interactionCount")
-    if view_count_tag:
-        return int(view_count_tag.get("content"))
+        soup = BeautifulSoup(response.text, "html.parser")
+        view_count_tag = soup.find("meta", itemprop="interactionCount")
+        if view_count_tag:
+            view_count = int(view_count_tag.get("content"))
+            logging.info(f"View count: {view_count}")
+            return view_count
 
-    raise ValueError(f"Could not find play count for {url}")
+        raise ValueError(f"Could not find play count for {url}")
+
+    attempt = 0
+    while attempt < retries:
+        try:
+            return fetch_view_count(url)
+        except (RequestException, ValueError) as e:
+            logging.warning(f"Attempt {attempt + 1} failed: {e}")
+            attempt += 1
+            if attempt < retries:
+                sleep_time = backoff_factor * (2 ** (attempt - 1))  # Exponential backoff
+                logging.info(f"Retrying in {sleep_time} seconds...")
+                time.sleep(sleep_time)
+            else:
+                raise ValueError(
+                    f"Failed to retrieve view count after {retries} attempts for {url}"
+                )
 
 
 def get_spotify_track_url_by_isrc(isrc: str, spotify_client: Spotify) -> str:
