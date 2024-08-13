@@ -126,7 +126,6 @@ class WebDriverManager:
                 start_time = time.time()
 
                 while time.time() - start_time < max_timeout:
-
                     element = self.driver.find_element(By.XPATH, xpath)
                     if element and element.is_displayed():
                         if attribute:
@@ -160,15 +159,20 @@ class WebDriverManager:
 
         logging.info(f"Attempting to find element on URL: {url} using XPath: {xpath}")
 
+        # Initial attempt without proxy
         result = self._retry_with_backoff(retries, retry_delay, _attempt_find_element)
 
+        # Check if rate limiting or other errors occurred, retry with proxy if needed
         if self._is_error_occurred(result):
-            self._restart_driver()
+            if "Rate limit detected" in result:
+                logging.info("Retrying with a new proxy due to rate limit detection.")
+            self._restart_driver(new_proxy=("Rate limit detected" in result))
 
-            # Retry again after restarting the driver
+            # Retry again after restarting the driver with the new proxy if rate limited
             result = self._retry_with_backoff(retries, retry_delay, _attempt_find_element)
 
         return result
+
 
     def _retry_with_backoff(self, retries: int, retry_delay: int, action):
         attempt = 1
