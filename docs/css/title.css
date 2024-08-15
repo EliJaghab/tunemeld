@@ -1,0 +1,239 @@
+:root {
+    --background-color: #fff;
+    --text-color: #333;
+    --link-color: teal;
+    --soundcloud-link-background: #f5f5f5;
+    --soundcloud-link-hover: #e0e0e0;
+    --toggle-width: 45px;
+    --toggle-height: 20px;
+    --toggle-border-radius: calc(var(--toggle-height) / 2);
+    --toggle-background: #ebebeb;
+    --toggle-background-checked: #242424;
+    --toggle-shadow: inset 0px 3px 7px rgba(0, 0, 0, 0.3), inset 0px -3px 7px rgba(255, 255, 255, 0.4);
+    --toggle-ball-size: calc(var(--toggle-height) - 4px);
+    --ball-position-offset: 2px;
+    --sun-icon-size: calc(var(--toggle-height) / 2);
+    --moon-icon-size: calc(var(--toggle-height) / 2);
+    --gooey-effect-size: calc(var(--toggle-ball-size) + 10px);
+}
+
+body.dark-mode {
+    --background-color: #333;
+    --text-color: #fff;
+    --link-color: #ffffff;
+    --soundcloud-link-background: #444;
+    --soundcloud-link-hover: #555;
+}
+
+.logo-title {
+    display: flex;
+    align-items: flex-start;
+}
+
+img#tunemeld-logo {
+    width: 12%;
+    margin-top: 5px;
+}
+
+h1.main-title {
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 600;
+}
+
+.theme-toggle-container {
+    position: relative;
+    margin-left: auto;
+    top: 4px;
+    right: 4px;
+    z-index: 1000;
+    padding: 0; /* Remove padding */
+}
+
+#theme-toggle-button {
+    display: none;
+}
+
+.theme-toggle {
+    width: var(--toggle-width);
+    height: var(--toggle-height);
+    position: relative;
+    display: block;
+    background: var(--toggle-background);
+    border-radius: var(--toggle-border-radius);
+    box-shadow: var(--toggle-shadow);
+    cursor: pointer;
+    padding: 0; /* Remove padding */
+}
+
+.theme-toggle:after {
+    content: "";
+    width: var(--toggle-ball-size);
+    height: var(--toggle-ball-size);
+    position: absolute;
+    top: var(--ball-position-offset);
+    left: var(--ball-position-offset);
+    background: linear-gradient(180deg, #ffcc89, #d8860b);
+    border-radius: 50%;
+    box-shadow: 0px 3px 7px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+}
+
+.theme-toggle img {
+    position: absolute;
+    width: var(--sun-icon-size);
+    height: var(--sun-icon-size);
+    top: calc((var(--toggle-height) - var(--sun-icon-size)) / 2);
+    z-index: 101;
+    transition: opacity 0.3s ease;
+    padding: 0; /* Remove padding */
+}
+
+.theme-toggle .sun {
+    left: var(--ball-position-margin);
+    fill: #fff;
+}
+
+.theme-toggle .moon {
+    right: var(--ball-position-margin);
+    fill: var(--moon-color);
+    opacity: 0;
+}
+
+#theme-toggle-button:checked + .theme-toggle {
+    background: var(--toggle-background-checked);
+}
+
+#theme-toggle-button:checked + .theme-toggle:after {
+    left: calc(var(--toggle-width) - var(--toggle-ball-size) - var(--ball-position-offset));
+    background: linear-gradient(180deg, #777, #3a3a3a);
+}
+
+#theme-toggle-button:checked + .theme-toggle .sun {
+    opacity: 0;
+}
+
+#theme-toggle-button:checked + .theme-toggle .moon {
+    opacity: 1;
+}
+
+.theme-toggle:active:after {
+    width: var(--gooey-effect-size);
+}
+
+#theme-toggle-button:active + .theme-toggle:after {
+    width: var(--gooey-effect-size);
+    left: calc(var(--ball-position-offset) + 2px);
+}
+
+#theme-toggle-button:checked:active + .theme-toggle:after {
+    width: var(--gooey-effect-size);
+    left: calc(var(--toggle-width) - var(--toggle-ball-size) - var(--gooey-effect-size)  2px);
+}
+
+#soundcloud-link {
+    background-color: var(--soundcloud-link-background);
+    border-radius: 5px;
+    font-family: 'DM Sans', sans-serif;
+    transition: background-color 0.3s ease;
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+    margin-top: 0;
+    padding: 3px 8px;
+    text-decoration: none;
+}
+
+#soundcloud-link:hover {
+    background-color: var(--soundcloud-link-hover);
+}
+
+#soundcloud-logo {
+    height: 20px;
+    margin-right: 5px;
+    width: 20px;
+}
+
+.stack-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    margin-left: auto;
+    padding: 0; 
+    text-align: right;
+}
+
+/* Desktop-Specific Styles */
+@media screen and (min-width: 768px) {
+    :root {
+        --toggle-width: 90px;
+        --toggle-height: 40px;
+        --ball-position-margin: 9px;
+    }
+    
+    .main-title {
+        margin-top: 40px;
+    }
+
+    #main-content {
+        max-width: 70rem;
+    }
+
+    .last-updated {
+        display: flex;
+        justify-content: center;
+        font-size: 0.8rem;
+    }
+
+    .theme-toggle-container {
+        margin-top: 0;
+        position: relative;
+        top: 0;
+        right: 0;
+        z-index: 1000;
+        padding: 0; /* Remove padding */
+    }
+
+    #soundcloud-link {
+        margin-top: 20px;
+        margin-left: auto;
+        font-size: 25px;
+    }
+
+    #soundcloud-logo {
+        height: 30px;
+        width: 30px;
+    }
+}
+
+/* Mobile Styles */
+@media screen and (max-width: 480px) {
+    :root {
+        --toggle-width: 45px;
+        --toggle-height: 20px;
+        --ball-position-margin: 5px;
+    }
+
+    .main-title {
+        font-size: 2rem;
+        margin-top: 9px;
+    }
+
+    .theme-toggle-container {
+        margin-top: 0;
+        position: absolute;
+        top: 0;
+        right: 0;
+        z-index: 1000;
+    }
+
+    #soundcloud-link {
+        margin-top: 20px;
+        margin-left: auto;
+        font-size: 10px;
+    }
+
+    #soundcloud-logo {
+        height: 15px;
+        width: 15px;
+    }
+}

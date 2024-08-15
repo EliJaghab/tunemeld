@@ -1,3 +1,4 @@
+import { loadTitleContent } from './title.js';
 import { setupSortButtons } from './playlist.js';
 import { setupGenreSelector, setupViewCountTypeSelector, updateGenreData } from './selectors.js';
 import { setupBodyClickListener, setupClosePlayerButton } from './servicePlayer.js';
@@ -6,24 +7,25 @@ import { initializeTosPrivacyOverlay } from './tosPrivacy.js';  // Import the ne
 document.addEventListener('DOMContentLoaded', initializeApp);
 
 function initializeApp() {
-  const genreSelector = document.getElementById('genre-selector');
-  const viewCountTypeSelector = document.getElementById('view-count-type-selector');
+  loadTitleContent().then(() => {
+    applyStoredTheme();
+    setupThemeToggle();
+    
+    const genreSelector = document.getElementById('genre-selector');
+    const viewCountTypeSelector = document.getElementById('view-count-type-selector');
 
-  let currentGenre = genreSelector.value || 'pop';
-  let viewCountType = viewCountTypeSelector.value || 'total-view-count';
+    let currentGenre = genreSelector.value || 'pop';
+    let viewCountType = viewCountTypeSelector.value || 'total-view-count';
 
-  updateGenreData(currentGenre, viewCountType, true);
+    updateGenreData(currentGenre, viewCountType, true);
 
-  setupGenreSelector(genreSelector);
-  setupViewCountTypeSelector(viewCountTypeSelector);
-  setupBodyClickListener();
-  setupSortButtons();
-  setupClosePlayerButton();
-  
-  // Initialize theme based on user time and preferences
-  applyStoredTheme();
-  setupThemeToggle();
-  initializeTosPrivacyOverlay();
+    setupGenreSelector(genreSelector);
+    setupViewCountTypeSelector(viewCountTypeSelector);
+    setupBodyClickListener();
+    setupSortButtons();
+    setupClosePlayerButton();
+    initializeTosPrivacyOverlay();
+  });
 }
 
 function applyStoredTheme() {
@@ -60,8 +62,3 @@ function setupThemeToggle() {
     themeToggleButton.addEventListener('change', toggleTheme);
   }
 }
-
-document.addEventListener('DOMContentLoaded', () => {
-  applyStoredTheme();
-  setupThemeToggle();
-});
