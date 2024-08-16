@@ -6,7 +6,6 @@ from datetime import datetime
 from typing import Dict, List
 
 import requests
-from requests.exceptions import RequestException
 
 from playlist_etl.transform import get_youtube_url_by_track_and_artist_name
 from playlist_etl.utils import (
@@ -65,13 +64,6 @@ def update_service_view_count(
         "current_timestamp": CURRENT_TIMESTAMP,
         "current_view_count": current_view_count,
     }
-
-    initial_view_count = track["view_count_data_json"][service_name]["initial_count_json"][
-        "initial_view_count"
-    ]
-    percentage_change = calculate_percentage_change(initial_view_count, current_view_count)
-    track["view_count_data_json"][service_name]["percentage_change"] = percentage_change
-
     return track
 
 
@@ -181,13 +173,6 @@ def get_spotify_track_url_by_isrc(isrc: str, spotify_client: Spotify) -> str:
         logging.info(f"Found track URL: {track_url}")
         return track_url
     raise ValueError(f"Could not find track for ISRC: {isrc}")
-
-
-def calculate_percentage_change(initial_count: int, current_count: int) -> float:
-    if initial_count == 0:
-        return 0.0
-    return ((current_count - initial_count) / initial_count) * 100
-
 
 if __name__ == "__main__":
     set_secrets()
