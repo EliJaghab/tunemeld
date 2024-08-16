@@ -6,13 +6,6 @@ export default {
         const url = new URL(request.url);
         const pathname = url.pathname;
 
-        if (pathname === '/') {
-
-            return new Response('Welcome to the homepage!', {
-              headers: { 'Content-Type': 'text/plain' },
-            });
-          }
-
         if (pathname.startsWith('/api/')) {
             if (request.method === 'OPTIONS') {
                 return handleOptions(request);
