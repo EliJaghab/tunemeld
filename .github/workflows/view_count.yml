@@ -47,8 +47,8 @@ jobs:
           make view_count
         
       - name: Run historical view counts
-          env:
-            MONGO_URI: ${{ secrets.MONGO_URI }}
-          run: |
-            source venv/bin/activate
-            make historical_view_count
+        env:
+          MONGO_URI: ${{ secrets.MONGO_URI }}
+        run: |
+          source venv/bin/activate
+          make historical_view_count
