@@ -1,22 +1,18 @@
-#player_container {
-    width: 100%;
-    display: none;
-    flex: none;
-}
-
-#player_content {
+.player_content {
     display: none;
     width: 100%;
 }
 
 #service-player-placeholder {
     width: 100%;
-}
-
-#volume-control {
-    display: none;
+    border-radius: 5px;
 }
 
 #close-player-button {
     display: none;
+}
+
+.player_content iframe, 
+#service-player-placeholder iframe {
+    border-radius: 10px; 
 }
