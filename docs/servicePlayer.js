@@ -1,6 +1,6 @@
-// High-Level Functions: Entry points and main logic
+import { fetchAndDisplayChartData } from './chart.js';
 
-export function setupBodyClickListener() {
+export function setupBodyClickListener(genre) {
   const body = document.body;
   if (!body) {
     console.error("Body element not found.");
@@ -10,10 +10,13 @@ export function setupBodyClickListener() {
   body.addEventListener('click', (event) => {
     const link = event.target.closest('a');
     if (link) {
-      handleLinkClick(event, link);
+      const row = link.closest('tr');
+      const isrc = row ? row.getAttribute('data-isrc') : null;
+      handleLinkClick(event, link, genre, isrc);
     }
   });
 }
+
 
 export function setupClosePlayerButton() {
   const closeButton = document.getElementById('close-player-button');
@@ -24,7 +27,7 @@ export function setupClosePlayerButton() {
   }
 }
 
-function handleLinkClick(event, link) {
+function handleLinkClick(event, link, genre, isrc) {
   const url = link.href;
   const serviceType = getServiceType(url);
 
@@ -32,24 +35,26 @@ function handleLinkClick(event, link) {
     event.preventDefault();
     openPlayer(url, serviceType);
     window.scrollTo({ top: 0, behavior: 'smooth' });
+    
+    if (isrc) {
+      fetchAndDisplayChartData(genre, isrc);
+    }
   }
 }
+
 
 function openPlayer(url, serviceType) {
   const placeholder = document.getElementById('service-player-placeholder');
   const closeButton = document.getElementById('close-player-button');
 
-  // Clear any previous content
   placeholder.innerHTML = '';
 
-  // Create a new iframe element
   const iframe = document.createElement('iframe');
   iframe.width = '100%';
   iframe.style.border = 'none';
 
   let showVolumeControl = false;
 
-  // Set iframe properties based on service type
   switch (serviceType) {
     case 'soundcloud':
       iframe.src = `https://w.soundcloud.com/player/?url=${encodeURIComponent(url)}&auto_play=true`;
@@ -79,9 +84,7 @@ function openPlayer(url, serviceType) {
       console.error("Unsupported service type:", serviceType);
   }
 
-  // Load iframe and then volume slider
   iframe.onload = function() {
-    toggleVolumeControl(showVolumeControl);
     closeButton.style.display = 'block';
   };
 
@@ -94,11 +97,8 @@ function closePlayer() {
 
   if (placeholder) placeholder.innerHTML = '';
   if (closeButton) closeButton.style.display = 'none';
-
-  toggleVolumeControl(false);
 }
 
-// Low-Level Utility Functions: Supporting functions used by mid-level functions
 
 function getServiceType(url) {
   if (isSoundCloudLink(url)) return 'soundcloud';
@@ -137,21 +137,4 @@ function getAppleMusicId(url) {
 function getYouTubeVideoId(url) {
   const match = url.match(/v=([a-zA-Z0-9_-]+)/);
   return match ? match[1] : '';
-}
-
-export function toggleVolumeControl(show) {
-  const volumeControl = document.getElementById('volume-control');
-  if (volumeControl) {
-    volumeControl.style.display = show ? 'block' : 'none';
-  }
-}
-
-function setVolume(volume) {
-  const iframe = document.querySelector('#service-player-placeholder iframe');
-  if (iframe && iframe.src.includes('soundcloud.com')) {
-    const widget = SC.Widget(iframe);
-    widget.setVolume(volume); 
-  } else {
-    console.error('SoundCloud iframe not found for volume setting');
-  }
 }
