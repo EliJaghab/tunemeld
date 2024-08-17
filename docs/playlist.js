@@ -110,7 +110,7 @@ function createTableRow(track, isAggregated, viewCountType) {
 
   const trackTitle = document.createElement('a');
   trackTitle.className = 'track-title';
-  trackTitle.href = track.track_url || '#';
+  trackTitle.href = track.youtube_url || '#';
   trackTitle.textContent = track.track_name || 'Unknown Track';
 
   const artistNameElement = document.createElement('span');
