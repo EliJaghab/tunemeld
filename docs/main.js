@@ -21,7 +21,7 @@ function initializeApp() {
 
     setupGenreSelector(genreSelector);
     setupViewCountTypeSelector(viewCountTypeSelector);
-    setupBodyClickListener();
+    setupBodyClickListener(currentGenre);
     setupSortButtons();
     setupClosePlayerButton();
     initializeTosPrivacyOverlay();
