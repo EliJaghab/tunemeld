@@ -90,6 +90,8 @@ function displayData(data, placeholderId, isAggregated = false, viewCountType) {
 
 function createTableRow(track, isAggregated, viewCountType) {  
   const row = document.createElement('tr');
+
+  row.setAttribute('data-isrc', track.isrc);
   
   const rankCell = document.createElement('td');
   rankCell.className = 'rank';
@@ -193,6 +195,8 @@ function displayViewCounts(track, row, viewCountType) {
 
 function createSmallPlaylistTableRow(track) {
   const row = document.createElement('tr');
+
+  row.setAttribute('data-isrc', track.isrc);
 
   const rankCell = document.createElement('td');
   rankCell.className = 'rank';
