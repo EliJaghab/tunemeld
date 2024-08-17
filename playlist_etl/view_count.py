@@ -174,6 +174,7 @@ def get_spotify_track_url_by_isrc(isrc: str, spotify_client: Spotify) -> str:
         return track_url
     raise ValueError(f"Could not find track for ISRC: {isrc}")
 
+
 if __name__ == "__main__":
     set_secrets()
     mongo_client = get_mongo_client()
