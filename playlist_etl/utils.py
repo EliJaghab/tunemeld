@@ -7,17 +7,15 @@ import psutil
 from dotenv import load_dotenv
 from fp.fp import FreeProxy
 from pymongo import MongoClient
+from pymongo.collection import Collection
 from selenium import webdriver
 from selenium.common.exceptions import (
-    InvalidSelectorException,
     NoSuchElementException,
     TimeoutException,
-    WebDriverException,
 )
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.ui import WebDriverWait
 from spotipy import Spotify
 from spotipy.oauth2 import SpotifyClientCredentials
 
@@ -38,6 +36,10 @@ def get_mongo_client():
     if not mongo_uri:
         raise Exception("MONGO_URI environment variable not set")
     return MongoClient(mongo_uri)
+
+def get_mongo_collection(mongo_client: MongoClient, collection_name: str) -> Collection:
+    db = mongo_client[PLAYLIST_ETL_COLLECTION_NAME]
+    return db[collection_name]
 
 
 def get_spotify_client() -> Spotify:
