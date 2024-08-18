@@ -47,9 +47,16 @@ export async function fetchAndDisplayChartData(genre, isrc) {
 function displayChart(track) {
     const ctx = document.getElementById('myChart').getContext('2d');
 
-    const labels = track.view_counts.Youtube.map(viewCount => new Date(viewCount[0]).toLocaleDateString());
-    const spotifyData = track.view_counts.Spotify.map(viewCount => viewCount[1]);
-    const youtubeData = track.view_counts.Youtube.map(viewCount => viewCount[1]);
+    // Sort the view counts based on the timestamp
+    const sortedSpotifyViewCounts = track.view_counts.Spotify.sort((a, b) => new Date(a[0]) - new Date(b[0]));
+    const sortedYoutubeViewCounts = track.view_counts.Youtube.sort((a, b) => new Date(a[0]) - new Date(b[0]));
+
+    const labels = sortedYoutubeViewCounts.map(viewCount => new Date(viewCount[0]).toLocaleString('en-US', { 
+        hour12: false, 
+        timeZoneName: 'short'
+    }));
+    const spotifyData = sortedSpotifyViewCounts.map(viewCount => viewCount[1]);
+    const youtubeData = sortedYoutubeViewCounts.map(viewCount => viewCount[1]);
 
     const albumCover = track.album_cover_url;
 
@@ -64,28 +71,32 @@ function displayChart(track) {
                 {
                     label: 'Spotify Views',
                     data: spotifyData,
-                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderColor: '#1DB954', 
                     fill: false,
                     pointRadius: 10,
-                    pointBackgroundColor: 'rgba(75, 192, 192, 1)'
+                    pointBackgroundColor: '#1DB954' 
                 },
                 {
                     label: 'YouTube Views',
                     data: youtubeData,
-                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderColor: '#FF0000', 
                     fill: false,
                     pointRadius: 10,
-                    pointBackgroundColor: 'rgba(255, 99, 132, 1)'
+                    pointBackgroundColor: '#FF0000'
                 }
             ]
         },
         options: {
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
-            },
             plugins: {
+                title: {
+                    display: true,
+                    text: `${track.track_name} by ${track.artist_name} - View Counts Received Over Time`
+                },
+                legend: {
+                    display: true,
+                    position: 'top',
+                    align: 'end'
+                },
                 afterDraw: (chart) => {
                     const ctx = chart.ctx;
                     chart.data.datasets.forEach((dataset, datasetIndex) => {
@@ -100,6 +111,11 @@ function displayChart(track) {
                             }
                         });
                     });
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true
                 }
             }
         }
