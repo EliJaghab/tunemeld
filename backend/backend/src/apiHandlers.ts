@@ -28,14 +28,14 @@ export async function handleGraphData(searchParams: URLSearchParams, env: any): 
         const trackViewsQuery = {
             isrc: { $in: isrcList.map(track => track.isrc) }
         };
-        const trackViews = await fetchFromMongoDB('track_views', trackViewsQuery, env);
+        const trackViews = await fetchFromMongoDB('historical_track_views', trackViewsQuery, env);
 
         // Map track views to the corresponding track details
         const responseData = isrcList.map(track => {
             const viewData = trackViews.find(view => view.isrc === track.isrc);
 
-            const spotifyViews = viewData?.view_counts?.Spotify?.map((entry: any) => [entry.timestamp, entry.view_count]) || [];
-            const youtubeViews = viewData?.view_counts?.Youtube?.map((entry: any) => [entry.timestamp, entry.view_count]) || [];
+            const spotifyViews = viewData?.view_counts?.Spotify?.map((entry: any) => [entry.current_timestamp, entry.delta_count]) || [];
+            const youtubeViews = viewData?.view_counts?.Youtube?.map((entry: any) => [entry.current_timestamp, entry.delta_count]) || [];
 
             return {
                 isrc: track.isrc,
