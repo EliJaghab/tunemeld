@@ -1,7 +1,8 @@
 import logging
 from datetime import datetime
 from typing import Dict, List
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import ThreadPoolExecutor, as_completed
+
 from pymongo import MongoClient
 from pymongo.collection import Collection
 
@@ -64,10 +65,6 @@ def update_historical_view_count(
                     "$sort": {"current_timestamp": -1},
                 }
             },
-            "$set": {
-                "last_updated": CURRENT_TIMESTAMP,
-                f"latest_view_count.{service_name}": current_view_count
-            },
             "$setOnInsert": {
                 "isrc": isrc,
                 "first_seen": CURRENT_TIMESTAMP
@@ -75,7 +72,6 @@ def update_historical_view_count(
         },
         upsert=True
     )
-
     if result.modified_count > 0 or result.upserted_id:
         logging.info(f"Updated historical view count for ISRC: {isrc}, Service: {service_name}")
     else:
@@ -85,8 +81,8 @@ def update_historical_view_count(
 def process_track(track: Dict, historical_collection: Collection) -> None:
     """Process a single track's view counts."""
     isrc = track["isrc"]
-    for service_name, view_counts in track["view_count_data_json"].items():
-        current_view_count = view_counts[-1]["current_view_count"]
+    for service_name, service_data in track["view_count_data_json"].items():
+        current_view_count = service_data["current_count_json"]["current_view_count"]
         previous_view_count = get_previous_view_count(isrc, service_name, historical_collection)
         delta_count = current_view_count - previous_view_count
         update_historical_view_count(historical_collection, isrc, service_name, current_view_count, delta_count)
@@ -95,8 +91,12 @@ def process_track(track: Dict, historical_collection: Collection) -> None:
 def process_tracks(tracks: List[Dict], mongo_client: MongoClient) -> None:
     """Process all tracks with concurrency."""
     historical_collection = get_mongo_collection(mongo_client, HISTORICAL_TRACK_VIEWS_COLLECTION)
+    
     with ThreadPoolExecutor() as executor:
-        executor.map(lambda track: process_track(track, historical_collection), tracks)
+        futures = {executor.submit(process_track, track, historical_collection): track for track in tracks}
+        
+        for future in as_completed(futures):
+            future.result()
 
 
 if __name__ == "__main__":
