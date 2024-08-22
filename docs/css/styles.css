@@ -7,6 +7,8 @@
   --btn-text-color: #333;
   --overlay-background: rgba(255, 255, 255, 0.9);
   --overlay-text-color: #333;
+  --table-header-background: #e0e0e0;
+  --table-header-text-color: #333;
 }
 
 body.dark-mode {
@@ -18,6 +20,8 @@ body.dark-mode {
   --btn-text-color: #fff;
   --overlay-background: rgba(0, 0, 0, 0.5);
   --overlay-text-color: #fff;
+  --table-header-background: #555;
+  --table-header-text-color: #fff;
 }
 
 /* Global Styles */
@@ -49,8 +53,12 @@ a {
 /* Buttons */
 .btn {
   padding: 10px 20px;
+  color: var(--btn-text-color);
+  border-radius: 5px;
+  cursor: pointer;
 }
 
+/* Collapse Button */
 .collapse-button {
   background-color: var(--btn-background);
   border: none;
@@ -78,7 +86,7 @@ a {
 }
 
 .footer-link {
-  color: #ccc;
+  color: var(--text-color);
   font-size: 0.8rem;
   margin-bottom: 5px;
 }
@@ -107,7 +115,7 @@ a {
 }
 
 .overlay-content {
-  background-color: white;
+  background-color: var(--container-background);
   border-radius: 5px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
   color: var(--overlay-text-color);
@@ -176,7 +184,6 @@ label {
   align-items: flex-start; /* Align items to the left */
   margin-top: 10px; /* Add space between the title and the stack */
 }
-
 
 /* Desktop-Specific Styles */
 @media screen and (min-width: 768px) {
