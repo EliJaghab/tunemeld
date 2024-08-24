@@ -118,6 +118,7 @@ class WebDriverManager:
     def find_element_by_xpath(
         self, url: str, xpath: str, attribute: str = None, retries: int = 5, retry_delay: int = 10
     ) -> str:
+        
         def _attempt_find_element() -> str:
             try:
                 self.driver.implicitly_wait(8)
@@ -141,7 +142,7 @@ class WebDriverManager:
 
                 logging.warning("Element not found even after waiting")
                 return "Element not found"
-
+            
             except TimeoutException:
                 logging.error("Timed out waiting for element")
                 return "Timed out waiting for element"
@@ -184,10 +185,11 @@ class WebDriverManager:
                 return result
 
             logging.info(f"Retrying... (attempt {attempt + 1} of {retries})")
-            time.sleep(retry_delay)
+            time.sleep(retry_delay * (2 ** (attempt - 1)))  # Exponential backoff
             attempt += 1
 
         return result
+
 
     def _is_error_occurred(self, result: str) -> bool:
         error_conditions = [
