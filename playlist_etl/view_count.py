@@ -34,9 +34,13 @@ SPOTIFY_VIEW_COUNT_XPATH = "//span[contains(@class, 'encore-text') and contains(
 
 def initialize_new_view_count_playlists(mongo_client: MongoClient) -> None:
     if collection_is_empty(VIEW_COUNTS_COLLECTION, mongo_client):
-        aggregated_playlists = read_data_from_mongo(mongo_client, AGGREGATED_DATA_COLLECTION)
+        aggregated_playlists = read_data_from_mongo(
+            mongo_client, AGGREGATED_DATA_COLLECTION
+        )
         for playlist in aggregated_playlists:
-            insert_or_update_data_to_mongo(mongo_client, VIEW_COUNTS_COLLECTION, playlist)
+            insert_or_update_data_to_mongo(
+                mongo_client, VIEW_COUNTS_COLLECTION, playlist
+            )
 
 
 def update_service_view_count(
@@ -48,7 +52,9 @@ def update_service_view_count(
 ) -> Dict:
     service_url_key = f"{service_name}_url".lower()
     if service_url_key not in track or not track[service_url_key]:
-        track[service_url_key] = get_service_url(service_name, track, spotify_client, mongo_client)
+        track[service_url_key] = get_service_url(
+            service_name, track, spotify_client, mongo_client
+        )
 
     if "view_count_data_json" not in track:
         track["view_count_data_json"] = defaultdict(dict)
@@ -114,7 +120,9 @@ def get_service_url(
             raise ValueError("Unexpected service name")
 
 
-def get_view_count(track: dict, service_name: str, webdriver_manager: WebDriverManager) -> int:
+def get_view_count(
+    track: dict, service_name: str, webdriver_manager: WebDriverManager
+) -> int:
     match service_name:
         case "Spotify":
             return get_spotify_track_view_count(track["spotify_url"], webdriver_manager)
@@ -126,7 +134,9 @@ def get_view_count(track: dict, service_name: str, webdriver_manager: WebDriverM
 
 def get_spotify_track_view_count(url: str, webdriver_manager: WebDriverManager) -> int:
     try:
-        play_count_info = webdriver_manager.find_element_by_xpath(url, SPOTIFY_VIEW_COUNT_XPATH)
+        play_count_info = webdriver_manager.find_element_by_xpath(
+            url, SPOTIFY_VIEW_COUNT_XPATH
+        )
         if play_count_info:
             play_count = int(play_count_info.replace(",", ""))
             logging.info(play_count)
@@ -141,9 +151,7 @@ def get_youtube_track_view_count(youtube_url: str) -> int:
     video_id = youtube_url.split("v=")[-1]
 
     api_key = os.getenv("GOOGLE_API_KEY")
-    youtube_api_url = (
-        f"https://www.googleapis.com/youtube/v3/videos?part=statistics&id={video_id}&key={api_key}"
-    )
+    youtube_api_url = f"https://www.googleapis.com/youtube/v3/videos?part=statistics&id={video_id}&key={api_key}"
 
     response = requests.get(youtube_api_url)
 
@@ -159,7 +167,9 @@ def get_youtube_track_view_count(youtube_url: str) -> int:
     else:
         logging.error(f"Error: {response.status_code}, {response.text}")
         if response.status_code == 403 and "quotaExceeded" in response.text:
-            raise ValueError(f"Quota exceeded: Could not get view count for {youtube_url}")
+            raise ValueError(
+                f"Quota exceeded: Could not get view count for {youtube_url}"
+            )
         raise ValueError(f"Failed to retrieve view count for {youtube_url}")
 
 
@@ -182,4 +192,6 @@ if __name__ == "__main__":
     spotify_client = get_spotify_client()
     view_counts_playlists = read_data_from_mongo(mongo_client, VIEW_COUNTS_COLLECTION)
     webdriver_manager = WebDriverManager(use_proxy=False)
-    update_view_counts(view_counts_playlists, mongo_client, webdriver_manager, spotify_client)
+    update_view_counts(
+        view_counts_playlists, mongo_client, webdriver_manager, spotify_client
+    )

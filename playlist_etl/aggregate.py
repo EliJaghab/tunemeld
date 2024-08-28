@@ -88,7 +88,9 @@ if __name__ == "__main__":
             "genre_name": genre,
             "tracks": consolidated_tracks,
         }
-        insert_or_update_data_to_mongo(mongo_client, AGGREGATED_DATA_COLLECTION, document)
+        insert_or_update_data_to_mongo(
+            mongo_client, AGGREGATED_DATA_COLLECTION, document
+        )
         print(f"Aggregation and consolidation completed for genre: {genre}.")
 
     clear_collection(mongo_client, VIEW_COUNTS_COLLECTION)
