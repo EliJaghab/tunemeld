@@ -14,6 +14,14 @@ import os
 from pathlib import Path
 from dotenv import load_dotenv
 
+# Mongo DB Configuration
+load_dotenv()
+
+MONGO_DATA_API_KEY = os.getenv("MONGO_DATA_API_KEY")
+MONGO_DATA_API_ENDPOINT = os.getenv("MONGO_DATA_API_ENDPOINT")
+MONGO_URI = os.getenv("MONGO_URI")
+MONGO_DB_NAME = os.getenv("MONGO_DB_NAME")
+
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -80,25 +88,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "django_backend.wsgi.application"
 
-# Database
-# https://docs.djangoproject.com/en/5.1/ref/settings/#databases
-
-load_dotenv()
-
-MONGO_DATA_API_KEY = os.getenv("MONGO_DATA_API_KEY")
-MONGO_DATA_API_ENDPOINT = os.getenv("MONGO_DATA_API_ENDPOINT")
-MONGO_URI = os.getenv("MONGO_URI")
-MONGO_DB_NAME = os.getenv("MONGO_DB_NAME")
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'djongo', 
-        'NAME': MONGO_DB_NAME,
-        'CLIENT': {
-            'host': MONGO_URI,  
-        },
-    }
-}
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
