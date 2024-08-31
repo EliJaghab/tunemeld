@@ -8,6 +8,11 @@ __pycache__/
 *.egg
 *.egg-info/
 
+# Django
+local_settings.py
+/output_static/
+/staticfiles/ 
+
 # Virtual Environment
 venv/
 .vscode/
