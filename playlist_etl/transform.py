@@ -27,9 +27,7 @@ APPLE_MUSIC_ALBUM_COVER_CACHE_COLLECTION = "apple_music_album_cover_cache"
 
 MAX_THREADS = 50
 
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
 
 class Track:
@@ -75,15 +73,11 @@ class Track:
 
     def set_apple_music_album_cover_url(self, mongo_client):
         if not self.album_cover_url:
-            self.album_cover_url = get_apple_music_album_cover(
-                self.track_url, mongo_client
-            )
+            self.album_cover_url = get_apple_music_album_cover(self.track_url, mongo_client)
 
 
 def convert_to_track_objects(data, service_name, genre_name):
-    logging.info(
-        f"Converting data to track objects for {service_name} and genre {genre_name}"
-    )
+    logging.info(f"Converting data to track objects for {service_name} and genre {genre_name}")
     match service_name:
         case "AppleMusic":
             return convert_apple_music_raw_export_to_track_type(data, genre_name)
@@ -104,9 +98,7 @@ def convert_apple_music_raw_export_to_track_type(data, genre_name):
             track_name = track_data["name"]
             artist_name = track_data["artist"]
             track_url = track_data["link"]
-            track = Track(
-                track_name, artist_name, track_url, rank, "AppleMusic", genre_name
-            )
+            track = Track(track_name, artist_name, track_url, rank, "AppleMusic", genre_name)
             tracks.append(track)
     return tracks
 
@@ -213,7 +205,9 @@ def get_youtube_url_by_track_and_artist_name(track_name, artist_name, mongo_clie
     query = f"{track_name} {artist_name}"
     api_key = os.getenv("GOOGLE_API_KEY")
 
-    youtube_search_url = f"https://www.googleapis.com/youtube/v3/search?part=snippet&q={query}&key={api_key}"
+    youtube_search_url = (
+        f"https://www.googleapis.com/youtube/v3/search?part=snippet&q={query}&key={api_key}"
+    )
     response = requests.get(youtube_search_url)
 
     if response.status_code == 200:
@@ -234,9 +228,7 @@ def get_youtube_url_by_track_and_artist_name(track_name, artist_name, mongo_clie
     else:
         logging.info(f"Error: {response.status_code}, {response.text}")
         if response.status_code == 403 and "quotaExceeded" in response.text:
-            raise ValueError(
-                f"Could not get Youtube URL for {track_name} {artist_name}"
-            )
+            raise ValueError(f"Could not get Youtube URL for {track_name} {artist_name}")
         return None
 
 
@@ -286,9 +278,7 @@ def transform_playlists(mongo_client):
             data = document["data_json"]
             logging.info(f"Processing {service_name} playlist for genre {genre}")
             tracks = convert_to_track_objects(data, service_name, genre)
-            logging.info(
-                f"Converted {len(tracks)} tracks for {service_name} in genre {genre}"
-            )
+            logging.info(f"Converted {len(tracks)} tracks for {service_name} in genre {genre}")
             all_tracks.extend(tracks)
 
         if not all_tracks:
@@ -305,10 +295,7 @@ def transform_playlists(mongo_client):
 
         logging.info("Setting YouTube URLs for all tracks")
         with concurrent.futures.ThreadPoolExecutor(max_workers=1) as executor:
-            futures = [
-                executor.submit(track.set_youtube_url, mongo_client)
-                for track in all_tracks
-            ]
+            futures = [executor.submit(track.set_youtube_url, mongo_client) for track in all_tracks]
             concurrent.futures.wait(futures)
 
         logging.info("Setting Apple Music album cover URLs for applicable tracks")
@@ -330,8 +317,7 @@ def process_tracks(tracks, source_name, genre, mongo_client):
     filtered_tracks = [
         track
         for track in tracks
-        if track.source_name.lower() == source_name.lower()
-        and track.genre_name == genre
+        if track.source_name.lower() == source_name.lower() and track.genre_name == genre
     ]
     if not filtered_tracks:
         logging.info(f"No tracks found for {source_name} in genre {genre}")
@@ -349,9 +335,7 @@ def process_tracks(tracks, source_name, genre, mongo_client):
         "tracks": [track.to_dict() for track in sorted_tracks],
     }
     insert_or_update_data_to_mongo(mongo_client, TRANSFORMED_DATA_COLLECTION, document)
-    logging.info(
-        f"Inserted {len(filtered_tracks)} tracks for {source_name} in genre {genre}"
-    )
+    logging.info(f"Inserted {len(filtered_tracks)} tracks for {source_name} in genre {genre}")
 
 
 if __name__ == "__main__":

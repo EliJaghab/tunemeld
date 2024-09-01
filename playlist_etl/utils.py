@@ -9,10 +9,7 @@ from fp.fp import FreeProxy
 from pymongo import MongoClient
 from pymongo.collection import Collection
 from selenium import webdriver
-from selenium.common.exceptions import (
-    NoSuchElementException,
-    TimeoutException,
-)
+from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
@@ -21,16 +18,12 @@ from spotipy.oauth2 import SpotifyClientCredentials
 
 PLAYLIST_ETL_COLLECTION_NAME = "playlist_etl"
 
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
 
 def set_secrets():
     if not os.getenv("GITHUB_ACTIONS"):
-        env_path = os.path.abspath(
-            os.path.join(os.path.dirname(__file__), "..", ".env")
-        )
+        env_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".env"))
         logging.info("env_path" + env_path)
         load_dotenv(dotenv_path=env_path)
 
@@ -143,15 +136,11 @@ class WebDriverManager:
                     if element and element.is_displayed():
                         if attribute:
                             element_value = element.get_attribute(attribute)
-                            logging.info(
-                                f"Successfully found element attribute: {element_value}"
-                            )
+                            logging.info(f"Successfully found element attribute: {element_value}")
                             return element_value
                         else:
                             element_text = element.text
-                            logging.info(
-                                f"Successfully found element text: {element_text}"
-                            )
+                            logging.info(f"Successfully found element text: {element_text}")
                             return element_text
 
                 logging.warning("Element not found even after waiting")
@@ -186,9 +175,7 @@ class WebDriverManager:
             self._restart_driver(new_proxy=("Rate limit detected" in result))
 
             # Retry again after restarting the driver with the new proxy if rate limited
-            result = self._retry_with_backoff(
-                retries, retry_delay, _attempt_find_element
-            )
+            result = self._retry_with_backoff(retries, retry_delay, _attempt_find_element)
 
         return result
 
@@ -250,9 +237,7 @@ class WebDriverManager:
     def _check_memory_usage(self):
         memory = psutil.virtual_memory()
         available_memory_mb = memory.available / (1024 * 1024)
-        memory_threshold_mb = available_memory_mb * (
-            self.memory_threshold_percent / 100
-        )
+        memory_threshold_mb = available_memory_mb * (self.memory_threshold_percent / 100)
         logging.info(f"Available Memory: {available_memory_mb:.2f} MB")
         logging.info(f"Memory Threshold: {memory_threshold_mb:.2f} MB")
         return available_memory_mb < memory_threshold_mb

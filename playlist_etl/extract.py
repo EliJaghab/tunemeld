@@ -59,9 +59,7 @@ SERVICE_CONFIGS = {
 DEBUG_MODE = False
 NO_RAPID = False
 
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
 
 class RapidAPIClient:
@@ -110,9 +108,7 @@ class Extractor:
             return quote(url)
 
     def get_playlist(self):
-        raise NotImplementedError(
-            "Each service must implement its own `get_playlist` method."
-        )
+        raise NotImplementedError("Each service must implement its own `get_playlist` method.")
 
 
 class AppleMusicFetcher(Extractor):
@@ -138,15 +134,11 @@ class AppleMusicFetcher(Extractor):
         subtitle = subtitle_tag.get_text(strip=True) if subtitle_tag else "Unknown"
 
         stream_tag = doc.find("amp-ambient-video", {"class": "editorial-video"})
-        playlist_stream_url = (
-            stream_tag["src"] if stream_tag and stream_tag.get("src") else None
-        )
+        playlist_stream_url = stream_tag["src"] if stream_tag and stream_tag.get("src") else None
 
         playlist_cover_description_tag = doc.find("p", {"data-testid": "truncate-text"})
         playlist_cover_description_text = (
-            unidecode(
-                html.unescape(playlist_cover_description_tag.get_text(strip=True))
-            )
+            unidecode(html.unescape(playlist_cover_description_tag.get_text(strip=True)))
             if playlist_cover_description_tag
             else None
         )
@@ -159,9 +151,7 @@ class AppleMusicFetcher(Extractor):
 
     def get_cover_url(self, url: str) -> str:
         xpath = "//amp-ambient-video"
-        src_attribute = self.webdriver_manager.find_element_by_xpath(
-            url, xpath, attribute="src"
-        )
+        src_attribute = self.webdriver_manager.find_element_by_xpath(url, xpath, attribute="src")
 
         if src_attribute == "Element not found" or "An error occurred" in src_attribute:
             raise ValueError(
@@ -171,9 +161,7 @@ class AppleMusicFetcher(Extractor):
         if src_attribute.endswith(".m3u8"):
             return src_attribute
         else:
-            raise ValueError(
-                f"Found src attribute, but it's not an m3u8 URL: {src_attribute}"
-            )
+            raise ValueError(f"Found src attribute, but it's not an m3u8 URL: {src_attribute}")
 
 
 class SoundCloudFetcher(Extractor):
@@ -194,15 +182,11 @@ class SoundCloudFetcher(Extractor):
         doc = BeautifulSoup(response.text, "html.parser")
 
         playlist_name_tag = doc.find("meta", {"property": "og:title"})
-        self.playlist_name = (
-            playlist_name_tag["content"] if playlist_name_tag else "Unknown"
-        )
+        self.playlist_name = playlist_name_tag["content"] if playlist_name_tag else "Unknown"
 
         description_tag = doc.find("meta", {"name": "description"})
         self.playlist_cover_description_text = (
-            description_tag["content"]
-            if description_tag
-            else "No description available"
+            description_tag["content"] if description_tag else "No description available"
         )
 
         playlist_cover_url_tag = doc.find("meta", {"property": "og:image"})
@@ -218,7 +202,9 @@ class SpotifyFetcher(Extractor):
         super().__init__(client, service_name, genre)
 
     def get_playlist(self, offset=0, limit=100):
-        url = f"{self.base_url}?{self.param_key}={self.playlist_param}&offset={offset}&limit={limit}"
+        url = (
+            f"{self.base_url}?{self.param_key}={self.playlist_param}&offset={offset}&limit={limit}"
+        )
         return get_json_response(url, self.host, self.api_key)
 
     def set_playlist_details(self):
@@ -228,9 +214,7 @@ class SpotifyFetcher(Extractor):
         doc = BeautifulSoup(response.text, "html.parser")
 
         playlist_name_tag = doc.find("meta", {"property": "og:title"})
-        self.playlist_name = (
-            playlist_name_tag["content"] if playlist_name_tag else "Unknown"
-        )
+        self.playlist_name = playlist_name_tag["content"] if playlist_name_tag else "Unknown"
 
         description_div = doc.find(
             lambda tag: tag.name == "div" and "Cover:" in tag.get_text(strip=True)
