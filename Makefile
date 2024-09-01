@@ -68,3 +68,12 @@ invalidate_cache: setup_env
 test: setup_env
 	@echo "Running tests..."
 	python -m unittest discover tests/
+
+build_backend:
+	pip install -r requirements.txt
+	python manage.py collectstatic --noinput
+
+start_backend:
+	gunicorn django_backend.wsgi
+
+
