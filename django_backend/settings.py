@@ -1,5 +1,6 @@
 import os
 from pathlib import Path
+
 from dotenv import load_dotenv
 
 # Mongo DB Configuration
@@ -12,8 +13,7 @@ MONGO_DB_NAME = os.getenv("MONGO_DB_NAME")
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-CSRF_TRUSTED_ORIGINS = ['https://www.tunemeld.com']
-
+CSRF_TRUSTED_ORIGINS = ["https://www.tunemeld.com"]
 
 
 # Quick-start development settings - unsuitable for production
@@ -27,8 +27,8 @@ DEBUG = False
 
 ALLOWED_HOSTS = []
 
-STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_URL = "/static/"
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 # Application definition
 
@@ -41,12 +41,12 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django_backend",
-    "django_distill"
+    "django_distill",
 ]
 
 MIDDLEWARE = [
-    "corsheaders.middleware.CorsMiddleware", 
-    "django.middleware.security.SecurityMiddleware",  
+    "corsheaders.middleware.CorsMiddleware",
+    "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -55,7 +55,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",  
+    "http://localhost:3000",
 ]
 
 ROOT_URLCONF = "django_backend.urls"
@@ -124,5 +124,3 @@ try:
     from .local_settings import *
 except:
     pass
-
-
