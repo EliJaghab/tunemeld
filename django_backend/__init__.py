@@ -1,4 +1,4 @@
-from django.conf import settings
+from  . import settings
 from pymongo import MongoClient
 
 mongo_client = MongoClient(settings.MONGO_URI)
