@@ -4,8 +4,12 @@ from collections import defaultdict
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime
 from typing import Dict, List
+from tenacity import retry, wait_exponential, stop_after_attempt
+
 
 import requests
+from requests.exceptions import RequestException
+
 
 from playlist_etl.transform import get_youtube_url_by_track_and_artist_name
 from playlist_etl.utils import (
@@ -28,7 +32,7 @@ logging.basicConfig(
 AGGREGATED_DATA_COLLECTION = "aggregated_playlists"
 VIEW_COUNTS_COLLECTION = "view_counts_playlists"
 CURRENT_TIMESTAMP = datetime.now().isoformat()
-SERVICE_NAMES = ["Spotify", "Youtube"]
+SERVICE_NAMES = ["Youtube"]
 SPOTIFY_VIEW_COUNT_XPATH = "//span[contains(@class, 'encore-text') and contains(@class, 'encore-text-body-small') and contains(@class, 'RANLXG3qKB61Bh3') and @data-testid='playcount']"
 
 
@@ -137,6 +141,7 @@ def get_spotify_track_view_count(url: str, webdriver_manager: WebDriverManager) 
     raise ValueError(f"Could not find play count for {url}")
 
 
+@retry(wait=wait_exponential(multiplier=1, min=4, max=10), stop=stop_after_attempt(3), reraise=True)
 def get_youtube_track_view_count(youtube_url: str) -> int:
     video_id = youtube_url.split("v=")[-1]
 
@@ -145,22 +150,29 @@ def get_youtube_track_view_count(youtube_url: str) -> int:
         f"https://www.googleapis.com/youtube/v3/videos?part=statistics&id={video_id}&key={api_key}"
     )
 
-    response = requests.get(youtube_api_url)
+    try:
+        response = requests.get(youtube_api_url)
+        response.raise_for_status()
 
-    if response.status_code == 200:
         data = response.json()
         if data["items"]:
             view_count = data["items"][0]["statistics"]["viewCount"]
             logging.info(f"Video ID {video_id} has {view_count} views.")
             return int(view_count)
         else:
-            logging.info(f"No data found for video ID {video_id}")
+            logging.warning(f"No data found for video ID {video_id}")
             return 0
-    else:
-        logging.error(f"Error: {response.status_code}, {response.text}")
+    except RequestException as e:
+        logging.error(f"Request failed: {e}")
         if response.status_code == 403 and "quotaExceeded" in response.text:
             raise ValueError(f"Quota exceeded: Could not get view count for {youtube_url}")
-        raise ValueError(f"Failed to retrieve view count for {youtube_url}")
+        raise ValueError(f"Failed to retrieve view count for {youtube_url}: {e}")
+    except ValueError as e:
+        logging.error(f"Value error: {e}")
+        raise
+    except Exception as e:
+        logging.exception(f"An unexpected error occurred: {e}")
+        raise ValueError(f"Unexpected error occurred for {youtube_url}: {e}")
 
 
 def get_spotify_track_url_by_isrc(isrc: str, spotify_client: Spotify) -> str:
