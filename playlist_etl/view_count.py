@@ -4,12 +4,10 @@ from collections import defaultdict
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime
 from typing import Dict, List
-from tenacity import retry, wait_exponential, stop_after_attempt
-
 
 import requests
 from requests.exceptions import RequestException
-
+from tenacity import retry, stop_after_attempt, wait_exponential
 
 from playlist_etl.transform import get_youtube_url_by_track_and_artist_name
 from playlist_etl.utils import (

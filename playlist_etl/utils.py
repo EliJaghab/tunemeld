@@ -163,12 +163,9 @@ class WebDriverManager:
                     return "Rate limit detected, retrying with new proxy..."
 
                 return f"An error occurred: {error_message}"
-        
-        
 
         logging.info(f"Attempting to find element on URL: {url} using XPath: {xpath}")
 
-        
         result = self._retry_with_backoff(retries, retry_delay, _attempt_find_element)
 
         # Check if rate limiting or other errors occurred, retry with proxy if needed
