@@ -70,7 +70,8 @@ test: setup_env
 	python -m unittest discover tests/
 
 build_backend:
-	pip install -r requirements.txt
+	pip install --upgrade pip  
+	pip install -r requirements.txt  
 	python manage.py collectstatic --noinput
 
 start_backend:
