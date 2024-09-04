@@ -111,7 +111,6 @@ class WebDriverManager:
     def __init__(self, use_proxy=False, memory_threshold_percent=75):
         self.use_proxy = use_proxy
         self.memory_threshold_percent = memory_threshold_percent
-        self.driver = self._create_webdriver(use_proxy)
 
     def find_element_by_xpath(
         self,
@@ -121,6 +120,8 @@ class WebDriverManager:
         retries: int = 5,
         retry_delay: int = 10,
     ) -> str:
+        if not hasattr(self, "driver") or not self.driver:
+            self.driver = self._create_webdriver(self.use_proxy)
 
         def _attempt_find_element() -> str:
             try:
@@ -162,10 +163,12 @@ class WebDriverManager:
                     return "Rate limit detected, retrying with new proxy..."
 
                 return f"An error occurred: {error_message}"
+        
+        
 
         logging.info(f"Attempting to find element on URL: {url} using XPath: {xpath}")
 
-        # Initial attempt without proxy
+        
         result = self._retry_with_backoff(retries, retry_delay, _attempt_find_element)
 
         # Check if rate limiting or other errors occurred, retry with proxy if needed
