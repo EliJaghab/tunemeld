@@ -9,7 +9,6 @@ __pycache__/
 *.egg-info/
 
 # Django
-local_settings.py
 /output_static/
 /staticfiles/ 
 

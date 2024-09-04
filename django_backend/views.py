@@ -9,7 +9,7 @@ from . import (
 
 
 def root(request):
-    return HttpResponse("Hello, World!")
+    return HttpResponse("Welcome to the Tunemeld Backend!")
 
 
 def get_graph_data(request, genre_name):
