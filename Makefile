@@ -70,10 +70,10 @@ test: setup_env
 	python -m unittest discover tests/
 
 build_backend:
-	apt-get update && apt-get install -y python3 python3-pip
 	pip install --upgrade pip  
 	pip install -r requirements.txt  
-	python manage.py collectstatic --noinput
+	python3 manage.py collectstatic --noinput
+
 
 
 
