@@ -135,6 +135,10 @@ def convert_spotify_raw_export_to_track_type(data, genre_name):
     tracks = []
     for rank, item in enumerate(data["items"]):
         track_info = item["track"]
+        
+        if not track_info: 
+            continue
+        
         isrc = track_info["external_ids"]["isrc"]
         track_name = track_info["name"]
         track_url = track_info["external_urls"]["spotify"]
