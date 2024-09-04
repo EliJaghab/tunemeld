@@ -71,10 +71,10 @@ test: setup_env
 
 build_backend:
 	apt-get update && apt-get install -y python3 python3-pip
-	ln -s /usr/bin/pip3 /usr/bin/pip
 	pip install --upgrade pip  
 	pip install -r requirements.txt  
 	python manage.py collectstatic --noinput
+
 
 
 start_backend:
