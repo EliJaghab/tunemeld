@@ -9,4 +9,4 @@ RUN pip install -r requirements.txt
 
 ENV DJANGO_SETTINGS_MODULE=django_backend.settings
 
-CMD ["uvicorn", "django_backend.asgi:application", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "django_backend.asgi:application", "--host", "0.0.0.0", "--port", "8000", "--lifespan", "off"]
