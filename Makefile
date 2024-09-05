@@ -84,6 +84,6 @@ build:
 	docker build -t tunemeld .
 
 run:
-	docker run --env-file .env -p 8000:8000 tunemeld
+	docker run --env-file .env.dev -p 8000:8000 tunemeld
 
 build_and_run: build run
