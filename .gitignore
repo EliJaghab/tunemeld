@@ -26,4 +26,3 @@ npm-debug.log*
 
 # Tox
 .tox/
-.env
