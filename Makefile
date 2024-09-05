@@ -1,15 +1,26 @@
-.PHONY: extract transform aggregate view_count format lint fix pull_push dev prod invalidate_cache test setup_env activate install_deps
+.PHONY: extract \
+	transform \
+	aggregate \
+	view_count \
+	format \
+	lint \
+	fix \
+	pull_push \
+	dev \
+	prod \
+	invalidate_cache \
+	test \
+	setup_env \
+	activate \
+	install_deps \
+	build \
+	run \
+	build_and_run
 
-# Automatically detect the project root
 PROJECT_ROOT := $(shell pwd)
-
-# Set the virtual environment directory (use system Python in CI)
 VENV := $(PROJECT_ROOT)/venv
-
-# Add PYTHONPATH to include the project root and ensure it's used in the venv
 export PYTHONPATH := $(PROJECT_ROOT)
 
-# Command to setup environment paths
 setup_env:
 	@echo "Setting up environment paths..."
 	@echo "Project root: $(PWD)"
@@ -69,8 +80,10 @@ test: setup_env
 	@echo "Running tests..."
 	python -m unittest discover tests/
 
+build:
+	docker build -t tunemeld .
 
-start_backend:
-	uvicorn django_backend.asgi:application --host 0.0.0.0 --port 8000
+run:
+	docker run --env-file .env -p 8000:8000 tunemeld
 
-
+build_and_run: build run
