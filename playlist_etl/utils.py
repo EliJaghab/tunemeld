@@ -23,7 +23,7 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(
 
 def set_secrets():
     if not os.getenv("GITHUB_ACTIONS"):
-        env_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".env"))
+        env_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".env.dev"))
         logging.info("env_path" + env_path)
         load_dotenv(dotenv_path=env_path)
 
