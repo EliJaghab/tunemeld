@@ -2,8 +2,11 @@ import os
 from pathlib import Path
 from dotenv import load_dotenv
 
-load_dotenv()
+environment = os.getenv("RAILWAY_ENVIRONMENT", "development")
 
+if environment == "development":
+    load_dotenv(".env.dev")
+    
 MONGO_DATA_API_KEY = os.getenv("MONGO_DATA_API_KEY")
 MONGO_DATA_API_ENDPOINT = os.getenv("MONGO_DATA_API_ENDPOINT")
 MONGO_URI = os.getenv("MONGO_URI")
