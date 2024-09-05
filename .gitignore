@@ -21,7 +21,8 @@ node_modules/
 npm-debug.log*
 
 # Environment variables
-.env
+.env.dev
+.env.prod
 
 # Tox
 .tox/
