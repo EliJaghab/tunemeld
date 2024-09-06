@@ -49,7 +49,7 @@ urlpatterns = [
         name="get_header_art_by_genre",
     ),
     path(
-        "health-check/",
+        "health/",
         views.health_check,
         name="health_check",
     ),
