@@ -1,7 +1,5 @@
 from django.contrib import admin
 from django.urls import path
-from django_distill import distill_path
-
 from django_backend import views
 
 GENRES = ["dance", "country", "rap", "pop"]
@@ -25,34 +23,34 @@ def get_genre_service_params():
 urlpatterns = [
     path("", views.root, name="root"),
     path("admin/", admin.site.urls),
-    distill_path(
+    path(
         "graph-data/<str:genre_name>/",
         views.get_graph_data,
         name="get_graph_data_by_genre",
-        distill_func=get_genre_name_params,
     ),
-    distill_path(
+    path(
         "playlist-data/<str:genre_name>/",
         views.get_playlist_data,
         name="get_playlist_data_by_genre",
-        distill_func=get_genre_name_params,
     ),
-    distill_path(
+    path(
         "service-playlist/<str:genre_name>/<str:service_name>/",
         views.get_service_playlist,
         name="get_service_playlist_by_genre_and_service",
-        distill_func=get_genre_service_params,
     ),
-    distill_path(
+    path(
         "last-updated/<str:genre_name>/",
         views.get_last_updated,
         name="get_last_updated_by_genre",
-        distill_func=get_genre_name_params,
     ),
-    distill_path(
+    path(
         "header-art/<str:genre_name>/",
         views.get_header_art,
         name="get_header_art_by_genre",
-        distill_func=get_genre_name_params,
+    ),
+    path(
+        "health-check/",
+        views.health_check,
+        name="health_check",
     ),
 ]

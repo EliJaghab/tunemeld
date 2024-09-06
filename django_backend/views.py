@@ -11,6 +11,9 @@ from . import (
 def root(request):
     return HttpResponse("Welcome to the Tunemeld Backend!")
 
+def health_check(request):
+    return HttpResponse("OK")
+
 
 def get_graph_data(request, genre_name):
     if not genre_name:
