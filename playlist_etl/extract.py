@@ -10,6 +10,7 @@ from unidecode import unidecode
 from playlist_etl.utils import (
     WebDriverManager,
     clear_collection,
+    get_logger,
     get_mongo_client,
     insert_or_update_data_to_mongo,
     set_secrets,
@@ -59,13 +60,16 @@ SERVICE_CONFIGS = {
 DEBUG_MODE = False
 NO_RAPID = False
 
-logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
+
+logger = get_logger(__name__)
+
+
 
 
 class RapidAPIClient:
     def __init__(self):
         self.api_key = self._get_api_key()
-        logging.info(f"apiKey: {self.api_key}")
+        logger.info(f"apiKey: {self.api_key}")
 
     @staticmethod
     def _get_api_key():
@@ -77,7 +81,7 @@ class RapidAPIClient:
 
 def get_json_response(url, host, api_key):
     if DEBUG_MODE or NO_RAPID:
-        logging.info("Debug Mode: not requesting RapidAPI")
+        logger.info("Debug Mode: not requesting RapidAPI")
         return {}
 
     headers = {
@@ -259,7 +263,7 @@ def run_extraction(mongo_client, client, service_name, genre):
     if not DEBUG_MODE:
         insert_or_update_data_to_mongo(mongo_client, "raw_playlists", document)
     else:
-        logging.info("Debug Mode: not updating mongo")
+        logger.info("Debug Mode: not updating mongo")
 
 
 if __name__ == "__main__":
@@ -268,13 +272,13 @@ if __name__ == "__main__":
     mongo_client = get_mongo_client()
 
     if DEBUG_MODE:
-        logging.info("Debug Mode: not clearing mongo")
+        logger.info("Debug Mode: not clearing mongo")
     else:
         clear_collection(mongo_client, "raw_playlists")
 
     for service_name, config in SERVICE_CONFIGS.items():
         for genre in PLAYLIST_GENRES:
-            logging.info(
+            logger.info(
                 f"Retrieving {genre} from {service_name} with credential "
                 f"{config['links'][genre]}"
             )

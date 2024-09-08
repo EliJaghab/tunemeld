@@ -15,6 +15,7 @@ from playlist_etl.utils import (
     Spotify,
     WebDriverManager,
     collection_is_empty,
+    get_logger,
     get_mongo_client,
     get_spotify_client,
     insert_or_update_data_to_mongo,
@@ -22,10 +23,7 @@ from playlist_etl.utils import (
     set_secrets,
 )
 
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s - %(levelname)s - %(filename)s:%(lineno)d - %(funcName)s() - %(message)s",
-)
+logger = get_logger(__name__)
 
 AGGREGATED_DATA_COLLECTION = "aggregated_playlists"
 VIEW_COUNTS_COLLECTION = "view_counts_playlists"
@@ -79,7 +77,7 @@ def update_view_counts(
     max_workers: int = 1,
 ):
     for playlist in playlists:
-        logging.info(f"Updating view counts for {playlist['genre_name']}")
+        logger.info(f"Updating view counts for {playlist['genre_name']}")
         with ThreadPoolExecutor(max_workers=max_workers) as executor:
             futures = []
             for track in playlist["tracks"]:
@@ -132,9 +130,9 @@ def get_spotify_track_view_count(url: str, webdriver_manager: WebDriverManager) 
     try:
         play_count_info = webdriver_manager.find_element_by_xpath(url, SPOTIFY_VIEW_COUNT_XPATH)
         if play_count_info:
-            logging.info(f"original spotify play count value {play_count_info}")
+            logger.info(f"original spotify play count value {play_count_info}")
             play_count = int(play_count_info.replace(",", ""))
-            logging.info(play_count)
+            logger.info(play_count)
             return play_count
     except Exception as e:
         print(f"Error with xpath {SPOTIFY_VIEW_COUNT_XPATH}: {e}")
@@ -158,7 +156,7 @@ def get_youtube_track_view_count(youtube_url: str) -> int:
         data = response.json()
         if data["items"]:
             view_count = data["items"][0]["statistics"]["viewCount"]
-            logging.info(f"Video ID {video_id} has {view_count} views.")
+            logger.info(f"Video ID {video_id} has {view_count} views.")
             return int(view_count)
         else:
             logging.warning(f"No data found for video ID {video_id}")
@@ -177,13 +175,13 @@ def get_youtube_track_view_count(youtube_url: str) -> int:
 
 
 def get_spotify_track_url_by_isrc(isrc: str, spotify_client: Spotify) -> str:
-    logging.info(f"Searching for track with ISRC: {isrc}")
+    logger.info(f"Searching for track with ISRC: {isrc}")
     results = spotify_client.search(q=f"isrc:{isrc}", type="track", limit=1)
     tracks = results["tracks"]["items"]
     if tracks:
         track_id = tracks[0]["id"]
         track_url = f"https://open.spotify.com/track/{track_id}"
-        logging.info(f"Found track URL: {track_url}")
+        logger.info(f"Found track URL: {track_url}")
         return track_url
     raise ValueError(f"Could not find track for ISRC: {isrc}")
 

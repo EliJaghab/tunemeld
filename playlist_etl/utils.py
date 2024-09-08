@@ -20,13 +20,26 @@ from webdriver_manager.chrome import ChromeDriverManager
 
 PLAYLIST_ETL_COLLECTION_NAME = "playlist_etl"
 
-logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
+def get_logger(name: str) -> logging.Logger:
+    logger = logging.getLogger(name)
+    if not logger.hasHandlers():
+        handler = logging.StreamHandler()
+        formatter = logging.Formatter(
+            fmt="%(asctime)s - %(levelname)s - %(funcName)s() - %(message)s",
+            datefmt="%m-%d %H:%M:%S"
+        )
+        handler.setFormatter(formatter)
+        logger.addHandler(handler)
+        logger.setLevel(logging.INFO)
+    return logger
+
+logger = get_logger(__name__)
 
 
 def set_secrets():
     if not os.getenv("GITHUB_ACTIONS"):
         env_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".env.dev"))
-        logging.info("env_path" + env_path)
+        logger.info("env_path" + env_path)
         load_dotenv(dotenv_path=env_path)
 
 
@@ -65,12 +78,12 @@ def insert_or_update_data_to_mongo(client, collection_name, document):
         if existing_document:
             document["update_timestamp"] = datetime.now(timezone.utc)
             result = collection.replace_one({"_id": document["_id"]}, document)
-            logging.info(f"Data updated for id: {document['_id']}")
+            logger.info(f"Data updated for id: {document['_id']}")
             return
 
     document["insert_timestamp"] = datetime.now(timezone.utc)
     result = collection.insert_one(document)
-    logging.info(f"Data inserted with id: {result.inserted_id}")
+    logger.info(f"Data inserted with id: {result.inserted_id}")
 
 
 def read_cache_from_mongo(mongo_client, collection_name):
@@ -83,7 +96,7 @@ def read_cache_from_mongo(mongo_client, collection_name):
 
 
 def update_cache_in_mongo(mongo_client, collection_name, key, value):
-    logging.info(
+    logger.info(
         f"Updating cache in collection: {collection_name} for key: {key} with value: {value}"
     )
     db = mongo_client[PLAYLIST_ETL_COLLECTION_NAME]
@@ -101,7 +114,7 @@ def clear_collection(client, collection_name):
     db = client[PLAYLIST_ETL_COLLECTION_NAME]
     collection = db[collection_name]
     collection.delete_many({})
-    logging.info(f"Cleared collection: {collection_name}")
+    logger.info(f"Cleared collection: {collection_name}")
 
 
 def collection_is_empty(collection_name, mongo_client) -> bool:
@@ -129,7 +142,7 @@ class WebDriverManager:
         def _attempt_find_element() -> str:
             try:
                 self.driver.implicitly_wait(8)
-                logging.info(f"Navigating to URL: {url}")
+                logger.info(f"Navigating to URL: {url}")
                 self.driver.get(url)
 
                 max_timeout = 15
@@ -140,11 +153,11 @@ class WebDriverManager:
                     if element and element.is_displayed():
                         if attribute:
                             element_value = element.get_attribute(attribute)
-                            logging.info(f"Successfully found element attribute: {element_value}")
+                            logger.info(f"Successfully found element attribute: {element_value}")
                             return element_value
                         else:
                             element_text = element.text
-                            logging.info(f"Successfully found element text: {element_text}")
+                            logger.info(f"Successfully found element text: {element_text}")
                             return element_text
 
                 logging.warning("Element not found even after waiting")
@@ -161,20 +174,20 @@ class WebDriverManager:
                 logging.error(f"An error occurred: {error_message}")
 
                 if self._is_rate_limit_issue(error_message):
-                    logging.info("Rate limit detected, switching proxy and retrying...")
+                    logger.info("Rate limit detected, switching proxy and retrying...")
                     self._restart_driver(new_proxy=True)
                     return "Rate limit detected, retrying with new proxy..."
 
                 return f"An error occurred: {error_message}"
 
-        logging.info(f"Attempting to find element on URL: {url} using XPath: {xpath}")
+        logger.info(f"Attempting to find element on URL: {url} using XPath: {xpath}")
 
         result = self._retry_with_backoff(retries, retry_delay, _attempt_find_element)
 
         # Check if rate limiting or other errors occurred, retry with proxy if needed
         if self._is_error_occurred(result):
             if "Rate limit detected" in result:
-                logging.info("Retrying with a new proxy due to rate limit detection.")
+                logger.info("Retrying with a new proxy due to rate limit detection.")
             self._restart_driver(new_proxy=("Rate limit detected" in result))
 
             # Retry again after restarting the driver with the new proxy if rate limited
@@ -190,7 +203,7 @@ class WebDriverManager:
             if not self._is_error_occurred(result):
                 return result
 
-            logging.info(f"Retrying... (attempt {attempt + 1} of {retries})")
+            logger.info(f"Retrying... (attempt {attempt + 1} of {retries})")
             time.sleep(retry_delay * (2 ** (attempt - 1)))  # Exponential backoff
             attempt += 1
 
@@ -215,7 +228,7 @@ class WebDriverManager:
         return any(keyword in error_message.lower() for keyword in rate_limit_keywords)
 
     def _restart_driver(self, new_proxy=False):
-        logging.info("Restarting WebDriver to clear memory/cache.")
+        logger.info("Restarting WebDriver to clear memory/cache.")
         self.driver.quit()
 
         if new_proxy:
@@ -231,7 +244,7 @@ class WebDriverManager:
 
         if use_proxy:
             proxy = FreeProxy(rand=True).get()
-            logging.info(f"Using proxy: {proxy}")
+            logger.info(f"Using proxy: {proxy}")
             options.add_argument(f"--proxy-server={proxy}")
 
         # Correctly initialize the Chrome driver with options
@@ -244,10 +257,12 @@ class WebDriverManager:
         memory = psutil.virtual_memory()
         available_memory_mb = memory.available / (1024 * 1024)
         memory_threshold_mb = available_memory_mb * (self.memory_threshold_percent / 100)
-        logging.info(f"Available Memory: {available_memory_mb:.2f} MB")
-        logging.info(f"Memory Threshold: {memory_threshold_mb:.2f} MB")
+        logger.info(f"Available Memory: {available_memory_mb:.2f} MB")
+        logger.info(f"Memory Threshold: {memory_threshold_mb:.2f} MB")
         return available_memory_mb < memory_threshold_mb
 
     def close_driver(self):
         if self.driver:
             self.driver.quit()
+
+

@@ -5,24 +5,22 @@ from typing import Dict, List
 
 from pymongo import MongoClient
 from pymongo.collection import Collection
-from utils import get_mongo_client, get_mongo_collection, read_data_from_mongo, set_secrets
+from utils import get_mongo_client, get_logger, get_mongo_collection, read_data_from_mongo, set_secrets
 
 HISTORICAL_TRACK_VIEWS_COLLECTION = "historical_track_views"
 VIEW_COUNTS_COLLECTION = "view_counts_playlists"
 CURRENT_TIMESTAMP = datetime.now().isoformat()
 
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s - %(levelname)s - %(filename)s:%(lineno)d - %(funcName)s() - %(message)s",
-)
+logger = get_logger(__name__)
+
 
 
 def get_all_tracks(mongo_client: MongoClient) -> List[Dict]:
     """Fetch all tracks from the playlists."""
-    logging.info("Reading data from MongoDB.")
+    logger.info("Reading data from MongoDB.")
     view_counts_playlists = read_data_from_mongo(mongo_client, VIEW_COUNTS_COLLECTION)
     all_tracks = [track for playlist in view_counts_playlists for track in playlist["tracks"]]
-    logging.info(f"Retrieved {len(all_tracks)} tracks.")
+    logger.info(f"Retrieved {len(all_tracks)} tracks.")
     return all_tracks
 
 
@@ -68,9 +66,9 @@ def update_historical_view_count(
         upsert=True,
     )
     if result.modified_count > 0 or result.upserted_id:
-        logging.info(f"Updated historical view count for ISRC: {isrc}, Service: {service_name}")
+        logger.info(f"Updated historical view count for ISRC: {isrc}, Service: {service_name}")
     else:
-        logging.info(f"No update performed for ISRC: {isrc}, Service: {service_name}")
+        logger.info(f"No update performed for ISRC: {isrc}, Service: {service_name}")
 
 
 def process_track(track: Dict, historical_collection: Collection) -> None:
@@ -103,4 +101,4 @@ if __name__ == "__main__":
     mongo_client = get_mongo_client()
     tracks = get_all_tracks(mongo_client)
     process_tracks(tracks, mongo_client)
-    logging.info("Completed processing all tracks.")
+    logger.info("Completed processing all tracks.")
