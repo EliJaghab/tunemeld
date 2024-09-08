@@ -10,14 +10,13 @@ from pymongo import MongoClient
 from pymongo.collection import Collection
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
-from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
-
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from spotipy import Spotify
 from spotipy.oauth2 import SpotifyClientCredentials
+from webdriver_manager.chrome import ChromeDriverManager
 
 PLAYLIST_ETL_COLLECTION_NAME = "playlist_etl"
 

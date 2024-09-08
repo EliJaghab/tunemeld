@@ -11,6 +11,7 @@ from . import (
 def root(request):
     return HttpResponse("Welcome to the Tunemeld Backend!")
 
+
 def health_check(request):
     return HttpResponse("OK")
 

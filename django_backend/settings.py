@@ -1,12 +1,13 @@
 import os
 from pathlib import Path
+
 from dotenv import load_dotenv
 
 environment = os.getenv("RAILWAY_ENVIRONMENT", "development")
 
 if environment == "development":
     load_dotenv(".env.dev")
-    
+
 MONGO_DATA_API_KEY = os.getenv("MONGO_DATA_API_KEY")
 MONGO_DATA_API_ENDPOINT = os.getenv("MONGO_DATA_API_ENDPOINT")
 MONGO_URI = os.getenv("MONGO_URI")
@@ -16,7 +17,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 CSRF_TRUSTED_ORIGINS = ["https://www.tunemeld.com"]
 
-SECRET_KEY = os.getenv("SECRET_KEY", "django-insecure-!^u31q!@ui68(aook0g4w@jw*ei=%bbx1d8em_bm8hxm+6te#0")
+SECRET_KEY = os.getenv(
+    "SECRET_KEY", "django-insecure-!^u31q!@ui68(aook0g4w@jw*ei=%bbx1d8em_bm8hxm+6te#0"
+)
 
 DEBUG = os.getenv("DEBUG", "False") == "True"
 
