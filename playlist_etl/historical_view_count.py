@@ -5,14 +5,19 @@ from typing import Dict, List
 
 from pymongo import MongoClient
 from pymongo.collection import Collection
-from utils import get_mongo_client, get_logger, get_mongo_collection, read_data_from_mongo, set_secrets
+from utils import (
+    get_logger,
+    get_mongo_client,
+    get_mongo_collection,
+    read_data_from_mongo,
+    set_secrets,
+)
 
 HISTORICAL_TRACK_VIEWS_COLLECTION = "historical_track_views"
 VIEW_COUNTS_COLLECTION = "view_counts_playlists"
 CURRENT_TIMESTAMP = datetime.now().isoformat()
 
 logger = get_logger(__name__)
-
 
 
 def get_all_tracks(mongo_client: MongoClient) -> List[Dict]:

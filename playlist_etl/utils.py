@@ -20,18 +20,20 @@ from webdriver_manager.chrome import ChromeDriverManager
 
 PLAYLIST_ETL_COLLECTION_NAME = "playlist_etl"
 
+
 def get_logger(name: str) -> logging.Logger:
     logger = logging.getLogger(name)
     if not logger.hasHandlers():
         handler = logging.StreamHandler()
         formatter = logging.Formatter(
             fmt="%(asctime)s - %(levelname)s - %(funcName)s() - %(message)s",
-            datefmt="%m-%d %H:%M:%S"
+            datefmt="%m-%d %H:%M:%S",
         )
         handler.setFormatter(formatter)
         logger.addHandler(handler)
         logger.setLevel(logging.INFO)
     return logger
+
 
 logger = get_logger(__name__)
 
@@ -264,5 +266,3 @@ class WebDriverManager:
     def close_driver(self):
         if self.driver:
             self.driver.quit()
-
-

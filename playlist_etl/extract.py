@@ -64,8 +64,6 @@ NO_RAPID = False
 logger = get_logger(__name__)
 
 
-
-
 class RapidAPIClient:
     def __init__(self):
         self.api_key = self._get_api_key()
