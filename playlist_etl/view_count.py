@@ -31,7 +31,7 @@ AGGREGATED_DATA_COLLECTION = "aggregated_playlists"
 VIEW_COUNTS_COLLECTION = "view_counts_playlists"
 CURRENT_TIMESTAMP = datetime.now().isoformat()
 SERVICE_NAMES = ["Spotify", "Youtube"]
-SPOTIFY_VIEW_COUNT_XPATH = "//span[contains(@class, 'encore-text') and contains(@class, 'encore-text-body-small') and contains(@class, 'RANLXG3qKB61Bh3') and @data-testid='playcount']"
+SPOTIFY_VIEW_COUNT_XPATH = "//span[@class='encore-text encore-text-body-small w1TBi3o5CTM7zW1EB3Bm'][4]"
 
 
 def initialize_new_view_count_playlists(mongo_client: MongoClient) -> None:
@@ -130,6 +130,7 @@ def get_spotify_track_view_count(url: str, webdriver_manager: WebDriverManager) 
     try:
         play_count_info = webdriver_manager.find_element_by_xpath(url, SPOTIFY_VIEW_COUNT_XPATH)
         if play_count_info:
+            logging.info(f"original spotify play count value {play_count_info}")
             play_count = int(play_count_info.replace(",", ""))
             logging.info(play_count)
             return play_count
