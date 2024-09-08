@@ -21,6 +21,12 @@ PROJECT_ROOT := $(shell pwd)
 VENV := $(PROJECT_ROOT)/venv
 export PYTHONPATH := $(PROJECT_ROOT)
 
+ifeq ($(GITHUB_ACTIONS),)
+	ENV_FILE := .env.prod
+else
+	ENV_FILE := .env.dev
+endif
+
 setup_env:
 	@echo "Setting up environment paths..."
 	@echo "Project root: $(PWD)"
@@ -29,6 +35,10 @@ setup_env:
 	@mkdir -p $(VENV)/lib/python3.10/site-packages || true
 	@echo "Creating sitecustomize.py to set PYTHONPATH in venv..."
 	@echo 'import sys; sys.path.insert(0, "$(PYTHONPATH)")' > $(VENV)/lib/python3.10/site-packages/sitecustomize.py || true
+	@echo "Loading environment variables from $(ENV_FILE)..."
+	@source $(ENV_FILE) || true
+
+
 
 extract: setup_env
 	@echo "Running extract..."
@@ -68,7 +78,7 @@ prod: setup_env
 	cd backend/backend && wrangler deploy --env production src/index.ts
 
 invalidate_cache: setup_env
-	@set -o allexport; source .env; set +o allexport; \
+	@set -o allexport; source $(ENV_FILE); set +o allexport; \
 	echo "Invalidating cache using Cloudflare API..." && \
 	RESPONSE=$$(curl -s -X POST "https://api.cloudflare.com/client/v4/zones/$$CF_ZONE_ID/purge_cache" \
 	-H "Authorization: Bearer $$CLOUDFLARE_API_TOKEN" \
