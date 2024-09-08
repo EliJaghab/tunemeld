@@ -10,7 +10,10 @@ from pymongo import MongoClient
 from pymongo.collection import Collection
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
+from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.chrome.service import Service
+
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from spotipy import Spotify
@@ -111,6 +114,7 @@ class WebDriverManager:
     def __init__(self, use_proxy=False, memory_threshold_percent=75):
         self.use_proxy = use_proxy
         self.memory_threshold_percent = memory_threshold_percent
+        self.driver = None
 
     def find_element_by_xpath(
         self,
@@ -231,7 +235,10 @@ class WebDriverManager:
             logging.info(f"Using proxy: {proxy}")
             options.add_argument(f"--proxy-server={proxy}")
 
-        driver = webdriver.Chrome(options=options)
+        # Correctly initialize the Chrome driver with options
+        driver_path = ChromeDriverManager().install()
+        service = Service(executable_path=driver_path)
+        driver = webdriver.Chrome(service=service, options=options)
         return driver
 
     def _check_memory_usage(self):
