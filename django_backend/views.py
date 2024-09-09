@@ -1,5 +1,7 @@
 from django.http import HttpResponse, JsonResponse
 
+from typing import Dict, List
+
 from . import (
     playlists_collection,
     raw_playlists_collection,
@@ -17,70 +19,48 @@ def health_check(request):
 
 
 def get_graph_data(request, genre_name):
+    """Returns track views for all the tracks in a given aggregated playlist."""
     if not genre_name:
         return JsonResponse({"error": "Genre is required"}, status=400)
 
     try:
-        count = playlists_collection.count_documents({"genre_name": genre_name})
-        if count == 0:
-            return JsonResponse({"message": "No data available for this genre"}, status=200)
-
-        playlists = playlists_collection.find({"genre_name": genre_name})
-
-        # Extract ISRCs and associated track details
-        isrc_list = [
-            {
-                "isrc": track["isrc"],
-                "track_name": track["track_name"],
-                "artist_name": track["artist_name"],
-                "youtube_url": track.get("youtube_url", ""),
-                "album_cover_url": track.get("album_cover_url", ""),
-            }
-            for playlist in playlists
-            for track in playlist["tracks"]
-            if track.get("isrc")
-        ]
-
-        if not isrc_list:
-            return JsonResponse({"error": "No ISRCs found for the specified genre"}, status=404)
-
-        track_views_query = {"isrc": {"$in": [track["isrc"] for track in isrc_list]}}
-        track_views = track_views_collection.find(track_views_query)
-
-        response_data = []
-        for track in isrc_list:
-            view_data = next((view for view in track_views if view["isrc"] == track["isrc"]), None)
-
-            spotify_views = (
-                [
-                    [entry["current_timestamp"], entry["delta_count"]]
-                    for entry in view_data.get("view_counts", {}).get("Spotify", [])
-                ]
-                if view_data
-                else []
-            )
-
-            youtube_views = (
-                [
-                    [entry["current_timestamp"], entry["delta_count"]]
-                    for entry in view_data.get("view_counts", {}).get("Youtube", [])
-                ]
-                if view_data
-                else []
-            )
-
-            response_data.append(
+        def get_tracks_from_playlist(genre_name: str) -> Dict:
+            playlists = playlists_collection.find({"genre_name": genre_name})
+            tracks = [
                 {
                     "isrc": track["isrc"],
                     "track_name": track["track_name"],
                     "artist_name": track["artist_name"],
-                    "youtube_url": track["youtube_url"],
-                    "album_cover_url": track["album_cover_url"],
-                    "view_counts": {"Spotify": spotify_views, "Youtube": youtube_views},
+                    "youtube_url": track.get("youtube_url", ""),
+                    "album_cover_url": track.get("album_cover_url", ""),
                 }
-            )
+                for track in playlists[0]["tracks"]
+            ]
+            return tracks
 
-        return JsonResponse(response_data, safe=False)
+        def get_view_counts(isrc: List[str]) -> Dict:
+            """Get all the view counts in one query."""
+            track_views_query = {"isrc": {"$in": isrc}}
+            track_views = track_views_collection.find(track_views_query)
+
+            isrc_to_track_views = {}
+            for track in track_views:
+                isrc_to_track_views[track["isrc"]] = track
+            return isrc_to_track_views
+
+        tracks = get_tracks_from_playlist(genre_name)
+        isrc_list = [track["isrc"] for track in tracks]
+        track_views = get_view_counts(isrc_list)
+
+        for track in tracks:
+            if track["isrc"] in track_views and "view_counts" in track_views[track["isrc"]]:
+                for service_name in track_views[track["isrc"]]["view_counts"]:
+                    track["view_counts"][service_name] = [
+                        [view["view_counts"][service_name]["current_timestamp"], view["view_counts"][service_name]["delta_count"]]
+                        for view in track_views[track["isrc"]][service_name]["view_counts"]
+                    ]
+
+        return JsonResponse(tracks, safe=False)
 
     except Exception as error:
         return JsonResponse({"error": str(error)}, status=500)
