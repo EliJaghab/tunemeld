@@ -21,12 +21,13 @@ SECRET_KEY = os.getenv(
     "SECRET_KEY", "django-insecure-!^u31q!@ui68(aook0g4w@jw*ei=%bbx1d8em_bm8hxm+6te#0"
 )
 
-DEBUG = os.getenv("DEBUG", "False") == "True"
+DEBUG = True
 
 ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS").split(",")
 
 STATIC_URL = "/static/"
-STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
+
 
 INSTALLED_APPS = [
     "corsheaders",
@@ -49,34 +50,23 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    'django_backend.middleware.LogBadRequestMiddleware'
+    'django_backend.core.middleware.LogBadRequestMiddleware'
 ]
 
 LOGGING = {
     'version': 1,
-    'disable_existing_loggers': False,
     'handlers': {
-        'console': {
-            'level': 'DEBUG',
-            'class': 'logging.StreamHandler',
-        },
-        'file': {
-            'level': 'DEBUG',
-            'class': 'logging.FileHandler',
-            'filename': 'debug.log',
+        'console':{
+            'level':'DEBUG',
+            'class':'logging.StreamHandler',
         },
     },
     'loggers': {
-        'django': {
-            'handlers': ['console', 'file'],
-            'level': 'DEBUG',
+        'django.request': {
+            'handlers':['console'],
             'propagate': True,
-        },
-        'django_backend': {
-            'handlers': ['console', 'file'],
-            'level': 'DEBUG',
-            'propagate': True,
-        },
+            'level':'DEBUG',
+        }
     },
 }
 
@@ -84,7 +74,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
 ]
 
-ROOT_URLCONF = "django_backend.urls"
+ROOT_URLCONF = "django_backend.core.urls"
 
 TEMPLATES = [
     {
@@ -102,7 +92,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "django_backend.wsgi.application"
+WSGI_APPLICATION = 'django_backend.core.wsgi.application'
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -126,7 +116,5 @@ TIME_ZONE = "UTC"
 USE_I18N = True
 
 USE_TZ = True
-
-STATIC_URL = "static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
