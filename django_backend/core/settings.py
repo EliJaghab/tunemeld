@@ -50,22 +50,22 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    'django_backend.core.middleware.LogBadRequestMiddleware'
+    "django_backend.core.middleware.LogBadRequestMiddleware",
 ]
 
 LOGGING = {
-    'version': 1,
-    'handlers': {
-        'console':{
-            'level':'DEBUG',
-            'class':'logging.StreamHandler',
+    "version": 1,
+    "handlers": {
+        "console": {
+            "level": "DEBUG",
+            "class": "logging.StreamHandler",
         },
     },
-    'loggers': {
-        'django.request': {
-            'handlers':['console'],
-            'propagate': True,
-            'level':'DEBUG',
+    "loggers": {
+        "django.request": {
+            "handlers": ["console"],
+            "propagate": True,
+            "level": "DEBUG",
         }
     },
 }
@@ -92,7 +92,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'django_backend.core.wsgi.application'
+WSGI_APPLICATION = "django_backend.core.wsgi.application"
 
 AUTH_PASSWORD_VALIDATORS = [
     {

@@ -2,8 +2,8 @@ from pymongo import MongoClient
 
 from . import settings
 
-default_app_config = 'core.apps.CoreConfig'
- 
+default_app_config = "core.apps.CoreConfig"
+
 mongo_client = MongoClient(settings.MONGO_URI)
 mongo_db = mongo_client[settings.MONGO_DB_NAME]
 

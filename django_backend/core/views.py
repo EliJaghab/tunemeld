@@ -1,6 +1,6 @@
-from django.http import HttpResponse, JsonResponse
-
 from typing import Dict, List
+
+from django.http import HttpResponse, JsonResponse
 
 from . import (
     playlists_collection,
@@ -24,6 +24,7 @@ def get_graph_data(request, genre_name):
         return JsonResponse({"error": "Genre is required"}, status=400)
 
     try:
+
         def get_tracks_from_playlist(genre_name: str) -> Dict:
             playlists = playlists_collection.find({"genre_name": genre_name})
             tracks = [
@@ -56,7 +57,10 @@ def get_graph_data(request, genre_name):
             if track["isrc"] in track_views and "view_counts" in track_views[track["isrc"]]:
                 for service_name in track_views[track["isrc"]]["view_counts"]:
                     track["view_counts"][service_name] = [
-                        [view["view_counts"][service_name]["current_timestamp"], view["view_counts"][service_name]["delta_count"]]
+                        [
+                            view["view_counts"][service_name]["current_timestamp"],
+                            view["view_counts"][service_name]["delta_count"],
+                        ]
                         for view in track_views[track["isrc"]][service_name]["view_counts"]
                     ]
 

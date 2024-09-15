@@ -2,7 +2,6 @@ from django.contrib import admin
 from django.urls import path
 from django.views.generic import RedirectView
 
-
 from django_backend.core import views
 
 GENRES = ["dance", "country", "rap", "pop"]
@@ -25,8 +24,7 @@ def get_genre_service_params():
 
 urlpatterns = [
     path("", views.root, name="root"),
-    path('favicon.ico', RedirectView.as_view(url='/static/favicon.ico', permanent=True)),
-
+    path("favicon.ico", RedirectView.as_view(url="/static/favicon.ico", permanent=True)),
     path("admin/", admin.site.urls),
     path(
         "graph-data/<str:genre_name>/",

@@ -1,16 +1,16 @@
-import lyricsgenius
 import logging
+import os
 import re
 from concurrent.futures import ThreadPoolExecutor
-import os
 
+import lyricsgenius
 from utils import (
-    set_secrets,
     get_mongo_client,
     get_mongo_collection,
+    get_spotify_client,
     insert_or_update_data_to_mongo,
     read_data_from_mongo,
-    get_spotify_client,
+    set_secrets,
 )
 
 logging.basicConfig(
@@ -21,6 +21,7 @@ logging.basicConfig(
 # Constants
 MAX_WORKERS = 4
 
+
 # Genius API Client
 class GeniusAPIClient:
     def __init__(self):
@@ -30,9 +31,9 @@ class GeniusAPIClient:
 
     def search_song(self, track_name: str, artist_name: str) -> dict:
         search_results = self.genius.search_songs(track_name)
-        for hit in search_results['hits']:
-            if hit['result']['primary_artist']['name'].lower() == artist_name.lower():
-                return hit['result']
+        for hit in search_results["hits"]:
+            if hit["result"]["primary_artist"]["name"].lower() == artist_name.lower():
+                return hit["result"]
         return None
 
     def get_lyrics(self, song_id: int) -> str:
@@ -41,60 +42,72 @@ class GeniusAPIClient:
 
     def get_artist_info(self, artist_id: int) -> dict:
         artist_response = self.genius.artist(artist_id)
-        artist = artist_response['artist']
+        artist = artist_response["artist"]
         return {
-            'bio': artist['description']['plain'],
+            "bio": artist["description"]["plain"],
         }
 
     @staticmethod
     def clean_lyrics(lyrics: str) -> str:
-        cleaned_lyrics = re.sub(r"(?i)(You might also like|Embed|Translations.*|Contributors.*)", "", lyrics).strip()
-        cleaned_lyrics = re.sub(r'\n\s*\n', '\n', cleaned_lyrics)
+        cleaned_lyrics = re.sub(
+            r"(?i)(You might also like|Embed|Translations.*|Contributors.*)", "", lyrics
+        ).strip()
+        cleaned_lyrics = re.sub(r"\n\s*\n", "\n", cleaned_lyrics)
         return cleaned_lyrics
+
 
 # Processing and data enrichment
 def fetch_and_store_genius_data(track: dict, genius_client: GeniusAPIClient, mongo_client) -> None:
-    song = genius_client.search_song(track['track_name'], track['artist_name'])
+    song = genius_client.search_song(track["track_name"], track["artist_name"])
     if song:
-        lyrics = genius_client.get_lyrics(song_id=song['id'])
-        artist_info = genius_client.get_artist_info(song['primary_artist']['id'])
+        lyrics = genius_client.get_lyrics(song_id=song["id"])
+        artist_info = genius_client.get_artist_info(song["primary_artist"]["id"])
 
         # Update MongoDB with the enriched data
         data_to_store = {
-            'isrc': track['isrc'],
-            'track_name': track['track_name'],
-            'artist_name': track['artist_name'],
-            'lyrics': lyrics,
-            'artist_bio': artist_info.get('bio', ''),
+            "isrc": track["isrc"],
+            "track_name": track["track_name"],
+            "artist_name": track["artist_name"],
+            "lyrics": lyrics,
+            "artist_bio": artist_info.get("bio", ""),
         }
         insert_or_update_data_to_mongo(mongo_client, data_to_store)
 
+
 def fetch_and_store_spotify_data(track: dict, spotify_client, mongo_client) -> None:
-    spotify_data = spotify_client.get_spotify_data(track['isrc'])
+    spotify_data = spotify_client.get_spotify_data(track["isrc"])
 
     # Update MongoDB with the enriched data
     if spotify_data:
         data_to_store = {
-            'isrc': track['isrc'],
-            'track_name': track['track_name'],
-            'artist_name': track['artist_name'],
-            'spotify_data': spotify_data,
+            "isrc": track["isrc"],
+            "track_name": track["track_name"],
+            "artist_name": track["artist_name"],
+            "spotify_data": spotify_data,
         }
         insert_or_update_data_to_mongo(mongo_client, data_to_store)
 
+
 # Main process
-def process_tracks(tracks: list, genius_client: GeniusAPIClient, spotify_client, mongo_client) -> None:
+def process_tracks(
+    tracks: list, genius_client: GeniusAPIClient, spotify_client, mongo_client
+) -> None:
     with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
         futures = []
         for track in tracks:
-            futures.append(executor.submit(fetch_and_store_genius_data, track, genius_client, mongo_client))
-            futures.append(executor.submit(fetch_and_store_spotify_data, track, spotify_client, mongo_client))
+            futures.append(
+                executor.submit(fetch_and_store_genius_data, track, genius_client, mongo_client)
+            )
+            futures.append(
+                executor.submit(fetch_and_store_spotify_data, track, spotify_client, mongo_client)
+            )
 
         for future in futures:
             try:
                 future.result()
             except Exception as e:
                 logging.error(f"Error processing track: {e}")
+
 
 if __name__ == "__main__":
     set_secrets()
