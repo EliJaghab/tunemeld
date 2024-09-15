@@ -12,6 +12,7 @@ __pycache__/
 /output_static/
 /staticfiles/ 
 backend/lib/
+backend/bin/
 
 # Virtual Environment
 venv/
