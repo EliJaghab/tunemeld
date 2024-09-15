@@ -74,7 +74,7 @@ pull_push: setup_env
 dev: setup_env
 	cd backend/backend && wrangler dev --env development src/index.ts
 
-prod: setup_env
+prod:
 	cd backend/backend && wrangler deploy --env production src/index.ts
 
 invalidate_cache: setup_env
