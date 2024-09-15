@@ -77,7 +77,7 @@ dev: setup_env
 prod:
 	cd backend/backend && wrangler deploy --env production src/index.ts
 
-invalidate_cache: setup_env
+invalidate_cache:
 	@set -o allexport; source $(ENV_FILE); set +o allexport; \
 	echo "Invalidating cache using Cloudflare API..." && \
 	RESPONSE=$$(curl -s -X POST "https://api.cloudflare.com/client/v4/zones/$$CF_ZONE_ID/purge_cache" \
