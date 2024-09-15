@@ -15,30 +15,30 @@
 	install_deps \
 	build \
 	run \
-	build_and_run
+	build_and_run \
+	build_and_debug \
+	build_locally \
+	setup_backend_env
 
 PROJECT_ROOT := $(shell pwd)
 VENV := $(PROJECT_ROOT)/venv
 export PYTHONPATH := $(PROJECT_ROOT)
 
 ifeq ($(GITHUB_ACTIONS),)
-	ENV_FILE := .env.prod
-else
 	ENV_FILE := .env.dev
+else
+	ENV_FILE := .env.prod
 endif
 
 setup_env:
 	@echo "Setting up environment paths..."
-	@echo "Project root: $(PWD)"
-	@echo "Virtual environment: $(VENV)"
-	@echo "PYTHONPATH: $(PYTHONPATH)"
-	@mkdir -p $(VENV)/lib/python3.10/site-packages || true
+	@echo "Project root: $(shell pwd)"
+	@echo "Virtual environment: $(shell pwd)/venv"
+	@echo "PYTHONPATH: $(shell pwd)"
 	@echo "Creating sitecustomize.py to set PYTHONPATH in venv..."
-	@echo 'import sys; sys.path.insert(0, "$(PYTHONPATH)")' > $(VENV)/lib/python3.10/site-packages/sitecustomize.py || true
-	@echo "Loading environment variables from $(ENV_FILE)..."
-	@source $(ENV_FILE) || true
-
-
+	@echo "import sys; sys.path.insert(0, '$(shell pwd)')" > venv/lib/python3.10/site-packages/sitecustomize.py
+	@echo "Loading environment variables from .env.dev..."
+	@source venv/bin/activate && export $(cat .env.dev | xargs)
 
 extract: setup_env
 	@echo "Running extract..."
@@ -90,10 +90,14 @@ test: setup_env
 	@echo "Running tests..."
 	python -m unittest discover tests/
 
-build:
-	docker build -t tunemeld .
+setup_backend_env:
+	@echo "Setting up backend virtual environment..."
+	python3 -m venv backend
+	@echo "Activating backend virtual environment and installing requirements..."
+	pip install --upgrade pip && pip install -r django_backend/requirements.txt
 
-run:
-	docker run --env-file .env.dev -p 8000:8000 tunemeld
-
-build_and_run: build run
+build_locally:
+	@echo "Building locally..."
+	@echo "Killing any process using port 8000..."
+	-lsof -ti tcp:8000 | xargs kill -9
+	python3 django_backend/manage.py runserver 0.0.0.0:8000 --noreload
