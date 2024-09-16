@@ -56,7 +56,7 @@ view_count:
 	@echo "Running view counts..."
 	python playlist_etl/view_count.py
 
-historical_view_count: setup_env
+historical_view_count:
 	@echo "Running view counts..."
 	python playlist_etl/historical_view_count.py
 
