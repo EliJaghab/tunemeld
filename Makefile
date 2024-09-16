@@ -52,7 +52,7 @@ aggregate: setup_env
 	@echo "Running aggregate..."
 	python playlist_etl/aggregate.py
 
-view_count: setup_env
+view_count:
 	@echo "Running view counts..."
 	python playlist_etl/view_count.py
 
