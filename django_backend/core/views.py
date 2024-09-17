@@ -1,3 +1,4 @@
+import logging
 from typing import Dict, List
 
 from django.http import HttpResponse, JsonResponse
@@ -8,6 +9,8 @@ from . import (
     track_views_collection,
     transformed_playlists_collection,
 )
+
+logger = logging.getLogger(__name__)
 
 
 def root(request):
@@ -67,6 +70,7 @@ def get_graph_data(request, genre_name):
         return JsonResponse(tracks, safe=False)
 
     except Exception as error:
+        logger.exception("Error in get_graph_data view")
         return JsonResponse({"error": str(error)}, status=500)
 
 
