@@ -50,8 +50,7 @@ MIDDLEWARE = [
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
-    "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "django_backend.core.middleware.RequestLoggingMiddleware",
+    "django.middleware.clickjacking.XFrameOptionsMiddleware"
 ]
 
 
@@ -59,32 +58,27 @@ LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
     "formatters": {
-        "detailed": {
-            "format": "%(levelname)s %(asctime)s %(module)s %(lineno)d %(message)s",
-        },
-        "simple": {
-            "format": "%(levelname)s %(message)s",
+        "verbose": {
+            "format": "%(levelname)s %(asctime)s [%(name)s:%(lineno)d] %(message)s",
         },
     },
     "handlers": {
         "console": {
-            "level": "DEBUG",
             "class": "logging.StreamHandler",
-            "formatter": "detailed",
+            "formatter": "verbose",
         },
     },
     "loggers": {
-        "django": {
+        "": {
             "handlers": ["console"],
-            "level": "DEBUG",
-            "propagate": True,
+            "level": "INFO",
         },
         "django.request": {
             "handlers": ["console"],
-            "level": "DEBUG",
-            "propagate": True,
+            "level": "INFO",
+            "propagate": False,
         },
-        "django.utils.autoreload": {
+        "django.server": {
             "handlers": ["console"],
             "level": "INFO",
             "propagate": False,
@@ -94,10 +88,11 @@ LOGGING = {
             "level": "DEBUG",
             "propagate": False,
         },
-    },
-    "root": {
-        "handlers": ["console"],
-        "level": "DEBUG",
+        "pymongo": {
+            "handlers": ["console"],
+            "level": "WARNING",
+            "propagate": False,
+        },
     },
 }
 
