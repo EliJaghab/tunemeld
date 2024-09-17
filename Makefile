@@ -100,4 +100,4 @@ build_locally:
 	@echo "Building locally..."
 	@echo "Killing any process using port 8000..."
 	-lsof -ti tcp:8000 | xargs kill -9
-	python3 django_backend/manage.py runserver 0.0.0.0:8000 --noreload
+	python3 django_backend/manage.py runserver 0.0.0.0:8000
