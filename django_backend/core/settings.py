@@ -1,5 +1,6 @@
 import os
 from pathlib import Path
+import logging
 
 from dotenv import load_dotenv
 
@@ -50,25 +51,56 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "django_backend.core.middleware.LogBadRequestMiddleware",
+    "django_backend.core.middleware.RequestLoggingMiddleware",
 ]
+
 
 LOGGING = {
     "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "detailed": {
+            "format": "%(levelname)s %(asctime)s %(module)s %(lineno)d %(message)s",
+        },
+        "simple": {
+            "format": "%(levelname)s %(message)s",
+        },
+    },
     "handlers": {
         "console": {
             "level": "DEBUG",
             "class": "logging.StreamHandler",
+            "formatter": "detailed",
         },
     },
     "loggers": {
+        "django": {
+            "handlers": ["console"],
+            "level": "DEBUG",
+            "propagate": True,
+        },
         "django.request": {
             "handlers": ["console"],
-            "propagate": True,
             "level": "DEBUG",
-        }
+            "propagate": True,
+        },
+        "django.utils.autoreload": {
+            "handlers": ["console"],
+            "level": "INFO", 
+            "propagate": False,
+        },
+        "django_backend": {
+            "handlers": ["console"],
+            "level": "DEBUG",
+            "propagate": False,
+        },
+    },
+    "root": {
+        "handlers": ["console"],
+        "level": "DEBUG",
     },
 }
+
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
