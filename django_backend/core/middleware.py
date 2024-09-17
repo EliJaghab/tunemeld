@@ -3,6 +3,7 @@ import traceback
 
 logger = logging.getLogger(__name__)
 
+
 class RequestLoggingMiddleware:
     def __init__(self, get_response):
         self.get_response = get_response
@@ -13,7 +14,7 @@ class RequestLoggingMiddleware:
             response = self.get_response(request)
         except Exception as e:
             logger.exception("Exception during request processing")
-            raise 
+            raise
         if response.status_code >= 400:
             logger.error(
                 f"Response: {response.status_code} {response.reason_phrase} "

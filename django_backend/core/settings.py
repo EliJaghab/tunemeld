@@ -1,6 +1,6 @@
+import logging
 import os
 from pathlib import Path
-import logging
 
 from dotenv import load_dotenv
 
@@ -86,7 +86,7 @@ LOGGING = {
         },
         "django.utils.autoreload": {
             "handlers": ["console"],
-            "level": "INFO", 
+            "level": "INFO",
             "propagate": False,
         },
         "django_backend": {
