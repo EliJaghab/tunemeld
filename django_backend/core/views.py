@@ -6,7 +6,7 @@ from django.http import HttpResponse, JsonResponse
 from . import (
     playlists_collection,
     raw_playlists_collection,
-    track_views_collection,
+    historical_track_views,
     transformed_playlists_collection,
 )
 
@@ -29,7 +29,7 @@ def get_graph_data(request, genre_name):
     try:
 
         def get_tracks_from_playlist(genre_name: str) -> Dict:
-            playlists = playlists_collection.find({"genre_name": genre_name})
+            playlists = playlists_collection.find({"genre_name": genre_name}, {'_id': False})
             tracks = [
                 {
                     "isrc": track["isrc"],
@@ -45,7 +45,7 @@ def get_graph_data(request, genre_name):
         def get_view_counts(isrc: List[str]) -> Dict:
             """Get all the view counts in one query."""
             track_views_query = {"isrc": {"$in": isrc}}
-            track_views = track_views_collection.find(track_views_query)
+            track_views = historical_track_views.find(track_views_query, {'_id': False})
 
             isrc_to_track_views = {}
             for track in track_views:
@@ -55,19 +55,19 @@ def get_graph_data(request, genre_name):
         tracks = get_tracks_from_playlist(genre_name)
         isrc_list = [track["isrc"] for track in tracks]
         track_views = get_view_counts(isrc_list)
-
         for track in tracks:
             if track["isrc"] in track_views and "view_counts" in track_views[track["isrc"]]:
-                for service_name in track_views[track["isrc"]]["view_counts"]:
+                for service_name, view_counts in track_views[track["isrc"]]["view_counts"].items():
+                    track["view_counts"] = track.get("view_counts", {})
                     track["view_counts"][service_name] = [
                         [
-                            view["view_counts"][service_name]["current_timestamp"],
-                            view["view_counts"][service_name]["delta_count"],
+                            view["current_timestamp"],
+                            view["delta_count"],
                         ]
-                        for view in track_views[track["isrc"]][service_name]["view_counts"]
+                        for view in view_counts
                     ]
 
-        return JsonResponse(tracks, safe=False)
+        return JsonResponse(track_views, safe=False)
 
     except Exception as error:
         logger.exception("Error in get_graph_data view")
