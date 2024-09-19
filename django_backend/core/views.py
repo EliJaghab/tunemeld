@@ -4,9 +4,9 @@ from typing import Dict, List
 from django.http import HttpResponse, JsonResponse
 
 from . import (
+    historical_track_views,
     playlists_collection,
     raw_playlists_collection,
-    historical_track_views,
     transformed_playlists_collection,
 )
 
@@ -29,7 +29,7 @@ def get_graph_data(request, genre_name):
     try:
 
         def get_tracks_from_playlist(genre_name: str) -> Dict:
-            playlists = playlists_collection.find({"genre_name": genre_name}, {'_id': False})
+            playlists = playlists_collection.find({"genre_name": genre_name}, {"_id": False})
             tracks = [
                 {
                     "isrc": track["isrc"],
@@ -45,7 +45,7 @@ def get_graph_data(request, genre_name):
         def get_view_counts(isrc: List[str]) -> Dict:
             """Get all the view counts in one query."""
             track_views_query = {"isrc": {"$in": isrc}}
-            track_views = historical_track_views.find(track_views_query, {'_id': False})
+            track_views = historical_track_views.find(track_views_query, {"_id": False})
 
             isrc_to_track_views = {}
             for track in track_views:
