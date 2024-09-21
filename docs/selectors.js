@@ -1,5 +1,6 @@
 import { fetchAndDisplayHeaderArt, hideSkeletonLoaders, showSkeletonLoaders  } from './header.js';
 import { addToggleEventListeners, fetchAndDisplayLastUpdated, fetchAndDisplayPlaylists, resetCollapseStates, setupSortButtons, sortTable, updateMainPlaylist } from './playlist.js';
+import { setupBodyClickListener } from './servicePlayer.js';
 
 export async function updateGenreData(genre, viewCountType, updateAll = false) {
     try {
@@ -14,6 +15,7 @@ export async function updateGenreData(genre, viewCountType, updateAll = false) {
       hideSkeletonLoaders();
       resetCollapseStates();
       addToggleEventListeners();
+      setupBodyClickListener(genre);
     } catch (error) {
       console.error('Error updating genre data:', error);
     }

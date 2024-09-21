@@ -1,14 +1,15 @@
 import { API_BASE_URL } from './config.js';
 
-export async function loadChart() {
-    return fetch('html/chart.html')
-        .then(response => response.text())
-        .then(data => {
-            document.getElementById('chart-container').innerHTML = data;
-        })
-        .catch(error => {
-            console.error('Error loading chart HTML:', error);
-        });
+let currentChart = null;
+
+async function loadChart() {
+    try {
+        const response = await fetch('html/chart.html');
+        const data = await response.text();
+        document.getElementById('chart-container').innerHTML = data;
+    } catch (error) {
+        console.error('Error loading chart HTML:', error);
+    }
 }
 
 async function loadChartJsLibrary() {
@@ -21,35 +22,32 @@ async function loadChartJsLibrary() {
     });
 }
 
-export async function fetchAndDisplayChartData(genre, isrc) {
-    await loadChart();  
-
-    await loadChartJsLibrary(); 
-
+async function fetchChartData(genre, isrc) {
     try {
         const response = await fetch(`${API_BASE_URL}/api/graph-data?genre=${genre}`);
         if (!response.ok) {
             throw new Error(`Failed to fetch chart data. Status: ${response.status}`);
         }
         const data = await response.json();
-
         const trackData = data.find(track => track.isrc === isrc);
-        if (trackData) {
-            displayChart(trackData);
-        } else {
+        if (!trackData) {
             console.error('No data found for the provided ISRC:', isrc);
+            return null;
         }
+        return trackData;
     } catch (error) {
         console.error('Error fetching chart data:', error);
+        return null;
     }
 }
 
-function displayChart(track) {
-    const ctx = document.getElementById('myChart').getContext('2d');
+function sortViewCounts(viewCounts) {
+    return viewCounts.sort((a, b) => new Date(a[0]) - new Date(b[0]));
+}
 
-    // Sort the view counts based on the timestamp
-    const sortedSpotifyViewCounts = track.view_counts.Spotify.sort((a, b) => new Date(a[0]) - new Date(b[0]));
-    const sortedYoutubeViewCounts = track.view_counts.Youtube.sort((a, b) => new Date(a[0]) - new Date(b[0]));
+function prepareChartData(track) {
+    const sortedSpotifyViewCounts = sortViewCounts(track.view_counts.Spotify);
+    const sortedYoutubeViewCounts = sortViewCounts(track.view_counts.Youtube);
 
     const labels = sortedYoutubeViewCounts.map(viewCount => new Date(viewCount[0]).toLocaleString('en-US', { 
         hour12: false, 
@@ -58,12 +56,21 @@ function displayChart(track) {
     const spotifyData = sortedSpotifyViewCounts.map(viewCount => viewCount[1]);
     const youtubeData = sortedYoutubeViewCounts.map(viewCount => viewCount[1]);
 
-    const albumCover = track.album_cover_url;
+    return { labels, spotifyData, youtubeData, albumCover: track.album_cover_url };
+}
 
+function displayChart(track) {
+    const ctx = document.getElementById('myChart').getContext('2d');
+
+    if (currentChart) {
+        currentChart.destroy();
+    }
+
+    const { labels, spotifyData, youtubeData, albumCover } = prepareChartData(track);
     const img = new Image();
     img.src = albumCover;
 
-    new Chart(ctx, {
+    currentChart = new Chart(ctx, {
         type: 'line',
         data: {
             labels: labels,
@@ -120,4 +127,14 @@ function displayChart(track) {
             }
         }
     });
+}
+
+export async function fetchAndDisplayChartData(genre, isrc) {
+    await loadChart();
+    await loadChartJsLibrary();
+
+    const trackData = await fetchChartData(genre, isrc);
+    if (trackData) {
+        displayChart(trackData);
+    }
 }
