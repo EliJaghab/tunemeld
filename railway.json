@@ -1,6 +1,0 @@
-{
-    "build": {
-      "dockerfile": "django_backend/Dockerfile",
-      "context": "django_backend"
-    }
-}
