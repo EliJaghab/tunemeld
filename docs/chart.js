@@ -73,14 +73,18 @@ function displayChart(track) {
     currentChart = new Chart(ctx, {
         type: 'line',
         data: {
-            labels: labels,
+            labels: labels.map(date => new Date(date).toLocaleDateString('en-US', {
+                month: 'numeric',
+                day: 'numeric',
+                year: '2-digit'
+            })),
             datasets: [
                 {
                     label: 'Spotify Views',
                     data: spotifyData,
                     borderColor: '#1DB954', 
                     fill: false,
-                    pointRadius: 10,
+                    pointRadius: 3,
                     pointBackgroundColor: '#1DB954' 
                 },
                 {
@@ -88,7 +92,7 @@ function displayChart(track) {
                     data: youtubeData,
                     borderColor: '#FF0000', 
                     fill: false,
-                    pointRadius: 10,
+                    pointRadius: 3,
                     pointBackgroundColor: '#FF0000'
                 }
             ]
@@ -122,7 +126,18 @@ function displayChart(track) {
             },
             scales: {
                 y: {
-                    beginAtZero: true
+                    type: 'logarithmic',
+                    beginAtZero: true,
+                    ticks: {
+                        callback: function(value) {
+                            return Number(value.toString());
+                        },
+                        maxTicksLimit: 10
+                    },
+                    title: {
+                        display: true,
+                        text: 'Logarithmic Scale'
+                    }
                 }
             }
         }
