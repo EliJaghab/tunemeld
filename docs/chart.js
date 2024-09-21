@@ -49,9 +49,10 @@ function prepareChartData(track) {
     const sortedSpotifyViewCounts = sortViewCounts(track.view_counts.Spotify);
     const sortedYoutubeViewCounts = sortViewCounts(track.view_counts.Youtube);
 
-    const labels = sortedYoutubeViewCounts.map(viewCount => new Date(viewCount[0]).toLocaleString('en-US', { 
-        hour12: false, 
-        timeZoneName: 'short'
+    const labels = sortedYoutubeViewCounts.map(viewCount => new Date(viewCount[0]).toLocaleDateString('en-US', {
+        month: 'numeric',
+        day: 'numeric',
+        year: '2-digit'
     }));
     const spotifyData = sortedSpotifyViewCounts.map(viewCount => viewCount[1]);
     const youtubeData = sortedYoutubeViewCounts.map(viewCount => viewCount[1]);
@@ -73,24 +74,20 @@ function displayChart(track) {
     currentChart = new Chart(ctx, {
         type: 'line',
         data: {
-            labels: labels.map(date => new Date(date).toLocaleDateString('en-US', {
-                month: 'numeric',
-                day: 'numeric',
-                year: '2-digit'
-            })),
+            labels: labels,
             datasets: [
                 {
                     label: 'Spotify Views',
                     data: spotifyData,
-                    borderColor: '#1DB954', 
+                    borderColor: '#1DB954',
                     fill: false,
                     pointRadius: 3,
-                    pointBackgroundColor: '#1DB954' 
+                    pointBackgroundColor: '#1DB954'
                 },
                 {
                     label: 'YouTube Views',
                     data: youtubeData,
-                    borderColor: '#FF0000', 
+                    borderColor: '#FF0000',
                     fill: false,
                     pointRadius: 3,
                     pointBackgroundColor: '#FF0000'
