@@ -6,9 +6,7 @@ ENV PYDEVD_DISABLE_FILE_VALIDATION=1
 
 WORKDIR /app
 
-COPY . /app/
-
-RUN ls -la /app
+COPY django_backend/ /app/
 
 RUN pip install --upgrade pip && pip install -r /app/requirements.txt
 
