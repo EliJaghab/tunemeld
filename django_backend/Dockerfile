@@ -12,7 +12,7 @@ ENV PYTHONPATH=/app
 
 RUN pip install --upgrade pip && pip install -r /app/requirements.txt
 
-RUN chmod +x /app/manage.py
+RUN chmod +x /app/django_backend/manage.py
 
 EXPOSE 8000
 EXPOSE 5678
