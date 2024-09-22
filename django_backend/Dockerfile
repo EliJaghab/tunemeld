@@ -8,6 +8,8 @@ WORKDIR /app
 
 COPY . /app/
 
+RUN ls -la /app
+
 RUN pip install --upgrade pip && pip install -r /app/requirements.txt
 
 RUN chmod +x /app/manage.py
