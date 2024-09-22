@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.urls import path
 from django.views.generic import RedirectView
 
-from django_backend.core import views
+from core import views
 
 GENRES = ["dance", "country", "rap", "pop"]
 SERVICES = ["AppleMusic", "SoundCloud", "Spotify"]
