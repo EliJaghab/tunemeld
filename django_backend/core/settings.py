@@ -82,11 +82,6 @@ LOGGING = {
             "level": "INFO",
             "propagate": False,
         },
-        "django_backend": {
-            "handlers": ["console"],
-            "level": "DEBUG",
-            "propagate": False,
-        },
         "pymongo": {
             "handlers": ["console"],
             "level": "WARNING",
