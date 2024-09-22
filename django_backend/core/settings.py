@@ -101,7 +101,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
 ]
 
-ROOT_URLCONF = "django_backend.core.urls"
+ROOT_URLCONF = "core.urls"
 
 TEMPLATES = [
     {
@@ -119,7 +119,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "django_backend.core.wsgi.application"
+WSGI_APPLICATION = "core.wsgi.application"
 
 AUTH_PASSWORD_VALIDATORS = [
     {
