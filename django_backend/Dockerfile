@@ -4,17 +4,17 @@ ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 ENV PYDEVD_DISABLE_FILE_VALIDATION=1
 
-WORKDIR /app
+WORKDIR /
 
-COPY django_backend/ /app/
+COPY django_backend/ /
 
-ENV PYTHONPATH=/app
+ENV PYTHONPATH=/
 
-RUN pip install --upgrade pip && pip install -r /app/requirements.txt
+RUN pip install --upgrade pip && pip install -r /requirements.txt
 
-RUN chmod +x /app/manage.py
+RUN chmod +x /manage.py
 
 EXPOSE 8000
 EXPOSE 5678
 
-CMD ["python3", "/app/manage.py", "runserver", "0.0.0.0:8000"]
+CMD ["python3", "/manage.py", "runserver", "0.0.0.0:8000"]
