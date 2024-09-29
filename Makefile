@@ -40,15 +40,15 @@ setup_env:
 	@echo "Loading environment variables from .env.dev..."
 	@source venv/bin/activate && export $(cat .env.dev | xargs)
 
-extract: setup_env
+extract:
 	@echo "Running extract..."
 	python playlist_etl/extract.py
 
-transform: setup_env
+transform:
 	@echo "Running transform..."
 	python playlist_etl/transform.py
 
-aggregate: setup_env
+aggregate: 
 	@echo "Running aggregate..."
 	python playlist_etl/aggregate.py
 
