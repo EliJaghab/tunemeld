@@ -29,8 +29,7 @@ AGGREGATED_DATA_COLLECTION = "aggregated_playlists"
 VIEW_COUNTS_COLLECTION = "view_counts_playlists"
 CURRENT_TIMESTAMP = datetime.now().isoformat()
 SERVICE_NAMES = ["Spotify", "Youtube"]
-SPOTIFY_VIEW_COUNT_XPATH = "/html[@class='no-focus-outline spotify__os--is-macos spotify__container--is-web']/body[@class='encore-dark-theme encore-layout-themes']/div[@id='main']/div[@class='Root global-nav']/div[@class='ZQftYELq0aOsg6tPbVbV']/div[@class='jEMA2gVoLgPQqAFrPhFw']/div[@class='main-view-container']/div[@class='main-view-container__scroll-node']/div[2]/div[@class='main-view-container__scroll-node-child']/main[@class='T0fKO6B7LQSCE_VaSM1P']/section/div[@class='NXiYChVp4Oydfxd7rT5r RMDSGDMFrx8eXHpFphqG']/div[@class='iWTIFTzhRZT0rCD0_gOK contentSpacing']/div[@class='RP2rRchy4i8TIp1CTmb7']/div[@class='blfR_YJUsKUvdgTejBSb']/span[@class='encore-text encore-text-body-small encore-internal-color-text-subdued w1TBi3o5CTM7zW1EB3Bm T3DGgMGXmTVmosRbZymu'][4]"
-
+SPOTIFY_VIEW_COUNT_XPATH = '(//*[contains(concat(" ", @class, " "), concat(" ", "T3DGgMGXmTVmosRbZymu", " "))])[4]'
 
 def initialize_new_view_count_playlists(mongo_client: MongoClient) -> None:
     if collection_is_empty(VIEW_COUNTS_COLLECTION, mongo_client):
