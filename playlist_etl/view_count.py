@@ -29,7 +29,7 @@ AGGREGATED_DATA_COLLECTION = "aggregated_playlists"
 VIEW_COUNTS_COLLECTION = "view_counts_playlists"
 CURRENT_TIMESTAMP = datetime.now().isoformat()
 SERVICE_NAMES = ["Spotify", "Youtube"]
-SPOTIFY_VIEW_COUNT_XPATH = '(//*[contains(concat(" ", @class, " "), concat(" ", "T3DGgMGXmTVmosRbZymu", " "))])[4]'
+SPOTIFY_VIEW_COUNT_XPATH = '(//*[contains(concat(" ", @class, " "), concat(" ", "w1TBi3o5CTM7zW1EB3Bm", " "))])[4]'
 
 def initialize_new_view_count_playlists(mongo_client: MongoClient) -> None:
     if collection_is_empty(VIEW_COUNTS_COLLECTION, mongo_client):
