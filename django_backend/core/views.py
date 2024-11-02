@@ -23,9 +23,6 @@ def create_response(status: ResponseStatus, message: str, data=None):
 def root(request):
     return create_response(ResponseStatus.SUCCESS, "Welcome to the Tunemeld Backend!")
 
-def health_check(request):
-    return create_response(ResponseStatus.SUCCESS, "OK")
-
 def get_graph_data(request, genre_name):
     if not genre_name:
         return create_response(ResponseStatus.ERROR, "Genre is required", None)
