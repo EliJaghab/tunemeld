@@ -1,7 +1,8 @@
 import logging
 from typing import Dict, List
 
-from django.http import HttpResponse, JsonResponse
+from django.http import JsonResponse
+from enum import Enum
 
 from . import (
     historical_track_views,
@@ -12,23 +13,25 @@ from . import (
 
 logger = logging.getLogger(__name__)
 
+class ResponseStatus(Enum):
+    SUCCESS = "success"
+    ERROR = "error"
+
+def create_response(status: ResponseStatus, message: str, data=None):
+    return JsonResponse({"status": status.value, "message": message, "data": data})
 
 def root(request):
-    return HttpResponse("Welcome to the Tunemeld Backend!")
-
+    return create_response(ResponseStatus.SUCCESS, "Welcome to the Tunemeld Backend!")
 
 def health_check(request):
-    return HttpResponse("OK")
-
+    return create_response(ResponseStatus.SUCCESS, "OK")
 
 def get_graph_data(request, genre_name):
-    """Returns track views for all the tracks in a given aggregated playlist."""
     if not genre_name:
-        return JsonResponse({"error": "Genre is required"}, status=400)
+        return create_response(ResponseStatus.ERROR, "Genre is required", None)
 
     try:
-
-        def get_tracks_from_playlist(genre_name: str) -> Dict:
+        def get_tracks_from_playlist(genre_name: str) -> List[Dict]:
             playlists = playlists_collection.find({"genre_name": genre_name}, {"_id": False})
             tracks = [
                 {
@@ -43,7 +46,6 @@ def get_graph_data(request, genre_name):
             return tracks
 
         def get_view_counts(isrc: List[str]) -> Dict:
-            """Get all the view counts in one query."""
             track_views_query = {"isrc": {"$in": isrc}}
             track_views = historical_track_views.find(track_views_query, {"_id": False})
 
@@ -67,29 +69,27 @@ def get_graph_data(request, genre_name):
                         for view in view_counts
                     ]
 
-        return JsonResponse(track_views, safe=False)
+        return create_response(ResponseStatus.SUCCESS, "Graph data retrieved successfully", tracks)
 
     except Exception as error:
         logger.exception("Error in get_graph_data view")
-        return JsonResponse({"error": str(error)}, status=500)
-
+        return create_response(ResponseStatus.ERROR, str(error), None)
 
 def get_playlist_data(request, genre_name):
     if not genre_name:
-        return JsonResponse({"error": "Genre is required"}, status=400)
+        return create_response(ResponseStatus.ERROR, "Genre is required", None)
 
     try:
         data = list(playlists_collection.find({"genre_name": genre_name}, {"_id": False}))
         if not data:
-            return JsonResponse({"error": "No data found for the specified genre"}, status=404)
-        return JsonResponse(data, safe=False)
+            return create_response(ResponseStatus.ERROR, "No data found for the specified genre", None)
+        return create_response(ResponseStatus.SUCCESS, "Playlist data retrieved successfully", data)
     except Exception as error:
-        return JsonResponse({"error": str(error)}, status=500)
-
+        return create_response(ResponseStatus.ERROR, str(error), None)
 
 def get_service_playlist(request, genre_name, service_name):
     if not genre_name or not service_name:
-        return JsonResponse({"error": "Genre and service are required"}, status=400)
+        return create_response(ResponseStatus.ERROR, "Genre and service are required", None)
 
     try:
         data = list(
@@ -98,43 +98,38 @@ def get_service_playlist(request, genre_name, service_name):
             )
         )
         if not data:
-            return JsonResponse(
-                {"error": "No data found for the specified genre and service"}, status=404
-            )
-        return JsonResponse(data, safe=False)
+            return create_response(ResponseStatus.ERROR, "No data found for the specified genre and service", None)
+        return create_response(ResponseStatus.SUCCESS, "Service playlist data retrieved successfully", data)
     except Exception as error:
-        return JsonResponse({"error": str(error)}, status=500)
-
+        return create_response(ResponseStatus.ERROR, str(error), None)
 
 def get_last_updated(request, genre_name):
     if not genre_name:
-        return JsonResponse({"error": "Genre is required"}, status=400)
+        return create_response(ResponseStatus.ERROR, "Genre is required", None)
 
     try:
         data = list(playlists_collection.find({"genre_name": genre_name}, {"_id": False}))
         if not data:
-            return JsonResponse({"error": "No data found for the specified genre"}, status=404)
+            return create_response(ResponseStatus.ERROR, "No data found for the specified genre", None)
 
         last_updated = data[0]["insert_timestamp"]
-        return JsonResponse({"last_updated": last_updated})
+        return create_response(ResponseStatus.SUCCESS, "Last updated timestamp retrieved successfully", {"last_updated": last_updated})
     except Exception as error:
-        return JsonResponse({"error": str(error)}, status=500)
-
+        return create_response(ResponseStatus.ERROR, str(error), None)
 
 def get_header_art(request, genre_name):
     if not genre_name:
-        return JsonResponse({"error": "Genre is required"}, status=400)
+        return create_response(ResponseStatus.ERROR, "Genre is required", None)
 
     try:
         data = list(raw_playlists_collection.find({"genre_name": genre_name}, {"_id": False}))
         if not data:
-            return JsonResponse({"error": "No data found for the specified genre"}, status=404)
+            return create_response(ResponseStatus.ERROR, "No data found for the specified genre", None)
 
         formatted_data = format_playlist_data(data)
-        return JsonResponse(formatted_data, safe=False)
+        return create_response(ResponseStatus.SUCCESS, "Header art data retrieved successfully", formatted_data)
     except Exception as error:
-        return JsonResponse({"error": str(error)}, status=500)
-
+        return create_response(ResponseStatus.ERROR, str(error), None)
 
 def format_playlist_data(data):
     result = {}
