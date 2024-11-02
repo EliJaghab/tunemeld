@@ -16,7 +16,11 @@ MONGO_DB_NAME = os.getenv("MONGO_DB_NAME")
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-CSRF_TRUSTED_ORIGINS = ["https://www.tunemeld.com"]
+CSRF_TRUSTED_ORIGINS = [
+    "https://www.tunemeld.com",
+    "https://api.tunemeld.com",
+    "https://tunemeld.com",
+]
 
 SECRET_KEY = os.getenv(
     "SECRET_KEY", "django-insecure-!^u31q!@ui68(aook0g4w@jw*ei=%bbx1d8em_bm8hxm+6te#0"
@@ -25,6 +29,8 @@ SECRET_KEY = os.getenv(
 DEBUG = True
 
 ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS").split(",")
+print("ALLOWED_HOSTS:", ALLOWED_HOSTS)
+
 
 STATIC_URL = "/static/"
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
@@ -93,7 +99,11 @@ LOGGING = {
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
+    "https://www.tunemeld.com",
+    "https://api.tunemeld.com",
+    "https://tunemeld.com",
 ]
+
 
 ROOT_URLCONF = "core.urls"
 
