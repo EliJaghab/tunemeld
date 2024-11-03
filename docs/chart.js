@@ -1,4 +1,4 @@
-import { API_BASE_URL } from './config.js';
+import { DJANGO_API_BASE_URL } from './config.js';
 
 let currentChart = null;
 
@@ -24,11 +24,12 @@ async function loadChartJsLibrary() {
 
 async function fetchChartData(genre, isrc) {
     try {
-        const response = await fetch(`${API_BASE_URL}/api/graph-data?genre=${genre}`);
+        const response = await fetch(`${DJANGO_API_BASE_URL}/graph-data/${genre}`);
         if (!response.ok) {
             throw new Error(`Failed to fetch chart data. Status: ${response.status}`);
         }
-        const data = await response.json();
+        const responseData = await response.json();
+        const data = responseData.data;
         const trackData = data.find(track => track.isrc === isrc);
         if (!trackData) {
             console.error('No data found for the provided ISRC:', isrc);

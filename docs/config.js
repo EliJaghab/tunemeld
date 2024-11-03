@@ -10,3 +10,5 @@ export function getApiBaseUrl() {
 }
 
 export const API_BASE_URL = getApiBaseUrl();
+
+export const DJANGO_API_BASE_URL = 'https://api.tunemeld.com';
