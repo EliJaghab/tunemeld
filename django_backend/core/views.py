@@ -2,7 +2,7 @@ import logging
 from enum import Enum
 from typing import Dict, List
 
-from core.cache import CloudflareKV
+from core.cache import Cache
 from django.http import JsonResponse
 
 from . import (historical_track_views, playlists_collection,
@@ -10,28 +10,24 @@ from . import (historical_track_views, playlists_collection,
 
 logger = logging.getLogger(__name__)
 
-cache = CloudflareKV()
-
+cache = Cache()
 
 class ResponseStatus(Enum):
     SUCCESS = "success"
     ERROR = "error"
 
-
 def create_response(status: ResponseStatus, message: str, data=None):
     return JsonResponse({"status": status.value, "message": message, "data": data})
-
 
 def root(request):
     return create_response(ResponseStatus.SUCCESS, "Welcome to the TuneMeld Backend!")
 
 def get_graph_data(request, genre_name):
-def get_graph_data(request, genre_name):
-        return create_response(ResponseStatus.ERROR, "Genre is required", None)
+    
 
     key = f"graph_data_{genre_name}"
 
-    cached_response = cache.get_kv_entry(key)
+    cached_response = cache.get(key)
     if cached_response:
         return create_response(
             ResponseStatus.SUCCESS, "Graph data retrieved successfully from cache", cached_response
