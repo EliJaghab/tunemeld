@@ -21,18 +21,6 @@ class ResponseStatus(Enum):
     ERROR = "error"
 
 
-def get_kv_entry(key):
-    url = f"https://api.cloudflare.com/client/v4/accounts/{settings.CF_ACCOUNT_ID}/storage/kv/namespaces/{settings.CF_NAMESPACE_ID}/values/{key}"
-    headers = {
-        "Authorization": f"Bearer {settings.CF_API_TOKEN}",
-        "Content-Type": "application/json",
-    }
-    response = requests.get(url, headers=headers)
-    if response.status_code == 200:
-        return response.text
-    return None
-
-
 def create_response(status: ResponseStatus, message: str, data=None):
     return JsonResponse({"status": status.value, "message": message, "data": data})
 
@@ -40,6 +28,15 @@ def create_response(status: ResponseStatus, message: str, data=None):
 def root(request):
     return create_response(ResponseStatus.SUCCESS, "Welcome to the Tunemeld Backend!")
 
+
+   # Try to get the existing data
+    graph_data = kv_store.get_kv_entry(key)
+    
+    if graph_data is None:
+        # If it doesn't exist, insert new data
+        new_data = generate_graph_data(genre_name)  # Assuming this function generates the graph data
+        kv_store.put_kv_entry(key, new_data)
+        graph_data = new_data
 
 def get_graph_data(request, genre_name):
     if not genre_name:
