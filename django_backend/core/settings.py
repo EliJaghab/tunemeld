@@ -14,6 +14,10 @@ MONGO_DATA_API_ENDPOINT = os.getenv("MONGO_DATA_API_ENDPOINT")
 MONGO_URI = os.getenv("MONGO_URI")
 MONGO_DB_NAME = os.getenv("MONGO_DB_NAME")
 
+CF_ACCOUNT_ID = os.getenv("CF_ACCOUNT_ID")
+CF_NAMESPACE_ID = os.getenv("CF_NAMESPACE_ID")
+CF_API_TOKEN = os.getenv("CF_API_TOKEN")
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 CSRF_TRUSTED_ORIGINS = [

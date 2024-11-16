@@ -1,5 +1,6 @@
 from js import Response
 
+
 async def on_fetch(request, env):
     key = request.query.get("key")
     value = request.query.get("value")
