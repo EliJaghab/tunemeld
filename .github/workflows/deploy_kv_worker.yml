@@ -33,4 +33,5 @@ jobs:
       env:
         CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
       run: |
-        wrangler tail --env production --format json --status error
+        wrangler tail --env production --format json --status error > cloudflare_error_logs.json
+        cat cloudflare_error_logs.json
