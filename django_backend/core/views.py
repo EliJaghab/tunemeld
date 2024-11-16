@@ -2,18 +2,15 @@ import logging
 from enum import Enum
 from typing import Dict, List
 
-import requests
-from core import settings
+from core.cache import CloudflareKV
 from django.http import JsonResponse
 
-from . import (
-    historical_track_views,
-    playlists_collection,
-    raw_playlists_collection,
-    transformed_playlists_collection,
-)
+from . import (historical_track_views, playlists_collection,
+               raw_playlists_collection, transformed_playlists_collection)
 
 logger = logging.getLogger(__name__)
+
+cache = CloudflareKV()
 
 
 class ResponseStatus(Enum):
@@ -26,21 +23,19 @@ def create_response(status: ResponseStatus, message: str, data=None):
 
 
 def root(request):
-    return create_response(ResponseStatus.SUCCESS, "Welcome to the Tunemeld Backend!")
-
-
-   # Try to get the existing data
-    graph_data = kv_store.get_kv_entry(key)
-    
-    if graph_data is None:
-        # If it doesn't exist, insert new data
-        new_data = generate_graph_data(genre_name)  # Assuming this function generates the graph data
-        kv_store.put_kv_entry(key, new_data)
-        graph_data = new_data
+    return create_response(ResponseStatus.SUCCESS, "Welcome to the TuneMeld Backend!")
 
 def get_graph_data(request, genre_name):
-    if not genre_name:
+def get_graph_data(request, genre_name):
         return create_response(ResponseStatus.ERROR, "Genre is required", None)
+
+    key = f"graph_data_{genre_name}"
+
+    cached_response = cache.get_kv_entry(key)
+    if cached_response:
+        return create_response(
+            ResponseStatus.SUCCESS, "Graph data retrieved successfully from cache", cached_response
+        )
 
     try:
 
@@ -49,7 +44,7 @@ def get_graph_data(request, genre_name):
             tracks = [
                 {
                     "isrc": track["isrc"],
-                    "track_name": track["track_name"],
+                    "isrc": track["isrc"],
                     "artist_name": track["artist_name"],
                     "youtube_url": track.get("youtube_url", ""),
                     "album_cover_url": track.get("album_cover_url", ""),
@@ -58,9 +53,8 @@ def get_graph_data(request, genre_name):
             ]
             return tracks
 
-        def get_view_counts(isrc: List[str]) -> Dict:
-            track_views_query = {"isrc": {"$in": isrc}}
-            track_views = historical_track_views.find(track_views_query, {"_id": False})
+        def get_view_counts(isrc_list: List[str]) -> Dict:
+            track_views_query = {"isrc": {"$in": isrc_list}}
 
             isrc_to_track_views = {}
             for track in track_views:
@@ -81,7 +75,7 @@ def get_graph_data(request, genre_name):
                         ]
                         for view in view_counts
                     ]
-
+        cache.put_kv_entry(key, tracks)
         return create_response(ResponseStatus.SUCCESS, "Graph data retrieved successfully", tracks)
 
     except Exception as error:
@@ -90,7 +84,6 @@ def get_graph_data(request, genre_name):
 
 
 def get_playlist_data(request, genre_name):
-    if not genre_name:
         return create_response(ResponseStatus.ERROR, "Genre is required", None)
 
     try:
@@ -105,7 +98,6 @@ def get_playlist_data(request, genre_name):
 
 
 def get_service_playlist(request, genre_name, service_name):
-    if not genre_name or not service_name:
         return create_response(ResponseStatus.ERROR, "Genre and service are required", None)
 
     try:
@@ -126,7 +118,6 @@ def get_service_playlist(request, genre_name, service_name):
 
 
 def get_last_updated(request, genre_name):
-    if not genre_name:
         return create_response(ResponseStatus.ERROR, "Genre is required", None)
 
     try:
@@ -147,7 +138,6 @@ def get_last_updated(request, genre_name):
 
 
 def get_header_art(request, genre_name):
-    if not genre_name:
         return create_response(ResponseStatus.ERROR, "Genre is required", None)
 
     try:
