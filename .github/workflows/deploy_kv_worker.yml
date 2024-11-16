@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - 'kv_worker/**'
+      - '.github/workflows/deploy_kv_worker.yml'
 
 jobs:
   deploy:
