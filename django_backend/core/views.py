@@ -40,7 +40,6 @@ def get_graph_data(request, genre_name):
             tracks = [
                 {
                     "isrc": track["isrc"],
-                    "isrc": track["isrc"],
                     "artist_name": track["artist_name"],
                     "youtube_url": track.get("youtube_url", ""),
                     "album_cover_url": track.get("album_cover_url", ""),
