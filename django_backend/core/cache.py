@@ -20,11 +20,11 @@ class Cache:
             "Content-Type": "application/json",
         }
         response = requests.get(url, headers=headers)
-        
+
         value = response.json().get("value")
         if not value:
             return None
-        
+
         return value
 
     def put(self, key, value):

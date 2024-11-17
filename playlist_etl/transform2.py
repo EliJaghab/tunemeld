@@ -1,24 +1,18 @@
 import concurrent.futures
 import os
 import re
+from collections import Counter, defaultdict
 from urllib.parse import unquote
-from collections import defaultdict, Counter
 
 import requests
 from bs4 import BeautifulSoup
 
 from playlist_etl.extract import PLAYLIST_GENRES, SERVICE_CONFIGS
-from playlist_etl.utils import (
-    get_logger,
-    get_mongo_client,
-    get_spotify_client,
-    overwrite_collection,
-    overwrite_kv_collection,
-    read_cache_from_mongo,
-    read_data_from_mongo,
-    set_secrets,
-    update_cache_in_mongo,
-)
+from playlist_etl.utils import (get_logger, get_mongo_client,
+                                get_spotify_client, overwrite_collection,
+                                overwrite_kv_collection, read_cache_from_mongo,
+                                read_data_from_mongo, set_secrets,
+                                update_cache_in_mongo)
 
 RAW_PLAYLISTS_COLLECTION = "raw_playlists"
 TRACK_COLLECTION = "track"

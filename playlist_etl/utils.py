@@ -1,6 +1,7 @@
 import logging
 import os
 import time
+from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
 
 import psutil
@@ -17,7 +18,6 @@ from selenium.webdriver.support import expected_conditions as EC
 from spotipy import Spotify
 from spotipy.oauth2 import SpotifyClientCredentials
 from webdriver_manager.chrome import ChromeDriverManager
-from concurrent.futures import ThreadPoolExecutor
 
 PLAYLIST_ETL_COLLECTION_NAME = "playlist_etl"
 
@@ -87,28 +87,22 @@ def insert_or_update_data_to_mongo(client, collection_name, document):
     document["insert_timestamp"] = datetime.now(timezone.utc)
     result = collection.insert_one(document)
     logger.info(f"Data inserted with id: {result.inserted_id}")
-    
+
+
 def insert_or_update_kv_data_to_mongo(client, collection_name, key, value):
     db = client[PLAYLIST_ETL_COLLECTION_NAME]
     collection = db[collection_name]
     existing_document = collection.find_one({"key": key})
 
     if existing_document:
-        update_data = {
-            "key": key,
-            "value": value,
-            "update_timestamp": datetime.now(timezone.utc)
-        }
+        update_data = {"key": key, "value": value, "update_timestamp": datetime.now(timezone.utc)}
         result = collection.replace_one({"key": key}, update_data)
         logger.info(f"KV data updated for key: {key}")
     else:
-        insert_data = {
-            "key": key,
-            "value": value,
-            "insert_timestamp": datetime.now(timezone.utc)
-        }
+        insert_data = {"key": key, "value": value, "insert_timestamp": datetime.now(timezone.utc)}
         result = collection.insert_one(insert_data)
         logger.info(f"KV data inserted with key: {key}")
+
 
 def read_cache_from_mongo(mongo_client, collection_name):
     db = mongo_client[PLAYLIST_ETL_COLLECTION_NAME]
@@ -289,18 +283,26 @@ class WebDriverManager:
         if self.driver:
             self.driver.quit()
 
+
 def overwrite_collection(client, collection_name: str, documents: list[dict]) -> None:
     clear_collection(client, collection_name)
-    
+
     with ThreadPoolExecutor() as executor:
-        futures = [executor.submit(insert_or_update_data_to_mongo, client, collection_name, doc) for doc in documents]
+        futures = [
+            executor.submit(insert_or_update_data_to_mongo, client, collection_name, doc)
+            for doc in documents
+        ]
         for future in futures:
-            future.result() 
+            future.result()
+
 
 def overwrite_kv_collection(client, collection_name: str, kv_dict: dict) -> None:
     clear_collection(client, collection_name)
-    
+
     with ThreadPoolExecutor() as executor:
-        futures = [executor.submit(insert_or_update_kv_data_to_mongo, client, collection_name, key, value) for key, value in kv_dict.items()]
+        futures = [
+            executor.submit(insert_or_update_kv_data_to_mongo, client, collection_name, key, value)
+            for key, value in kv_dict.items()
+        ]
         for future in futures:
             future.result()
