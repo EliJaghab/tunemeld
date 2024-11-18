@@ -72,6 +72,11 @@ class PlaylistRank(BaseModel):
 
 
 class Transform:
+    """
+    Transforms tracks from raw playlists to Track objects.
+    Stores ISRC to track relationship with playlist ranks in MongoDB.
+    
+    """
     def __init__(self):
         set_secrets()
         self.mongo_client = MongoDBClient()
@@ -92,10 +97,33 @@ class Transform:
         self.tracks: dict[str, Track] = {}
         self.playlist_ranks: dict[str, dict[str, int]] = {}
 
-    def transform(self):
-        self.build_track_objects()
-        self.overwrite_data_to_mongo()
 
+    def transform(self):
+        logger.info("Starting the transformation process")
+        self.load_and_transform_data()
+        self.save_transformed_data()
+        logger.info("Transformation process completed successfully")
+    
+    def load_and_transform_data(self):
+        self.load_raw_playlists()
+        self.build_track_objects()
+    
+    def save_transformed_data(self):
+        formatted_tracks = self.format_tracks()
+        formatted_ranks = self.format_playlist_ranks()
+        self.write_to_database(formatted_tracks, formatted_ranks)
+    
+    def write_to_database(self, tracks: dict, ranks: dict):
+        logger.info("Saving transformed data to MongoDB")
+        self.mongo_client.overwrite_kv_collection(TRACK_COLLECTION, tracks)
+        self.mongo_client.overwrite_kv_collection(TRACK_PLAYLIST_COLLECTION, ranks)
+    
+    def load_raw_playlists(self) -> list[dict]:
+        logger.info("Reading raw playlists from MongoDB")
+        raw_playlists = self.mongo_client.read_data(RAW_PLAYLISTS_COLLECTION)
+        logger.info(f"Found {len(raw_playlists)} playlists in MongoDB")
+        return raw_playlists
+    
     def build_track_objects(self):
         logger.info("Reading raw playlists from MongoDB")
         raw_playlists = self.mongo_client.read_data(RAW_PLAYLISTS_COLLECTION)
@@ -106,9 +134,7 @@ class Transform:
         for playlist_data in raw_playlists:
             genre_name = playlist_data["genre_name"]
             service_name = playlist_data["service_name"]
-            if genre_name != "dance":
-                continue
-            
+
             logger.info(
                 f"Processing playlist for genre {genre_name} from {service_name}"
             )
