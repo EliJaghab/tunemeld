@@ -5,12 +5,10 @@ from urllib.parse import unquote
 
 import requests
 from bs4 import BeautifulSoup
+from pydantic import BaseModel
 
-from playlist_etl.utils import (get_logger, get_mongo_client,
-                                get_spotify_client, overwrite_collection,
-                                overwrite_kv_collection, read_cache_from_mongo,
-                                read_data_from_mongo, set_secrets,
-                                update_cache_in_mongo)
+from playlist_etl.mongo_db_client import MongoDBClient
+from playlist_etl.utils import get_logger, get_spotify_client, set_secrets
 
 RAW_PLAYLISTS_COLLECTION = "raw_playlists"
 TRACK_COLLECTION = "track"
@@ -23,36 +21,19 @@ MAX_THREADS = 100
 
 logger = get_logger(__name__)
 
-class Track:
-    def __init__(
-        self,
-        isrc: str,
-        spotify_track_name: str | None = None,
-        spotify_artist_name: str | None = None,
-        spotify_track_url: str | None = None,
-        soundcloud_track_name: str | None = None,
-        soundcloud_artist_name: str | None = None,
-        soundcloud_track_url: str | None = None,
-        apple_music_track_name: str | None = None,
-        apple_music_artist_name: str | None = None,
-        apple_music_track_url: str | None = None,
-        album_cover_url: str | None = None,
-    ):
-        self.spotify_track_name = spotify_track_name
-        self.spotify_artist_name = spotify_artist_name
-        self.spotify_track_url = spotify_track_url
-        self.soundcloud_track_name = soundcloud_track_name
-        self.soundcloud_artist_name = soundcloud_artist_name
-        self.soundcloud_track_url = soundcloud_track_url
-        self.apple_music_track_name = apple_music_track_name
-        self.apple_music_artist_name = apple_music_artist_name
-        self.apple_music_track_url = apple_music_track_url
-        self.album_cover_url = album_cover_url
-        self.isrc = isrc
 
-    @staticmethod
-    def from_dict(data: dict) -> "Track":
-        return Track(**data)
+class Track(BaseModel):
+    isrc: str
+    spotify_track_name: str | None = None
+    spotify_artist_name: str | None = None
+    spotify_track_url: str | None = None
+    soundcloud_track_name: str | None = None
+    soundcloud_artist_name: str | None = None
+    soundcloud_track_url: str | None = None
+    apple_music_track_name: str | None = None
+    apple_music_artist_name: str | None = None
+    apple_music_track_url: str | None = None
+    album_cover_url: str | None = None
 
     def set_youtube_url(self, mongo_client):
         if not self.youtube_url:
@@ -63,13 +44,19 @@ class Track:
     def set_apple_music_album_cover_url(self, mongo_client):
         if not self.album_cover_url:
             self.album_cover_url = get_apple_music_album_cover(self.track_url, mongo_client)
-    
+
     def to_dict(self) -> dict:
-        return self.__dict__
+        return self.dict()
+
+
+class PlaylistRank(BaseModel):
+    isrc: str
+    rank: int
+
 
 def get_isrc_from_spotify_api(track_name, artist_name, spotify_client, mongo_client):
     cache_key = f"{track_name}|{artist_name}"
-    isrc_cache = read_cache_from_mongo(mongo_client, ISRC_CACHE_COLLECTION)
+    isrc_cache = mongo_client.read_cache(ISRC_CACHE_COLLECTION)
 
     if cache_key in isrc_cache:
         logger.info(f"Cache hit for ISRC: {cache_key}")
@@ -99,7 +86,7 @@ def get_isrc_from_spotify_api(track_name, artist_name, spotify_client, mongo_cli
         isrc = search_spotify(query)
         if isrc:
             logger.info(f"Found ISRC for {track_name} by {artist_name}: {isrc}")
-            update_cache_in_mongo(mongo_client, ISRC_CACHE_COLLECTION, cache_key, isrc)
+            mongo_client.update_cache(ISRC_CACHE_COLLECTION, cache_key, isrc)
             return isrc
 
     logger.info(
@@ -110,7 +97,7 @@ def get_isrc_from_spotify_api(track_name, artist_name, spotify_client, mongo_cli
 
 def get_youtube_url_by_track_and_artist_name(track_name, artist_name, mongo_client):
     cache_key = f"{track_name}|{artist_name}"
-    youtube_cache = read_cache_from_mongo(mongo_client, YOUTUBE_CACHE_COLLECTION)
+    youtube_cache = mongo_client.read_cache(YOUTUBE_CACHE_COLLECTION)
 
     if cache_key in youtube_cache:
         logger.info(f"Cache hit for ISRC: {cache_key}")
@@ -133,9 +120,7 @@ def get_youtube_url_by_track_and_artist_name(track_name, artist_name, mongo_clie
                 logger.info(
                     f"Updating YouTube cache for {track_name} by {artist_name} with URL {youtube_url}"
                 )
-                update_cache_in_mongo(
-                    mongo_client, YOUTUBE_CACHE_COLLECTION, cache_key, youtube_url
-                )
+                mongo_client.update_cache(YOUTUBE_CACHE_COLLECTION, cache_key, youtube_url)
                 return youtube_url
         logger.info(f"No video found for {track_name} by {artist_name}")
         return None
@@ -148,9 +133,7 @@ def get_youtube_url_by_track_and_artist_name(track_name, artist_name, mongo_clie
 
 def get_apple_music_album_cover(url_link, mongo_client):
     cache_key = url_link
-    album_cover_cache = read_cache_from_mongo(
-        mongo_client, APPLE_MUSIC_ALBUM_COVER_CACHE_COLLECTION
-    )
+    album_cover_cache = mongo_client.read_cache(APPLE_MUSIC_ALBUM_COVER_CACHE_COLLECTION)
 
     if cache_key in album_cover_cache:
         return album_cover_cache[cache_key]
@@ -166,60 +149,73 @@ def get_apple_music_album_cover(url_link, mongo_client):
 
     srcset = source_tag["srcset"]
     album_cover_url = unquote(srcset.split()[0])
-    update_cache_in_mongo(
-        mongo_client,
+    mongo_client.update_cache(
         APPLE_MUSIC_ALBUM_COVER_CACHE_COLLECTION,
         cache_key,
         album_cover_url,
     )
     return album_cover_url
-    
+
 
 class Transform:
     def __init__(self):
         set_secrets()
-        self.mongo_client = get_mongo_client()
+        self.mongo_client = MongoDBClient()
         self.spotify_client = get_spotify_client()
         self.tracks = {}
         self.playlist_ranks = {}
-    
+
     def transform(self):
         self.build_track_objects()
-        self.overwrite_data_to_mongo() 
-    
+        self.overwrite_data_to_mongo()
+
     def build_track_objects(self):
         logger.info("Reading raw playlists from MongoDB")
-        raw_playlists = read_data_from_mongo(self.mongo_client, RAW_PLAYLISTS_COLLECTION)
+        raw_playlists = self.mongo_client.read_data(RAW_PLAYLISTS_COLLECTION)
         logger.info(f"Found playlists from MongoDB: {len(raw_playlists)} documents found")
-        
+
         for playlist_data in raw_playlists:
             genre_name = playlist_data["genre_name"]
+            if genre_name != "dance":
+                continue
             service_name = playlist_data["service_name"]
             logger.info(f"Processing playlist for genre {genre_name} from {service_name}")
             self.convert_to_track_objects(playlist_data["data_json"], service_name, genre_name)
             self.set_youtube_url_for_all_tracks()
             self.set_apple_music_album_cover_url_for_all_tracks()
-            self.exclude_tracks_without_isrc()
-    
+
     def exclude_tracks_without_isrc(self):
         self.tracks = {isrc: track for isrc, track in self.tracks.items() if track.isrc is not None}
         for playlist in self.playlist_ranks:
-            self.playlist_ranks[playlist] = {isrc: rank for isrc, rank in self.playlist_ranks[playlist].items() if isrc in self.tracks}
-    
+            self.playlist_ranks[playlist] = {
+                isrc: rank
+                for isrc, rank in self.playlist_ranks[playlist].items()
+                if isrc in self.tracks
+            }
+
     def format_tracks(self):
-        formatted_tracks = {isrc: track.to_dict() for isrc, track in self.tracks.items() if track.isrc is not None}
+        formatted_tracks = {
+            isrc: track.to_dict() for isrc, track in self.tracks.items() if track.isrc is not None
+        }
         return formatted_tracks
 
+    def format_playlist_ranks(self):
+        formatted_ranks = {
+            playlist: [PlaylistRank(isrc=isrc, rank=rank).dict() for isrc, rank in ranks.items()]
+            for playlist, ranks in self.playlist_ranks.items()
+        }
+        return formatted_ranks
 
     def overwrite_data_to_mongo(self):
         formatted_tracks = self.format_tracks()
-        overwrite_kv_collection(self.mongo_client, TRACK_COLLECTION, formatted_tracks)
+        self.mongo_client.overwrite_kv_collection(TRACK_COLLECTION, formatted_tracks)
         print(self.playlist_ranks)
-        overwrite_kv_collection(self.mongo_client, TRACK_PLAYLIST_COLLECTION, self.playlist_ranks)
+        formatted_ranks = self.format_playlist_ranks()
+        self.mongo_client.overwrite_kv_collection(TRACK_PLAYLIST_COLLECTION, formatted_ranks)
 
     def get_isrc_from_spotify_api(self, track_name: str, artist_name: str) -> str | None:
         cache_key = f"{track_name}|{artist_name}"
-        isrc_cache = read_cache_from_mongo(self.mongo_client, ISRC_CACHE_COLLECTION)
+        isrc_cache = self.mongo_client.read_cache(ISRC_CACHE_COLLECTION)
 
         if cache_key in isrc_cache:
             logger.info(f"Spotify cache hit for ISRC: {cache_key}")
@@ -247,7 +243,7 @@ class Transform:
             isrc = search_spotify(query)
             if isrc:
                 logger.info(f"Found ISRC for {track_name} by {artist_name}: {isrc}")
-                update_cache_in_mongo(self.mongo_client, ISRC_CACHE_COLLECTION, cache_key, isrc)
+                self.mongo_client.update_cache(ISRC_CACHE_COLLECTION, cache_key, isrc)
                 return isrc
 
         logger.info(
@@ -255,9 +251,11 @@ class Transform:
         )
         return None
 
-    def get_youtube_url_by_track_and_artist_name(self, track_name: str, artist_name: str) -> str | None:
+    def get_youtube_url_by_track_and_artist_name(
+        self, track_name: str, artist_name: str
+    ) -> str | None:
         cache_key = f"{track_name}|{artist_name}"
-        youtube_cache = read_cache_from_mongo(self.mongo_client, YOUTUBE_CACHE_COLLECTION)
+        youtube_cache = self.mongo_client.read_cache(YOUTUBE_CACHE_COLLECTION)
 
         if cache_key in youtube_cache:
             logger.info(f"Youtube cache hit for ISRC: {cache_key}")
@@ -280,9 +278,7 @@ class Transform:
                     logger.info(
                         f"Updating YouTube cache for {track_name} by {artist_name} with URL {youtube_url}"
                     )
-                    update_cache_in_mongo(
-                        self.mongo_client, YOUTUBE_CACHE_COLLECTION, cache_key, youtube_url
-                    )
+                    self.mongo_client.update_cache(YOUTUBE_CACHE_COLLECTION, cache_key, youtube_url)
                     return youtube_url
             logger.info(f"No video found for {track_name} by {artist_name}")
             return None
@@ -294,9 +290,7 @@ class Transform:
 
     def get_apple_music_album_cover(self, url_link: str) -> str:
         cache_key = url_link
-        album_cover_cache = read_cache_from_mongo(
-            self.mongo_client, APPLE_MUSIC_ALBUM_COVER_CACHE_COLLECTION
-        )
+        album_cover_cache = self.mongo_client.read_cache(APPLE_MUSIC_ALBUM_COVER_CACHE_COLLECTION)
 
         if cache_key in album_cover_cache:
             return album_cover_cache[cache_key]
@@ -312,8 +306,7 @@ class Transform:
 
         srcset = source_tag["srcset"]
         album_cover_url = unquote(srcset.split()[0])
-        update_cache_in_mongo(
-            self.mongo_client,
+        self.mongo_client.update_cache(
             APPLE_MUSIC_ALBUM_COVER_CACHE_COLLECTION,
             cache_key,
             album_cover_url,
@@ -332,59 +325,70 @@ class Transform:
             case _:
                 raise ValueError("Unknown service name")
 
-    def convert_apple_music_raw_export_to_track_type(self, data: dict, genre_name: str) -> list[Track]:
+    def convert_apple_music_raw_export_to_track_type(
+        self, data: dict, genre_name: str
+    ) -> list[Track]:
         logger.info(f"Converting Apple Music data for genre {genre_name}")
         isrc_rank_map = {}
-        
+
         for key, track_data in data["album_details"].items():
             if key.isdigit():
                 track_name = track_data["name"]
                 artist_name = track_data["artist"]
-                isrc = get_isrc_from_spotify_api(track_name, artist_name, self.spotify_client, self.mongo_client)
-                
+                isrc = get_isrc_from_spotify_api(
+                    track_name, artist_name, self.spotify_client, self.mongo_client
+                )
+
+                if isrc is None:
+                    continue
+
                 track_url = track_data["link"]
-                
+
                 if isrc in self.tracks:
                     track.apple_music_track_name = track_name
                     track.apple_music_artist_name = artist_name
                     track.apple_music_track_url = track_url
                 else:
                     track = Track(
-                        isrc = isrc,
+                        isrc=isrc,
                         apple_music_track_name=track_name,
                         apple_music_artist_name=artist_name,
                         apple_music_track_url=track_url,
-                    )                
+                    )
                     self.tracks[isrc] = track
- 
+
                 isrc_rank_map[isrc] = int(key) + 1
-            
+
         self.playlist_ranks[f"AppleMusic_{genre_name}"] = isrc_rank_map
 
-    def convert_soundcloud_raw_export_to_track_type(self, data: dict, genre_name: str) -> list[Track]:
+    def convert_soundcloud_raw_export_to_track_type(
+        self, data: dict, genre_name: str
+    ) -> list[Track]:
         logger.info(f"Converting SoundCloud data for genre {genre_name}")
         isrc_rank_map = {}
-        
+
         for i, item in enumerate(data["tracks"]["items"]):
             isrc = item["publisher"]["isrc"]
+            if isrc is None:
+                continue
             track_name = item["title"]
             artist_name = item["user"]["name"]
             track_url = item["permalink"]
             album_cover_url = item["artworkUrl"]
-            
+
             if " - " in track_name:
                 artist_name, track_name = track_name.split(" - ", 1)
-                
+
             if isrc in self.tracks:
                 track = self.tracks[isrc]
                 track.soundcloud_track_name = track_name
                 track.soundcloud_artist_name = artist_name
                 track.soundcloud_track_url = track_url
                 track.album_cover_url = album_cover_url
-                
+
             else:
                 track = Track(
-                    isrc = isrc,
+                    isrc=isrc,
                     soundcloud_track_name=track_name,
                     soundcloud_artist_name=artist_name,
                     soundcloud_track_url=track_url,
@@ -393,7 +397,7 @@ class Transform:
                 self.tracks[isrc] = track
 
             isrc_rank_map[isrc] = i + 1
-        
+
         self.playlist_ranks[f"SoundCloud_{genre_name}"] = isrc_rank_map
 
     def convert_spotify_raw_export_to_track_type(self, data: dict, genre_name: str) -> list[Track]:
@@ -404,13 +408,16 @@ class Transform:
 
             if not track_info:
                 continue
-            
+
             track_name = track_info["name"]
             artist_name = ", ".join(artist["name"] for artist in track_info["artists"])
             track_url = track_info["external_urls"]["spotify"]
             album_cover_url = track_info["album"]["images"][0]["url"]
             isrc = track_info["external_ids"]["isrc"]
-            
+
+            if isrc is None:
+                continue
+
             if isrc in self.tracks:
                 track = self.tracks[isrc]
                 track.spotify_track_name = track_name
@@ -419,22 +426,25 @@ class Transform:
                 track.album_cover_url = album_cover_url
             else:
                 track = Track(
-                    isrc = isrc,
+                    isrc=isrc,
                     spotify_track_name=track_name,
                     spotify_artist_name=artist_name,
                     spotify_track_url=track_url,
                     album_cover_url=album_cover_url,
                 )
                 self.tracks[isrc] = track
-                
+
             isrc_rank_map[isrc] = i + 1
-        
+
         self.playlist_ranks[f"Spotify_{genre_name}"] = isrc_rank_map
 
     def set_youtube_url_for_all_tracks(self) -> None:
         logger.info("Setting YouTube URLs for all tracks")
         with concurrent.futures.ThreadPoolExecutor(max_workers=1) as executor:
-            futures = [executor.submit(track.set_youtube_url, self.mongo_client) for track in self.tracks.values()]
+            futures = [
+                executor.submit(track.set_youtube_url, self.mongo_client)
+                for track in self.tracks.values()
+            ]
             concurrent.futures.wait(futures)
 
     def set_apple_music_album_cover_url_for_all_tracks(self):
@@ -445,7 +455,8 @@ class Transform:
                 for track in self.tracks.values()
                 if not track.album_cover_url == "AppleMusic"
             ]
-            concurrent.futures.wait(futures)                    
+            concurrent.futures.wait(futures)
+
 
 if __name__ == "__main__":
     transform = Transform()
