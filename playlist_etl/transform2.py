@@ -1,14 +1,10 @@
-import os
 import concurrent.futures
+import os
+
 from pydantic import BaseModel
 
 from playlist_etl.mongo_db_client import MongoDBClient
-from playlist_etl.services import (
-    SpotifyService,
-    YouTubeService,
-    AppleMusicService,
-    CacheService,
-)
+from playlist_etl.services import AppleMusicService, CacheService, SpotifyService, YouTubeService
 from playlist_etl.utils import get_logger, set_secrets
 
 RAW_PLAYLISTS_COLLECTION = "raw_playlists"
@@ -36,34 +32,22 @@ class Track(BaseModel):
 
     def set_youtube_url(self, youtube_service):
         if not self.youtube_url:
-            self.youtube_url = youtube_service.get_youtube_url(
-                self.track_name, self.artist_name
-            )
+            self.youtube_url = youtube_service.get_youtube_url(self.track_name, self.artist_name)
 
     def set_apple_music_album_cover_url(self, apple_music_service):
         if not self.album_cover_url and self.apple_music_track_url:
-            self.album_cover_url = apple_music_service.get_album_cover_url(
-                self.apple_music_track_url
-            )
+            self.album_cover_url = apple_music_service.get_album_cover_url(self.apple_music_track_url)
 
     def to_dict(self) -> dict:
         return self.dict()
 
     @property
     def track_name(self) -> str | None:
-        return (
-            self.spotify_track_name
-            or self.soundcloud_track_name
-            or self.apple_music_track_name
-        )
+        return self.spotify_track_name or self.soundcloud_track_name or self.apple_music_track_name
 
     @property
     def artist_name(self) -> str | None:
-        return (
-            self.spotify_artist_name
-            or self.soundcloud_artist_name
-            or self.apple_music_artist_name
-        )
+        return self.spotify_artist_name or self.soundcloud_artist_name or self.apple_music_artist_name
 
 
 class PlaylistRank(BaseModel):
@@ -75,8 +59,9 @@ class Transform:
     """
     Transforms tracks from raw playlists to Track objects.
     Stores ISRC to track relationship with playlist ranks in MongoDB.
-    
+
     """
+
     def __init__(self):
         set_secrets()
         self.mongo_client = MongoDBClient()
@@ -97,68 +82,56 @@ class Transform:
         self.tracks: dict[str, Track] = {}
         self.playlist_ranks: dict[str, dict[str, int]] = {}
 
-
     def transform(self):
         logger.info("Starting the transformation process")
         self.load_and_transform_data()
         self.save_transformed_data()
         logger.info("Transformation process completed successfully")
-    
+
     def load_and_transform_data(self):
         self.load_raw_playlists()
         self.build_track_objects()
-    
+
     def save_transformed_data(self):
         formatted_tracks = self.format_tracks()
         formatted_ranks = self.format_playlist_ranks()
         self.write_to_database(formatted_tracks, formatted_ranks)
-    
+
     def write_to_database(self, tracks: dict, ranks: dict):
         logger.info("Saving transformed data to MongoDB")
         self.mongo_client.overwrite_kv_collection(TRACK_COLLECTION, tracks)
         self.mongo_client.overwrite_kv_collection(TRACK_PLAYLIST_COLLECTION, ranks)
-    
+
     def load_raw_playlists(self) -> list[dict]:
         logger.info("Reading raw playlists from MongoDB")
         raw_playlists = self.mongo_client.read_data(RAW_PLAYLISTS_COLLECTION)
         logger.info(f"Found {len(raw_playlists)} playlists in MongoDB")
         return raw_playlists
-    
+
     def build_track_objects(self):
         logger.info("Reading raw playlists from MongoDB")
         raw_playlists = self.mongo_client.read_data(RAW_PLAYLISTS_COLLECTION)
-        logger.info(
-            f"Found playlists from MongoDB: {len(raw_playlists)} documents found"
-        )
+        logger.info(f"Found playlists from MongoDB: {len(raw_playlists)} documents found")
 
         for playlist_data in raw_playlists:
             genre_name = playlist_data["genre_name"]
             service_name = playlist_data["service_name"]
 
-            logger.info(
-                f"Processing playlist for genre {genre_name} from {service_name}"
-            )
-            self.convert_to_track_objects(
-                playlist_data["data_json"], service_name, genre_name
-            )
+            logger.info(f"Processing playlist for genre {genre_name} from {service_name}")
+            self.convert_to_track_objects(playlist_data["data_json"], service_name, genre_name)
 
         self.set_youtube_url_for_all_tracks()
         self.set_apple_music_album_cover_url_for_all_tracks()
 
     def format_tracks(self):
         formatted_tracks = {
-            isrc: track.to_dict()
-            for isrc, track in self.tracks.items()
-            if track.isrc is not None
+            isrc: track.to_dict() for isrc, track in self.tracks.items() if track.isrc is not None
         }
         return formatted_tracks
 
     def format_playlist_ranks(self):
         formatted_ranks = {
-            playlist: [
-                PlaylistRank(isrc=isrc, rank=rank).dict()
-                for isrc, rank in ranks.items()
-            ]
+            playlist: [PlaylistRank(isrc=isrc, rank=rank).dict() for isrc, rank in ranks.items()]
             for playlist, ranks in self.playlist_ranks.items()
         }
         return formatted_ranks
@@ -167,16 +140,10 @@ class Transform:
         formatted_tracks = self.format_tracks()
         self.mongo_client.overwrite_kv_collection(TRACK_COLLECTION, formatted_tracks)
         formatted_ranks = self.format_playlist_ranks()
-        self.mongo_client.overwrite_kv_collection(
-            TRACK_PLAYLIST_COLLECTION, formatted_ranks
-        )
+        self.mongo_client.overwrite_kv_collection(TRACK_PLAYLIST_COLLECTION, formatted_ranks)
 
-    def convert_to_track_objects(
-        self, data: dict, service_name: str, genre_name: str
-    ) -> None:
-        logger.info(
-            f"Converting data to track objects for {service_name} and genre {genre_name}"
-        )
+    def convert_to_track_objects(self, data: dict, service_name: str, genre_name: str) -> None:
+        logger.info(f"Converting data to track objects for {service_name} and genre {genre_name}")
         if service_name == "AppleMusic":
             self.convert_apple_music_raw_export_to_track_type(data, genre_name)
         elif service_name == "Spotify":
@@ -186,9 +153,7 @@ class Transform:
         else:
             raise ValueError("Unknown service name")
 
-    def convert_apple_music_raw_export_to_track_type(
-        self, data: dict, genre_name: str
-    ) -> None:
+    def convert_apple_music_raw_export_to_track_type(self, data: dict, genre_name: str) -> None:
         logger.info(f"Converting Apple Music data for genre {genre_name}")
         isrc_rank_map = {}
 
@@ -199,7 +164,9 @@ class Transform:
                 isrc = self.spotify_service.get_isrc(track_name, artist_name)
 
                 if isrc is None:
-                    logger.warning(f"ISRC not found for Apple Music track: {track_name} by {artist_name}")
+                    logger.warning(
+                        f"ISRC not found for Apple Music track: {track_name} by {artist_name}"
+                    )
                     continue
 
                 track_url = track_data["link"]
@@ -222,9 +189,7 @@ class Transform:
 
         self.playlist_ranks[f"AppleMusic_{genre_name}"] = isrc_rank_map
 
-    def convert_soundcloud_raw_export_to_track_type(
-        self, data: dict, genre_name: str
-    ) -> None:
+    def convert_soundcloud_raw_export_to_track_type(self, data: dict, genre_name: str) -> None:
         logger.info(f"Converting SoundCloud data for genre {genre_name}")
         isrc_rank_map = {}
 
@@ -235,7 +200,9 @@ class Transform:
                 artist_name = item["user"]["name"]
                 isrc = self.spotify_service.get_isrc(track_name, artist_name)
                 if isrc is None:
-                    logger.warning(f"ISRC not found for SoundCloud track: {track_name} by {artist_name}")
+                    logger.warning(
+                        f"ISRC not found for SoundCloud track: {track_name} by {artist_name}"
+                    )
                     continue
             else:
                 track_name = item["title"]
@@ -267,9 +234,7 @@ class Transform:
 
         self.playlist_ranks[f"SoundCloud_{genre_name}"] = isrc_rank_map
 
-    def convert_spotify_raw_export_to_track_type(
-        self, data: dict, genre_name: str
-    ) -> None:
+    def convert_spotify_raw_export_to_track_type(self, data: dict, genre_name: str) -> None:
         logger.info(f"Converting Spotify data for genre {genre_name}")
         isrc_rank_map = {}
         for i, item in enumerate(data["items"]):
@@ -279,9 +244,7 @@ class Transform:
                 continue
 
             track_name = track_info["name"]
-            artist_name = ", ".join(
-                artist["name"] for artist in track_info["artists"]
-            )
+            artist_name = ", ".join(artist["name"] for artist in track_info["artists"])
             track_url = track_info["external_urls"]["spotify"]
             album_cover_url = track_info["album"]["images"][0]["url"]
             isrc = track_info["external_ids"].get("isrc")
@@ -289,7 +252,9 @@ class Transform:
             if isrc is None:
                 isrc = self.spotify_service.get_isrc(track_name, artist_name)
                 if isrc is None:
-                    logger.warning(f"ISRC not found for Spotify track: {track_name} by {artist_name}")
+                    logger.warning(
+                        f"ISRC not found for Spotify track: {track_name} by {artist_name}"
+                    )
                     continue
 
             if isrc in self.tracks:
@@ -325,9 +290,7 @@ class Transform:
         logger.info("Setting Apple Music album cover URLs for all tracks")
         with concurrent.futures.ThreadPoolExecutor(max_workers=MAX_THREADS) as executor:
             futures = [
-                executor.submit(
-                    track.set_apple_music_album_cover_url, self.apple_music_service
-                )
+                executor.submit(track.set_apple_music_album_cover_url, self.apple_music_service)
                 for track in self.tracks.values()
                 if track.apple_music_track_url
             ]

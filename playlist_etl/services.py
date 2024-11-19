@@ -1,7 +1,8 @@
 import re
 from typing import Optional
-import requests
 from urllib.parse import unquote
+
+import requests
 from bs4 import BeautifulSoup
 from spotipy import Spotify
 from spotipy.oauth2 import SpotifyClientCredentials
@@ -10,6 +11,7 @@ from playlist_etl.mongo_db_client import MongoDBClient
 from playlist_etl.utils import get_logger
 
 logger = get_logger(__name__)
+
 
 class CacheService:
     def __init__(self, mongo_client: MongoDBClient):
@@ -22,6 +24,7 @@ class CacheService:
     def set(self, collection_name: str, key: str, value):
         logger.info(f"Updating cache in collection: {collection_name} for key: {key}")
         self.mongo_client.update_cache(collection_name, key, value)
+
 
 class SpotifyService:
     ISRC_CACHE_COLLECTION = "isrc_cache"
@@ -70,8 +73,11 @@ class SpotifyService:
                 self.cache_service.set(self.ISRC_CACHE_COLLECTION, cache_key, isrc)
                 return isrc
 
-        logger.info(f"No track found on Spotify using queries: {queries} for {track_name} by {artist_name}")
+        logger.info(
+            f"No track found on Spotify using queries: {queries} for {track_name} by {artist_name}"
+        )
         return None
+
 
 class YouTubeService:
     YOUTUBE_CACHE_COLLECTION = "youtube_cache"
@@ -90,9 +96,7 @@ class YouTubeService:
             return youtube_url
 
         query = f"{track_name} {artist_name}"
-        youtube_search_url = (
-            f"https://www.googleapis.com/youtube/v3/search?part=snippet&q={query}&key={self.api_key}"
-        )
+        youtube_search_url = f"https://www.googleapis.com/youtube/v3/search?part=snippet&q={query}&key={self.api_key}"
         response = requests.get(youtube_search_url)
 
         if response.status_code == 200:
@@ -101,7 +105,9 @@ class YouTubeService:
                 video_id = data["items"][0]["id"].get("videoId")
                 if video_id:
                     youtube_url = f"https://www.youtube.com/watch?v={video_id}"
-                    logger.info(f"Found YouTube URL for {track_name} by {artist_name}: {youtube_url}")
+                    logger.info(
+                        f"Found YouTube URL for {track_name} by {artist_name}: {youtube_url}"
+                    )
                     self.cache_service.set(self.YOUTUBE_CACHE_COLLECTION, cache_key, youtube_url)
                     return youtube_url
             logger.info(f"No video found for {track_name} by {artist_name}")
@@ -111,6 +117,7 @@ class YouTubeService:
             if response.status_code == 403 and "quotaExceeded" in response.text:
                 raise ValueError(f"Could not get YouTube URL for {track_name} {artist_name}")
             return None
+
 
 class AppleMusicService:
     ALBUM_COVER_CACHE_COLLECTION = "apple_music_album_cover_cache"
