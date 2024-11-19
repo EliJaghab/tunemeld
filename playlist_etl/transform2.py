@@ -7,10 +7,11 @@ from pydantic import BaseModel
 from playlist_etl.mongo_db_client import MongoDBClient
 from playlist_etl.services import AppleMusicService, CacheService, SpotifyService, YouTubeService
 from playlist_etl.utils import get_logger, set_secrets
-
-RAW_PLAYLISTS_COLLECTION = "raw_playlists"
-TRACK_COLLECTION = "track"
-TRACK_PLAYLIST_COLLECTION = "track_playlist"
+from playlist_etl.config import (
+    RAW_PLAYLISTS_COLLECTION,
+    TRACK_COLLECTION,
+    TRACK_PLAYLIST_COLLECTION,
+)
 
 MAX_THREADS = 100
 

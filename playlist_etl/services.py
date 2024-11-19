@@ -9,6 +9,11 @@ from spotipy.oauth2 import SpotifyClientCredentials
 
 from playlist_etl.mongo_db_client import MongoDBClient
 from playlist_etl.utils import get_logger
+from playlist_etl.config import (
+    ISRC_CACHE_COLLECTION,
+    YOUTUBE_CACHE_COLLECTION,
+    APPLE_MUSIC_ALBUM_COVER_CACHE_COLLECTION,
+)
 
 logger = get_logger(__name__)
 
@@ -27,8 +32,6 @@ class CacheService:
 
 
 class SpotifyService:
-    ISRC_CACHE_COLLECTION = "isrc_cache"
-
     def __init__(self, client_id: str, client_secret: str, cache_service: CacheService):
         if not client_id or not client_secret:
             raise ValueError("Spotify client ID or client secret not provided.")
@@ -41,7 +44,7 @@ class SpotifyService:
 
     def get_isrc(self, track_name: str, artist_name: str) -> Optional[str]:
         cache_key = f"{track_name}|{artist_name}"
-        isrc = self.cache_service.get(self.ISRC_CACHE_COLLECTION, cache_key)
+        isrc = self.cache_service.get(ISRC_CACHE_COLLECTION, cache_key)
         if isrc:
             logger.info(f"Cache hit for ISRC: {cache_key}")
             return isrc
@@ -70,7 +73,7 @@ class SpotifyService:
             isrc = search_spotify(query)
             if isrc:
                 logger.info(f"Found ISRC for {track_name} by {artist_name}: {isrc}")
-                self.cache_service.set(self.ISRC_CACHE_COLLECTION, cache_key, isrc)
+                self.cache_service.set(ISRC_CACHE_COLLECTION, cache_key, isrc)
                 return isrc
 
         logger.info(
@@ -80,8 +83,6 @@ class SpotifyService:
 
 
 class YouTubeService:
-    YOUTUBE_CACHE_COLLECTION = "youtube_cache"
-
     def __init__(self, api_key: str, cache_service: CacheService):
         if not api_key:
             raise ValueError("YouTube API key not provided.")
@@ -90,7 +91,7 @@ class YouTubeService:
 
     def get_youtube_url(self, track_name: str, artist_name: str) -> Optional[str]:
         cache_key = f"{track_name}|{artist_name}"
-        youtube_url = self.cache_service.get(self.YOUTUBE_CACHE_COLLECTION, cache_key)
+        youtube_url = self.cache_service.get(YOUTUBE_CACHE_COLLECTION, cache_key)
         if youtube_url:
             logger.info(f"Cache hit for YouTube URL: {cache_key}")
             return youtube_url
@@ -108,7 +109,7 @@ class YouTubeService:
                     logger.info(
                         f"Found YouTube URL for {track_name} by {artist_name}: {youtube_url}"
                     )
-                    self.cache_service.set(self.YOUTUBE_CACHE_COLLECTION, cache_key, youtube_url)
+                    self.cache_service.set(YOUTUBE_CACHE_COLLECTION, cache_key, youtube_url)
                     return youtube_url
             logger.info(f"No video found for {track_name} by {artist_name}")
             return None
@@ -120,14 +121,12 @@ class YouTubeService:
 
 
 class AppleMusicService:
-    ALBUM_COVER_CACHE_COLLECTION = "apple_music_album_cover_cache"
-
     def __init__(self, cache_service: CacheService):
         self.cache_service = cache_service
 
     def get_album_cover_url(self, track_url: str) -> Optional[str]:
         cache_key = track_url
-        album_cover_url = self.cache_service.get(self.ALBUM_COVER_CACHE_COLLECTION, cache_key)
+        album_cover_url = self.cache_service.get(APPLE_MUSIC_ALBUM_COVER_CACHE_COLLECTION, cache_key)
         if album_cover_url:
             logger.info(f"Cache hit for Apple Music Album Cover URL: {cache_key}")
             return album_cover_url
@@ -144,7 +143,7 @@ class AppleMusicService:
 
             srcset = source_tag["srcset"]
             album_cover_url = unquote(srcset.split()[0])
-            self.cache_service.set(self.ALBUM_COVER_CACHE_COLLECTION, cache_key, album_cover_url)
+            self.cache_service.set(APPLE_MUSIC_ALBUM_COVER_CACHE_COLLECTION, cache_key, album_cover_url)
             return album_cover_url
         except Exception as e:
             logger.info(f"Error fetching album cover URL: {e}")
