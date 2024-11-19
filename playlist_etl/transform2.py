@@ -1,5 +1,6 @@
 import concurrent.futures
 import os
+from collections import defaultdict
 
 from pydantic import BaseModel
 
@@ -36,10 +37,12 @@ class Track(BaseModel):
 
     def set_apple_music_album_cover_url(self, apple_music_service):
         if not self.album_cover_url and self.apple_music_track_url:
-            self.album_cover_url = apple_music_service.get_album_cover_url(self.apple_music_track_url)
+            self.album_cover_url = apple_music_service.get_album_cover_url(
+                self.apple_music_track_url
+            )
 
     def to_dict(self) -> dict:
-        return self.dict()
+        return self.model_dump()
 
 
 class PlaylistRank(BaseModel):
@@ -54,14 +57,18 @@ class Transform:
 
     """
 
-    def __init__(self, mongo_client, cache_service, spotify_service, youtube_service, apple_music_service):
+    def __init__(
+        self, mongo_client, cache_service, spotify_service, youtube_service, apple_music_service
+    ):
         self.mongo_client = mongo_client
         self.cache_service = cache_service
         self.spotify_service = spotify_service
         self.youtube_service = youtube_service
         self.apple_music_service = apple_music_service
         self.tracks: dict[str, Track] = {}
-        self.playlist_ranks: dict[str, dict[str, int]] = {}
+        self.playlist_ranks: dict[str, dict[str, int]] = (
+            {}
+        )  # {service_name}_{genre_name}: {isrc: rank}}
 
     def transform(self):
         logger.info("Starting the transformation process")
@@ -277,11 +284,131 @@ class Transform:
             ]
             concurrent.futures.wait(futures)
 
+
 class Aggregate:
     def __init__(self, mongo_client):
         self.mongo_client = mongo_client
-    
-    
+
+    def aggregate(self):
+        tracks, track_playlist = self._get_track_data_from_mongo()
+        self._aggregate_tracks_by_isrc(track_playlist)
+
+    def _aggregate_tracks_by_isrc(self, track_playlist):
+        candidates_by_genre = self._group_by_genre(track_playlist)
+        aggregate_by_isrc = self._group_by_isrc_within_genre(candidates_by_genre)
+        matches = self._get_matches(aggregate_by_isrc)
+        self._rank_matches(matches)
+
+    def _get_track_data_from_mongo(self):
+        tracks = self.mongo_client.read_data(TRACK_COLLECTION)
+        track_playlist = self.mongo_client.read_data(TRACK_PLAYLIST_COLLECTION)
+        return tracks, track_playlist
+
+    def _group_by_genre(self, track_playlist) -> dict:
+        """Group ISRC matches across the same genre from different services.
+        Eg. output
+        {
+            "dance": {
+                "23490580": {
+                    "rank": 1,
+                    "service_name": "soundcloud"
+                },
+                "23490580": {
+                    "rank": 2,
+                    "service_name": "spotify"
+                }
+            }
+        }
+        """
+        candidates_by_genre = defaultdict(dict)
+        for item in track_playlist:
+            genre_name, service_name = item["key"].split("_")
+            for track in item["value"]:
+                candidates_by_genre[genre_name][track["isrc"]] = {
+                    "rank": track["rank"],
+                    "service_name": service_name,
+                }
+        return candidates_by_genre
+
+    def _group_by_isrc_within_genre(self, candidate_by_genre):
+        """Groups ISRC matches across the same genre. Two different playlists can have the same ISRC.
+        Eg. output
+        {
+            "dance": {
+                "23490580": {
+                    [("soundcloud", 1)]
+                },
+                "23434580": {
+                    [("soundcloud", 1), ("spotify", 2)]
+                }
+            }
+            "pop": {
+                "23490523": {
+                    [("soundcloud", 1), ("spotify", 2)]
+                },
+                "23490580": {
+                    [("soundcloud", 1)]
+                }
+        }
+        """
+        aggregate_by_isrc = defaultdict(lambda: defaultdict(list))
+        for genre, candidates in candidate_by_genre.items():
+            for isrc, candidate in candidates.items():
+                aggregate_by_isrc[genre][isrc].append(
+                    (candidate["service_name"], candidate["rank"])
+                )
+        return aggregate_by_isrc
+
+    def _get_matches(self, aggregate_by_isrc):
+        """Get ISRCs that come up more than once for the same genre.
+        Eg. input
+         {
+            "pop": {
+                "23490523": {
+                    [("soundcloud", 1), ("spotify", 2)]
+                },
+                "23490580": {
+                    [("soundcloud", 1)]
+                }
+        }
+        Eg. output:
+        {
+            "pop": {
+                "23490523": {
+                    [("soundcloud", 1), ("spotify", 2)]
+        }
+        """
+        matches = {}
+        for genre, isrcs in aggregate_by_isrc.items():
+            matches[genre] = {isrc: sources for isrc, sources in isrcs.items() if len(sources) > 1}
+        return matches
+
+    def _rank_matches(self, matches):
+        """Rank matches based on the rank of the services.
+        Eg. input
+        {
+            "pop": {
+                "23490523": {
+                    [("soundcloud", 1), ("spotify", 2)]
+                },
+        }
+        Eg. output
+        {
+            "dance": {
+                1: {
+                    ISRC: "23490523",
+                    sources: [("soundcloud", 1), ("spotify", 2)]
+                }
+            }
+        }
+        """
+        rank_priority = ["AppleMusic", "SoundCloud", "Spotify"]
+        for genre_name, matches_by_genre in matches.items():
+            for isrc, sources in matches_by_genre.items():
+                ranked_sources = sorted(sources, key=lambda x: rank_priority.index(x[0]))
+                matches[genre_name][isrc] = {"isrc": isrc, "sources": ranked_sources}
+
+        return matches
 
 
 if __name__ == "__main__":
@@ -298,8 +425,10 @@ if __name__ == "__main__":
     )
     apple_music_service = AppleMusicService(cache_service)
 
-    transform = Transform(mongo_client, cache_service, spotify_service, youtube_service, apple_music_service)
+    transform = Transform(
+        mongo_client, cache_service, spotify_service, youtube_service, apple_music_service
+    )
     transform.transform()
 
-    aggregate = Aggregate(mongo_client, cache_service, spotify_service, youtube_service)
+    aggregate = Aggregate(mongo_client)
     aggregate.aggregate()
