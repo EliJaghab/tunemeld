@@ -41,14 +41,6 @@ class Track(BaseModel):
     def to_dict(self) -> dict:
         return self.dict()
 
-    @property
-    def track_name(self) -> str | None:
-        return self.spotify_track_name or self.soundcloud_track_name or self.apple_music_track_name
-
-    @property
-    def artist_name(self) -> str | None:
-        return self.spotify_artist_name or self.soundcloud_artist_name or self.apple_music_artist_name
-
 
 class PlaylistRank(BaseModel):
     isrc: str
@@ -296,7 +288,13 @@ class Transform:
             ]
             concurrent.futures.wait(futures)
 
+class Aggregate:
+    
+            
+
 
 if __name__ == "__main__":
     transform = Transform()
     transform.transform()
+    aggregate = Aggregate()
+    aggregate.aggregate()
