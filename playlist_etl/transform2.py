@@ -54,23 +54,12 @@ class Transform:
 
     """
 
-    def __init__(self):
-        set_secrets()
-        self.mongo_client = MongoDBClient()
-        self.cache_service = CacheService(self.mongo_client)
-
-        self.spotify_service = SpotifyService(
-            client_id=os.getenv("SPOTIFY_CLIENT_ID"),
-            client_secret=os.getenv("SPOTIFY_CLIENT_SECRET"),
-            cache_service=self.cache_service,
-        )
-
-        self.youtube_service = YouTubeService(
-            api_key=os.getenv("GOOGLE_API_KEY"), cache_service=self.cache_service
-        )
-
-        self.apple_music_service = AppleMusicService(self.cache_service)
-
+    def __init__(self, mongo_client, cache_service, spotify_service, youtube_service, apple_music_service):
+        self.mongo_client = mongo_client
+        self.cache_service = cache_service
+        self.spotify_service = spotify_service
+        self.youtube_service = youtube_service
+        self.apple_music_service = apple_music_service
         self.tracks: dict[str, Track] = {}
         self.playlist_ranks: dict[str, dict[str, int]] = {}
 
@@ -289,12 +278,28 @@ class Transform:
             concurrent.futures.wait(futures)
 
 class Aggregate:
+    def __init__(self, mongo_client):
+        self.mongo_client = mongo_client
     
-            
+    
 
 
 if __name__ == "__main__":
-    transform = Transform()
+    set_secrets()
+    mongo_client = MongoDBClient()
+    cache_service = CacheService(mongo_client)
+    spotify_service = SpotifyService(
+        client_id=os.getenv("SPOTIFY_CLIENT_ID"),
+        client_secret=os.getenv("SPOTIFY_CLIENT_SECRET"),
+        cache_service=cache_service,
+    )
+    youtube_service = YouTubeService(
+        api_key=os.getenv("GOOGLE_API_KEY"), cache_service=cache_service
+    )
+    apple_music_service = AppleMusicService(cache_service)
+
+    transform = Transform(mongo_client, cache_service, spotify_service, youtube_service, apple_music_service)
     transform.transform()
-    aggregate = Aggregate()
+
+    aggregate = Aggregate(mongo_client, cache_service, spotify_service, youtube_service)
     aggregate.aggregate()
