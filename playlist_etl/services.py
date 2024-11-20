@@ -7,13 +7,13 @@ from bs4 import BeautifulSoup
 from spotipy import Spotify
 from spotipy.oauth2 import SpotifyClientCredentials
 
-from playlist_etl.mongo_db_client import MongoDBClient
-from playlist_etl.utils import get_logger
 from playlist_etl.config import (
+    APPLE_MUSIC_ALBUM_COVER_CACHE_COLLECTION,
     ISRC_CACHE_COLLECTION,
     YOUTUBE_CACHE_COLLECTION,
-    APPLE_MUSIC_ALBUM_COVER_CACHE_COLLECTION,
 )
+from playlist_etl.mongo_db_client import MongoDBClient
+from playlist_etl.utils import get_logger
 
 logger = get_logger(__name__)
 
@@ -126,7 +126,9 @@ class AppleMusicService:
 
     def get_album_cover_url(self, track_url: str) -> Optional[str]:
         cache_key = track_url
-        album_cover_url = self.cache_service.get(APPLE_MUSIC_ALBUM_COVER_CACHE_COLLECTION, cache_key)
+        album_cover_url = self.cache_service.get(
+            APPLE_MUSIC_ALBUM_COVER_CACHE_COLLECTION, cache_key
+        )
         if album_cover_url:
             logger.info(f"Cache hit for Apple Music Album Cover URL: {cache_key}")
             return album_cover_url
@@ -143,7 +145,9 @@ class AppleMusicService:
 
             srcset = source_tag["srcset"]
             album_cover_url = unquote(srcset.split()[0])
-            self.cache_service.set(APPLE_MUSIC_ALBUM_COVER_CACHE_COLLECTION, cache_key, album_cover_url)
+            self.cache_service.set(
+                APPLE_MUSIC_ALBUM_COVER_CACHE_COLLECTION, cache_key, album_cover_url
+            )
             return album_cover_url
         except Exception as e:
             logger.info(f"Error fetching album cover URL: {e}")

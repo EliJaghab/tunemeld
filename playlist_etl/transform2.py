@@ -5,16 +5,16 @@ from typing import Any
 
 from pydantic import BaseModel
 
+from playlist_etl.config import (
+    GENRE_NAMES,
+    RAW_PLAYLISTS_COLLECTION,
+    SERVICE_NAMES,
+    TRACK_COLLECTION,
+    TRACK_PLAYLIST_COLLECTION,
+)
 from playlist_etl.mongo_db_client import MongoDBClient
 from playlist_etl.services import AppleMusicService, CacheService, SpotifyService, YouTubeService
 from playlist_etl.utils import get_logger, set_secrets
-from playlist_etl.config import (
-    RAW_PLAYLISTS_COLLECTION,
-    TRACK_COLLECTION,
-    TRACK_PLAYLIST_COLLECTION,
-    GENRE_NAMES,
-    SERVICE_NAMES,
-)
 
 MAX_THREADS = 100
 
@@ -98,7 +98,9 @@ class Transform:
 
         for genre_name in GENRE_NAMES:
             for service_name in SERVICE_NAMES:
-                raw_playlist = raw_playlists.find_one({"genre_name": genre_name, "service_name": service_name})
+                raw_playlist = raw_playlists.find_one(
+                    {"genre_name": genre_name, "service_name": service_name}
+                )
                 logger.info(f"Processing playlist for genre {genre_name} from {service_name}")
                 self.convert_to_track_objects(raw_playlist["data_json"], service_name, genre_name)
 
@@ -107,11 +109,9 @@ class Transform:
 
     def format_tracks(self) -> list[dict[str, Any]]:
         formatted_tracks = [
-            {
-                "isrc": isrc,
-                "service_data": track.model_dump(exclude={"isrc"})
-            }
-            for isrc, track in self.tracks.items() if track.isrc is not None
+            {"isrc": isrc, "service_data": track.model_dump(exclude={"isrc"})}
+            for isrc, track in self.tracks.items()
+            if track.isrc is not None
         ]
         return formatted_tracks
 
@@ -120,13 +120,15 @@ class Transform:
             PlaylistRank(
                 service_name=service_name,
                 genre_name=genre_name,
-                tracks=[TrackRank(isrc=isrc, rank=rank) for isrc, rank in ranks.items()]
+                tracks=[TrackRank(isrc=isrc, rank=rank) for isrc, rank in ranks.items()],
             ).model_dump()
             for (service_name, genre_name), ranks in self.playlist_ranks.items()
         ]
         return formatted_ranks
 
-    def convert_to_track_objects(self, data: dict[str, Any], service_name: str, genre_name: str) -> None:
+    def convert_to_track_objects(
+        self, data: dict[str, Any], service_name: str, genre_name: str
+    ) -> None:
         logger.info(f"Converting data to track objects for {service_name} and genre {genre_name}")
         if service_name == "AppleMusic":
             self.convert_apple_music_raw_export_to_track_type(data, genre_name)
@@ -137,7 +139,9 @@ class Transform:
         else:
             raise ValueError("Unknown service name")
 
-    def convert_apple_music_raw_export_to_track_type(self, data: dict[str, Any], genre_name: str) -> None:
+    def convert_apple_music_raw_export_to_track_type(
+        self, data: dict[str, Any], genre_name: str
+    ) -> None:
         logger.info(f"Converting Apple Music data for genre {genre_name}")
         isrc_rank_map = {}
 
@@ -173,7 +177,9 @@ class Transform:
 
         self.playlist_ranks[(f"AppleMusic", genre_name)] = isrc_rank_map
 
-    def convert_soundcloud_raw_export_to_track_type(self, data: dict[str, Any], genre_name: str) -> None:
+    def convert_soundcloud_raw_export_to_track_type(
+        self, data: dict[str, Any], genre_name: str
+    ) -> None:
         logger.info(f"Converting SoundCloud data for genre {genre_name}")
         isrc_rank_map = {}
 
@@ -218,7 +224,9 @@ class Transform:
 
         self.playlist_ranks[(f"SoundCloud", genre_name)] = isrc_rank_map
 
-    def convert_spotify_raw_export_to_track_type(self, data: dict[str, Any], genre_name: str) -> None:
+    def convert_spotify_raw_export_to_track_type(
+        self, data: dict[str, Any], genre_name: str
+    ) -> None:
         logger.info(f"Converting Spotify data for genre {genre_name}")
         isrc_rank_map = {}
         for i, item in enumerate(data["items"]):
@@ -300,7 +308,9 @@ class Aggregate:
         track_playlist = self.mongo_client.read_data(TRACK_PLAYLIST_COLLECTION)
         return tracks, track_playlist
 
-    def _group_by_genre(self, track_playlist: list[dict[str, Any]]) -> dict[str, dict[str, dict[str, Any]]]:
+    def _group_by_genre(
+        self, track_playlist: list[dict[str, Any]]
+    ) -> dict[str, dict[str, dict[str, Any]]]:
         """Group ISRC matches across the same genre from different services.
         Eg. output
         {
@@ -326,7 +336,9 @@ class Aggregate:
                 }
         return candidates_by_genre
 
-    def _group_by_isrc_within_genre(self, candidate_by_genre: dict[str, dict[str, dict[str, Any]]]) -> dict[str, dict[str, list[tuple]]]:
+    def _group_by_isrc_within_genre(
+        self, candidate_by_genre: dict[str, dict[str, dict[str, Any]]]
+    ) -> dict[str, dict[str, list[tuple]]]:
         """Groups ISRC matches across the same genre. Two different playlists can have the same ISRC.
         Eg. output
         {
@@ -355,7 +367,9 @@ class Aggregate:
                 )
         return aggregate_by_isrc
 
-    def _get_matches(self, aggregate_by_isrc: dict[str, dict[str, list[tuple]]]) -> dict[str, dict[str, list[tuple]]]:
+    def _get_matches(
+        self, aggregate_by_isrc: dict[str, dict[str, list[tuple]]]
+    ) -> dict[str, dict[str, list[tuple]]]:
         """Get ISRCs that come up more than once for the same genre.
         Eg. input
          {
@@ -379,7 +393,9 @@ class Aggregate:
             matches[genre] = {isrc: sources for isrc, sources in isrcs.items() if len(sources) > 1}
         return matches
 
-    def _rank_matches(self, matches: dict[str, dict[str, list[tuple]]]) -> dict[str, dict[str, dict[str, Any]]]:
+    def _rank_matches(
+        self, matches: dict[str, dict[str, list[tuple]]]
+    ) -> dict[str, dict[str, dict[str, Any]]]:
         """Rank matches based on the rank of the services.
         Eg. input
         {
@@ -426,5 +442,5 @@ if __name__ == "__main__":
     )
     transform.transform()
 
-    #aggregate = Aggregate(mongo_client)
-    #aggregate.aggregate()
+    # aggregate = Aggregate(mongo_client)
+    # aggregate.aggregate()

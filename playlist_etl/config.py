@@ -1,5 +1,5 @@
 GENRE_NAMES = ["pop", "dance", "country", "pop"]
-#GENRE_NAMES = ["dance"]
+# GENRE_NAMES = ["dance"]
 SERVICE_NAMES = ["Spotify", "AppleMusic", "SoundCloud"]
 
 PLAYLIST_ETL_DATABASE = "playlist_etl"
