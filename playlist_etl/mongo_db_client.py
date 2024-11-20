@@ -4,9 +4,8 @@ from typing import Any
 
 from pymongo import MongoClient
 from pymongo.collection import Collection
-from utils import get_logger, set_secrets
-
-PLAYLIST_ETL_COLLECTION_NAME = "playlist_etl"
+from playlist_etl.utils import get_logger, set_secrets
+from playlist_etl.config import PLAYLIST_ETL_DATABASE
 
 logger = get_logger(__name__)
 
@@ -18,7 +17,7 @@ class MongoDBClient:
         if not mongo_uri:
             raise Exception("MONGO_URI environment variable not set")
         self.client = MongoClient(mongo_uri)
-        self.db = self.client[PLAYLIST_ETL_COLLECTION_NAME]
+        self.db = self.client[PLAYLIST_ETL_DATABASE]
 
     def get_collection(self, collection_name: str) -> Collection[Any]:
         return self.db[collection_name]
@@ -92,3 +91,4 @@ class MongoDBClient:
             logger.info(
                 f"Overwritten KV collection: {collection_name} with {len(documents)} entries"
             )
+ 
