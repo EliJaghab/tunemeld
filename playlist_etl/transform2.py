@@ -6,9 +6,12 @@ from typing import Any
 from pydantic import BaseModel
 
 from playlist_etl.config import (
+    APPLE_MUSIC,
     GENRE_NAMES,
     RAW_PLAYLISTS_COLLECTION,
     SERVICE_NAMES,
+    SOUNDCLOUD,
+    SPOTIFY,
     TRACK_COLLECTION,
     TRACK_PLAYLIST_COLLECTION,
 )
@@ -49,6 +52,7 @@ class Track(BaseModel):
 class TrackRank(BaseModel):
     isrc: str
     rank: int
+    sources: list[str]
 
 
 class PlaylistRank(BaseModel):
@@ -77,7 +81,7 @@ class Transform:
         self.youtube_service = youtube_service
         self.apple_music_service = apple_music_service
         self.tracks: dict[str, Track] = {}
-        self.playlist_ranks: dict[str, dict[str, int]] = {}
+        self.playlist_ranks: dict[tuple[str, str], list[TrackRank]] = {}
 
     def transform(self) -> None:
         logger.info("Starting the transformation process")
@@ -120,7 +124,10 @@ class Transform:
             PlaylistRank(
                 service_name=service_name,
                 genre_name=genre_name,
-                tracks=[TrackRank(isrc=isrc, rank=rank) for isrc, rank in ranks.items()],
+                tracks=[
+                    TrackRank(isrc=rank.isrc, rank=rank.rank, sources=rank.sources)
+                    for rank in ranks
+                ],
             ).model_dump()
             for (service_name, genre_name), ranks in self.playlist_ranks.items()
         ]
@@ -130,11 +137,11 @@ class Transform:
         self, data: dict[str, Any], service_name: str, genre_name: str
     ) -> None:
         logger.info(f"Converting data to track objects for {service_name} and genre {genre_name}")
-        if service_name == "AppleMusic":
+        if service_name == APPLE_MUSIC:
             self.convert_apple_music_raw_export_to_track_type(data, genre_name)
-        elif service_name == "Spotify":
+        elif service_name == SPOTIFY:
             self.convert_spotify_raw_export_to_track_type(data, genre_name)
-        elif service_name == "SoundCloud":
+        elif service_name == SOUNDCLOUD:
             self.convert_soundcloud_raw_export_to_track_type(data, genre_name)
         else:
             raise ValueError("Unknown service name")
@@ -143,7 +150,7 @@ class Transform:
         self, data: dict[str, Any], genre_name: str
     ) -> None:
         logger.info(f"Converting Apple Music data for genre {genre_name}")
-        isrc_rank_map = {}
+        isrc_rank_map = []
 
         for key, track_data in data["album_details"].items():
             if key.isdigit():
@@ -173,15 +180,15 @@ class Transform:
                     )
                     self.tracks[isrc] = track
 
-                isrc_rank_map[isrc] = int(key) + 1
+                isrc_rank_map.append(TrackRank(isrc=isrc, rank=int(key) + 1, sources=[APPLE_MUSIC]))
 
-        self.playlist_ranks[(f"AppleMusic", genre_name)] = isrc_rank_map
+        self.playlist_ranks[(APPLE_MUSIC, genre_name)] = isrc_rank_map
 
     def convert_soundcloud_raw_export_to_track_type(
         self, data: dict[str, Any], genre_name: str
     ) -> None:
         logger.info(f"Converting SoundCloud data for genre {genre_name}")
-        isrc_rank_map = {}
+        isrc_rank_map = []
 
         for i, item in enumerate(data["tracks"]["items"]):
             isrc = item.get("publisher", {}).get("isrc")
@@ -220,15 +227,15 @@ class Transform:
                 )
                 self.tracks[isrc] = track
 
-            isrc_rank_map[isrc] = i + 1
+            isrc_rank_map.append(TrackRank(isrc=isrc, rank=i + 1, sources=[SOUNDCLOUD]))
 
-        self.playlist_ranks[(f"SoundCloud", genre_name)] = isrc_rank_map
+        self.playlist_ranks[(SOUNDCLOUD, genre_name)] = isrc_rank_map
 
     def convert_spotify_raw_export_to_track_type(
         self, data: dict[str, Any], genre_name: str
     ) -> None:
         logger.info(f"Converting Spotify data for genre {genre_name}")
-        isrc_rank_map = {}
+        isrc_rank_map = []
         for i, item in enumerate(data["items"]):
             track_info = item.get("track")
 
@@ -265,9 +272,9 @@ class Transform:
                 )
                 self.tracks[isrc] = track
 
-            isrc_rank_map[isrc] = i + 1
+            isrc_rank_map.append(TrackRank(isrc=isrc, rank=i + 1, sources=[SPOTIFY]))
 
-        self.playlist_ranks[(f"Spotify", genre_name)] = isrc_rank_map
+        self.playlist_ranks[(SPOTIFY, genre_name)] = isrc_rank_map
 
     def set_youtube_url_for_all_tracks(self) -> None:
         logger.info("Setting YouTube URLs for all tracks")
@@ -293,132 +300,60 @@ class Aggregate:
     def __init__(self, mongo_client: MongoDBClient):
         self.mongo_client = mongo_client
 
-    def aggregate(self) -> None:
-        tracks, track_playlist = self._get_track_data_from_mongo()
-        self._aggregate_tracks_by_isrc(track_playlist)
-
-    def _aggregate_tracks_by_isrc(self, track_playlist: list[dict[str, Any]]) -> None:
+    def aggregate(self, track_playlist):
         candidates_by_genre = self._group_by_genre(track_playlist)
-        aggregate_by_isrc = self._group_by_isrc_within_genre(candidates_by_genre)
-        matches = self._get_matches(aggregate_by_isrc)
+        matches = self._get_matches(candidates_by_genre)
         self._rank_matches(matches)
 
-    def _get_track_data_from_mongo(self) -> (list[dict[str, Any]], list[dict[str, Any]]):
-        tracks = self.mongo_client.read_data(TRACK_COLLECTION)
-        track_playlist = self.mongo_client.read_data(TRACK_PLAYLIST_COLLECTION)
-        return tracks, track_playlist
-
-    def _group_by_genre(
-        self, track_playlist: list[dict[str, Any]]
-    ) -> dict[str, dict[str, dict[str, Any]]]:
+    def _group_by_genre(self, track_playlist) -> dict:
         """Group ISRC matches across the same genre from different services.
         Eg. output
         {
             "dance": {
                 "23490580": {
-                    "rank": 1,
-                    "service_name": "soundcloud"
-                },
-                "23490580": {
-                    "rank": 2,
-                    "service_name": "spotify"
+                    "SoundCloud": 1,
+                    "Spotify": 2
                 }
             }
         }
         """
-        candidates_by_genre = defaultdict(dict)
-        for item in track_playlist:
-            genre_name, service_name = item["key"].split("_")
-            for track in item["value"]:
-                candidates_by_genre[genre_name][track["isrc"]] = {
-                    "rank": track["rank"],
-                    "service_name": service_name,
-                }
+        track_playlists = self.mongo_client.get_collection(TRACK_PLAYLIST_COLLECTION)
+        candidates_by_genre = defaultdict(lambda: defaultdict(dict))
+        for genre_name in GENRE_NAMES:
+            for service_name in SERVICE_NAMES:
+                track_playlist = track_playlists.find_one(
+                    {"genre_name": genre_name, "service_name": service_name}
+                )
+
+                for track in track_playlist["tracks"]:
+                    candidates_by_genre[genre_name][track["isrc"]][service_name] = track["rank"]
+
         return candidates_by_genre
 
-    def _group_by_isrc_within_genre(
-        self, candidate_by_genre: dict[str, dict[str, dict[str, Any]]]
-    ) -> dict[str, dict[str, list[tuple]]]:
-        """Groups ISRC matches across the same genre. Two different playlists can have the same ISRC.
-        Eg. output
-        {
-            "dance": {
-                "23490580": {
-                    [("soundcloud", 1)]
-                },
-                "23434580": {
-                    [("soundcloud", 1), ("spotify", 2)]
-                }
-            }
-            "pop": {
-                "23490523": {
-                    [("soundcloud", 1), ("spotify", 2)]
-                },
-                "23490580": {
-                    [("soundcloud", 1)]
-                }
-        }
-        """
-        aggregate_by_isrc = defaultdict(lambda: defaultdict(list))
-        for genre, candidates in candidate_by_genre.items():
-            for isrc, candidate in candidates.items():
-                aggregate_by_isrc[genre][isrc].append(
-                    (candidate["service_name"], candidate["rank"])
-                )
-        return aggregate_by_isrc
-
-    def _get_matches(
-        self, aggregate_by_isrc: dict[str, dict[str, list[tuple]]]
-    ) -> dict[str, dict[str, list[tuple]]]:
-        """Get ISRCs that come up more than once for the same genre.
-        Eg. input
-         {
-            "pop": {
-                "23490523": {
-                    [("soundcloud", 1), ("spotify", 2)]
-                },
-                "23490580": {
-                    [("soundcloud", 1)]
-                }
-        }
-        Eg. output:
-        {
-            "pop": {
-                "23490523": {
-                    [("soundcloud", 1), ("spotify", 2)]
-        }
-        """
-        matches = {}
-        for genre, isrcs in aggregate_by_isrc.items():
-            matches[genre] = {isrc: sources for isrc, sources in isrcs.items() if len(sources) > 1}
+    def _get_matches(self, candidates):
+        """Get ISRCs that come up more than once for the same genre."""
+        matches = defaultdict(dict)
+        for genre_name, isrc in candidates.items():
+            for isrc, sources in isrc.items():
+                if len(sources.values()) > 1:
+                    matches[genre_name][isrc] = sources
         return matches
 
-    def _rank_matches(
-        self, matches: dict[str, dict[str, list[tuple]]]
-    ) -> dict[str, dict[str, dict[str, Any]]]:
-        """Rank matches based on the rank of the services.
-        Eg. input
-        {
-            "pop": {
-                "23490523": {
-                    [("soundcloud", 1), ("spotify", 2)]
-                },
-        }
-        Eg. output
-        {
-            "dance": {
-                1: {
-                    ISRC: "23490523",
-                    sources: [("soundcloud", 1), ("spotify", 2)]
-                }
-            }
-        }
-        """
+    def _rank_by_service(self, matches):
+        """Rank matches based on the rank of the services."""
         rank_priority = ["AppleMusic", "SoundCloud", "Spotify"]
-        for genre_name, matches_by_genre in matches.items():
-            for isrc, sources in matches_by_genre.items():
-                ranked_sources = sorted(sources, key=lambda x: rank_priority.index(x[0]))
-                matches[genre_name][isrc] = {"isrc": isrc, "sources": ranked_sources}
+
+        for isrc_sources in matches.values():
+            for sources in isrc_sources.values():
+                aggregate_service_name = None
+
+                for service_name in rank_priority:
+                    if service_name in sources:
+                        aggregate_service_name = service_name
+
+                raw_aggregate_rank = sources[aggregate_service_name]
+                sources["raw_aggregate_rank"] = raw_aggregate_rank
+                sources["aggregate_service_name"] = aggregate_service_name
 
         return matches
 
@@ -442,5 +377,5 @@ if __name__ == "__main__":
     )
     transform.transform()
 
-    # aggregate = Aggregate(mongo_client)
+    aggregate = Aggregate(mongo_client)
     # aggregate.aggregate()
