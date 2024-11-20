@@ -6,6 +6,7 @@ from typing import Any
 from pydantic import BaseModel
 
 from playlist_etl.config import (
+    AGGREGATE,
     APPLE_MUSIC,
     GENRE_NAMES,
     RANK_PRIORITY,
@@ -23,7 +24,6 @@ from playlist_etl.utils import get_logger, set_secrets
 MAX_THREADS = 100
 
 logger = get_logger(__name__)
-
 
 class Track(BaseModel):
     isrc: str
@@ -301,24 +301,17 @@ class Aggregate:
     def __init__(self, mongo_client: MongoDBClient):
         self.mongo_client = mongo_client
 
-    def aggregate(self, track_playlist):
-        candidates_by_genre = self._group_by_genre(track_playlist)
-        matches = self._get_matches(candidates_by_genre)
-        self._rank_matches(matches)
-
-    def _group_by_genre(self, track_playlist) -> dict:
-        """Group ISRC matches across the same genre from different services.
-        Eg. output
-        {
-            "dance": {
-                "23490580": {
-                    "SoundCloud": 1,
-                    "Spotify": 2
-                }
-            }
-        }
-        """
+    def aggregate(self):
         track_playlists = self.mongo_client.get_collection(TRACK_PLAYLIST_COLLECTION)
+        candidates_by_genre = self._group_by_genre(track_playlists)
+        matches = self._get_matches(candidates_by_genre)
+        ranked_matches = self._add_aggregate_rank(matches)
+        sorted_matches = self._rank_matches(ranked_matches)
+        formatted_playlists = self._format_aggregated_playlist(sorted_matches)
+        self._write_aggregated_playlists(formatted_playlists)
+
+    def _group_by_genre(self, track_playlists) -> dict:
+        """Group ISRC matches across the same genre from different services."""
         candidates_by_genre = defaultdict(lambda: defaultdict(dict))
         for genre_name in GENRE_NAMES:
             for service_name in SERVICE_NAMES:
@@ -331,16 +324,16 @@ class Aggregate:
 
         return candidates_by_genre
 
-    def _get_matches(self, candidates):
+    def _get_matches(self, candidates: dict) -> dict:
         """Get ISRCs that come up more than once for the same genre."""
         matches = defaultdict(dict)
-        for genre_name, isrc in candidates.items():
-            for isrc, sources in isrc.items():
-                if len(sources.values()) > 1:
+        for genre_name, isrcs in candidates.items():
+            for isrc, sources in isrcs.items():
+                if len(sources) > 1:
                     matches[genre_name][isrc] = sources
         return matches
 
-    def _rank_by_service(self, matches):
+    def _add_aggregate_rank(self, matches: dict) -> dict:
         """Rank matches based on the rank of the services."""
         for isrc_sources in matches.values():
             for sources in isrc_sources.values():
@@ -356,6 +349,41 @@ class Aggregate:
 
         return matches
 
+    def _rank_matches(self, matches: dict) -> dict:
+        for isrc_sources in matches.values():
+            isrc_sources_list = list(isrc_sources.values())
+            isrc_sources_list.sort(key=lambda x: x["raw_aggregate_rank"])
+            for i, sources in enumerate(isrc_sources_list, start=1):
+                sources["rank"] = i
+        return matches
+
+    def _format_aggregated_playlist(self, matches_by_genre: dict) -> dict:
+        formatted_playlists = {}
+        for genre_name, isrc_sources in matches_by_genre.items():
+            tracks = [
+                {
+                    "isrc": isrc,
+                    "rank": sources["rank"],
+                    "sources": sources
+                }
+                for isrc, sources in isrc_sources.items()
+            ]
+            formatted_playlists[genre_name] = {
+                "service_name": AGGREGATE,
+                "genre_name": genre_name,
+                "tracks": tracks
+            }
+        return formatted_playlists
+
+    def _write_aggregated_playlists(self, formatted_playlists: dict) -> None:
+        logger.info("Writing aggregated playlists to MongoDB")
+        for genre_name in GENRE_NAMES:
+            playlist = formatted_playlists[genre_name]
+            self.mongo_client.get_collection(TRACK_PLAYLIST_COLLECTION).update_one(
+                {"service_name": AGGREGATE, "genre_name": genre_name},
+                {"$set": playlist},
+                upsert=True
+            )
 
 if __name__ == "__main__":
     set_secrets()
@@ -377,4 +405,4 @@ if __name__ == "__main__":
     transform.transform()
 
     aggregate = Aggregate(mongo_client)
-    # aggregate.aggregate()
+    aggregate.aggregate()
