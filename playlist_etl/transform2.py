@@ -8,6 +8,7 @@ from pydantic import BaseModel
 from playlist_etl.config import (
     APPLE_MUSIC,
     GENRE_NAMES,
+    RANK_PRIORITY,
     RAW_PLAYLISTS_COLLECTION,
     SERVICE_NAMES,
     SOUNDCLOUD,
@@ -341,13 +342,11 @@ class Aggregate:
 
     def _rank_by_service(self, matches):
         """Rank matches based on the rank of the services."""
-        rank_priority = ["AppleMusic", "SoundCloud", "Spotify"]
-
         for isrc_sources in matches.values():
             for sources in isrc_sources.values():
                 aggregate_service_name = None
 
-                for service_name in rank_priority:
+                for service_name in RANK_PRIORITY:
                     if service_name in sources:
                         aggregate_service_name = service_name
 
