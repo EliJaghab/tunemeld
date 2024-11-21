@@ -6,6 +6,7 @@ import requests
 from bs4 import BeautifulSoup
 from spotipy import Spotify
 from spotipy.oauth2 import SpotifyClientCredentials
+from tenacity import retry, stop_after_attempt, wait_exponential
 
 from playlist_etl.config import (
     APPLE_MUSIC_ALBUM_COVER_CACHE_COLLECTION,
@@ -81,6 +82,17 @@ class SpotifyService:
         )
         return None
 
+    def get_track_url_by_isrc(self, isrc: str) -> str:
+        logger.info(f"Searching for track with ISRC: {isrc}")
+        results = self.spotify_client.search(q=f"isrc:{isrc}", type="track", limit=1)
+        tracks = results["tracks"]["items"]
+        if tracks:
+            track_id = tracks[0]["id"]
+            track_url = f"https://open.spotify.com/track/{track_id}"
+            logger.info(f"Found track URL: {track_url}")
+            return track_url
+        raise ValueError(f"Could not find track for ISRC: {isrc}")
+
 
 class YouTubeService:
     def __init__(self, api_key: str, cache_service: CacheService):
@@ -118,6 +130,28 @@ class YouTubeService:
             if response.status_code == 403 and "quotaExceeded" in response.text:
                 raise ValueError(f"Could not get YouTube URL for {track_name} {artist_name}")
             return None
+
+    @retry(
+        wait=wait_exponential(multiplier=1, min=4, max=10), stop=stop_after_attempt(3), reraise=True
+    )
+    def get_youtube_track_view_count(youtube_url: str) -> int:
+        video_id = youtube_url.split("v=")[-1]
+
+        youtube_api_url = f"https://www.googleapis.com/youtube/v3/videos?part=statistics&id={video_id}&key={self.api_key}"
+
+        try:
+            response = requests.get(youtube_api_url)
+            response.raise_for_status()
+
+            data = response.json()
+            if data["items"]:
+                view_count = data["items"][0]["statistics"]["viewCount"]
+                logger.info(f"Video ID {video_id} has {view_count} views.")
+                return int(view_count)
+
+        except Exception as e:
+            logger.exception(f"An unexpected error occurred: {e}")
+            raise ValueError(f"Unexpected error occurred for {youtube_url}: {e}")
 
 
 class AppleMusicService:
