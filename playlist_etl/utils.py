@@ -19,6 +19,8 @@ from spotipy import Spotify
 from spotipy.oauth2 import SpotifyClientCredentials
 from webdriver_manager.chrome import ChromeDriverManager
 
+from playlist_etl.config import SPOTIFY_VIEW_COUNT_XPATH, SPOTIFY_ERROR_THRESHOLD
+
 PLAYLIST_ETL_COLLECTION_NAME = "playlist_etl"
 
 
@@ -145,6 +147,7 @@ class WebDriverManager:
         self.use_proxy = use_proxy
         self.memory_threshold_percent = memory_threshold_percent
         self.driver = None
+        self.spotify_error_count = 0
 
     def find_element_by_xpath(
         self,
@@ -238,7 +241,7 @@ class WebDriverManager:
 
     def _is_rate_limit_issue(self, error_message: str) -> bool:
         rate_limit_keywords = [
-            "429",  # HTTP status code for too many requests
+            "429", 
             "rate limit",
             "too many requests",
             "quota exceeded",
@@ -282,6 +285,28 @@ class WebDriverManager:
     def close_driver(self):
         if self.driver:
             self.driver.quit()
+
+    def get_spotify_track_view_count(self, url: str) -> int:
+        try:
+            play_count_info = self.find_element_by_xpath(url, SPOTIFY_VIEW_COUNT_XPATH)
+
+            if play_count_info == "Element not found on the page":
+                if self.spotify_error_count == SPOTIFY_ERROR_THRESHOLD:
+                    raise ValueError("Too many spotify errors, investigate")
+
+                self.spotify_error_count += 1
+                return 0
+
+            if play_count_info:
+                logger.info(f"original spotify play count value {play_count_info}")
+                play_count = int(play_count_info.replace(",", ""))
+                logger.info(play_count)
+                return play_count
+
+        except Exception as e:
+            print(f"Error with xpath {SPOTIFY_VIEW_COUNT_XPATH}: {e}")
+
+        raise ValueError(f"Could not find play count for {url}")
 
 
 def overwrite_collection(client, collection_name: str, documents: list[dict]) -> None:
