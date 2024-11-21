@@ -1,15 +1,11 @@
 import datetime
 
+from playlist_etl.models import ServiceName
+
 CURRENT_TIMESTAMP = datetime.now().isoformat()
 
-GENRE_NAMES = ["pop", "dance", "country", "rap"]
+RANK_PRIORITY = [ServiceName.APPLE_MUSIC, ServiceName.SOUNDCLOUD, ServiceName.SPOTIFY]
 
-SPOTIFY = "Spotify"
-APPLE_MUSIC = "AppleMusic"
-SOUNDCLOUD = "SoundCloud"
-SERVICE_NAMES = [SPOTIFY, APPLE_MUSIC, SOUNDCLOUD]
-RANK_PRIORITY = [APPLE_MUSIC, SOUNDCLOUD, SPOTIFY]
-AGGREGATE = "Aggregate"
 
 PLAYLIST_ETL_DATABASE = "playlist_etl"
 RAW_PLAYLISTS_COLLECTION = "raw_playlists"
