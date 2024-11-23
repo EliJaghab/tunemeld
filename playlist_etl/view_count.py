@@ -20,9 +20,8 @@ from playlist_etl.utils import (
     get_spotify_client,
     insert_or_update_data_to_mongo,
     read_data_from_mongo,
-    set_secrets,
 )
-
+from playlist_etl.helpers import get_logger
 logger = get_logger(__name__)
 
 AGGREGATED_DATA_COLLECTION = "aggregated_playlists"

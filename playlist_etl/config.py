@@ -1,18 +1,20 @@
-import datetime
+from datetime import datetime
 
-from playlist_etl.models import ServiceName
+from playlist_etl.models import TrackSourceServiceName
 
 CURRENT_TIMESTAMP = datetime.now().isoformat()
 
-RANK_PRIORITY = [ServiceName.APPLE_MUSIC, ServiceName.SOUNDCLOUD, ServiceName.SPOTIFY]
+RANK_PRIORITY = [TrackSourceServiceName.APPLE_MUSIC, TrackSourceServiceName.SOUNDCLOUD, TrackSourceServiceName.SPOTIFY]
 
 
 PLAYLIST_ETL_DATABASE = "playlist_etl"
 RAW_PLAYLISTS_COLLECTION = "raw_playlists"
 TRACK_COLLECTION = "track"
 TRACK_PLAYLIST_COLLECTION = "track_playlist"
+
+# caches
 ISRC_CACHE_COLLECTION = "isrc_cache"
-YOUTUBE_CACHE_COLLECTION = "youtube_cache"
+YOUTUBE_URL_CACHE_COLLECTION = "youtube_cache"
 APPLE_MUSIC_ALBUM_COVER_CACHE_COLLECTION = "apple_music_album_cover_cache"
 
 # view count vars

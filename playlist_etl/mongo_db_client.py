@@ -6,7 +6,7 @@ from pymongo import MongoClient
 from pymongo.collection import Collection
 
 from playlist_etl.config import PLAYLIST_ETL_DATABASE
-from playlist_etl.utils import get_logger, set_secrets
+from playlist_etl.helpers import get_logger, set_secrets
 
 logger = get_logger(__name__)
 

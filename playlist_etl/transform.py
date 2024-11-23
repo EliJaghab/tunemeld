@@ -15,9 +15,9 @@ from playlist_etl.utils import (
     insert_or_update_data_to_mongo,
     read_cache_from_mongo,
     read_data_from_mongo,
-    set_secrets,
     update_cache_in_mongo,
 )
+from playlist_etl.helpers import get_logger
 
 RAW_PLAYLISTS_COLLECTION = "raw_playlists"
 TRANSFORMED_DATA_COLLECTION = "transformed_playlists"

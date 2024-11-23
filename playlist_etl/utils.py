@@ -3,9 +3,9 @@ import os
 import time
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
+from typing import Any
 
 import psutil
-from dotenv import load_dotenv
 from fp.fp import FreeProxy
 from pymongo import MongoClient
 from pymongo.collection import Collection
@@ -20,32 +20,12 @@ from spotipy.oauth2 import SpotifyClientCredentials
 from webdriver_manager.chrome import ChromeDriverManager
 
 from playlist_etl.config import SPOTIFY_ERROR_THRESHOLD, SPOTIFY_VIEW_COUNT_XPATH
+from playlist_etl.helpers import get_logger
+from playlist_etl.mongo_db_client import MongoDBClient
 
 PLAYLIST_ETL_COLLECTION_NAME = "playlist_etl"
 
-
-def get_logger(name: str) -> logging.Logger:
-    logger = logging.getLogger(name)
-    if not logger.hasHandlers():
-        handler = logging.StreamHandler()
-        formatter = logging.Formatter(
-            fmt="%(asctime)s - %(levelname)s - %(funcName)s() - %(message)s",
-            datefmt="%m-%d %H:%M:%S",
-        )
-        handler.setFormatter(formatter)
-        logger.addHandler(handler)
-        logger.setLevel(logging.INFO)
-    return logger
-
-
-logger = get_logger(__name__)
-
-
-def set_secrets():
-    if not os.getenv("GITHUB_ACTIONS"):
-        env_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".env.dev"))
-        logger.info("env_path" + env_path)
-        load_dotenv(dotenv_path=env_path)
+logger=get_logger(__name__)
 
 
 def get_mongo_client():
@@ -307,6 +287,32 @@ class WebDriverManager:
             print(f"Error with xpath {SPOTIFY_VIEW_COUNT_XPATH}: {e}")
 
         raise ValueError(f"Could not find play count for {url}")
+
+
+class CacheManager:
+    def __init__(self, mongo_client: MongoDBClient, collection_name: str):
+        self.mongo_client = mongo_client
+        self.collection_name = collection_name
+        self.cache = self.load_cache()
+
+    def load_cache(self) -> dict:
+        logger.info(f"Loading {self.collection_name} cache into memory")
+        cache = {}
+        data = self.mongo_client.get_collection(self.collection_name).find()
+        for item in data:
+            cache[item["key"]] = item["value"]
+        return cache
+
+    def get(self, key: str) -> Any:
+        return self.cache.get(key)
+
+    def set(self, key: str, value: Any) -> None:
+        self.cache[key] = value
+        self.mongo_client.get_collection(self.collection_name).update_one(
+            {"key": key},
+            {"$set": {"value": value}},
+            upsert=True,
+        )
 
 
 def overwrite_collection(client, collection_name: str, documents: list[dict]) -> None:

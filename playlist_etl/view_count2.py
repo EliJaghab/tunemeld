@@ -5,7 +5,7 @@ from playlist_etl.config import (AGGREGATE, APPLE_MUSIC, GENRE_NAMES,
                                  RAW_PLAYLISTS_COLLECTION, SERVICE_NAMES,
                                  SOUNDCLOUD, SPOTIFY, TRACK_COLLECTION,
                                  TRACK_PLAYLIST_COLLECTION, YOUTUBE,
-                                 YOUTUBE_CACHE_COLLECTION)
+                                 YOUTUBE_URL_CACHE_COLLECTION)
 from playlist_etl.models import Track
 from playlist_etl.mongo_db_client import MongoDBClient
 from playlist_etl.services import YouTubeService
