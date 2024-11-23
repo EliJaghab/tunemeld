@@ -19,7 +19,7 @@ from spotipy import Spotify
 from spotipy.oauth2 import SpotifyClientCredentials
 from webdriver_manager.chrome import ChromeDriverManager
 
-from playlist_etl.config import SPOTIFY_VIEW_COUNT_XPATH, SPOTIFY_ERROR_THRESHOLD
+from playlist_etl.config import SPOTIFY_ERROR_THRESHOLD, SPOTIFY_VIEW_COUNT_XPATH
 
 PLAYLIST_ETL_COLLECTION_NAME = "playlist_etl"
 
@@ -241,7 +241,7 @@ class WebDriverManager:
 
     def _is_rate_limit_issue(self, error_message: str) -> bool:
         rate_limit_keywords = [
-            "429", 
+            "429",
             "rate limit",
             "too many requests",
             "quota exceeded",

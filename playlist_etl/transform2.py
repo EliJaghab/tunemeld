@@ -3,20 +3,13 @@ import os
 from collections import defaultdict
 from typing import Any
 
-from pydantic import BaseModel
-
 from playlist_etl.config import (
-    AGGREGATE,
-    APPLE_MUSIC,
-    GENRE_NAMES,
     RANK_PRIORITY,
     RAW_PLAYLISTS_COLLECTION,
-    SERVICE_NAMES,
-    SOUNDCLOUD,
-    SPOTIFY,
     TRACK_COLLECTION,
     TRACK_PLAYLIST_COLLECTION,
 )
+from playlist_etl.models import GenreName, Playlist, ServiceName, Track, TrackData, TrackRank
 from playlist_etl.mongo_db_client import MongoDBClient
 from playlist_etl.services import AppleMusicService, CacheService, SpotifyService, YouTubeService
 from playlist_etl.utils import get_logger, set_secrets
@@ -25,47 +18,11 @@ MAX_THREADS = 100
 
 logger = get_logger(__name__)
 
-class Track(BaseModel):
-    isrc: str
-    spotify_track_name: str | None = None
-    spotify_artist_name: str | None = None
-    spotify_track_url: str | None = None
-    soundcloud_track_name: str | None = None
-    soundcloud_artist_name: str | None = None
-    soundcloud_track_url: str | None = None
-    apple_music_track_name: str | None = None
-    apple_music_artist_name: str | None = None
-    apple_music_track_url: str | None = None
-    album_cover_url: str | None = None
-    youtube_url: str | None = None
-
-    def set_youtube_url(self, youtube_service: YouTubeService) -> None:
-        if not self.youtube_url:
-            self.youtube_url = youtube_service.get_youtube_url(self.track_name, self.artist_name)
-
-    def set_apple_music_album_cover_url(self, apple_music_service: AppleMusicService) -> None:
-        if not self.album_cover_url and self.apple_music_track_url:
-            self.album_cover_url = apple_music_service.get_album_cover_url(
-                self.apple_music_track_url
-            )
-
-
-class TrackRank(BaseModel):
-    isrc: str
-    rank: int
-    sources: list[str]
-
-
-class PlaylistRank(BaseModel):
-    service_name: str
-    genre_name: str
-    tracks: list[TrackRank]
-
 
 class Transform:
     """
-    Transforms tracks from raw playlists to Track objects.
-    Stores ISRC to track relationship with playlist ranks in MongoDB.
+    Converts raw tracks to Track Object
+    Converts raw playlists to Playlist Object.
     """
 
     def __init__(
@@ -86,44 +43,44 @@ class Transform:
 
     def transform(self) -> None:
         logger.info("Starting the transformation process")
-        self.build_track_objects()
+        raw_playlists = self.mongo_client.get_collection(RAW_PLAYLISTS_COLLECTION)
+        self.build_track_objects(raw_playlists)
+        self.set_youtube_urls()
+        self.set_apple_music_album_covers()
+        self.set_spotify_urls()
         self.overwrite()
         logger.info("Transformation process completed successfully")
 
-    def overwrite(self) -> None:
-        logger.info("Saving transformed data to MongoDB")
-        formatted_tracks = self.format_tracks()
-        formatted_ranks = self.format_playlist_ranks()
-        self.mongo_client.overwrite_collection(TRACK_COLLECTION, formatted_tracks)
-        self.mongo_client.overwrite_collection(TRACK_PLAYLIST_COLLECTION, formatted_ranks)
-
-    def build_track_objects(self) -> None:
+    def build_track_objects(self, raw_playlists: dict) -> None:
         logger.info("Reading raw playlists from MongoDB")
         raw_playlists = self.mongo_client.get_collection(RAW_PLAYLISTS_COLLECTION)
 
-        for genre_name in GENRE_NAMES:
-            for service_name in SERVICE_NAMES:
+        for genre_name in GenreName:
+            for service_name in ServiceName:
+                genre_name_value = genre_name.value
+                service_name_value = service_name.value
                 raw_playlist = raw_playlists.find_one(
-                    {"genre_name": genre_name, "service_name": service_name}
+                    {"genre_name": genre_name_value, "service_name": service_name_value}
                 )
-                logger.info(f"Processing playlist for genre {genre_name} from {service_name}")
-                self.convert_to_track_objects(raw_playlist["data_json"], service_name, genre_name)
+                logger.info(
+                    f"Processing playlist for genre {genre_name_value} from {service_name_value}"
+                )
+                self.convert_to_track_objects(
+                    raw_playlist["data_json"], service_name_value, genre_name_value
+                )
 
-        self.set_youtube_url_for_all_tracks()
-        self.set_apple_music_album_cover_url_for_all_tracks()
-
-    def format_tracks(self) -> list[dict[str, Any]]:
+    def format_tracks(self) -> list[dict]:
         formatted_tracks = [
-            {"isrc": isrc, "service_data": track.model_dump(exclude={"isrc"})}
+            {"isrc": isrc, "track_data": track.model_dump(exclude={"isrc"})}
             for isrc, track in self.tracks.items()
             if track.isrc is not None
         ]
         return formatted_tracks
 
-    def format_playlist_ranks(self) -> list[dict[str, Any]]:
+    def format_playlist_ranks(self) -> list[dict]:
         formatted_ranks = [
-            PlaylistRank(
-                service_name=service_name,
+            Playlist(
+                service_name=ServiceName(service_name),
                 genre_name=genre_name,
                 tracks=[
                     TrackRank(isrc=rank.isrc, rank=rank.rank, sources=rank.sources)
@@ -135,24 +92,32 @@ class Transform:
         return formatted_ranks
 
     def convert_to_track_objects(
-        self, data: dict[str, Any], service_name: str, genre_name: str
+        self, data: dict, service_name: str, genre_name: str
     ) -> None:
         logger.info(f"Converting data to track objects for {service_name} and genre {genre_name}")
-        if service_name == APPLE_MUSIC:
+        if service_name == ServiceName.APPLE_MUSIC:
             self.convert_apple_music_raw_export_to_track_type(data, genre_name)
-        elif service_name == SPOTIFY:
+        elif service_name == ServiceName.SPOTIFY:
             self.convert_spotify_raw_export_to_track_type(data, genre_name)
-        elif service_name == SOUNDCLOUD:
+        elif service_name == ServiceName.SOUNDCLOUD:
             self.convert_soundcloud_raw_export_to_track_type(data, genre_name)
         else:
             raise ValueError("Unknown service name")
 
+    def get_track(
+        self, isrc
+    ) -> Track:
+        if isrc in self.tracks:
+            track = self.tracks[isrc]
+        else:
+            track = Track(isrc=isrc)
+            self.tracks[isrc] = track
+        return track
+
     def convert_apple_music_raw_export_to_track_type(
-        self, data: dict[str, Any], genre_name: str
+        self, data: dict, genre_name: str
     ) -> None:
         logger.info(f"Converting Apple Music data for genre {genre_name}")
-        isrc_rank_map = []
-
         for key, track_data in data["album_details"].items():
             if key.isdigit():
                 track_name = track_data["name"]
@@ -166,31 +131,28 @@ class Transform:
                     continue
 
                 track_url = track_data["link"]
+                album_cover_url = track_data.get("album_cover_url")
+                track = self.get_track(isrc, track_name, artist_name, track_url, album_cover_url)
+                track.apple_music_track_data = TrackData(
+                    service_name=ServiceName.APPLE_MUSIC,
+                    track_name=track_name,
+                    artist_name=artist_name,
+                    track_url=track_url,
+                    album_cover_url=None,
+                )
 
-                if isrc in self.tracks:
-                    track = self.tracks[isrc]
-                    track.apple_music_track_name = track_name
-                    track.apple_music_artist_name = artist_name
-                    track.apple_music_track_url = track_url
-                else:
-                    track = Track(
+                self.playlist_ranks[(ServiceName.APPLE_MUSIC.value, genre_name)].append(
+                    TrackRank(
                         isrc=isrc,
-                        apple_music_track_name=track_name,
-                        apple_music_artist_name=artist_name,
-                        apple_music_track_url=track_url,
+                        rank=int(key) + 1,
+                        sources=[ServiceName.APPLE_MUSIC.value],
                     )
-                    self.tracks[isrc] = track
-
-                isrc_rank_map.append(TrackRank(isrc=isrc, rank=int(key) + 1, sources=[APPLE_MUSIC]))
-
-        self.playlist_ranks[(APPLE_MUSIC, genre_name)] = isrc_rank_map
+                )
 
     def convert_soundcloud_raw_export_to_track_type(
-        self, data: dict[str, Any], genre_name: str
+        self, data: dict, genre_name: str
     ) -> None:
         logger.info(f"Converting SoundCloud data for genre {genre_name}")
-        isrc_rank_map = []
-
         for i, item in enumerate(data["tracks"]["items"]):
             isrc = item.get("publisher", {}).get("isrc")
             if isrc is None:
@@ -212,31 +174,27 @@ class Transform:
             if " - " in track_name:
                 artist_name, track_name = track_name.split(" - ", 1)
 
-            if isrc in self.tracks:
-                track = self.tracks[isrc]
-                track.soundcloud_track_name = track_name
-                track.soundcloud_artist_name = artist_name
-                track.soundcloud_track_url = track_url
-                track.album_cover_url = album_cover_url
-            else:
-                track = Track(
+            track = self.get_track(isrc, track_name, artist_name, track_url, album_cover_url)
+            track.soundcloud_track_data = TrackData(
+                service_name=ServiceName.SOUNDCLOUD,
+                track_name=track_name,
+                artist_name=artist_name,
+                track_url=track_url,
+                album_cover_url=album_cover_url,
+            )
+
+            self.playlist_ranks[(ServiceName.SOUNDCLOUD.value, genre_name)].append(
+                TrackRank(
                     isrc=isrc,
-                    soundcloud_track_name=track_name,
-                    soundcloud_artist_name=artist_name,
-                    soundcloud_track_url=track_url,
-                    album_cover_url=album_cover_url,
+                    rank=i + 1,
+                    sources=[ServiceName.SOUNDCLOUD.value],
                 )
-                self.tracks[isrc] = track
-
-            isrc_rank_map.append(TrackRank(isrc=isrc, rank=i + 1, sources=[SOUNDCLOUD]))
-
-        self.playlist_ranks[(SOUNDCLOUD, genre_name)] = isrc_rank_map
+            )
 
     def convert_spotify_raw_export_to_track_type(
-        self, data: dict[str, Any], genre_name: str
+        self, data: dict, genre_name: str
     ) -> None:
         logger.info(f"Converting Spotify data for genre {genre_name}")
-        isrc_rank_map = []
         for i, item in enumerate(data["items"]):
             track_info = item.get("track")
 
@@ -257,44 +215,93 @@ class Transform:
                     )
                     continue
 
-            if isrc in self.tracks:
-                track = self.tracks[isrc]
-                track.spotify_track_name = track_name
-                track.spotify_artist_name = artist_name
-                track.spotify_track_url = track_url
-                track.album_cover_url = album_cover_url
-            else:
-                track = Track(
+            track = self.get_track(isrc, track_name, artist_name, track_url, album_cover_url)
+            track.spotify_track_data = TrackData(
+                service_name=ServiceName.SPOTIFY,
+                track_name=track_name,
+                artist_name=artist_name,
+                track_url=track_url,
+                album_cover_url=album_cover_url,
+            )
+
+            self.playlist_ranks[(ServiceName.SPOTIFY.value, genre_name)].append(
+                TrackRank(
                     isrc=isrc,
-                    spotify_track_name=track_name,
-                    spotify_artist_name=artist_name,
-                    spotify_track_url=track_url,
-                    album_cover_url=album_cover_url,
+                    rank=i + 1,
+                    sources=[ServiceName.SPOTIFY.value],
                 )
-                self.tracks[isrc] = track
+            )
 
-            isrc_rank_map.append(TrackRank(isrc=isrc, rank=i + 1, sources=[SPOTIFY]))
-
-        self.playlist_ranks[(SPOTIFY, genre_name)] = isrc_rank_map
-
-    def set_youtube_url_for_all_tracks(self) -> None:
+    def set_youtube_urls(self) -> None:
         logger.info("Setting YouTube URLs for all tracks")
         with concurrent.futures.ThreadPoolExecutor(max_workers=MAX_THREADS) as executor:
             futures = [
-                executor.submit(track.set_youtube_url, self.youtube_service)
-                for track in self.tracks.values()
+                executor.submit(self.set_youtube_url, track) for track in self.tracks.values()
             ]
             concurrent.futures.wait(futures)
 
-    def set_apple_music_album_cover_url_for_all_tracks(self) -> None:
+    def set_youtube_url(self, track: Track) -> None:
+        if not track.youtube_url:
+            youtube_url = self.youtube_service.get_youtube_url(
+                track.spotify_track_data.track_name
+                or track.soundcloud_track_data.track_name
+                or track.apple_music_track_data.track_name,
+                track.spotify_track_data.artist_name
+                or track.soundcloud_track_data.artist_name
+                or track.apple_music_track_data.artist_name,
+            )
+            track.youtube_url = youtube_url
+
+    def set_apple_music_album_covers(self) -> None:
         logger.info("Setting Apple Music album cover URLs for all tracks")
         with concurrent.futures.ThreadPoolExecutor(max_workers=MAX_THREADS) as executor:
             futures = [
-                executor.submit(track.set_apple_music_album_cover_url, self.apple_music_service)
+                executor.submit(self.set_apple_music_album_cover_url, track)
                 for track in self.tracks.values()
-                if track.apple_music_track_url
+                if track.apple_music_track_data and not track.apple_music_track_data.album_cover_url
             ]
             concurrent.futures.wait(futures)
+
+    def set_apple_music_album_cover_url(self, track: Track) -> None:
+        if track.apple_music_track_data and not track.apple_music_track_data.album_cover_url:
+            album_cover_url = self.apple_music_service.get_album_cover_url(
+                track.apple_music_track_data.track_url
+            )
+            track.apple_music_track_data.album_cover_url = album_cover_url
+
+    def set_spotify_urls(self) -> None:
+        logger.info("Setting Spotify URLs for all tracks")
+        with concurrent.futures.ThreadPoolExecutor(max_workers=MAX_THREADS) as executor:
+            futures = [
+                executor.submit(self.set_spotify_url, track)
+                for track in self.tracks.values()
+                if not track.spotify_track_data.track_url
+            ]
+            concurrent.futures.wait(futures)
+
+    def set_spotify_url(self, track: Track) -> None:
+        if not track.spotify_track_data.track_url:
+            spotify_url = self.spotify_service.get_track_url_by_isrc(track.isrc)
+            track.spotify_track_data.track_url = spotify_url
+    
+    def overwrite(self) -> None:
+        logger.info("Saving transformed data to MongoDB")
+        formatted_tracks = [
+            {
+                "isrc": isrc,
+                "soundcloud_track_data": track.soundcloud_track_data.model_dump() if track.soundcloud_track_data else None,
+                "spotify_track_data": track.spotify_track_data.model_dump() if track.spotify_track_data else None,
+                "apple_music_track_data": track.apple_music_track_data.model_dump() if track.apple_music_track_data else None,
+                "youtube_url": track.youtube_url,
+                "spotify_views": track.spotify_views.model_dump() if track.spotify_views else None,
+                "youtube_views": track.youtube_views.model_dump() if track.youtube_views else None,
+            }
+            for isrc, track in self.tracks.items()
+            if track.isrc is not None
+        ]
+        formatted_ranks = self.format_playlist_ranks()
+        self.mongo_client.overwrite_collection(TRACK_COLLECTION, formatted_tracks)
+        self.mongo_client.overwrite_collection(TRACK_PLAYLIST_COLLECTION, formatted_ranks)
 
 
 class Aggregate:
@@ -318,9 +325,16 @@ class Aggregate:
                 track_playlist = track_playlists.find_one(
                     {"genre_name": genre_name, "service_name": service_name}
                 )
+                if not track_playlist:
+                    logger.warning(
+                        f"No track playlist found for genre {genre_name} and service {service_name}"
+                    )
+                    continue
 
                 for track in track_playlist["tracks"]:
-                    candidates_by_genre[genre_name][track["isrc"]][service_name] = track["rank"]
+                    candidates_by_genre[genre_name][track["isrc"]][track["service_name"]] = track[
+                        "rank"
+                    ]
 
         return candidates_by_genre
 
@@ -335,25 +349,28 @@ class Aggregate:
 
     def _add_aggregate_rank(self, matches: dict) -> dict:
         """Rank matches based on the rank of the services."""
-        for isrc_sources in matches.values():
-            for sources in isrc_sources.values():
+        for genre_name, isrc_sources in matches.items():
+            for isrc, sources in isrc_sources.items():
                 aggregate_service_name = None
 
                 for service_name in RANK_PRIORITY:
                     if service_name in sources:
                         aggregate_service_name = service_name
+                        break
 
-                raw_aggregate_rank = sources[aggregate_service_name]
-                sources["raw_aggregate_rank"] = raw_aggregate_rank
-                sources["aggregate_service_name"] = aggregate_service_name
+                if aggregate_service_name:
+                    raw_aggregate_rank = sources[aggregate_service_name]
+                    sources["raw_aggregate_rank"] = raw_aggregate_rank
+                    sources["aggregate_service_name"] = aggregate_service_name
 
         return matches
 
     def _rank_matches(self, matches: dict) -> dict:
-        for isrc_sources in matches.values():
-            isrc_sources_list = list(isrc_sources.values())
-            isrc_sources_list.sort(key=lambda x: x["raw_aggregate_rank"])
-            for i, sources in enumerate(isrc_sources_list, start=1):
+        for genre_name, isrc_sources in matches.items():
+            # Convert isrc_sources (dict) to list and sort
+            sorted_sources = sorted(isrc_sources.values(), key=lambda x: x["raw_aggregate_rank"])
+            # Assign new rank
+            for i, sources in enumerate(sorted_sources, start=1):
                 sources["rank"] = i
         return matches
 
@@ -364,26 +381,30 @@ class Aggregate:
                 {
                     "isrc": isrc,
                     "rank": sources["rank"],
-                    "sources": sources
+                    "sources": list(sources.keys()),  # Extracting service names
                 }
                 for isrc, sources in isrc_sources.items()
             ]
             formatted_playlists[genre_name] = {
-                "service_name": AGGREGATE,
+                "service_name": ServiceName.AGGREGATE.value,
                 "genre_name": genre_name,
-                "tracks": tracks
+                "tracks": tracks,
             }
         return formatted_playlists
 
     def _write_aggregated_playlists(self, formatted_playlists: dict) -> None:
         logger.info("Writing aggregated playlists to MongoDB")
         for genre_name in GENRE_NAMES:
-            playlist = formatted_playlists[genre_name]
+            playlist = formatted_playlists.get(genre_name)
+            if not playlist:
+                logger.warning(f"No aggregated playlist found for genre {genre_name}")
+                continue
             self.mongo_client.get_collection(TRACK_PLAYLIST_COLLECTION).update_one(
-                {"service_name": AGGREGATE, "genre_name": genre_name},
+                {"service_name": ServiceName.AGGREGATE.value, "genre_name": genre_name},
                 {"$set": playlist},
-                upsert=True
+                upsert=True,
             )
+
 
 if __name__ == "__main__":
     set_secrets()
@@ -404,5 +425,5 @@ if __name__ == "__main__":
     )
     transform.transform()
 
-    aggregate = Aggregate(mongo_client)
-    aggregate.aggregate()
+    #aggregate = Aggregate(mongo_client)
+    #aggregate.aggregate()

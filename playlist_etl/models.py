@@ -24,6 +24,7 @@ class TrackData(BaseModel):
     track_name: str | None = None
     artist_name: str | None = None
     track_url: HttpUrl | None = None
+    album_cover_url: HttpUrl | None = None
 
 
 class StartView(BaseModel):
@@ -38,19 +39,18 @@ class CurrentView(BaseModel):
 
 class ServiceView(BaseModel):
     service_name: ServiceName
-    start_view: StartView
-    current_view: CurrentView
+    start_view: StartView | None = None
+    current_view: CurrentView | None = None
 
 
 class Track(BaseModel):
     isrc: str
-    soundcloud_track_data: TrackData | None = None
-    spotify_track_data: TrackData | None = None
-    apple_music_track_data: TrackData | None = None
-    album_cover_url: HttpUrl | None = None
+    soundcloud_track_data: TrackData = TrackData(service_name=ServiceName.SOUNDCLOUD)
+    spotify_track_data: TrackData = TrackData(service_name=ServiceName.SPOTIFY)
+    apple_music_track_data: TrackData = TrackData(service_name=ServiceName.APPLE_MUSIC)
     youtube_url: HttpUrl | None = None
-    spotify_views: ServiceView | None = None
-    youtube_views: ServiceView | None = None
+    spotify_views: ServiceView = ServiceView(service_name=ServiceName.SPOTIFY)
+    youtube_views: ServiceView = ServiceView(service_name=ServiceName.YOUTUBE)
 
 
 class TrackRank(BaseModel):

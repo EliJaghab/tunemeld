@@ -43,6 +43,28 @@ def initialize_new_view_count_playlists(mongo_client: MongoClient) -> None:
             insert_or_update_data_to_mongo(mongo_client, VIEW_COUNTS_COLLECTION, playlist)
 
 
+def create_or_update_track(
+    track: Dict,
+    service_name: str,
+    current_view_count: int,
+    current_timestamp: str,
+) -> Dict:
+    if "view_count_data_json" not in track:
+        track["view_count_data_json"] = defaultdict(dict)
+
+    if "initial_count_json" not in track["view_count_data_json"][service_name]:
+        track["view_count_data_json"][service_name]["initial_count_json"] = {
+            "initial_timestamp": current_timestamp,
+            "initial_view_count": current_view_count,
+        }
+
+    track["view_count_data_json"][service_name]["current_count_json"] = {
+        "current_timestamp": current_timestamp,
+        "current_view_count": current_view_count,
+    }
+    return track
+
+
 def update_service_view_count(
     track: Dict,
     service_name: str,
@@ -54,21 +76,8 @@ def update_service_view_count(
     if service_url_key not in track or not track[service_url_key]:
         track[service_url_key] = get_service_url(service_name, track, spotify_client, mongo_client)
 
-    if "view_count_data_json" not in track:
-        track["view_count_data_json"] = defaultdict(dict)
-
     current_view_count = get_view_count(track, service_name, webdriver_manager)
-    if "initial_count_json" not in track["view_count_data_json"][service_name]:
-        track["view_count_data_json"][service_name]["initial_count_json"] = {
-            "initial_timestamp": CURRENT_TIMESTAMP,
-            "initial_view_count": current_view_count,
-        }
-
-    track["view_count_data_json"][service_name]["current_count_json"] = {
-        "current_timestamp": CURRENT_TIMESTAMP,
-        "current_view_count": current_view_count,
-    }
-    return track
+    return create_or_update_track(track, service_name, current_view_count, CURRENT_TIMESTAMP)
 
 
 def update_view_counts(
