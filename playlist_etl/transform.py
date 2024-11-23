@@ -7,6 +7,7 @@ import requests
 from bs4 import BeautifulSoup
 
 from playlist_etl.extract import PLAYLIST_GENRES, SERVICE_CONFIGS
+from playlist_etl.helpers import get_logger
 from playlist_etl.utils import (
     clear_collection,
     get_logger,
@@ -17,7 +18,6 @@ from playlist_etl.utils import (
     read_data_from_mongo,
     update_cache_in_mongo,
 )
-from playlist_etl.helpers import get_logger
 
 RAW_PLAYLISTS_COLLECTION = "raw_playlists"
 TRANSFORMED_DATA_COLLECTION = "transformed_playlists"

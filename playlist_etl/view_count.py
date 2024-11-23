@@ -9,6 +9,7 @@ import requests
 from requests.exceptions import RequestException
 from tenacity import retry, stop_after_attempt, wait_exponential
 
+from playlist_etl.helpers import get_logger
 from playlist_etl.transform import get_youtube_url_by_track_and_artist_name
 from playlist_etl.utils import (
     MongoClient,
@@ -21,7 +22,7 @@ from playlist_etl.utils import (
     insert_or_update_data_to_mongo,
     read_data_from_mongo,
 )
-from playlist_etl.helpers import get_logger
+
 logger = get_logger(__name__)
 
 AGGREGATED_DATA_COLLECTION = "aggregated_playlists"

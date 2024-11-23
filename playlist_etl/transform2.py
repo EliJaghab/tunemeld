@@ -4,18 +4,26 @@ from collections import defaultdict
 from typing import Any
 
 from playlist_etl.config import (
+    ISRC_CACHE_COLLECTION,
     RANK_PRIORITY,
     RAW_PLAYLISTS_COLLECTION,
     TRACK_COLLECTION,
     TRACK_PLAYLIST_COLLECTION,
-    ISRC_CACHE_COLLECTION,
     YOUTUBE_URL_CACHE_COLLECTION,
 )
-from playlist_etl.models import GenreName, Playlist, TrackSourceServiceName, Track, TrackRank, TrackData, ServiceView
+from playlist_etl.helpers import get_logger, set_secrets
+from playlist_etl.models import (
+    GenreName,
+    Playlist,
+    ServiceView,
+    Track,
+    TrackData,
+    TrackRank,
+    TrackSourceServiceName,
+)
 from playlist_etl.mongo_db_client import MongoDBClient
 from playlist_etl.services import AppleMusicService, SpotifyService, YouTubeService
 from playlist_etl.utils import CacheManager
-from playlist_etl.helpers import get_logger, set_secrets
 
 MAX_THREADS = 100
 
@@ -62,8 +70,7 @@ class Transform:
             for service_name in TrackSourceServiceName:
                 genre_name_value = genre_name.value
                 service_name_value = service_name.value
-            
-                
+
                 raw_playlist = raw_playlists.find_one(
                     {"genre_name": genre_name_value, "service_name": service_name_value}
                 )
@@ -96,9 +103,7 @@ class Transform:
         ]
         return formatted_ranks
 
-    def convert_to_track_objects(
-        self, data: dict, service_name: str, genre_name: str
-    ) -> None:
+    def convert_to_track_objects(self, data: dict, service_name: str, genre_name: str) -> None:
         logger.info(f"Converting data to track objects for {service_name} and genre {genre_name}")
         if service_name == TrackSourceServiceName.APPLE_MUSIC:
             self.convert_apple_music_raw_export_to_track_type(data, genre_name)
@@ -117,9 +122,7 @@ class Transform:
             self.tracks[isrc] = track
         return track
 
-    def convert_apple_music_raw_export_to_track_type(
-        self, data: dict, genre_name: str
-    ) -> None:
+    def convert_apple_music_raw_export_to_track_type(self, data: dict, genre_name: str) -> None:
         logger.info(f"Converting Apple Music data for genre {genre_name}")
         for key, track_data in data["album_details"].items():
             if key.isdigit():
@@ -146,15 +149,13 @@ class Transform:
                     )
                 )
 
-    def convert_soundcloud_raw_export_to_track_type(
-        self, data: dict, genre_name: str
-    ) -> None:
+    def convert_soundcloud_raw_export_to_track_type(self, data: dict, genre_name: str) -> None:
         logger.info(f"Converting SoundCloud data for genre {genre_name}")
         for i, item in enumerate(data["tracks"]["items"]):
             isrc = item["publisher"]["isrc"]
-            if not isrc: 
+            if not isrc:
                 continue
-            
+
             track_name = item["title"]
             artist_name = item["user"]["name"]
 
@@ -175,18 +176,19 @@ class Transform:
                 )
             )
 
-    def convert_spotify_raw_export_to_track_type(
-        self, data: dict, genre_name: str
-    ) -> None:
+    def convert_spotify_raw_export_to_track_type(self, data: dict, genre_name: str) -> None:
         logger.info(f"Converting Spotify data for genre {genre_name}")
         for i, item in enumerate(data["items"]):
             track_info = item["track"]
-            if not track_info: continue
+            if not track_info:
+                continue
             isrc = track_info["external_ids"]["isrc"]
 
             track = self.get_track(isrc)
             track.spotify_track_data.track_name = track_info["name"]
-            track.spotify_track_data.artist_name = ", ".join(artist["name"] for artist in track_info["artists"])
+            track.spotify_track_data.artist_name = ", ".join(
+                artist["name"] for artist in track_info["artists"]
+            )
             track.spotify_track_data.track_url = track_info["external_urls"]["spotify"]
             track.spotify_track_data.album_cover_url = track_info["album"]["images"][0]["url"]
 
@@ -249,7 +251,7 @@ class Transform:
         if not track.spotify_track_data.track_url:
             spotify_url = self.spotify_service.get_track_url_by_isrc(track.isrc)
             track.spotify_track_data.track_url = spotify_url
-    
+
     def merge_track_data(self, existing_data: dict, new_data: dict) -> dict:
         merged_data = existing_data.copy()
         for key, value in new_data.items():
@@ -262,9 +264,19 @@ class Transform:
         formatted_tracks = [
             {
                 "isrc": isrc,
-                "soundcloud_track_data": track.soundcloud_track_data.model_dump() if track.soundcloud_track_data else None,
-                "spotify_track_data": track.spotify_track_data.model_dump() if track.spotify_track_data else None,
-                "apple_music_track_data": track.apple_music_track_data.model_dump() if track.apple_music_track_data else None,
+                "soundcloud_track_data": (
+                    track.soundcloud_track_data.model_dump()
+                    if track.soundcloud_track_data
+                    else None
+                ),
+                "spotify_track_data": (
+                    track.spotify_track_data.model_dump() if track.spotify_track_data else None
+                ),
+                "apple_music_track_data": (
+                    track.apple_music_track_data.model_dump()
+                    if track.apple_music_track_data
+                    else None
+                ),
                 "youtube_url": track.youtube_url if track.youtube_url else None,
                 "spotify_views": track.spotify_views.model_dump() if track.spotify_views else None,
                 "youtube_views": track.youtube_views.model_dump() if track.youtube_views else None,
@@ -273,25 +285,20 @@ class Transform:
             if track.isrc is not None
         ]
         formatted_ranks = self.format_playlist_ranks()
-        
+
         track_collection = self.mongo_client.get_collection(TRACK_COLLECTION)
         for track in formatted_tracks:
             existing_track = track_collection.find_one({"isrc": track["isrc"]})
             if existing_track:
                 merged_track = self.merge_track_data(existing_track, track)
                 track_collection.update_one(
-                    {"isrc": track["isrc"]},
-                    {"$set": merged_track},
-                    upsert=True
+                    {"isrc": track["isrc"]}, {"$set": merged_track}, upsert=True
                 )
             else:
-                track_collection.update_one(
-                    {"isrc": track["isrc"]},
-                    {"$set": track},
-                    upsert=True
-                )
-        
+                track_collection.update_one({"isrc": track["isrc"]}, {"$set": track}, upsert=True)
+
         self.mongo_client.overwrite_collection(TRACK_PLAYLIST_COLLECTION, formatted_ranks)
+
 
 if __name__ == "__main__":
     set_secrets()
@@ -312,5 +319,5 @@ if __name__ == "__main__":
         mongo_client, isrc_cache_manager, spotify_service, youtube_service, apple_music_service
     )
     transform.transform()
-    #aggregate = Aggregate(mongo_client)
-    #aggregate.aggregate()
+    # aggregate = Aggregate(mongo_client)
+    # aggregate.aggregate()

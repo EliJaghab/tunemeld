@@ -25,7 +25,7 @@ from playlist_etl.mongo_db_client import MongoDBClient
 
 PLAYLIST_ETL_COLLECTION_NAME = "playlist_etl"
 
-logger=get_logger(__name__)
+logger = get_logger(__name__)
 
 
 def get_mongo_client():

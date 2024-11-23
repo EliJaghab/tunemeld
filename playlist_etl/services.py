@@ -71,7 +71,7 @@ class SpotifyService:
         except Exception as e:
             logger.info(f"Error searching Spotify with query '{query}': {e}")
             return None
-        
+
     def get_track_url_by_isrc(self, isrc: str) -> str:
         logger.info(f"Searching for track with ISRC: {isrc}")
         results = self.spotify_client.search(q=f"isrc:{isrc}", type="track", limit=1)

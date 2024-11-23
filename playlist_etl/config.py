@@ -4,7 +4,11 @@ from playlist_etl.models import TrackSourceServiceName
 
 CURRENT_TIMESTAMP = datetime.now().isoformat()
 
-RANK_PRIORITY = [TrackSourceServiceName.APPLE_MUSIC, TrackSourceServiceName.SOUNDCLOUD, TrackSourceServiceName.SPOTIFY]
+RANK_PRIORITY = [
+    TrackSourceServiceName.APPLE_MUSIC,
+    TrackSourceServiceName.SOUNDCLOUD,
+    TrackSourceServiceName.SPOTIFY,
+]
 
 
 PLAYLIST_ETL_DATABASE = "playlist_etl"

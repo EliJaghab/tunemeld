@@ -1,6 +1,6 @@
-
 import logging
 import os
+
 from dotenv import load_dotenv
 
 
@@ -17,7 +17,9 @@ def get_logger(name: str) -> logging.Logger:
         logger.setLevel(logging.INFO)
     return logger
 
+
 logger = get_logger(__name__)
+
 
 def set_secrets():
     if not os.getenv("GITHUB_ACTIONS"):
