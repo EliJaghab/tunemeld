@@ -9,7 +9,7 @@ import requests
 from requests.exceptions import RequestException
 from tenacity import retry, stop_after_attempt, wait_exponential
 
-from playlist_etl.helpers import get_logger
+from playlist_etl.helpers import get_logger, set_secrets
 from playlist_etl.transform import get_youtube_url_by_track_and_artist_name
 from playlist_etl.utils import (
     MongoClient,
