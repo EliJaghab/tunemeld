@@ -77,10 +77,12 @@ class Track(BaseModel):
 class TrackRank(BaseModel):
     isrc: str
     rank: int
-    sources: list[TrackSourceServiceName]
+    sources: dict[TrackSourceServiceName, int]
+    raw_aggregate_rank: int | None = None
+    aggregate_service_name: TrackSourceServiceName | None = None
 
 
 class Playlist(BaseModel):
-    service_name: TrackSourceServiceName
+    service_name: PlaylistType
     genre_name: str
     tracks: list[TrackRank]
