@@ -93,11 +93,11 @@ class SpotifyService:
 
 
 class YouTubeService:
-    def __init__(self, api_key: str, cache_service: CacheManager):
+    def __init__(self, api_key: str, cache_manager: CacheManager):
         if not api_key:
             raise ValueError("YouTube API key not provided.")
         self.api_key = api_key
-        self.cache_service = cache_service
+        self.cache_service = cache_manager
 
     def get_youtube_url(self, track_name: str, artist_name: str) -> Optional[str]:
         cache_key = f"{track_name}|{artist_name}"
