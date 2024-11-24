@@ -4,14 +4,11 @@ from collections import defaultdict
 from typing import Any
 
 from playlist_etl.config import (
-    ISRC_CACHE_COLLECTION,
-    RANK_PRIORITY,
     RAW_PLAYLISTS_COLLECTION,
     TRACK_COLLECTION,
     TRACK_PLAYLIST_COLLECTION,
-    YOUTUBE_URL_CACHE_COLLECTION,
 )
-from playlist_etl.helpers import get_logger, set_secrets
+from playlist_etl.helpers import get_logger
 from playlist_etl.models import GenreName, Playlist, Track, TrackRank, TrackSourceServiceName
 from playlist_etl.mongo_db_client import MongoDBClient
 from playlist_etl.services import AppleMusicService, SpotifyService, YouTubeService
@@ -31,7 +28,6 @@ class Transform:
     def __init__(
         self,
         mongo_client: MongoDBClient,
-        isrc_cache_manager: CacheManager,
         spotify_service: SpotifyService,
         youtube_service: YouTubeService,
         apple_music_service: AppleMusicService,
