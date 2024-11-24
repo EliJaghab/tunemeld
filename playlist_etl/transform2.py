@@ -1,7 +1,5 @@
 import concurrent.futures
-import os
 from collections import defaultdict
-from typing import Any
 
 from playlist_etl.config import (
     RAW_PLAYLISTS_COLLECTION,
@@ -12,7 +10,6 @@ from playlist_etl.helpers import get_logger
 from playlist_etl.models import GenreName, Playlist, Track, TrackRank, TrackSourceServiceName
 from playlist_etl.mongo_db_client import MongoDBClient
 from playlist_etl.services import AppleMusicService, SpotifyService, YouTubeService
-from playlist_etl.utils import CacheManager
 
 MAX_THREADS = 100
 
