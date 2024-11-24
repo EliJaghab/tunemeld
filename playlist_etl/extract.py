@@ -13,8 +13,8 @@ from playlist_etl.utils import (
     get_logger,
     get_mongo_client,
     insert_or_update_data_to_mongo,
-    set_secrets,
 )
+from playlist_etl.utils import get_logger
 
 PLAYLIST_GENRES = ["country", "dance", "pop", "rap"]
 
