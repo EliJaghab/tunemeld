@@ -129,7 +129,7 @@ class Transform:
                     TrackRank(
                         isrc=isrc,
                         rank=int(key) + 1,
-                        sources=[TrackSourceServiceName.APPLE_MUSIC.value],
+                        sources={TrackSourceServiceName.APPLE_MUSIC: int(key) + 1},
                     )
                 )
 
@@ -156,7 +156,7 @@ class Transform:
                 TrackRank(
                     isrc=isrc,
                     rank=i + 1,
-                    sources=[TrackSourceServiceName.SOUNDCLOUD.value],
+                    sources={TrackSourceServiceName.SOUNDCLOUD: i + 1},
                 )
             )
 
@@ -180,7 +180,7 @@ class Transform:
                 TrackRank(
                     isrc=isrc,
                     rank=i + 1,
-                    sources=[TrackSourceServiceName.SPOTIFY.value],
+                    sources={TrackSourceServiceName.SPOTIFY: i + 1},
                 )
             )
 
