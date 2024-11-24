@@ -7,8 +7,8 @@ from utils import (
     get_mongo_client,
     insert_or_update_data_to_mongo,
     read_data_from_mongo,
-    set_secrets,
 )
+from helpers import set_secrets
 from view_count import VIEW_COUNTS_COLLECTION
 
 AGGREGATED_DATA_COLLECTION = "aggregated_playlists"
