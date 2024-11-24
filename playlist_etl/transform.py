@@ -7,10 +7,9 @@ import requests
 from bs4 import BeautifulSoup
 
 from playlist_etl.extract import PLAYLIST_GENRES, SERVICE_CONFIGS
-from playlist_etl.helpers import get_logger
+from playlist_etl.helpers import get_logger, set_secrets
 from playlist_etl.utils import (
     clear_collection,
-    get_logger,
     get_mongo_client,
     get_spotify_client,
     insert_or_update_data_to_mongo,
