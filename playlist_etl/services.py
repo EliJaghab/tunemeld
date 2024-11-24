@@ -5,9 +5,9 @@ from urllib.parse import unquote
 import requests
 from bs4 import BeautifulSoup
 from spotipy import Spotify
+from spotipy.exceptions import SpotifyException
 from spotipy.oauth2 import SpotifyClientCredentials
 from tenacity import retry, stop_after_attempt, wait_exponential
-from spotipy.exceptions import SpotifyException
 
 from playlist_etl.helpers import get_logger
 from playlist_etl.utils import CacheManager
@@ -77,7 +77,9 @@ class SpotifyService:
             logger.error(f"Failed to find track URL for ISRC: {isrc} after multiple attempts")
         return track_url
 
-    @retry(wait=wait_exponential(multiplier=1, min=4, max=10), stop=stop_after_attempt(5), reraise=True)
+    @retry(
+        wait=wait_exponential(multiplier=1, min=4, max=10), stop=stop_after_attempt(5), reraise=True
+    )
     def _get_track_url_by_isrc(self, isrc: str) -> str:
         try:
             results = self.spotify_client.search(q=f"isrc:{isrc}", type="track", limit=1)

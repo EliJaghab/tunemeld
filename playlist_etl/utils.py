@@ -308,7 +308,9 @@ class CacheManager:
         return self.cache.get(key)
 
     def set(self, key: str, value: Any) -> None:
-        logger.info(f"Setting cache for key: {key} with value: {value} in collection: {self.collection_name}")
+        logger.info(
+            f"Setting cache for key: {key} with value: {value} in collection: {self.collection_name}"
+        )
         self.cache[key] = value
         self.mongo_client.get_collection(self.collection_name).update_one(
             {"key": key},

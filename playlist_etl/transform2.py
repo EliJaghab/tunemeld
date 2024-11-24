@@ -12,13 +12,7 @@ from playlist_etl.config import (
     YOUTUBE_URL_CACHE_COLLECTION,
 )
 from playlist_etl.helpers import get_logger, set_secrets
-from playlist_etl.models import (
-    GenreName,
-    Playlist,
-    Track,
-    TrackRank,
-    TrackSourceServiceName,
-)
+from playlist_etl.models import GenreName, Playlist, Track, TrackRank, TrackSourceServiceName
 from playlist_etl.mongo_db_client import MongoDBClient
 from playlist_etl.services import AppleMusicService, SpotifyService, YouTubeService
 from playlist_etl.utils import CacheManager
@@ -207,7 +201,6 @@ class Transform:
             for future in concurrent.futures.as_completed(futures):
                 future.result()
 
-
     def set_youtube_url(self, track: Track) -> None:
         if not track.youtube_url:
             youtube_url = self.youtube_service.get_youtube_url(
@@ -249,7 +242,6 @@ class Transform:
             for future in concurrent.futures.as_completed(futures):
                 future.result()
 
-
     def set_spotify_url(self, track: Track) -> None:
         if not track.spotify_track_data.track_url:
             spotify_url = self.spotify_service.get_track_url_by_isrc(track.isrc)
@@ -272,13 +264,17 @@ class Transform:
             {
                 "isrc": isrc,
                 "soundcloud_track_data": (
-                    track.soundcloud_track_data.model_dump() if track.soundcloud_track_data else None
+                    track.soundcloud_track_data.model_dump()
+                    if track.soundcloud_track_data
+                    else None
                 ),
                 "spotify_track_data": (
                     track.spotify_track_data.model_dump() if track.spotify_track_data else None
                 ),
                 "apple_music_track_data": (
-                    track.apple_music_track_data.model_dump() if track.apple_music_track_data else None
+                    track.apple_music_track_data.model_dump()
+                    if track.apple_music_track_data
+                    else None
                 ),
                 "youtube_url": track.youtube_url,
                 "spotify_views": track.spotify_views.model_dump() if track.spotify_views else None,
@@ -301,6 +297,7 @@ class Transform:
                 track_collection.update_one({"isrc": track["isrc"]}, {"$set": track}, upsert=True)
 
         self.mongo_client.overwrite_collection(TRACK_PLAYLIST_COLLECTION, formatted_ranks)
+
 
 if __name__ == "__main__":
     set_secrets()
