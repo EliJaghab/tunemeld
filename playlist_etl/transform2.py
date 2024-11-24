@@ -37,7 +37,6 @@ class Transform:
         apple_music_service: AppleMusicService,
     ):
         self.mongo_client = mongo_client
-        self.isrc_cache_manager = isrc_cache_manager
         self.spotify_service = spotify_service
         self.youtube_service = youtube_service
         self.apple_music_service = apple_music_service
@@ -297,27 +296,3 @@ class Transform:
                 track_collection.update_one({"isrc": track["isrc"]}, {"$set": track}, upsert=True)
 
         self.mongo_client.overwrite_collection(TRACK_PLAYLIST_COLLECTION, formatted_ranks)
-
-
-if __name__ == "__main__":
-    set_secrets()
-    mongo_client = MongoDBClient()
-    isrc_cache_manager = CacheManager(mongo_client, ISRC_CACHE_COLLECTION)
-    youtube_url_cache_service = CacheManager(mongo_client, YOUTUBE_URL_CACHE_COLLECTION)
-    spotify_service = SpotifyService(
-        client_id=os.getenv("SPOTIFY_CLIENT_ID"),
-        client_secret=os.getenv("SPOTIFY_CLIENT_SECRET"),
-        isrc_cache_manager=isrc_cache_manager,
-    )
-    youtube_service = YouTubeService(
-        api_key=os.getenv("GOOGLE_API_KEY"), cache_service=youtube_url_cache_service
-    )
-    youtube_url_cache_manager = CacheManager(mongo_client, YOUTUBE_URL_CACHE_COLLECTION)
-    apple_music_service = AppleMusicService(youtube_url_cache_manager)
-
-    transform = Transform(
-        mongo_client, isrc_cache_manager, spotify_service, youtube_service, apple_music_service
-    )
-    transform.transform()
-    # aggregate = Aggregate(mongo_client)
-    # aggregate.aggregate()
