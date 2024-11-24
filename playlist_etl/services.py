@@ -104,8 +104,9 @@ class YouTubeService:
         youtube_url = self.cache_service.get(cache_key)
         if youtube_url:
             logger.info(f"Cache hit for YouTube URL: {cache_key}")
-            query = f"{track_name} {artist_name}"
-        youtube_search_url = f"https://www.googleapis.com/youtube/v3/search?part=snippet&q={query}&key={self.api_key}"
+            return youtube_url
+        
+        youtube_search_url = f"https://www.googleapis.com/youtube/v3/search?part=snippet&q={cache_key}&key={self.api_key}"
         response = requests.get(youtube_search_url)
 
         if response.status_code == 200:
@@ -124,7 +125,7 @@ class YouTubeService:
         else:
             logger.info(f"Error fetching YouTube URL: {response.status_code}, {response.text}")
             if response.status_code == 403 and "quotaExceeded" in response.text:
-                raise ValueError(f"Could not get YouTube URL for {track_name} {artist_name}")
+                raise ValueError(f"Could not get YouTube URL for {track_name} {artist_name} because Quota Exceeded")
             return None
 
     @retry(
