@@ -15,9 +15,7 @@ from playlist_etl.helpers import get_logger, set_secrets
 from playlist_etl.models import (
     GenreName,
     Playlist,
-    ServiceView,
     Track,
-    TrackData,
     TrackRank,
     TrackSourceServiceName,
 )
@@ -206,7 +204,9 @@ class Transform:
             futures = [
                 executor.submit(self.set_youtube_url, track) for track in self.tracks.values()
             ]
-            concurrent.futures.wait(futures)
+            for future in concurrent.futures.as_completed(futures):
+                future.result()
+
 
     def set_youtube_url(self, track: Track) -> None:
         if not track.youtube_url:
@@ -228,10 +228,11 @@ class Transform:
                 for track in self.tracks.values()
                 if track.apple_music_track_data
             ]
-            concurrent.futures.wait(futures)
+            for future in concurrent.futures.as_completed(futures):
+                future.result()
 
     def set_apple_music_album_cover_url(self, track: Track) -> None:
-        if track.apple_music_track_data and not track.apple_music_track_data.album_cover_url:
+        if track.apple_music_track_data.track_name:
             album_cover_url = self.apple_music_service.get_album_cover_url(
                 track.apple_music_track_data.track_url
             )
@@ -245,7 +246,9 @@ class Transform:
                 for track in self.tracks.values()
                 if not track.spotify_track_data.track_url
             ]
-            concurrent.futures.wait(futures)
+            for future in concurrent.futures.as_completed(futures):
+                future.result()
+
 
     def set_spotify_url(self, track: Track) -> None:
         if not track.spotify_track_data.track_url:
@@ -253,11 +256,15 @@ class Transform:
             track.spotify_track_data.track_url = spotify_url
 
     def merge_track_data(self, existing_data: dict, new_data: dict) -> dict:
-        merged_data = existing_data.copy()
-        for key, value in new_data.items():
-            if value is not None:
-                merged_data[key] = value
-        return merged_data
+        def recursive_merge(d1: dict, d2: dict) -> dict:
+            for key, value in d2.items():
+                if isinstance(value, dict) and key in d1 and isinstance(d1[key], dict):
+                    d1[key] = recursive_merge(d1[key], value)
+                else:
+                    d1[key] = value
+            return d1
+
+        return recursive_merge(existing_data.copy(), new_data)
 
     def overwrite(self) -> None:
         logger.info("Saving transformed data to MongoDB")
@@ -265,19 +272,15 @@ class Transform:
             {
                 "isrc": isrc,
                 "soundcloud_track_data": (
-                    track.soundcloud_track_data.model_dump()
-                    if track.soundcloud_track_data
-                    else None
+                    track.soundcloud_track_data.model_dump() if track.soundcloud_track_data else None
                 ),
                 "spotify_track_data": (
                     track.spotify_track_data.model_dump() if track.spotify_track_data else None
                 ),
                 "apple_music_track_data": (
-                    track.apple_music_track_data.model_dump()
-                    if track.apple_music_track_data
-                    else None
+                    track.apple_music_track_data.model_dump() if track.apple_music_track_data else None
                 ),
-                "youtube_url": track.youtube_url if track.youtube_url else None,
+                "youtube_url": track.youtube_url,
                 "spotify_views": track.spotify_views.model_dump() if track.spotify_views else None,
                 "youtube_views": track.youtube_views.model_dump() if track.youtube_views else None,
             }
@@ -299,7 +302,6 @@ class Transform:
 
         self.mongo_client.overwrite_collection(TRACK_PLAYLIST_COLLECTION, formatted_ranks)
 
-
 if __name__ == "__main__":
     set_secrets()
     mongo_client = MongoDBClient()
@@ -313,7 +315,8 @@ if __name__ == "__main__":
     youtube_service = YouTubeService(
         api_key=os.getenv("GOOGLE_API_KEY"), cache_service=youtube_url_cache_service
     )
-    apple_music_service = AppleMusicService(isrc_cache_manager)
+    youtube_url_cache_manager = CacheManager(mongo_client, YOUTUBE_URL_CACHE_COLLECTION)
+    apple_music_service = AppleMusicService(youtube_url_cache_manager)
 
     transform = Transform(
         mongo_client, isrc_cache_manager, spotify_service, youtube_service, apple_music_service
