@@ -1,12 +1,9 @@
 from collections import defaultdict
 
-from playlist_etl.config import (
-    TRACK_PLAYLIST_COLLECTION,
-    RANK_PRIORITY,
-)
-from playlist_etl.models import TrackSourceServiceName, GenreName, PlaylistType, TrackRank, Playlist
-from playlist_etl.mongo_db_client import MongoDBClient
+from playlist_etl.config import RANK_PRIORITY, TRACK_PLAYLIST_COLLECTION
 from playlist_etl.helpers import get_logger
+from playlist_etl.models import GenreName, Playlist, PlaylistType, TrackRank, TrackSourceServiceName
+from playlist_etl.mongo_db_client import MongoDBClient
 
 logger = get_logger(__name__)
 
@@ -34,7 +31,9 @@ class Aggregate:
                 )
                 track_ranks = [TrackRank(**track) for track in playlist["tracks"]]
                 for track in track_ranks:
-                    candidates_by_genre[genre_name][track.isrc]["sources"][service_name] = track.rank
+                    candidates_by_genre[genre_name][track.isrc]["sources"][
+                        service_name
+                    ] = track.rank
 
         return candidates_by_genre
 
@@ -85,7 +84,7 @@ class Aggregate:
                     aggregate_service_name=isrc_data["aggregate_service_name"],
                 )
                 tracks.append(track.model_dump())
-                
+
             playlist = Playlist(
                 service_name=PlaylistType.AGGREGATE,
                 genre_name=genre_name,

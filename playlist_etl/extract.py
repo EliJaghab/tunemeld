@@ -6,13 +6,13 @@ import requests
 from bs4 import BeautifulSoup
 from unidecode import unidecode
 
+from playlist_etl.helpers import get_logger, set_secrets
 from playlist_etl.utils import (
     WebDriverManager,
     clear_collection,
     get_mongo_client,
     insert_or_update_data_to_mongo,
 )
-from playlist_etl.helpers import set_secrets, get_logger
 
 PLAYLIST_GENRES = ["country", "dance", "pop", "rap"]
 
