@@ -7,6 +7,7 @@ from pymongo.collection import Collection
 
 from playlist_etl.config import PLAYLIST_ETL_DATABASE
 from playlist_etl.helpers import get_logger, set_secrets
+from playlist_etl.models import Track
 
 logger = get_logger(__name__)
 
@@ -92,3 +93,8 @@ class MongoDBClient:
             logger.info(
                 f"Overwritten KV collection: {collection_name} with {len(documents)} entries"
             )
+
+    def update_track(self, track: Track) -> None:
+        self.track_collection.update_one(
+            {"isrc": track.isrc}, {"$set": track.model_dump()}, upsert=True
+        )
