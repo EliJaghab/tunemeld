@@ -5,7 +5,8 @@ from playlist_etl.config import ISRC_CACHE_COLLECTION, YOUTUBE_URL_CACHE_COLLECT
 from playlist_etl.helpers import set_secrets
 from playlist_etl.services import AppleMusicService, SpotifyService, YouTubeService
 from playlist_etl.transform2 import Transform
-from playlist_etl.utils import CacheManager, MongoDBClient
+from playlist_etl.utils import CacheManager, MongoDBClient, WebDriverManager
+from playlist_etl.view_count2 import ViewCount
 
 
 class Main:
@@ -24,11 +25,13 @@ class Main:
         self.apple_music_service = AppleMusicService(
             CacheManager(self.mongo_client, YOUTUBE_URL_CACHE_COLLECTION)
         )
+        self.web_driver = WebDriverManager()
 
     def main(self):
         # self.extract()
         self.transform()
         self.aggregate()
+        self.view_count()
 
     def transform(self):
         transform = Transform(
@@ -39,6 +42,10 @@ class Main:
     def aggregate(self):
         aggregate = Aggregate(self.mongo_client)
         aggregate.aggregate()
+
+    def view_count(self):
+        view_count = ViewCount(self.mongo_client, self.web_driver, self.youtube_service)
+        view_count.update()
 
 
 if __name__ == "__main__":
