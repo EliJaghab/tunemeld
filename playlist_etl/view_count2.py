@@ -1,15 +1,9 @@
-from pydantic import BaseModel
-
-from playlist_etl.config import (AGGREGATE, APPLE_MUSIC, GENRE_NAMES,
-                                 PLAYLIST_ETL_DATABASE, RANK_PRIORITY,
-                                 RAW_PLAYLISTS_COLLECTION, SERVICE_NAMES,
-                                 SOUNDCLOUD, SPOTIFY, TRACK_COLLECTION,
-                                 TRACK_PLAYLIST_COLLECTION, YOUTUBE,
-                                 YOUTUBE_URL_CACHE_COLLECTION)
-from playlist_etl.models import Track
 from playlist_etl.mongo_db_client import MongoDBClient
 from playlist_etl.services import YouTubeService
-from playlist_etl.utils import WebDriverManager, get_logger
+from playlist_etl.utils import WebDriverManager
+from playlist_etl.config import CURRENT_TIMESTAMP, TRACK_PLAYLIST_COLLECTION, TRACK_COLLECTION
+from playlist_etl.helpers import get_logger
+from playlist_etl.models import Track, HistoricalView, PlaylistType, GenreName
 
 logger = get_logger(__name__)
 
@@ -23,24 +17,90 @@ class ViewCount:
         self.web_driver = web_driver
         self.youtube_service = youtube_service
     
-    def update_current_view_counts(self):
-        track_collection = self.mongo_client.get_collection(TRACK_COLLECTION)
+    def update(self):
+        playlists = self.mongo_client.get_collection(TRACK_PLAYLIST_COLLECTION)
+        tracks = self.mongo_client.get_collection(TRACK_COLLECTION)
+        updated_tracks = self._get_new_view_count_data(playlists, tracks)
+        self._update_view_counts(updated_tracks)
     
-    def _get_current_view_counts
-        
+    def _get_new_view_count_data(self, playlists, tracks):
+        updated_tracks = []
+        for playlist_name in PlaylistType:
+            for genre_name in GenreName:
+                
+                playlist_name = playlist_name.value
+                genre_name = genre_name.value
+                
+                playlist = playlists.find_one({"service_name": playlist_name, "genre_name": genre_name})
+                
+                
+                for track in playlist["tracks"]:
+                    track_data = tracks.find_one({"isrc": track["isrc"]})
+                    track = Track(**track_data)
+                    self._update_track_view_counts(track)
+                    updated_tracks.append(track)
+                    
+        return updated_tracks
     
-    def get_service_url(self, service_name: str, isrc: str) -> int:
-        if service_name == SPOTIFY:
-            return self.web_driver.get_spotify_track_view_count(isrc)
-        elif service_name == YOUTUBE:
-            return self.youtube_service.get_youtube_track_view_count(isrc)
-        else:
-            raise ValueError("Unexpected service name")
-            
-        
-        
-
-
-
-
+    def _update_track_view_counts(self, track: Track):
+        self._update_spotify_view_count(track)
+        self._update_youtube_view_count(track)
+                
     
+    def _update_spotify_view_count(self, track: Track) -> bool:
+        self._update_spotify_start_view_count(track)
+        self._update_spotify_current_view_count(track)
+        self._update_spotify_historical_view_count(track)
+
+    def _update_spotify_start_view_count(self, track: Track) -> bool:
+        if track.spotify_view.start_view.timestamp is not None:
+            return
+        
+        track.spotify_view.start_view.view_count = self.web_driver.get_spotify_track_view_count(track.isrc)
+        track.spotify_view.start_view.timestamp = CURRENT_TIMESTAMP
+
+    def _update_spotify_current_view_count(self, track: Track) -> None:
+        track.spotify_view.current_view.view_count = self.web_driver.get_spotify_track_view_count(track.isrc)
+        track.spotify_view.current_view.timestamp = CURRENT_TIMESTAMP
+    
+    def _update_spotify_historical_view_count(self, track: Track) -> bool:
+        historical_view = HistoricalView()
+        historical_view.total_view_count = track.spotify_view.current_view.view_count
+        delta_view_count = self._get_delta_view_count(track.spotify_view.historical_view, track.spotify_view.current_view.view_count)
+        historical_view.delta_view_count = delta_view_count
+        historical_view.timestamp = CURRENT_TIMESTAMP
+        track.spotify_view.historical_view.append(historical_view)
+
+    def _update_youtube_view_count(self, track: Track) -> bool:
+        if track.youtube_view.start_view.timestamp is not None:
+            return
+        
+        track.youtube_view.start_view.view_count = self.youtube_service.get_youtube_track_view_count(track.youtube_url)
+        track.youtube_view.start_view.timestamp = CURRENT_TIMESTAMP
+
+    def _update_youtube_current_view_count(self, track: Track) -> None:
+        track.youtube_view.current_view.view_count = self.youtube_service.get_youtube_track_view_count(track.youtube_url)
+        track.youtube_view.current_view.timestamp = CURRENT_TIMESTAMP
+
+    def _update_youtube_historical_view_count(self, track: Track) -> bool:
+        historical_view = HistoricalView()
+        historical_view.total_view_count = track.youtube_view.current_view.view_count
+        delta_view_count = self._get_delta_view_count(track.youtube_view.historical_view, track.youtube_view.current_view.view_count)
+        historical_view.delta_view_count = delta_view_count
+        historical_view.timestamp = CURRENT_TIMESTAMP
+        track.youtube_view.historical_view.append(historical_view)
+
+    def _get_delta_view_count(self, historical_views: list[HistoricalView], current_view_count: int) -> int:
+        if not historical_views:
+            return 0
+        return current_view_count - historical_views[-1].total_view_count
+    
+    def _update_view_counts(self, tracks):
+        for track in tracks:
+            self.mongo_client.update_track(track)
+
+
+
+
+
+
