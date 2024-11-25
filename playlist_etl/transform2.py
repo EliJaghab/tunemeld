@@ -48,7 +48,6 @@ class Transform:
 
     def build_track_objects(self, raw_playlists: dict) -> None:
         logger.info("Reading raw playlists from MongoDB")
-        raw_playlists = self.mongo_client.get_collection(RAW_PLAYLISTS_COLLECTION)
 
         for genre_name in GenreName:
             for service_name in TrackSourceServiceName:
@@ -253,25 +252,7 @@ class Transform:
     def overwrite(self) -> None:
         logger.info("Saving transformed data to MongoDB")
         formatted_tracks = [
-            {
-                "isrc": isrc,
-                "soundcloud_track_data": (
-                    track.soundcloud_track_data.model_dump()
-                    if track.soundcloud_track_data
-                    else None
-                ),
-                "spotify_track_data": (
-                    track.spotify_track_data.model_dump() if track.spotify_track_data else None
-                ),
-                "apple_music_track_data": (
-                    track.apple_music_track_data.model_dump()
-                    if track.apple_music_track_data
-                    else None
-                ),
-                "youtube_url": track.youtube_url,
-                "spotify_views": track.spotify_views.model_dump() if track.spotify_views else None,
-                "youtube_views": track.youtube_views.model_dump() if track.youtube_views else None,
-            }
+            {"isrc": isrc, "track_data": track.model_dump()}
             for isrc, track in self.tracks.items()
             if track.isrc is not None
         ]
