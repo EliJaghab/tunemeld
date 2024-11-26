@@ -2,7 +2,7 @@ from playlist_etl.config import CURRENT_TIMESTAMP, TRACK_COLLECTION, TRACK_PLAYL
 from playlist_etl.helpers import get_logger
 from playlist_etl.models import GenreName, HistoricalView, PlaylistType, Track
 from playlist_etl.mongo_db_client import MongoDBClient
-from playlist_etl.services import YouTubeService
+from playlist_etl.services import YouTubeService, SpotifyService
 from playlist_etl.utils import WebDriverManager
 
 logger = get_logger(__name__)
@@ -12,10 +12,12 @@ class ViewCount:
     def __init__(
         self,
         mongo_client: MongoDBClient,
+        spotify_service: SpotifyService,
         web_driver: WebDriverManager,
         youtube_service: YouTubeService,
     ):
         self.mongo_client = mongo_client
+        self.spotify_service = spotify_service
         self.web_driver = web_driver
         self.youtube_service = youtube_service
 
@@ -50,22 +52,32 @@ class ViewCount:
         self._update_youtube_view_count(track)
 
     def _update_spotify_view_count(self, track: Track) -> bool:
+        self._update_spotify_track_url(track)
+        if not track.spotify_track_data.track_url: 
+            return None
         self._update_spotify_start_view_count(track)
         self._update_spotify_current_view_count(track)
         self._update_spotify_historical_view_count(track)
+    
+    def _update_spotify_track_url(self, track: Track) -> None:
+        if track.spotify_track_data.track_url is not None:
+            return
+
+        track.spotify_track_data.track_url = self.spotify_service.get_track_url_by_isrc(track.isrc)
+    
 
     def _update_spotify_start_view_count(self, track: Track) -> bool:
         if track.spotify_view.start_view.timestamp is not None:
             return
 
         track.spotify_view.start_view.view_count = self.web_driver.get_spotify_track_view_count(
-            track.isrc
+            track.spotify_track_data.track_url
         )
         track.spotify_view.start_view.timestamp = CURRENT_TIMESTAMP
 
     def _update_spotify_current_view_count(self, track: Track) -> None:
         track.spotify_view.current_view.view_count = self.web_driver.get_spotify_track_view_count(
-            track.isrc
+            track.spotify_track_data.track_url
         )
         track.spotify_view.current_view.timestamp = CURRENT_TIMESTAMP
 
