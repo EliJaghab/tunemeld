@@ -21,11 +21,11 @@ class ViewCount:
         self.web_driver = web_driver
         self.youtube_service = youtube_service
 
-    def update(self):
+    def set(self):
         playlists = self.mongo_client.get_collection(TRACK_PLAYLIST_COLLECTION)
         tracks = self.mongo_client.get_collection(TRACK_COLLECTION)
         updated_tracks = self._get_new_view_count_data(playlists, tracks)
-        self._update_view_counts(updated_tracks)
+        self._set_view_counts(updated_tracks)
 
     def _get_new_view_count_data(self, playlists, tracks):
         updated_tracks = []
@@ -42,31 +42,31 @@ class ViewCount:
                 for track in playlist["tracks"]:
                     track_data = tracks.find_one({"isrc": track["isrc"]})
                     track = Track(**track_data)
-                    self._update_track_view_counts(track)
+                    self._set_track_view_counts(track)
                     updated_tracks.append(track)
 
         return updated_tracks
 
-    def _update_track_view_counts(self, track: Track):
-        self._update_spotify_view_count(track)
-        self._update_youtube_view_count(track)
+    def _set_track_view_counts(self, track: Track):
+        self._set_spotify_view_count(track)
+        self._set_youtube_view_count(track)
 
-    def _update_spotify_view_count(self, track: Track) -> bool:
-        self._update_spotify_track_url(track)
+    def _set_spotify_view_count(self, track: Track) -> bool:
+        self._set_spotify_track_url(track)
         if not track.spotify_track_data.track_url: 
             return None
-        self._update_spotify_start_view_count(track)
-        self._update_spotify_current_view_count(track)
-        self._update_spotify_historical_view_count(track)
+        self._set_spotify_start_view_count(track)
+        self._set_spotify_current_view_count(track)
+        self._set_spotify_historical_view_count(track)
     
-    def _update_spotify_track_url(self, track: Track) -> None:
+    def _set_spotify_track_url(self, track: Track) -> None:
         if track.spotify_track_data.track_url is not None:
             return
 
         track.spotify_track_data.track_url = self.spotify_service.get_track_url_by_isrc(track.isrc)
     
 
-    def _update_spotify_start_view_count(self, track: Track) -> bool:
+    def _set_spotify_start_view_count(self, track: Track) -> bool:
         if track.spotify_view.start_view.timestamp is not None:
             return
 
@@ -75,13 +75,13 @@ class ViewCount:
         )
         track.spotify_view.start_view.timestamp = CURRENT_TIMESTAMP
 
-    def _update_spotify_current_view_count(self, track: Track) -> None:
+    def _set_spotify_current_view_count(self, track: Track) -> None:
         track.spotify_view.current_view.view_count = self.web_driver.get_spotify_track_view_count(
             track.spotify_track_data.track_url
         )
         track.spotify_view.current_view.timestamp = CURRENT_TIMESTAMP
 
-    def _update_spotify_historical_view_count(self, track: Track) -> bool:
+    def _set_spotify_historical_view_count(self, track: Track) -> bool:
         historical_view = HistoricalView()
         historical_view.total_view_count = track.spotify_view.current_view.view_count
         delta_view_count = self._get_delta_view_count(
@@ -91,7 +91,7 @@ class ViewCount:
         historical_view.timestamp = CURRENT_TIMESTAMP
         track.spotify_view.historical_view.append(historical_view)
 
-    def _update_youtube_view_count(self, track: Track) -> bool:
+    def _set_youtube_view_count(self, track: Track) -> bool:
         if track.youtube_view.start_view.timestamp is not None:
             return
 
@@ -100,13 +100,13 @@ class ViewCount:
         )
         track.youtube_view.start_view.timestamp = CURRENT_TIMESTAMP
 
-    def _update_youtube_current_view_count(self, track: Track) -> None:
+    def _set_youtube_current_view_count(self, track: Track) -> None:
         track.youtube_view.current_view.view_count = (
             self.youtube_service.get_youtube_track_view_count(track.youtube_url)
         )
         track.youtube_view.current_view.timestamp = CURRENT_TIMESTAMP
 
-    def _update_youtube_historical_view_count(self, track: Track) -> bool:
+    def _set_youtube_historical_view_count(self, track: Track) -> bool:
         historical_view = HistoricalView()
         historical_view.total_view_count = track.youtube_view.current_view.view_count
         delta_view_count = self._get_delta_view_count(
@@ -123,6 +123,6 @@ class ViewCount:
             return 0
         return current_view_count - historical_views[-1].total_view_count
 
-    def _update_view_counts(self, tracks):
+    def _set_view_counts(self, tracks):
         for track in tracks:
             self.mongo_client.update_track(track)
