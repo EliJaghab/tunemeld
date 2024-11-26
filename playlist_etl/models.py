@@ -96,5 +96,5 @@ class TrackRank(BaseModel):
 
 class Playlist(BaseModel):
     service_name: PlaylistType
-    genre_name: str
+    genre_name: GenreName
     tracks: list[TrackRank]
