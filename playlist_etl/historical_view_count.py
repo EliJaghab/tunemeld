@@ -10,8 +10,8 @@ from utils import (
     get_mongo_client,
     get_mongo_collection,
     read_data_from_mongo,
-    set_secrets,
 )
+from helpers import set_secrets
 
 HISTORICAL_TRACK_VIEWS_COLLECTION = "historical_track_views"
 VIEW_COUNTS_COLLECTION = "view_counts_playlists"
