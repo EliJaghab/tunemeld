@@ -5,7 +5,7 @@ from typing import Any
 from pymongo import MongoClient
 from pymongo.collection import Collection
 
-from playlist_etl.config import PLAYLIST_ETL_DATABASE
+from playlist_etl.config import PLAYLIST_ETL_DATABASE, TRACK_COLLECTION
 from playlist_etl.helpers import get_logger, set_secrets
 from playlist_etl.models import Track
 
@@ -20,6 +20,7 @@ class MongoDBClient:
             raise Exception("MONGO_URI environment variable not set")
         self.client = MongoClient(mongo_uri)
         self.db = self.client[PLAYLIST_ETL_DATABASE]
+        self.track_collection = self.get_collection(TRACK_COLLECTION)
 
     def get_collection(self, collection_name: str) -> Collection[Any]:
         return self.db[collection_name]
