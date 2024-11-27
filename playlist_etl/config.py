@@ -2,7 +2,7 @@ from datetime import datetime
 
 from playlist_etl.models import TrackSourceServiceName
 
-CURRENT_TIMESTAMP = datetime.now().isoformat()
+CURRENT_TIMESTAMP = datetime.now()
 
 RANK_PRIORITY = [
     TrackSourceServiceName.APPLE_MUSIC,
