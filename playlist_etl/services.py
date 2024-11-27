@@ -105,7 +105,7 @@ class YouTubeService:
         if youtube_url:
             logger.info(f"Cache hit for YouTube URL: {cache_key}")
             return youtube_url
-        
+
         youtube_search_url = f"https://www.googleapis.com/youtube/v3/search?part=snippet&q={cache_key}&key={self.api_key}"
         response = requests.get(youtube_search_url)
 
@@ -125,13 +125,15 @@ class YouTubeService:
         else:
             logger.info(f"Error fetching YouTube URL: {response.status_code}, {response.text}")
             if response.status_code == 403 and "quotaExceeded" in response.text:
-                raise ValueError(f"Could not get YouTube URL for {track_name} {artist_name} because Quota Exceeded")
+                raise ValueError(
+                    f"Could not get YouTube URL for {track_name} {artist_name} because Quota Exceeded"
+                )
             return None
 
     @retry(
         wait=wait_exponential(multiplier=1, min=4, max=10), stop=stop_after_attempt(3), reraise=True
     )
-    def get_youtube_track_view_count(youtube_url: str) -> int:
+    def get_youtube_track_view_count(self, youtube_url: str) -> int:
         video_id = youtube_url.split("v=")[-1]
 
         youtube_api_url = f"https://www.googleapis.com/youtube/v3/videos?part=statistics&id={video_id}&key={self.api_key}"
