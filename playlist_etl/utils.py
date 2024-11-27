@@ -14,7 +14,6 @@ from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support import expected_conditions as EC
 from spotipy import Spotify
 from spotipy.oauth2 import SpotifyClientCredentials
 from webdriver_manager.chrome import ChromeDriverManager
@@ -248,9 +247,13 @@ class WebDriverManager:
             logger.info(f"Using proxy: {proxy}")
             options.add_argument(f"--proxy-server={proxy}")
 
-        # Correctly initialize the Chrome driver with options
         driver_path = ChromeDriverManager().install()
+        driver_dir = os.path.dirname(ChromeDriverManager().install())
+
+        # Manually set the path to the chromedriver executable
+        driver_path = os.path.join(driver_dir, "chromedriver")
         service = Service(executable_path=driver_path)
+        logger.info(f"Creating new WebDriver instance using path {driver_path}")
         driver = webdriver.Chrome(service=service, options=options)
         return driver
 
@@ -266,9 +269,9 @@ class WebDriverManager:
         if self.driver:
             self.driver.quit()
 
-    def get_spotify_track_view_count(self, url: str) -> int:
+    def get_spotify_track_view_count(self, url: str, xpath: str = SPOTIFY_VIEW_COUNT_XPATH) -> int:
         try:
-            play_count_info = self.find_element_by_xpath(url, SPOTIFY_VIEW_COUNT_XPATH)
+            play_count_info = self.find_element_by_xpath(url, xpath)
 
             if play_count_info == "Element not found on the page":
                 if self.spotify_error_count == SPOTIFY_ERROR_THRESHOLD:
@@ -284,7 +287,7 @@ class WebDriverManager:
                 return play_count
 
         except Exception as e:
-            print(f"Error with xpath {SPOTIFY_VIEW_COUNT_XPATH}: {e}")
+            print(f"Error with xpath {xpath}: {e}")
 
         raise ValueError(f"Could not find play count for {url}")
 
