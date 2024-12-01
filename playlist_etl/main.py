@@ -46,8 +46,8 @@ def main() -> None:
         CacheManager(mongo_client, YOUTUBE_URL_CACHE_COLLECTION)
     )
 
-    # transform(mongo_client, spotify_service, youtube_service, apple_music_service)
-    # aggregate(mongo_client)
+    transform(mongo_client, spotify_service, youtube_service, apple_music_service)
+    aggregate(mongo_client)
     update_view_counts(mongo_client, spotify_service, youtube_service)
 
 
