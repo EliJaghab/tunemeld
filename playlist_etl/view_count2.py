@@ -41,12 +41,10 @@ class ViewCountTrackProcessor:
                 for track in playlist["tracks"]:
                     track_data = tracks.find_one({"isrc": track["isrc"]})
                     track = Track(**track_data)
-                    
+
                     if track.isrc in seen_isrc:
                         continue
                     seen_isrc.add(track.isrc)
-                    
-                    if track.isrc != "GBCFB2401282": continue
                     if self._update_track(track):
                         logger.info(f"Updated view counts for {track.isrc}")
                         updated_tracks.append(track)

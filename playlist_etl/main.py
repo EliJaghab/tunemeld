@@ -9,10 +9,13 @@ from playlist_etl.utils import CacheManager, MongoDBClient, WebDriverManager
 from playlist_etl.view_count2 import ViewCountTrackProcessor
 
 
-def transform(self):
-    transform = Transform(
-        self.mongo_client, self.spotify_service, self.youtube_service, self.apple_music_service
-    )
+def transform(
+    mongo_client: MongoDBClient,
+    spotify_service: SpotifyService,
+    youtube_service: YouTubeService,
+    apple_music_service: AppleMusicService,
+) -> None:
+    transform = Transform(mongo_client, spotify_service, youtube_service, apple_music_service)
     transform.transform()
 
 

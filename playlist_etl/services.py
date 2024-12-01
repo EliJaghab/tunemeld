@@ -180,13 +180,13 @@ class YouTubeService:
             )
             if not track_name or not artist_name:
                 return False
-            
+
             track_url = self.get_youtube_url(track_name, artist_name)
             if track_url is None:
                 return False
-            
+
             track.youtube_url = track_url
-        
+
         return True
 
     def get_youtube_url(self, track_name: str, artist_name: str) -> Optional[str]:
