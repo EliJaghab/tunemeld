@@ -187,7 +187,8 @@ class Transform:
         logger.info("Setting YouTube URLs for all tracks")
         with concurrent.futures.ThreadPoolExecutor(max_workers=MAX_THREADS) as executor:
             futures = [
-                executor.submit(self.youtube_service.set_track_url, track) for track in self.tracks.values()
+                executor.submit(self.youtube_service.set_track_url, track)
+                for track in self.tracks.values()
             ]
             for future in concurrent.futures.as_completed(futures):
                 future.result()

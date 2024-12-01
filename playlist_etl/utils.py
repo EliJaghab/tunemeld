@@ -1,16 +1,14 @@
-import logging
 import os
 import time
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
 from typing import Any
 
-import psutil
 from fp.fp import FreeProxy
 from pymongo import MongoClient
 from pymongo.collection import Collection
 from selenium import webdriver
-from selenium.common.exceptions import NoSuchElementException, TimeoutException
+from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
@@ -18,10 +16,10 @@ from spotipy import Spotify
 from spotipy.oauth2 import SpotifyClientCredentials
 from webdriver_manager.chrome import ChromeDriverManager
 
-from playlist_etl.config import SPOTIFY_ERROR_THRESHOLD, SPOTIFY_VIEW_COUNT_XPATH
+from playlist_etl.config import SPOTIFY_VIEW_COUNT_XPATH
 from playlist_etl.helpers import get_logger
-from playlist_etl.mongo_db_client import MongoDBClient
 from playlist_etl.models import HistoricalView
+from playlist_etl.mongo_db_client import MongoDBClient
 
 PLAYLIST_ETL_COLLECTION_NAME = "playlist_etl"
 
@@ -29,6 +27,7 @@ logger = get_logger(__name__)
 
 RETRIES = 3
 RETRY_DELAY = 8
+
 
 def get_mongo_client():
     mongo_uri = os.getenv("MONGO_URI")
@@ -188,18 +187,18 @@ class WebDriverManager:
                 return result
             except Exception as e:
                 error_message = str(e)
-                
+
                 if isinstance(e, NoSuchElementException):
                     logger.error("Element not found: Unable to locate the specified element.")
                 else:
                     logger.error(f"An error occurred: {error_message}")
-                
+
                 if self._is_rate_limit_issue(error_message):
                     logger.info("Rate limit detected, switching proxy and retrying...")
                     self._restart_driver(new_proxy=True)
                 else:
                     logger.info(f"Retrying... (attempt {attempt} of {retries})")
-                
+
                 if attempt == retries:
                     raise
                 time.sleep(retry_delay * (2 ** (attempt - 1)))
@@ -295,9 +294,7 @@ def overwrite_kv_collection(client, collection_name: str, kv_dict: dict) -> None
             future.result()
 
 
-def get_delta_view_count(
-    historical_views: list[HistoricalView], current_view_count: int
-) -> int:
+def get_delta_view_count(historical_views: list[HistoricalView], current_view_count: int) -> int:
     if not historical_views:
         return 0
     return current_view_count - historical_views[-1].total_view_count

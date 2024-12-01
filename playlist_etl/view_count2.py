@@ -7,6 +7,7 @@ from playlist_etl.utils import WebDriverManager
 
 logger = get_logger(__name__)
 
+
 class ViewCountTrackProcessor:
     def __init__(
         self,
@@ -29,7 +30,7 @@ class ViewCountTrackProcessor:
         self._save_view_counts(updated_tracks)
 
     def _update_tracks(self, playlists, tracks):
-        updated_tracks = [] 
+        updated_tracks = []
         for playlist_name in PlaylistType:
             for genre_name in GenreName:
 
@@ -40,7 +41,7 @@ class ViewCountTrackProcessor:
                 for track in playlist["tracks"]:
                     track_data = tracks.find_one({"isrc": track["isrc"]})
                     track = Track(**track_data)
-                    
+
                     if self._update_track(track):
                         logger.info(f"Updated view counts for {track.isrc}")
                         updated_tracks.append(track)
@@ -48,7 +49,6 @@ class ViewCountTrackProcessor:
                         logger.info(f"No updates for {track.isrc}")
 
         return updated_tracks
-    
 
     def _update_track(self, track: Track) -> bool:
         spotify_updated = self._update_spotify_count(track)
@@ -58,16 +58,15 @@ class ViewCountTrackProcessor:
     def _update_spotify_count(self, track: Track) -> bool:
         if not self.spotify_service.set_track_url(track):
             return False
-        
+
         return self.spotify_service.update_view_count(track)
-    
+
     def _update_youtube_count(self, track: Track) -> bool:
         if not self.youtube_service.set_track_url(track):
             return False
-        
+
         return self.youtube_service.update_view_count(track)
-        
+
     def _save_view_counts(self, tracks):
         for track in tracks:
             self.mongo_client.update_track(track)
-
