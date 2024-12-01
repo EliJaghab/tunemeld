@@ -99,3 +99,6 @@ class MongoDBClient:
         self.track_collection.update_one(
             {"isrc": track.isrc}, {"$set": track.model_dump()}, upsert=True
         )
+    
+    def get_collection_count(self, collection: Collection) -> int:
+        return collection.count_documents({})
