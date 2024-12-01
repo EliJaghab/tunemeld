@@ -63,7 +63,7 @@ def insert_or_update_data_to_mongo(client, collection_name, document):
 
         if existing_document:
             document["update_timestamp"] = datetime.now(timezone.utc)
-            result = collection.replace_one({"_id": document["_id"]}, document)
+            collection.replace_one({"_id": document["_id"]}, document)
             logger.info(f"Data updated for id: {document['_id']}")
             return
 
@@ -119,7 +119,6 @@ def clear_collection(client, collection_name):
 
 
 def collection_is_empty(collection_name, mongo_client) -> bool:
-    db = mongo_client[PLAYLIST_ETL_COLLECTION_NAME]
     return not read_data_from_mongo(mongo_client, collection_name)
 
 

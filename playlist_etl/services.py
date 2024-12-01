@@ -102,24 +102,19 @@ class SpotifyService:
 
     def set_track_url(self, track: Track) -> bool:
         if not track.spotify_track_data.track_url:
-
             track_url = self.get_track_url_by_isrc(track.isrc)
             if not track_url:
                 return False
-
             track.spotify_track_data.track_url = track_url
-
         return True
 
     def update_view_count(self, track: Track) -> bool:
-
         def _update_view_count(track: Track) -> bool:
             start_view_count_update = _set_start_view_count(track)
             current_view_count_update = _set_current_view_count(track)
             if start_view_count_update or current_view_count_update:
                 _set_historical_view_count(track)
                 return True
-
             return False
 
         def _set_start_view_count(track: Track) -> bool:
@@ -245,14 +240,12 @@ class YouTubeService:
             raise ValueError(f"Unexpected error occurred for {youtube_url}: {e}")
 
     def update_view_count(self, track: Track) -> bool:
-
         def _update_view_count(track: Track) -> bool:
             start_view_count_update = _set_start_view_count(track)
             current_view_count_update = _set_current_view_count(track)
             if start_view_count_update or current_view_count_update:
                 _set_historical_view_count(track)
                 return True
-
             return False
 
         def _set_start_view_count(track: Track) -> bool:

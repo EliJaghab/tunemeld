@@ -1,9 +1,8 @@
-from playlist_etl.config import CURRENT_TIMESTAMP, TRACK_COLLECTION, TRACK_PLAYLIST_COLLECTION
+from playlist_etl.config import TRACK_COLLECTION, TRACK_PLAYLIST_COLLECTION
 from playlist_etl.helpers import get_logger
-from playlist_etl.models import GenreName, HistoricalView, PlaylistType, Track
+from playlist_etl.models import GenreName, PlaylistType, Track
 from playlist_etl.mongo_db_client import MongoDBClient
 from playlist_etl.services import SpotifyService, YouTubeService
-from playlist_etl.utils import WebDriverManager
 
 logger = get_logger(__name__)
 
