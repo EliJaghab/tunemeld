@@ -9,8 +9,10 @@ from spotipy.exceptions import SpotifyException
 from spotipy.oauth2 import SpotifyClientCredentials
 from tenacity import retry, stop_after_attempt, wait_exponential
 
+from playlist_etl.config import CURRENT_TIMESTAMP
 from playlist_etl.helpers import get_logger
-from playlist_etl.utils import CacheManager
+from playlist_etl.utils import CacheManager, get_delta_view_count, WebDriverManager
+from playlist_etl.models import Track, HistoricalView
 
 SPOTIFY_ERROR_THRESHOLD = 5
 
@@ -18,7 +20,7 @@ logger = get_logger(__name__)
 
 
 class SpotifyService:
-    def __init__(self, client_id: str, client_secret: str, isrc_cache_manager: CacheManager):
+    def __init__(self, client_id: str, client_secret: str, isrc_cache_manager: CacheManager, webdriver_manager: WebDriverManager):
         if not client_id or not client_secret:
             raise ValueError("Spotify client ID or client secret not provided.")
         self.spotify_client = Spotify(
@@ -27,6 +29,7 @@ class SpotifyService:
             )
         )
         self.isrc_cache_manager = isrc_cache_manager
+        self.webdriver_manager = webdriver_manager
         self.error_count = 0
 
     def get_isrc(self, track_name: str, artist_name: str) -> Optional[str]:
@@ -90,23 +93,107 @@ class SpotifyService:
         except SpotifyException as e:
             logger.error(f"SpotifyException: {e}")
             raise
+    
+    def set_track_url(self, track: Track) -> bool:
+        if not track.spotify_track_data.track_url:
+                    
+            track_url = self.get_track_url_by_isrc(track.isrc)
+            if not track_url: 
+                return False
+            
+            track.spotify_track_data.track_url = track_url
+            
+        return True
+    
+    def update_view_count(self, track: Track) -> bool:
+        
+        def _update_view_count(track: Track) -> bool:
+            start_view_count_update = _set_start_view_count(track)
+            current_view_count_update = _set_current_view_count(track)
+            if start_view_count_update or current_view_count_update:
+                _set_historical_view_count(track)
+                return True
+            
+            return False
+        
+        def _set_start_view_count(track: Track) -> bool:
+            if track.spotify_view.start_view.timestamp is not None:
+                return False
 
+            view_count = _get_track_view_count(track)
+            if view_count is None:
+                return False
+
+            track.spotify_view.start_view.view_count = view_count
+            track.spotify_view.start_view.timestamp = CURRENT_TIMESTAMP
+            return True
+
+        def _get_track_view_count(track: Track) -> int | None:
+            track_url = track.spotify_track_data.track_url
+            try:
+                return self.webdriver_manager.get_spotify_track_view_count(track_url)
+            except Exception as e:
+                logger.error(f"Error getting Spotify view count for {track.isrc} {track_url}: {e}")
+                return None
+        
+        def _set_current_view_count(track: Track) -> bool:
+            view_count = _get_track_view_count(track)
+            if view_count is None:
+                return False
+            
+            track.spotify_view.current_view.view_count = view_count
+            track.spotify_view.current_view.timestamp = CURRENT_TIMESTAMP
+            return True
+
+        def _set_historical_view_count(track: Track) -> bool:
+            historical_view = HistoricalView()
+            historical_view.total_view_count = track.spotify_view.current_view.view_count
+            delta_view_count = get_delta_view_count(
+                track.spotify_view.historical_view, track.spotify_view.current_view.view_count
+            )
+            historical_view.delta_view_count = delta_view_count
+            historical_view.timestamp = CURRENT_TIMESTAMP
+            track.spotify_view.historical_view.append(historical_view)
+        
+
+        return _update_view_count(track)
 
 class YouTubeService:
-    def __init__(self, api_key: str, cache_manager: CacheManager):
+    def __init__(self, api_key: str, cache_manager: CacheManager) -> None:
         if not api_key:
             raise ValueError("YouTube API key not provided.")
         self.api_key = api_key
         self.cache_service = cache_manager
-
+    
+    
+    def set_track_url(self, track: Track) -> bool:
+        if not track.youtube_url:
+            track_name = (
+                track.spotify_track_data.track_name
+                or track.soundcloud_track_data.track_name
+                or track.apple_music_track_data.track_name
+            )
+            artist_name = (
+                track.spotify_track_data.artist_name
+                or track.soundcloud_track_data.artist_name
+                or track.apple_music_track_data.artist_name
+            )
+            if track_name and artist_name:
+                track_url = self.get_youtube_url(track_name, artist_name)
+                if not track_url:
+                    return False
+                track.youtube_url = track_url
+            return True
+    
     def get_youtube_url(self, track_name: str, artist_name: str) -> Optional[str]:
         cache_key = f"{track_name}|{artist_name}"
         youtube_url = self.cache_service.get(cache_key)
         if youtube_url:
             logger.info(f"Cache hit for YouTube URL: {cache_key}")
             return youtube_url
-
-        youtube_search_url = f"https://www.googleapis.com/youtube/v3/search?part=snippet&q={cache_key}&key={self.api_key}"
+        
+        query = f"{track_name} {artist_name}"
+        youtube_search_url = f"https://www.googleapis.com/youtube/v3/search?part=snippet&q={query}&key={self.api_key}"
         response = requests.get(youtube_search_url)
 
         if response.status_code == 200:
@@ -153,6 +240,61 @@ class YouTubeService:
             raise ValueError(f"Unexpected error occurred for {youtube_url}: {e}")
 
 
+    
+    def update_view_count(self, track: Track) -> bool:
+        
+        def _update_view_count(track: Track) -> bool:
+            start_view_count_update = _set_start_view_count(track)
+            current_view_count_update = _set_current_view_count(track)
+            if start_view_count_update or current_view_count_update:
+                _set_historical_view_count(track)
+                return True
+            
+            return False
+        
+        def _set_start_view_count(track: Track) -> bool:
+            if track.youtube_view.start_view.timestamp is not None:
+                return False
+
+            view_count = _get_track_view_count(track)
+            if view_count is None:
+                return False
+
+            track.youtube_view.start_view.view_count = view_count
+            track.youtube_view.start_view.timestamp = CURRENT_TIMESTAMP
+            return True
+
+        def _get_track_view_count(track: Track) -> int | None:
+            track_url = track.youtube_url
+            try:
+                return self.get_youtube_track_view_count(track_url)
+            except Exception as e:
+                logger.error(f"Error getting Spotify view count for {track.isrc} {track_url}: {e}")
+                return None
+        
+        def _set_current_view_count(track: Track) -> bool:
+            view_count = _get_track_view_count(track)
+            if view_count is None:
+                return False
+            
+            track.youtube_view.current_view.view_count = view_count
+            track.youtube_view.current_view.timestamp = CURRENT_TIMESTAMP
+            return True
+
+        def _set_historical_view_count(track: Track) -> bool:
+            historical_view = HistoricalView()
+            historical_view.total_view_count = track.youtube_view.current_view.view_count
+            delta_view_count = get_delta_view_count(
+                track.youtube_view.historical_view, track.youtube_view.current_view.view_count
+            )
+            historical_view.delta_view_count = delta_view_count
+            historical_view.timestamp = CURRENT_TIMESTAMP
+            track.youtube_view.historical_view.append(historical_view)
+        
+
+        return _update_view_count(track)
+            
+    
 class AppleMusicService:
     def __init__(self, cache_service: CacheManager):
         self.cache_service = cache_service
