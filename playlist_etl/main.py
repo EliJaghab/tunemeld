@@ -6,48 +6,47 @@ from playlist_etl.helpers import set_secrets
 from playlist_etl.services import AppleMusicService, SpotifyService, YouTubeService
 from playlist_etl.transform2 import Transform
 from playlist_etl.utils import CacheManager, MongoDBClient, WebDriverManager
-from playlist_etl.view_count2 import ViewCount
+from playlist_etl.view_count2 import ViewCountTrackProcessor
 
 
-class Main:
-    def __init__(self):
-        set_secrets()
-        self.mongo_client = MongoDBClient()
-        self.spotify_service = SpotifyService(
-            client_id=os.getenv("SPOTIFY_CLIENT_ID"),
-            client_secret=os.getenv("SPOTIFY_CLIENT_SECRET"),
-            isrc_cache_manager=CacheManager(self.mongo_client, ISRC_CACHE_COLLECTION),
-        )
-        self.youtube_service = YouTubeService(
-            api_key=os.getenv("GOOGLE_API_KEY"),
-            cache_manager=CacheManager(self.mongo_client, YOUTUBE_URL_CACHE_COLLECTION),
-        )
-        self.apple_music_service = AppleMusicService(
-            CacheManager(self.mongo_client, YOUTUBE_URL_CACHE_COLLECTION)
-        )
-        self.web_driver = WebDriverManager()
 
-    def main(self):
-        # self.extract()
-        self.transform()
-        self.aggregate()
-        self.view_count()
+def transform(self):
+    transform = Transform(
+        self.mongo_client, self.spotify_service, self.youtube_service, self.apple_music_service
+    )
+    transform.transform()
 
-    def transform(self):
-        transform = Transform(
-            self.mongo_client, self.spotify_service, self.youtube_service, self.apple_music_service
-        )
-        transform.transform()
+def aggregate(mongo_client: MongoDBClient) -> None:
+    aggregate = Aggregate(mongo_client)
+    aggregate.aggregate()
 
-    def aggregate(self):
-        aggregate = Aggregate(self.mongo_client)
-        aggregate.aggregate()
-
-    def view_count(self):
-        view_count = ViewCount(self.mongo_client, self.web_driver, self.youtube_service)
-        view_count.update()
+def update_view_counts(mongo_client: MongoDBClient, spotify_service: SpotifyService, youtube_service: YouTubeService) -> None:
+    view_count = ViewCountTrackProcessor(mongo_client, spotify_service, youtube_service)
+    view_count.update_view_counts()
+        
+def main() -> None:
+    set_secrets()
+    mongo_client = MongoDBClient()
+    webdriver_manager = WebDriverManager()
+    spotify_service = SpotifyService(
+        client_id=os.getenv("SPOTIFY_CLIENT_ID"),
+        client_secret=os.getenv("SPOTIFY_CLIENT_SECRET"),
+        isrc_cache_manager=CacheManager(mongo_client, ISRC_CACHE_COLLECTION),
+        webdriver_manager=webdriver_manager
+    )
+    youtube_service = YouTubeService(
+        api_key=os.getenv("GOOGLE_API_KEY"),
+        cache_manager=CacheManager(mongo_client, YOUTUBE_URL_CACHE_COLLECTION),
+    )
+    apple_music_service = AppleMusicService(
+        CacheManager(mongo_client, YOUTUBE_URL_CACHE_COLLECTION)
+    )
+    
+    #transform(mongo_client, spotify_service, youtube_service, apple_music_service)
+    #aggregate(mongo_client)
+    update_view_counts(mongo_client, spotify_service, youtube_service)
+        
 
 
 if __name__ == "__main__":
-    main = Main()
-    main.main()
+    main()
