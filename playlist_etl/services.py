@@ -103,7 +103,7 @@ class SpotifyService:
     def set_track_url(self, track: Track) -> bool:
         if not track.spotify_track_data.track_url:
             track_url = self.get_track_url_by_isrc(track.isrc)
-            if not track_url:
+            if track_url is None:
                 return False
             track.spotify_track_data.track_url = track_url
         return True
@@ -178,12 +178,16 @@ class YouTubeService:
                 or track.soundcloud_track_data.artist_name
                 or track.apple_music_track_data.artist_name
             )
-            if track_name and artist_name:
-                track_url = self.get_youtube_url(track_name, artist_name)
-                if not track_url:
-                    return False
-                track.youtube_url = track_url
-            return True
+            if not track_name or not artist_name:
+                return False
+            
+            track_url = self.get_youtube_url(track_name, artist_name)
+            if track_url is None:
+                return False
+            
+            track.youtube_url = track_url
+        
+        return True
 
     def get_youtube_url(self, track_name: str, artist_name: str) -> Optional[str]:
         cache_key = f"{track_name}|{artist_name}"
@@ -265,7 +269,7 @@ class YouTubeService:
             try:
                 return self.get_youtube_track_view_count(track_url)
             except Exception as e:
-                logger.error(f"Error getting Spotify view count for {track.isrc} {track_url}: {e}")
+                logger.error(f"Error getting Youtube view count for {track.isrc} {track_url}: {e}")
                 return None
 
         def _set_current_view_count(track: Track) -> bool:
