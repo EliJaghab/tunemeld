@@ -30,6 +30,7 @@ class ViewCountTrackProcessor:
 
     def _update_tracks(self, playlists, tracks):
         updated_tracks = []
+        seen_isrc = set()
         for playlist_name in PlaylistType:
             for genre_name in GenreName:
 
@@ -40,7 +41,12 @@ class ViewCountTrackProcessor:
                 for track in playlist["tracks"]:
                     track_data = tracks.find_one({"isrc": track["isrc"]})
                     track = Track(**track_data)
-
+                    
+                    if track.isrc in seen_isrc:
+                        continue
+                    seen_isrc.add(track.isrc)
+                    
+                    if track.isrc != "GBCFB2401282": continue
                     if self._update_track(track):
                         logger.info(f"Updated view counts for {track.isrc}")
                         updated_tracks.append(track)
@@ -63,7 +69,6 @@ class ViewCountTrackProcessor:
     def _update_youtube_count(self, track: Track) -> bool:
         if not self.youtube_service.set_track_url(track):
             return False
-
         return self.youtube_service.update_view_count(track)
 
     def _save_view_counts(self, tracks):
