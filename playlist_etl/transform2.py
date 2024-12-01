@@ -187,22 +187,10 @@ class Transform:
         logger.info("Setting YouTube URLs for all tracks")
         with concurrent.futures.ThreadPoolExecutor(max_workers=MAX_THREADS) as executor:
             futures = [
-                executor.submit(self.set_youtube_url, track) for track in self.tracks.values()
+                executor.submit(self.youtube_service.set_track_url, track) for track in self.tracks.values()
             ]
             for future in concurrent.futures.as_completed(futures):
                 future.result()
-
-    def set_youtube_url(self, track: Track) -> None:
-        if not track.youtube_url:
-            youtube_url = self.youtube_service.get_youtube_url(
-                track.spotify_track_data.track_name
-                or track.soundcloud_track_data.track_name
-                or track.apple_music_track_data.track_name,
-                track.spotify_track_data.artist_name
-                or track.soundcloud_track_data.artist_name
-                or track.apple_music_track_data.artist_name,
-            )
-            track.youtube_url = youtube_url
 
     def set_apple_music_album_covers(self) -> None:
         logger.info("Setting Apple Music album cover URLs for all tracks")
@@ -226,17 +214,12 @@ class Transform:
         logger.info("Setting Spotify URLs for all tracks")
         with concurrent.futures.ThreadPoolExecutor(max_workers=MAX_THREADS) as executor:
             futures = [
-                executor.submit(self.set_spotify_url, track)
+                executor.submit(self.spotify_service.set_track_url, track)
                 for track in self.tracks.values()
                 if not track.spotify_track_data.track_url
             ]
             for future in concurrent.futures.as_completed(futures):
                 future.result()
-
-    def set_spotify_url(self, track: Track) -> None:
-        if not track.spotify_track_data.track_url:
-            spotify_url = self.spotify_service.get_track_url_by_isrc(track.isrc)
-            track.spotify_track_data.track_url = spotify_url
 
     def merge_track_data(self, existing_data: dict, new_data: dict) -> dict:
         def recursive_merge(d1: dict, d2: dict) -> dict:
