@@ -21,11 +21,14 @@ from webdriver_manager.chrome import ChromeDriverManager
 from playlist_etl.config import SPOTIFY_ERROR_THRESHOLD, SPOTIFY_VIEW_COUNT_XPATH
 from playlist_etl.helpers import get_logger
 from playlist_etl.mongo_db_client import MongoDBClient
+from playlist_etl.models import HistoricalView
 
 PLAYLIST_ETL_COLLECTION_NAME = "playlist_etl"
 
 logger = get_logger(__name__)
 
+RETRIES = 3
+RETRY_DELAY = 8
 
 def get_mongo_client():
     mongo_uri = os.getenv("MONGO_URI")
@@ -125,98 +128,82 @@ class WebDriverManager:
     def __init__(self, use_proxy=False, memory_threshold_percent=75):
         self.use_proxy = use_proxy
         self.memory_threshold_percent = memory_threshold_percent
-        self.driver = None
+        self.driver = self._create_webdriver(self.use_proxy)
         self.spotify_error_count = 0
+
+    def _create_webdriver(self, use_proxy: bool):
+        options = Options()
+        options.add_argument("--headless")
+        options.add_argument("--disable-gpu")
+        options.add_argument("--no-sandbox")
+
+        if use_proxy:
+            proxy = FreeProxy(rand=True).get()
+            logger.info(f"Using proxy: {proxy}")
+            options.add_argument(f"--proxy-server={proxy}")
+
+        driver_dir = os.path.dirname(ChromeDriverManager().install())
+        driver_path = os.path.join(driver_dir, "chromedriver")
+        service = Service(executable_path=driver_path)
+        logger.info(f"Creating new WebDriver instance using path {driver_path}")
+        driver = webdriver.Chrome(service=service, options=options)
+        return driver
 
     def find_element_by_xpath(
         self,
         url: str,
         xpath: str,
         attribute: str = None,
-        retries: int = 5,
-        retry_delay: int = 10,
     ) -> str:
-        if not hasattr(self, "driver") or not self.driver:
-            self.driver = self._create_webdriver(self.use_proxy)
-
         def _attempt_find_element() -> str:
-            try:
-                self.driver.implicitly_wait(8)
-                logger.info(f"Navigating to URL: {url}")
-                self.driver.get(url)
+            self.driver.implicitly_wait(8)
+            logger.info(f"Navigating to URL: {url}")
+            self.driver.get(url)
 
-                max_timeout = 15
-                start_time = time.time()
+            max_timeout = 15
+            start_time = time.time()
 
-                while time.time() - start_time < max_timeout:
-                    element = self.driver.find_element(By.XPATH, xpath)
-                    if element and element.is_displayed():
-                        if attribute:
-                            element_value = element.get_attribute(attribute)
-                            logger.info(f"Successfully found element attribute: {element_value}")
-                            return element_value
-                        else:
-                            element_text = element.text
-                            logger.info(f"Successfully found element text: {element_text}")
-                            return element_text
-
-                logging.warning("Element not found even after waiting")
-                return "Element not found"
-
-            except TimeoutException:
-                logging.error("Timed out waiting for element")
-                return "Timed out waiting for element"
-            except NoSuchElementException:
-                logging.error("Element not found on the page")
-                return "Element not found on the page"
-            except Exception as e:
-                error_message = str(e)
-                logging.error(f"An error occurred: {error_message}")
-
-                if self._is_rate_limit_issue(error_message):
-                    logger.info("Rate limit detected, switching proxy and retrying...")
-                    self._restart_driver(new_proxy=True)
-                    return "Rate limit detected, retrying with new proxy..."
-
-                return f"An error occurred: {error_message}"
+            while time.time() - start_time < max_timeout:
+                element = self.driver.find_element(By.XPATH, xpath)
+                if element and element.is_displayed():
+                    if attribute:
+                        element_value = element.get_attribute(attribute)
+                        logger.info(f"Successfully found element attribute: {element_value}")
+                        return element_value
+                    else:
+                        element_text = element.text
+                        logger.info(f"Successfully found element text: {element_text}")
+                        return element_text
+            logger.warning("Element not found even after waiting")
+            raise NoSuchElementException("Element not found")
 
         logger.info(f"Attempting to find element on URL: {url} using XPath: {xpath}")
-
-        result = self._retry_with_backoff(retries, retry_delay, _attempt_find_element)
-
-        # Check if rate limiting or other errors occurred, retry with proxy if needed
-        if self._is_error_occurred(result):
-            if "Rate limit detected" in result:
-                logger.info("Retrying with a new proxy due to rate limit detection.")
-            self._restart_driver(new_proxy=("Rate limit detected" in result))
-
-            # Retry again after restarting the driver with the new proxy if rate limited
-            result = self._retry_with_backoff(retries, retry_delay, _attempt_find_element)
-
-        return result
+        return self._retry_with_backoff(RETRIES, RETRY_DELAY, _attempt_find_element)
 
     def _retry_with_backoff(self, retries: int, retry_delay: int, action):
         attempt = 1
         while attempt <= retries:
-            result = action()
-
-            if not self._is_error_occurred(result):
+            try:
+                result = action()
                 return result
-
-            logger.info(f"Retrying... (attempt {attempt + 1} of {retries})")
-            time.sleep(retry_delay * (2 ** (attempt - 1)))  # Exponential backoff
-            attempt += 1
-
-        return result
-
-    def _is_error_occurred(self, result: str) -> bool:
-        error_conditions = [
-            "An error occurred",
-            "Timed out waiting for element",
-            "Element not found on the page",
-            "Element not found",
-        ]
-        return any(condition in result for condition in error_conditions)
+            except Exception as e:
+                error_message = str(e)
+                
+                if isinstance(e, NoSuchElementException):
+                    logger.error("Element not found: Unable to locate the specified element.")
+                else:
+                    logger.error(f"An error occurred: {error_message}")
+                
+                if self._is_rate_limit_issue(error_message):
+                    logger.info("Rate limit detected, switching proxy and retrying...")
+                    self._restart_driver(new_proxy=True)
+                else:
+                    logger.info(f"Retrying... (attempt {attempt} of {retries})")
+                
+                if attempt == retries:
+                    raise
+                time.sleep(retry_delay * (2 ** (attempt - 1)))
+                attempt += 1
 
     def _is_rate_limit_issue(self, error_message: str) -> bool:
         rate_limit_keywords = [
@@ -230,40 +217,7 @@ class WebDriverManager:
     def _restart_driver(self, new_proxy=False):
         logger.info("Restarting WebDriver to clear memory/cache.")
         self.driver.quit()
-
-        if new_proxy:
-            self.driver = self._create_webdriver(use_proxy=True)
-        else:
-            self.driver = self._create_webdriver(self.use_proxy)
-
-    def _create_webdriver(self, use_proxy: bool):
-        options = Options()
-        options.add_argument("--headless")
-        options.add_argument("--disable-gpu")
-        options.add_argument("--no-sandbox")
-
-        if use_proxy:
-            proxy = FreeProxy(rand=True).get()
-            logger.info(f"Using proxy: {proxy}")
-            options.add_argument(f"--proxy-server={proxy}")
-
-        driver_path = ChromeDriverManager().install()
-        driver_dir = os.path.dirname(ChromeDriverManager().install())
-
-        # Manually set the path to the chromedriver executable
-        driver_path = os.path.join(driver_dir, "chromedriver")
-        service = Service(executable_path=driver_path)
-        logger.info(f"Creating new WebDriver instance using path {driver_path}")
-        driver = webdriver.Chrome(service=service, options=options)
-        return driver
-
-    def _check_memory_usage(self):
-        memory = psutil.virtual_memory()
-        available_memory_mb = memory.available / (1024 * 1024)
-        memory_threshold_mb = available_memory_mb * (self.memory_threshold_percent / 100)
-        logger.info(f"Available Memory: {available_memory_mb:.2f} MB")
-        logger.info(f"Memory Threshold: {memory_threshold_mb:.2f} MB")
-        return available_memory_mb < memory_threshold_mb
+        self.driver = self._create_webdriver(use_proxy=new_proxy or self.use_proxy)
 
     def close_driver(self):
         if self.driver:
@@ -272,24 +226,14 @@ class WebDriverManager:
     def get_spotify_track_view_count(self, url: str, xpath: str = SPOTIFY_VIEW_COUNT_XPATH) -> int:
         try:
             play_count_info = self.find_element_by_xpath(url, xpath)
-
-            if play_count_info == "Element not found on the page":
-                if self.spotify_error_count == SPOTIFY_ERROR_THRESHOLD:
-                    raise ValueError("Too many spotify errors, investigate")
-
-                self.spotify_error_count += 1
-                return 0
-
             if play_count_info:
-                logger.info(f"original spotify play count value {play_count_info}")
+                logger.info(f"Original Spotify play count value: {play_count_info}")
                 play_count = int(play_count_info.replace(",", ""))
                 logger.info(play_count)
                 return play_count
-
         except Exception as e:
-            print(f"Error with xpath {xpath}: {e}")
-
-        raise ValueError(f"Could not find play count for {url}")
+            logger.error(f"Error with XPath {xpath}: {e}")
+            raise ValueError(f"Could not find play count for {url}") from e
 
 
 class CacheManager:
@@ -310,7 +254,12 @@ class CacheManager:
         logger.info(f"Getting cache for key: {key} in collection: {self.collection_name}")
         return self.cache.get(key)
 
+    def _validate_cache_entry(self, key: str, value: Any) -> bool:
+        if key is None or value is None:
+            raise ValueError("Key or value cannot be None")
+
     def set(self, key: str, value: Any) -> None:
+        self._validate_cache_entry(key, value)
         logger.info(
             f"Setting cache for key: {key} with value: {value} in collection: {self.collection_name}"
         )
@@ -344,3 +293,11 @@ def overwrite_kv_collection(client, collection_name: str, kv_dict: dict) -> None
         ]
         for future in futures:
             future.result()
+
+
+def get_delta_view_count(
+    historical_views: list[HistoricalView], current_view_count: int
+) -> int:
+    if not historical_views:
+        return 0
+    return current_view_count - historical_views[-1].total_view_count
