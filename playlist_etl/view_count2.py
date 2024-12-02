@@ -4,6 +4,8 @@ from playlist_etl.models import GenreName, PlaylistType, Track
 from playlist_etl.mongo_db_client import MongoDBClient
 from playlist_etl.services import SpotifyService, YouTubeService
 
+from pymongo.collection import Collection
+
 logger = get_logger(__name__)
 
 
@@ -28,9 +30,12 @@ class ViewCountTrackProcessor:
         )
         self._save_view_counts(updated_tracks)
 
-    def _update_tracks(self, playlists, tracks):
+    def _update_tracks(self, playlists: Collection, tracks: Collection):
         updated_tracks = []
         seen_isrc = set()
+        total_tracks = self.mongo_client.get_collection_count(tracks)
+        processed_tracks = 0
+
         for playlist_name in PlaylistType:
             for genre_name in GenreName:
 
@@ -50,6 +55,10 @@ class ViewCountTrackProcessor:
                         updated_tracks.append(track)
                     else:
                         logger.info(f"No updates for {track.isrc}")
+
+                    processed_tracks += 1
+                    completion_percentage = (processed_tracks / total_tracks) * 100
+                    logger.info(f"Processing: {completion_percentage:.2f}% complete")
 
         return updated_tracks
 
