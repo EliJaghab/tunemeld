@@ -60,6 +60,11 @@ class Transform:
                 logger.info(
                     f"Processing playlist for genre {genre_name_value} from {service_name_value}"
                 )
+                if not raw_playlist:
+                    logger.warning(
+                        f"No raw playlist found for {service_name_value} and genre {genre_name_value}"
+                    )
+                    raise ValueError("No raw playlist found")
                 self.convert_to_track_objects(
                     raw_playlist["data_json"], service_name_value, genre_name_value
                 )
