@@ -10,6 +10,12 @@
 	prod \
 	invalidate_cache \
 	test \
+	test-unit \
+	test-integration \
+	test-slow \
+	test-all \
+	test-coverage \
+	test-ci \
 	setup_env \
 	activate \
 	install_deps \
@@ -18,7 +24,9 @@
 	build_and_run \
 	build_and_debug \
 	build_locally \
-	setup_backend_env
+	setup_backend_env \
+	serve \
+	serve-frontend
 
 PROJECT_ROOT := $(shell pwd)
 VENV := $(PROJECT_ROOT)/venv
@@ -48,7 +56,7 @@ transform:
 	@echo "Running transform..."
 	python playlist_etl/transform.py
 
-aggregate: 
+aggregate:
 	@echo "Running aggregate..."
 	python playlist_etl/aggregate.py
 
@@ -61,8 +69,8 @@ historical_view_count:
 	python playlist_etl/historical_view_count.py
 
 format: setup_env
-	@echo "Running tox to lint and format code..."
-	tox
+	@echo "Running ruff to lint and format code..."
+	source venv/bin/activate && ruff check --fix . && ruff format .
 
 pull_push: setup_env
 	@git pull --rebase
@@ -87,8 +95,44 @@ invalidate_cache:
 	echo "$$RESPONSE" | grep -q '"success":true' && echo "Success" || echo "Failure: $$RESPONSE"
 
 test: setup_env
-	@echo "Running tests..."
-	python -m unittest discover tests/
+	@echo "Running all tests..."
+	source venv/bin/activate && python -m pytest tests/ -v
+
+test-unit: setup_env
+	@echo "Running unit tests only..."
+	source venv/bin/activate && python -m pytest tests/ -v -m "not integration and not slow"
+
+test-integration: setup_env
+	@echo "Running integration tests..."
+	source venv/bin/activate && python -m pytest tests/ -v -m "integration and not slow"
+
+test-slow: setup_env
+	@echo "Running slow tests..."
+	source venv/bin/activate && python -m pytest tests/ -v -m "slow"
+
+test-all: setup_env
+	@echo "Running all tests including slow ones..."
+	source venv/bin/activate && python -m pytest tests/ -v -m "integration or slow or (not integration and not slow)"
+
+test-coverage: setup_env
+	@echo "Running tests with coverage report..."
+	source venv/bin/activate && python -m pytest tests/ -v --cov=playlist_etl --cov-report=html --cov-report=term-missing
+
+test-ci: setup_env
+	@echo "Running tests as they would run in CI..."
+	source venv/bin/activate && python -m pytest tests/ -v --tb=short --cov=playlist_etl --cov-report=xml -m "not slow"
+
+lint: setup_env
+	@echo "Running linting checks..."
+	source venv/bin/activate && ruff check . && mypy .
+
+install-dev: setup_env
+	@echo "Installing development dependencies..."
+	source venv/bin/activate && pip install -e ".[dev]"
+
+install-pre-commit: install-dev
+	@echo "Installing pre-commit hooks..."
+	source venv/bin/activate && pre-commit install
 
 setup_backend_env:
 	@echo "Setting up backend virtual environment..."
@@ -101,3 +145,15 @@ build_locally:
 	@echo "Killing any process using port 8000..."
 	-lsof -ti tcp:8000 | xargs kill -9
 	python3 django_backend/manage.py runserver 0.0.0.0:8000
+
+serve-frontend:
+	@echo "🌐 Starting TuneMeld frontend server..."
+	@echo "📍 Website will be available at: http://localhost:8080"
+	@echo "🛑 Press Ctrl+C to stop the server"
+	@cd docs && python -m http.server 8080
+
+serve:
+	@echo "🌐 Starting TuneMeld website..."
+	@echo "📍 Frontend: http://localhost:8080"
+	@echo "🛑 Press Ctrl+C to stop"
+	@cd docs && python -m http.server 8080

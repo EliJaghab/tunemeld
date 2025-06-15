@@ -10,12 +10,13 @@ __pycache__/
 
 # Django
 /output_static/
-/staticfiles/ 
+/staticfiles/
 backend/lib/
 backend/bin/
 
 # Virtual Environment
 venv/
+venv_temp/
 .vscode/
 
 # Node.js
@@ -28,3 +29,24 @@ npm-debug.log*
 
 # Tox
 .tox/
+
+# IDE
+.idea/
+*.swp
+*.swo
+
+# Testing and Coverage
+.coverage
+htmlcov/
+.pytest_cache/
+coverage.xml
+
+# Build and Distribution
+build/
+dist/
+
+# MyPy
+.mypy_cache/
+
+# Ruff
+.ruff_cache/
