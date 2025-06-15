@@ -1,4 +1,3 @@
-import logging
 import os
 from pathlib import Path
 
@@ -32,7 +31,7 @@ SECRET_KEY = os.getenv(
 
 DEBUG = True
 
-ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS").split(",")
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")
 print("ALLOWED_HOSTS:", ALLOWED_HOSTS)
 
 
@@ -152,3 +151,12 @@ USE_I18N = True
 USE_TZ = True
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# Database configuration for Django tests
+# Note: This app primarily uses MongoDB, but Django requires a database backend for testing
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": ":memory:",
+    }
+}
