@@ -1,4 +1,5 @@
 import concurrent.futures
+import json
 from collections import defaultdict
 
 from playlist_etl.config import (
@@ -65,9 +66,8 @@ class Transform:
                         f"No raw playlist found for {service_name_value} and genre {genre_name_value}"
                     )
                     raise ValueError("No raw playlist found")
-                self.convert_to_track_objects(
-                    raw_playlist["data_json"], service_name_value, genre_name_value
-                )
+                data = json.loads(raw_playlist["data_json"])
+                self.convert_to_track_objects(data, service_name_value, genre_name_value)
 
     def format_tracks(self) -> list[dict]:
         formatted_tracks = [
@@ -112,6 +112,9 @@ class Transform:
 
     def convert_apple_music_raw_export_to_track_type(self, data: dict, genre_name: str) -> None:
         logger.info(f"Converting Apple Music data for genre {genre_name}")
+        # Handle case where data might be a JSON string instead of parsed dict
+        if isinstance(data, str):
+            data = json.loads(data)
         for key, track_data in data["album_details"].items():
             if key.isdigit():
                 track_name = track_data["name"]
@@ -139,6 +142,9 @@ class Transform:
 
     def convert_soundcloud_raw_export_to_track_type(self, data: dict, genre_name: str) -> None:
         logger.info(f"Converting SoundCloud data for genre {genre_name}")
+        # Handle case where data might be a JSON string instead of parsed dict
+        if isinstance(data, str):
+            data = json.loads(data)
         for i, item in enumerate(data["tracks"]["items"]):
             isrc = item["publisher"]["isrc"]
             if not isrc:
@@ -166,6 +172,9 @@ class Transform:
 
     def convert_spotify_raw_export_to_track_type(self, data: dict, genre_name: str) -> None:
         logger.info(f"Converting Spotify data for genre {genre_name}")
+        # Handle case where data might be a JSON string instead of parsed dict
+        if isinstance(data, str):
+            data = json.loads(data)
         for i, item in enumerate(data["items"]):
             track_info = item["track"]
             if not track_info:
