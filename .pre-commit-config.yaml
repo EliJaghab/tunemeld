@@ -32,12 +32,11 @@ repos:
             staticfiles/.*
           )$
 
-  # Temporarily disabled unit tests in pre-commit until test fixes are merged
-  # - repo: local
-  #   hooks:
-  #     - id: unit-tests
-  #       name: Run unit tests (excluding external APIs)
-  #       entry: bash -c "source venv/bin/activate && python -m pytest tests/ -v -m 'not external_api and not slow' --tb=short"
-  #       language: system
-  #       pass_filenames: false
-  #       stages: [pre-commit]
+  - repo: local
+    hooks:
+      - id: unit-tests
+        name: Run basic unit tests (extract tests only)
+        entry: bash -c "source venv/bin/activate && python -m pytest tests/extract_test.py -v -m 'not external_api and not slow' --tb=short"
+        language: system
+        pass_filenames: false
+        stages: [pre-commit]
