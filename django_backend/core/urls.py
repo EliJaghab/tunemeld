@@ -1,10 +1,10 @@
 from core import views
-from django.contrib import admin
 from django.urls import path
 from django.views.generic import RedirectView
 
 urlpatterns = [
     path("", views.root, name="root"),
+    path("health", views.health, name="health"),
     path("favicon.ico", RedirectView.as_view(url="/static/favicon.ico", permanent=True)),
     path(
         "graph-data/<str:genre_name>",

@@ -29,6 +29,10 @@ def root(request):
     return create_response(ResponseStatus.SUCCESS, "Welcome to the TuneMeld Backend!")
 
 
+def health(request):
+    return create_response(ResponseStatus.SUCCESS, "Service is healthy")
+
+
 def get_graph_data(request, genre_name):
     key = f"graph_data_{genre_name}"
 
