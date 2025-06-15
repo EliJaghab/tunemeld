@@ -1,30 +1,35 @@
 import logging
 from enum import Enum
-from typing import Dict, List
 
 from core.cache import Cache
 from django.http import JsonResponse
 
-from . import (historical_track_views, playlists_collection,
-               raw_playlists_collection, transformed_playlists_collection)
+from . import (
+    historical_track_views,
+    playlists_collection,
+    raw_playlists_collection,
+    transformed_playlists_collection,
+)
 
 logger = logging.getLogger(__name__)
 
 cache = Cache()
 
+
 class ResponseStatus(Enum):
     SUCCESS = "success"
     ERROR = "error"
 
+
 def create_response(status: ResponseStatus, message: str, data=None):
     return JsonResponse({"status": status.value, "message": message, "data": data})
+
 
 def root(request):
     return create_response(ResponseStatus.SUCCESS, "Welcome to the TuneMeld Backend!")
 
-def get_graph_data(request, genre_name):
-    
 
+def get_graph_data(request, genre_name):
     key = f"graph_data_{genre_name}"
 
     cached_response = cache.get(key)
@@ -35,7 +40,7 @@ def get_graph_data(request, genre_name):
 
     try:
 
-        def get_tracks_from_playlist(genre_name: str) -> List[Dict]:
+        def get_tracks_from_playlist(genre_name: str) -> list[dict]:
             playlists = playlists_collection.find({"genre_name": genre_name}, {"_id": False})
             tracks = [
                 {
@@ -48,8 +53,9 @@ def get_graph_data(request, genre_name):
             ]
             return tracks
 
-        def get_view_counts(isrc_list: List[str]) -> Dict:
+        def get_view_counts(isrc_list: list[str]) -> dict:
             track_views_query = {"isrc": {"$in": isrc_list}}
+            track_views = historical_track_views.find(track_views_query)
 
             isrc_to_track_views = {}
             for track in track_views:
@@ -70,7 +76,7 @@ def get_graph_data(request, genre_name):
                         ]
                         for view in view_counts
                     ]
-        cache.put_kv_entry(key, tracks)
+        cache.put(key, tracks)
         return create_response(ResponseStatus.SUCCESS, "Graph data retrieved successfully", tracks)
 
     except Exception as error:
@@ -79,8 +85,6 @@ def get_graph_data(request, genre_name):
 
 
 def get_playlist_data(request, genre_name):
-        return create_response(ResponseStatus.ERROR, "Genre is required", None)
-
     try:
         data = list(playlists_collection.find({"genre_name": genre_name}, {"_id": False}))
         if not data:
@@ -93,8 +97,6 @@ def get_playlist_data(request, genre_name):
 
 
 def get_service_playlist(request, genre_name, service_name):
-        return create_response(ResponseStatus.ERROR, "Genre and service are required", None)
-
     try:
         data = list(
             transformed_playlists_collection.find(
@@ -113,8 +115,6 @@ def get_service_playlist(request, genre_name, service_name):
 
 
 def get_last_updated(request, genre_name):
-        return create_response(ResponseStatus.ERROR, "Genre is required", None)
-
     try:
         data = list(playlists_collection.find({"genre_name": genre_name}, {"_id": False}))
         if not data:
@@ -133,8 +133,6 @@ def get_last_updated(request, genre_name):
 
 
 def get_header_art(request, genre_name):
-        return create_response(ResponseStatus.ERROR, "Genre is required", None)
-
     try:
         data = list(raw_playlists_collection.find({"genre_name": genre_name}, {"_id": False}))
         if not data:
