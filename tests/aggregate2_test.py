@@ -28,7 +28,6 @@ class TestAggregate:
         """Test grouping tracks by genre from a single service"""
         # Mock collection with single service data
         mock_collection = Mock()
-        spotify_playlist = multiple_service_playlists["spotify_dance"]
 
         mock_collection.find_one.return_value = {
             "genre_name": "dance",
@@ -340,7 +339,10 @@ class TestAggregate:
         def mock_find_one(query):
             service = query["service_name"]
             genre = query["genre_name"]
-            key = f"{service.lower()}_{genre}"
+            # Handle enum values - convert to string values for key lookup
+            service_str = service.value if hasattr(service, "value") else str(service)
+            genre_str = genre.value if hasattr(genre, "value") else str(genre)
+            key = f"{service_str.lower()}_{genre_str}"
             return multiple_service_playlists.get(key)
 
         mock_collection.find_one.side_effect = mock_find_one

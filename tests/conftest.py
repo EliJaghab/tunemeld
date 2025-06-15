@@ -159,7 +159,7 @@ def multiple_service_playlists():
                 {"isrc": "USUG12405639", "rank": 3, "sources": {"Spotify": 3}},
             ],
         },
-        "apple_music_dance": {
+        "applemusic_dance": {
             "service_name": "AppleMusic",
             "genre_name": "dance",
             "tracks": [
