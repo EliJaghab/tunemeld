@@ -1,0 +1,43 @@
+repos:
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    # Ruff version.
+    rev: v0.8.4
+    hooks:
+      # Run the linter.
+      - id: ruff
+        args: [--fix]
+      # Run the formatter.
+      - id: ruff-format
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.4.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-added-large-files
+      - id: check-merge-conflict
+      - id: check-toml
+
+  - repo: https://github.com/pre-commit/mirrors-prettier
+    rev: v3.0.3
+    hooks:
+      - id: prettier
+        files: \.(js|jsx|ts|tsx|json|css|scss|md|html)$
+        exclude: |
+          (?x)^(
+            node_modules/.*|
+            venv/.*|
+            .tox/.*|
+            staticfiles/.*
+          )$
+
+  # Temporarily disabled - tests depend on unstaged changes from other branches
+  # - repo: local
+  #   hooks:
+  #     - id: unit-tests
+  #       name: Run basic unit tests (extract tests only)
+  #       entry: bash -c "source venv/bin/activate && python -m pytest tests/extract_test.py -v -m 'not external_api and not slow' --tb=short"
+  #       language: system
+  #       pass_filenames: false
+  #       stages: [pre-commit]
