@@ -12,6 +12,8 @@ from typing import Any, ClassVar
 import pytest
 import requests
 
+from playlist_etl.models import GenreName, TrackSourceServiceName
+
 
 class TestAPIIntegration:
     """Integration tests for TuneMeld Django API endpoints"""
@@ -19,9 +21,17 @@ class TestAPIIntegration:
     # API base URL - will be set from environment or default to localhost
     BASE_URL = "http://127.0.0.1:8000"
 
-    # Common test data
-    TEST_GENRES: ClassVar[list[str]] = ["edm", "rap", "country"]  # Common genres that should exist
-    TEST_SERVICES: ClassVar[list[str]] = ["Spotify", "AppleMusic", "SoundCloud"]
+    # Use existing enums from models instead of duplicating constants
+    TEST_GENRES: ClassVar[list[str]] = [
+        GenreName.RAP.value,
+        GenreName.COUNTRY.value,
+        GenreName.DANCE.value,
+    ]
+    TEST_SERVICES: ClassVar[list[str]] = [
+        TrackSourceServiceName.SPOTIFY.value,
+        TrackSourceServiceName.APPLE_MUSIC.value,
+        TrackSourceServiceName.SOUNDCLOUD.value,
+    ]
 
     @classmethod
     def setup_class(cls):
@@ -364,7 +374,7 @@ class TestAPIDataQuality:
     @pytest.mark.integration
     def test_data_consistency_across_endpoints(self):
         """Test that data is consistent between related endpoints"""
-        test_genre = "edm"  # Use EDM as it's likely to have data
+        test_genre = GenreName.DANCE.value  # Use dance as it's likely to have data
 
         # Get data from different endpoints
         playlist_response = self.make_request(f"/playlist-data/{test_genre}")
@@ -394,7 +404,7 @@ class TestAPIDataQuality:
     @pytest.mark.integration
     def test_required_data_fields(self):
         """Test that required data fields are present and valid"""
-        test_genre = "edm"
+        test_genre = GenreName.DANCE.value
 
         response = self.make_request(f"/playlist-data/{test_genre}")
 
