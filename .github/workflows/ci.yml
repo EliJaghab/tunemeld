@@ -70,6 +70,18 @@ jobs:
     #     mypy playlist_etl --ignore-missing-imports --no-strict-optional
     #   continue-on-error: true  # Type checking is informational for now
 
+    - name: Set PYTHONPATH for module imports
+      run: |
+        echo "PYTHONPATH=${{ github.workspace }}" >> $GITHUB_ENV
+
+    - name: Debug environment
+      run: |
+        pwd
+        ls -la
+        echo "PYTHONPATH: $PYTHONPATH"
+        python -c "import sys; print('Python path:', sys.path)"
+        python -c "import playlist_etl; print('playlist_etl imported successfully')"
+
     - name: Run unit tests with coverage
       run: |
         pytest tests/ -v --tb=short --cov=playlist_etl --cov-report=xml --cov-report=term-missing -m "not integration and not slow"
