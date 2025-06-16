@@ -1,39 +1,48 @@
-import { API_BASE_URL } from './config.js';
-import { getCurrentViewCountType, setCurrentColumn, setCurrentOrder } from './selectors.js';
+import { API_BASE_URL, DJANGO_API_BASE_URL } from "./config.js";
+import { getCurrentViewCountType, setCurrentColumn, setCurrentOrder } from "./selectors.js";
 
 export async function fetchAndDisplayLastUpdated(genre) {
   try {
-    const response = await fetch(`${API_BASE_URL}/api/last-updated?genre=${genre}`);
+    const response = await fetch(`${DJANGO_API_BASE_URL}/last-updated/${genre}`);
     if (!response.ok) {
       throw new Error(`Failed to fetch last-updated. Status: ${response.status}`);
     }
-    const lastUpdated = await response.json();
+    const responseData = await response.json();
+
+    // Handle Django's wrapped response format
+    if (responseData.status === "error") {
+      throw new Error(responseData.message || "Failed to fetch last updated");
+    }
+
+    // Extract the actual data from Django's response
+    const lastUpdated = responseData.data || responseData;
     displayLastUpdated(lastUpdated);
   } catch (error) {
-    console.error('Error fetching last updated date:', error);
+    console.error("Error fetching last updated date:", error);
   }
 }
 
 function displayLastUpdated(lastUpdated) {
-  const lastUpdatedDate = new Date(lastUpdated.lastUpdated);
-  const formattedDate = lastUpdatedDate.toLocaleString('en-US', {
-    month: 'long',
-    day: 'numeric',
-    year: 'numeric',
-    hour: 'numeric',
-    minute: '2-digit',
-    timeZoneName: 'short',
+  // Django uses 'last_updated' instead of 'lastUpdated'
+  const lastUpdatedDate = new Date(lastUpdated.last_updated || lastUpdated.lastUpdated);
+  const formattedDate = lastUpdatedDate.toLocaleString("en-US", {
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+    timeZoneName: "short",
   });
-  document.getElementById('last-updated').textContent = `Last Updated - ${formattedDate}`;
+  document.getElementById("last-updated").textContent = `Last Updated - ${formattedDate}`;
 }
 
 export function setupSortButtons() {
-  document.querySelectorAll('.sort-button').forEach(button => {
-    button.addEventListener('click', function () {
-      const column = button.getAttribute('data-column');
-      const order = button.getAttribute('data-order');
-      const newOrder = order === 'desc' ? 'asc' : 'desc';
-      button.setAttribute('data-order', newOrder);
+  document.querySelectorAll(".sort-button").forEach(button => {
+    button.addEventListener("click", function () {
+      const column = button.getAttribute("data-column");
+      const order = button.getAttribute("data-order");
+      const newOrder = order === "desc" ? "asc" : "desc";
+      button.setAttribute("data-order", newOrder);
       setCurrentColumn(column);
       setCurrentOrder(newOrder);
       sortTable(column, newOrder, getCurrentViewCountType());
@@ -43,17 +52,20 @@ export function setupSortButtons() {
 
 export async function updateMainPlaylist(genre, viewCountType) {
   try {
-    const url = `${API_BASE_URL}/api/main-playlist?genre=${genre}`;
-    await fetchAndDisplayData(url, 'main-playlist-data-placeholder', true, viewCountType);
+    const url = `${DJANGO_API_BASE_URL}/playlist-data/${genre}`;
+    await fetchAndDisplayData(url, "main-playlist-data-placeholder", true, viewCountType);
   } catch (error) {
-    console.error('Error updating main playlist:', error);
+    console.error("Error updating main playlist:", error);
   }
 }
 
 export async function fetchAndDisplayPlaylists(genre) {
-  const services = ['AppleMusic', 'SoundCloud', 'Spotify'];
+  const services = ["AppleMusic", "SoundCloud", "Spotify"];
   for (const service of services) {
-    await fetchAndDisplayData(`${API_BASE_URL}/api/service-playlist?genre=${genre}&service=${service}`, `${service.toLowerCase()}-data-placeholder`);
+    await fetchAndDisplayData(
+      `${DJANGO_API_BASE_URL}/service-playlist/${genre}/${service}`,
+      `${service.toLowerCase()}-data-placeholder`
+    );
   }
 }
 
@@ -63,86 +75,96 @@ async function fetchAndDisplayData(url, placeholderId, isAggregated = false, vie
     if (!response.ok) {
       throw new Error(`Failed to fetch ${url}. Status: ${response.status}`);
     }
-    const data = await response.json();
+    const responseData = await response.json();
+
+    // Handle Django's wrapped response format
+    if (responseData.status === "error") {
+      throw new Error(responseData.message || "Failed to fetch data");
+    }
+
+    // Extract the actual data from Django's response
+    const data = responseData.data || responseData;
     playlistData = data;
     displayData(data, placeholderId, isAggregated, viewCountType);
   } catch (error) {
-    console.error('Error fetching and displaying data:', error);
+    console.error("Error fetching and displaying data:", error);
   }
 }
 
-
 function displayData(data, placeholderId, isAggregated = false, viewCountType) {
-  
   const placeholder = document.getElementById(placeholderId);
   if (!placeholder) {
     console.error(`Placeholder with ID ${placeholderId} not found.`);
     return;
   }
-  placeholder.innerHTML = '';
+  placeholder.innerHTML = "";
   data.forEach(playlist => {
     playlist.tracks.forEach(track => {
-      const row = isAggregated ? createTableRow(track, isAggregated, viewCountType) : createSmallPlaylistTableRow(track);
+      const row = isAggregated
+        ? createTableRow(track, isAggregated, viewCountType)
+        : createSmallPlaylistTableRow(track);
       placeholder.appendChild(row);
     });
   });
 }
 
-function createTableRow(track, isAggregated, viewCountType) {  
-  const row = document.createElement('tr');
+function createTableRow(track, isAggregated, viewCountType) {
+  const row = document.createElement("tr");
 
-  row.setAttribute('data-isrc', track.isrc);
-  
-  const rankCell = document.createElement('td');
-  rankCell.className = 'rank';
+  row.setAttribute("data-isrc", track.isrc);
+
+  const rankCell = document.createElement("td");
+  rankCell.className = "rank";
   rankCell.textContent = track.rank;
 
-  const coverCell = document.createElement('td');
-  coverCell.className = 'cover';
-  const albumCover = document.createElement('img');
-  albumCover.className = 'album-cover';
-  albumCover.src = track.album_cover_url || '';
-  albumCover.alt = 'Album Cover';
+  const coverCell = document.createElement("td");
+  coverCell.className = "cover";
+  const albumCover = document.createElement("img");
+  albumCover.className = "album-cover";
+  albumCover.src = track.album_cover_url || "";
+  albumCover.alt = "Album Cover";
   coverCell.appendChild(albumCover);
 
-  const trackInfoCell = document.createElement('td');
-  trackInfoCell.className = 'info';
-  const trackInfoDiv = document.createElement('div');
-  trackInfoDiv.className = 'track-info-div';
+  const trackInfoCell = document.createElement("td");
+  trackInfoCell.className = "info";
+  const trackInfoDiv = document.createElement("div");
+  trackInfoDiv.className = "track-info-div";
 
-  const trackTitle = document.createElement('a');
-  trackTitle.className = 'track-title';
-  trackTitle.href = track.youtube_url || '#';
-  trackTitle.textContent = track.track_name || 'Unknown Track';
+  const trackTitle = document.createElement("a");
+  trackTitle.className = "track-title";
+  trackTitle.href = track.youtube_url || "#";
+  trackTitle.textContent = track.track_name || "Unknown Track";
 
-  const artistNameElement = document.createElement('span');
-  artistNameElement.className = 'artist-name';
-  artistNameElement.textContent = track.artist_name || 'Unknown Artist';
+  const artistNameElement = document.createElement("span");
+  artistNameElement.className = "artist-name";
+  artistNameElement.textContent = track.artist_name || "Unknown Artist";
 
   trackInfoDiv.appendChild(trackTitle);
-  trackInfoDiv.appendChild(document.createElement('br'));
+  trackInfoDiv.appendChild(document.createElement("br"));
   trackInfoDiv.appendChild(artistNameElement);
 
   trackInfoCell.appendChild(trackInfoDiv);
 
-  const youtubeStatCell = document.createElement('td');
-  youtubeStatCell.className = 'youtube-view-count';
-  youtubeStatCell.textContent = track.view_count_data_json.Youtube.current_count_json.current_view_count.toLocaleString()
+  const youtubeStatCell = document.createElement("td");
+  youtubeStatCell.className = "youtube-view-count";
+  youtubeStatCell.textContent =
+    track.view_count_data_json.Youtube.current_count_json.current_view_count.toLocaleString();
 
-  const spotifyStatCell = document.createElement('td');
-  spotifyStatCell.className = 'spotify-view-count';
-  spotifyStatCell.textContent = track.view_count_data_json.Spotify.current_count_json.current_view_count.toLocaleString()
-  
-  const seenOnCell = document.createElement('td');
-  seenOnCell.className = 'seen-on';
+  const spotifyStatCell = document.createElement("td");
+  spotifyStatCell.className = "spotify-view-count";
+  spotifyStatCell.textContent =
+    track.view_count_data_json.Spotify.current_count_json.current_view_count.toLocaleString();
+
+  const seenOnCell = document.createElement("td");
+  seenOnCell.className = "seen-on";
   if (isAggregated) {
     displaySources(seenOnCell, track);
   }
 
-  const externalLinksCell = document.createElement('td');
-  externalLinksCell.className = 'external';
+  const externalLinksCell = document.createElement("td");
+  externalLinksCell.className = "external";
   if (track.youtube_url) {
-    const youtubeLink = createSourceLink('YouTube', track.youtube_url);
+    const youtubeLink = createSourceLink("YouTube", track.youtube_url);
     externalLinksCell.appendChild(youtubeLink);
   }
 
@@ -150,7 +172,7 @@ function createTableRow(track, isAggregated, viewCountType) {
   row.appendChild(coverCell);
   row.appendChild(trackInfoCell);
   if (isAggregated) {
-    displayViewCounts(track, row, viewCountType)
+    displayViewCounts(track, row, viewCountType);
   }
   row.appendChild(seenOnCell);
   row.appendChild(externalLinksCell);
@@ -159,11 +181,11 @@ function createTableRow(track, isAggregated, viewCountType) {
 }
 
 function displayViewCounts(track, row, viewCountType) {
-  const youtubeStatCell = document.createElement('td');
-  youtubeStatCell.className = 'youtube-view-count';
+  const youtubeStatCell = document.createElement("td");
+  youtubeStatCell.className = "youtube-view-count";
 
-  const spotifyStatCell = document.createElement('td');
-  spotifyStatCell.className = 'spotify-view-count';
+  const spotifyStatCell = document.createElement("td");
+  spotifyStatCell.className = "spotify-view-count";
 
   const youtubeCurrentViewCount = track.view_count_data_json.Youtube.current_count_json.current_view_count;
   const youtubeInitialViewCount = track.view_count_data_json.Youtube.initial_count_json.initial_view_count;
@@ -194,46 +216,46 @@ function displayViewCounts(track, row, viewCountType) {
 }
 
 function createSmallPlaylistTableRow(track) {
-  const row = document.createElement('tr');
+  const row = document.createElement("tr");
 
-  row.setAttribute('data-isrc', track.isrc);
+  row.setAttribute("data-isrc", track.isrc);
 
-  const rankCell = document.createElement('td');
-  rankCell.className = 'rank';
-  rankCell.textContent = track.rank || '';
+  const rankCell = document.createElement("td");
+  rankCell.className = "rank";
+  rankCell.textContent = track.rank || "";
 
-  const coverCell = document.createElement('td');
-  coverCell.className = 'cover';
-  const albumCover = document.createElement('img');
-  albumCover.className = 'album-cover';
-  albumCover.src = track.album_cover_url || '';
-  albumCover.alt = 'Album Cover';
+  const coverCell = document.createElement("td");
+  coverCell.className = "cover";
+  const albumCover = document.createElement("img");
+  albumCover.className = "album-cover";
+  albumCover.src = track.album_cover_url || "";
+  albumCover.alt = "Album Cover";
   coverCell.appendChild(albumCover);
 
-  const trackInfoCell = document.createElement('td');
-  trackInfoCell.className = 'info';
-  const trackInfoDiv = document.createElement('div');
-  trackInfoDiv.className = 'track-info-div';
+  const trackInfoCell = document.createElement("td");
+  trackInfoCell.className = "info";
+  const trackInfoDiv = document.createElement("div");
+  trackInfoDiv.className = "track-info-div";
 
-  const trackTitle = document.createElement('a');
-  trackTitle.className = 'track-title';
-  trackTitle.href = track.track_url || '#';
-  trackTitle.textContent = track.track_name || 'Unknown Track';
+  const trackTitle = document.createElement("a");
+  trackTitle.className = "track-title";
+  trackTitle.href = track.track_url || "#";
+  trackTitle.textContent = track.track_name || "Unknown Track";
 
-  const artistNameElement = document.createElement('span');
-  artistNameElement.className = 'artist-name';
-  artistNameElement.textContent = track.artist_name || 'Unknown Artist';
+  const artistNameElement = document.createElement("span");
+  artistNameElement.className = "artist-name";
+  artistNameElement.textContent = track.artist_name || "Unknown Artist";
 
   trackInfoDiv.appendChild(trackTitle);
-  trackInfoDiv.appendChild(document.createElement('br'));
+  trackInfoDiv.appendChild(document.createElement("br"));
   trackInfoDiv.appendChild(artistNameElement);
 
   trackInfoCell.appendChild(trackInfoDiv);
 
-  const externalLinksCell = document.createElement('td');
-  externalLinksCell.className = 'external';
+  const externalLinksCell = document.createElement("td");
+  externalLinksCell.className = "external";
   if (track.youtube_url) {
-    const youtubeLink = createSourceLink('YouTube', track.youtube_url);
+    const youtubeLink = createSourceLink("YouTube", track.youtube_url);
     externalLinksCell.appendChild(youtubeLink);
   }
 
@@ -246,13 +268,13 @@ function createSmallPlaylistTableRow(track) {
 }
 
 function displaySources(cell, track) {
-  const sourcesContainer = document.createElement('div');
-  sourcesContainer.className = 'track-sources';
+  const sourcesContainer = document.createElement("div");
+  sourcesContainer.className = "track-sources";
   const allSources = {
     ...track.additional_sources,
     [track.source_name]: track.track_url,
   };
-  Object.keys(allSources).forEach((source) => {
+  Object.keys(allSources).forEach(source => {
     const sourceLink = allSources[source];
     const linkElement = createSourceLink(source, sourceLink);
     sourcesContainer.appendChild(linkElement);
@@ -263,33 +285,33 @@ function displaySources(cell, track) {
 function createSourceLink(source, sourceLink) {
   if (!sourceLink) {
     console.warn(`No Link available for source: ${source}`);
-    return document.createTextNode('');
+    return document.createTextNode("");
   }
 
-  const sourceIcon = document.createElement('img');
-  const linkElement = document.createElement('a');
+  const sourceIcon = document.createElement("img");
+  const linkElement = document.createElement("a");
   linkElement.href = sourceLink;
-  linkElement.target = '_blank';
-  sourceIcon.className = 'source-icon';
+  linkElement.target = "_blank";
+  sourceIcon.className = "source-icon";
   switch (source) {
-    case 'SoundCloud':
-      sourceIcon.src = 'images/soundcloud_logo.png';
-      sourceIcon.alt = 'SoundCloud';
+    case "SoundCloud":
+      sourceIcon.src = "images/soundcloud_logo.png";
+      sourceIcon.alt = "SoundCloud";
       break;
-    case 'Spotify':
-      sourceIcon.src = 'images/spotify_logo.png';
-      sourceIcon.alt = 'Spotify';
+    case "Spotify":
+      sourceIcon.src = "images/spotify_logo.png";
+      sourceIcon.alt = "Spotify";
       break;
-    case 'AppleMusic':
-      sourceIcon.src = 'images/apple_music_logo.png';
-      sourceIcon.alt = 'Apple Music';
+    case "AppleMusic":
+      sourceIcon.src = "images/apple_music_logo.png";
+      sourceIcon.alt = "Apple Music";
       break;
-    case 'YouTube':
-      sourceIcon.src = 'images/youtube_logo.png';
-      sourceIcon.alt = 'YouTube';
+    case "YouTube":
+      sourceIcon.src = "images/youtube_logo.png";
+      sourceIcon.alt = "YouTube";
       break;
     default:
-      return document.createTextNode('');
+      return document.createTextNode("");
   }
   linkElement.appendChild(sourceIcon);
   return linkElement;
@@ -302,23 +324,23 @@ export function sortTable(column, order, viewCountType) {
     playlist.tracks.sort((a, b) => {
       let aValue, bValue;
 
-      if (column === 'rank') {
+      if (column === "rank") {
         aValue = a.rank;
         bValue = b.rank;
-      } else if (column === 'spotify_views') {
-        aValue = getViewCount(a, 'Spotify', viewCountType);
-        bValue = getViewCount(b, 'Spotify', viewCountType);
-      } else if (column === 'youtube_views') {
-        aValue = getViewCount(a, 'Youtube', viewCountType);
-        bValue = getViewCount(b, 'Youtube', viewCountType);
+      } else if (column === "spotify_views") {
+        aValue = getViewCount(a, "Spotify", viewCountType);
+        bValue = getViewCount(b, "Spotify", viewCountType);
+      } else if (column === "youtube_views") {
+        aValue = getViewCount(a, "Youtube", viewCountType);
+        bValue = getViewCount(b, "Youtube", viewCountType);
       }
 
-      return order === 'asc' ? aValue - bValue : bValue - aValue;
+      return order === "asc" ? aValue - bValue : bValue - aValue;
     });
     return playlist;
   });
 
-  displayData(sortedData, 'main-playlist-data-placeholder', true, viewCountType);
+  displayData(sortedData, "main-playlist-data-placeholder", true, viewCountType);
 }
 
 function getViewCount(track, platform, viewCountType) {
@@ -331,33 +353,33 @@ function getViewCount(track, platform, viewCountType) {
     return currentCount - initialCount;
   } else {
     console.error("Unknown view count type:", viewCountType);
-    return 0; 
+    return 0;
   }
 }
 
 export function resetCollapseStates() {
-  document.querySelectorAll('.playlist-content').forEach(content => {
-    content.classList.remove('collapsed');
+  document.querySelectorAll(".playlist-content").forEach(content => {
+    content.classList.remove("collapsed");
   });
-  document.querySelectorAll('.collapse-button').forEach(button => {
-    button.textContent = '▼';
+  document.querySelectorAll(".collapse-button").forEach(button => {
+    button.textContent = "▼";
   });
 }
 
 export function addToggleEventListeners() {
-  document.querySelectorAll('.collapse-button').forEach(button => {
-    button.removeEventListener('click', toggleCollapse);
+  document.querySelectorAll(".collapse-button").forEach(button => {
+    button.removeEventListener("click", toggleCollapse);
   });
 
-  document.querySelectorAll('.collapse-button').forEach(button => {
-    button.addEventListener('click', toggleCollapse);
+  document.querySelectorAll(".collapse-button").forEach(button => {
+    button.addEventListener("click", toggleCollapse);
   });
 }
 
 function toggleCollapse(event) {
   const button = event.currentTarget;
-  const targetId = button.getAttribute('data-target');
+  const targetId = button.getAttribute("data-target");
   const content = document.querySelector(`${targetId} .playlist-content`);
-  content.classList.toggle('collapsed');
-  button.textContent = content.classList.contains('collapsed') ? '▲' : '▼';
+  content.classList.toggle("collapsed");
+  button.textContent = content.classList.contains("collapsed") ? "▲" : "▼";
 }
