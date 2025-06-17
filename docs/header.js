@@ -16,11 +16,14 @@ export function hideSkeletonLoaders() {
 
 export async function fetchAndDisplayHeaderArt(genre) {
   try {
-    const response = await fetch(`${API_BASE_URL}/api/header-art?genre=${genre}`);
+    const response = await fetch(`${API_BASE_URL}/header-art/${genre}`);
     if (!response.ok) {
       throw new Error(`Failed to fetch header art. Status: ${response.status}`);
     }
-    const data = await response.json();
+    const responseData = await response.json();
+    
+    // Handle Django's wrapped response format
+    const data = responseData.data || responseData;
     displayHeaderArt(data);
   } catch (error) {
     console.error("Error fetching header art:", error);
