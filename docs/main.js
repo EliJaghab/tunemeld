@@ -1,21 +1,21 @@
-import { loadTitleContent } from './title.js';
-import { setupSortButtons } from './playlist.js';
-import { setupGenreSelector, setupViewCountTypeSelector, updateGenreData } from './selectors.js';
-import { setupBodyClickListener, setupClosePlayerButton } from './servicePlayer.js';
-import { initializeTosPrivacyOverlay } from './tosPrivacy.js';  // Import the new file
+import { loadTitleContent } from "./title.js";
+import { setupSortButtons } from "./playlist.js";
+import { setupGenreSelector, setupViewCountTypeSelector, updateGenreData } from "./selectors.js";
+import { setupBodyClickListener, setupClosePlayerButton } from "./servicePlayer.js";
+import { initializeTosPrivacyOverlay } from "./tosPrivacy.js"; // Import the new file
 
-document.addEventListener('DOMContentLoaded', initializeApp);
+document.addEventListener("DOMContentLoaded", initializeApp);
 
 function initializeApp() {
   loadTitleContent().then(() => {
     applyStoredTheme();
     setupThemeToggle();
-    
-    const genreSelector = document.getElementById('genre-selector');
-    const viewCountTypeSelector = document.getElementById('view-count-type-selector');
 
-    let currentGenre = genreSelector.value || 'pop';
-    let viewCountType = viewCountTypeSelector.value || 'total-view-count';
+    const genreSelector = document.getElementById("genre-selector");
+    const viewCountTypeSelector = document.getElementById("view-count-type-selector");
+
+    let currentGenre = genreSelector.value || "pop";
+    let viewCountType = viewCountTypeSelector.value || "total-view-count";
 
     updateGenreData(currentGenre, viewCountType, true);
 
@@ -29,10 +29,10 @@ function initializeApp() {
 }
 
 function applyStoredTheme() {
-  const storedTheme = localStorage.getItem('theme');
+  const storedTheme = localStorage.getItem("theme");
   if (storedTheme) {
-    document.body.classList.toggle('dark-mode', storedTheme === 'dark');
-    document.getElementById('theme-toggle-button').checked = storedTheme === 'dark';
+    document.body.classList.toggle("dark-mode", storedTheme === "dark");
+    document.getElementById("theme-toggle-button").checked = storedTheme === "dark";
   } else {
     applyThemeBasedOnTime();
   }
@@ -43,22 +43,22 @@ function applyThemeBasedOnTime() {
   const isDarkMode = hour >= 19 || hour < 7;
 
   if (isDarkMode) {
-    document.body.classList.add('dark-mode');
-    document.getElementById('theme-toggle-button').checked = true;
+    document.body.classList.add("dark-mode");
+    document.getElementById("theme-toggle-button").checked = true;
   } else {
-    document.body.classList.remove('dark-mode');
-    document.getElementById('theme-toggle-button').checked = false;
+    document.body.classList.remove("dark-mode");
+    document.getElementById("theme-toggle-button").checked = false;
   }
 }
 
 function toggleTheme() {
-  const isDarkMode = document.body.classList.toggle('dark-mode');
-  localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
+  const isDarkMode = document.body.classList.toggle("dark-mode");
+  localStorage.setItem("theme", isDarkMode ? "dark" : "light");
 }
 
 function setupThemeToggle() {
-  const themeToggleButton = document.getElementById('theme-toggle-button');
+  const themeToggleButton = document.getElementById("theme-toggle-button");
   if (themeToggleButton) {
-    themeToggleButton.addEventListener('change', toggleTheme);
+    themeToggleButton.addEventListener("change", toggleTheme);
   }
 }
