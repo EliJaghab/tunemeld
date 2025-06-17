@@ -1,9 +1,9 @@
-import { API_BASE_URL } from './config.js';
+import { DJANGO_API_BASE_URL } from './config.js';
 import { getCurrentViewCountType, setCurrentColumn, setCurrentOrder } from './selectors.js';
 
 export async function fetchAndDisplayLastUpdated(genre) {
   try {
-    const response = await fetch(`${API_BASE_URL}/last-updated/${genre}`);
+    const response = await fetch(`${DJANGO_API_BASE_URL}/last-updated/${genre}`);
     if (!response.ok) {
       throw new Error(`Failed to fetch last-updated. Status: ${response.status}`);
     }

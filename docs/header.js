@@ -1,34 +1,40 @@
-import { API_BASE_URL } from './config.js';
+import { DJANGO_API_BASE_URL } from "./config.js";
 
 export function showSkeletonLoaders() {
-  document.querySelectorAll('.skeleton, .skeleton-text').forEach(el => {
-    el.classList.add('loading');
+  document.querySelectorAll(".skeleton, .skeleton-text").forEach(el => {
+    el.classList.add("loading");
   });
 }
 
 export function hideSkeletonLoaders() {
-  document.querySelectorAll('.skeleton, .skeleton-text').forEach(el => {
-    el.classList.remove('loading');
-    el.classList.remove('skeleton');
-    el.classList.remove('skeleton-text');
+  document.querySelectorAll(".skeleton, .skeleton-text").forEach(el => {
+    el.classList.remove("loading");
+    el.classList.remove("skeleton");
+    el.classList.remove("skeleton-text");
   });
 }
 
 export async function fetchAndDisplayHeaderArt(genre) {
   try {
-    const response = await fetch(`${API_BASE_URL}/api/header-art?genre=${genre}`);
+    const response = await fetch(`${DJANGO_API_BASE_URL}/header-art/${genre}`);
     if (!response.ok) {
       throw new Error(`Failed to fetch header art. Status: ${response.status}`);
     }
-    const data = await response.json();
-    displayHeaderArt(data);
+    const responseData = await response.json();
+
+    // Handle Django's wrapped response format
+    if (responseData.status === "success" && responseData.data) {
+      displayHeaderArt(responseData.data);
+    } else {
+      throw new Error(responseData.message || "Failed to fetch header art data");
+    }
   } catch (error) {
-    console.error('Error fetching header art:', error);
+    console.error("Error fetching header art:", error);
   }
 }
 
 function displayHeaderArt(data) {
-  const services = ['SoundCloud', 'AppleMusic', 'Spotify'];
+  const services = ["SoundCloud", "AppleMusic", "Spotify"];
 
   services.forEach(service => {
     const serviceData = data[service];
@@ -40,7 +46,15 @@ function displayHeaderArt(data) {
       const serviceName = serviceData.service_name || service; // Use service name if not provided
       const genre = data.genre_name;
 
-      displayServiceHeader(service, playlistCoverUrl, playlistUrl, playlistName, playlistDescription, serviceName, genre);
+      displayServiceHeader(
+        service,
+        playlistCoverUrl,
+        playlistUrl,
+        playlistName,
+        playlistDescription,
+        serviceName,
+        genre
+      );
     } else {
       console.warn(`No data found for service: ${service}`);
     }
@@ -53,7 +67,7 @@ function displayServiceHeader(service, coverUrl, playlistUrl, playlistName, play
   const titleElement = document.getElementById(`${service.toLowerCase()}-playlist-title`);
   const coverLinkElement = document.getElementById(`${service.toLowerCase()}-cover-link`);
 
-  if (coverUrl.endsWith('.m3u8') && service === 'AppleMusic') {
+  if (coverUrl.endsWith(".m3u8") && service === "AppleMusic") {
     displayAppleMusicVideo(coverUrl);
   } else {
     imagePlaceholder.style.backgroundImage = `url('${coverUrl}')`;
@@ -65,11 +79,10 @@ function displayServiceHeader(service, coverUrl, playlistUrl, playlistName, play
   coverLinkElement.href = playlistUrl;
 
   setupDescriptionModal(descriptionElement, playlistDescription, playlistName, serviceName, genre);
-
 }
 
 function setupDescriptionModal(descriptionElement, fullText, title, serviceName, genre) {
-  descriptionElement.removeEventListener('click', toggleDescriptionExpand);
+  descriptionElement.removeEventListener("click", toggleDescriptionExpand);
 
   const descriptionBoxWidth = descriptionElement.clientWidth;
 
@@ -83,11 +96,10 @@ function setupDescriptionModal(descriptionElement, fullText, title, serviceName,
 
   if (fullText.length > estimatedMaxTextLength) {
     let truncatedText = fullText.substring(0, estimatedMaxTextLength);
-    truncatedText = truncatedText.substring(0, truncatedText.lastIndexOf(' ')) + '... ';
+    truncatedText = truncatedText.substring(0, truncatedText.lastIndexOf(" ")) + "... ";
 
     descriptionElement.innerHTML = `${truncatedText}<span class="more-button">MORE</span>`;
     createAndAttachModal(descriptionElement, fullText, title, serviceName, genre);
-
   } else {
     descriptionElement.textContent = fullText;
   }
@@ -98,8 +110,8 @@ function isMobileView() {
 }
 
 function createAndAttachModal(descriptionElement, fullText, title, serviceName, genre) {
-  const modal = document.createElement('div');
-  modal.className = 'description-modal';
+  const modal = document.createElement("div");
+  modal.className = "description-modal";
   modal.innerHTML = `
     <button class="description-modal-close">&times;</button>
     <div class="description-modal-header">${title}</div>
@@ -108,43 +120,43 @@ function createAndAttachModal(descriptionElement, fullText, title, serviceName, 
   `;
   document.body.appendChild(modal);
 
-  const overlay = document.createElement('div');
-  overlay.className = 'description-overlay';
+  const overlay = document.createElement("div");
+  overlay.className = "description-overlay";
   document.body.appendChild(overlay);
 
-  descriptionElement.querySelector('.more-button').addEventListener('click', function () {
-    modal.classList.add('active');
-    overlay.classList.add('active');
+  descriptionElement.querySelector(".more-button").addEventListener("click", function () {
+    modal.classList.add("active");
+    overlay.classList.add("active");
   });
 
-  modal.querySelector('.description-modal-close').addEventListener('click', function () {
-    modal.classList.remove('active');
-    overlay.classList.remove('active');
+  modal.querySelector(".description-modal-close").addEventListener("click", function () {
+    modal.classList.remove("active");
+    overlay.classList.remove("active");
   });
 
-  overlay.addEventListener('click', function () {
-    modal.classList.remove('active');
-    overlay.classList.remove('active');
+  overlay.addEventListener("click", function () {
+    modal.classList.remove("active");
+    overlay.classList.remove("active");
   });
 }
 
-document.addEventListener('DOMContentLoaded', function () {
-  document.querySelectorAll('.description').forEach(descriptionElement => {
+document.addEventListener("DOMContentLoaded", function () {
+  document.querySelectorAll(".description").forEach(descriptionElement => {
     const fullText = descriptionElement.textContent;
     setupDescriptionModal(descriptionElement, fullText);
   });
 });
 
 function toggleDescriptionExpand() {
-  this.classList.toggle('expanded');
+  this.classList.toggle("expanded");
 }
 
 function displayAppleMusicVideo(url) {
-  const videoContainer = document.getElementById('applemusic-video-container');
+  const videoContainer = document.getElementById("applemusic-video-container");
   videoContainer.innerHTML = `
     <video id="applemusic-video" class="video-js vjs-default-skin" muted autoplay loop playsinline controlsList="nodownload nofullscreen noremoteplayback"></video>
   `;
-  const video = document.getElementById('applemusic-video');
+  const video = document.getElementById("applemusic-video");
 
   if (Hls.isSupported()) {
     const hls = new Hls();
@@ -153,9 +165,9 @@ function displayAppleMusicVideo(url) {
     hls.on(Hls.Events.MANIFEST_PARSED, function () {
       video.play();
     });
-  } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+  } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
     video.src = url;
-    video.addEventListener('canplay', function () {
+    video.addEventListener("canplay", function () {
       video.play();
     });
   }
