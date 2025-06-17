@@ -3,11 +3,15 @@ import { getCurrentViewCountType, setCurrentColumn, setCurrentOrder } from './se
 
 export async function fetchAndDisplayLastUpdated(genre) {
   try {
-    const response = await fetch(`${API_BASE_URL}/api/last-updated?genre=${genre}`);
+    const response = await fetch(`${API_BASE_URL}/last-updated/${genre}`);
     if (!response.ok) {
       throw new Error(`Failed to fetch last-updated. Status: ${response.status}`);
     }
-    const lastUpdated = await response.json();
+    const responseData = await response.json();
+    
+    // Handle Django's wrapped response format
+    const lastUpdated = responseData.data || responseData;
+    
     displayLastUpdated(lastUpdated);
   } catch (error) {
     console.error('Error fetching last updated date:', error);
