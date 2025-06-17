@@ -4,7 +4,7 @@
   --background-color-light: #fff;
   --container-background-light: #f9f9f9;
   --skeleton-light: lightgray;
-  
+
   --text-color-dark: #f9f9f9;
   --background-color-dark: #333;
   --container-background-dark: #444;
@@ -30,8 +30,8 @@ body.dark-mode {
   border-radius: 10px;
   display: flex;
   justify-content: space-around;
-  margin-bottom: .5rem;
-  padding: .5rem;
+  margin-bottom: 0.5rem;
+  padding: 0.5rem;
 }
 
 .header-title {
@@ -39,7 +39,7 @@ body.dark-mode {
   text-align: center;
   font-size: 1.2rem;
   width: 100%;
-  padding: .2rem;
+  padding: 0.2rem;
   color: var(--text-color);
 }
 
@@ -76,7 +76,7 @@ body.dark-mode {
   flex: 1;
   flex-direction: column;
   justify-content: flex-end;
-  margin: .3rem;
+  margin: 0.3rem;
   max-width: 300px;
 }
 
@@ -90,8 +90,13 @@ body.dark-mode {
 
 .skeleton::before {
   animation: shimmer 2s infinite;
-  background: linear-gradient(90deg, var(--skeleton-color) 0%, rgba(255, 255, 255, 0.2) 50%, var(--skeleton-color) 100%);
-  content: '';
+  background: linear-gradient(
+    90deg,
+    var(--skeleton-color) 0%,
+    rgba(255, 255, 255, 0.2) 50%,
+    var(--skeleton-color) 100%
+  );
+  content: "";
   height: 100%;
   left: -100%;
   position: absolute;
@@ -109,13 +114,13 @@ body.dark-mode {
 /* Shimmer Animation */
 @keyframes shimmer {
   0% {
-      transform: translateX(-100%);
+    transform: translateX(-100%);
   }
   50% {
-      transform: translateX(100%);
+    transform: translateX(100%);
   }
   100% {
-      transform: translateX(-100%);
+    transform: translateX(-100%);
   }
 }
 

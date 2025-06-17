@@ -1,5 +1,4 @@
 import re
-from typing import Optional
 from urllib.parse import unquote
 
 import requests
@@ -38,7 +37,7 @@ class SpotifyService:
         self.webdriver_manager = webdriver_manager
         self.error_count = 0
 
-    def get_isrc(self, track_name: str, artist_name: str) -> Optional[str]:
+    def get_isrc(self, track_name: str, artist_name: str) -> str | None:
         cache_key = f"{track_name}|{artist_name}"
         isrc = self.isrc_cache_manager.get(cache_key)
         if isrc:
@@ -83,15 +82,21 @@ class SpotifyService:
     def get_track_url_by_isrc(self, isrc: str) -> str:
         track_url = self._get_track_url_by_isrc(isrc)
         if not track_url:
-            logger.error(f"Failed to find track URL for ISRC: {isrc} after multiple attempts")
+            logger.error(
+                f"Failed to find track URL for ISRC: {isrc} after multiple attempts"
+            )
         return track_url
 
     @retry(
-        wait=wait_exponential(multiplier=1, min=4, max=10), stop=stop_after_attempt(5), reraise=True
+        wait=wait_exponential(multiplier=1, min=4, max=10),
+        stop=stop_after_attempt(5),
+        reraise=True,
     )
     def _get_track_url_by_isrc(self, isrc: str) -> str:
         try:
-            results = self.spotify_client.search(q=f"isrc:{isrc}", type="track", limit=1)
+            results = self.spotify_client.search(
+                q=f"isrc:{isrc}", type="track", limit=1
+            )
             if results["tracks"]["items"]:
                 return results["tracks"]["items"][0]["external_urls"]["spotify"]
             else:
@@ -134,7 +139,9 @@ class SpotifyService:
             try:
                 return self.webdriver_manager.get_spotify_track_view_count(track_url)
             except Exception as e:
-                logger.error(f"Error getting Spotify view count for {track.isrc} {track_url}: {e}")
+                logger.error(
+                    f"Error getting Spotify view count for {track.isrc} {track_url}: {e}"
+                )
                 return None
 
         def _set_current_view_count(track: Track) -> bool:
@@ -148,9 +155,12 @@ class SpotifyService:
 
         def _set_historical_view_count(track: Track) -> bool:
             historical_view = HistoricalView()
-            historical_view.total_view_count = track.spotify_view.current_view.view_count
+            historical_view.total_view_count = (
+                track.spotify_view.current_view.view_count
+            )
             delta_view_count = get_delta_view_count(
-                track.spotify_view.historical_view, track.spotify_view.current_view.view_count
+                track.spotify_view.historical_view,
+                track.spotify_view.current_view.view_count,
             )
             historical_view.delta_view_count = delta_view_count
             historical_view.timestamp = CURRENT_TIMESTAMP
@@ -189,7 +199,7 @@ class YouTubeService:
 
         return True
 
-    def get_youtube_url(self, track_name: str, artist_name: str) -> Optional[str]:
+    def get_youtube_url(self, track_name: str, artist_name: str) -> str | None:
         cache_key = f"{track_name}|{artist_name}"
         youtube_url = self.cache_service.get(cache_key)
         if youtube_url:
@@ -214,7 +224,9 @@ class YouTubeService:
             logger.info(f"No video found for {track_name} by {artist_name}")
             return None
         else:
-            logger.info(f"Error fetching YouTube URL: {response.status_code}, {response.text}")
+            logger.info(
+                f"Error fetching YouTube URL: {response.status_code}, {response.text}"
+            )
             if response.status_code == 403 and "quotaExceeded" in response.text:
                 raise ValueError(
                     f"Could not get YouTube URL for {track_name} {artist_name} because Quota Exceeded"
@@ -222,7 +234,9 @@ class YouTubeService:
             return None
 
     @retry(
-        wait=wait_exponential(multiplier=1, min=4, max=10), stop=stop_after_attempt(3), reraise=True
+        wait=wait_exponential(multiplier=1, min=4, max=10),
+        stop=stop_after_attempt(3),
+        reraise=True,
     )
     def get_youtube_track_view_count(self, youtube_url: str) -> int:
         video_id = youtube_url.split("v=")[-1]
@@ -269,7 +283,9 @@ class YouTubeService:
             try:
                 return self.get_youtube_track_view_count(track_url)
             except Exception as e:
-                logger.error(f"Error getting Youtube view count for {track.isrc} {track_url}: {e}")
+                logger.error(
+                    f"Error getting Youtube view count for {track.isrc} {track_url}: {e}"
+                )
                 return None
 
         def _set_current_view_count(track: Track) -> bool:
@@ -283,9 +299,12 @@ class YouTubeService:
 
         def _set_historical_view_count(track: Track) -> bool:
             historical_view = HistoricalView()
-            historical_view.total_view_count = track.youtube_view.current_view.view_count
+            historical_view.total_view_count = (
+                track.youtube_view.current_view.view_count
+            )
             delta_view_count = get_delta_view_count(
-                track.youtube_view.historical_view, track.youtube_view.current_view.view_count
+                track.youtube_view.historical_view,
+                track.youtube_view.current_view.view_count,
             )
             historical_view.delta_view_count = delta_view_count
             historical_view.timestamp = CURRENT_TIMESTAMP
@@ -298,7 +317,7 @@ class AppleMusicService:
     def __init__(self, cache_service: CacheManager):
         self.cache_service = cache_service
 
-    def get_album_cover_url(self, track_url: str) -> Optional[str]:
+    def get_album_cover_url(self, track_url: str) -> str | None:
         cache_key = track_url
         album_cover_url = self.cache_service.get(cache_key)
         if album_cover_url:

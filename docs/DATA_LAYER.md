@@ -7,6 +7,7 @@ TuneMeld uses MongoDB with a normalized schema design to handle music data from 
 ## Collection Schema Design
 
 ### 1. Raw Playlists Collection (`raw_playlists`)
+
 **Purpose**: Store original, unprocessed playlist data from each streaming service
 
 ```json
@@ -32,6 +33,7 @@ TuneMeld uses MongoDB with a normalized schema design to handle music data from 
 ```
 
 ### 2. Normalized Track Collection (`track`)
+
 **Purpose**: Store complete track metadata with service-specific data
 
 ```json
@@ -96,6 +98,7 @@ TuneMeld uses MongoDB with a normalized schema design to handle music data from 
 ```
 
 ### 3. Track Playlist Collection (`track_playlist`)
+
 **Purpose**: Store service-specific rankings for each genre
 
 ```json
@@ -124,6 +127,7 @@ TuneMeld uses MongoDB with a normalized schema design to handle music data from 
 ```
 
 ### 4. Aggregated Playlist Collection (`track_playlist` with service_name: "Aggregate")
+
 **Purpose**: Store cross-service rankings using ISRC matching
 
 ```json
@@ -149,6 +153,7 @@ TuneMeld uses MongoDB with a normalized schema design to handle music data from 
 ```
 
 ### 5. View Counts Playlists Collection (`view_counts_playlists`)
+
 **Purpose**: Optimized collection for frontend analytics display
 
 ```json
@@ -181,6 +186,7 @@ TuneMeld uses MongoDB with a normalized schema design to handle music data from 
 ### 6. Cache Collections
 
 #### ISRC Cache (`isrc_cache`)
+
 ```json
 {
   "_id": "cache_spotify_track_12345",
@@ -191,6 +197,7 @@ TuneMeld uses MongoDB with a normalized schema design to handle music data from 
 ```
 
 #### YouTube URL Cache (`youtube_cache`)
+
 ```json
 {
   "_id": "cache_USA2P2446028",
@@ -203,6 +210,7 @@ TuneMeld uses MongoDB with a normalized schema design to handle music data from 
 ## Data Models (Pydantic)
 
 ### Core Enums
+
 ```python
 class GenreName(str, Enum):
     DANCE = "dance"
@@ -223,6 +231,7 @@ class PlaylistType(str, Enum):
 ```
 
 ### Track Model
+
 ```python
 class Track(BaseModel):
     isrc: str
@@ -235,6 +244,7 @@ class Track(BaseModel):
 ```
 
 ### Playlist Model
+
 ```python
 class Playlist(BaseModel):
     service_name: PlaylistType
@@ -245,23 +255,27 @@ class Playlist(BaseModel):
 ## Data Processing Pipeline
 
 ### 1. Extraction Phase
+
 - Raw playlist data scraped from each service
 - Stored in `raw_playlists` collection
 - Preserves original structure for debugging
 
 ### 2. Transformation Phase
+
 - ISRCs resolved for each track
 - YouTube URLs matched using search API
 - Album covers fetched from each service
 - Data normalized into `Track` objects
 
 ### 3. Aggregation Phase
+
 - Tracks matched across services using ISRC
 - Cross-service rankings calculated
 - Priority given to: Apple Music → SoundCloud → Spotify
 - Results stored in aggregated playlist collection
 
 ### 4. Analytics Phase
+
 - View counts scraped from Spotify and YouTube
 - Historical data tracked with delta calculations
 - Optimized for frontend chart display
@@ -269,18 +283,21 @@ class Playlist(BaseModel):
 ## Query Patterns
 
 ### Get Playlist Data
+
 ```javascript
 // Frontend API call
 const response = await fetch(`${API_BASE_URL}/playlist-data/dance`);
 ```
 
 ### Get Analytics Data
+
 ```javascript
 // Chart data with view counts
 const response = await fetch(`${API_BASE_URL}/graph-data/dance`);
 ```
 
 ### MongoDB Aggregation Example
+
 ```python
 # Get top tracks across all services for a genre
 pipeline = [
@@ -294,19 +311,22 @@ pipeline = [
 ## Performance Considerations
 
 ### Indexing Strategy
+
 ```javascript
 // Recommended indexes
-db.track_playlist.createIndex({"service_name": 1, "genre_name": 1})
-db.track.createIndex({"isrc": 1})
-db.view_counts_playlists.createIndex({"genre_name": 1})
+db.track_playlist.createIndex({ service_name: 1, genre_name: 1 });
+db.track.createIndex({ isrc: 1 });
+db.view_counts_playlists.createIndex({ genre_name: 1 });
 ```
 
 ### Caching Layers
+
 1. **MongoDB Cache Collections** - Persistent caching for expensive operations
 2. **Cloudflare KV** - Edge caching for API responses
 3. **Application Cache** - In-memory caching for frequently accessed data
 
 ### Data Size Management
+
 - Raw playlists: ~50 tracks per genre per service
 - Total tracks: ~200 unique ISRCs per genre
 - Historical data: Daily snapshots with delta calculations
@@ -315,16 +335,19 @@ db.view_counts_playlists.createIndex({"genre_name": 1})
 ## Data Quality Measures
 
 ### ISRC Validation
+
 - ISRC format validation (e.g., "USA2P2446028")
 - Fallback matching when ISRCs are missing
 - Cross-reference with multiple music databases
 
 ### View Count Accuracy
+
 - Multiple source verification
 - Anomaly detection for sudden spikes
 - Historical trend validation
 
 ### Data Freshness
+
 - Timestamp tracking for all collections
 - ETL pipeline runs on configurable schedule
 - Data staleness monitoring

@@ -29,7 +29,7 @@
 
 .playlist-description {
   color: var(--text-color);
-  font-family: 'DM Sans', sans-serif;
+  font-family: "DM Sans", sans-serif;
   font-size: 14px;
   font-weight: 400;
   margin-bottom: 10px;
@@ -72,7 +72,8 @@
   border: none;
 }
 
-.playlist-table th, .playlist-table td {
+.playlist-table th,
+.playlist-table td {
   border-bottom: 1px solid var(--container-background);
   padding: 5px;
   text-align: left;
@@ -86,36 +87,43 @@
   position: relative;
 }
 
-.playlist-table th.rank, .playlist-table td.rank {
+.playlist-table th.rank,
+.playlist-table td.rank {
   text-align: center;
   width: 2%;
 }
 
-.playlist-table th.cover, .playlist-table td.cover {
+.playlist-table th.cover,
+.playlist-table td.cover {
   text-align: center;
   width: 0%;
 }
 
-.playlist-table th.info, .playlist-table td.info {
+.playlist-table th.info,
+.playlist-table td.info {
   width: 10%;
 }
 
-.playlist-table th.stat, .playlist-table td.spotify-view-count {
-  width: 10%;
-  text-align: center;
-}
-
-.playlist-table th.stat, .playlist-table td.youtube-view-count {
+.playlist-table th.stat,
+.playlist-table td.spotify-view-count {
   width: 10%;
   text-align: center;
 }
 
-.playlist-table th.seen-on, .playlist-table td.seen-on {
+.playlist-table th.stat,
+.playlist-table td.youtube-view-count {
+  width: 10%;
+  text-align: center;
+}
+
+.playlist-table th.seen-on,
+.playlist-table td.seen-on {
   width: 5%;
   text-align: center;
 }
 
-.playlist-table th.external, .playlist-table td.external {
+.playlist-table th.external,
+.playlist-table td.external {
   width: 0%;
   text-align: center;
 }
@@ -192,7 +200,7 @@
   border-radius: 5px;
   color: var(--text-color);
   cursor: pointer;
-  font-size: .8rem;
+  font-size: 0.8rem;
   padding: 3px 8px;
   position: absolute;
   right: 1px;
@@ -223,22 +231,22 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  line-height: 1; 
-  padding: 0; 
+  line-height: 1;
+  padding: 0;
   padding-left: 5px;
 }
 
 .sort-button i {
-  display: block; 
+  display: block;
   margin: 0;
-  padding: 0; 
+  padding: 0;
   line-height: 1;
   color: var(--text-color);
 }
 
 .sort-button i + i {
   margin-top: -10px;
-} 
+}
 
 .sort-button[data-order="asc"] .fa-sort-up {
   display: inline;
@@ -247,7 +255,7 @@
 
 .sort-button[data-order="desc"] .fa-sort-down {
   display: inline;
-  color: lightskyblue; 
+  color: lightskyblue;
 }
 
 @media screen and (max-width: 768px) {
@@ -255,7 +263,7 @@
     flex-direction: column;
     align-items: center;
   }
-  
+
   .playlist-column {
     width: 100%;
   }

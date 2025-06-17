@@ -5,7 +5,13 @@ from pymongo.collection import Collection
 
 from playlist_etl.config import RANK_PRIORITY, TRACK_PLAYLIST_COLLECTION
 from playlist_etl.helpers import get_logger
-from playlist_etl.models import GenreName, Playlist, PlaylistType, TrackRank, TrackSourceServiceName
+from playlist_etl.models import (
+    GenreName,
+    Playlist,
+    PlaylistType,
+    TrackRank,
+    TrackSourceServiceName,
+)
 from playlist_etl.mongo_db_client import MongoDBClient
 
 logger = get_logger(__name__)
@@ -24,24 +30,18 @@ class Aggregate:
         formatted_playlists = self._format_aggregated_playlist(sorted_matches)
         self._write_aggregated_playlists(formatted_playlists)
 
-    def _group_by_genre(
-        self, track_playlists: Collection[Any]
-    ) -> dict[GenreName, dict[str, dict[str, Any]]]:
+    def _group_by_genre(self, track_playlists: Collection[Any]) -> dict[GenreName, dict[str, dict[str, Any]]]:
         """Group ISRC matches across the same genre from different services."""
-        candidates_by_genre: defaultdict[GenreName, defaultdict[str, defaultdict[str, Any]]] = (
-            defaultdict(lambda: defaultdict(lambda: defaultdict(dict)))
+        candidates_by_genre: defaultdict[GenreName, defaultdict[str, defaultdict[str, Any]]] = defaultdict(
+            lambda: defaultdict(lambda: defaultdict(dict))
         )
         for genre_name in GenreName:
             for service_name in TrackSourceServiceName:
-                playlist = track_playlists.find_one(
-                    {"genre_name": genre_name, "service_name": service_name}
-                )
+                playlist = track_playlists.find_one({"genre_name": genre_name, "service_name": service_name})
                 if playlist and "tracks" in playlist and playlist["tracks"]:
                     track_ranks = [TrackRank(**track) for track in playlist["tracks"]]
                     for track in track_ranks:
-                        candidates_by_genre[genre_name][track.isrc]["sources"][service_name] = (
-                            track.rank
-                        )
+                        candidates_by_genre[genre_name][track.isrc]["sources"][service_name] = track.rank
 
         return dict(candidates_by_genre)
 
@@ -49,9 +49,7 @@ class Aggregate:
         self, candidates: dict[GenreName, dict[str, dict[str, Any]]]
     ) -> dict[GenreName, dict[str, dict[str, Any]]]:
         """Get ISRCs that come up more than once for the same genre."""
-        matches: defaultdict[GenreName, defaultdict[str, dict[str, Any]]] = defaultdict(
-            lambda: defaultdict(dict)
-        )
+        matches: defaultdict[GenreName, defaultdict[str, dict[str, Any]]] = defaultdict(lambda: defaultdict(dict))
         for genre_name, isrcs in candidates.items():
             for isrc, isrc_data in isrcs.items():
                 if len(isrc_data["sources"]) > 1:
@@ -112,9 +110,7 @@ class Aggregate:
             formatted_playlists[genre_name] = playlist.model_dump()
         return formatted_playlists
 
-    def _write_aggregated_playlists(
-        self, formatted_playlists: dict[GenreName, dict[str, Any]]
-    ) -> None:
+    def _write_aggregated_playlists(self, formatted_playlists: dict[GenreName, dict[str, Any]]) -> None:
         logger.info("Writing aggregated playlists to MongoDB")
         for genre_name in GenreName:
             genre_name_value = genre_name.value

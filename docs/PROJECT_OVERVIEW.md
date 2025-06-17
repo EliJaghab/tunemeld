@@ -21,15 +21,17 @@ TuneMeld is a music analytics platform that aggregates playlist data from multip
 ```
 
 ### 1. Frontend (`/docs/`)
+
 - **Technology**: Vanilla JavaScript, HTML, CSS
 - **Current State**: Static website hosted on GitHub Pages
-- **Features**: 
+- **Features**:
   - Genre-based playlist viewing
   - Interactive charts and visualizations
   - Dark/light mode toggle
   - Service-specific playlist displays
 
 ### 2. ETL Pipeline (`/playlist_etl/`)
+
 - **Technology**: Python with Pydantic models
 - **Current State**: Fully functional data processing pipeline
 - **Key Components**:
@@ -40,6 +42,7 @@ TuneMeld is a music analytics platform that aggregates playlist data from multip
   - `models.py` - Type-safe data models
 
 ### 3. Django Backend (`/django_backend/`)
+
 - **Technology**: Django REST Framework
 - **Current State**: Implemented but not fully deployed
 - **API Endpoints**:
@@ -50,6 +53,7 @@ TuneMeld is a music analytics platform that aggregates playlist data from multip
   - `/header-art/<genre>` - Playlist artwork and metadata
 
 ### 4. Data Layer (MongoDB)
+
 - **Technology**: MongoDB with multiple collections
 - **Current State**: Operational with normalized schema
 - **Collections**:
@@ -62,6 +66,7 @@ TuneMeld is a music analytics platform that aggregates playlist data from multip
 ## Data Flow
 
 ### Current Process
+
 1. **Extraction**: ETL pipeline scrapes playlists from Spotify, SoundCloud, Apple Music
 2. **Transformation**: Raw data is normalized, ISRCs are resolved, YouTube URLs are matched
 3. **Aggregation**: Tracks are ranked across services using ISRC matching
@@ -72,16 +77,19 @@ TuneMeld is a music analytics platform that aggregates playlist data from multip
 ### Key Features
 
 #### Cross-Service Track Matching
+
 - Uses ISRC (International Standard Recording Code) for accurate track identification
 - Prioritizes services in order: Apple Music → SoundCloud → Spotify
 - Handles missing ISRCs gracefully with fallback matching
 
 #### View Count Analytics
+
 - Tracks play counts from Spotify and YouTube over time
 - Calculates delta changes and growth trends
 - Stores historical view data for trend analysis
 
 #### Caching Strategy
+
 - MongoDB collections for persistent caching (ISRCs, YouTube URLs, album covers)
 - Cloudflare KV for API response caching
 - Smart cache invalidation and warming
@@ -89,6 +97,7 @@ TuneMeld is a music analytics platform that aggregates playlist data from multip
 ## Technology Stack
 
 ### Backend
+
 - **Python 3.10+** - ETL pipeline and data processing
 - **Django 3.x** - REST API framework
 - **Pydantic** - Data validation and serialization
@@ -96,12 +105,14 @@ TuneMeld is a music analytics platform that aggregates playlist data from multip
 - **Selenium WebDriver** - Web scraping for view counts
 
 ### Frontend
+
 - **Vanilla JavaScript** - Client-side logic
 - **Chart.js** - Data visualization
 - **CSS Grid/Flexbox** - Responsive layouts
 - **Progressive Web App** features
 
 ### Infrastructure
+
 - **MongoDB Atlas** - Database hosting
 - **Cloudflare** - CDN and KV storage
 - **Railway/Heroku** - Backend deployment (planned)
@@ -110,17 +121,20 @@ TuneMeld is a music analytics platform that aggregates playlist data from multip
 ## Current Status
 
 ### ✅ Working Components
+
 - ETL pipeline with full data processing
 - MongoDB schema and data storage
 - Frontend user interface
 - Basic Django API structure
 
 ### ⚠️ Partially Complete
+
 - Django backend API (implemented but not deployed)
 - Data consistency between old and new APIs
 - Frontend integration with backend APIs
 
 ### ❌ Pending Work
+
 - Backend deployment to production
 - Frontend migration from static files to API calls
 - Complete view count integration
@@ -129,18 +143,22 @@ TuneMeld is a music analytics platform that aggregates playlist data from multip
 ## Key Challenges Addressed
 
 ### 1. Wide Document Problem
+
 **Issue**: Original MongoDB documents were too wide, causing performance issues
 **Solution**: Normalized schema with separate collections for different data types
 
 ### 2. Cross-Service Data Matching
+
 **Issue**: Same tracks appear differently across services
 **Solution**: ISRC-based matching with intelligent fallback strategies
 
 ### 3. Real-Time Analytics
+
 **Issue**: Need for up-to-date view counts and trend data
 **Solution**: Separate analytics pipeline with historical data tracking
 
 ### 4. Scalable Architecture
+
 **Issue**: Moving from static files to proper backend architecture
 **Solution**: Django REST API with MongoDB and Cloudflare caching
 
@@ -153,6 +171,7 @@ TuneMeld is a music analytics platform that aggregates playlist data from multip
 5. **Monitoring & Observability**: Add comprehensive logging and metrics
 
 ## File Structure
+
 ```
 tunemeld/
 ├── docs/                    # Frontend static files

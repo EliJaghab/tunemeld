@@ -21,7 +21,7 @@ export async function fetchAndDisplayHeaderArt(genre) {
       throw new Error(`Failed to fetch header art. Status: ${response.status}`);
     }
     const responseData = await response.json();
-    
+
     // Handle Django's wrapped response format
     const data = responseData.data || responseData;
     displayHeaderArt(data);

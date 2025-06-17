@@ -62,7 +62,7 @@ class ServiceView(BaseModel):
     service_name: DataSourceServiceName
     start_view: StartView = Field(default_factory=StartView)
     current_view: CurrentView = Field(default_factory=CurrentView)
-    historical_view: list[HistoricalView] = list()
+    historical_view: list[HistoricalView] = []
     youtube_view: YouTubeView = Field(default_factory=YouTubeView)
 
 
@@ -78,12 +78,8 @@ class Track(BaseModel):
         default_factory=lambda: TrackData(service_name=TrackSourceServiceName.SOUNDCLOUD)
     )
     youtube_url: str | None = None
-    spotify_view: ServiceView = Field(
-        default_factory=lambda: ServiceView(service_name=DataSourceServiceName.SPOTIFY)
-    )
-    youtube_view: ServiceView = Field(
-        default_factory=lambda: ServiceView(service_name=DataSourceServiceName.YOUTUBE)
-    )
+    spotify_view: ServiceView = Field(default_factory=lambda: ServiceView(service_name=DataSourceServiceName.SPOTIFY))
+    youtube_view: ServiceView = Field(default_factory=lambda: ServiceView(service_name=DataSourceServiceName.YOUTUBE))
 
 
 class TrackRank(BaseModel):

@@ -7,6 +7,7 @@ This document outlines the work required to complete the migration from static f
 ## Current State Analysis
 
 ### ✅ Completed Work
+
 - Django project structure with REST API endpoints
 - MongoDB integration with PyMongo
 - Cloudflare KV caching implementation
@@ -14,6 +15,7 @@ This document outlines the work required to complete the migration from static f
 - CORS configuration for frontend integration
 
 ### ⚠️ Issues Identified
+
 1. **Data Inconsistency**: API responses missing view count data (validated in `validation.ipynb`)
 2. **Backend Not Deployed**: Django API exists but not live in production
 3. **Frontend Still Using Old API**: Static file generation still in use
@@ -24,23 +26,26 @@ This document outlines the work required to complete the migration from static f
 ### Phase 1: Fix Data Layer Integration
 
 #### 1.1 Resolve View Count Data Issues
+
 - [ ] **Fix Graph Data Endpoint** (`django_backend/core/views.py:25-78`)
+
   - [ ] Update `get_view_counts()` function to properly query `historical_track_views` collection
   - [ ] Ensure view count data structure matches frontend expectations
   - [ ] Add error handling for missing view count data
-  
+
 - [ ] **Test Data Consistency**
   - [ ] Run validation notebook to confirm API parity
   - [ ] Update test cases to cover all data scenarios
   - [ ] Verify all 4 genres return consistent data
 
 **Code Changes Required:**
+
 ```python
 # In django_backend/core/views.py:51-61
 def get_view_counts(isrc_list: List[str]) -> Dict:
     track_views_query = {"isrc": {"$in": isrc_list}}
     track_views = historical_track_views.find(track_views_query, {"_id": False})  # Missing line
-    
+
     isrc_to_track_views = {}
     for track in track_views:
         isrc_to_track_views[track["isrc"]] = track
@@ -48,7 +53,9 @@ def get_view_counts(isrc_list: List[str]) -> Dict:
 ```
 
 #### 1.2 Update Database Queries
+
 - [ ] **Optimize Collection Queries**
+
   - [ ] Review all collection references in `django_backend/core/__init__.py:10-14`
   - [ ] Ensure proper indexing for performance
   - [ ] Add connection pooling configuration
@@ -61,7 +68,9 @@ def get_view_counts(isrc_list: List[str]) -> Dict:
 ### Phase 2: Deploy Backend to Production
 
 #### 2.1 Environment Configuration
+
 - [ ] **Production Settings**
+
   - [ ] Create `settings_prod.py` with production configurations
   - [ ] Set up environment variables for deployment
   - [ ] Configure static file serving
@@ -73,7 +82,9 @@ def get_view_counts(isrc_list: List[str]) -> Dict:
   - [ ] Configure read/write preferences
 
 #### 2.2 Deployment Setup
+
 - [ ] **Choose Deployment Platform**
+
   - [ ] Railway (recommended - already configured)
   - [ ] Heroku (alternative option)
   - [ ] DigitalOcean App Platform
@@ -85,6 +96,7 @@ def get_view_counts(isrc_list: List[str]) -> Dict:
   - [ ] Set up health check endpoints
 
 **Required Files:**
+
 ```bash
 # requirements.txt (already exists)
 Django>=3.0,<4.0
@@ -100,7 +112,9 @@ web: gunicorn core.wsgi:application --bind 0.0.0.0:$PORT
 ```
 
 #### 2.3 Domain and SSL Configuration
+
 - [ ] **Set up Domain**
+
   - [ ] Configure `api.tunemeld.com` DNS records
   - [ ] Set up SSL certificate
   - [ ] Update CORS settings for production domain
@@ -113,7 +127,9 @@ web: gunicorn core.wsgi:application --bind 0.0.0.0:$PORT
 ### Phase 3: Frontend Migration
 
 #### 3.1 Update API Configuration
+
 - [ ] **Switch API Endpoints** (`docs/config.js:1-15`)
+
   - [ ] Update `useProdBackend` to `true`
   - [ ] Verify `DJANGO_API_BASE_URL` points to production
   - [ ] Test all API calls work with new backend
@@ -124,7 +140,9 @@ web: gunicorn core.wsgi:application --bind 0.0.0.0:$PORT
   - [ ] Clean up old API endpoints
 
 #### 3.2 Error Handling and User Experience
+
 - [ ] **Add Loading States**
+
   - [ ] Implement proper loading indicators
   - [ ] Add error messages for API failures
   - [ ] Implement retry logic for failed requests
@@ -137,7 +155,9 @@ web: gunicorn core.wsgi:application --bind 0.0.0.0:$PORT
 ### Phase 4: Testing and Monitoring
 
 #### 4.1 End-to-End Testing
+
 - [ ] **API Testing**
+
   - [ ] Test all endpoints with various inputs
   - [ ] Verify response formats match frontend expectations
   - [ ] Load test with expected traffic volumes
@@ -148,7 +168,9 @@ web: gunicorn core.wsgi:application --bind 0.0.0.0:$PORT
   - [ ] Test across different browsers and devices
 
 #### 4.2 Monitoring and Logging
+
 - [ ] **Application Monitoring**
+
   - [ ] Set up application logs with appropriate levels
   - [ ] Monitor API response times
   - [ ] Track error rates and types
@@ -163,14 +185,16 @@ web: gunicorn core.wsgi:application --bind 0.0.0.0:$PORT
 ### API Endpoint Updates Required
 
 #### 1. Graph Data Endpoint Fix
+
 **File**: `django_backend/core/views.py:25-78`
 **Issue**: Missing query to `historical_track_views` collection
 **Solution**:
+
 ```python
 def get_view_counts(isrc_list: List[str]) -> Dict:
     track_views_query = {"isrc": {"$in": isrc_list}}
     track_views = historical_track_views.find(track_views_query, {"_id": False})
-    
+
     isrc_to_track_views = {}
     for track in track_views:
         isrc_to_track_views[track["isrc"]] = track
@@ -178,8 +202,10 @@ def get_view_counts(isrc_list: List[str]) -> Dict:
 ```
 
 #### 2. Cache Integration
+
 **File**: `django_backend/core/cache.py:29-39`
 **Enhancement**: Add error handling and fallback logic
+
 ```python
 def put_kv_entry(self, key, value, ttl=3600):
     """Add TTL parameter for cache expiration"""
@@ -191,13 +217,15 @@ def put_kv_entry(self, key, value, ttl=3600):
 ```
 
 #### 3. Response Formatting
+
 **File**: `django_backend/core/views.py:19-21`
 **Enhancement**: Add consistent error responses
+
 ```python
 def create_response(status: ResponseStatus, message: str, data=None, status_code=200):
     response = JsonResponse({
-        "status": status.value, 
-        "message": message, 
+        "status": status.value,
+        "message": message,
         "data": data
     })
     response.status_code = status_code
@@ -207,16 +235,18 @@ def create_response(status: ResponseStatus, message: str, data=None, status_code
 ### Database Optimization
 
 #### Required Indexes
+
 ```javascript
 // MongoDB indexes for optimal performance
-db.view_counts_playlists.createIndex({"genre_name": 1})
-db.playlists_collection.createIndex({"genre_name": 1})
-db.transformed_playlists_collection.createIndex({"genre_name": 1, "service_name": 1})
-db.raw_playlists_collection.createIndex({"genre_name": 1})
-db.historical_track_views.createIndex({"isrc": 1})
+db.view_counts_playlists.createIndex({ genre_name: 1 });
+db.playlists_collection.createIndex({ genre_name: 1 });
+db.transformed_playlists_collection.createIndex({ genre_name: 1, service_name: 1 });
+db.raw_playlists_collection.createIndex({ genre_name: 1 });
+db.historical_track_views.createIndex({ isrc: 1 });
 ```
 
 #### Connection Configuration
+
 ```python
 # In django_backend/core/__init__.py
 from pymongo import MongoClient
@@ -233,6 +263,7 @@ mongo_client = MongoClient(
 ## Deployment Checklist
 
 ### Pre-Deployment
+
 - [ ] All tests pass locally
 - [ ] Environment variables configured
 - [ ] Database connections tested
@@ -240,6 +271,7 @@ mongo_client = MongoClient(
 - [ ] Security settings reviewed
 
 ### Deployment Steps
+
 - [ ] Deploy to staging environment
 - [ ] Run database migrations (if any)
 - [ ] Test all endpoints in staging
@@ -248,6 +280,7 @@ mongo_client = MongoClient(
 - [ ] Verify production functionality
 
 ### Post-Deployment
+
 - [ ] Monitor application logs
 - [ ] Check API response times
 - [ ] Verify frontend integration
@@ -257,12 +290,14 @@ mongo_client = MongoClient(
 ## Risk Mitigation
 
 ### Rollback Plan
+
 - [ ] Keep old static file API as backup
 - [ ] Implement feature flags for API switching
 - [ ] Monitor error rates closely
 - [ ] Have database backup before changes
 
 ### Performance Considerations
+
 - [ ] Implement rate limiting
 - [ ] Add request timeout handling
 - [ ] Monitor memory usage
@@ -271,12 +306,14 @@ mongo_client = MongoClient(
 ## Success Criteria
 
 ### Technical Metrics
+
 - [ ] All API endpoints return data within 500ms
 - [ ] Error rate < 1% for all endpoints
 - [ ] 99.9% uptime for production deployment
 - [ ] Frontend fully functional with backend API
 
 ### Business Metrics
+
 - [ ] No user-facing functionality lost
 - [ ] Data consistency maintained across all views
 - [ ] Charts and analytics working correctly
@@ -285,7 +322,7 @@ mongo_client = MongoClient(
 ## Timeline Estimate
 
 - **Phase 1 (Data Layer)**: 2-3 days
-- **Phase 2 (Deployment)**: 1-2 days  
+- **Phase 2 (Deployment)**: 1-2 days
 - **Phase 3 (Frontend)**: 1-2 days
 - **Phase 4 (Testing)**: 1-2 days
 

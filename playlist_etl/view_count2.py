@@ -1,10 +1,10 @@
+from pymongo.collection import Collection
+
 from playlist_etl.config import TRACK_COLLECTION, TRACK_PLAYLIST_COLLECTION
 from playlist_etl.helpers import get_logger
 from playlist_etl.models import GenreName, PlaylistType, Track
 from playlist_etl.mongo_db_client import MongoDBClient
 from playlist_etl.services import SpotifyService, YouTubeService
-
-from pymongo.collection import Collection
 
 logger = get_logger(__name__)
 
@@ -38,7 +38,6 @@ class ViewCountTrackProcessor:
 
         for playlist_name in PlaylistType:
             for genre_name in GenreName:
-
                 playlist = playlists.find_one(
                     {"service_name": playlist_name, "genre_name": genre_name}
                 )

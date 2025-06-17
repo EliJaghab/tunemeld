@@ -8,7 +8,13 @@ from playlist_etl.config import (
     TRACK_PLAYLIST_COLLECTION,
 )
 from playlist_etl.helpers import get_logger
-from playlist_etl.models import GenreName, Playlist, Track, TrackRank, TrackSourceServiceName
+from playlist_etl.models import (
+    GenreName,
+    Playlist,
+    Track,
+    TrackRank,
+    TrackSourceServiceName,
+)
 from playlist_etl.mongo_db_client import MongoDBClient
 from playlist_etl.services import AppleMusicService, SpotifyService, YouTubeService
 
@@ -58,13 +64,9 @@ class Transform:
                 raw_playlist = raw_playlists.find_one(
                     {"genre_name": genre_name_value, "service_name": service_name_value}
                 )
-                logger.info(
-                    f"Processing playlist for genre {genre_name_value} from {service_name_value}"
-                )
+                logger.info(f"Processing playlist for genre {genre_name_value} from {service_name_value}")
                 if not raw_playlist:
-                    logger.warning(
-                        f"No raw playlist found for {service_name_value} and genre {genre_name_value}"
-                    )
+                    logger.warning(f"No raw playlist found for {service_name_value} and genre {genre_name_value}")
                     raise ValueError("No raw playlist found")
                 data = json.loads(raw_playlist["data_json"])
                 self.convert_to_track_objects(data, service_name_value, genre_name_value)
@@ -82,10 +84,7 @@ class Transform:
             Playlist(
                 service_name=TrackSourceServiceName(service_name),
                 genre_name=genre_name,
-                tracks=[
-                    TrackRank(isrc=rank.isrc, rank=rank.rank, sources=rank.sources)
-                    for rank in ranks
-                ],
+                tracks=[TrackRank(isrc=rank.isrc, rank=rank.rank, sources=rank.sources) for rank in ranks],
             ).model_dump()
             for (service_name, genre_name), ranks in self.playlist_ranks.items()
         ]
@@ -122,9 +121,7 @@ class Transform:
                 isrc = self.spotify_service.get_isrc(track_name, artist_name)
 
                 if isrc is None:
-                    logger.warning(
-                        f"ISRC not found for Apple Music track: {track_name} by {artist_name}"
-                    )
+                    logger.warning(f"ISRC not found for Apple Music track: {track_name} by {artist_name}")
                     continue
 
                 track = self.get_track(isrc)
@@ -183,9 +180,7 @@ class Transform:
 
             track = self.get_track(isrc)
             track.spotify_track_data.track_name = track_info["name"]
-            track.spotify_track_data.artist_name = ", ".join(
-                artist["name"] for artist in track_info["artists"]
-            )
+            track.spotify_track_data.artist_name = ", ".join(artist["name"] for artist in track_info["artists"])
             track.spotify_track_data.track_url = track_info["external_urls"]["spotify"]
             track.spotify_track_data.album_cover_url = track_info["album"]["images"][0]["url"]
 
@@ -200,10 +195,7 @@ class Transform:
     def set_youtube_urls(self) -> None:
         logger.info("Setting YouTube URLs for all tracks")
         with concurrent.futures.ThreadPoolExecutor(max_workers=MAX_THREADS) as executor:
-            futures = [
-                executor.submit(self.youtube_service.set_track_url, track)
-                for track in self.tracks.values()
-            ]
+            futures = [executor.submit(self.youtube_service.set_track_url, track) for track in self.tracks.values()]
             for future in concurrent.futures.as_completed(futures):
                 future.result()
 
@@ -220,9 +212,7 @@ class Transform:
 
     def set_apple_music_album_cover_url(self, track: Track) -> None:
         if track.apple_music_track_data.track_name:
-            album_cover_url = self.apple_music_service.get_album_cover_url(
-                track.apple_music_track_data.track_url
-            )
+            album_cover_url = self.apple_music_service.get_album_cover_url(track.apple_music_track_data.track_url)
             track.apple_music_track_data.album_cover_url = album_cover_url
 
     def set_spotify_urls(self) -> None:
@@ -261,9 +251,7 @@ class Transform:
             existing_track = track_collection.find_one({"isrc": track["isrc"]})
             if existing_track:
                 merged_track = self.merge_track_data(existing_track, track)
-                track_collection.update_one(
-                    {"isrc": track["isrc"]}, {"$set": merged_track}, upsert=True
-                )
+                track_collection.update_one({"isrc": track["isrc"]}, {"$set": merged_track}, upsert=True)
             else:
                 track_collection.update_one({"isrc": track["isrc"]}, {"$set": track}, upsert=True)
 

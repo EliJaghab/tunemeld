@@ -48,9 +48,7 @@ def get_spotify_client() -> Spotify:
         raise ValueError("Spotify client ID or client secret not found.")
 
     spotify = Spotify(
-        client_credentials_manager=SpotifyClientCredentials(
-            client_id=client_id, client_secret=client_secret
-        )
+        client_credentials_manager=SpotifyClientCredentials(client_id=client_id, client_secret=client_secret)
     )
     return spotify
 
@@ -79,11 +77,11 @@ def insert_or_update_kv_data_to_mongo(client, collection_name, key, value):
 
     if existing_document:
         update_data = {"key": key, "value": value, "update_timestamp": datetime.now(timezone.utc)}
-        result = collection.replace_one({"key": key}, update_data)
+        collection.replace_one({"key": key}, update_data)
         logger.info(f"KV data updated for key: {key}")
     else:
         insert_data = {"key": key, "value": value, "insert_timestamp": datetime.now(timezone.utc)}
-        result = collection.insert_one(insert_data)
+        collection.insert_one(insert_data)
         logger.info(f"KV data inserted with key: {key}")
 
 
@@ -97,9 +95,7 @@ def read_cache_from_mongo(mongo_client, collection_name):
 
 
 def update_cache_in_mongo(mongo_client, collection_name, key, value):
-    logger.info(
-        f"Updating cache in collection: {collection_name} for key: {key} with value: {value}"
-    )
+    logger.info(f"Updating cache in collection: {collection_name} for key: {key} with value: {value}")
     db = mongo_client[PLAYLIST_ETL_COLLECTION_NAME]
     collection = db[collection_name]
     collection.replace_one({"key": key}, {"key": key, "value": value}, upsert=True)
@@ -258,9 +254,7 @@ class CacheManager:
 
     def set(self, key: str, value: Any) -> None:
         self._validate_cache_entry(key, value)
-        logger.info(
-            f"Setting cache for key: {key} with value: {value} in collection: {self.collection_name}"
-        )
+        logger.info(f"Setting cache for key: {key} with value: {value} in collection: {self.collection_name}")
         self.cache[key] = value
         self.mongo_client.get_collection(self.collection_name).update_one(
             {"key": key},
@@ -273,10 +267,7 @@ def overwrite_collection(client, collection_name: str, documents: list[dict]) ->
     clear_collection(client, collection_name)
 
     with ThreadPoolExecutor() as executor:
-        futures = [
-            executor.submit(insert_or_update_data_to_mongo, client, collection_name, doc)
-            for doc in documents
-        ]
+        futures = [executor.submit(insert_or_update_data_to_mongo, client, collection_name, doc) for doc in documents]
         for future in futures:
             future.result()
 
