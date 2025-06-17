@@ -33,7 +33,7 @@ jobs:
         run: |
           source venv/bin/activate
           make prod
-      
+
       - name: Invalidate Cache
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}

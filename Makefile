@@ -3,6 +3,9 @@
 	aggregate \
 	view_count \
 	format \
+	format-js \
+	format-check \
+	clean-repo \
 	lint \
 	fix \
 	pull_push \
@@ -16,6 +19,8 @@
 	test-all \
 	test-coverage \
 	test-ci \
+	test-header-art \
+	test-visual \
 	setup_env \
 	activate \
 	install_deps \
@@ -26,7 +31,8 @@
 	build_locally \
 	setup_backend_env \
 	serve \
-	serve-frontend
+	serve-frontend \
+	serve-backend
 
 PROJECT_ROOT := $(shell pwd)
 VENV := $(PROJECT_ROOT)/venv
@@ -69,8 +75,27 @@ historical_view_count:
 	python playlist_etl/historical_view_count.py
 
 format: setup_env
-	@echo "Running ruff to lint and format code..."
-	source venv/bin/activate && ruff check --fix . && ruff format .
+	@echo "Running ruff to lint and format code aggressively..."
+	source venv/bin/activate && ruff check --fix --unsafe-fixes . && ruff format .
+	@echo "Formatting JavaScript files with Prettier..."
+	npx prettier --write "docs/**/*.js"
+
+format-js:
+	@echo "Formatting JavaScript files with Prettier..."
+	npx prettier --write "docs/**/*.js"
+
+format-check:
+	@echo "Checking code formatting..."
+	source venv/bin/activate && ruff check . && ruff format --check .
+	@echo "Checking JavaScript formatting..."
+	npx prettier --check "docs/**/*.js"
+
+clean-repo: setup_env
+	@echo "🧹 Cleaning up repository with aggressive formatting..."
+	source venv/bin/activate && ruff check --fix --unsafe-fixes .
+	source venv/bin/activate && ruff format .
+	npx prettier --write "docs/**/*.js" "docs/**/*.html" "docs/**/*.css" "docs/**/*.md"
+	@echo "✅ Repository cleaned and formatted!"
 
 pull_push: setup_env
 	@git pull --rebase
@@ -157,3 +182,20 @@ serve:
 	@echo "📍 Frontend: http://localhost:8080"
 	@echo "🛑 Press Ctrl+C to stop"
 	@cd docs && python -m http.server 8080
+
+serve-backend:
+	@echo "🚀 Starting Django backend server..."
+	@echo "📍 Backend API: http://localhost:8000"
+	@echo "🛑 Press Ctrl+C to stop"
+	@cd django_backend && python manage.py runserver
+
+test-header-art:
+	@echo "🧪 Testing header art functionality..."
+	@if [ ! -f scripts/verify-header-art.js ]; then echo "❌ Puppeteer scripts not found. Run setup first."; exit 1; fi
+	@node scripts/verify-header-art.js http://localhost:8000
+
+test-visual:
+	@echo "📸 Running visual tests..."
+	@if [ ! -f scripts/verify-header-art.js ]; then echo "❌ Puppeteer scripts not found. Run setup first."; exit 1; fi
+	@node scripts/verify-header-art.js http://localhost:8000
+	@node scripts/responsive-screenshots.js http://localhost:8000

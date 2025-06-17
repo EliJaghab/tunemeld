@@ -1,5 +1,4 @@
 import collections
-from typing import Dict, List
 
 from extract import PLAYLIST_GENRES
 from helpers import set_secrets
@@ -62,7 +61,7 @@ def consolidate_tracks(tracks_by_isrc):
     return consolidated_tracks
 
 
-def read_transformed_data_from_mongo(client, genre: str) -> List[Dict]:
+def read_transformed_data_from_mongo(client, genre: str) -> list[dict]:
     print(f"Reading transformed data for genre: {genre} from MongoDB...")
     data = read_data_from_mongo(client, TRANSFORMED_DATA_COLLECTION)
     filtered_data = [doc for doc in data if doc["genre_name"] == genre]
@@ -88,7 +87,9 @@ if __name__ == "__main__":
             "genre_name": genre,
             "tracks": consolidated_tracks,
         }
-        insert_or_update_data_to_mongo(mongo_client, AGGREGATED_DATA_COLLECTION, document)
+        insert_or_update_data_to_mongo(
+            mongo_client, AGGREGATED_DATA_COLLECTION, document
+        )
         print(f"Aggregation and consolidation completed for genre: {genre}.")
 
     clear_collection(mongo_client, VIEW_COUNTS_COLLECTION)

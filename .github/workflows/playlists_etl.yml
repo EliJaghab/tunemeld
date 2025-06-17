@@ -52,7 +52,7 @@ jobs:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CF_ZONE_ID: ${{ secrets.CF_ZONE_ID }}
         run: make invalidate_cache
-      
+
       - name: Run view counts
         env:
           MONGO_URI: ${{ secrets.MONGO_URI }}

@@ -3,7 +3,6 @@ import os
 from collections import defaultdict
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime
-from typing import Dict, List
 
 import requests
 from requests.exceptions import RequestException
@@ -16,7 +15,6 @@ from playlist_etl.utils import (
     Spotify,
     WebDriverManager,
     collection_is_empty,
-    get_logger,
     get_mongo_client,
     get_spotify_client,
     insert_or_update_data_to_mongo,
@@ -29,26 +27,28 @@ AGGREGATED_DATA_COLLECTION = "aggregated_playlists"
 VIEW_COUNTS_COLLECTION = "view_counts_playlists"
 CURRENT_TIMESTAMP = datetime.now().isoformat()
 SERVICE_NAMES = ["Spotify", "Youtube"]
-SPOTIFY_VIEW_COUNT_XPATH = (
-    '(//*[contains(concat(" ", @class, " "), concat(" ", "w1TBi3o5CTM7zW1EB3Bm", " "))])[4]'
-)
+SPOTIFY_VIEW_COUNT_XPATH = '(//*[contains(concat(" ", @class, " "), concat(" ", "w1TBi3o5CTM7zW1EB3Bm", " "))])[4]'
 SPOTIFY_ERROR_COUNT = 0
 SPOTIFY_ERROR_THRESHOLD = 5
 
 
 def initialize_new_view_count_playlists(mongo_client: MongoClient) -> None:
     if collection_is_empty(VIEW_COUNTS_COLLECTION, mongo_client):
-        aggregated_playlists = read_data_from_mongo(mongo_client, AGGREGATED_DATA_COLLECTION)
+        aggregated_playlists = read_data_from_mongo(
+            mongo_client, AGGREGATED_DATA_COLLECTION
+        )
         for playlist in aggregated_playlists:
-            insert_or_update_data_to_mongo(mongo_client, VIEW_COUNTS_COLLECTION, playlist)
+            insert_or_update_data_to_mongo(
+                mongo_client, VIEW_COUNTS_COLLECTION, playlist
+            )
 
 
 def create_or_update_track(
-    track: Dict,
+    track: dict,
     service_name: str,
     current_view_count: int,
     current_timestamp: str,
-) -> Dict:
+) -> dict:
     if "view_count_data_json" not in track:
         track["view_count_data_json"] = defaultdict(dict)
 
@@ -66,22 +66,26 @@ def create_or_update_track(
 
 
 def update_service_view_count(
-    track: Dict,
+    track: dict,
     service_name: str,
     spotify_client: Spotify,
     mongo_client: MongoClient,
     webdriver_manager: WebDriverManager,
-) -> Dict:
+) -> dict:
     service_url_key = f"{service_name}_url".lower()
     if service_url_key not in track or not track[service_url_key]:
-        track[service_url_key] = get_service_url(service_name, track, spotify_client, mongo_client)
+        track[service_url_key] = get_service_url(
+            service_name, track, spotify_client, mongo_client
+        )
 
     current_view_count = get_view_count(track, service_name, webdriver_manager)
-    return create_or_update_track(track, service_name, current_view_count, CURRENT_TIMESTAMP)
+    return create_or_update_track(
+        track, service_name, current_view_count, CURRENT_TIMESTAMP
+    )
 
 
 def update_view_counts(
-    playlists: List[Dict],
+    playlists: list[dict],
     mongo_client: MongoClient,
     webdriver_manager: WebDriverManager,
     spotify_client: Spotify,
@@ -127,7 +131,9 @@ def get_service_url(
             raise ValueError("Unexpected service name")
 
 
-def get_view_count(track: dict, service_name: str, webdriver_manager: WebDriverManager) -> int:
+def get_view_count(
+    track: dict, service_name: str, webdriver_manager: WebDriverManager
+) -> int:
     match service_name:
         case "Spotify":
             return get_spotify_track_view_count(track["spotify_url"], webdriver_manager)
@@ -141,10 +147,11 @@ def get_spotify_track_view_count(url: str, webdriver_manager: WebDriverManager) 
     global SPOTIFY_ERROR_COUNT, SPOTIFY_ERROR_THRESHOLD
     try:
         logging.info(SPOTIFY_VIEW_COUNT_XPATH)
-        play_count_info = webdriver_manager.find_element_by_xpath(url, SPOTIFY_VIEW_COUNT_XPATH)
+        play_count_info = webdriver_manager.find_element_by_xpath(
+            url, SPOTIFY_VIEW_COUNT_XPATH
+        )
 
         if play_count_info == "Element not found on the page":
-
             if SPOTIFY_ERROR_COUNT == SPOTIFY_ERROR_THRESHOLD:
                 raise ValueError("Too many spotify errors, investigate")
 
@@ -164,14 +171,16 @@ def get_spotify_track_view_count(url: str, webdriver_manager: WebDriverManager) 
     raise ValueError(f"Could not find play count for {url}")
 
 
-@retry(wait=wait_exponential(multiplier=1, min=4, max=10), stop=stop_after_attempt(3), reraise=True)
+@retry(
+    wait=wait_exponential(multiplier=1, min=4, max=10),
+    stop=stop_after_attempt(3),
+    reraise=True,
+)
 def get_youtube_track_view_count(youtube_url: str) -> int:
     video_id = youtube_url.split("v=")[-1]
 
     api_key = os.getenv("GOOGLE_API_KEY")
-    youtube_api_url = (
-        f"https://www.googleapis.com/youtube/v3/videos?part=statistics&id={video_id}&key={api_key}"
-    )
+    youtube_api_url = f"https://www.googleapis.com/youtube/v3/videos?part=statistics&id={video_id}&key={api_key}"
 
     try:
         response = requests.get(youtube_api_url)
@@ -188,7 +197,9 @@ def get_youtube_track_view_count(youtube_url: str) -> int:
     except RequestException as e:
         logging.error(f"Request failed: {e}")
         if response.status_code == 403 and "quotaExceeded" in response.text:
-            raise ValueError(f"Quota exceeded: Could not get view count for {youtube_url}")
+            raise ValueError(
+                f"Quota exceeded: Could not get view count for {youtube_url}"
+            )
         raise ValueError(f"Failed to retrieve view count for {youtube_url}: {e}")
     except ValueError as e:
         logging.error(f"Value error: {e}")
@@ -217,4 +228,6 @@ if __name__ == "__main__":
     spotify_client = get_spotify_client()
     view_counts_playlists = read_data_from_mongo(mongo_client, VIEW_COUNTS_COLLECTION)
     webdriver_manager = WebDriverManager(use_proxy=False)
-    update_view_counts(view_counts_playlists, mongo_client, webdriver_manager, spotify_client)
+    update_view_counts(
+        view_counts_playlists, mongo_client, webdriver_manager, spotify_client
+    )

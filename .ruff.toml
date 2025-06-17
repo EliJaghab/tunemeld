@@ -1,0 +1,41 @@
+# Exclude Jupyter notebooks and common non-Python directories
+exclude = [
+    "*.ipynb",
+    "node_modules",
+    "venv",
+    ".git",
+    "__pycache__",
+    "staticfiles",
+    "build",
+    "dist"
+]
+
+# Set line length to 120 characters (more reasonable for modern development)
+line-length = 120
+
+# Enforce strict linting rules
+[lint]
+select = [
+    "E",      # pycodestyle errors
+    "W",      # pycodestyle warnings
+    "F",      # pyflakes
+    "I",      # isort
+    "N",      # pep8-naming
+    "UP",     # pyupgrade
+    "C4",     # flake8-comprehensions
+    "B",      # flake8-bugbear
+    "A",      # flake8-builtins
+    "TID252", # ban relative imports
+    "SIM",    # flake8-simplify
+    "Q",      # flake8-quotes
+]
+
+ignore = [
+    "COM812", # trailing-comma-missing (conflicts with formatter)
+    "ISC001", # single-line-implicit-string-concatenation (conflicts with formatter)
+]
+
+# Use double quotes for strings and space indentation
+[format]
+quote-style = "double"
+indent-style = "space"

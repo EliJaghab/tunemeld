@@ -60,15 +60,11 @@ class Track:
 
     def set_isrc(self, spotify_client, mongo_client):
         if not self.isrc:
-            self.isrc = get_isrc_from_spotify_api(
-                self.track_name, self.artist_name, spotify_client, mongo_client
-            )
+            self.isrc = get_isrc_from_spotify_api(self.track_name, self.artist_name, spotify_client, mongo_client)
 
     def set_youtube_url(self, mongo_client):
         if not self.youtube_url:
-            self.youtube_url = get_youtube_url_by_track_and_artist_name(
-                self.track_name, self.artist_name, mongo_client
-            )
+            self.youtube_url = get_youtube_url_by_track_and_artist_name(self.track_name, self.artist_name, mongo_client)
 
     def set_apple_music_album_cover_url(self, mongo_client):
         if not self.album_cover_url:
@@ -192,9 +188,7 @@ def get_isrc_from_spotify_api(track_name, artist_name, spotify_client, mongo_cli
             update_cache_in_mongo(mongo_client, ISRC_CACHE_COLLECTION, cache_key, isrc)
             return isrc
 
-    logger.info(
-        f"No track found on Spotify using queries: {queries} for {track_name} by {artist_name}"
-    )
+    logger.info(f"No track found on Spotify using queries: {queries} for {track_name} by {artist_name}")
     return None
 
 
@@ -208,9 +202,7 @@ def get_youtube_url_by_track_and_artist_name(track_name, artist_name, mongo_clie
     query = f"{track_name} {artist_name}"
     api_key = os.getenv("GOOGLE_API_KEY")
 
-    youtube_search_url = (
-        f"https://www.googleapis.com/youtube/v3/search?part=snippet&q={query}&key={api_key}"
-    )
+    youtube_search_url = f"https://www.googleapis.com/youtube/v3/search?part=snippet&q={query}&key={api_key}"
     response = requests.get(youtube_search_url)
 
     if response.status_code == 200:
@@ -219,12 +211,8 @@ def get_youtube_url_by_track_and_artist_name(track_name, artist_name, mongo_clie
             video_id = data["items"][0]["id"].get("videoId")
             if video_id:
                 youtube_url = f"https://www.youtube.com/watch?v={video_id}"
-                logger.info(
-                    f"Updating YouTube cache for {track_name} by {artist_name} with URL {youtube_url}"
-                )
-                update_cache_in_mongo(
-                    mongo_client, YOUTUBE_CACHE_COLLECTION, cache_key, youtube_url
-                )
+                logger.info(f"Updating YouTube cache for {track_name} by {artist_name} with URL {youtube_url}")
+                update_cache_in_mongo(mongo_client, YOUTUBE_CACHE_COLLECTION, cache_key, youtube_url)
                 return youtube_url
         logger.info(f"No video found for {track_name} by {artist_name}")
         return None
@@ -237,9 +225,7 @@ def get_youtube_url_by_track_and_artist_name(track_name, artist_name, mongo_clie
 
 def get_apple_music_album_cover(url_link, mongo_client):
     cache_key = url_link
-    album_cover_cache = read_cache_from_mongo(
-        mongo_client, APPLE_MUSIC_ALBUM_COVER_CACHE_COLLECTION
-    )
+    album_cover_cache = read_cache_from_mongo(mongo_client, APPLE_MUSIC_ALBUM_COVER_CACHE_COLLECTION)
 
     if cache_key in album_cover_cache:
         return album_cover_cache[cache_key]
@@ -290,10 +276,7 @@ def transform_playlists(mongo_client):
 
         logger.info("Setting ISRCs for all tracks")
         with concurrent.futures.ThreadPoolExecutor(max_workers=MAX_THREADS) as executor:
-            futures = [
-                executor.submit(track.set_isrc, spotify_client, mongo_client)
-                for track in all_tracks
-            ]
+            futures = [executor.submit(track.set_isrc, spotify_client, mongo_client) for track in all_tracks]
             concurrent.futures.wait(futures)
 
         logger.info("Setting YouTube URLs for all tracks")
@@ -311,25 +294,21 @@ def transform_playlists(mongo_client):
             concurrent.futures.wait(futures)
 
         logger.info(f"Processing tracks by source and genre for {genre}")
-        for source in SERVICE_CONFIGS.keys():
+        for source in SERVICE_CONFIGS:
             process_tracks(all_tracks, source, genre, mongo_client)
 
 
 def process_tracks(tracks, source_name, genre, mongo_client):
     logger.info(f"Processing {source_name} tracks for genre {genre}")
     filtered_tracks = [
-        track
-        for track in tracks
-        if track.source_name.lower() == source_name.lower() and track.genre_name == genre
+        track for track in tracks if track.source_name.lower() == source_name.lower() and track.genre_name == genre
     ]
     if not filtered_tracks:
         logger.info(f"No tracks found for {source_name} in genre {genre}")
         return
 
     sorted_tracks = sorted(filtered_tracks, key=lambda x: x.rank)
-    logger.info(
-        f"Filtered and sorted {len(filtered_tracks)} tracks for {source_name} in genre {genre}"
-    )
+    logger.info(f"Filtered and sorted {len(filtered_tracks)} tracks for {source_name} in genre {genre}")
     playlist_url = SERVICE_CONFIGS[source_name]["links"][genre]
     document = {
         "service_name": source_name,

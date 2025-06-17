@@ -1,18 +1,18 @@
 .player_content {
-    display: none;
-    width: 100%;
+  display: none;
+  width: 100%;
 }
 
 #service-player-placeholder {
-    width: 100%;
-    border-radius: 5px;
+  width: 100%;
+  border-radius: 5px;
 }
 
 #close-player-button {
-    display: none;
+  display: none;
 }
 
-.player_content iframe, 
+.player_content iframe,
 #service-player-placeholder iframe {
-    border-radius: 10px; 
+  border-radius: 10px;
 }
