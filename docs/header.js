@@ -1,4 +1,4 @@
-import { API_BASE_URL } from './config.js';
+import { DJANGO_API_BASE_URL } from './config.js';
 
 export function showSkeletonLoaders() {
   document.querySelectorAll('.skeleton, .skeleton-text').forEach(el => {
@@ -16,12 +16,16 @@ export function hideSkeletonLoaders() {
 
 export async function fetchAndDisplayHeaderArt(genre) {
   try {
-    const response = await fetch(`${API_BASE_URL}/api/header-art?genre=${genre}`);
+    const response = await fetch(`${DJANGO_API_BASE_URL}/header-art/${genre}`);
     if (!response.ok) {
       throw new Error(`Failed to fetch header art. Status: ${response.status}`);
     }
-    const data = await response.json();
-    displayHeaderArt(data);
+    const responseData = await response.json();
+    if (responseData.status === 'success' && responseData.data) {
+      displayHeaderArt(responseData.data);
+    } else {
+      throw new Error(responseData.message || 'Failed to fetch header art data');
+    }
   } catch (error) {
     console.error('Error fetching header art:', error);
   }
