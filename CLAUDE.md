@@ -83,10 +83,19 @@ make test-integration
 # Run tests with coverage
 make test-coverage
 
+# Test playlist ETL pipeline (simulates playlist_etl2 GitHub workflow)
+make test-playlist-etl
+
 # Visual/UI testing
 make test-header-art         # Test header art functionality
 make test-visual             # Full visual regression tests
 ```
+
+**Test Environment:**
+
+- All tests use `.env.test` with fake API keys (safe to commit)
+- No external API calls or costs incurred during testing
+- Comprehensive mocking of Spotify, YouTube, Apple Music, and RapidAPI services
 
 **Visual Testing:** Screenshots saved to `screenshots/` directory (gitignored).
 

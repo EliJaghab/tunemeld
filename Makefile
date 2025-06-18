@@ -121,31 +121,43 @@ invalidate_cache:
 
 test: setup_env
 	@echo "Running all tests..."
+	@set -o allexport; source .env.test; set +o allexport; \
 	source venv/bin/activate && python -m pytest tests/ -v
 
 test-unit: setup_env
 	@echo "Running unit tests only..."
+	@set -o allexport; source .env.test; set +o allexport; \
 	source venv/bin/activate && python -m pytest tests/ -v -m "not integration and not slow"
 
 test-integration: setup_env
 	@echo "Running integration tests..."
+	@set -o allexport; source .env.test; set +o allexport; \
 	source venv/bin/activate && python -m pytest tests/ -v -m "integration and not slow"
 
 test-slow: setup_env
 	@echo "Running slow tests..."
+	@set -o allexport; source .env.test; set +o allexport; \
 	source venv/bin/activate && python -m pytest tests/ -v -m "slow"
 
 test-all: setup_env
 	@echo "Running all tests including slow ones..."
+	@set -o allexport; source .env.test; set +o allexport; \
 	source venv/bin/activate && python -m pytest tests/ -v -m "integration or slow or (not integration and not slow)"
 
 test-coverage: setup_env
 	@echo "Running tests with coverage report..."
+	@set -o allexport; source .env.test; set +o allexport; \
 	source venv/bin/activate && python -m pytest tests/ -v --cov=playlist_etl --cov-report=html --cov-report=term-missing
 
 test-ci: setup_env
 	@echo "Running tests as they would run in CI..."
+	@set -o allexport; source .env.test; set +o allexport; \
 	source venv/bin/activate && python -m pytest tests/ -v --tb=short --cov=playlist_etl --cov-report=xml -m "not slow"
+
+test-playlist-etl: setup_env
+	@echo "Testing playlist ETL pipeline (simulates playlist_etl2 workflow)..."
+	@set -o allexport; source .env.test; set +o allexport; \
+	source venv/bin/activate && python playlist_etl/main.py
 
 lint: setup_env
 	@echo "Running linting checks..."
