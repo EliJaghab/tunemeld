@@ -186,8 +186,9 @@ build_locally:
 serve-frontend:
 	@echo "🌐 Starting TuneMeld frontend server..."
 	@echo "📍 Website will be available at: http://localhost:8080"
+	@echo "🔄 Cache disabled for development"
 	@echo "🛑 Press Ctrl+C to stop the server"
-	@cd docs && python -m http.server 8080
+	@python scripts/dev-server.py
 
 serve:
 	@echo "🌐 Starting TuneMeld website..."
