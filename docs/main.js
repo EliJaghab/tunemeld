@@ -2,7 +2,8 @@ import { loadTitleContent } from "./title.js";
 import { setupSortButtons } from "./playlist.js";
 import { setupGenreSelector, setupViewCountTypeSelector, updateGenreData } from "./selectors.js";
 import { setupBodyClickListener, setupClosePlayerButton } from "./servicePlayer.js";
-import { initializeTosPrivacyOverlay } from "./tosPrivacy.js"; // Import the new file
+import { initializeTosPrivacyOverlay } from "./tosPrivacy.js";
+import { stateManager } from "./StateManager.js";
 
 document.addEventListener("DOMContentLoaded", initializeApp);
 
@@ -14,8 +15,10 @@ function initializeApp() {
     const genreSelector = document.getElementById("genre-selector");
     const viewCountTypeSelector = document.getElementById("view-count-type-selector");
 
+    stateManager.initializeFromDOM();
+
     let currentGenre = genreSelector.value || "pop";
-    let viewCountType = viewCountTypeSelector.value || "total-view-count";
+    let viewCountType = stateManager.getViewCountType();
 
     updateGenreData(currentGenre, viewCountType, true);
 
