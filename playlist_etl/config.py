@@ -20,5 +20,15 @@ RANK_PRIORITY = [
 # Database configuration - imported from centralized config
 # PLAYLIST_ETL_DATABASE, RAW_PLAYLISTS_COLLECTION, etc. are now imported
 
-# Performance configuration - imported from centralized config
-# SPOTIFY_ERROR_THRESHOLD, SPOTIFY_VIEW_COUNT_XPATH are now imported
+# Database Configuration
+PLAYLIST_ETL_DATABASE = "playlist_etl"
+
+# Database Collections
+RAW_PLAYLISTS_COLLECTION = "raw_playlists"
+TRACK_COLLECTION = "tracks"
+TRACK_PLAYLIST_COLLECTION = "track_playlists"
+ISRC_CACHE_COLLECTION = "isrc_cache"
+YOUTUBE_URL_CACHE_COLLECTION = "youtube_url_cache"
+
+# Performance configuration
+SPOTIFY_VIEW_COUNT_XPATH = "//span[@class='Type__TypeElement-sc-goli3j-0 fZDcWX']"

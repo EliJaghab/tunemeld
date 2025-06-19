@@ -8,15 +8,15 @@ from unittest.mock import Mock, patch
 
 import pytest
 
-from playlist_etl.aggregate2 import Aggregate
+from playlist_etl.aggregate import Aggregate
 from playlist_etl.config import (
     RAW_PLAYLISTS_COLLECTION,
     TRACK_COLLECTION,
     TRACK_PLAYLIST_COLLECTION,
 )
 from playlist_etl.extract import RapidAPIClient, run_extraction
-from playlist_etl.transform2 import Transform
-from playlist_etl.view_count2 import ViewCountTrackProcessor
+from playlist_etl.transform import Transform
+from playlist_etl.view_count import ViewCountTrackProcessor
 
 
 class TestETLPipelineIntegration:
@@ -59,13 +59,7 @@ class TestETLPipelineIntegration:
             def mock_find(query=None):
                 if query is None:
                     return iter(self.pipeline_data[name])
-                return iter(
-                    [
-                        doc
-                        for doc in self.pipeline_data[name]
-                        if all(doc.get(k) == v for k, v in query.items())
-                    ]
-                )
+                return iter([doc for doc in self.pipeline_data[name] if all(doc.get(k) == v for k, v in query.items())])
 
             def mock_insert_many(docs):
                 self.pipeline_data[name].extend(docs)
@@ -86,12 +80,8 @@ class TestETLPipelineIntegration:
             return collection
 
         mock_client.get_collection = mock_get_collection
-        mock_client.get_collection_count = lambda col: len(
-            self.pipeline_data.get(col.collection_name, [])
-        )
-        mock_client.overwrite_collection = lambda name, docs: self.pipeline_data.update(
-            {name: docs}
-        )
+        mock_client.get_collection_count = lambda col: len(self.pipeline_data.get(col.collection_name, []))
+        mock_client.overwrite_collection = lambda name, docs: self.pipeline_data.update({name: docs})
         mock_client.update_track = Mock()
 
         return mock_client
@@ -251,9 +241,7 @@ class TestETLPipelineIntegration:
         for service_name in ["Spotify", "AppleMusic", "SoundCloud"]:
             with patch("playlist_etl.extract.DEBUG_MODE", False):
                 with patch("playlist_etl.extract.WebDriverManager") as mock_webdriver:
-                    mock_webdriver.return_value.find_element_by_xpath.return_value = (
-                        "https://test.m3u8"
-                    )
+                    mock_webdriver.return_value.find_element_by_xpath.return_value = "https://test.m3u8"
                     run_extraction(mock_mongo_client, client, service_name, "dance")
 
         # Verify extraction results
@@ -283,9 +271,7 @@ class TestETLPipelineIntegration:
 
         # Prepare mock data in the format Transform expects
         for playlist in raw_playlists:
-            playlist["data_json"] = json.dumps(
-                sample_extraction_responses[playlist["service_name"]]
-            )
+            playlist["data_json"] = json.dumps(sample_extraction_responses[playlist["service_name"]])
 
         # Run transformation
         transform = Transform(
@@ -306,9 +292,7 @@ class TestETLPipelineIntegration:
         assert len(tracks) > 0, "Transform should create track objects"
         assert len(track_playlists) > 0, "Transform should create playlist rankings"
 
-        print(
-            f"✅ Transformation: Created {len(tracks)} tracks, {len(track_playlists)} playlist rankings"
-        )
+        print(f"✅ Transformation: Created {len(tracks)} tracks, {len(track_playlists)} playlist rankings")
 
         # === PHASE 3: AGGREGATION ===
         print("\n🔄 Phase 3: Testing Aggregation...")
@@ -408,12 +392,8 @@ class TestETLPipelineIntegration:
 
         # Verify genre distribution
         for genre in genres:
-            genre_playlists = [
-                p for p in self.pipeline_data[RAW_PLAYLISTS_COLLECTION] if p["genre_name"] == genre
-            ]
-            assert len(genre_playlists) == len(
-                services
-            ), f"Expected {len(services)} playlists for {genre}"
+            genre_playlists = [p for p in self.pipeline_data[RAW_PLAYLISTS_COLLECTION] if p["genre_name"] == genre]
+            assert len(genre_playlists) == len(services), f"Expected {len(services)} playlists for {genre}"
 
         print(
             f"✅ Multi-Genre Integration: Successfully processed {total_playlists} playlists across {len(genres)} genres"
@@ -488,11 +468,7 @@ class TestETLPipelineIntegration:
         aggregate.aggregate()
 
         # Verify data consistency
-        aggregated = [
-            p
-            for p in self.pipeline_data[TRACK_PLAYLIST_COLLECTION]
-            if p.get("service_name") == "Aggregate"
-        ]
+        aggregated = [p for p in self.pipeline_data[TRACK_PLAYLIST_COLLECTION] if p.get("service_name") == "Aggregate"]
 
         if aggregated and aggregated[0].get("tracks"):
             aggregate_track = aggregated[0]["tracks"][0]
@@ -540,9 +516,7 @@ class TestPipelinePerformance:
                 playlist = {
                     "service_name": service,
                     "genre_name": genre,
-                    "data_json": json.dumps(
-                        {"items" if service == "Spotify" else "tracks": tracks_data}
-                    ),
+                    "data_json": json.dumps({"items" if service == "Spotify" else "tracks": tracks_data}),
                 }
                 mock_mongo_client.pipeline_data[RAW_PLAYLISTS_COLLECTION].append(playlist)
 
@@ -562,9 +536,7 @@ class TestPipelinePerformance:
         print(f"  - Throughput: {total_tracks/processing_time:.1f} tracks/second")
 
         # Performance assertions
-        assert (
-            processing_time < 30
-        ), f"Pipeline should complete in under 30 seconds, took {processing_time:.2f}s"
+        assert processing_time < 30, f"Pipeline should complete in under 30 seconds, took {processing_time:.2f}s"
         assert total_tracks / processing_time > 10, "Should process at least 10 tracks per second"
 
         print("✅ Performance: Pipeline meets performance benchmarks")
