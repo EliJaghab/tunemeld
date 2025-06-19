@@ -239,10 +239,12 @@ class TestETLPipelineIntegration:
         client.api_key = "test_key"
 
         for service_name in ["Spotify", "AppleMusic", "SoundCloud"]:
-            with patch("playlist_etl.extract.DEBUG_MODE", False):
-                with patch("playlist_etl.extract.WebDriverManager") as mock_webdriver:
-                    mock_webdriver.return_value.find_element_by_xpath.return_value = "https://test.m3u8"
-                    run_extraction(mock_mongo_client, client, service_name, "dance")
+            with (
+                patch("playlist_etl.extract.DEBUG_MODE", False),
+                patch("playlist_etl.extract.WebDriverManager") as mock_webdriver,
+            ):
+                mock_webdriver.return_value.find_element_by_xpath.return_value = "https://test.m3u8"
+                run_extraction(mock_mongo_client, client, service_name, "dance")
 
         # Verify extraction results
         raw_playlists = self.pipeline_data[RAW_PLAYLISTS_COLLECTION]
@@ -281,9 +283,8 @@ class TestETLPipelineIntegration:
             apple_music_service=mock_apple_music_service,
         )
 
-        with patch("concurrent.futures.ThreadPoolExecutor"):
-            with patch("concurrent.futures.as_completed", return_value=[]):
-                transform.transform()
+        with patch("concurrent.futures.ThreadPoolExecutor"), patch("concurrent.futures.as_completed", return_value=[]):
+            transform.transform()
 
         # Verify transformation results
         tracks = self.pipeline_data[TRACK_COLLECTION]
@@ -396,7 +397,8 @@ class TestETLPipelineIntegration:
             assert len(genre_playlists) == len(services), f"Expected {len(services)} playlists for {genre}"
 
         print(
-            f"✅ Multi-Genre Integration: Successfully processed {total_playlists} playlists across {len(genres)} genres"
+            f"✅ Multi-Genre Integration: Successfully processed {total_playlists} playlists "
+            f"across {len(genres)} genres"
         )
 
     @pytest.mark.integration

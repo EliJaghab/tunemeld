@@ -16,10 +16,10 @@ class TestWebDriverManager:
         manager = WebDriverManager(use_proxy=True)
         yield manager
         # Cleanup
-        try:
-            manager.close_driver()
-        except Exception:
-            pass  # Driver may already be closed
+        from contextlib import suppress
+
+        with suppress(Exception):
+            manager.close_driver()  # Driver may already be closed
 
     @pytest.mark.external_api
     @pytest.mark.slow
@@ -73,10 +73,10 @@ class TestWebDriverManager:
     def test_close_driver_cleanup(self, webdriver_manager):
         """Test that driver cleanup works properly"""
         # Use the driver briefly
-        try:
-            webdriver_manager.find_element_by_xpath("https://example.com", "//title")
-        except Exception:
-            pass  # Don't care if this fails
+        from contextlib import suppress
+
+        with suppress(Exception):
+            webdriver_manager.find_element_by_xpath("https://example.com", "//title")  # Don't care if this fails
 
         # Cleanup should not raise exception
         webdriver_manager.close_driver()
