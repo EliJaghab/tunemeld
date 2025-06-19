@@ -1,0 +1,28 @@
+{
+  "environment": "development",
+  "debug": true,
+  "api": {
+    "django": {
+      "baseUrl": "http://127.0.0.1:8000",
+      "healthUrl": "http://127.0.0.1:8000/health"
+    },
+    "cloudflare": {
+      "baseUrl": "http://127.0.0.1:8787"
+    }
+  },
+  "database": {
+    "mongo": {
+      "uri": "mongodb+srv://elijaghab:GardenCity1!@tunemeld.owgixhk.mongodb.net/",
+      "dbName": "playlist_etl"
+    }
+  },
+  "cors": {
+    "allowedOrigins": ["http://127.0.0.1:5500", "http://localhost:3000", "http://localhost:8080"]
+  },
+  "allowedHosts": ["localhost", "127.0.0.1", "0.0.0.0"],
+  "features": {
+    "useProdBackend": false,
+    "debugMode": false,
+    "noRapid": false
+  }
+}

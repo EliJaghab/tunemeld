@@ -1,0 +1,38 @@
+{
+  "environment": "test",
+  "debug": true,
+  "api": {
+    "django": {
+      "baseUrl": "http://localhost:8000",
+      "healthUrl": "http://localhost:8000/health"
+    }
+  },
+  "database": {
+    "mongo": {
+      "uri": "mongodb://localhost:27017/tunemeld_test",
+      "dbName": "tunemeld_test"
+    }
+  },
+  "cors": {
+    "allowedOrigins": ["http://localhost:3000", "http://127.0.0.1:5500"]
+  },
+  "allowedHosts": ["localhost", "127.0.0.1"],
+  "features": {
+    "useProdBackend": false,
+    "debugMode": true,
+    "noRapid": true
+  },
+  "apiKeys": {
+    "rapidApi": "test_rapidapi_key_123456789",
+    "spotify": {
+      "clientId": "test_spotify_client_id",
+      "clientSecret": "test_spotify_client_secret"
+    },
+    "google": "test_google_api_key_123456789",
+    "cloudflare": {
+      "token": "test_cloudflare_token",
+      "zoneId": "test_zone_id",
+      "accountId": "test_account_id"
+    }
+  }
+}

@@ -1,0 +1,76 @@
+{
+  "ui": {
+    "themes": {
+      "light": {
+        "backgroundColor": "#fff",
+        "textColor": "#333",
+        "linkColor": "teal",
+        "containerBackground": "#f5f5f5",
+        "btnBackground": "#ddd",
+        "btnTextColor": "#333",
+        "overlayBackground": "rgba(255, 255, 255, 0.9)",
+        "overlayTextColor": "#333",
+        "tableHeaderBackground": "#e0e0e0",
+        "tableHeaderTextColor": "#333"
+      },
+      "dark": {
+        "backgroundColor": "#333",
+        "textColor": "#fff",
+        "linkColor": "#ffffff",
+        "containerBackground": "#444",
+        "btnBackground": "#555",
+        "btnTextColor": "#fff",
+        "overlayBackground": "rgba(0, 0, 0, 0.5)",
+        "overlayTextColor": "#fff",
+        "tableHeaderBackground": "#555",
+        "tableHeaderTextColor": "#fff"
+      }
+    },
+    "darkModeHours": {
+      "start": 19,
+      "end": 7
+    },
+    "mobileBreakpoint": 480,
+    "viewCountTypes": [
+      {
+        "id": "total-view-count",
+        "name": "Total Views",
+        "default": true
+      },
+      {
+        "id": "weekly-view-count",
+        "name": "Weekly Views"
+      }
+    ],
+    "defaultSort": {
+      "column": "rank",
+      "order": "asc"
+    }
+  },
+  "external": {
+    "cdnUrls": {
+      "bootstrap": "https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css",
+      "googleFonts": "https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,600&display=swap",
+      "fontAwesome": "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css",
+      "hlsJs": "https://cdn.jsdelivr.net/npm/hls.js@latest",
+      "chartJs": "https://cdn.jsdelivr.net/npm/chart.js"
+    },
+    "googleAds": {
+      "publisherId": "ca-pub-8361030237626890"
+    },
+    "links": {
+      "youtubeTerms": "https://www.youtube.com/t/terms",
+      "googlePrivacy": "https://www.google.com/policies/privacy/",
+      "creatorSoundcloud": "https://soundcloud.com/elijaghab"
+    }
+  },
+  "performance": {
+    "retries": 3,
+    "retryDelay": 8,
+    "spotifyErrorThreshold": 5,
+    "webdriverMemoryThreshold": 75
+  },
+  "selectors": {
+    "spotifyViewCountXpath": "(//*[contains(concat(\" \", @class, \" \"), concat(\" \", \"w1TBi3o5CTM7zW1EB3Bm\", \" \"))])[4]"
+  }
+}

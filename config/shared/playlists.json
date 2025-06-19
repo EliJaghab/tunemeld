@@ -1,0 +1,75 @@
+{
+  "playlists": {
+    "spotify": {
+      "baseUrl": "https://open.spotify.com/playlist/",
+      "playlists": {
+        "country": {
+          "id": "37i9dQZF1DX1lVhptIYRda",
+          "url": "https://open.spotify.com/playlist/37i9dQZF1DX1lVhptIYRda",
+          "name": "Hot Country"
+        },
+        "dance": {
+          "id": "37i9dQZF1DX4dyzvuaRJ0n",
+          "url": "https://open.spotify.com/playlist/37i9dQZF1DX4dyzvuaRJ0n",
+          "name": "Dance Hits"
+        },
+        "pop": {
+          "id": "37i9dQZF1DXcBWIGoYBM5M",
+          "url": "https://open.spotify.com/playlist/37i9dQZF1DXcBWIGoYBM5M",
+          "name": "Today's Top Hits"
+        },
+        "rap": {
+          "id": "37i9dQZF1DX0XUsuxWHRQd",
+          "url": "https://open.spotify.com/playlist/37i9dQZF1DX0XUsuxWHRQd",
+          "name": "RapCaviar"
+        }
+      }
+    },
+    "soundcloud": {
+      "baseUrl": "https://soundcloud.com/",
+      "playlists": {
+        "country": {
+          "url": "https://soundcloud.com/soundcloud-shine/sets/backroads-best-country-now",
+          "name": "Backroads: Best Country Now"
+        },
+        "dance": {
+          "url": "https://soundcloud.com/soundcloud-the-peak/sets/on-the-up-new-edm-hits",
+          "name": "On the Up: New EDM Hits"
+        },
+        "pop": {
+          "url": "https://soundcloud.com/soundcloud-shine/sets/ear-candy-fresh-pop-picks",
+          "name": "Ear Candy: Fresh Pop Picks"
+        },
+        "rap": {
+          "url": "https://soundcloud.com/soundcloud-hustle/sets/drippin-best-rap-right-now",
+          "name": "Drippin': Best Rap Right Now"
+        }
+      }
+    },
+    "appleMusic": {
+      "baseUrl": "https://music.apple.com/us/playlist/",
+      "playlists": {
+        "country": {
+          "id": "pl.87bb5b36a9bd49db8c975607452bfa2b",
+          "url": "https://music.apple.com/us/playlist/todays-country/pl.87bb5b36a9bd49db8c975607452bfa2b",
+          "name": "Today's Country"
+        },
+        "dance": {
+          "id": "pl.6bf4415b83ce4f3789614ac4c3675740",
+          "url": "https://music.apple.com/us/playlist/dancexl/pl.6bf4415b83ce4f3789614ac4c3675740",
+          "name": "danceXL"
+        },
+        "pop": {
+          "id": "pl.5ee8333dbe944d9f9151e97d92d1ead9",
+          "url": "https://music.apple.com/us/playlist/a-list-pop/pl.5ee8333dbe944d9f9151e97d92d1ead9",
+          "name": "A-List Pop"
+        },
+        "rap": {
+          "id": "pl.abe8ba42278f4ef490e3a9fc5ec8e8c5",
+          "url": "https://music.apple.com/us/playlist/rap-life/pl.abe8ba42278f4ef490e3a9fc5ec8e8c5",
+          "name": "Rap Life"
+        }
+      }
+    }
+  }
+}

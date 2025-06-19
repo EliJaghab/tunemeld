@@ -1,13 +1,18 @@
 import os
+import sys
 from pathlib import Path
 
 from dotenv import load_dotenv
 
-environment = os.getenv("RAILWAY_ENVIRONMENT", "development")
+# Add config path
+sys.path.append(str(Path(__file__).parent.parent.parent))
+from config.backend.settings import tunemeld_config
 
+environment = os.getenv("RAILWAY_ENVIRONMENT", "development")
 if environment == "development":
     load_dotenv(".env.dev")
 
+# Environment variables that remain as env vars (secrets)
 MONGO_DATA_API_KEY = os.getenv("MONGO_DATA_API_KEY")
 MONGO_DATA_API_ENDPOINT = os.getenv("MONGO_DATA_API_ENDPOINT")
 MONGO_URI = os.getenv("MONGO_URI")
@@ -19,15 +24,10 @@ CF_API_TOKEN = os.getenv("CF_API_TOKEN")
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-CSRF_TRUSTED_ORIGINS = [
-    "https://www.tunemeld.com",
-    "https://api.tunemeld.com",
-    "https://tunemeld.com",
-]
+# Use centralized configuration for CORS
+CSRF_TRUSTED_ORIGINS = tunemeld_config.get_cors_origins()
 
-SECRET_KEY = os.getenv(
-    "SECRET_KEY", "django-insecure-!^u31q!@ui68(aook0g4w@jw*ei=%bbx1d8em_bm8hxm+6te#0"
-)
+SECRET_KEY = os.getenv("SECRET_KEY", "django-insecure-!^u31q!@ui68(aook0g4w@jw*ei=%bbx1d8em_bm8hxm+6te#0")
 
 DEBUG = True
 

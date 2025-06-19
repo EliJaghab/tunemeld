@@ -1,15 +1,9 @@
-import { DJANGO_API_BASE_URL } from "./config.js";
 import { stateManager } from "./StateManager.js";
+import { apiService } from "./ApiService.js";
 
 export async function fetchAndDisplayLastUpdated(genre) {
   try {
-    const response = await fetch(`${DJANGO_API_BASE_URL}/last-updated/${genre}`);
-    if (!response.ok) {
-      throw new Error(`Failed to fetch last-updated. Status: ${response.status}`);
-    }
-    const responseData = await response.json();
-    // Handle Django's wrapped response format
-    const lastUpdated = responseData.data || responseData;
+    const lastUpdated = await apiService.fetchLastUpdated(genre);
     displayLastUpdated(lastUpdated);
   } catch (error) {
     console.error("Error fetching last updated date:", error);
@@ -45,8 +39,9 @@ export function setupSortButtons() {
 
 export async function updateMainPlaylist(genre, viewCountType) {
   try {
-    const url = `${DJANGO_API_BASE_URL}/playlist-data/${genre}`;
-    await fetchAndDisplayData(url, "main-playlist-data-placeholder", true, viewCountType);
+    const data = await apiService.fetchPlaylistData(genre);
+    playlistData = data;
+    displayData(data, "main-playlist-data-placeholder", true, viewCountType);
   } catch (error) {
     console.error("Error updating main playlist:", error);
   }
@@ -55,14 +50,19 @@ export async function updateMainPlaylist(genre, viewCountType) {
 export async function fetchAndDisplayPlaylists(genre) {
   const services = ["AppleMusic", "SoundCloud", "Spotify"];
   for (const service of services) {
-    await fetchAndDisplayData(
-      `${DJANGO_API_BASE_URL}/service-playlist/${genre}/${service}`,
-      `${service.toLowerCase()}-data-placeholder`
-    );
+    try {
+      const data = await apiService.fetchServicePlaylist(genre, service);
+      displayData(data, `${service.toLowerCase()}-data-placeholder`);
+    } catch (error) {
+      console.error(`Error fetching ${service} playlist:`, error);
+    }
   }
 }
 
+// Note: This function is now deprecated in favor of direct apiService calls
+// Keeping for backward compatibility during migration
 async function fetchAndDisplayData(url, placeholderId, isAggregated = false, viewCountType) {
+  console.warn("fetchAndDisplayData is deprecated. Use apiService methods instead.");
   try {
     const response = await fetch(url);
     if (!response.ok) {

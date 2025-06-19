@@ -1,5 +1,8 @@
 import html
 import os
+
+# Import centralized configuration
+import sys
 from urllib.parse import quote, urlparse
 
 import requests
@@ -14,46 +17,42 @@ from playlist_etl.utils import (
     insert_or_update_data_to_mongo,
 )
 
-PLAYLIST_GENRES = ["country", "dance", "pop", "rap"]
+sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
+from config.backend.settings import tunemeld_config
 
-SERVICE_CONFIGS = {
-    "AppleMusic": {
-        "base_url": "https://apple-music24.p.rapidapi.com/playlist1/",
-        "host": "apple-music24.p.rapidapi.com",
-        "param_key": "url",
-        "playlist_base_url": "https://music.apple.com/us/playlist/",
-        "links": {
-            "country": "https://music.apple.com/us/playlist/todays-country/pl.87bb5b36a9bd49db8c975607452bfa2b",
-            "dance": "https://music.apple.com/us/playlist/dancexl/pl.6bf4415b83ce4f3789614ac4c3675740",
-            "pop": "https://music.apple.com/us/playlist/a-list-pop/pl.5ee8333dbe944d9f9151e97d92d1ead9",
-            "rap": "https://music.apple.com/us/playlist/rap-life/pl.abe8ba42278f4ef490e3a9fc5ec8e8c5",
-        },
-    },
-    "SoundCloud": {
-        "base_url": "https://soundcloud-scraper.p.rapidapi.com/v1/playlist/tracks",
-        "host": "soundcloud-scraper.p.rapidapi.com",
-        "param_key": "playlist",
-        "playlist_base_url": "https://soundcloud.com/",
-        "links": {
-            "country": "https://soundcloud.com/soundcloud-shine/sets/backroads-best-country-now",
-            "dance": "https://soundcloud.com/soundcloud-the-peak/sets/on-the-up-new-edm-hits",
-            "pop": "https://soundcloud.com/soundcloud-shine/sets/ear-candy-fresh-pop-picks",
-            "rap": "https://soundcloud.com/soundcloud-hustle/sets/drippin-best-rap-right-now",
-        },
-    },
-    "Spotify": {
-        "base_url": "https://spotify23.p.rapidapi.com/playlist_tracks/",
-        "host": "spotify23.p.rapidapi.com",
-        "param_key": "id",
-        "playlist_base_url": "https://open.spotify.com/playlist/",
-        "links": {
-            "country": "https://open.spotify.com/playlist/37i9dQZF1DX1lVhptIYRda",
-            "dance": "https://open.spotify.com/playlist/37i9dQZF1DX4dyzvuaRJ0n",
-            "pop": "https://open.spotify.com/playlist/37i9dQZF1DXcBWIGoYBM5M",
-            "rap": "https://open.spotify.com/playlist/37i9dQZF1DX0XUsuxWHRQd",
-        },
-    },
-}
+PLAYLIST_GENRES = tunemeld_config.get_genres()
+
+# Build service configs from centralized configuration
+SERVICE_CONFIGS = {}
+for service_key in ["appleMusic", "soundcloud", "spotify"]:
+    service_config = tunemeld_config.get_service_config(service_key)
+    api_config = tunemeld_config.get_service_api_config(service_key)
+
+    if service_config and api_config:
+        # Map service IDs to the format expected by this module
+        service_name = (
+            service_key.replace("appleMusic", "AppleMusic")
+            .replace("soundcloud", "SoundCloud")
+            .replace("spotify", "Spotify")
+        )
+
+        links = {}
+        for genre in PLAYLIST_GENRES:
+            playlist_url = tunemeld_config.get_playlist_url(service_key, genre)
+            if playlist_url:
+                links[genre] = playlist_url
+
+        SERVICE_CONFIGS[service_name] = {
+            "base_url": api_config.get("baseUrl", ""),
+            "host": api_config.get("host", ""),
+            "param_key": "url"
+            if service_key == "appleMusic"
+            else ("playlist" if service_key == "soundcloud" else "id"),
+            "playlist_base_url": service_config.get("embedUrl", "").replace("/embed/", "/playlist/")
+            if service_key == "spotify"
+            else api_config.get("baseUrl", ""),
+            "links": links,
+        }
 
 DEBUG_MODE = False
 NO_RAPID = False
@@ -154,9 +153,7 @@ class AppleMusicFetcher(Extractor):
         src_attribute = self.webdriver_manager.find_element_by_xpath(url, xpath, attribute="src")
 
         if src_attribute == "Element not found" or "An error occurred" in src_attribute:
-            raise ValueError(
-                f"Could not find amp-ambient-video src attribute for Apple Music {self.genre}"
-            )
+            raise ValueError(f"Could not find amp-ambient-video src attribute for Apple Music {self.genre}")
 
         if src_attribute.endswith(".m3u8"):
             return src_attribute
@@ -190,9 +187,7 @@ class SoundCloudFetcher(Extractor):
         )
 
         playlist_cover_url_tag = doc.find("meta", {"property": "og:image"})
-        self.playlist_cover_url = (
-            playlist_cover_url_tag["content"] if playlist_cover_url_tag else None
-        )
+        self.playlist_cover_url = playlist_cover_url_tag["content"] if playlist_cover_url_tag else None
 
         self.playlist_url = url
 
@@ -202,9 +197,7 @@ class SpotifyFetcher(Extractor):
         super().__init__(client, service_name, genre)
 
     def get_playlist(self, offset=0, limit=100):
-        url = (
-            f"{self.base_url}?{self.param_key}={self.playlist_param}&offset={offset}&limit={limit}"
-        )
+        url = f"{self.base_url}?{self.param_key}={self.playlist_param}&offset={offset}&limit={limit}"
         return get_json_response(url, self.host, self.api_key)
 
     def set_playlist_details(self):
@@ -216,9 +209,7 @@ class SpotifyFetcher(Extractor):
         playlist_name_tag = doc.find("meta", {"property": "og:title"})
         self.playlist_name = playlist_name_tag["content"] if playlist_name_tag else "Unknown"
 
-        description_div = doc.find(
-            lambda tag: tag.name == "div" and "Cover:" in tag.get_text(strip=True)
-        )
+        description_div = doc.find(lambda tag: tag.name == "div" and "Cover:" in tag.get_text(strip=True))
         self.playlist_cover_description_text = (
             description_div.get_text(strip=True).replace("Spotify", " ")
             if description_div
@@ -226,9 +217,7 @@ class SpotifyFetcher(Extractor):
         )
 
         playlist_cover_url_tag = doc.find("meta", {"property": "og:image"})
-        self.playlist_cover_url = (
-            playlist_cover_url_tag["content"] if playlist_cover_url_tag else None
-        )
+        self.playlist_cover_url = playlist_cover_url_tag["content"] if playlist_cover_url_tag else None
 
         self.playlist_url = url
 
@@ -274,8 +263,5 @@ if __name__ == "__main__":
 
     for service_name, config in SERVICE_CONFIGS.items():
         for genre in PLAYLIST_GENRES:
-            logger.info(
-                f"Retrieving {genre} from {service_name} with credential "
-                f"{config['links'][genre]}"
-            )
+            logger.info(f"Retrieving {genre} from {service_name} with credential " f"{config['links'][genre]}")
             run_extraction(mongo_client, client, service_name, genre)

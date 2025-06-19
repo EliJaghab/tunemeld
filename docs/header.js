@@ -1,4 +1,4 @@
-import { DJANGO_API_BASE_URL } from "./config.js";
+import { apiService } from "./ApiService.js";
 
 export function showSkeletonLoaders() {
   document.querySelectorAll(".skeleton, .skeleton-text").forEach(el => {
@@ -16,14 +16,7 @@ export function hideSkeletonLoaders() {
 
 export async function fetchAndDisplayHeaderArt(genre) {
   try {
-    const response = await fetch(`${DJANGO_API_BASE_URL}/header-art/${genre}`);
-    if (!response.ok) {
-      throw new Error(`Failed to fetch header art. Status: ${response.status}`);
-    }
-    const responseData = await response.json();
-
-    // Handle Django's wrapped response format
-    const data = responseData.data || responseData;
+    const data = await apiService.fetchHeaderArt(genre);
     displayHeaderArt(data);
   } catch (error) {
     console.error("Error fetching header art:", error);

@@ -1,28 +1,24 @@
+import os
+
+# Import centralized configuration
+import sys
 from datetime import datetime
 
 from playlist_etl.models import TrackSourceServiceName
 
+sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
+
 CURRENT_TIMESTAMP = datetime.now()
 
+# Use centralized configuration
 RANK_PRIORITY = [
     TrackSourceServiceName.APPLE_MUSIC,
     TrackSourceServiceName.SOUNDCLOUD,
     TrackSourceServiceName.SPOTIFY,
 ]
 
+# Database configuration - imported from centralized config
+# PLAYLIST_ETL_DATABASE, RAW_PLAYLISTS_COLLECTION, etc. are now imported
 
-PLAYLIST_ETL_DATABASE = "playlist_etl"
-RAW_PLAYLISTS_COLLECTION = "raw_playlists"
-TRACK_COLLECTION = "track"
-TRACK_PLAYLIST_COLLECTION = "track_playlist"
-
-# caches
-ISRC_CACHE_COLLECTION = "isrc_cache"
-YOUTUBE_URL_CACHE_COLLECTION = "youtube_cache"
-APPLE_MUSIC_ALBUM_COVER_CACHE_COLLECTION = "apple_music_album_cover_cache"
-
-# view count vars
-SPOTIFY_ERROR_THRESHOLD = 5
-SPOTIFY_VIEW_COUNT_XPATH = (
-    '(//*[contains(concat(" ", @class, " "), concat(" ", "w1TBi3o5CTM7zW1EB3Bm", " "))])[4]'
-)
+# Performance configuration - imported from centralized config
+# SPOTIFY_ERROR_THRESHOLD, SPOTIFY_VIEW_COUNT_XPATH are now imported

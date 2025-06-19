@@ -1,0 +1,60 @@
+{
+  "services": {
+    "spotify": {
+      "id": "spotify",
+      "name": "Spotify",
+      "displayName": "Spotify",
+      "color": "#1DB954",
+      "logo": "images/spotify_logo.png",
+      "embedUrl": "https://open.spotify.com/embed/",
+      "urlPattern": "^https:\\/\\/open\\.spotify\\.com\\/(track|album|playlist)\\/[a-zA-Z0-9]+",
+      "api": {
+        "baseUrl": "https://spotify23.p.rapidapi.com/playlist_tracks/",
+        "host": "spotify23.p.rapidapi.com"
+      }
+    },
+    "soundcloud": {
+      "id": "soundcloud",
+      "name": "SoundCloud",
+      "displayName": "SoundCloud",
+      "color": "#FF5500",
+      "logo": "images/soundcloud_logo.png",
+      "embedUrl": "https://w.soundcloud.com/player/?url=",
+      "urlPattern": "^https:\\/\\/soundcloud\\.com\\/[a-zA-Z0-9-_]+\\/[a-zA-Z0-9-_]+",
+      "api": {
+        "baseUrl": "https://soundcloud-scraper.p.rapidapi.com/v1/playlist/tracks",
+        "host": "soundcloud-scraper.p.rapidapi.com",
+        "embedApiUrl": "https://w.soundcloud.com/player/api.js"
+      }
+    },
+    "appleMusic": {
+      "id": "appleMusic",
+      "name": "Apple Music",
+      "displayName": "Apple Music",
+      "color": "#FC3C44",
+      "logo": "images/apple_music_logo.png",
+      "embedUrl": "https://embed.music.apple.com/us/album/",
+      "urlPattern": "^https:\\/\\/music\\.apple\\.com\\/",
+      "api": {
+        "baseUrl": "https://apple-music24.p.rapidapi.com/playlist1/",
+        "host": "apple-music24.p.rapidapi.com"
+      }
+    },
+    "youtube": {
+      "id": "youtube",
+      "name": "YouTube",
+      "displayName": "YouTube",
+      "color": "#FF0000",
+      "logo": "images/youtube_logo.png",
+      "embedUrl": "https://www.youtube.com/embed/",
+      "urlPattern": "^https:\\/\\/(www\\.)?youtube\\.com\\/watch\\?v=[a-zA-Z0-9_-]+",
+      "api": {
+        "searchUrl": "https://www.googleapis.com/youtube/v3/search",
+        "statsUrl": "https://www.googleapis.com/youtube/v3/videos",
+        "videoUrl": "https://www.youtube.com/watch?v="
+      }
+    }
+  },
+  "serviceOrder": ["AppleMusic", "SoundCloud", "Spotify"],
+  "rankPriority": ["APPLE_MUSIC", "SOUNDCLOUD", "SPOTIFY"]
+}

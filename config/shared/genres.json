@@ -1,0 +1,25 @@
+{
+  "genres": [
+    {
+      "id": "country",
+      "name": "Country",
+      "displayName": "Country"
+    },
+    {
+      "id": "dance",
+      "name": "Dance",
+      "displayName": "Dance"
+    },
+    {
+      "id": "pop",
+      "name": "Pop",
+      "displayName": "Pop",
+      "default": true
+    },
+    {
+      "id": "rap",
+      "name": "Rap",
+      "displayName": "Rap"
+    }
+  ]
+}
