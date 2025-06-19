@@ -1,11 +1,10 @@
-import { DJANGO_API_BASE_URL } from "./config.js";
+import { apiService } from "./ApiService.js";
 
 let currentChart = null;
 
 async function loadChart() {
   try {
-    const response = await fetch("html/chart.html");
-    const data = await response.text();
+    const data = await apiService.fetchChartHtml();
     document.getElementById("chart-container").innerHTML = data;
   } catch (error) {
     console.error("Error loading chart HTML:", error);
@@ -13,24 +12,12 @@ async function loadChart() {
 }
 
 async function loadChartJsLibrary() {
-  return new Promise((resolve, reject) => {
-    const script = document.createElement("script");
-    script.src = "https://cdn.jsdelivr.net/npm/chart.js";
-    script.onload = resolve;
-    script.onerror = reject;
-    document.head.appendChild(script);
-  });
+  return apiService.loadScript("https://cdn.jsdelivr.net/npm/chart.js");
 }
 
 async function fetchChartData(genre, isrc) {
   try {
-    const response = await fetch(`${DJANGO_API_BASE_URL}/graph-data/${genre}`);
-    if (!response.ok) {
-      throw new Error(`Failed to fetch chart data. Status: ${response.status}`);
-    }
-    const responseData = await response.json();
-    // Handle Django's wrapped response format
-    const data = responseData.data || responseData;
+    const data = await apiService.fetchChartData(genre);
     const trackData = data.find(track => track.isrc === isrc);
     if (!trackData) {
       console.error("No data found for the provided ISRC:", isrc);
