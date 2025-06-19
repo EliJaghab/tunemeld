@@ -3,8 +3,8 @@ import time
 import pytest
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
 
+from playlist_etl.config import SPOTIFY_VIEW_COUNT_XPATH
 from playlist_etl.utils import WebDriverManager
-from playlist_etl.view_count import SPOTIFY_VIEW_COUNT_XPATH
 
 
 class TestWebDriverManager:
@@ -91,9 +91,7 @@ def run_external_tests():
     import subprocess
     import sys
 
-    result = subprocess.run(
-        [sys.executable, "-m", "pytest", __file__, "-v", "-m", "external_api", "--tb=short"]
-    )
+    result = subprocess.run([sys.executable, "-m", "pytest", __file__, "-v", "-m", "external_api", "--tb=short"])
     return result.returncode == 0
 
 
