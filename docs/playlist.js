@@ -1,5 +1,5 @@
 import { DJANGO_API_BASE_URL } from "./config.js";
-import { getCurrentViewCountType, setCurrentColumn, setCurrentOrder } from "./selectors.js";
+import { stateManager } from "./StateManager.js";
 
 export async function fetchAndDisplayLastUpdated(genre) {
   try {
@@ -36,9 +36,9 @@ export function setupSortButtons() {
       const order = button.getAttribute("data-order");
       const newOrder = order === "desc" ? "asc" : "desc";
       button.setAttribute("data-order", newOrder);
-      setCurrentColumn(column);
-      setCurrentOrder(newOrder);
-      sortTable(column, newOrder, getCurrentViewCountType());
+      stateManager.setCurrentColumn(column);
+      stateManager.setCurrentOrder(newOrder);
+      sortTable(column, newOrder, stateManager.getViewCountType());
     });
   });
 }
