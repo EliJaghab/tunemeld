@@ -3,8 +3,8 @@ import time
 import pytest
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
 
+from playlist_etl.config import SPOTIFY_VIEW_COUNT_XPATH
 from playlist_etl.utils import WebDriverManager
-from playlist_etl.view_count import SPOTIFY_VIEW_COUNT_XPATH
 
 
 class TestWebDriverManager:
@@ -16,10 +16,10 @@ class TestWebDriverManager:
         manager = WebDriverManager(use_proxy=True)
         yield manager
         # Cleanup
-        try:
-            manager.close_driver()
-        except Exception:
-            pass  # Driver may already be closed
+        from contextlib import suppress
+
+        with suppress(Exception):
+            manager.close_driver()  # Driver may already be closed
 
     @pytest.mark.external_api
     @pytest.mark.slow
@@ -73,10 +73,10 @@ class TestWebDriverManager:
     def test_close_driver_cleanup(self, webdriver_manager):
         """Test that driver cleanup works properly"""
         # Use the driver briefly
-        try:
-            webdriver_manager.find_element_by_xpath("https://example.com", "//title")
-        except Exception:
-            pass  # Don't care if this fails
+        from contextlib import suppress
+
+        with suppress(Exception):
+            webdriver_manager.find_element_by_xpath("https://example.com", "//title")  # Don't care if this fails
 
         # Cleanup should not raise exception
         webdriver_manager.close_driver()
@@ -91,9 +91,7 @@ def run_external_tests():
     import subprocess
     import sys
 
-    result = subprocess.run(
-        [sys.executable, "-m", "pytest", __file__, "-v", "-m", "external_api", "--tb=short"]
-    )
+    result = subprocess.run([sys.executable, "-m", "pytest", __file__, "-v", "-m", "external_api", "--tb=short"])
     return result.returncode == 0
 
 

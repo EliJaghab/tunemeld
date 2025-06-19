@@ -20,7 +20,7 @@ from playlist_etl.models import (
     TrackRank,
     TrackSourceServiceName,
 )
-from playlist_etl.transform2 import Transform
+from playlist_etl.transform import Transform
 
 
 class TestTransform:
@@ -110,9 +110,7 @@ class TestTransform:
         assert track1.spotify_track_data.album_cover_url == "https://i.scdn.co/image/abc123"
 
         # Verify playlist ranks were created
-        spotify_ranks = self.transform.playlist_ranks[
-            (TrackSourceServiceName.SPOTIFY.value, "dance")
-        ]
+        spotify_ranks = self.transform.playlist_ranks[(TrackSourceServiceName.SPOTIFY.value, "dance")]
         assert len(spotify_ranks) == 2
         assert spotify_ranks[0].isrc == "USA2P2446028"
         assert spotify_ranks[0].rank == 1
@@ -166,9 +164,7 @@ class TestTransform:
 
         # Verify ISRC lookups were called
         assert self.mock_spotify_service.get_isrc.call_count == 2
-        self.mock_spotify_service.get_isrc.assert_any_call(
-            "Talk To Me", "Champion, Four Tet, Skrillex & Naisha"
-        )
+        self.mock_spotify_service.get_isrc.assert_any_call("Talk To Me", "Champion, Four Tet, Skrillex & Naisha")
         self.mock_spotify_service.get_isrc.assert_any_call("Shine On", "Kaskade")
 
         # Verify tracks were created
@@ -177,10 +173,7 @@ class TestTransform:
         track1 = self.transform.tracks["USA2P2446028"]
         assert track1.apple_music_track_data.track_name == "Talk To Me"
         assert track1.apple_music_track_data.artist_name == "Champion, Four Tet, Skrillex & Naisha"
-        assert (
-            track1.apple_music_track_data.track_url
-            == "https://music.apple.com/us/album/talk-to-me/123"
-        )
+        assert track1.apple_music_track_data.track_url == "https://music.apple.com/us/album/talk-to-me/123"
 
     def test_convert_apple_music_raw_export_missing_isrc(self):
         """Test Apple Music conversion when ISRC lookup fails"""
@@ -235,12 +228,8 @@ class TestTransform:
         track1 = self.transform.tracks["USA2P2446028"]
         assert track1.soundcloud_track_data.track_name == "Talk To Me"
         assert track1.soundcloud_track_data.artist_name == "Champion"
-        assert (
-            track1.soundcloud_track_data.track_url == "https://soundcloud.com/champion/talk-to-me"
-        )
-        assert (
-            track1.soundcloud_track_data.album_cover_url == "https://i1.sndcdn.com/artworks-abc123"
-        )
+        assert track1.soundcloud_track_data.track_url == "https://soundcloud.com/champion/talk-to-me"
+        assert track1.soundcloud_track_data.album_cover_url == "https://i1.sndcdn.com/artworks-abc123"
 
         # Verify track without artist prefix in title
         track2 = self.transform.tracks["GB5KW2402411"]
@@ -347,19 +336,14 @@ class TestTransform:
         track.apple_music_track_data.track_name = "Talk To Me"
         track.apple_music_track_data.track_url = "https://music.apple.com/us/album/123"
 
-        self.mock_apple_music_service.get_album_cover_url.return_value = (
-            "https://is1-ssl.mzstatic.com/image/abc123"
-        )
+        self.mock_apple_music_service.get_album_cover_url.return_value = "https://is1-ssl.mzstatic.com/image/abc123"
 
         self.transform.set_apple_music_album_cover_url(track)
 
         self.mock_apple_music_service.get_album_cover_url.assert_called_once_with(
             "https://music.apple.com/us/album/123"
         )
-        assert (
-            track.apple_music_track_data.album_cover_url
-            == "https://is1-ssl.mzstatic.com/image/abc123"
-        )
+        assert track.apple_music_track_data.album_cover_url == "https://is1-ssl.mzstatic.com/image/abc123"
 
     def test_merge_track_data_simple(self):
         """Test merging track data with simple values"""
