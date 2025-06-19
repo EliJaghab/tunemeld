@@ -1,13 +1,15 @@
-import { API_BASE_URL } from "./config.js";
-import { getCurrentViewCountType, setCurrentColumn, setCurrentOrder } from "./selectors.js";
+import { DJANGO_API_BASE_URL } from "./config.js";
+import { stateManager } from "./StateManager.js";
 
 export async function fetchAndDisplayLastUpdated(genre) {
   try {
-    const response = await fetch(`${API_BASE_URL}/api/last-updated?genre=${genre}`);
+    const response = await fetch(`${DJANGO_API_BASE_URL}/last-updated/${genre}`);
     if (!response.ok) {
       throw new Error(`Failed to fetch last-updated. Status: ${response.status}`);
     }
-    const lastUpdated = await response.json();
+    const responseData = await response.json();
+    // Handle Django's wrapped response format
+    const lastUpdated = responseData.data || responseData;
     displayLastUpdated(lastUpdated);
   } catch (error) {
     console.error("Error fetching last updated date:", error);
@@ -15,7 +17,7 @@ export async function fetchAndDisplayLastUpdated(genre) {
 }
 
 function displayLastUpdated(lastUpdated) {
-  const lastUpdatedDate = new Date(lastUpdated.lastUpdated);
+  const lastUpdatedDate = new Date(lastUpdated.last_updated);
   const formattedDate = lastUpdatedDate.toLocaleString("en-US", {
     month: "long",
     day: "numeric",
@@ -34,16 +36,16 @@ export function setupSortButtons() {
       const order = button.getAttribute("data-order");
       const newOrder = order === "desc" ? "asc" : "desc";
       button.setAttribute("data-order", newOrder);
-      setCurrentColumn(column);
-      setCurrentOrder(newOrder);
-      sortTable(column, newOrder, getCurrentViewCountType());
+      stateManager.setCurrentColumn(column);
+      stateManager.setCurrentOrder(newOrder);
+      sortTable(column, newOrder, stateManager.getViewCountType());
     });
   });
 }
 
 export async function updateMainPlaylist(genre, viewCountType) {
   try {
-    const url = `${API_BASE_URL}/api/main-playlist?genre=${genre}`;
+    const url = `${DJANGO_API_BASE_URL}/playlist-data/${genre}`;
     await fetchAndDisplayData(url, "main-playlist-data-placeholder", true, viewCountType);
   } catch (error) {
     console.error("Error updating main playlist:", error);
@@ -54,7 +56,7 @@ export async function fetchAndDisplayPlaylists(genre) {
   const services = ["AppleMusic", "SoundCloud", "Spotify"];
   for (const service of services) {
     await fetchAndDisplayData(
-      `${API_BASE_URL}/api/service-playlist?genre=${genre}&service=${service}`,
+      `${DJANGO_API_BASE_URL}/service-playlist/${genre}/${service}`,
       `${service.toLowerCase()}-data-placeholder`
     );
   }
@@ -66,7 +68,9 @@ async function fetchAndDisplayData(url, placeholderId, isAggregated = false, vie
     if (!response.ok) {
       throw new Error(`Failed to fetch ${url}. Status: ${response.status}`);
     }
-    const data = await response.json();
+    const responseData = await response.json();
+    // Handle Django's wrapped response format
+    const data = responseData.data || responseData;
     playlistData = data;
     displayData(data, placeholderId, isAggregated, viewCountType);
   } catch (error) {
