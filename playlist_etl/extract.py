@@ -69,6 +69,7 @@ logger = get_logger(__name__)
 
 class PlaylistMetadata(TypedDict, total=False):
     """Type definition for playlist metadata extracted from web scraping"""
+
     service_name: str
     genre_name: str
     playlist_name: str
@@ -93,7 +94,7 @@ def _extract_spotify_metadata_from_html(url: str, html_content: str) -> Playlist
         "playlist_url": url,
         "playlist_name": _get_meta_content(doc, "og:title") or "Unknown",
         "playlist_cover_url": _get_meta_content(doc, "og:image"),
-        "playlist_creator": "spotify"  # Default for Spotify playlists
+        "playlist_creator": "spotify",  # Default for Spotify playlists
     }
 
     # Extract full description text first
@@ -139,7 +140,7 @@ def _extract_spotify_full_description(doc: BeautifulSoup) -> str | None:
     selectors = [
         'span[data-encore-id="text"][variant="bodySmall"]',
         "span.encore-text-body-small.encore-internal-color-text-subdued",
-        'span[class*="encore-text-body-small"]'
+        'span[class*="encore-text-body-small"]',
     ]
 
     for selector in selectors:
@@ -320,9 +321,7 @@ class AppleMusicFetcher(Extractor):
         src_attribute = self.webdriver_manager.find_element_by_xpath(url, xpath, attribute="src")
 
         if src_attribute == "Element not found" or "An error occurred" in src_attribute:
-            raise ValueError(
-                f"Could not find amp-ambient-video src attribute for Apple Music {self.genre}"
-            )
+            raise ValueError(f"Could not find amp-ambient-video src attribute for Apple Music {self.genre}")
 
         if src_attribute.endswith(".m3u8"):
             return src_attribute
@@ -356,9 +355,7 @@ class SoundCloudFetcher(Extractor):
         )
 
         playlist_cover_url_tag = doc.find("meta", {"property": "og:image"})
-        self.playlist_cover_url = (
-            playlist_cover_url_tag["content"] if playlist_cover_url_tag else None
-        )
+        self.playlist_cover_url = playlist_cover_url_tag["content"] if playlist_cover_url_tag else None
 
         self.playlist_url = url
 
@@ -368,9 +365,7 @@ class SpotifyFetcher(Extractor):
         super().__init__(client, service_name, genre)
 
     def get_playlist(self, offset=0, limit=100):
-        url = (
-            f"{self.base_url}?{self.param_key}={self.playlist_param}&offset={offset}&limit={limit}"
-        )
+        url = f"{self.base_url}?{self.param_key}={self.playlist_param}&offset={offset}&limit={limit}"
         return get_json_response(url, self.host, self.api_key)
 
     def set_playlist_details(self):
@@ -393,9 +388,8 @@ class SpotifyFetcher(Extractor):
         self.playlist_creator = metadata.get("playlist_creator", "spotify")
 
         # Set description text to tagline or fallback
-        self.playlist_cover_description_text = (
-            self.playlist_tagline or
-            metadata.get("playlist_cover_description_text", "No description available")
+        self.playlist_cover_description_text = self.playlist_tagline or metadata.get(
+            "playlist_cover_description_text", "No description available"
         )
 
     def get_metadata_as_typed_dict(self) -> PlaylistMetadata:
@@ -462,8 +456,5 @@ if __name__ == "__main__":
 
     for service_name, config in SERVICE_CONFIGS.items():
         for genre in PLAYLIST_GENRES:
-            logger.info(
-                f"Retrieving {genre} from {service_name} with credential "
-                f"{config['links'][genre]}"
-            )
+            logger.info(f"Retrieving {genre} from {service_name} with credential " f"{config['links'][genre]}")
             run_extraction(mongo_client, client, service_name, genre)
