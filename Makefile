@@ -1,5 +1,7 @@
 .PHONY: extract \
 	transform \
+	transform-playlist \
+	transform-metadata \
 	aggregate \
 	view_count \
 	format \
@@ -58,9 +60,16 @@ extract:
 	@echo "Running extract..."
 	python playlist_etl/extract.py
 
-transform:
-	@echo "Running transform..."
-	python playlist_etl/transform.py
+transform: transform-playlist transform-metadata
+	@echo "Running all transformations..."
+
+transform-playlist:
+	@echo "Running playlist track transformation..."
+	python playlist_etl/transform_playlist.py
+
+transform-metadata:
+	@echo "Running playlist metadata transformation..."
+	python playlist_etl/transform_playlist_metadata.py
 
 aggregate:
 	@echo "Running aggregate..."
