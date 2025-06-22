@@ -1,95 +1,123 @@
-import collections
+from collections import defaultdict
+from typing import Any
 
-from extract import PLAYLIST_GENRES
-from helpers import set_secrets
-from utils import (
-    clear_collection,
-    get_mongo_client,
-    insert_or_update_data_to_mongo,
-    read_data_from_mongo,
+from pymongo.collection import Collection
+
+from playlist_etl.config import RANK_PRIORITY, TRACK_PLAYLIST_COLLECTION
+from playlist_etl.helpers import get_logger
+from playlist_etl.models import (
+    GenreName,
+    Playlist,
+    PlaylistType,
+    TrackRank,
+    TrackSourceServiceName,
 )
-from view_count import VIEW_COUNTS_COLLECTION
+from playlist_etl.mongo_db_client import MongoDBClient
 
-AGGREGATED_DATA_COLLECTION = "aggregated_playlists"
-TRANSFORMED_DATA_COLLECTION = "transformed_playlists"
-
-
-def aggregate_tracks_by_isrc(services):
-    track_aggregate = collections.defaultdict(dict)
-
-    for service in services:
-        for track in service["tracks"]:
-            isrc = track["isrc"]
-            source = track["source_name"]
-            track_aggregate[isrc][source] = track
-
-    filtered_aggregate = {}
-    for isrc, sources in track_aggregate.items():
-        if len(sources) > 1:
-            filtered_aggregate[isrc] = sources
-
-    return filtered_aggregate
+logger = get_logger(__name__)
 
 
-def consolidate_tracks(tracks_by_isrc):
-    consolidated_tracks = []
+class Aggregate:
+    def __init__(self, mongo_client: MongoDBClient) -> None:
+        self.mongo_client = mongo_client
 
-    rank_priority = ["AppleMusic", "SoundCloud", "Spotify"]
-    default_source_priority = ["SoundCloud", "AppleMusic", "Spotify"]
+    def aggregate(self) -> None:
+        track_playlists = self.mongo_client.get_collection(TRACK_PLAYLIST_COLLECTION)
+        candidates_by_genre = self._group_by_genre(track_playlists)
+        matches = self._get_matches(candidates_by_genre)
+        ranked_matches = self._add_aggregate_rank(matches)
+        sorted_matches = self._rank_matches(ranked_matches)
+        formatted_playlists = self._format_aggregated_playlist(sorted_matches)
+        self._write_aggregated_playlists(formatted_playlists)
 
-    for track in tracks_by_isrc.values():
-        primary_rank_source = next(
-            (rank_source for rank_source in rank_priority if rank_source in track), None
+    def _group_by_genre(self, track_playlists: Collection[Any]) -> dict[GenreName, dict[str, dict[str, Any]]]:
+        """Group ISRC matches across the same genre from different services."""
+        candidates_by_genre: defaultdict[GenreName, defaultdict[str, defaultdict[str, Any]]] = defaultdict(
+            lambda: defaultdict(lambda: defaultdict(dict))
         )
-        primary_source = next(
-            (source for source in default_source_priority if source in track), None
-        )
+        for genre_name in GenreName:
+            for service_name in TrackSourceServiceName:
+                playlist = track_playlists.find_one({"genre_name": genre_name, "service_name": service_name})
+                if playlist and "tracks" in playlist and playlist["tracks"]:
+                    track_ranks = [TrackRank(**track) for track in playlist["tracks"]]
+                    for track in track_ranks:
+                        candidates_by_genre[genre_name][track.isrc]["sources"][service_name] = track.rank
 
-        new_track_entry = track[primary_source].copy()
-        new_track_entry["rank"] = track[primary_rank_source]["rank"]
-        new_track_entry["additional_sources"] = {
-            source: details["track_url"] for source, details in track.items()
-        }
+        return dict(candidates_by_genre)
 
-        consolidated_tracks.append(new_track_entry)
+    def _get_matches(
+        self, candidates: dict[GenreName, dict[str, dict[str, Any]]]
+    ) -> dict[GenreName, dict[str, dict[str, Any]]]:
+        """Get ISRCs that come up more than once for the same genre."""
+        matches: defaultdict[GenreName, defaultdict[str, dict[str, Any]]] = defaultdict(lambda: defaultdict(dict))
+        for genre_name, isrcs in candidates.items():
+            for isrc, isrc_data in isrcs.items():
+                if len(isrc_data["sources"]) > 1:
+                    matches[genre_name][isrc]["sources"] = isrc_data["sources"]
+        return dict(matches)
 
-    consolidated_tracks.sort(key=lambda x: x["rank"])
+    def _add_aggregate_rank(
+        self, matches: dict[GenreName, dict[str, dict[str, Any]]]
+    ) -> dict[GenreName, dict[str, dict[str, Any]]]:
+        """Rank matches based on the rank of the services."""
+        for _genre_name, isrcs in matches.items():
+            for _isrc, isrc_data in isrcs.items():
+                aggregate_service_name: TrackSourceServiceName | None = None
 
-    for index, track in enumerate(consolidated_tracks, start=1):
-        track["rank"] = index
+                for service_name in RANK_PRIORITY:
+                    if service_name in isrc_data["sources"]:
+                        aggregate_service_name = service_name
+                        break
 
-    return consolidated_tracks
+                if aggregate_service_name:
+                    raw_aggregate_rank = isrc_data["sources"][aggregate_service_name]
+                    isrc_data["raw_aggregate_rank"] = raw_aggregate_rank
+                    isrc_data["aggregate_service_name"] = aggregate_service_name
 
+        return matches
 
-def read_transformed_data_from_mongo(client, genre: str) -> list[dict]:
-    print(f"Reading transformed data for genre: {genre} from MongoDB...")
-    data = read_data_from_mongo(client, TRANSFORMED_DATA_COLLECTION)
-    filtered_data = [doc for doc in data if doc["genre_name"] == genre]
-    print(f"Found {len(filtered_data)} documents for genre: {genre}.")
-    return filtered_data
+    def _rank_matches(
+        self, matches: dict[GenreName, dict[str, dict[str, Any]]]
+    ) -> dict[GenreName, dict[str, dict[str, Any]]]:
+        for _genre_name, isrcs in matches.items():
+            isrc_list = list(isrcs.values())
+            isrc_list.sort(key=lambda x: x.get("raw_aggregate_rank", float("inf")))
+            for rank, isrc_data in enumerate(isrc_list, start=1):
+                isrc_data["rank"] = rank
+        return matches
 
+    def _format_aggregated_playlist(
+        self, sorted_matches: dict[GenreName, dict[str, dict[str, Any]]]
+    ) -> dict[GenreName, dict[str, Any]]:
+        formatted_playlists: dict[GenreName, dict[str, Any]] = {}
+        for genre_name, isrcs in sorted_matches.items():
+            tracks: list[dict[str, Any]] = []
+            for isrc, isrc_data in isrcs.items():
+                track = TrackRank(
+                    isrc=isrc,
+                    rank=isrc_data["rank"],
+                    sources=isrc_data["sources"],
+                    raw_aggregate_rank=isrc_data.get("raw_aggregate_rank"),
+                    aggregate_service_name=isrc_data.get("aggregate_service_name"),
+                )
+                tracks.append(track.model_dump())
 
-if __name__ == "__main__":
-    print("Setting secrets...")
-    set_secrets()
-    mongo_client = get_mongo_client()
+            playlist = Playlist(
+                service_name=PlaylistType.AGGREGATE,
+                genre_name=genre_name,
+                tracks=tracks,
+            )
+            formatted_playlists[genre_name] = playlist.model_dump()
+        return formatted_playlists
 
-    print(f"Clearing collection: {AGGREGATED_DATA_COLLECTION}")
-    clear_collection(mongo_client, AGGREGATED_DATA_COLLECTION)
-
-    for genre in PLAYLIST_GENRES:
-        print(f"Processing genre: {genre}...")
-        transformed_data = read_transformed_data_from_mongo(mongo_client, genre)
-        tracks_by_isrc = aggregate_tracks_by_isrc(transformed_data)
-        consolidated_tracks = consolidate_tracks(tracks_by_isrc)
-        document = {
-            "service_name": "aggregated",
-            "genre_name": genre,
-            "tracks": consolidated_tracks,
-        }
-        insert_or_update_data_to_mongo(
-            mongo_client, AGGREGATED_DATA_COLLECTION, document
-        )
-        print(f"Aggregation and consolidation completed for genre: {genre}.")
-
-    clear_collection(mongo_client, VIEW_COUNTS_COLLECTION)
+    def _write_aggregated_playlists(self, formatted_playlists: dict[GenreName, dict[str, Any]]) -> None:
+        logger.info("Writing aggregated playlists to MongoDB")
+        for genre_name in GenreName:
+            genre_name_value = genre_name.value
+            if genre_name in formatted_playlists:
+                playlist_dict = formatted_playlists[genre_name]
+                self.mongo_client.get_collection(TRACK_PLAYLIST_COLLECTION).update_one(
+                    {"service_name": PlaylistType.AGGREGATE.value, "genre_name": genre_name_value},
+                    {"$set": playlist_dict},
+                    upsert=True,
+                )

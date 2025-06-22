@@ -1,12 +1,13 @@
 import os
 
-from playlist_etl.aggregate2 import Aggregate
+from playlist_etl.aggregate import Aggregate
 from playlist_etl.config import ISRC_CACHE_COLLECTION, YOUTUBE_URL_CACHE_COLLECTION
 from playlist_etl.helpers import set_secrets
 from playlist_etl.services import AppleMusicService, SpotifyService, YouTubeService
-from playlist_etl.transform2 import Transform
+from playlist_etl.transform_playlist import Transform
+from playlist_etl.transform_playlist_metadata import transform_all_spotify_metadata
 from playlist_etl.utils import CacheManager, MongoDBClient, WebDriverManager
-from playlist_etl.view_count2 import ViewCountTrackProcessor
+from playlist_etl.view_count import ViewCountTrackProcessor
 
 
 def transform(
@@ -45,11 +46,10 @@ def main() -> None:
         api_key=os.getenv("GOOGLE_API_KEY"),
         cache_manager=CacheManager(mongo_client, YOUTUBE_URL_CACHE_COLLECTION),
     )
-    apple_music_service = AppleMusicService(
-        CacheManager(mongo_client, YOUTUBE_URL_CACHE_COLLECTION)
-    )
+    apple_music_service = AppleMusicService(CacheManager(mongo_client, YOUTUBE_URL_CACHE_COLLECTION))
 
     transform(mongo_client, spotify_service, youtube_service, apple_music_service)
+    transform_all_spotify_metadata()
     aggregate(mongo_client)
     update_view_counts(mongo_client, spotify_service, youtube_service)
 

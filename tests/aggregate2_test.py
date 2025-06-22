@@ -7,7 +7,7 @@ from unittest.mock import Mock
 
 import pytest
 
-from playlist_etl.aggregate2 import Aggregate
+from playlist_etl.aggregate import Aggregate
 from playlist_etl.config import RANK_PRIORITY, TRACK_PLAYLIST_COLLECTION
 from playlist_etl.models import GenreName, PlaylistType, TrackSourceServiceName
 
