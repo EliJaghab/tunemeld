@@ -2,9 +2,9 @@ import time
 
 import pytest
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
+from utils import WebDriverManager
 
-from playlist_etl.config import SPOTIFY_VIEW_COUNT_XPATH
-from playlist_etl.utils import WebDriverManager
+from config import SPOTIFY_VIEW_COUNT_XPATH
 
 
 class TestWebDriverManager:

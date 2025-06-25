@@ -1,5 +1,5 @@
 """
-Comprehensive tests for transform2.py
+Comprehensive tests for transform_playlist.py
 Tests data transformation pipeline with real data structures and service integration
 """
 
@@ -9,18 +9,18 @@ from concurrent.futures import Future
 from unittest.mock import Mock, patch
 
 import pytest
-
-from playlist_etl.config import (
-    RAW_PLAYLISTS_COLLECTION,
-    TRACK_COLLECTION,
-)
-from playlist_etl.models import (
+from models import (
     GenreName,
     Track,
     TrackRank,
     TrackSourceServiceName,
 )
-from playlist_etl.transform_playlist import Transform
+from transform_playlist import Transform
+
+from config import (
+    RAW_PLAYLISTS_COLLECTION,
+    TRACK_COLLECTION,
+)
 
 
 class TestTransform:

@@ -1,14 +1,8 @@
-import sys
 import unittest
-from pathlib import Path
 from unittest.mock import Mock, patch
 
-# Add project root to Python path
-project_root = Path(__file__).parent.parent
-sys.path.insert(0, str(project_root))
-
-from playlist_etl.extract import SpotifyFetcher
-from playlist_etl.transform_playlist_metadata import (
+from extract import SpotifyFetcher
+from transform_playlist_metadata import (
     transform_creator,
     transform_featured_artist,
     transform_playlist_name,
@@ -39,7 +33,10 @@ class TestSpotifyExtraction(unittest.TestCase):
             <title>Today's Top Hits | Spotify Playlist</title>
         </head>
         <body>
-            <span data-encore-id="text" variant="bodySmall" class="encore-text-body-small encore-internal-color-text-subdued">The hottest 50. Cover: Benson Boone</span>
+            <span data-encore-id="text" variant="bodySmall"
+                  class="encore-text-body-small encore-internal-color-text-subdued">
+                The hottest 50. Cover: Benson Boone
+            </span>
             <span class="e-9960-text encore-text-body-small">35,143,543 saves</span>
         </body>
         </html>
@@ -54,8 +51,8 @@ class TestSpotifyExtraction(unittest.TestCase):
             "links": {"pop": "https://open.spotify.com/playlist/37i9dQZF1DXcBWIGoYBM5M"},
         }
 
-    @patch("playlist_etl.extract.requests.get")
-    @patch("playlist_etl.extract.SERVICE_CONFIGS")
+    @patch("extract.requests.get")
+    @patch("extract.SERVICE_CONFIGS")
     def test_spotify_metadata_extraction_with_cover_artist(self, mock_configs, mock_get):
         """Test extraction when playlist has a cover artist"""
         # Setup mocks
@@ -79,8 +76,8 @@ class TestSpotifyExtraction(unittest.TestCase):
         self.assertEqual(fetcher.playlist_creator, "spotify")
         self.assertEqual(fetcher.playlist_cover_description_text, "The hottest 50.")
 
-    @patch("playlist_etl.extract.requests.get")
-    @patch("playlist_etl.extract.SERVICE_CONFIGS")
+    @patch("extract.requests.get")
+    @patch("extract.SERVICE_CONFIGS")
     def test_spotify_metadata_extraction_without_cover_artist(self, mock_configs, mock_get):
         """Test extraction when playlist doesn't have a cover artist"""
         # Mock HTML without "Cover:" text (matches real Spotify structure)
@@ -93,7 +90,10 @@ class TestSpotifyExtraction(unittest.TestCase):
             <meta property="og:image" content="https://example.com/image.jpg" />
         </head>
         <body>
-            <span data-encore-id="text" variant="bodySmall" class="encore-text-body-small encore-internal-color-text-subdued">The world's biggest dance & electronic hits.</span>
+            <span data-encore-id="text" variant="bodySmall"
+                  class="encore-text-body-small encore-internal-color-text-subdued">
+                The world's biggest dance & electronic hits.
+            </span>
             <span class="e-9960-text encore-text-body-small">5,758,625 saves</span>
         </body>
         </html>
@@ -114,8 +114,8 @@ class TestSpotifyExtraction(unittest.TestCase):
         self.assertEqual(fetcher.playlist_saves_count, "5.8M")  # Enhanced parser returns formatted version
         self.assertEqual(fetcher.playlist_track_count, 75)
 
-    @patch("playlist_etl.extract.requests.get")
-    @patch("playlist_etl.extract.SERVICE_CONFIGS")
+    @patch("extract.requests.get")
+    @patch("extract.SERVICE_CONFIGS")
     def test_spotify_metadata_extraction_fallback(self, mock_configs, mock_get):
         """Test extraction with fallback when main elements are missing"""
         # Minimal HTML (matches real Spotify structure)
@@ -127,7 +127,9 @@ class TestSpotifyExtraction(unittest.TestCase):
             <meta property="og:description" content="Playlist · Spotify · 100 items · 2.5M saves" />
         </head>
         <body>
-            <span class="encore-text-body-small encore-internal-color-text-subdued">Classic rock anthems and deep cuts</span>
+            <span class="encore-text-body-small encore-internal-color-text-subdued">
+                Classic rock anthems and deep cuts
+            </span>
         </body>
         </html>
         """
@@ -149,11 +151,11 @@ class TestSpotifyExtraction(unittest.TestCase):
         self.assertEqual(fetcher.playlist_track_count, 100)
         self.assertEqual(fetcher.playlist_creator, "spotify")  # Default value
 
-    @patch("playlist_etl.extract.requests.get")
-    @patch("playlist_etl.extract.SERVICE_CONFIGS")
+    @patch("extract.requests.get")
+    @patch("extract.SERVICE_CONFIGS")
     def test_document_creation_with_enhanced_fields(self, mock_configs, mock_get):
         """Test that document includes all enhanced fields"""
-        from playlist_etl.extract import run_extraction
+        from extract import run_extraction
 
         # Setup mocks
         mock_configs.__getitem__.return_value = self.mock_config
@@ -165,14 +167,14 @@ class TestSpotifyExtraction(unittest.TestCase):
         mock_get.return_value = mock_response
 
         # Mock RapidAPI response
-        with patch("playlist_etl.extract.get_json_response") as mock_api:
+        with patch("extract.get_json_response") as mock_api:
             mock_api.return_value = {"tracks": []}
 
             # Mock MongoDB
             mock_mongo_client = Mock()
 
-            with patch("playlist_etl.extract.insert_or_update_data_to_mongo") as mock_insert:
-                with patch("playlist_etl.extract.DEBUG_MODE", False):
+            with patch("extract.insert_or_update_data_to_mongo") as mock_insert:
+                with patch("extract.DEBUG_MODE", False):
                     run_extraction(mock_mongo_client, self.mock_client, "Spotify", "pop")
 
                 # Verify document structure

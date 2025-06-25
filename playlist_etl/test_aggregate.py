@@ -1,15 +1,15 @@
 """
-Comprehensive tests for aggregate2.py
+Comprehensive tests for aggregate.py
 Tests cross-service track aggregation using ISRC matching with real data structures
 """
 
 from unittest.mock import Mock
 
 import pytest
+from aggregate import Aggregate
+from models import GenreName, PlaylistType, TrackSourceServiceName
 
-from playlist_etl.aggregate import Aggregate
-from playlist_etl.config import RANK_PRIORITY, TRACK_PLAYLIST_COLLECTION
-from playlist_etl.models import GenreName, PlaylistType, TrackSourceServiceName
+from config import RANK_PRIORITY, TRACK_PLAYLIST_COLLECTION
 
 
 class TestAggregate:

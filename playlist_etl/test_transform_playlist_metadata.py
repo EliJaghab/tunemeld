@@ -1,13 +1,7 @@
-import sys
 import unittest
-from pathlib import Path
 
-# Add project root to Python path
-project_root = Path(__file__).parent.parent
-sys.path.insert(0, str(project_root))
-
-from playlist_etl.extract import PlaylistMetadata  # noqa: E402
-from playlist_etl.transform_playlist_metadata import (  # noqa: E402
+from extract import PlaylistMetadata
+from transform_playlist_metadata import (
     transform_creator,
     transform_featured_artist,
     transform_playlist_name,
