@@ -112,7 +112,7 @@ def _create_fallback_description(tagline: str | None, featured_artist: str | Non
     if featured_artist:
         return f"Cover: {featured_artist}"
 
-    raise ValueError("No valid playlist description found - missing tagline, featured artist, and description content")
+    return "Curated playlist from Spotify."
 
 
 def transform_spotify_playlist_metadata(raw_metadata: PlaylistMetadata) -> DisplayPlaylistMetadata:
