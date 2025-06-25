@@ -50,3 +50,4 @@ dist/
 
 # Ruff
 .ruff_cache/
+.venv/
