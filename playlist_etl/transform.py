@@ -7,6 +7,7 @@ from playlist_etl.config import (
     TRACK_COLLECTION,
     TRACK_PLAYLIST_COLLECTION,
 )
+from playlist_etl.functional_clients import apple_music_get_album_cover_url
 from playlist_etl.helpers import get_logger
 from playlist_etl.models import (
     GenreName,
@@ -16,7 +17,7 @@ from playlist_etl.models import (
     TrackSourceServiceName,
 )
 from playlist_etl.mongo_db_client import MongoDBClient
-from playlist_etl.services import AppleMusicService, SpotifyService, YouTubeService
+from playlist_etl.services import SpotifyService, YouTubeService
 
 MAX_THREADS = 100
 
@@ -34,12 +35,10 @@ class Transform:
         mongo_client: MongoDBClient,
         spotify_service: SpotifyService,
         youtube_service: YouTubeService,
-        apple_music_service: AppleMusicService,
     ):
         self.mongo_client = mongo_client
         self.spotify_service = spotify_service
         self.youtube_service = youtube_service
-        self.apple_music_service = apple_music_service
         self.tracks: dict[str, Track] = {}
         self.playlist_ranks: defaultdict[tuple[str, str], list[TrackRank]] = defaultdict(list)
 
@@ -212,7 +211,7 @@ class Transform:
 
     def set_apple_music_album_cover_url(self, track: Track) -> None:
         if track.apple_music_track_data.track_name:
-            album_cover_url = self.apple_music_service.get_album_cover_url(track.apple_music_track_data.track_url)
+            album_cover_url = apple_music_get_album_cover_url(track.apple_music_track_data.track_url)
             track.apple_music_track_data.album_cover_url = album_cover_url
 
     def set_spotify_urls(self) -> None:
