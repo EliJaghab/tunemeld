@@ -173,9 +173,9 @@ install-pre-commit: install-dev
 
 setup_backend_env:
 	@echo "Setting up backend virtual environment..."
-	python3 -m venv backend
+	python3 -m venv .venv
 	@echo "Activating backend virtual environment and installing requirements..."
-	pip install --upgrade pip && pip install -r django_backend/requirements.txt
+	source .venv/bin/activate && pip install --upgrade pip && pip install -r django_backend/requirements.txt
 
 build_locally:
 	@echo "Building locally..."

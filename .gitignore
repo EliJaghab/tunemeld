@@ -11,12 +11,12 @@ __pycache__/
 # Django
 /output_static/
 /staticfiles/
-backend/lib/
-backend/bin/
 
 # Virtual Environment
 venv/
 venv_temp/
+.venv/
+backend/
 .vscode/
 
 # Node.js
