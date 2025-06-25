@@ -6,8 +6,8 @@ from pathlib import Path
 project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
 
-from playlist_etl.extract import PlaylistMetadata
-from playlist_etl.transform_playlist_metadata import (
+from playlist_etl.extract import PlaylistMetadata  # noqa: E402
+from playlist_etl.transform_playlist_metadata import (  # noqa: E402
     transform_creator,
     transform_featured_artist,
     transform_playlist_name,
@@ -58,8 +58,8 @@ class TestSpotifyPlaylistMetadataTransformation(unittest.TestCase):
         self.assertEqual(result["playlist_cover_description_text"], expected_description)
         self.assertIsNone(result["playlist_featured_artist"])
 
-    def test_minimal_data_fallback(self):
-        """Test transformation with minimal data"""
+    def test_minimal_data_raises_error(self):
+        """Test transformation with minimal data raises ValueError"""
         raw_metadata: PlaylistMetadata = {
             "service_name": "Spotify",
             "genre_name": "pop",
@@ -68,11 +68,11 @@ class TestSpotifyPlaylistMetadataTransformation(unittest.TestCase):
             "playlist_featured_artist": None,
         }
 
-        result = transform_spotify_playlist_metadata(raw_metadata)
+        # Should raise ValueError when no tagline or featured artist
+        with self.assertRaises(ValueError) as context:
+            transform_spotify_playlist_metadata(raw_metadata)
 
-        # Should use fallback description
-        expected_description = "Curated playlist from Spotify."
-        self.assertEqual(result["playlist_cover_description_text"], expected_description)
+        self.assertIn("No valid playlist description found", str(context.exception))
 
     def test_messy_data_cleaning(self):
         """Test transformation of messy data with artifacts"""
