@@ -105,10 +105,10 @@ pull_push: setup_env
 	@echo "Successfully pulled, rebased, and pushed the changes."
 
 dev: setup_env
-	cd backend/backend && wrangler dev --env development src/index.ts
+	cd cloudflare_worker && wrangler dev --env development src/index.ts
 
 prod:
-	cd backend/backend && wrangler deploy --env production src/index.ts
+	cd cloudflare_worker && wrangler deploy --env production src/index.ts
 
 invalidate_cache:
 	@set -o allexport; source $(ENV_FILE); set +o allexport; \
