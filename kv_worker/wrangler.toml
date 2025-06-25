@@ -1,8 +1,0 @@
-name = "tunemeld-worker"
-main = "worker.py"
-compatibility_date = "2024-11-15"
-compatibility_flags = ["python_workers"] # Required for Python workers
-
-[[kv_namespaces]]
-binding = "tunemeld_cache"
-id = "49ccdc0ecbd4465ab6e1b104e24adcec"
