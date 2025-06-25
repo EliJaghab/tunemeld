@@ -11,7 +11,6 @@ Benefits:
 - Easier testing and maintenance
 """
 
-from functools import lru_cache
 from urllib.parse import unquote
 
 import requests
@@ -23,26 +22,39 @@ from playlist_etl.utils import CacheManager, MongoDBClient
 logger = get_logger(__name__)
 
 
-@lru_cache(maxsize=1)
+# Module-level cache variables to avoid @lru_cache issues in tests
+_mongo_client = None
+_cache_manager = None
+_requests_session = None
+
+
 def get_mongo_client():
     """Get cached MongoDB connection."""
-    return MongoDBClient()
+    global _mongo_client
+    if _mongo_client is None:
+        _mongo_client = MongoDBClient()
+    return _mongo_client
 
 
-@lru_cache(maxsize=1)
 def get_apple_music_cache_manager():
     """Get cached Apple Music cache manager."""
-    from playlist_etl.config import YOUTUBE_URL_CACHE_COLLECTION
+    global _cache_manager
+    if _cache_manager is None:
+        from playlist_etl.config import YOUTUBE_URL_CACHE_COLLECTION
 
-    return CacheManager(get_mongo_client(), YOUTUBE_URL_CACHE_COLLECTION)
+        _cache_manager = CacheManager(get_mongo_client(), YOUTUBE_URL_CACHE_COLLECTION)
+    return _cache_manager
 
 
-@lru_cache(maxsize=1)
 def get_requests_session():
     """Get cached requests session for Apple Music scraping."""
-    session = requests.Session()
-    session.headers.update({"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36"})
-    return session
+    global _requests_session
+    if _requests_session is None:
+        _requests_session = requests.Session()
+        _requests_session.headers.update(
+            {"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36"}
+        )
+    return _requests_session
 
 
 def apple_music_get_album_cover_url(track_url: str) -> str | None:
