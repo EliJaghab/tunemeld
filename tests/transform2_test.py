@@ -28,6 +28,14 @@ class TestTransform:
 
     def setup_method(self):
         """Set up test fixtures for each test method"""
+        # Clear caches to ensure clean state for each test
+        try:
+            from playlist_etl.apple_music_api import clear_cache
+
+            clear_cache()
+        except ImportError:
+            pass  # Module might not be available in all test contexts
+
         self.mock_mongo_client = Mock()
         self.mock_spotify_service = Mock()
         self.mock_youtube_service = Mock()
@@ -327,19 +335,20 @@ class TestTransform:
         # Both tracks get submitted, but only track1 will actually process since track2 has no track_name
         assert mock_executor_instance.submit.call_count == 2
 
-    @patch("playlist_etl.apple_music_api.apple_music_get_album_cover_url")
-    def test_set_apple_music_album_cover_url(self, mock_apple_music_func):
-        """Test setting individual Apple Music album cover URL"""
+    def test_set_apple_music_album_cover_url(self):
+        """Test setting individual Apple Music album cover URL with mocked dependencies"""
         track = Track(isrc="USA2P2446028")
         track.apple_music_track_data.track_name = "Talk To Me"
         track.apple_music_track_data.track_url = "https://music.apple.com/us/album/123"
 
-        mock_apple_music_func.return_value = "https://is1-ssl.mzstatic.com/image/abc123"
-
-        self.transform.set_apple_music_album_cover_url(track)
-
-        mock_apple_music_func.assert_called_once_with("https://music.apple.com/us/album/123")
-        assert track.apple_music_track_data.album_cover_url == "https://is1-ssl.mzstatic.com/image/abc123"
+        # Mock the functional API directly
+        with patch(
+            "playlist_etl.apple_music_api.apple_music_get_album_cover_url",
+            return_value="https://is1-ssl.mzstatic.com/image/abc123",
+        ) as mock_func:
+            self.transform.set_apple_music_album_cover_url(track)
+            mock_func.assert_called_once_with("https://music.apple.com/us/album/123")
+            assert track.apple_music_track_data.album_cover_url == "https://is1-ssl.mzstatic.com/image/abc123"
 
     def test_merge_track_data_simple(self):
         """Test merging track data with simple values"""
