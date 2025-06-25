@@ -186,6 +186,28 @@ agentree -i
 - All environment files are automatically copied to maintain consistency
 - Dependencies are installed automatically in the new environment
 
+### Critical Usage Warning ⚠️
+
+**IMPORTANT**: After running `agentree -b <branch-name>`, you MUST work in the created worktree directory, NOT in the original repository directory.
+
+**Wrong way** (will pull in unrelated changes):
+
+```bash
+agentree -b fix-bug
+# Still working in /Users/eli/github/tunemeld/ ❌
+# This will include uncommitted changes from other branches!
+```
+
+**Correct way** (clean isolated environment):
+
+```bash
+agentree -b fix-bug
+# Work in /Users/eli/github/tunemeld-worktrees/agent-fix-bug/ ✅
+# This has ONLY the clean base branch without contamination
+```
+
+**Why this matters**: The worktree directory contains a clean copy from the base branch without any uncommitted changes from other work. Working in the original directory defeats the purpose of isolation and will create PRs with unrelated files.
+
 # important-instruction-reminders
 
 Do what has been asked; nothing more, nothing less.
