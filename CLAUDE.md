@@ -1,7 +1,5 @@
 # TuneMeld Development Guide
 
-TuneMeld aggregates weekly curated playlists from SoundCloud, Apple Music and Spotify.
-
 ## Quick Start
 
 ```bash
