@@ -15,7 +15,7 @@ from playlist_etl.config import (
     TRACK_PLAYLIST_COLLECTION,
 )
 from playlist_etl.extract import RapidAPIClient, run_extraction
-from playlist_etl.transform import Transform
+from playlist_etl.transform_playlist import Transform
 from playlist_etl.view_count import ViewCountTrackProcessor
 
 

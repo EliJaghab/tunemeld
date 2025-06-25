@@ -1,3 +1,17 @@
+"""
+Transform raw playlist track data into normalized Track objects
+
+This module processes raw playlist data from Spotify, Apple Music, and SoundCloud APIs,
+converting them into standardized Track objects with consistent structure across services.
+Key functions:
+- Converts raw API responses to Track objects with ISRC matching
+- Enriches tracks with YouTube URLs and Apple Music album covers
+- Creates ranked playlist structures for cross-service comparison
+- Handles data merging and persistence to MongoDB
+
+Focus: Track-level data transformation and cross-service normalization
+"""
+
 import concurrent.futures
 import json
 from collections import defaultdict
@@ -68,7 +82,11 @@ class Transform:
                 if not raw_playlist:
                     logger.warning(f"No raw playlist found for {service_name_value} and genre {genre_name_value}")
                     raise ValueError("No raw playlist found")
-                data = json.loads(raw_playlist["data_json"])
+                data = (
+                    raw_playlist["data_json"]
+                    if isinstance(raw_playlist["data_json"], dict)
+                    else json.loads(raw_playlist["data_json"])
+                )
                 self.convert_to_track_objects(data, service_name_value, genre_name_value)
 
     def format_tracks(self) -> list[dict]:

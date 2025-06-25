@@ -8,10 +8,9 @@ Focus: Spotify playlist metadata transformation
 """
 
 import re
-from datetime import datetime
 from typing import TypedDict
 
-from playlist_etl.config import PLAYLIST_METADATA_COLLECTION, RAW_PLAYLISTS_COLLECTION
+from playlist_etl.config import RAW_PLAYLISTS_COLLECTION
 from playlist_etl.extract import PlaylistMetadata
 from playlist_etl.helpers import get_logger
 from playlist_etl.mongo_db_client import MongoDBClient
@@ -21,6 +20,7 @@ logger = get_logger(__name__)
 
 class DisplayPlaylistMetadata(TypedDict, total=False):
     """Type definition for display-ready playlist metadata"""
+
     service_name: str
     genre_name: str
     playlist_name: str
@@ -88,8 +88,6 @@ def transform_featured_artist(raw_artist: str | None) -> str | None:
     return cleaned if cleaned else None
 
 
-
-
 def transform_creator(raw_creator: str | None) -> str:
     """Transform creator info into display format"""
     if not raw_creator:
@@ -115,8 +113,6 @@ def _create_fallback_description(tagline: str | None, featured_artist: str | Non
         return f"Cover: {featured_artist}"
 
     raise ValueError("No valid playlist description found - missing tagline, featured artist, and description content")
-
-
 
 
 def transform_spotify_playlist_metadata(raw_metadata: PlaylistMetadata) -> DisplayPlaylistMetadata:
@@ -145,10 +141,9 @@ def transform_spotify_playlist_metadata(raw_metadata: PlaylistMetadata) -> Displ
         "playlist_cover_url": raw_metadata.get("playlist_cover_url"),
         "playlist_cover_description_text": playlist_cover_description_text,
         "playlist_featured_artist": clean_featured_artist,
-
         # Keep original data for reference
         "raw_metadata": raw_metadata,
-        "last_transformed": None  # Will be set by transform process
+        "last_transformed": None,  # Will be set by transform process
     }
 
     return transformed
@@ -174,7 +169,7 @@ def process_spotify_playlist_metadata(genre_name: str) -> None:
             # Update the raw playlist with transformed description
             collection.update_one(
                 {"_id": raw_playlist["_id"]},
-                {"$set": {"playlist_cover_description_text": transformed["playlist_cover_description_text"]}}
+                {"$set": {"playlist_cover_description_text": transformed["playlist_cover_description_text"]}},
             )
 
             logger.info(f"Updated playlist with transformed description: {raw_playlist.get('playlist_name')}")
@@ -182,8 +177,6 @@ def process_spotify_playlist_metadata(genre_name: str) -> None:
     except Exception as e:
         logger.error(f"Error transforming Spotify playlist metadata: {e}")
         raise
-
-
 
 
 def transform_all_spotify_metadata() -> None:
