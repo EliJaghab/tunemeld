@@ -1,7 +1,9 @@
 """
-Functional API clients with caching and session reuse.
+Apple Music API client with functional approach and caching.
 
-This module replaces OOP-based service classes with pure functions and cached sessions.
+This module provides Apple Music API operations using pure functions with automatic
+session caching, replacing the OOP-based AppleMusicService class.
+
 Benefits:
 - 95% less boilerplate code
 - Automatic session/connection caching via @lru_cache

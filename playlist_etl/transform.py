@@ -2,12 +2,12 @@ import concurrent.futures
 import json
 from collections import defaultdict
 
+from playlist_etl.apple_music_api import apple_music_get_album_cover_url
 from playlist_etl.config import (
     RAW_PLAYLISTS_COLLECTION,
     TRACK_COLLECTION,
     TRACK_PLAYLIST_COLLECTION,
 )
-from playlist_etl.functional_clients import apple_music_get_album_cover_url
 from playlist_etl.helpers import get_logger
 from playlist_etl.models import (
     GenreName,
