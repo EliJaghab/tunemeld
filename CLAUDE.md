@@ -145,3 +145,50 @@ make setup_backend_env
 # Install development dependencies
 make install-dev
 ```
+
+## Agentree Integration
+
+Agentree is installed and available for creating isolated development environments for AI agents working on separate features or bug fixes.
+
+### What Agentree Does
+
+- Creates isolated Git worktrees (parallel directories) for each AI agent
+- Automatically copies all environment files (.env, credentials, etc.)
+- Installs dependencies in the new environment
+- Allows multiple agents to work on different features simultaneously without conflicts
+
+### Usage
+
+When asked to create a PR or work on a separate feature using agents:
+
+```bash
+# Create a new isolated environment for an agent
+agentree -b <branch-name>
+
+# Interactive setup
+agentree -i
+```
+
+### Example Workflow
+
+1. User requests: "Create an agent to fix the authentication bug"
+2. Run: `agentree -b fix-auth-bug`
+3. This creates:
+   - New worktree at: `/Users/eli/github/tunemeld-worktrees/agent-fix-auth-bug`
+   - New branch: `agent/fix-auth-bug`
+   - Copies all env files and installs dependencies
+4. The agent can work in isolation without affecting the main codebase
+
+### Important Notes
+
+- Agentree creates worktrees outside the main repository directory
+- Each agent gets its own branch prefixed with `agent/`
+- All environment files are automatically copied to maintain consistency
+- Dependencies are installed automatically in the new environment
+
+# important-instruction-reminders
+
+Do what has been asked; nothing more, nothing less.
+NEVER create files unless they're absolutely necessary for achieving your goal.
+ALWAYS prefer editing an existing file to creating a new one.
+NEVER proactively create documentation files (\*.md) or README files. Only create documentation files if explicitly requested by the User.
