@@ -184,9 +184,7 @@ class TuneMeldAPITestCase(TestCase):
     @patch("core.views.cache.put")
     @patch("core.historical_track_views.find")
     @patch("core.playlists_collection.find")
-    def test_get_graph_data_no_cache(
-        self, mock_find, mock_track_views_find, mock_cache_put, mock_cache_get
-    ):
+    def test_get_graph_data_no_cache(self, mock_find, mock_track_views_find, mock_cache_put, mock_cache_get):
         """Test graph data retrieval when data is not cached"""
         # Mock cache miss
         mock_cache_get.return_value = None

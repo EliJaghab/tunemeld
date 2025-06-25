@@ -93,6 +93,8 @@ select = [
     "SIM",    # flake8-simplify
     "TCH",    # flake8-type-checking
     "RUF",    # Ruff-specific rules
+    "TID",    # flake8-tidy-imports (ban relative imports)
+    "PIE",    # flake8-pie (miscellaneous lints)
 ]
 
 ignore = [
@@ -101,6 +103,7 @@ ignore = [
     "C901",   # too complex
     "W191",   # indentation contains tabs
     "E722",   # bare except
+    # E402 (module level import not at top) is NOT ignored - we want to enforce this
 ]
 
 # Allow fix for all enabled rules (when `--fix`) is provided.
@@ -125,6 +128,13 @@ line-ending = "auto"
 
 [tool.ruff.lint.isort]
 known-first-party = ["playlist_etl", "django_backend"]
+
+[tool.ruff.lint.flake8-tidy-imports]
+# Ban all relative imports
+ban-relative-imports = "all"
+
+# Ban specific modules that should not be imported
+banned-modules = []
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

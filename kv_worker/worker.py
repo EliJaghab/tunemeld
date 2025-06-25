@@ -29,21 +29,15 @@ def create_response(data=None, message=None, status="success", status_code=200):
 
 async def handle_put_request(env, key, value):
     await env.tunemeld_cache.put(key, value)
-    return create_response(
-        data={"key": key, "value": value}, message="Stored key-value pair successfully."
-    )
+    return create_response(data={"key": key, "value": value}, message="Stored key-value pair successfully.")
 
 
 async def handle_get_request(env, key):
     stored_value = await env.tunemeld_cache.get(key)
     if stored_value is not None:
-        return create_response(
-            data={"key": key, "value": stored_value}, message="Retrieved stored value."
-        )
+        return create_response(data={"key": key, "value": stored_value}, message="Retrieved stored value.")
     else:
-        return create_response(
-            message="No value found for the provided key.", status="error", status_code=404
-        )
+        return create_response(message="No value found for the provided key.", status="error", status_code=404)
 
 
 async def handle_invalid_request():

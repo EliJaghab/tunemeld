@@ -29,9 +29,7 @@ class SpotifyService:
         if not client_id or not client_secret:
             raise ValueError("Spotify client ID or client secret not provided.")
         self.spotify_client = Spotify(
-            client_credentials_manager=SpotifyClientCredentials(
-                client_id=client_id, client_secret=client_secret
-            )
+            client_credentials_manager=SpotifyClientCredentials(client_id=client_id, client_secret=client_secret)
         )
         self.isrc_cache_manager = isrc_cache_manager
         self.webdriver_manager = webdriver_manager
@@ -60,9 +58,7 @@ class SpotifyService:
                 self.isrc_cache_manager.set(cache_key, isrc)
                 return isrc
 
-        logger.info(
-            f"No track found on Spotify using queries: {queries} for {track_name} by {artist_name}"
-        )
+        logger.info(f"No track found on Spotify using queries: {queries} for {track_name} by {artist_name}")
         return None
 
     def _get_track_name_with_no_parens(self, track_name: str) -> str:
@@ -82,9 +78,7 @@ class SpotifyService:
     def get_track_url_by_isrc(self, isrc: str) -> str:
         track_url = self._get_track_url_by_isrc(isrc)
         if not track_url:
-            logger.error(
-                f"Failed to find track URL for ISRC: {isrc} after multiple attempts"
-            )
+            logger.error(f"Failed to find track URL for ISRC: {isrc} after multiple attempts")
         return track_url
 
     @retry(
@@ -94,9 +88,7 @@ class SpotifyService:
     )
     def _get_track_url_by_isrc(self, isrc: str) -> str:
         try:
-            results = self.spotify_client.search(
-                q=f"isrc:{isrc}", type="track", limit=1
-            )
+            results = self.spotify_client.search(q=f"isrc:{isrc}", type="track", limit=1)
             if results["tracks"]["items"]:
                 return results["tracks"]["items"][0]["external_urls"]["spotify"]
             else:
@@ -139,9 +131,7 @@ class SpotifyService:
             try:
                 return self.webdriver_manager.get_spotify_track_view_count(track_url)
             except Exception as e:
-                logger.error(
-                    f"Error getting Spotify view count for {track.isrc} {track_url}: {e}"
-                )
+                logger.error(f"Error getting Spotify view count for {track.isrc} {track_url}: {e}")
                 return None
 
         def _set_current_view_count(track: Track) -> bool:
@@ -155,9 +145,7 @@ class SpotifyService:
 
         def _set_historical_view_count(track: Track) -> bool:
             historical_view = HistoricalView()
-            historical_view.total_view_count = (
-                track.spotify_view.current_view.view_count
-            )
+            historical_view.total_view_count = track.spotify_view.current_view.view_count
             delta_view_count = get_delta_view_count(
                 track.spotify_view.historical_view,
                 track.spotify_view.current_view.view_count,
@@ -216,21 +204,15 @@ class YouTubeService:
                 video_id = data["items"][0]["id"].get("videoId")
                 if video_id:
                     youtube_url = f"https://www.youtube.com/watch?v={video_id}"
-                    logger.info(
-                        f"Found YouTube URL for {track_name} by {artist_name}: {youtube_url}"
-                    )
+                    logger.info(f"Found YouTube URL for {track_name} by {artist_name}: {youtube_url}")
                     self.cache_service.set(cache_key, youtube_url)
                     return youtube_url
             logger.info(f"No video found for {track_name} by {artist_name}")
             return None
         else:
-            logger.info(
-                f"Error fetching YouTube URL: {response.status_code}, {response.text}"
-            )
+            logger.info(f"Error fetching YouTube URL: {response.status_code}, {response.text}")
             if response.status_code == 403 and "quotaExceeded" in response.text:
-                raise ValueError(
-                    f"Could not get YouTube URL for {track_name} {artist_name} because Quota Exceeded"
-                )
+                raise ValueError(f"Could not get YouTube URL for {track_name} {artist_name} because Quota Exceeded")
             return None
 
     @retry(
@@ -241,7 +223,9 @@ class YouTubeService:
     def get_youtube_track_view_count(self, youtube_url: str) -> int:
         video_id = youtube_url.split("v=")[-1]
 
-        youtube_api_url = f"https://www.googleapis.com/youtube/v3/videos?part=statistics&id={video_id}&key={self.api_key}"
+        youtube_api_url = (
+            f"https://www.googleapis.com/youtube/v3/videos?part=statistics&id={video_id}&key={self.api_key}"
+        )
 
         try:
             response = requests.get(youtube_api_url)
@@ -255,7 +239,7 @@ class YouTubeService:
 
         except Exception as e:
             logger.exception(f"An unexpected error occurred: {e}")
-            raise ValueError(f"Unexpected error occurred for {youtube_url}: {e}")
+            raise ValueError(f"Unexpected error occurred for {youtube_url}: {e}") from e
 
     def update_view_count(self, track: Track) -> bool:
         def _update_view_count(track: Track) -> bool:
@@ -283,9 +267,7 @@ class YouTubeService:
             try:
                 return self.get_youtube_track_view_count(track_url)
             except Exception as e:
-                logger.error(
-                    f"Error getting Youtube view count for {track.isrc} {track_url}: {e}"
-                )
+                logger.error(f"Error getting Youtube view count for {track.isrc} {track_url}: {e}")
                 return None
 
         def _set_current_view_count(track: Track) -> bool:
@@ -299,9 +281,7 @@ class YouTubeService:
 
         def _set_historical_view_count(track: Track) -> bool:
             historical_view = HistoricalView()
-            historical_view.total_view_count = (
-                track.youtube_view.current_view.view_count
-            )
+            historical_view.total_view_count = track.youtube_view.current_view.view_count
             delta_view_count = get_delta_view_count(
                 track.youtube_view.historical_view,
                 track.youtube_view.current_view.view_count,

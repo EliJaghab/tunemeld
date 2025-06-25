@@ -1,6 +1,6 @@
 from pymongo import MongoClient
 
-from . import settings
+from django_backend.core import settings
 
 default_app_config = "core.apps.CoreConfig"
 

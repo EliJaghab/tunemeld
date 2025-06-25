@@ -81,9 +81,7 @@ class MongoDBClient:
         collection = self.get_collection(collection_name)
         if documents:
             collection.insert_many(documents)
-            logger.info(
-                f"Overwritten collection: {collection_name} with {len(documents)} documents"
-            )
+            logger.info(f"Overwritten collection: {collection_name} with {len(documents)} documents")
 
     def overwrite_kv_collection(self, collection_name: str, kv_dict: dict[str, Any]) -> None:
         self.clear_collection(collection_name)
@@ -91,14 +89,10 @@ class MongoDBClient:
         documents = [{"key": key, "value": value} for key, value in kv_dict.items()]
         if documents:
             collection.insert_many(documents)
-            logger.info(
-                f"Overwritten KV collection: {collection_name} with {len(documents)} entries"
-            )
+            logger.info(f"Overwritten KV collection: {collection_name} with {len(documents)} entries")
 
     def update_track(self, track: Track) -> None:
-        self.track_collection.update_one(
-            {"isrc": track.isrc}, {"$set": track.model_dump()}, upsert=True
-        )
+        self.track_collection.update_one({"isrc": track.isrc}, {"$set": track.model_dump()}, upsert=True)
 
     def get_collection_count(self, collection: Collection) -> int:
         return collection.count_documents({})
