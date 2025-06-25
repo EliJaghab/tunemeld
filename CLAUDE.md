@@ -179,6 +179,38 @@ agentree -i
    - Copies all env files and installs dependencies
 4. The agent can work in isolation without affecting the main codebase
 
+### Multiple Simultaneous Agents
+
+Agentree supports **unlimited concurrent agents** working simultaneously on different tasks:
+
+```bash
+# Agent 1: Fix authentication
+agentree -b fix-auth-bug
+
+# Agent 2: Add dark mode (while Agent 1 is still working)
+agentree -b add-dark-mode
+
+# Agent 3: Optimize database queries (while others continue)
+agentree -b optimize-db-performance
+
+# Agent 4: Refactor test suite
+agentree -b refactor-tests
+```
+
+**Each agent gets complete isolation:**
+
+- Own directory: `/Users/eli/github/tunemeld-worktrees/agent-<task>/`
+- Own Git branch: `agent/<task>`
+- Own environment files and dependencies
+- No interference with other agents
+
+**Benefits:**
+
+- **Parallel Development**: Multiple features/fixes can be developed simultaneously
+- **Clean PRs**: Each agent creates focused, isolated pull requests
+- **No Cross-Contamination**: Changes from one agent don't affect others
+- **Resource Efficient**: Shared base repo, separate working environments
+
 ### Important Notes
 
 - Agentree creates worktrees outside the main repository directory
