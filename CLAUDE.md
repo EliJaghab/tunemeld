@@ -246,3 +246,12 @@ Do what has been asked; nothing more, nothing less.
 NEVER create files unless they're absolutely necessary for achieving your goal.
 ALWAYS prefer editing an existing file to creating a new one.
 NEVER proactively create documentation files (\*.md) or README files. Only create documentation files if explicitly requested by the User.
+
+## Communication Guidelines
+
+**ALWAYS include PR links at the end of messages when available:**
+
+- If a PR was created or worked on during the session, include the PR URL as a clickable hyperlink at the bottom of your response
+- Format: `**Related PR:** [Description](https://github.com/owner/repo/pull/number)`
+- This helps the user quickly access context and track progress
+- Include this even for brief responses when a PR is relevant
