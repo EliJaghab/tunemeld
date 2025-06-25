@@ -3,9 +3,7 @@ from core import settings
 
 
 class Cache:
-    BASE_URL_TEMPLATE = (
-        "https://api.cloudflare.com/client/v4/accounts/{}/storage/kv/namespaces/{}/values/"
-    )
+    BASE_URL_TEMPLATE = "https://api.cloudflare.com/client/v4/accounts/{}/storage/kv/namespaces/{}/values/"
 
     def __init__(self):
         self.CF_ACCOUNT_ID = settings.CF_ACCOUNT_ID

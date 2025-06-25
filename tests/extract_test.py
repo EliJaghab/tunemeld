@@ -54,9 +54,7 @@ class TestGetJsonResponse:
         mock_response.json.return_value = {"success": True, "data": ["track1", "track2"]}
         mock_get.return_value = mock_response
 
-        result = get_json_response(
-            url="https://api.example.com/playlist", host="api.example.com", api_key="test_key"
-        )
+        result = get_json_response(url="https://api.example.com/playlist", host="api.example.com", api_key="test_key")
 
         assert result == {"success": True, "data": ["track1", "track2"]}
 
@@ -87,18 +85,14 @@ class TestGetJsonResponse:
     @patch("playlist_etl.extract.DEBUG_MODE", True)
     def test_get_json_response_debug_mode(self):
         """Test debug mode returns empty dict"""
-        result = get_json_response(
-            url="https://api.example.com/playlist", host="api.example.com", api_key="test_key"
-        )
+        result = get_json_response(url="https://api.example.com/playlist", host="api.example.com", api_key="test_key")
 
         assert result == {}
 
     @patch("playlist_etl.extract.NO_RAPID", True)
     def test_get_json_response_no_rapid_mode(self):
         """Test NO_RAPID mode returns empty dict"""
-        result = get_json_response(
-            url="https://api.example.com/playlist", host="api.example.com", api_key="test_key"
-        )
+        result = get_json_response(url="https://api.example.com/playlist", host="api.example.com", api_key="test_key")
 
         assert result == {}
 
@@ -164,9 +158,7 @@ class TestServiceConfigurations:
         """Test that playlist URLs are properly formatted"""
         for service_name, config in SERVICE_CONFIGS.items():
             for genre, url in config["links"].items():
-                assert url.startswith(
-                    "https://"
-                ), f"Invalid URL format for {service_name} {genre}: {url}"
+                assert url.startswith("https://"), f"Invalid URL format for {service_name} {genre}: {url}"
 
                 # Service-specific URL validation
                 if service_name == "Spotify":
@@ -236,12 +228,8 @@ class TestRealWorldScenarios:
                             {"name": "Skrillex"},
                         ],
                         "external_ids": {"isrc": "USA2P2446028"},
-                        "external_urls": {
-                            "spotify": "https://open.spotify.com/track/7nJVTcj5YWQVoI1vQqK7Ez"
-                        },
-                        "album": {
-                            "images": [{"url": "https://i.scdn.co/image/ab67616d0000b273..."}]
-                        },
+                        "external_urls": {"spotify": "https://open.spotify.com/track/7nJVTcj5YWQVoI1vQqK7Ez"},
+                        "album": {"images": [{"url": "https://i.scdn.co/image/ab67616d0000b273..."}]},
                     }
                 },
                 {
@@ -468,9 +456,7 @@ class TestErrorHandling:
         """Test handling of API rate limits"""
         rate_limit_response = Mock()
         rate_limit_response.status_code = 429
-        rate_limit_response.raise_for_status.side_effect = requests.HTTPError(
-            "429 Too Many Requests"
-        )
+        rate_limit_response.raise_for_status.side_effect = requests.HTTPError("429 Too Many Requests")
 
         mock_get_json.side_effect = requests.HTTPError("429 Too Many Requests")
 
@@ -492,9 +478,7 @@ class TestRunExtraction:
     @patch("playlist_etl.extract.insert_or_update_data_to_mongo")
     @patch("playlist_etl.extract.get_json_response")
     @patch("playlist_etl.extract.requests.get")
-    def test_run_extraction_spotify_end_to_end(
-        self, mock_requests_get, mock_get_json, mock_mongo_insert
-    ):
+    def test_run_extraction_spotify_end_to_end(self, mock_requests_get, mock_get_json, mock_mongo_insert):
         """Test complete run_extraction flow for Spotify with MongoDB mocking"""
         # Mock Spotify playlist page response for set_playlist_details
         mock_spotify_page = Mock()
@@ -590,9 +574,7 @@ class TestRunExtraction:
     @patch("playlist_etl.extract.insert_or_update_data_to_mongo")
     @patch("playlist_etl.extract.get_json_response")
     @patch("playlist_etl.extract.requests.get")
-    def test_run_extraction_debug_mode_skips_mongo(
-        self, mock_requests_get, mock_get_json, mock_mongo_insert
-    ):
+    def test_run_extraction_debug_mode_skips_mongo(self, mock_requests_get, mock_get_json, mock_mongo_insert):
         """Test that DEBUG_MODE=True skips MongoDB insertion"""
         # Mock the web scraping and API calls
         mock_page = Mock()

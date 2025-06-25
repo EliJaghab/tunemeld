@@ -25,7 +25,7 @@ select = [
     "C4",     # flake8-comprehensions
     "B",      # flake8-bugbear
     "A",      # flake8-builtins
-    "TID252", # ban relative imports
+    "TID",    # flake8-tidy-imports (ban relative imports)
     "SIM",    # flake8-simplify
     "Q",      # flake8-quotes
 ]
@@ -39,3 +39,7 @@ ignore = [
 [format]
 quote-style = "double"
 indent-style = "space"
+
+# Ban relative imports
+[lint.flake8-tidy-imports]
+ban-relative-imports = "all"
