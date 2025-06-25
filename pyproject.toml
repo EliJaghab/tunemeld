@@ -40,15 +40,16 @@ django = [
 ]
 
 [tool.ruff]
-# Same as Black.
-line-length = 100
+# Set line length to 120 characters (more reasonable for modern development)
+line-length = 120
 indent-width = 4
 
 # Assume Python 3.10+.
 target-version = "py310"
 
-# Exclude common directories
+# Exclude Jupyter notebooks and common non-Python directories
 exclude = [
+    "*.ipynb",
     ".bzr",
     ".direnv",
     ".eggs",
@@ -68,6 +69,7 @@ exclude = [
     ".venv",
     ".vscode",
     "__pypackages__",
+    "__pycache__",
     "_build",
     "buck-out",
     "build",
@@ -80,26 +82,29 @@ exclude = [
 ]
 
 [tool.ruff.lint]
-# Enable pycodestyle (`E`) and Pyflakes (`F`) codes by default.
-# Plus some additional useful ones
+# Enforce strict linting rules
 select = [
     "E",      # pycodestyle errors
     "W",      # pycodestyle warnings
-    "F",      # Pyflakes
+    "F",      # pyflakes
     "I",      # isort
-    "B",      # flake8-bugbear
-    "C4",     # flake8-comprehensions
+    "N",      # pep8-naming
     "UP",     # pyupgrade
+    "C4",     # flake8-comprehensions
+    "B",      # flake8-bugbear
+    "A",      # flake8-builtins
+    "TID252", # ban relative imports
     "SIM",    # flake8-simplify
+    "Q",      # flake8-quotes
     "TCH",    # flake8-type-checking
     "RUF",    # Ruff-specific rules
 ]
 
 ignore = [
-    "E501",   # line too long, handled by black
+    "COM812", # trailing-comma-missing (conflicts with formatter)
+    "ISC001", # single-line-implicit-string-concatenation (conflicts with formatter)
     "B008",   # do not perform function calls in argument defaults
     "C901",   # too complex
-    "W191",   # indentation contains tabs
     "E722",   # bare except
 ]
 
