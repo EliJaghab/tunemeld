@@ -70,9 +70,9 @@ Tests are organized with markers for different scenarios:
 
 ```
 tests/
-├── aggregate2_test.py     # Cross-service track aggregation (19 tests)
+├── aggregate_test.py      # Cross-service track aggregation (19 tests)
 ├── extract_test.py        # API data extraction (34 tests)
-├── transform2_test.py     # Data transformation (25 tests)
+├── transform_test.py      # Data transformation (25 tests)
 ├── integration_test.py    # End-to-end pipeline (5 tests)
 ├── utils_test.py          # WebDriver utilities (4 tests)
 └── conftest.py           # Test fixtures & mock data
@@ -111,8 +111,8 @@ make test              # Full test suite
 ```bash
 # Test individual components
 pytest tests/extract_test.py -v          # Data extraction
-pytest tests/transform2_test.py -v       # Data transformation
-pytest tests/aggregate2_test.py -v       # Cross-service aggregation
+pytest tests/transform_test.py -v        # Data transformation
+pytest tests/aggregate_test.py -v        # Cross-service aggregation
 
 # Test end-to-end flow
 make test-integration

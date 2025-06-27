@@ -20,7 +20,7 @@ from playlist_etl.models import (
     TrackRank,
     TrackSourceServiceName,
 )
-from playlist_etl.transform import Transform
+from playlist_etl.transform_playlist import Transform
 
 
 class TestTransform:
