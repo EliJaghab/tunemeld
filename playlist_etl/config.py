@@ -13,6 +13,7 @@ RANK_PRIORITY = [
 
 PLAYLIST_ETL_DATABASE = "playlist_etl"
 RAW_PLAYLISTS_COLLECTION = "raw_playlists"
+PLAYLIST_METADATA_COLLECTION = "playlist_metadata"
 TRACK_COLLECTION = "track"
 TRACK_PLAYLIST_COLLECTION = "track_playlist"
 
@@ -23,6 +24,4 @@ APPLE_MUSIC_ALBUM_COVER_CACHE_COLLECTION = "apple_music_album_cover_cache"
 
 # view count vars
 SPOTIFY_ERROR_THRESHOLD = 5
-SPOTIFY_VIEW_COUNT_XPATH = (
-    '(//*[contains(concat(" ", @class, " "), concat(" ", "w1TBi3o5CTM7zW1EB3Bm", " "))])[4]'
-)
+SPOTIFY_VIEW_COUNT_XPATH = '(//*[contains(concat(" ", @class, " "), concat(" ", "w1TBi3o5CTM7zW1EB3Bm", " "))])[4]'
