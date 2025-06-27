@@ -105,8 +105,8 @@ make test-visual             # Full visual regression tests
 # Pull latest changes and push (with rebase)
 make pull_push
 
-# Deploy to production
-make prod
+# Deploy to production (automated via Railway)
+# No manual deployment command needed - pushes to main branch deploy automatically
 
 # Invalidate CDN cache
 make invalidate_cache
@@ -120,7 +120,7 @@ make invalidate_cache
 4. **Test changes:** `make test-header-art` or `make test-visual`
 5. **Run tests:** `make test`
 6. **Commit:** Pre-commit hooks will run automatically
-7. **Deploy:** `make pull_push` then `make prod`
+7. **Deploy:** `make pull_push` (Railway deploys automatically on push to main)
 
 ## ETL Pipeline (Backend)
 
