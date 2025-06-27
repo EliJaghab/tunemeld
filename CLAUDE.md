@@ -240,6 +240,33 @@ agentree -b fix-bug
 
 **Why this matters**: The worktree directory contains a clean copy from the base branch without any uncommitted changes from other work. Working in the original directory defeats the purpose of isolation and will create PRs with unrelated files.
 
+### Best Practice: Always Start from Latest Main ⚠️
+
+**CRITICAL**: Before creating an agentree, always ensure you're starting from the latest main/master branch to avoid working with stale code:
+
+```bash
+# ALWAYS do this first - pull latest changes
+git checkout master  # or main
+git pull origin master
+
+# THEN create the agentree
+agentree -b fix-specific-issue
+```
+
+**Why this is essential**:
+
+- **Avoids merge conflicts**: Working from latest code prevents integration issues
+- **Prevents stale fixes**: Ensures you're not fixing problems already resolved
+- **Clean PRs**: Reduces contamination from outdated branches
+- **Current dependencies**: Ensures you have the latest package versions and configurations
+
+**Warning Signs of Stale Base**:
+
+- Tests failing that should pass
+- Import errors that don't make sense
+- Features behaving differently than expected
+- PRs with unexpected file changes
+
 # important-instruction-reminders
 
 Do what has been asked; nothing more, nothing less.
