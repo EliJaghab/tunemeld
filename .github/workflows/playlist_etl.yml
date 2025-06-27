@@ -1,4 +1,4 @@
-name: playlists_etl2
+name: playlists_etl
 
 on:
   schedule:

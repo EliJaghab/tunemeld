@@ -155,7 +155,7 @@ test-ci: setup_env
 	source venv/bin/activate && python -m pytest tests/ -v --tb=short --cov=playlist_etl --cov-report=xml -m "not slow"
 
 test-playlist-etl: setup_env
-	@echo "Testing playlist ETL pipeline (simulates playlist_etl2 workflow)..."
+	@echo "Testing playlist ETL pipeline (simulates playlist_etl workflow)..."
 	@set -o allexport; source .env.test; set +o allexport; \
 	source venv/bin/activate && python playlist_etl/main.py
 
