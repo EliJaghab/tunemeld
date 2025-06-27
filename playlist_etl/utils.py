@@ -130,24 +130,49 @@ class WebDriverManager:
         options.add_argument("--headless")
         options.add_argument("--disable-gpu")
         options.add_argument("--no-sandbox")
+        options.add_argument("--disable-dev-shm-usage")
+        options.add_argument("--disable-web-security")
+        options.add_argument("--disable-features=VizDisplayCompositor")
+        options.add_argument("--remote-debugging-port=9222")
 
         if use_proxy:
             proxy = FreeProxy(rand=True).get()
             logger.info(f"Using proxy: {proxy}")
             options.add_argument(f"--proxy-server={proxy}")
 
-        driver_dir = os.path.dirname(ChromeDriverManager().install())
-        driver_path = os.path.join(driver_dir, "chromedriver")
-        service = Service(executable_path=driver_path)
-        logger.info(f"Creating new WebDriver instance using path {driver_path}")
-        driver = webdriver.Chrome(service=service, options=options)
-        return driver
+        try:
+            # Let ChromeDriverManager automatically handle version matching
+            driver_path = ChromeDriverManager().install()
+
+            # Make sure the driver is executable
+            import stat
+
+            current_perms = os.stat(driver_path).st_mode
+            os.chmod(driver_path, current_perms | stat.S_IEXEC)
+
+            service = Service(executable_path=driver_path)
+            logger.info(f"Creating new WebDriver instance using path {driver_path}")
+            driver = webdriver.Chrome(service=service, options=options)
+            return driver
+        except Exception as e:
+            logger.error(f"Failed to create WebDriver with auto-managed driver: {e}")
+            # Fallback to system chromedriver if available
+            try:
+                service = Service()  # Use system chromedriver
+                logger.info("Attempting to use system chromedriver as fallback")
+                driver = webdriver.Chrome(service=service, options=options)
+                return driver
+            except Exception as fallback_e:
+                logger.error(f"Fallback to system chromedriver also failed: {fallback_e}")
+                raise RuntimeError(
+                    f"Could not initialize ChromeDriver. Auto-managed error: {e}, System fallback error: {fallback_e}"
+                ) from fallback_e
 
     def find_element_by_xpath(
         self,
         url: str,
         xpath: str,
-        attribute: str = None,
+        attribute: str | None = None,
     ) -> str:
         def _attempt_find_element() -> str:
             self.driver.implicitly_wait(8)
