@@ -5,10 +5,9 @@ from dotenv import load_dotenv
 
 environment = os.getenv("RAILWAY_ENVIRONMENT", "development")
 
-# Load appropriate environment file
-if environment == "production":
-    load_dotenv(".env.prod")
-else:
+# Load environment file only in development
+# In production (Railway), environment variables are set directly
+if environment != "production":
     load_dotenv(".env.dev")
 
 MONGO_DATA_API_KEY = os.getenv("MONGO_DATA_API_KEY")
