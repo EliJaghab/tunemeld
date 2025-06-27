@@ -12,8 +12,6 @@ ENV PYTHONPATH=/
 
 RUN pip install --upgrade pip && pip install -r /requirements.txt
 
-# Note: manage.py is already executable, no need for chmod
-
 EXPOSE 8000
 EXPOSE 5678
 
