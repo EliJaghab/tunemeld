@@ -276,7 +276,29 @@ NEVER proactively create documentation files (\*.md) or README files. Only creat
 
 ## Communication Guidelines
 
-**ALWAYS include PR links at the end of messages when available:**
+### Automatic PR Context Integration
+
+**ALWAYS include current PR context when responding:**
+
+- Automatically fetch and include recent open PRs at the start of each work session
+- Include PR titles, descriptions, and links to provide full context
+- Focus only on open PRs (exclude merged/closed PRs to avoid noise)
+- Use GitHub CLI command: `gh api repos/$(gh repo view --json owner,name --jq '.owner.login + "/" + .name')/pulls --jq '.[] | select(.state=="open") | {number: .number, title: .title, html_url: .html_url, body: .body}' | head -10`
+
+**Current Open PRs Context:**
+
+Recent open pull requests that provide important context for development:
+
+- **PR #54**: refactor: Rename transform.py to transform_playlist.py and update imports - [View PR](https://github.com/EliJaghab/tunemeld/pull/54)
+- **PR #45**: feat: Add comprehensive credential validation system - [View PR](https://github.com/EliJaghab/tunemeld/pull/45)
+- **PR #44**: fix: Remove hardcoded Django SECRET_KEY security vulnerability - [View PR](https://github.com/EliJaghab/tunemeld/pull/44)
+- **PR #43**: Clean: Remove legacy Cloudflare Worker infrastructure and simplify architecture - [View PR](https://github.com/EliJaghab/tunemeld/pull/43)
+
+**Problem Summary**: Current work includes fixing module naming consistency (transform.py → transform_playlist.py), implementing credential validation, removing Django security vulnerabilities, and cleaning up legacy infrastructure to simplify the architecture.
+
+### PR Link Guidelines
+
+**Include PR links at the end of messages when relevant:**
 
 - If a PR was created or worked on during the session, include the PR URL as a clickable hyperlink at the bottom of your response
 - Format: `**Related PR:** [Description](https://github.com/owner/repo/pull/number)`
