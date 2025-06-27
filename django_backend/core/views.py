@@ -29,14 +29,17 @@ def root(request):
     return create_response(ResponseStatus.SUCCESS, "Welcome to the TuneMeld Backend!")
 
 
+def health(request):
+    """Health check endpoint for Railway deployment monitoring"""
+    return create_response(ResponseStatus.SUCCESS, "Service is healthy")
+
+
 def get_graph_data(request, genre_name):
     key = f"graph_data_{genre_name}"
 
     cached_response = cache.get(key)
     if cached_response:
-        return create_response(
-            ResponseStatus.SUCCESS, "Graph data retrieved successfully from cache", cached_response
-        )
+        return create_response(ResponseStatus.SUCCESS, "Graph data retrieved successfully from cache", cached_response)
 
     try:
 
@@ -88,9 +91,7 @@ def get_playlist_data(request, genre_name):
     try:
         data = list(playlists_collection.find({"genre_name": genre_name}, {"_id": False}))
         if not data:
-            return create_response(
-                ResponseStatus.ERROR, "No data found for the specified genre", None
-            )
+            return create_response(ResponseStatus.ERROR, "No data found for the specified genre", None)
         return create_response(ResponseStatus.SUCCESS, "Playlist data retrieved successfully", data)
     except Exception as error:
         return create_response(ResponseStatus.ERROR, str(error), None)
@@ -104,12 +105,8 @@ def get_service_playlist(request, genre_name, service_name):
             )
         )
         if not data:
-            return create_response(
-                ResponseStatus.ERROR, "No data found for the specified genre and service", None
-            )
-        return create_response(
-            ResponseStatus.SUCCESS, "Service playlist data retrieved successfully", data
-        )
+            return create_response(ResponseStatus.ERROR, "No data found for the specified genre and service", None)
+        return create_response(ResponseStatus.SUCCESS, "Service playlist data retrieved successfully", data)
     except Exception as error:
         return create_response(ResponseStatus.ERROR, str(error), None)
 
@@ -118,9 +115,7 @@ def get_last_updated(request, genre_name):
     try:
         data = list(playlists_collection.find({"genre_name": genre_name}, {"_id": False}))
         if not data:
-            return create_response(
-                ResponseStatus.ERROR, "No data found for the specified genre", None
-            )
+            return create_response(ResponseStatus.ERROR, "No data found for the specified genre", None)
 
         last_updated = data[0]["insert_timestamp"]
         return create_response(
@@ -136,14 +131,10 @@ def get_header_art(request, genre_name):
     try:
         data = list(raw_playlists_collection.find({"genre_name": genre_name}, {"_id": False}))
         if not data:
-            return create_response(
-                ResponseStatus.ERROR, "No data found for the specified genre", None
-            )
+            return create_response(ResponseStatus.ERROR, "No data found for the specified genre", None)
 
         formatted_data = format_playlist_data(data)
-        return create_response(
-            ResponseStatus.SUCCESS, "Header art data retrieved successfully", formatted_data
-        )
+        return create_response(ResponseStatus.SUCCESS, "Header art data retrieved successfully", formatted_data)
     except Exception as error:
         return create_response(ResponseStatus.ERROR, str(error), None)
 

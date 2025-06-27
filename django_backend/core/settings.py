@@ -5,7 +5,10 @@ from dotenv import load_dotenv
 
 environment = os.getenv("RAILWAY_ENVIRONMENT", "development")
 
-if environment == "development":
+# Load appropriate environment file
+if environment == "production":
+    load_dotenv(".env.prod")
+else:
     load_dotenv(".env.dev")
 
 MONGO_DATA_API_KEY = os.getenv("MONGO_DATA_API_KEY")
@@ -25,14 +28,20 @@ CSRF_TRUSTED_ORIGINS = [
     "https://tunemeld.com",
 ]
 
-SECRET_KEY = os.getenv(
-    "SECRET_KEY", "django-insecure-!^u31q!@ui68(aook0g4w@jw*ei=%bbx1d8em_bm8hxm+6te#0"
-)
+SECRET_KEY = os.getenv("SECRET_KEY", "django-insecure-!^u31q!@ui68(aook0g4w@jw*ei=%bbx1d8em_bm8hxm+6te#0")
 
-DEBUG = True
+# Set DEBUG based on environment
+DEBUG = environment != "production"
 
 ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")
-print("ALLOWED_HOSTS:", ALLOWED_HOSTS)
+
+# Environment-specific logging
+if environment == "production":
+    print(f"🚀 Railway Production Environment - DEBUG={DEBUG}")
+    print(f"📍 ALLOWED_HOSTS: {ALLOWED_HOSTS}")
+else:
+    print(f"🔧 Development Environment - DEBUG={DEBUG}")
+    print(f"📍 ALLOWED_HOSTS: {ALLOWED_HOSTS}")
 
 
 STATIC_URL = "/static/"
@@ -79,7 +88,7 @@ LOGGING = {
     "loggers": {
         "": {
             "handlers": ["console"],
-            "level": "INFO",
+            "level": "DEBUG" if DEBUG else "INFO",
         },
         "django.request": {
             "handlers": ["console"],
