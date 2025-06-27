@@ -317,6 +317,7 @@ NEVER proactively create documentation files (\*.md) or README files. Only creat
 **ALWAYS include PR links at the end of messages when available:**
 
 - If a PR was created or worked on during the session, include the PR URL as a clickable hyperlink at the bottom of your response
-- Format: `**Related PR:** [Description](https://github.com/owner/repo/pull/number)`
+- Format: `**Related PR:**` on its own line, followed by the link `[Description](https://github.com/owner/repo/pull/number)` on the next line
+- This prevents the link from being cut off in terminal displays
 - This helps the user quickly access context and track progress
 - Include this even for brief responses when a PR is relevant
