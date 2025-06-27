@@ -60,7 +60,7 @@ extract:
 
 transform:
 	@echo "Running transform..."
-	python playlist_etl/transform.py
+	python playlist_etl/transform_playlist.py
 
 aggregate:
 	@echo "Running aggregate..."
