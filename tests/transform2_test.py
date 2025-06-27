@@ -28,16 +28,22 @@ class TestTransform:
 
     def setup_method(self):
         """Set up test fixtures for each test method"""
+        # Clear caches to ensure clean state for each test
+        try:
+            from playlist_etl.apple_music_api import clear_cache
+
+            clear_cache()
+        except ImportError:
+            pass  # Module might not be available in all test contexts
+
         self.mock_mongo_client = Mock()
         self.mock_spotify_service = Mock()
         self.mock_youtube_service = Mock()
-        self.mock_apple_music_service = Mock()
 
         self.transform = Transform(
             mongo_client=self.mock_mongo_client,
             spotify_service=self.mock_spotify_service,
             youtube_service=self.mock_youtube_service,
-            apple_music_service=self.mock_apple_music_service,
         )
 
     def test_init(self):
@@ -45,7 +51,6 @@ class TestTransform:
         assert self.transform.mongo_client == self.mock_mongo_client
         assert self.transform.spotify_service == self.mock_spotify_service
         assert self.transform.youtube_service == self.mock_youtube_service
-        assert self.transform.apple_music_service == self.mock_apple_music_service
         assert isinstance(self.transform.tracks, dict)
         assert isinstance(self.transform.playlist_ranks, defaultdict)
 
@@ -331,19 +336,19 @@ class TestTransform:
         assert mock_executor_instance.submit.call_count == 2
 
     def test_set_apple_music_album_cover_url(self):
-        """Test setting individual Apple Music album cover URL"""
+        """Test setting individual Apple Music album cover URL with mocked dependencies"""
         track = Track(isrc="USA2P2446028")
         track.apple_music_track_data.track_name = "Talk To Me"
         track.apple_music_track_data.track_url = "https://music.apple.com/us/album/123"
 
-        self.mock_apple_music_service.get_album_cover_url.return_value = "https://is1-ssl.mzstatic.com/image/abc123"
-
-        self.transform.set_apple_music_album_cover_url(track)
-
-        self.mock_apple_music_service.get_album_cover_url.assert_called_once_with(
-            "https://music.apple.com/us/album/123"
-        )
-        assert track.apple_music_track_data.album_cover_url == "https://is1-ssl.mzstatic.com/image/abc123"
+        # Mock the functional API directly
+        with patch(
+            "playlist_etl.apple_music_api.apple_music_get_album_cover_url",
+            return_value="https://is1-ssl.mzstatic.com/image/abc123",
+        ) as mock_func:
+            self.transform.set_apple_music_album_cover_url(track)
+            mock_func.assert_called_once_with("https://music.apple.com/us/album/123")
+            assert track.apple_music_track_data.album_cover_url == "https://is1-ssl.mzstatic.com/image/abc123"
 
     def test_merge_track_data_simple(self):
         """Test merging track data with simple values"""
@@ -567,7 +572,6 @@ class TestTransformIntegration:
         mock_mongo_client = Mock()
         mock_spotify_service = Mock()
         mock_youtube_service = Mock()
-        mock_apple_music_service = Mock()
 
         # Set up realistic ISRC responses - Apple Music track should get a different ISRC
         mock_spotify_service.get_isrc.return_value = "GB5KW2402411"
@@ -576,7 +580,6 @@ class TestTransformIntegration:
             mongo_client=mock_mongo_client,
             spotify_service=mock_spotify_service,
             youtube_service=mock_youtube_service,
-            apple_music_service=mock_apple_music_service,
         )
 
         # Test Spotify data conversion
