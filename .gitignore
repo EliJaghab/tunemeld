@@ -51,3 +51,6 @@ dist/
 # Ruff
 .ruff_cache/
 .venv/
+
+# Temporary patch files (from agentree workflow)
+*.patch
