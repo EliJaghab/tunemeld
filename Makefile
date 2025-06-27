@@ -56,23 +56,23 @@ setup_env:
 
 extract:
 	@echo "Running extract..."
-	python playlist_etl/extract.py
+	PYTHONPATH=$(PROJECT_ROOT) python3 playlist_etl/extract.py
 
 transform:
 	@echo "Running transform..."
-	python playlist_etl/transform_playlist.py
+	PYTHONPATH=$(PROJECT_ROOT) python3 playlist_etl/transform_playlist.py
 
 aggregate:
 	@echo "Running aggregate..."
-	python playlist_etl/aggregate.py
+	PYTHONPATH=$(PROJECT_ROOT) python3 playlist_etl/aggregate.py
 
 view_count:
 	@echo "Running view counts..."
-	python playlist_etl/view_count.py
+	PYTHONPATH=$(PROJECT_ROOT) python3 playlist_etl/view_count.py
 
 historical_view_count:
 	@echo "Running view counts..."
-	python playlist_etl/historical_view_count.py
+	PYTHONPATH=$(PROJECT_ROOT) python3 playlist_etl/historical_view_count.py
 
 format: setup_env
 	@echo "Running ruff to lint and format code aggressively..."
@@ -154,10 +154,10 @@ test-ci: setup_env
 	@set -o allexport; source .env.test; set +o allexport; \
 	source venv/bin/activate && python -m pytest tests/ -v --tb=short --cov=playlist_etl --cov-report=xml -m "not slow"
 
-test-playlist-etl: setup_env
+test-playlist-etl:
 	@echo "Testing playlist ETL pipeline (simulates playlist_etl workflow)..."
 	@set -o allexport; source .env.test; set +o allexport; \
-	source venv/bin/activate && python playlist_etl/main.py
+	PYTHONPATH=$(PROJECT_ROOT) python3 playlist_etl/main.py
 
 lint: setup_env
 	@echo "Running linting checks..."
