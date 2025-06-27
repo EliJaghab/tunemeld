@@ -1,0 +1,577 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.10.9, pytest-8.4.0, pluggy-1.5.0 -- /Users/eli/.pyenv/versions/tunemeld/bin/python
+cachedir: .pytest_cache
+rootdir: /Users/eli/github/tunemeld
+configfile: pytest.ini
+plugins: anyio-4.9.0, cov-6.2.1, mock-3.14.1, asyncio-1.0.0
+asyncio: mode=strict, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 91 items / 8 deselected / 83 selected
+
+tests/aggregate2_test.py::TestAggregate::test_init PASSED                [  1%]
+tests/aggregate2_test.py::TestAggregate::test_group_by_genre_single_service PASSED [  2%]
+tests/aggregate2_test.py::TestAggregate::test_group_by_genre_multiple_services PASSED [  3%]
+tests/aggregate2_test.py::TestAggregate::test_get_matches_single_service_excluded PASSED [  4%]
+tests/aggregate2_test.py::TestAggregate::test_get_matches_multiple_services_included PASSED [  6%]
+tests/aggregate2_test.py::TestAggregate::test_add_aggregate_rank_priority_order PASSED [  7%]
+tests/aggregate2_test.py::TestAggregate::test_add_aggregate_rank_spotify_fallback PASSED [  8%]
+tests/aggregate2_test.py::TestAggregate::test_rank_matches_sorting PASSED [  9%]
+tests/aggregate2_test.py::TestAggregate::test_format_aggregated_playlist PASSED [ 10%]
+tests/aggregate2_test.py::TestAggregate::test_write_aggregated_playlists PASSED [ 12%]
+tests/aggregate2_test.py::TestAggregate::test_aggregate_end_to_end PASSED [ 13%]
+tests/aggregate2_test.py::TestAggregate::test_aggregate_empty_playlists PASSED [ 14%]
+tests/aggregate2_test.py::TestAggregate::test_aggregate_missing_playlist PASSED [ 15%]
+tests/aggregate2_test.py::TestAggregate::test_aggregate_all_genres[dance] PASSED [ 16%]
+tests/aggregate2_test.py::TestAggregate::test_aggregate_all_genres[rap] PASSED [ 18%]
+tests/aggregate2_test.py::TestAggregate::test_aggregate_all_genres[country] PASSED [ 19%]
+tests/aggregate2_test.py::TestAggregate::test_aggregate_all_genres[pop] PASSED [ 20%]
+tests/aggregate2_test.py::TestAggregate::test_rank_priority_configuration PASSED [ 21%]
+tests/aggregate2_test.py::TestAggregateIntegration::test_realistic_aggregation_scenario PASSED [ 22%]
+tests/extract_test.py::TestRapidAPIClient::test_init_with_api_key PASSED [ 24%]
+tests/extract_test.py::TestRapidAPIClient::test_init_without_api_key PASSED [ 25%]
+tests/extract_test.py::TestRapidAPIClient::test_init_with_empty_api_key PASSED [ 26%]
+tests/extract_test.py::TestGetJsonResponse::test_get_json_response_success PASSED [ 27%]
+tests/extract_test.py::TestGetJsonResponse::test_get_json_response_http_error PASSED [ 28%]
+tests/extract_test.py::TestGetJsonResponse::test_get_json_response_debug_mode PASSED [ 30%]
+tests/extract_test.py::TestGetJsonResponse::test_get_json_response_no_rapid_mode PASSED [ 31%]
+tests/extract_test.py::TestExtractor::test_extractor_init_spotify ERROR  [ 32%]
+tests/extract_test.py::TestExtractor::test_extractor_init_apple_music ERROR [ 33%]
+tests/extract_test.py::TestExtractor::test_extractor_init_soundcloud ERROR [ 34%]
+tests/extract_test.py::TestExtractor::test_extractor_init_invalid_service ERROR [ 36%]
+tests/extract_test.py::TestServiceConfigurations::test_service_configs_structure PASSED [ 37%]
+tests/extract_test.py::TestServiceConfigurations::test_service_configs_links_all_genres PASSED [ 38%]
+tests/extract_test.py::TestServiceConfigurations::test_playlist_urls_format PASSED [ 39%]
+tests/extract_test.py::TestServiceConfigurations::test_service_config_completeness[AppleMusic] PASSED [ 40%]
+tests/extract_test.py::TestServiceConfigurations::test_service_config_completeness[SoundCloud] PASSED [ 42%]
+tests/extract_test.py::TestServiceConfigurations::test_service_config_completeness[Spotify] PASSED [ 43%]
+tests/extract_test.py::TestPlaylistGenres::test_playlist_genres_defined PASSED [ 44%]
+tests/extract_test.py::TestPlaylistGenres::test_playlist_genres_match_models PASSED [ 45%]
+tests/extract_test.py::TestRealWorldScenarios::test_spotify_playlist_extraction ERROR [ 46%]
+tests/extract_test.py::TestRealWorldScenarios::test_apple_music_playlist_extraction ERROR [ 48%]
+tests/extract_test.py::TestRealWorldScenarios::test_soundcloud_playlist_extraction ERROR [ 49%]
+tests/extract_test.py::TestRealWorldScenarios::test_extraction_with_api_error ERROR [ 50%]
+tests/extract_test.py::TestRealWorldScenarios::test_extraction_with_empty_response ERROR [ 51%]
+tests/extract_test.py::TestRealWorldScenarios::test_all_service_genre_combinations[Spotify-dance] ERROR [ 53%]
+tests/extract_test.py::TestRealWorldScenarios::test_all_service_genre_combinations[AppleMusic-pop] ERROR [ 54%]
+tests/extract_test.py::TestRealWorldScenarios::test_all_service_genre_combinations[SoundCloud-rap] ERROR [ 55%]
+tests/extract_test.py::TestRealWorldScenarios::test_all_service_genre_combinations[Spotify-country] ERROR [ 56%]
+tests/extract_test.py::TestRealWorldScenarios::test_url_construction_spotify ERROR [ 57%]
+tests/extract_test.py::TestRealWorldScenarios::test_url_construction_apple_music ERROR [ 59%]
+tests/extract_test.py::TestRealWorldScenarios::test_url_construction_soundcloud ERROR [ 60%]
+tests/extract_test.py::TestErrorHandling::test_network_timeout_handling PASSED [ 61%]
+tests/extract_test.py::TestErrorHandling::test_invalid_json_response PASSED [ 62%]
+tests/extract_test.py::TestErrorHandling::test_rate_limit_handling PASSED [ 63%]
+tests/extract_test.py::TestRunExtraction::test_run_extraction_spotify_end_to_end PASSED [ 65%]
+tests/extract_test.py::TestRunExtraction::test_run_extraction_apple_music_end_to_end PASSED [ 66%]
+tests/extract_test.py::TestRunExtraction::test_run_extraction_debug_mode_skips_mongo PASSED [ 67%]
+tests/extract_test.py::TestRunExtraction::test_run_extraction_invalid_service_raises_error PASSED [ 68%]
+tests/transform2_test.py::TestTransform::test_init ERROR                 [ 69%]
+tests/transform2_test.py::TestTransform::test_get_track_new_track ERROR  [ 71%]
+tests/transform2_test.py::TestTransform::test_get_track_existing_track ERROR [ 72%]
+tests/transform2_test.py::TestTransform::test_convert_spotify_raw_export_valid_data ERROR [ 73%]
+tests/transform2_test.py::TestTransform::test_convert_spotify_raw_export_missing_track ERROR [ 74%]
+tests/transform2_test.py::TestTransform::test_convert_apple_music_raw_export_valid_data ERROR [ 75%]
+tests/transform2_test.py::TestTransform::test_convert_apple_music_raw_export_missing_isrc ERROR [ 77%]
+tests/transform2_test.py::TestTransform::test_convert_soundcloud_raw_export_valid_data ERROR [ 78%]
+tests/transform2_test.py::TestTransform::test_convert_soundcloud_raw_export_missing_isrc ERROR [ 79%]
+tests/transform2_test.py::TestTransform::test_set_youtube_urls ERROR     [ 80%]
+tests/transform2_test.py::TestTransform::test_set_apple_music_album_covers ERROR [ 81%]
+tests/transform2_test.py::TestTransform::test_set_apple_music_album_cover_url ERROR [ 83%]
+tests/transform2_test.py::TestTransform::test_merge_track_data_simple ERROR [ 84%]
+tests/transform2_test.py::TestTransform::test_merge_track_data_nested ERROR [ 85%]
+tests/transform2_test.py::TestTransform::test_format_tracks ERROR        [ 86%]
+tests/transform2_test.py::TestTransform::test_format_playlist_ranks ERROR [ 87%]
+tests/transform2_test.py::TestTransform::test_overwrite_new_tracks ERROR [ 89%]
+tests/transform2_test.py::TestTransform::test_overwrite_existing_tracks ERROR [ 90%]
+tests/transform2_test.py::TestTransform::test_build_track_objects_missing_playlist ERROR [ 91%]
+tests/transform2_test.py::TestTransform::test_convert_to_track_objects_unknown_service ERROR [ 92%]
+tests/transform2_test.py::TestTransform::test_convert_to_track_objects_all_services[Spotify] ERROR [ 93%]
+tests/transform2_test.py::TestTransform::test_convert_to_track_objects_all_services[SoundCloud] ERROR [ 95%]
+tests/transform2_test.py::TestTransform::test_convert_to_track_objects_all_services[AppleMusic] ERROR [ 96%]
+tests/transform2_test.py::TestTransform::test_transform_end_to_end ERROR [ 97%]
+tests/transform2_test.py::TestTransformIntegration::test_realistic_multi_service_transformation PASSED [ 98%]
+tests/utils_test.py::TestWebDriverManager::test_close_driver_cleanup ERROR [100%]
+
+==================================== ERRORS ====================================
+_________ ERROR at setup of TestExtractor.test_extractor_init_spotify __________
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1379: in patched
+    return func(*newargs, **newkeywargs)
+E   TypeError: TestExtractor.setup_method() takes 2 positional arguments but 3 were given
+_______ ERROR at setup of TestExtractor.test_extractor_init_apple_music ________
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1379: in patched
+    return func(*newargs, **newkeywargs)
+E   TypeError: TestExtractor.setup_method() takes 2 positional arguments but 3 were given
+________ ERROR at setup of TestExtractor.test_extractor_init_soundcloud ________
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1379: in patched
+    return func(*newargs, **newkeywargs)
+E   TypeError: TestExtractor.setup_method() takes 2 positional arguments but 3 were given
+_____ ERROR at setup of TestExtractor.test_extractor_init_invalid_service ______
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1379: in patched
+    return func(*newargs, **newkeywargs)
+E   TypeError: TestExtractor.setup_method() takes 2 positional arguments but 3 were given
+__ ERROR at setup of TestRealWorldScenarios.test_spotify_playlist_extraction ___
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1379: in patched
+    return func(*newargs, **newkeywargs)
+E   TypeError: TestRealWorldScenarios.setup_method() takes 2 positional arguments but 3 were given
+_ ERROR at setup of TestRealWorldScenarios.test_apple_music_playlist_extraction _
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1379: in patched
+    return func(*newargs, **newkeywargs)
+E   TypeError: TestRealWorldScenarios.setup_method() takes 2 positional arguments but 3 were given
+_ ERROR at setup of TestRealWorldScenarios.test_soundcloud_playlist_extraction _
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1379: in patched
+    return func(*newargs, **newkeywargs)
+E   TypeError: TestRealWorldScenarios.setup_method() takes 2 positional arguments but 3 were given
+___ ERROR at setup of TestRealWorldScenarios.test_extraction_with_api_error ____
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1379: in patched
+    return func(*newargs, **newkeywargs)
+E   TypeError: TestRealWorldScenarios.setup_method() takes 2 positional arguments but 3 were given
+_ ERROR at setup of TestRealWorldScenarios.test_extraction_with_empty_response _
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1379: in patched
+    return func(*newargs, **newkeywargs)
+E   TypeError: TestRealWorldScenarios.setup_method() takes 2 positional arguments but 3 were given
+_ ERROR at setup of TestRealWorldScenarios.test_all_service_genre_combinations[Spotify-dance] _
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1379: in patched
+    return func(*newargs, **newkeywargs)
+E   TypeError: TestRealWorldScenarios.setup_method() takes 2 positional arguments but 3 were given
+_ ERROR at setup of TestRealWorldScenarios.test_all_service_genre_combinations[AppleMusic-pop] _
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1379: in patched
+    return func(*newargs, **newkeywargs)
+E   TypeError: TestRealWorldScenarios.setup_method() takes 2 positional arguments but 3 were given
+_ ERROR at setup of TestRealWorldScenarios.test_all_service_genre_combinations[SoundCloud-rap] _
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1379: in patched
+    return func(*newargs, **newkeywargs)
+E   TypeError: TestRealWorldScenarios.setup_method() takes 2 positional arguments but 3 were given
+_ ERROR at setup of TestRealWorldScenarios.test_all_service_genre_combinations[Spotify-country] _
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1379: in patched
+    return func(*newargs, **newkeywargs)
+E   TypeError: TestRealWorldScenarios.setup_method() takes 2 positional arguments but 3 were given
+____ ERROR at setup of TestRealWorldScenarios.test_url_construction_spotify ____
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1379: in patched
+    return func(*newargs, **newkeywargs)
+E   TypeError: TestRealWorldScenarios.setup_method() takes 2 positional arguments but 3 were given
+__ ERROR at setup of TestRealWorldScenarios.test_url_construction_apple_music __
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1379: in patched
+    return func(*newargs, **newkeywargs)
+E   TypeError: TestRealWorldScenarios.setup_method() takes 2 positional arguments but 3 were given
+__ ERROR at setup of TestRealWorldScenarios.test_url_construction_soundcloud ___
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1379: in patched
+    return func(*newargs, **newkeywargs)
+E   TypeError: TestRealWorldScenarios.setup_method() takes 2 positional arguments but 3 were given
+__________________ ERROR at setup of TestTransform.test_init ___________________
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1376: in patched
+    with self.decoration_helper(patched,
+../../.pyenv/versions/3.10.9/lib/python3.10/contextlib.py:135: in __enter__
+    return next(self.gen)
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1358: in decoration_helper
+    arg = exit_stack.enter_context(patching)
+../../.pyenv/versions/3.10.9/lib/python3.10/contextlib.py:492: in enter_context
+    result = _cm_type.__enter__(cm)
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1447: in __enter__
+    original, local = self.get_original()
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1420: in get_original
+    raise AttributeError(
+E   AttributeError: <module 'playlist_etl.apple_music_api' from '/Users/eli/github/tunemeld/playlist_etl/apple_music_api.py'> does not have the attribute 'WebDriverManager'
+___________ ERROR at setup of TestTransform.test_get_track_new_track ___________
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1376: in patched
+    with self.decoration_helper(patched,
+../../.pyenv/versions/3.10.9/lib/python3.10/contextlib.py:135: in __enter__
+    return next(self.gen)
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1358: in decoration_helper
+    arg = exit_stack.enter_context(patching)
+../../.pyenv/versions/3.10.9/lib/python3.10/contextlib.py:492: in enter_context
+    result = _cm_type.__enter__(cm)
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1447: in __enter__
+    original, local = self.get_original()
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1420: in get_original
+    raise AttributeError(
+E   AttributeError: <module 'playlist_etl.apple_music_api' from '/Users/eli/github/tunemeld/playlist_etl/apple_music_api.py'> does not have the attribute 'WebDriverManager'
+________ ERROR at setup of TestTransform.test_get_track_existing_track _________
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1376: in patched
+    with self.decoration_helper(patched,
+../../.pyenv/versions/3.10.9/lib/python3.10/contextlib.py:135: in __enter__
+    return next(self.gen)
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1358: in decoration_helper
+    arg = exit_stack.enter_context(patching)
+../../.pyenv/versions/3.10.9/lib/python3.10/contextlib.py:492: in enter_context
+    result = _cm_type.__enter__(cm)
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1447: in __enter__
+    original, local = self.get_original()
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1420: in get_original
+    raise AttributeError(
+E   AttributeError: <module 'playlist_etl.apple_music_api' from '/Users/eli/github/tunemeld/playlist_etl/apple_music_api.py'> does not have the attribute 'WebDriverManager'
+__ ERROR at setup of TestTransform.test_convert_spotify_raw_export_valid_data __
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1376: in patched
+    with self.decoration_helper(patched,
+../../.pyenv/versions/3.10.9/lib/python3.10/contextlib.py:135: in __enter__
+    return next(self.gen)
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1358: in decoration_helper
+    arg = exit_stack.enter_context(patching)
+../../.pyenv/versions/3.10.9/lib/python3.10/contextlib.py:492: in enter_context
+    result = _cm_type.__enter__(cm)
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1447: in __enter__
+    original, local = self.get_original()
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1420: in get_original
+    raise AttributeError(
+E   AttributeError: <module 'playlist_etl.apple_music_api' from '/Users/eli/github/tunemeld/playlist_etl/apple_music_api.py'> does not have the attribute 'WebDriverManager'
+_ ERROR at setup of TestTransform.test_convert_spotify_raw_export_missing_track _
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1376: in patched
+    with self.decoration_helper(patched,
+../../.pyenv/versions/3.10.9/lib/python3.10/contextlib.py:135: in __enter__
+    return next(self.gen)
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1358: in decoration_helper
+    arg = exit_stack.enter_context(patching)
+../../.pyenv/versions/3.10.9/lib/python3.10/contextlib.py:492: in enter_context
+    result = _cm_type.__enter__(cm)
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1447: in __enter__
+    original, local = self.get_original()
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1420: in get_original
+    raise AttributeError(
+E   AttributeError: <module 'playlist_etl.apple_music_api' from '/Users/eli/github/tunemeld/playlist_etl/apple_music_api.py'> does not have the attribute 'WebDriverManager'
+_ ERROR at setup of TestTransform.test_convert_apple_music_raw_export_valid_data _
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1376: in patched
+    with self.decoration_helper(patched,
+../../.pyenv/versions/3.10.9/lib/python3.10/contextlib.py:135: in __enter__
+    return next(self.gen)
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1358: in decoration_helper
+    arg = exit_stack.enter_context(patching)
+../../.pyenv/versions/3.10.9/lib/python3.10/contextlib.py:492: in enter_context
+    result = _cm_type.__enter__(cm)
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1447: in __enter__
+    original, local = self.get_original()
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1420: in get_original
+    raise AttributeError(
+E   AttributeError: <module 'playlist_etl.apple_music_api' from '/Users/eli/github/tunemeld/playlist_etl/apple_music_api.py'> does not have the attribute 'WebDriverManager'
+_ ERROR at setup of TestTransform.test_convert_apple_music_raw_export_missing_isrc _
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1376: in patched
+    with self.decoration_helper(patched,
+../../.pyenv/versions/3.10.9/lib/python3.10/contextlib.py:135: in __enter__
+    return next(self.gen)
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1358: in decoration_helper
+    arg = exit_stack.enter_context(patching)
+../../.pyenv/versions/3.10.9/lib/python3.10/contextlib.py:492: in enter_context
+    result = _cm_type.__enter__(cm)
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1447: in __enter__
+    original, local = self.get_original()
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1420: in get_original
+    raise AttributeError(
+E   AttributeError: <module 'playlist_etl.apple_music_api' from '/Users/eli/github/tunemeld/playlist_etl/apple_music_api.py'> does not have the attribute 'WebDriverManager'
+_ ERROR at setup of TestTransform.test_convert_soundcloud_raw_export_valid_data _
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1376: in patched
+    with self.decoration_helper(patched,
+../../.pyenv/versions/3.10.9/lib/python3.10/contextlib.py:135: in __enter__
+    return next(self.gen)
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1358: in decoration_helper
+    arg = exit_stack.enter_context(patching)
+../../.pyenv/versions/3.10.9/lib/python3.10/contextlib.py:492: in enter_context
+    result = _cm_type.__enter__(cm)
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1447: in __enter__
+    original, local = self.get_original()
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1420: in get_original
+    raise AttributeError(
+E   AttributeError: <module 'playlist_etl.apple_music_api' from '/Users/eli/github/tunemeld/playlist_etl/apple_music_api.py'> does not have the attribute 'WebDriverManager'
+_ ERROR at setup of TestTransform.test_convert_soundcloud_raw_export_missing_isrc _
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1376: in patched
+    with self.decoration_helper(patched,
+../../.pyenv/versions/3.10.9/lib/python3.10/contextlib.py:135: in __enter__
+    return next(self.gen)
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1358: in decoration_helper
+    arg = exit_stack.enter_context(patching)
+../../.pyenv/versions/3.10.9/lib/python3.10/contextlib.py:492: in enter_context
+    result = _cm_type.__enter__(cm)
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1447: in __enter__
+    original, local = self.get_original()
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1420: in get_original
+    raise AttributeError(
+E   AttributeError: <module 'playlist_etl.apple_music_api' from '/Users/eli/github/tunemeld/playlist_etl/apple_music_api.py'> does not have the attribute 'WebDriverManager'
+____________ ERROR at setup of TestTransform.test_set_youtube_urls _____________
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1376: in patched
+    with self.decoration_helper(patched,
+../../.pyenv/versions/3.10.9/lib/python3.10/contextlib.py:135: in __enter__
+    return next(self.gen)
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1358: in decoration_helper
+    arg = exit_stack.enter_context(patching)
+../../.pyenv/versions/3.10.9/lib/python3.10/contextlib.py:492: in enter_context
+    result = _cm_type.__enter__(cm)
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1447: in __enter__
+    original, local = self.get_original()
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1420: in get_original
+    raise AttributeError(
+E   AttributeError: <module 'playlist_etl.apple_music_api' from '/Users/eli/github/tunemeld/playlist_etl/apple_music_api.py'> does not have the attribute 'WebDriverManager'
+______ ERROR at setup of TestTransform.test_set_apple_music_album_covers _______
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1376: in patched
+    with self.decoration_helper(patched,
+../../.pyenv/versions/3.10.9/lib/python3.10/contextlib.py:135: in __enter__
+    return next(self.gen)
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1358: in decoration_helper
+    arg = exit_stack.enter_context(patching)
+../../.pyenv/versions/3.10.9/lib/python3.10/contextlib.py:492: in enter_context
+    result = _cm_type.__enter__(cm)
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1447: in __enter__
+    original, local = self.get_original()
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1420: in get_original
+    raise AttributeError(
+E   AttributeError: <module 'playlist_etl.apple_music_api' from '/Users/eli/github/tunemeld/playlist_etl/apple_music_api.py'> does not have the attribute 'WebDriverManager'
+_____ ERROR at setup of TestTransform.test_set_apple_music_album_cover_url _____
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1376: in patched
+    with self.decoration_helper(patched,
+../../.pyenv/versions/3.10.9/lib/python3.10/contextlib.py:135: in __enter__
+    return next(self.gen)
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1358: in decoration_helper
+    arg = exit_stack.enter_context(patching)
+../../.pyenv/versions/3.10.9/lib/python3.10/contextlib.py:492: in enter_context
+    result = _cm_type.__enter__(cm)
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1447: in __enter__
+    original, local = self.get_original()
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1420: in get_original
+    raise AttributeError(
+E   AttributeError: <module 'playlist_etl.apple_music_api' from '/Users/eli/github/tunemeld/playlist_etl/apple_music_api.py'> does not have the attribute 'WebDriverManager'
+_________ ERROR at setup of TestTransform.test_merge_track_data_simple _________
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1376: in patched
+    with self.decoration_helper(patched,
+../../.pyenv/versions/3.10.9/lib/python3.10/contextlib.py:135: in __enter__
+    return next(self.gen)
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1358: in decoration_helper
+    arg = exit_stack.enter_context(patching)
+../../.pyenv/versions/3.10.9/lib/python3.10/contextlib.py:492: in enter_context
+    result = _cm_type.__enter__(cm)
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1447: in __enter__
+    original, local = self.get_original()
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1420: in get_original
+    raise AttributeError(
+E   AttributeError: <module 'playlist_etl.apple_music_api' from '/Users/eli/github/tunemeld/playlist_etl/apple_music_api.py'> does not have the attribute 'WebDriverManager'
+_________ ERROR at setup of TestTransform.test_merge_track_data_nested _________
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1376: in patched
+    with self.decoration_helper(patched,
+../../.pyenv/versions/3.10.9/lib/python3.10/contextlib.py:135: in __enter__
+    return next(self.gen)
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1358: in decoration_helper
+    arg = exit_stack.enter_context(patching)
+../../.pyenv/versions/3.10.9/lib/python3.10/contextlib.py:492: in enter_context
+    result = _cm_type.__enter__(cm)
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1447: in __enter__
+    original, local = self.get_original()
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1420: in get_original
+    raise AttributeError(
+E   AttributeError: <module 'playlist_etl.apple_music_api' from '/Users/eli/github/tunemeld/playlist_etl/apple_music_api.py'> does not have the attribute 'WebDriverManager'
+______________ ERROR at setup of TestTransform.test_format_tracks ______________
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1376: in patched
+    with self.decoration_helper(patched,
+../../.pyenv/versions/3.10.9/lib/python3.10/contextlib.py:135: in __enter__
+    return next(self.gen)
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1358: in decoration_helper
+    arg = exit_stack.enter_context(patching)
+../../.pyenv/versions/3.10.9/lib/python3.10/contextlib.py:492: in enter_context
+    result = _cm_type.__enter__(cm)
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1447: in __enter__
+    original, local = self.get_original()
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1420: in get_original
+    raise AttributeError(
+E   AttributeError: <module 'playlist_etl.apple_music_api' from '/Users/eli/github/tunemeld/playlist_etl/apple_music_api.py'> does not have the attribute 'WebDriverManager'
+__________ ERROR at setup of TestTransform.test_format_playlist_ranks __________
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1376: in patched
+    with self.decoration_helper(patched,
+../../.pyenv/versions/3.10.9/lib/python3.10/contextlib.py:135: in __enter__
+    return next(self.gen)
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1358: in decoration_helper
+    arg = exit_stack.enter_context(patching)
+../../.pyenv/versions/3.10.9/lib/python3.10/contextlib.py:492: in enter_context
+    result = _cm_type.__enter__(cm)
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1447: in __enter__
+    original, local = self.get_original()
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1420: in get_original
+    raise AttributeError(
+E   AttributeError: <module 'playlist_etl.apple_music_api' from '/Users/eli/github/tunemeld/playlist_etl/apple_music_api.py'> does not have the attribute 'WebDriverManager'
+__________ ERROR at setup of TestTransform.test_overwrite_new_tracks ___________
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1376: in patched
+    with self.decoration_helper(patched,
+../../.pyenv/versions/3.10.9/lib/python3.10/contextlib.py:135: in __enter__
+    return next(self.gen)
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1358: in decoration_helper
+    arg = exit_stack.enter_context(patching)
+../../.pyenv/versions/3.10.9/lib/python3.10/contextlib.py:492: in enter_context
+    result = _cm_type.__enter__(cm)
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1447: in __enter__
+    original, local = self.get_original()
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1420: in get_original
+    raise AttributeError(
+E   AttributeError: <module 'playlist_etl.apple_music_api' from '/Users/eli/github/tunemeld/playlist_etl/apple_music_api.py'> does not have the attribute 'WebDriverManager'
+________ ERROR at setup of TestTransform.test_overwrite_existing_tracks ________
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1376: in patched
+    with self.decoration_helper(patched,
+../../.pyenv/versions/3.10.9/lib/python3.10/contextlib.py:135: in __enter__
+    return next(self.gen)
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1358: in decoration_helper
+    arg = exit_stack.enter_context(patching)
+../../.pyenv/versions/3.10.9/lib/python3.10/contextlib.py:492: in enter_context
+    result = _cm_type.__enter__(cm)
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1447: in __enter__
+    original, local = self.get_original()
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1420: in get_original
+    raise AttributeError(
+E   AttributeError: <module 'playlist_etl.apple_music_api' from '/Users/eli/github/tunemeld/playlist_etl/apple_music_api.py'> does not have the attribute 'WebDriverManager'
+__ ERROR at setup of TestTransform.test_build_track_objects_missing_playlist ___
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1376: in patched
+    with self.decoration_helper(patched,
+../../.pyenv/versions/3.10.9/lib/python3.10/contextlib.py:135: in __enter__
+    return next(self.gen)
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1358: in decoration_helper
+    arg = exit_stack.enter_context(patching)
+../../.pyenv/versions/3.10.9/lib/python3.10/contextlib.py:492: in enter_context
+    result = _cm_type.__enter__(cm)
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1447: in __enter__
+    original, local = self.get_original()
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1420: in get_original
+    raise AttributeError(
+E   AttributeError: <module 'playlist_etl.apple_music_api' from '/Users/eli/github/tunemeld/playlist_etl/apple_music_api.py'> does not have the attribute 'WebDriverManager'
+_ ERROR at setup of TestTransform.test_convert_to_track_objects_unknown_service _
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1376: in patched
+    with self.decoration_helper(patched,
+../../.pyenv/versions/3.10.9/lib/python3.10/contextlib.py:135: in __enter__
+    return next(self.gen)
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1358: in decoration_helper
+    arg = exit_stack.enter_context(patching)
+../../.pyenv/versions/3.10.9/lib/python3.10/contextlib.py:492: in enter_context
+    result = _cm_type.__enter__(cm)
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1447: in __enter__
+    original, local = self.get_original()
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1420: in get_original
+    raise AttributeError(
+E   AttributeError: <module 'playlist_etl.apple_music_api' from '/Users/eli/github/tunemeld/playlist_etl/apple_music_api.py'> does not have the attribute 'WebDriverManager'
+_ ERROR at setup of TestTransform.test_convert_to_track_objects_all_services[Spotify] _
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1376: in patched
+    with self.decoration_helper(patched,
+../../.pyenv/versions/3.10.9/lib/python3.10/contextlib.py:135: in __enter__
+    return next(self.gen)
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1358: in decoration_helper
+    arg = exit_stack.enter_context(patching)
+../../.pyenv/versions/3.10.9/lib/python3.10/contextlib.py:492: in enter_context
+    result = _cm_type.__enter__(cm)
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1447: in __enter__
+    original, local = self.get_original()
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1420: in get_original
+    raise AttributeError(
+E   AttributeError: <module 'playlist_etl.apple_music_api' from '/Users/eli/github/tunemeld/playlist_etl/apple_music_api.py'> does not have the attribute 'WebDriverManager'
+_ ERROR at setup of TestTransform.test_convert_to_track_objects_all_services[SoundCloud] _
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1376: in patched
+    with self.decoration_helper(patched,
+../../.pyenv/versions/3.10.9/lib/python3.10/contextlib.py:135: in __enter__
+    return next(self.gen)
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1358: in decoration_helper
+    arg = exit_stack.enter_context(patching)
+../../.pyenv/versions/3.10.9/lib/python3.10/contextlib.py:492: in enter_context
+    result = _cm_type.__enter__(cm)
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1447: in __enter__
+    original, local = self.get_original()
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1420: in get_original
+    raise AttributeError(
+E   AttributeError: <module 'playlist_etl.apple_music_api' from '/Users/eli/github/tunemeld/playlist_etl/apple_music_api.py'> does not have the attribute 'WebDriverManager'
+_ ERROR at setup of TestTransform.test_convert_to_track_objects_all_services[AppleMusic] _
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1376: in patched
+    with self.decoration_helper(patched,
+../../.pyenv/versions/3.10.9/lib/python3.10/contextlib.py:135: in __enter__
+    return next(self.gen)
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1358: in decoration_helper
+    arg = exit_stack.enter_context(patching)
+../../.pyenv/versions/3.10.9/lib/python3.10/contextlib.py:492: in enter_context
+    result = _cm_type.__enter__(cm)
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1447: in __enter__
+    original, local = self.get_original()
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1420: in get_original
+    raise AttributeError(
+E   AttributeError: <module 'playlist_etl.apple_music_api' from '/Users/eli/github/tunemeld/playlist_etl/apple_music_api.py'> does not have the attribute 'WebDriverManager'
+__________ ERROR at setup of TestTransform.test_transform_end_to_end ___________
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1376: in patched
+    with self.decoration_helper(patched,
+../../.pyenv/versions/3.10.9/lib/python3.10/contextlib.py:135: in __enter__
+    return next(self.gen)
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1358: in decoration_helper
+    arg = exit_stack.enter_context(patching)
+../../.pyenv/versions/3.10.9/lib/python3.10/contextlib.py:492: in enter_context
+    result = _cm_type.__enter__(cm)
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1447: in __enter__
+    original, local = self.get_original()
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:1420: in get_original
+    raise AttributeError(
+E   AttributeError: <module 'playlist_etl.apple_music_api' from '/Users/eli/github/tunemeld/playlist_etl/apple_music_api.py'> does not have the attribute 'WebDriverManager'
+_______ ERROR at setup of TestWebDriverManager.test_close_driver_cleanup _______
+tests/utils_test.py:16: in webdriver_manager
+    manager = WebDriverManager(use_proxy=False)
+playlist_etl/utils.py:125: in __init__
+    self.driver = self._create_webdriver(self.use_proxy)
+playlist_etl/utils.py:143: in _create_webdriver
+    driver = webdriver.Chrome(service=service, options=options)
+../../.pyenv/versions/tunemeld/lib/python3.10/site-packages/selenium/webdriver/chrome/webdriver.py:45: in __init__
+    super().__init__(
+../../.pyenv/versions/tunemeld/lib/python3.10/site-packages/selenium/webdriver/chromium/webdriver.py:55: in __init__
+    self.service.start()
+../../.pyenv/versions/tunemeld/lib/python3.10/site-packages/selenium/webdriver/common/service.py:102: in start
+    self.assert_process_still_running()
+../../.pyenv/versions/tunemeld/lib/python3.10/site-packages/selenium/webdriver/common/service.py:115: in assert_process_still_running
+    raise WebDriverException(f"Service {self._path} unexpectedly exited. Status code was: {return_code}")
+E   selenium.common.exceptions.WebDriverException: Message: Service /Users/eli/.wdm/drivers/chromedriver/mac64/137.0.7151.119/chromedriver-mac-arm64/chromedriver unexpectedly exited. Status code was: -9
+================================ tests coverage ================================
+_______________ coverage: platform darwin, python 3.10.9-final-0 _______________
+
+Name                                          Stmts   Miss  Cover   Missing
+---------------------------------------------------------------------------
+playlist_etl/__init__.py                          0      0   100%
+playlist_etl/aggregate.py                        73      0   100%
+playlist_etl/apple_music_api.py                  48     33    31%   29, 35-37, 43-45, 61-94, 99-101
+playlist_etl/config.py                           14      0   100%
+playlist_etl/extract.py                         245     80    67%   104-112, 117, 119, 125, 148-150, 157-165, 170-181, 192-196, 202-209, 217-228, 277, 323, 330, 335, 338-339, 342-363, 403, 422, 454-469
+playlist_etl/helpers.py                          18      9    50%   10-17, 25-28
+playlist_etl/historical_view_count.py            49     49     0%   1-123
+playlist_etl/main.py                             30     30     0%   1-55
+playlist_etl/main_view_count.py                   3      3     0%   1-4
+playlist_etl/models.py                           63      0   100%
+playlist_etl/mongo_db_client.py                  80     57    29%   17-23, 26, 29-39, 42-52, 55-59, 62-64, 67-68, 71-73, 76-77, 80-84, 89-94, 99, 104
+playlist_etl/services.py                        231    197    15%   29-38, 41-66, 69, 72-80, 83-88, 96-106, 109-114, 117-169, 174-177, 180-200, 203-234, 242-258, 261-313, 318, 321-343
+playlist_etl/transform.py                       153     91    41%   46-53, 56-71, 74-79, 82-90, 93-101, 105, 115, 123-124, 140-161, 173, 177, 195-199, 202-210, 213-215, 218-226, 229-237, 240-257
+playlist_etl/transform_playlist_metadata.py     101    101     0%   10-212
+playlist_etl/utils.py                           207    142    31%   33-36, 40-41, 45-53, 57-70, 74-85, 89-94, 98-101, 105-107, 111-114, 118, 126, 135-137, 144, 152-175, 178-200, 203-209, 212-214, 217-218, 221-230, 235-237, 240-245, 248-249, 252-253, 256-259, 267-272, 276-284, 288-290
+playlist_etl/view_count.py                       56     41    27%   19-21, 24-29, 32-58, 61-63, 66-69, 72-74, 77-78
+---------------------------------------------------------------------------
+TOTAL                                          1371    833    39%
+Coverage XML written to file coverage.xml
+=========================== short test summary info ============================
+ERROR tests/extract_test.py::TestExtractor::test_extractor_init_spotify - Typ...
+ERROR tests/extract_test.py::TestExtractor::test_extractor_init_apple_music
+ERROR tests/extract_test.py::TestExtractor::test_extractor_init_soundcloud - ...
+ERROR tests/extract_test.py::TestExtractor::test_extractor_init_invalid_service
+ERROR tests/extract_test.py::TestRealWorldScenarios::test_spotify_playlist_extraction
+ERROR tests/extract_test.py::TestRealWorldScenarios::test_apple_music_playlist_extraction
+ERROR tests/extract_test.py::TestRealWorldScenarios::test_soundcloud_playlist_extraction
+ERROR tests/extract_test.py::TestRealWorldScenarios::test_extraction_with_api_error
+ERROR tests/extract_test.py::TestRealWorldScenarios::test_extraction_with_empty_response
+ERROR tests/extract_test.py::TestRealWorldScenarios::test_all_service_genre_combinations[Spotify-dance]
+ERROR tests/extract_test.py::TestRealWorldScenarios::test_all_service_genre_combinations[AppleMusic-pop]
+ERROR tests/extract_test.py::TestRealWorldScenarios::test_all_service_genre_combinations[SoundCloud-rap]
+ERROR tests/extract_test.py::TestRealWorldScenarios::test_all_service_genre_combinations[Spotify-country]
+ERROR tests/extract_test.py::TestRealWorldScenarios::test_url_construction_spotify
+ERROR tests/extract_test.py::TestRealWorldScenarios::test_url_construction_apple_music
+ERROR tests/extract_test.py::TestRealWorldScenarios::test_url_construction_soundcloud
+ERROR tests/transform2_test.py::TestTransform::test_init - AttributeError: <m...
+ERROR tests/transform2_test.py::TestTransform::test_get_track_new_track - Att...
+ERROR tests/transform2_test.py::TestTransform::test_get_track_existing_track
+ERROR tests/transform2_test.py::TestTransform::test_convert_spotify_raw_export_valid_data
+ERROR tests/transform2_test.py::TestTransform::test_convert_spotify_raw_export_missing_track
+ERROR tests/transform2_test.py::TestTransform::test_convert_apple_music_raw_export_valid_data
+ERROR tests/transform2_test.py::TestTransform::test_convert_apple_music_raw_export_missing_isrc
+ERROR tests/transform2_test.py::TestTransform::test_convert_soundcloud_raw_export_valid_data
+ERROR tests/transform2_test.py::TestTransform::test_convert_soundcloud_raw_export_missing_isrc
+ERROR tests/transform2_test.py::TestTransform::test_set_youtube_urls - Attrib...
+ERROR tests/transform2_test.py::TestTransform::test_set_apple_music_album_covers
+ERROR tests/transform2_test.py::TestTransform::test_set_apple_music_album_cover_url
+ERROR tests/transform2_test.py::TestTransform::test_merge_track_data_simple
+ERROR tests/transform2_test.py::TestTransform::test_merge_track_data_nested
+ERROR tests/transform2_test.py::TestTransform::test_format_tracks - Attribute...
+ERROR tests/transform2_test.py::TestTransform::test_format_playlist_ranks - A...
+ERROR tests/transform2_test.py::TestTransform::test_overwrite_new_tracks - At...
+ERROR tests/transform2_test.py::TestTransform::test_overwrite_existing_tracks
+ERROR tests/transform2_test.py::TestTransform::test_build_track_objects_missing_playlist
+ERROR tests/transform2_test.py::TestTransform::test_convert_to_track_objects_unknown_service
+ERROR tests/transform2_test.py::TestTransform::test_convert_to_track_objects_all_services[Spotify]
+ERROR tests/transform2_test.py::TestTransform::test_convert_to_track_objects_all_services[SoundCloud]
+ERROR tests/transform2_test.py::TestTransform::test_convert_to_track_objects_all_services[AppleMusic]
+ERROR tests/transform2_test.py::TestTransform::test_transform_end_to_end - At...
+ERROR tests/utils_test.py::TestWebDriverManager::test_close_driver_cleanup - ...
+================= 42 passed, 8 deselected, 41 errors in 7.26s ==================

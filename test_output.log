@@ -1,0 +1,202 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.10.9, pytest-8.4.0, pluggy-1.5.0 -- /Users/eli/.pyenv/versions/tunemeld/bin/python
+cachedir: .pytest_cache
+rootdir: /Users/eli/github/tunemeld
+configfile: pytest.ini
+plugins: anyio-4.9.0, cov-6.2.1, mock-3.14.1, asyncio-1.0.0
+asyncio: mode=strict, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 91 items / 7 deselected / 84 selected
+
+tests/aggregate2_test.py::TestAggregate::test_init PASSED                [  1%]
+tests/aggregate2_test.py::TestAggregate::test_group_by_genre_single_service PASSED [  2%]
+tests/aggregate2_test.py::TestAggregate::test_group_by_genre_multiple_services PASSED [  3%]
+tests/aggregate2_test.py::TestAggregate::test_get_matches_single_service_excluded PASSED [  4%]
+tests/aggregate2_test.py::TestAggregate::test_get_matches_multiple_services_included PASSED [  5%]
+tests/aggregate2_test.py::TestAggregate::test_add_aggregate_rank_priority_order PASSED [  7%]
+tests/aggregate2_test.py::TestAggregate::test_add_aggregate_rank_spotify_fallback PASSED [  8%]
+tests/aggregate2_test.py::TestAggregate::test_rank_matches_sorting PASSED [  9%]
+tests/aggregate2_test.py::TestAggregate::test_format_aggregated_playlist PASSED [ 10%]
+tests/aggregate2_test.py::TestAggregate::test_write_aggregated_playlists PASSED [ 11%]
+tests/aggregate2_test.py::TestAggregate::test_aggregate_end_to_end PASSED [ 13%]
+tests/aggregate2_test.py::TestAggregate::test_aggregate_empty_playlists PASSED [ 14%]
+tests/aggregate2_test.py::TestAggregate::test_aggregate_missing_playlist PASSED [ 15%]
+tests/aggregate2_test.py::TestAggregate::test_aggregate_all_genres[dance] PASSED [ 16%]
+tests/aggregate2_test.py::TestAggregate::test_aggregate_all_genres[rap] PASSED [ 17%]
+tests/aggregate2_test.py::TestAggregate::test_aggregate_all_genres[country] PASSED [ 19%]
+tests/aggregate2_test.py::TestAggregate::test_aggregate_all_genres[pop] PASSED [ 20%]
+tests/aggregate2_test.py::TestAggregate::test_rank_priority_configuration PASSED [ 21%]
+tests/aggregate2_test.py::TestAggregateIntegration::test_realistic_aggregation_scenario PASSED [ 22%]
+tests/extract_test.py::TestRapidAPIClient::test_init_with_api_key PASSED [ 23%]
+tests/extract_test.py::TestRapidAPIClient::test_init_without_api_key PASSED [ 25%]
+tests/extract_test.py::TestRapidAPIClient::test_init_with_empty_api_key PASSED [ 26%]
+tests/extract_test.py::TestGetJsonResponse::test_get_json_response_success PASSED [ 27%]
+tests/extract_test.py::TestGetJsonResponse::test_get_json_response_http_error PASSED [ 28%]
+tests/extract_test.py::TestGetJsonResponse::test_get_json_response_debug_mode PASSED [ 29%]
+tests/extract_test.py::TestGetJsonResponse::test_get_json_response_no_rapid_mode PASSED [ 30%]
+tests/extract_test.py::TestExtractor::test_extractor_init_spotify PASSED [ 32%]
+tests/extract_test.py::TestExtractor::test_extractor_init_apple_music FAILED [ 33%]
+tests/extract_test.py::TestExtractor::test_extractor_init_soundcloud PASSED [ 34%]
+tests/extract_test.py::TestExtractor::test_extractor_init_invalid_service PASSED [ 35%]
+tests/extract_test.py::TestServiceConfigurations::test_service_configs_structure PASSED [ 36%]
+tests/extract_test.py::TestServiceConfigurations::test_service_configs_links_all_genres PASSED [ 38%]
+tests/extract_test.py::TestServiceConfigurations::test_playlist_urls_format PASSED [ 39%]
+tests/extract_test.py::TestServiceConfigurations::test_service_config_completeness[AppleMusic] PASSED [ 40%]
+tests/extract_test.py::TestServiceConfigurations::test_service_config_completeness[SoundCloud] PASSED [ 41%]
+tests/extract_test.py::TestServiceConfigurations::test_service_config_completeness[Spotify] PASSED [ 42%]
+tests/extract_test.py::TestPlaylistGenres::test_playlist_genres_defined PASSED [ 44%]
+tests/extract_test.py::TestPlaylistGenres::test_playlist_genres_match_models PASSED [ 45%]
+tests/extract_test.py::TestRealWorldScenarios::test_spotify_playlist_extraction PASSED [ 46%]
+tests/extract_test.py::TestRealWorldScenarios::test_apple_music_playlist_extraction FAILED [ 47%]
+tests/extract_test.py::TestRealWorldScenarios::test_soundcloud_playlist_extraction PASSED [ 48%]
+tests/extract_test.py::TestRealWorldScenarios::test_extraction_with_api_error PASSED [ 50%]
+tests/extract_test.py::TestRealWorldScenarios::test_extraction_with_empty_response PASSED [ 51%]
+tests/extract_test.py::TestRealWorldScenarios::test_all_service_genre_combinations[Spotify-dance] PASSED [ 52%]
+tests/extract_test.py::TestRealWorldScenarios::test_all_service_genre_combinations[AppleMusic-pop] FAILED [ 53%]
+tests/extract_test.py::TestRealWorldScenarios::test_all_service_genre_combinations[SoundCloud-rap] PASSED [ 54%]
+tests/extract_test.py::TestRealWorldScenarios::test_all_service_genre_combinations[Spotify-country] PASSED [ 55%]
+tests/extract_test.py::TestRealWorldScenarios::test_url_construction_spotify PASSED [ 57%]
+tests/extract_test.py::TestRealWorldScenarios::test_url_construction_apple_music PASSED [ 58%]
+tests/extract_test.py::TestRealWorldScenarios::test_url_construction_soundcloud PASSED [ 59%]
+tests/extract_test.py::TestErrorHandling::test_network_timeout_handling PASSED [ 60%]
+tests/extract_test.py::TestErrorHandling::test_invalid_json_response PASSED [ 61%]
+tests/extract_test.py::TestErrorHandling::test_rate_limit_handling PASSED [ 63%]
+tests/extract_test.py::TestRunExtraction::test_run_extraction_spotify_end_to_end PASSED [ 64%]
+tests/extract_test.py::TestRunExtraction::test_run_extraction_apple_music_end_to_end PASSED [ 65%]
+tests/extract_test.py::TestRunExtraction::test_run_extraction_debug_mode_skips_mongo PASSED [ 66%]
+tests/extract_test.py::TestRunExtraction::test_run_extraction_invalid_service_raises_error PASSED [ 67%]
+tests/transform2_test.py::TestTransform::test_init PASSED                [ 69%]
+tests/transform2_test.py::TestTransform::test_get_track_new_track PASSED [ 70%]
+tests/transform2_test.py::TestTransform::test_get_track_existing_track PASSED [ 71%]
+tests/transform2_test.py::TestTransform::test_convert_spotify_raw_export_valid_data PASSED [ 72%]
+tests/transform2_test.py::TestTransform::test_convert_spotify_raw_export_missing_track PASSED [ 73%]
+tests/transform2_test.py::TestTransform::test_convert_apple_music_raw_export_valid_data PASSED [ 75%]
+tests/transform2_test.py::TestTransform::test_convert_apple_music_raw_export_missing_isrc PASSED [ 76%]
+tests/transform2_test.py::TestTransform::test_convert_soundcloud_raw_export_valid_data PASSED [ 77%]
+tests/transform2_test.py::TestTransform::test_convert_soundcloud_raw_export_missing_isrc PASSED [ 78%]
+tests/transform2_test.py::TestTransform::test_set_youtube_urls PASSED    [ 79%]
+tests/transform2_test.py::TestTransform::test_set_apple_music_album_covers PASSED [ 80%]
+tests/transform2_test.py::TestTransform::test_set_apple_music_album_cover_url FAILED [ 82%]
+tests/transform2_test.py::TestTransform::test_merge_track_data_simple PASSED [ 83%]
+tests/transform2_test.py::TestTransform::test_merge_track_data_nested PASSED [ 84%]
+tests/transform2_test.py::TestTransform::test_format_tracks PASSED       [ 85%]
+tests/transform2_test.py::TestTransform::test_format_playlist_ranks PASSED [ 86%]
+tests/transform2_test.py::TestTransform::test_overwrite_new_tracks PASSED [ 88%]
+tests/transform2_test.py::TestTransform::test_overwrite_existing_tracks PASSED [ 89%]
+tests/transform2_test.py::TestTransform::test_build_track_objects_missing_playlist PASSED [ 90%]
+tests/transform2_test.py::TestTransform::test_convert_to_track_objects_unknown_service PASSED [ 91%]
+tests/transform2_test.py::TestTransform::test_convert_to_track_objects_all_services[Spotify] PASSED [ 92%]
+tests/transform2_test.py::TestTransform::test_convert_to_track_objects_all_services[SoundCloud] PASSED [ 94%]
+tests/transform2_test.py::TestTransform::test_convert_to_track_objects_all_services[AppleMusic] PASSED [ 95%]
+tests/transform2_test.py::TestTransform::test_transform_end_to_end PASSED [ 96%]
+tests/transform2_test.py::TestTransformIntegration::test_realistic_multi_service_transformation PASSED [ 97%]
+tests/utils_test.py::TestWebDriverManager::test_webdriver_initialization SKIPPED [ 98%]
+tests/utils_test.py::TestWebDriverManager::test_close_driver_cleanup ERROR [100%]
+
+==================================== ERRORS ====================================
+_______ ERROR at setup of TestWebDriverManager.test_close_driver_cleanup _______
+tests/utils_test.py:16: in webdriver_manager
+    manager = WebDriverManager(use_proxy=True)
+playlist_etl/utils.py:125: in __init__
+    self.driver = self._create_webdriver(self.use_proxy)
+playlist_etl/utils.py:135: in _create_webdriver
+    proxy = FreeProxy(rand=True).get()
+../../.pyenv/versions/tunemeld/lib/python3.10/site-packages/fp/fp.py:85: in get
+    return self.get(repeat=True)
+../../.pyenv/versions/tunemeld/lib/python3.10/site-packages/fp/fp.py:86: in get
+    raise FreeProxyException(
+E   fp.errors.FreeProxyException: There are no working proxies at this time.
+=================================== FAILURES ===================================
+________________ TestExtractor.test_extractor_init_apple_music _________________
+tests/extract_test.py:126: in test_extractor_init_apple_music
+    extractor = AppleMusicFetcher(self.mock_client, "AppleMusic", "pop")
+playlist_etl/extract.py:283: in __init__
+    self.webdriver_manager = WebDriverManager()
+playlist_etl/utils.py:125: in __init__
+    self.driver = self._create_webdriver(self.use_proxy)
+playlist_etl/utils.py:143: in _create_webdriver
+    driver = webdriver.Chrome(service=service, options=options)
+../../.pyenv/versions/tunemeld/lib/python3.10/site-packages/selenium/webdriver/chrome/webdriver.py:45: in __init__
+    super().__init__(
+../../.pyenv/versions/tunemeld/lib/python3.10/site-packages/selenium/webdriver/chromium/webdriver.py:55: in __init__
+    self.service.start()
+../../.pyenv/versions/tunemeld/lib/python3.10/site-packages/selenium/webdriver/common/service.py:102: in start
+    self.assert_process_still_running()
+../../.pyenv/versions/tunemeld/lib/python3.10/site-packages/selenium/webdriver/common/service.py:115: in assert_process_still_running
+    raise WebDriverException(f"Service {self._path} unexpectedly exited. Status code was: {return_code}")
+E   selenium.common.exceptions.WebDriverException: Message: Service /Users/eli/.wdm/drivers/chromedriver/mac64/137.0.7151.119/chromedriver-mac-arm64/chromedriver unexpectedly exited. Status code was: -9
+_________ TestRealWorldScenarios.test_apple_music_playlist_extraction __________
+tests/extract_test.py:299: in test_apple_music_playlist_extraction
+    extractor = AppleMusicFetcher(self.mock_client, "AppleMusic", "dance")
+playlist_etl/extract.py:283: in __init__
+    self.webdriver_manager = WebDriverManager()
+playlist_etl/utils.py:125: in __init__
+    self.driver = self._create_webdriver(self.use_proxy)
+playlist_etl/utils.py:143: in _create_webdriver
+    driver = webdriver.Chrome(service=service, options=options)
+../../.pyenv/versions/tunemeld/lib/python3.10/site-packages/selenium/webdriver/chrome/webdriver.py:45: in __init__
+    super().__init__(
+../../.pyenv/versions/tunemeld/lib/python3.10/site-packages/selenium/webdriver/chromium/webdriver.py:55: in __init__
+    self.service.start()
+../../.pyenv/versions/tunemeld/lib/python3.10/site-packages/selenium/webdriver/common/service.py:102: in start
+    self.assert_process_still_running()
+../../.pyenv/versions/tunemeld/lib/python3.10/site-packages/selenium/webdriver/common/service.py:115: in assert_process_still_running
+    raise WebDriverException(f"Service {self._path} unexpectedly exited. Status code was: {return_code}")
+E   selenium.common.exceptions.WebDriverException: Message: Service /Users/eli/.wdm/drivers/chromedriver/mac64/137.0.7151.119/chromedriver-mac-arm64/chromedriver unexpectedly exited. Status code was: -9
+__ TestRealWorldScenarios.test_all_service_genre_combinations[AppleMusic-pop] __
+tests/extract_test.py:391: in test_all_service_genre_combinations
+    extractor = fetcher_class(self.mock_client, service_name, genre)
+playlist_etl/extract.py:283: in __init__
+    self.webdriver_manager = WebDriverManager()
+playlist_etl/utils.py:125: in __init__
+    self.driver = self._create_webdriver(self.use_proxy)
+playlist_etl/utils.py:143: in _create_webdriver
+    driver = webdriver.Chrome(service=service, options=options)
+../../.pyenv/versions/tunemeld/lib/python3.10/site-packages/selenium/webdriver/chrome/webdriver.py:45: in __init__
+    super().__init__(
+../../.pyenv/versions/tunemeld/lib/python3.10/site-packages/selenium/webdriver/chromium/webdriver.py:55: in __init__
+    self.service.start()
+../../.pyenv/versions/tunemeld/lib/python3.10/site-packages/selenium/webdriver/common/service.py:102: in start
+    self.assert_process_still_running()
+../../.pyenv/versions/tunemeld/lib/python3.10/site-packages/selenium/webdriver/common/service.py:115: in assert_process_still_running
+    raise WebDriverException(f"Service {self._path} unexpectedly exited. Status code was: {return_code}")
+E   selenium.common.exceptions.WebDriverException: Message: Service /Users/eli/.wdm/drivers/chromedriver/mac64/137.0.7151.119/chromedriver-mac-arm64/chromedriver unexpectedly exited. Status code was: -9
+______________ TestTransform.test_set_apple_music_album_cover_url ______________
+../../.pyenv/versions/3.10.9/lib/python3.10/unittest/mock.py:940: in assert_called_once_with
+    raise AssertionError(msg)
+E   AssertionError: Expected 'apple_music_get_album_cover_url' to be called once. Called 0 times.
+
+During handling of the above exception, another exception occurred:
+tests/transform2_test.py:350: in test_set_apple_music_album_cover_url
+    mock_func.assert_called_once_with("https://music.apple.com/us/album/123")
+E   AssertionError: Expected 'apple_music_get_album_cover_url' to be called once. Called 0 times.
+================================ tests coverage ================================
+_______________ coverage: platform darwin, python 3.10.9-final-0 _______________
+
+Name                                          Stmts   Miss  Cover   Missing
+---------------------------------------------------------------------------
+playlist_etl/__init__.py                          0      0   100%
+playlist_etl/aggregate.py                        73      0   100%
+playlist_etl/apple_music_api.py                  48     10    79%   70-71, 79-90
+playlist_etl/config.py                           14      0   100%
+playlist_etl/extract.py                         245     77    69%   104-112, 117, 119, 125, 148-150, 157-165, 170-181, 192-196, 202-209, 217-228, 277, 323, 330, 342-363, 403, 422, 454-469
+playlist_etl/helpers.py                          18      5    72%   10-17
+playlist_etl/historical_view_count.py            49     49     0%   1-123
+playlist_etl/main.py                             30     30     0%   1-55
+playlist_etl/main_view_count.py                   3      3     0%   1-4
+playlist_etl/models.py                           63      0   100%
+playlist_etl/mongo_db_client.py                  80     50    38%   20, 29-39, 42-52, 55-59, 62-64, 67-68, 71-73, 76-77, 80-84, 89-94, 99, 104
+playlist_etl/services.py                        231    197    15%   29-38, 41-66, 69, 72-80, 83-88, 96-106, 109-114, 117-169, 174-177, 180-200, 203-234, 242-258, 261-313, 318, 321-343
+playlist_etl/transform.py                       153      3    98%   115, 143, 173
+playlist_etl/transform_playlist_metadata.py     101    101     0%   10-212
+playlist_etl/utils.py                           207    130    37%   33-36, 40-41, 45-53, 57-70, 74-85, 89-94, 98-101, 105-107, 111-114, 118, 126, 136-137, 144, 152-175, 178-200, 203-209, 212-214, 217-218, 221-230, 252-253, 256-259, 267-272, 276-284, 288-290
+playlist_etl/view_count.py                       56     41    27%   19-21, 24-29, 32-58, 61-63, 66-69, 72-74, 77-78
+---------------------------------------------------------------------------
+TOTAL                                          1371    696    49%
+Coverage XML written to file coverage.xml
+=========================== short test summary info ============================
+FAILED tests/extract_test.py::TestExtractor::test_extractor_init_apple_music
+FAILED tests/extract_test.py::TestRealWorldScenarios::test_apple_music_playlist_extraction
+FAILED tests/extract_test.py::TestRealWorldScenarios::test_all_service_genre_combinations[AppleMusic-pop]
+FAILED tests/transform2_test.py::TestTransform::test_set_apple_music_album_cover_url
+ERROR tests/utils_test.py::TestWebDriverManager::test_close_driver_cleanup - ...
+== 4 failed, 78 passed, 1 skipped, 7 deselected, 1 error in 443.32s (0:07:23) ==

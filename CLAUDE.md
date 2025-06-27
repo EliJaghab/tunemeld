@@ -83,7 +83,7 @@ make test-integration
 # Run tests with coverage
 make test-coverage
 
-# Test playlist ETL pipeline (simulates playlist_etl2 GitHub workflow)
+# Test playlist ETL pipeline (simulates playlist_etl GitHub workflow)
 make test-playlist-etl
 
 # Visual/UI testing
