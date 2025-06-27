@@ -5,8 +5,18 @@ from dotenv import load_dotenv
 
 environment = os.getenv("RAILWAY_ENVIRONMENT", "development")
 
+# Load appropriate environment file based on environment
+# Environment files are in the root directory, two levels up from settings.py
+env_file_path = Path(__file__).resolve().parent.parent.parent
+
 if environment == "development":
-    load_dotenv(".env.dev")
+    load_dotenv(env_file_path / ".env.dev")
+elif environment == "test":
+    load_dotenv(env_file_path / ".env.test")
+elif environment == "production":
+    # Production should use environment variables set in Railway/hosting platform
+    # We explicitly don't load .env.prod to avoid accidental exposure
+    pass
 
 MONGO_DATA_API_KEY = os.getenv("MONGO_DATA_API_KEY")
 MONGO_DATA_API_ENDPOINT = os.getenv("MONGO_DATA_API_ENDPOINT")
@@ -25,9 +35,13 @@ CSRF_TRUSTED_ORIGINS = [
     "https://tunemeld.com",
 ]
 
-SECRET_KEY = os.getenv(
-    "SECRET_KEY", "django-insecure-!^u31q!@ui68(aook0g4w@jw*ei=%bbx1d8em_bm8hxm+6te#0"
-)
+# SECRET_KEY is required and must be set as an environment variable
+SECRET_KEY = os.getenv("SECRET_KEY")
+if not SECRET_KEY:
+    raise ValueError(
+        "SECRET_KEY environment variable is required but not set. "
+        "Please set it in your .env file or environment variables."
+    )
 
 DEBUG = True
 

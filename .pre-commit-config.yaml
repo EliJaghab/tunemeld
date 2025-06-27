@@ -43,3 +43,12 @@ repos:
   #       language: system
   #       pass_filenames: false
   #       stages: [pre-commit]
+
+  - repo: local
+    hooks:
+      - id: validate-credentials
+        name: Validate API credentials
+        entry: python scripts/validate_credentials.py --env-file .env.dev
+        language: system
+        pass_filenames: false
+        stages: [pre-commit]
