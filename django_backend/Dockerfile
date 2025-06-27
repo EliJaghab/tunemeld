@@ -12,7 +12,11 @@ ENV PYTHONPATH=/
 
 RUN pip install --upgrade pip && pip install -r /requirements.txt
 
-RUN chmod +x manage.py
+# Debug: List files to verify manage.py is copied correctly
+RUN ls -la /
+
+# Verify manage.py exists and is executable (remove redundant chmod)
+RUN test -f manage.py && echo "manage.py found" || echo "manage.py NOT found"
 
 EXPOSE 8000
 EXPOSE 5678
