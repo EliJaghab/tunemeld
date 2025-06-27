@@ -9,9 +9,6 @@
 	lint \
 	fix \
 	pull_push \
-	dev \
-	prod \
-	invalidate_cache \
 	test \
 	test-unit \
 	test-integration \
@@ -104,11 +101,9 @@ pull_push: setup_env
 	@if [ $$? -ne 0 ]; then echo "Error: Failed to push the changes."; exit 1; fi
 	@echo "Successfully pulled, rebased, and pushed the changes."
 
-dev: setup_env
-	cd backend/backend && wrangler dev --env development src/index.ts
-
-prod:
-	cd backend/backend && wrangler deploy --env production src/index.ts
+# Legacy Cloudflare Worker deployment targets removed
+# The application now uses Railway for backend deployment
+# Use 'make serve-backend' for local Django development
 
 invalidate_cache:
 	@set -o allexport; source $(ENV_FILE); set +o allexport; \
