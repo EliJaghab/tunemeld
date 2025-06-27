@@ -157,7 +157,35 @@ Agentree is installed and available for creating isolated development environmen
 - Installs dependencies in the new environment
 - Allows multiple agents to work on different features simultaneously without conflicts
 
-### Usage
+### Numbered Agent Sandboxes (Recommended)
+
+For simpler agent management, use the numbered sandbox system with 6 pre-defined agent slots:
+
+```bash
+# Direct script usage
+agent-sandbox status
+agent-sandbox open 1 fix-auth-bug
+agent-sandbox auto-open add-dark-mode
+agent-sandbox close 1
+
+# Or use agent-specific commands
+scripts/agent-make-commands sandbox-status
+scripts/agent-make-commands sandbox-open 1 fix-auth-bug
+scripts/agent-make-commands sandbox-auto add-dark-mode
+scripts/agent-make-commands sandbox-close 1
+```
+
+**Sandbox Management:**
+
+- 6 numbered sandboxes (1-6) available
+- Each sandbox can be "open" (in use) or "closed" (available)
+- Simple naming: `sandbox-1-task-name`, `sandbox-2-task-name`, etc.
+- Automatic cleanup when closing sandboxes
+- Status tracking with visual indicators (🟢 open, ⚫ closed)
+
+### Manual Agentree Usage
+
+For custom branch naming or advanced usage:
 
 When asked to create a PR or work on a separate feature using agents:
 
