@@ -4,7 +4,7 @@ from playlist_etl.aggregate import Aggregate
 from playlist_etl.config import ISRC_CACHE_COLLECTION, YOUTUBE_URL_CACHE_COLLECTION
 from playlist_etl.helpers import set_secrets
 from playlist_etl.services import AppleMusicService, SpotifyService, YouTubeService
-from playlist_etl.transform_playlist import Transform
+from playlist_etl.transform import Transform
 from playlist_etl.transform_playlist_metadata import transform_all_spotify_metadata
 from playlist_etl.utils import CacheManager, MongoDBClient, WebDriverManager
 from playlist_etl.view_count import ViewCountTrackProcessor
