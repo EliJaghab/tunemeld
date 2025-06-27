@@ -12,8 +12,6 @@ ENV PYTHONPATH=/
 
 RUN pip install --upgrade pip && pip install -r /requirements.txt
 
-RUN chmod +x manage.py
-
 EXPOSE 8000
 EXPOSE 5678
 
