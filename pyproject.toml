@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [tool.setuptools.packages.find]
 include = ["playlist_etl*", "django_backend*"]
-exclude = ["venv*", "node_modules*", "staticfiles*", "backend*", "kv_worker*", "output_static*", "tests*"]
+exclude = ["venv*", "node_modules*", "staticfiles*", "backend*", "output_static*", "tests*"]
 
 [project]
 name = "tunemeld"
