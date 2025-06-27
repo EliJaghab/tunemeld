@@ -302,6 +302,16 @@ NEVER create files unless they're absolutely necessary for achieving your goal.
 ALWAYS prefer editing an existing file to creating a new one.
 NEVER proactively create documentation files (\*.md) or README files. Only create documentation files if explicitly requested by the User.
 
+## Git Workflow Guidelines
+
+**NEVER push directly to main/master branch unless explicitly requested:**
+
+- ALWAYS use agentree workflow: `agentree -b <branch-name>` before making changes
+- Work in isolated agentree environments to prevent contamination
+- Create PRs for all changes - never commit directly to main
+- Only push to main if the user specifically says "push to main" or "commit to main"
+- Exception: Only push directly to main when explicitly requested by the user
+
 ## Communication Guidelines
 
 **ALWAYS include PR links at the end of messages when available:**
