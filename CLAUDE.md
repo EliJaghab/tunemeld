@@ -146,6 +146,17 @@ make setup_backend_env
 make install-dev
 ```
 
+### Django SECRET_KEY Configuration
+
+**IMPORTANT**: Django requires a `SECRET_KEY` environment variable to be set. The application will not start without it.
+
+1. **Required for all environments**: Development, test, and production each need a unique SECRET_KEY
+2. **Auto-generated keys**: The repository includes pre-generated keys in `.env.dev` and `.env.test` (safe for those environments)
+3. **Production keys**: Must be set securely via Railway environment variables, never committed to the repository
+4. **Security**: Each environment must use a different key for proper security isolation
+
+If you see an error about missing SECRET_KEY, ensure your environment file is properly loaded or set the variable directly.
+
 ## Agentree Integration
 
 Agentree is installed and available for creating isolated development environments for AI agents working on separate features or bug fixes.
