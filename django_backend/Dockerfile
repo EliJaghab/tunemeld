@@ -6,15 +6,15 @@ ENV PYDEVD_DISABLE_FILE_VALIDATION=1
 
 WORKDIR /
 
-COPY django_backend/ /
+COPY . /
 
 ENV PYTHONPATH=/
 
 RUN pip install --upgrade pip && pip install -r /requirements.txt
 
-RUN chmod +x /manage.py
+RUN chmod +x manage.py
 
-EXPOSE 8080
+EXPOSE 8000
 EXPOSE 5678
 
-CMD ["python3", "/manage.py", "runserver", "0.0.0.0:8080"]
+CMD ["python3", "manage.py", "runserver", "0.0.0.0:8000"]
