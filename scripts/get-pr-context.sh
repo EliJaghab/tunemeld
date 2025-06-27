@@ -1,19 +1,18 @@
 #!/bin/bash
 
-# Get PR Context - Fetch recent open PRs for assistant context
-# Usage: ./scripts/get-pr-context.sh [number_of_prs]
+# Get Thread-Relevant PR Context - Show only PRs related to current work
+# Usage: ./scripts/get-pr-context.sh [search_term]
 
-MAX_PRS=${1:-5}
+SEARCH_TERM=${1:-""}
 
-echo "## Current Open PRs Context"
+echo "## Thread-Relevant PR Context"
 echo ""
-echo "Recent open pull requests that provide important context for development:"
 
-gh api repos/$(gh repo view --json owner,name --jq '.owner.login + "/" + .name')/pulls \
-  --jq '.[] | select(.state=="open") | {number: .number, title: .title, html_url: .html_url, body: .body}' \
-  | head -$((MAX_PRS * 4)) \
-  | jq -s '.[0:'$MAX_PRS']' \
-  | jq -r '.[] | "- **PR #\(.number)**: \(.title) - [View PR](\(.html_url))"'
-
-echo ""
-echo "**Problem Summary**: Use this context to understand current development priorities and ongoing work."
+if [ -n "$SEARCH_TERM" ]; then
+    echo "PRs related to current work on: $SEARCH_TERM"
+    gh api repos/$(gh repo view --json owner,name --jq '.owner.login + "/" + .name')/pulls \
+      --jq '.[] | select(.state=="open") | select(.title | test("'$SEARCH_TERM'"; "i")) | {number: .number, title: .title, html_url: .html_url}' \
+      | jq -r '"**Work completed:** \(.title) - [PR #\(.number)](\(.html_url)) - Status: Ready for review"'
+else
+    echo "**Work completed:** Use with search term to show relevant PRs"
+fi
