@@ -135,12 +135,36 @@ class WebDriverManager:
         options.add_argument("--disable-features=VizDisplayCompositor")
         options.add_argument("--remote-debugging-port=9222")
 
+        # Additional options for GitHub Actions environment
+        if os.getenv("GITHUB_ACTIONS"):
+            options.add_argument("--disable-extensions")
+            options.add_argument("--disable-plugins")
+            options.add_argument("--disable-images")
+            options.add_argument("--disable-javascript")
+            options.add_argument("--window-size=1920,1080")
+            options.add_argument("--single-process")
+            options.add_argument("--disable-background-timer-throttling")
+            options.add_argument("--disable-backgrounding-occluded-windows")
+            options.add_argument("--disable-renderer-backgrounding")
+
         if use_proxy:
             proxy = FreeProxy(rand=True).get()
             logger.info(f"Using proxy: {proxy}")
             options.add_argument(f"--proxy-server={proxy}")
 
         try:
+            # In GitHub Actions, try to use the system-installed chromedriver first
+            if os.getenv("GITHUB_ACTIONS"):
+                try:
+                    # Try to use the chromedriver set up by the GitHub Action
+                    service = Service()  # Use system chromedriver
+                    logger.info("Using system chromedriver from GitHub Actions setup")
+                    driver = webdriver.Chrome(service=service, options=options)
+                    return driver
+                except Exception as gha_e:
+                    logger.warning(f"System chromedriver failed in GitHub Actions: {gha_e}")
+                    # Fall back to ChromeDriverManager
+
             # Let ChromeDriverManager automatically handle version matching
             driver_path = ChromeDriverManager().install()
 
