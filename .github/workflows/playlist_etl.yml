@@ -25,13 +25,18 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Install Chrome browser
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y google-chrome-stable
+      - name: Setup Chrome and ChromeDriver
+        uses: browser-actions/setup-chrome@v1
+        with:
+          chrome-version: stable
+          install-chromedriver: true
 
-      - name: Set up ChromeDriver
-        uses: nanasess/setup-chromedriver@v2
+      - name: Verify Chrome installation
+        run: |
+          which google-chrome || which google-chrome-stable || echo "Chrome not found in PATH"
+          google-chrome --version || google-chrome-stable --version || echo "Chrome version check failed"
+          which chromedriver || echo "ChromeDriver not found in PATH"
+          chromedriver --version || echo "ChromeDriver version check failed"
 
       - name: Set environment variables
         run: |

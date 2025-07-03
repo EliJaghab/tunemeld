@@ -147,6 +147,25 @@ class WebDriverManager:
             options.add_argument("--disable-backgrounding-occluded-windows")
             options.add_argument("--disable-renderer-backgrounding")
 
+            # Try to find Chrome binary in common GitHub Actions locations
+            chrome_paths = [
+                "/usr/bin/google-chrome",
+                "/usr/bin/google-chrome-stable",
+                "/usr/bin/chromium-browser",
+                "/opt/google/chrome/chrome",
+            ]
+            chrome_binary = None
+            for path in chrome_paths:
+                if os.path.exists(path):
+                    chrome_binary = path
+                    break
+
+            if chrome_binary:
+                options.binary_location = chrome_binary
+                logger.info(f"Using Chrome binary: {chrome_binary}")
+            else:
+                logger.warning("No Chrome binary found in expected locations")
+
         if use_proxy:
             proxy = FreeProxy(rand=True).get()
             logger.info(f"Using proxy: {proxy}")
