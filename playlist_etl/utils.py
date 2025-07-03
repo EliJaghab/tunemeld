@@ -135,43 +135,12 @@ class WebDriverManager:
         options.add_argument("--disable-features=VizDisplayCompositor")
         options.add_argument("--remote-debugging-port=9222")
 
-        # Additional options for GitHub Actions environment
+        # Essential options for GitHub Actions environment
         if os.getenv("GITHUB_ACTIONS"):
             options.add_argument("--disable-extensions")
-            options.add_argument("--disable-plugins")
             options.add_argument("--disable-images")
             options.add_argument("--window-size=1920,1080")
-            options.add_argument("--disable-background-timer-throttling")
-            options.add_argument("--disable-backgrounding-occluded-windows")
-            options.add_argument("--disable-renderer-backgrounding")
-            options.add_argument("--disable-ipc-flooding-protection")
-            options.add_argument("--disable-default-apps")
-            options.add_argument("--disable-hang-monitor")
-            options.add_argument("--disable-prompt-on-repost")
-            options.add_argument("--disable-sync")
             options.add_argument("--no-first-run")
-            options.add_argument("--disable-blink-features=AutomationControlled")
-            # DO NOT disable JavaScript as we need it for Apple Music scraping
-            # DO NOT use --single-process as it can cause crashes in headless environments
-
-            # Try to find Chrome binary in common GitHub Actions locations
-            chrome_paths = [
-                "/usr/bin/google-chrome",
-                "/usr/bin/google-chrome-stable",
-                "/usr/bin/chromium-browser",
-                "/opt/google/chrome/chrome",
-            ]
-            chrome_binary = None
-            for path in chrome_paths:
-                if os.path.exists(path):
-                    chrome_binary = path
-                    break
-
-            if chrome_binary:
-                options.binary_location = chrome_binary
-                logger.info(f"Using Chrome binary: {chrome_binary}")
-            else:
-                logger.warning("No Chrome binary found in expected locations")
 
         if use_proxy:
             proxy = FreeProxy(rand=True).get()
@@ -184,11 +153,11 @@ class WebDriverManager:
                 try:
                     # Try to use the chromedriver set up by the GitHub Action
                     service = Service()  # Use system chromedriver
-                    logger.info("Using system chromedriver from GitHub Actions setup")
+                    logger.info("Using system chromedriver")
                     driver = webdriver.Chrome(service=service, options=options)
                     return driver
                 except Exception as gha_e:
-                    logger.warning(f"System chromedriver failed in GitHub Actions: {gha_e}")
+                    logger.warning(f"System chromedriver failed: {gha_e}")
                     # Fall back to ChromeDriverManager
 
             # Let ChromeDriverManager automatically handle version matching

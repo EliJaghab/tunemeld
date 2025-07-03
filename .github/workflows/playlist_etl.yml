@@ -31,10 +31,8 @@ jobs:
           chrome-version: stable
           install-chromedriver: true
 
-      - name: Set environment variables
-        run: |
-          echo "PYTHONPATH=$PWD" >> $GITHUB_ENV
-          echo "GITHUB_ACTIONS=true" >> $GITHUB_ENV
+      - name: Set PYTHONPATH
+        run: echo "PYTHONPATH=$PWD" >> $GITHUB_ENV
 
       - name: Run main.py
         env:
