@@ -16,8 +16,10 @@ MONGO_DATA_API_ENDPOINT = os.getenv("MONGO_DATA_API_ENDPOINT")
 MONGO_URI = os.getenv("MONGO_URI")
 MONGO_DB_NAME = os.getenv("MONGO_DB_NAME")
 
-
-
+# Cloudflare KV Cache settings
+CF_ACCOUNT_ID = os.getenv("CF_ACCOUNT_ID")
+CF_NAMESPACE_ID = os.getenv("CF_NAMESPACE_ID")
+CF_API_TOKEN = os.getenv("CF_API_TOKEN")
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -28,14 +30,14 @@ CSRF_TRUSTED_ORIGINS = [
     "https://tunemeld.com",
 ]
 
-SECRET_KEY = os.getenv("SECRET_KEY")
-if not SECRET_KEY:
-    raise ValueError("SECRET_KEY environment variable is required")
+SECRET_KEY = os.getenv("SECRET_KEY", "django-insecure-!^u31q!@ui68(aook0g4w@jw*ei=%bbx1d8em_bm8hxm+6te#0")
 
 # Set DEBUG based on environment
 DEBUG = environment != "production"
 
-ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "localhost,127.0.0.1,tunemeld.com,www.tunemeld.com,api.tunemeld.com").split(",")
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "localhost,127.0.0.1,tunemeld.com,www.tunemeld.com,api.tunemeld.com").split(
+    ","
+)
 
 # Environment-specific logging
 if environment == "production":
