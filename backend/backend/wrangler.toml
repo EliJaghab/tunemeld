@@ -11,12 +11,14 @@ workers_dev = false
 route = "tunemeld.com/*"
 
 [env.production.vars]
-MONGO_DATA_API_KEY = "fpmvWMah9mqSs6eXOeSMtViHFRTZkYiK4zGKnW4CkMlEH0NLPhc26F5mEHI4dx0t"
-MONGO_DATA_API_ENDPOINT = "https://us-east-1.aws.data.mongodb-api.com/app/data-vuoqyfy/endpoint/data/v1"
+# Environment variables will be set in Cloudflare Worker dashboard
+# MONGO_DATA_API_KEY = "set in Cloudflare Worker environment"
+# MONGO_DATA_API_ENDPOINT = "set in Cloudflare Worker environment"
 
 [env.development]
 workers_dev = true
 
 [env.development.vars]
-MONGO_DATA_API_KEY = "fpmvWMah9mqSs6eXOeSMtViHFRTZkYiK4zGKnW4CkMlEH0NLPhc26F5mEHI4dx0t"
-MONGO_DATA_API_ENDPOINT = "https://us-east-1.aws.data.mongodb-api.com/app/data-vuoqyfy/endpoint/data/v1"
+# Environment variables will be set in Cloudflare Worker dashboard
+# MONGO_DATA_API_KEY = "set in Cloudflare Worker environment"
+# MONGO_DATA_API_ENDPOINT = "set in Cloudflare Worker environment"

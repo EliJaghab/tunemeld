@@ -7,7 +7,8 @@ environment = os.getenv("RAILWAY_ENVIRONMENT", "development")
 
 # Load environment file only in development
 # In production (Railway), environment variables are set directly
-if environment != "production":
+if environment != "production" and not load_dotenv(".env.local"):
+    # Try .env.local first (for secure local development), then fallback to .env.dev
     load_dotenv(".env.dev")
 
 MONGO_DATA_API_KEY = os.getenv("MONGO_DATA_API_KEY")
@@ -27,7 +28,9 @@ CSRF_TRUSTED_ORIGINS = [
     "https://tunemeld.com",
 ]
 
-SECRET_KEY = os.getenv("SECRET_KEY", "django-insecure-!^u31q!@ui68(aook0g4w@jw*ei=%bbx1d8em_bm8hxm+6te#0")
+SECRET_KEY = os.getenv("SECRET_KEY")
+if not SECRET_KEY:
+    raise ValueError("SECRET_KEY environment variable is required")
 
 # Set DEBUG based on environment
 DEBUG = environment != "production"
