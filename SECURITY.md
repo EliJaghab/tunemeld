@@ -19,10 +19,6 @@
    - Never use `.env.prod` in production
    - Use Railway's environment variable management
 
-2. **Cloudflare Workers**:
-   - Set environment variables in Cloudflare Worker dashboard
-   - Remove hardcoded credentials from `wrangler.toml`
-
 ### Security Best Practices
 
 1. **Credential Rotation**:
@@ -54,6 +50,13 @@ If credentials are exposed:
 - ✅ `.env.test` - Test environment (fake credentials only)
 - ❌ `.env.dev` - Should be replaced with `.env.local`
 - ❌ `.env.prod` - Should use Railway environment variables
+
+## Architecture Changes
+
+**Removed Cloudflare Infrastructure:**
+- Cloudflare Workers have been completely removed
+- All caching now handled by Railway/Django
+- Simplified architecture: GitHub Pages (frontend) → Railway Django (API) → MongoDB
 
 ## Contact
 

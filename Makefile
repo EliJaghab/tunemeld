@@ -9,9 +9,6 @@
 	lint \
 	fix \
 	pull_push \
-	dev \
-	prod \
-	invalidate_cache \
 	test \
 	test-unit \
 	test-integration \
@@ -104,20 +101,6 @@ pull_push: setup_env
 	@if [ $$? -ne 0 ]; then echo "Error: Failed to push the changes."; exit 1; fi
 	@echo "Successfully pulled, rebased, and pushed the changes."
 
-dev: setup_env
-	cd backend/backend && wrangler dev --env development src/index.ts
-
-prod:
-	cd backend/backend && wrangler deploy --env production src/index.ts
-
-invalidate_cache:
-	@set -o allexport; source $(ENV_FILE); set +o allexport; \
-	echo "Invalidating cache using Cloudflare API..." && \
-	RESPONSE=$$(curl -s -X POST "https://api.cloudflare.com/client/v4/zones/$$CF_ZONE_ID/purge_cache" \
-	-H "Authorization: Bearer $$CLOUDFLARE_API_TOKEN" \
-	-H "Content-Type: application/json" \
-	--data '{"purge_everything":true}'); \
-	echo "$$RESPONSE" | grep -q '"success":true' && echo "Success" || echo "Failure: $$RESPONSE"
 
 test: setup_env
 	@echo "Running all tests..."

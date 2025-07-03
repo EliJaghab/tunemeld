@@ -16,9 +16,8 @@ MONGO_DATA_API_ENDPOINT = os.getenv("MONGO_DATA_API_ENDPOINT")
 MONGO_URI = os.getenv("MONGO_URI")
 MONGO_DB_NAME = os.getenv("MONGO_DB_NAME")
 
-CF_ACCOUNT_ID = os.getenv("CF_ACCOUNT_ID")
-CF_NAMESPACE_ID = os.getenv("CF_NAMESPACE_ID")
-CF_API_TOKEN = os.getenv("CF_API_TOKEN")
+
+
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -35,7 +34,7 @@ if not SECRET_KEY:
 # Set DEBUG based on environment
 DEBUG = environment != "production"
 
-ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "localhost,127.0.0.1,tunemeld.com,www.tunemeld.com,api.tunemeld.com").split(",")
 
 # Environment-specific logging
 if environment == "production":
