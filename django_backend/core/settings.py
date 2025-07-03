@@ -7,7 +7,8 @@ environment = os.getenv("RAILWAY_ENVIRONMENT", "development")
 
 # Load environment file only in development
 # In production (Railway), environment variables are set directly
-if environment != "production":
+if environment != "production" and not load_dotenv(".env.local"):
+    # Try .env.local first (for secure local development), then fallback to .env.dev
     load_dotenv(".env.dev")
 
 MONGO_DATA_API_KEY = os.getenv("MONGO_DATA_API_KEY")
@@ -15,9 +16,11 @@ MONGO_DATA_API_ENDPOINT = os.getenv("MONGO_DATA_API_ENDPOINT")
 MONGO_URI = os.getenv("MONGO_URI")
 MONGO_DB_NAME = os.getenv("MONGO_DB_NAME")
 
+# Cloudflare KV Cache settings
 CF_ACCOUNT_ID = os.getenv("CF_ACCOUNT_ID")
 CF_NAMESPACE_ID = os.getenv("CF_NAMESPACE_ID")
 CF_API_TOKEN = os.getenv("CF_API_TOKEN")
+
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -32,7 +35,9 @@ SECRET_KEY = os.getenv("SECRET_KEY", "django-insecure-!^u31q!@ui68(aook0g4w@jw*e
 # Set DEBUG based on environment
 DEBUG = environment != "production"
 
-ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "localhost,127.0.0.1,tunemeld.com,www.tunemeld.com,api.tunemeld.com").split(
+    ","
+)
 
 # Environment-specific logging
 if environment == "production":
