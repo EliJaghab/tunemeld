@@ -140,12 +140,19 @@ class WebDriverManager:
             options.add_argument("--disable-extensions")
             options.add_argument("--disable-plugins")
             options.add_argument("--disable-images")
-            options.add_argument("--disable-javascript")
             options.add_argument("--window-size=1920,1080")
-            options.add_argument("--single-process")
             options.add_argument("--disable-background-timer-throttling")
             options.add_argument("--disable-backgrounding-occluded-windows")
             options.add_argument("--disable-renderer-backgrounding")
+            options.add_argument("--disable-ipc-flooding-protection")
+            options.add_argument("--disable-default-apps")
+            options.add_argument("--disable-hang-monitor")
+            options.add_argument("--disable-prompt-on-repost")
+            options.add_argument("--disable-sync")
+            options.add_argument("--no-first-run")
+            options.add_argument("--disable-blink-features=AutomationControlled")
+            # DO NOT disable JavaScript as we need it for Apple Music scraping
+            # DO NOT use --single-process as it can cause crashes in headless environments
 
             # Try to find Chrome binary in common GitHub Actions locations
             chrome_paths = [
