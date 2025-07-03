@@ -68,7 +68,11 @@ class Transform:
                 if not raw_playlist:
                     logger.warning(f"No raw playlist found for {service_name_value} and genre {genre_name_value}")
                     raise ValueError("No raw playlist found")
-                data = json.loads(raw_playlist["data_json"])
+                data = (
+                    raw_playlist["data_json"]
+                    if isinstance(raw_playlist["data_json"], dict)
+                    else json.loads(raw_playlist["data_json"])
+                )
                 self.convert_to_track_objects(data, service_name_value, genre_name_value)
 
     def format_tracks(self) -> list[dict]:

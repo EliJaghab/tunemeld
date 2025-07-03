@@ -51,24 +51,29 @@ def main() -> None:
     set_secrets()
     mongo_client = MongoDBClient()
     webdriver_manager = WebDriverManager()
-    spotify_service = SpotifyService(
-        client_id=os.getenv("SPOTIFY_CLIENT_ID"),
-        client_secret=os.getenv("SPOTIFY_CLIENT_SECRET"),
-        isrc_cache_manager=CacheManager(mongo_client, ISRC_CACHE_COLLECTION),
-        webdriver_manager=webdriver_manager,
-    )
-    youtube_service = YouTubeService(
-        api_key=os.getenv("GOOGLE_API_KEY"),
-        cache_manager=CacheManager(mongo_client, YOUTUBE_URL_CACHE_COLLECTION),
-    )
-    apple_music_service = AppleMusicService(CacheManager(mongo_client, YOUTUBE_URL_CACHE_COLLECTION))
 
-    # ETL Pipeline: Extract → Transform → Aggregate → View counts
-    extract()
-    transform(mongo_client, spotify_service, youtube_service, apple_music_service)
-    transform_all_spotify_metadata()
-    aggregate(mongo_client)
-    update_view_counts(mongo_client, spotify_service, youtube_service)
+    try:
+        spotify_service = SpotifyService(
+            client_id=os.getenv("SPOTIFY_CLIENT_ID"),
+            client_secret=os.getenv("SPOTIFY_CLIENT_SECRET"),
+            isrc_cache_manager=CacheManager(mongo_client, ISRC_CACHE_COLLECTION),
+            webdriver_manager=webdriver_manager,
+        )
+        youtube_service = YouTubeService(
+            api_key=os.getenv("GOOGLE_API_KEY"),
+            cache_manager=CacheManager(mongo_client, YOUTUBE_URL_CACHE_COLLECTION),
+        )
+        apple_music_service = AppleMusicService(CacheManager(mongo_client, YOUTUBE_URL_CACHE_COLLECTION))
+
+        # ETL Pipeline: Extract → Transform → Aggregate → View counts
+        extract()
+        transform(mongo_client, spotify_service, youtube_service, apple_music_service)
+        transform_all_spotify_metadata()
+        aggregate(mongo_client)
+        update_view_counts(mongo_client, spotify_service, youtube_service)
+    finally:
+        # Ensure WebDriver is properly closed
+        webdriver_manager.close_driver()
 
 
 if __name__ == "__main__":
