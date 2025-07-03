@@ -1,7 +1,6 @@
 import logging
 from enum import Enum
 
-from core.cache import Cache
 from django.http import JsonResponse
 
 from . import (
@@ -10,10 +9,13 @@ from . import (
     raw_playlists_collection,
     transformed_playlists_collection,
 )
+from .cache import Cache
 
 logger = logging.getLogger(__name__)
 
 cache = Cache()
+
+
 
 
 class ResponseStatus(Enum):
@@ -42,6 +44,8 @@ def get_graph_data(request, genre_name):
         return create_response(ResponseStatus.SUCCESS, "Graph data retrieved successfully from cache", cached_response)
 
     try:
+        if not playlists_collection or not historical_track_views:
+            return create_response(ResponseStatus.ERROR, "Database connection not available", None)
 
         def get_tracks_from_playlist(genre_name: str) -> list[dict]:
             playlists = playlists_collection.find({"genre_name": genre_name}, {"_id": False})
@@ -89,6 +93,9 @@ def get_graph_data(request, genre_name):
 
 def get_playlist_data(request, genre_name):
     try:
+        if not playlists_collection:
+            return create_response(ResponseStatus.ERROR, "Database connection not available", None)
+        
         data = list(playlists_collection.find({"genre_name": genre_name}, {"_id": False}))
         if not data:
             return create_response(ResponseStatus.ERROR, "No data found for the specified genre", None)
@@ -99,6 +106,9 @@ def get_playlist_data(request, genre_name):
 
 def get_service_playlist(request, genre_name, service_name):
     try:
+        if not transformed_playlists_collection:
+            return create_response(ResponseStatus.ERROR, "Database connection not available", None)
+        
         data = list(
             transformed_playlists_collection.find(
                 {"genre_name": genre_name, "service_name": service_name}, {"_id": False}
@@ -113,6 +123,9 @@ def get_service_playlist(request, genre_name, service_name):
 
 def get_last_updated(request, genre_name):
     try:
+        if not playlists_collection:
+            return create_response(ResponseStatus.ERROR, "Database connection not available", None)
+        
         data = list(playlists_collection.find({"genre_name": genre_name}, {"_id": False}))
         if not data:
             return create_response(ResponseStatus.ERROR, "No data found for the specified genre", None)
@@ -129,6 +142,9 @@ def get_last_updated(request, genre_name):
 
 def get_header_art(request, genre_name):
     try:
+        if not raw_playlists_collection:
+            return create_response(ResponseStatus.ERROR, "Database connection not available", None)
+        
         data = list(raw_playlists_collection.find({"genre_name": genre_name}, {"_id": False}))
         if not data:
             return create_response(ResponseStatus.ERROR, "No data found for the specified genre", None)
