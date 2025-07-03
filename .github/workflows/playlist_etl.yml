@@ -31,13 +31,6 @@ jobs:
           chrome-version: stable
           install-chromedriver: true
 
-      - name: Verify Chrome installation
-        run: |
-          which google-chrome || which google-chrome-stable || echo "Chrome not found in PATH"
-          google-chrome --version || google-chrome-stable --version || echo "Chrome version check failed"
-          which chromedriver || echo "ChromeDriver not found in PATH"
-          chromedriver --version || echo "ChromeDriver version check failed"
-
       - name: Set environment variables
         run: |
           echo "PYTHONPATH=$PWD" >> $GITHUB_ENV
