@@ -19,6 +19,7 @@ MONGO_DB_NAME = os.getenv("MONGO_DB_NAME")
 
 
 
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 CSRF_TRUSTED_ORIGINS = [
