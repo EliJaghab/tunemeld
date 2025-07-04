@@ -15,6 +15,6 @@ RUN pip install --upgrade pip && pip install -r requirements.txt
 EXPOSE 8000
 
 # Debug: List files to verify they were copied
-RUN ls -la /app/
+RUN ls -la /app/ && echo "Django files copied successfully"
 
 CMD ["python3", "startup_debug.py"]
