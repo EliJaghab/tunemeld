@@ -1,20 +1,39 @@
 import logging
 from enum import Enum
 
-from core.cache import Cache
 from django.conf import settings
 from django.http import JsonResponse
 
-from . import (
-    historical_track_views,
-    playlists_collection,
-    raw_playlists_collection,
-    transformed_playlists_collection,
-)
+print("[VIEWS] Loading Django views...")
+
+# Safe cache import with fallback
+try:
+    from core.cache import Cache
+
+    cache = Cache()
+    print("[VIEWS] Cache initialized successfully")
+except Exception as e:
+    print(f"[VIEWS] Cache initialization failed: {e}")
+    cache = None
+
+# Safe MongoDB imports with fallback
+try:
+    from . import (
+        historical_track_views,
+        playlists_collection,
+        raw_playlists_collection,
+        transformed_playlists_collection,
+    )
+
+    print("[VIEWS] MongoDB collections imported successfully")
+except Exception as e:
+    print(f"[VIEWS] MongoDB import failed: {e}")
+    historical_track_views = None
+    playlists_collection = None
+    raw_playlists_collection = None
+    transformed_playlists_collection = None
 
 logger = logging.getLogger(__name__)
-
-cache = Cache()
 
 
 class ResponseStatus(Enum):
@@ -45,11 +64,17 @@ def health(request):
 
 
 def get_graph_data(request, genre_name):
+    if not playlists_collection:
+        return create_response(ResponseStatus.ERROR, "Database not available", None)
+
     key = f"graph_data_{genre_name}"
 
-    cached_response = cache.get(key)
-    if cached_response:
-        return create_response(ResponseStatus.SUCCESS, "Graph data retrieved successfully from cache", cached_response)
+    if cache:
+        cached_response = cache.get(key)
+        if cached_response:
+            return create_response(
+                ResponseStatus.SUCCESS, "Graph data retrieved successfully from cache", cached_response
+            )
 
     try:
 
@@ -98,6 +123,9 @@ def get_graph_data(request, genre_name):
 
 
 def get_playlist_data(request, genre_name):
+    if not playlists_collection:
+        return create_response(ResponseStatus.ERROR, "Database not available", None)
+
     try:
         data = list(playlists_collection.find({"genre_name": genre_name}, {"_id": False}))
         if not data:
@@ -108,6 +136,9 @@ def get_playlist_data(request, genre_name):
 
 
 def get_service_playlist(request, genre_name, service_name):
+    if not transformed_playlists_collection:
+        return create_response(ResponseStatus.ERROR, "Database not available", None)
+
     try:
         data = list(
             transformed_playlists_collection.find(
@@ -122,6 +153,9 @@ def get_service_playlist(request, genre_name, service_name):
 
 
 def get_last_updated(request, genre_name):
+    if not playlists_collection:
+        return create_response(ResponseStatus.ERROR, "Database not available", None)
+
     try:
         data = list(playlists_collection.find({"genre_name": genre_name}, {"_id": False}))
         if not data:
@@ -138,6 +172,9 @@ def get_last_updated(request, genre_name):
 
 
 def get_header_art(request, genre_name):
+    if not raw_playlists_collection:
+        return create_response(ResponseStatus.ERROR, "Database not available", None)
+
     try:
         data = list(raw_playlists_collection.find({"genre_name": genre_name}, {"_id": False}))
         if not data:
