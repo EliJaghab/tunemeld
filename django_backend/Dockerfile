@@ -6,12 +6,15 @@ ENV PYDEVD_DISABLE_FILE_VALIDATION=1
 
 WORKDIR /app
 
-COPY . /app
+COPY . .
 
 ENV PYTHONPATH=/app
 
-RUN pip install --upgrade pip && pip install -r /app/requirements.txt
+RUN pip install --upgrade pip && pip install -r requirements.txt
 
 EXPOSE 8000
 
-CMD ["python3", "/app/manage.py", "runserver", "0.0.0.0:8000"]
+# Debug: List files to verify they were copied
+RUN ls -la /app/
+
+CMD ["python3", "startup_debug.py"]
