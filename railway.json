@@ -1,6 +1,6 @@
 {
   "build": {
-    "dockerfilePath": "django_backend/Dockerfile",
+    "dockerfilePath": "django_backend/Dockerfile.new",
     "context": "django_backend",
     "args": ["--no-cache", "--pull"]
   }
