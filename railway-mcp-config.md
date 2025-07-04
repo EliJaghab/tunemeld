@@ -4,6 +4,40 @@
 
 This document describes the Railway MCP (Model Context Protocol) server setup for the TuneMeld project. The Railway MCP server enables AI agents to manage Railway.app infrastructure through natural language commands.
 
+## Quick Setup (Recommended)
+
+For easy setup on any system, use the automated setup script:
+
+### Option 1: Interactive Setup
+
+```bash
+# Run from the tunemeld project root
+node scripts/setup-railway-mcp.js
+```
+
+### Option 2: With Token Argument
+
+```bash
+# Pass your Railway API token as an argument
+node scripts/setup-railway-mcp.js YOUR_RAILWAY_API_TOKEN
+```
+
+### Option 3: Bash Script (Unix/Linux/macOS)
+
+```bash
+# Run from the tunemeld project root
+./scripts/setup-railway-mcp.sh
+```
+
+The setup script will:
+
+- Build the Railway MCP server
+- Configure Claude Desktop automatically
+- Test the setup
+- Provide troubleshooting tips
+
+**Get your Railway API token at:** https://railway.app/account/tokens
+
 ## Configuration
 
 ### Claude Desktop Configuration

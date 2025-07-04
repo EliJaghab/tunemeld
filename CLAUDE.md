@@ -14,6 +14,9 @@ make format
 
 # Run tests
 make test
+
+# Setup Railway MCP for AI infrastructure management (one-time setup)
+make setup-railway-mcp
 ```
 
 ## Server Commands
@@ -145,6 +148,42 @@ make setup_backend_env
 # Install development dependencies
 make install-dev
 ```
+
+## Railway MCP Setup
+
+TuneMeld includes a Railway MCP (Model Context Protocol) server that enables AI agents to manage Railway.app infrastructure through natural language commands.
+
+### Quick Setup
+
+```bash
+# Run the automated setup script
+node scripts/setup-railway-mcp.js
+```
+
+This will:
+
+- Build the Railway MCP server
+- Configure Claude Desktop automatically
+- Test the setup
+- Enable Railway.app management through Claude Code
+
+### Features
+
+Once configured, you can use natural language commands like:
+
+- "List my Railway projects"
+- "Deploy the latest changes"
+- "Show deployment logs"
+- "Set environment variables"
+- "Create a new service from GitHub"
+
+### Requirements
+
+- Railway.app account and API token
+- Node.js installed
+- Claude Desktop application
+
+See `railway-mcp-config.md` for detailed configuration options.
 
 ## Agentree Integration
 
