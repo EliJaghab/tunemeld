@@ -49,11 +49,13 @@ async function cacheImage(url: string): Promise<void> {
   }
 }
 
-export function createJsonResponse(data: any): Response {
+export function createJsonResponse(data: any, cacheMaxAge: number = 3600): Response {
   return new Response(JSON.stringify(data), {
     headers: {
       "Content-Type": "application/json",
       "Access-Control-Allow-Origin": "*",
+      "Cache-Control": `public, max-age=${cacheMaxAge}, s-maxage=${cacheMaxAge * 2}`,
+      Vary: "Accept-Encoding",
     },
   });
 }

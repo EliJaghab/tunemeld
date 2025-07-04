@@ -4,6 +4,7 @@ import {
   handleMainPlaylist,
   handleLastUpdated,
   handleHeaderArt,
+  handleCacheStatus,
 } from "./apiHandlers";
 import { handleError, handleOptions } from "./utils";
 
@@ -40,6 +41,9 @@ export default {
             break;
           case "/api/header-art":
             response = await handleHeaderArt(searchParams, env);
+            break;
+          case "/api/cache-status":
+            response = await handleCacheStatus(searchParams, env);
             break;
           default:
             response = new Response("Not Found", {
