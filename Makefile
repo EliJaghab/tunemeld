@@ -12,8 +12,6 @@
 	dev \
 	prod \
 	invalidate_cache \
-	invalidate_cache_api \
-	invalidate_cache_genre \
 	test \
 	test-unit \
 	test-integration \
@@ -114,31 +112,12 @@ prod:
 
 invalidate_cache:
 	@set -o allexport; source $(ENV_FILE); set +o allexport; \
-	echo "Invalidating all cache using Cloudflare API..." && \
+	echo "🗑️  Wiping entire Cloudflare cache (new data release)..." && \
 	RESPONSE=$$(curl -s -X POST "https://api.cloudflare.com/client/v4/zones/$$CF_ZONE_ID/purge_cache" \
 	-H "Authorization: Bearer $$CLOUDFLARE_API_TOKEN" \
 	-H "Content-Type: application/json" \
 	--data '{"purge_everything":true}'); \
-	echo "$$RESPONSE" | grep -q '"success":true' && echo "✅ Cache invalidated successfully" || echo "❌ Failure: $$RESPONSE"
-
-invalidate_cache_api:
-	@set -o allexport; source $(ENV_FILE); set +o allexport; \
-	echo "Invalidating API cache using Cloudflare API..." && \
-	RESPONSE=$$(curl -s -X POST "https://api.cloudflare.com/client/v4/zones/$$CF_ZONE_ID/purge_cache" \
-	-H "Authorization: Bearer $$CLOUDFLARE_API_TOKEN" \
-	-H "Content-Type: application/json" \
-	--data '{"files":["https://tunemeld.com/api/*"]}'); \
-	echo "$$RESPONSE" | grep -q '"success":true' && echo "✅ API cache invalidated successfully" || echo "❌ Failure: $$RESPONSE"
-
-invalidate_cache_genre:
-	@if [ -z "$(GENRE)" ]; then echo "❌ Usage: make invalidate_cache_genre GENRE=dance"; exit 1; fi
-	@set -o allexport; source $(ENV_FILE); set +o allexport; \
-	echo "Invalidating cache for genre: $(GENRE)" && \
-	RESPONSE=$$(curl -s -X POST "https://api.cloudflare.com/client/v4/zones/$$CF_ZONE_ID/purge_cache" \
-	-H "Authorization: Bearer $$CLOUDFLARE_API_TOKEN" \
-	-H "Content-Type: application/json" \
-	--data '{"files":["https://tunemeld.com/api/graph-data?genre=$(GENRE)","https://tunemeld.com/api/main-playlist?genre=$(GENRE)","https://tunemeld.com/api/last-updated?genre=$(GENRE)","https://tunemeld.com/api/header-art?genre=$(GENRE)"]}'); \
-	echo "$$RESPONSE" | grep -q '"success":true' && echo "✅ Cache for genre $(GENRE) invalidated successfully" || echo "❌ Failure: $$RESPONSE"
+	echo "$$RESPONSE" | grep -q '"success":true' && echo "✅ Cache wiped successfully" || echo "❌ Failure: $$RESPONSE"
 
 test: setup_env
 	@echo "Running all tests..."

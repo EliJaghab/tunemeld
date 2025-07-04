@@ -1,11 +1,11 @@
 import { cacheAlbumCovers, createJsonResponse, fetchFromMongoDB, handleError } from "./utils";
 
-// Cache configuration for different data types
+// Cache configuration for different data types (weekly data releases)
 const CACHE_TIMES = {
-  GRAPH_DATA: 1800, // 30 minutes - view count data changes frequently
-  PLAYLIST_DATA: 3600, // 1 hour - playlist data is relatively stable
-  LAST_UPDATED: 300, // 5 minutes - timestamps need to be fresh
-  HEADER_ART: 7200, // 2 hours - images rarely change
+  GRAPH_DATA: 86400, // 24 hours - data releases weekly
+  PLAYLIST_DATA: 86400, // 24 hours - data releases weekly
+  LAST_UPDATED: 3600, // 1 hour - timestamps can be cached longer
+  HEADER_ART: 604800, // 1 week - images rarely change between releases
 };
 
 export async function handleGraphData(searchParams: URLSearchParams, env: any): Promise<Response> {
@@ -171,12 +171,14 @@ export async function handleCacheStatus(searchParams: URLSearchParams, env: any)
     const status = {
       cache_working: isCacheWorking,
       cloudflare_edge_caching: true,
+      cache_strategy: "Weekly data releases - cache everything for 24h, wipe completely on new releases",
       cache_configuration: {
-        graph_data_ttl: `${CACHE_TIMES.GRAPH_DATA}s (${CACHE_TIMES.GRAPH_DATA / 60}min)`,
-        playlist_data_ttl: `${CACHE_TIMES.PLAYLIST_DATA}s (${CACHE_TIMES.PLAYLIST_DATA / 60}min)`,
+        graph_data_ttl: `${CACHE_TIMES.GRAPH_DATA}s (${CACHE_TIMES.GRAPH_DATA / 3600}h)`,
+        playlist_data_ttl: `${CACHE_TIMES.PLAYLIST_DATA}s (${CACHE_TIMES.PLAYLIST_DATA / 3600}h)`,
         last_updated_ttl: `${CACHE_TIMES.LAST_UPDATED}s (${CACHE_TIMES.LAST_UPDATED / 60}min)`,
-        header_art_ttl: `${CACHE_TIMES.HEADER_ART}s (${CACHE_TIMES.HEADER_ART / 60}min)`,
+        header_art_ttl: `${CACHE_TIMES.HEADER_ART}s (${CACHE_TIMES.HEADER_ART / 86400}d)`,
       },
+      cache_invalidation: "Full cache wipe only (make invalidate_cache)",
       cache_headers_enabled: true,
       test_performed: new Date().toISOString(),
     };
