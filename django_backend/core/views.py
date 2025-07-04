@@ -197,3 +197,23 @@ def format_playlist_data(data):
                 "playlist_url": item.get("playlist_url", ""),
             }
     return result
+
+
+def cache_status(request):
+    """Cache status endpoint for debugging"""
+    try:
+        from django.core.cache import cache
+
+        # Test cache connection
+        test_key = "cache_test"
+        cache.set(test_key, "test_value", 10)
+        test_result = cache.get(test_key)
+        cache.delete(test_key)
+
+        status = {
+            "connected": test_result == "test_value",
+            "backend": cache._cache.__class__.__name__,
+        }
+        return create_response(ResponseStatus.SUCCESS, "Cache status retrieved", status)
+    except Exception as error:
+        return create_response(ResponseStatus.ERROR, str(error), None)

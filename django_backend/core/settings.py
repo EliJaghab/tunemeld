@@ -183,3 +183,18 @@ DATABASES = {
         "NAME": ":memory:",
     }
 }
+
+# Redis Cache Configuration for Railway
+REDIS_URL = os.getenv("REDIS_URL", "redis://localhost:6379/0")
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": REDIS_URL,
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        },
+        "KEY_PREFIX": "tunemeld",
+        "TIMEOUT": 3600 if environment == "production" else 300,
+    }
+}

@@ -1,0 +1,60 @@
+name: Redis Cache Test
+
+on:
+  push:
+    branches: [ master, main ]
+    paths:
+      - 'django_backend/**'
+  pull_request:
+    branches: [ master, main ]
+    paths:
+      - 'django_backend/**'
+
+jobs:
+  test-cache:
+    runs-on: ubuntu-latest
+
+    services:
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.11
+
+    - name: Install dependencies
+      run: |
+        cd django_backend
+        pip install -r requirements.txt
+
+    - name: Test Redis connection
+      run: |
+        redis-cli ping
+
+    - name: Test Django cache
+      run: |
+        cd django_backend
+        export REDIS_URL=redis://localhost:6379/0
+        python -c "
+        import os
+        import django
+        os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'core.settings')
+        django.setup()
+        from django.core.cache import cache
+        cache.set('test', 'works', 60)
+        result = cache.get('test')
+        print('Cache test: PASS' if result == 'works' else 'Cache test: FAIL')
+        assert result == 'works', 'Cache test failed'
+        print('Redis cache working correctly!')
+        "

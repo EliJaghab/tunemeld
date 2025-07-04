@@ -31,4 +31,5 @@ urlpatterns = [
         views.get_header_art,
         name="get_header_art_by_genre",
     ),
+    path("cache-status/", views.cache_status, name="cache_status"),
 ]
