@@ -25,5 +25,5 @@ ENV PYTHONPATH=/app
 # Expose port 8000
 EXPOSE 8000
 
-# Start Django development server
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+# Start Django development server on Railway's PORT
+CMD ["sh", "-c", "python manage.py runserver 0.0.0.0:${PORT:-8000}"]
