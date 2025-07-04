@@ -32,7 +32,8 @@
 	setup_backend_env \
 	serve \
 	serve-frontend \
-	serve-backend
+	serve-backend \
+	setup-railway-mcp
 
 PROJECT_ROOT := $(shell pwd)
 VENV := $(PROJECT_ROOT)/venv
@@ -212,3 +213,9 @@ test-visual:
 	@if [ ! -f scripts/verify-header-art.js ]; then echo "❌ Puppeteer scripts not found. Run setup first."; exit 1; fi
 	@node scripts/verify-header-art.js http://localhost:8000
 	@node scripts/responsive-screenshots.js http://localhost:8000
+
+setup-railway-mcp:
+	@echo "🚄 Setting up Railway MCP for TuneMeld..."
+	@echo "This will configure Railway MCP for AI agent infrastructure management"
+	@echo ""
+	@node scripts/setup-railway-mcp.js
