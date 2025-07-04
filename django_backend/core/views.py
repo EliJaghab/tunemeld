@@ -64,7 +64,7 @@ def health(request):
 
 
 def get_graph_data(request, genre_name):
-    if not playlists_collection:
+    if playlists_collection is None:
         return create_response(ResponseStatus.ERROR, "Database not available", None)
 
     key = f"graph_data_{genre_name}"
@@ -123,7 +123,7 @@ def get_graph_data(request, genre_name):
 
 
 def get_playlist_data(request, genre_name):
-    if not playlists_collection:
+    if playlists_collection is None:
         return create_response(ResponseStatus.ERROR, "Database not available", None)
 
     try:
@@ -136,7 +136,7 @@ def get_playlist_data(request, genre_name):
 
 
 def get_service_playlist(request, genre_name, service_name):
-    if not transformed_playlists_collection:
+    if transformed_playlists_collection is None:
         return create_response(ResponseStatus.ERROR, "Database not available", None)
 
     try:
@@ -153,7 +153,7 @@ def get_service_playlist(request, genre_name, service_name):
 
 
 def get_last_updated(request, genre_name):
-    if not playlists_collection:
+    if playlists_collection is None:
         return create_response(ResponseStatus.ERROR, "Database not available", None)
 
     try:
@@ -172,7 +172,7 @@ def get_last_updated(request, genre_name):
 
 
 def get_header_art(request, genre_name):
-    if not raw_playlists_collection:
+    if raw_playlists_collection is None:
         return create_response(ResponseStatus.ERROR, "Database not available", None)
 
     try:
