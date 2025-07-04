@@ -1,11 +1,11 @@
 import { cacheAlbumCovers, createJsonResponse, fetchFromMongoDB, handleError } from "./utils";
 
-// Cache configuration for different data types (weekly data releases)
+// Cache configuration for different data types
 const CACHE_TIMES = {
-  GRAPH_DATA: 86400, // 24 hours - data releases weekly
-  PLAYLIST_DATA: 86400, // 24 hours - data releases weekly
-  LAST_UPDATED: 3600, // 1 hour - timestamps can be cached longer
-  HEADER_ART: 604800, // 1 week - images rarely change between releases
+  GRAPH_DATA: 3600, // 1 hour - view counts update hourly
+  PLAYLIST_DATA: 86400, // 24 hours - playlists update weekly
+  LAST_UPDATED: 900, // 15 minutes - timestamps for checking data freshness
+  HEADER_ART: 86400, // 24 hours - images update weekly
 };
 
 export async function handleGraphData(searchParams: URLSearchParams, env: any): Promise<Response> {
@@ -171,12 +171,14 @@ export async function handleCacheStatus(searchParams: URLSearchParams, env: any)
     const status = {
       cache_working: isCacheWorking,
       cloudflare_edge_caching: true,
-      cache_strategy: "Weekly data releases - cache everything for 24h, wipe completely on new releases",
+      cache_strategy: "Mixed update frequency - view counts hourly, playlists weekly",
       cache_configuration: {
-        graph_data_ttl: `${CACHE_TIMES.GRAPH_DATA}s (${CACHE_TIMES.GRAPH_DATA / 3600}h)`,
-        playlist_data_ttl: `${CACHE_TIMES.PLAYLIST_DATA}s (${CACHE_TIMES.PLAYLIST_DATA / 3600}h)`,
-        last_updated_ttl: `${CACHE_TIMES.LAST_UPDATED}s (${CACHE_TIMES.LAST_UPDATED / 60}min)`,
-        header_art_ttl: `${CACHE_TIMES.HEADER_ART}s (${CACHE_TIMES.HEADER_ART / 86400}d)`,
+        graph_data_ttl: `${CACHE_TIMES.GRAPH_DATA}s (${CACHE_TIMES.GRAPH_DATA / 3600}h) - view counts update hourly`,
+        playlist_data_ttl: `${CACHE_TIMES.PLAYLIST_DATA}s (${
+          CACHE_TIMES.PLAYLIST_DATA / 3600
+        }h) - playlists update weekly`,
+        last_updated_ttl: `${CACHE_TIMES.LAST_UPDATED}s (${CACHE_TIMES.LAST_UPDATED / 60}min) - freshness check`,
+        header_art_ttl: `${CACHE_TIMES.HEADER_ART}s (${CACHE_TIMES.HEADER_ART / 3600}h) - images update weekly`,
       },
       cache_invalidation: "Full cache wipe only (make invalidate_cache)",
       cache_headers_enabled: true,
