@@ -2,6 +2,7 @@ import logging
 from enum import Enum
 
 from django.conf import settings
+from django.core.cache import cache
 from django.http import JsonResponse
 
 print("[VIEWS] Loading Django views...")
@@ -202,8 +203,6 @@ def format_playlist_data(data):
 def cache_status(request):
     """Cache status endpoint for debugging"""
     try:
-        from django.core.cache import cache
-
         # Test cache connection
         test_key = "cache_test"
         cache.set(test_key, "test_value", 10)

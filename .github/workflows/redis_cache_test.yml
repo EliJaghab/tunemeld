@@ -42,19 +42,37 @@ jobs:
       run: |
         redis-cli ping
 
-    - name: Test Django cache
+    - name: Test Django cache with backend Redis
       run: |
         cd django_backend
         export REDIS_URL=redis://localhost:6379/0
+        export RAILWAY_ENVIRONMENT=testing
         python -c "
         import os
         import django
         os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'core.settings')
         django.setup()
         from django.core.cache import cache
+        from django.conf import settings
+        print(f'Cache backend: {settings.CACHES[\"default\"][\"BACKEND\"]}')
+        print(f'Redis URL: {settings.CACHES[\"default\"][\"LOCATION\"]}')
         cache.set('test', 'works', 60)
         result = cache.get('test')
         print('Cache test: PASS' if result == 'works' else 'Cache test: FAIL')
         assert result == 'works', 'Cache test failed'
-        print('Redis cache working correctly!')
+        print('✅ Backend Redis cache working correctly!')
         "
+
+    - name: Test cache status endpoint
+      run: |
+        cd django_backend
+        export REDIS_URL=redis://localhost:6379/0
+        export RAILWAY_ENVIRONMENT=testing
+        # Start Django server in background
+        python manage.py runserver 0.0.0.0:8000 &
+        SERVER_PID=$!
+        sleep 3
+        # Test cache status endpoint
+        curl -f http://localhost:8000/cache-status/ | python -m json.tool
+        # Clean up
+        kill $SERVER_PID
