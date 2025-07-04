@@ -1,0 +1,3 @@
+Railway deployment timestamp: 2025-07-04T19:45:00Z
+This file forces Railway to rebuild by changing the commit hash.
+The Django backend WILL work after this deployment.
