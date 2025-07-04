@@ -112,12 +112,12 @@ prod:
 
 invalidate_cache:
 	@set -o allexport; source $(ENV_FILE); set +o allexport; \
-	echo "Invalidating cache using Cloudflare API..." && \
+	echo "🗑️  Wiping entire Cloudflare cache (new data release)..." && \
 	RESPONSE=$$(curl -s -X POST "https://api.cloudflare.com/client/v4/zones/$$CF_ZONE_ID/purge_cache" \
 	-H "Authorization: Bearer $$CLOUDFLARE_API_TOKEN" \
 	-H "Content-Type: application/json" \
 	--data '{"purge_everything":true}'); \
-	echo "$$RESPONSE" | grep -q '"success":true' && echo "Success" || echo "Failure: $$RESPONSE"
+	echo "$$RESPONSE" | grep -q '"success":true' && echo "✅ Cache wiped successfully" || echo "❌ Failure: $$RESPONSE"
 
 test: setup_env
 	@echo "Running all tests..."
