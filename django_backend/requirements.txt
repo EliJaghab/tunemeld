@@ -4,4 +4,5 @@ django_distill==3.2.7
 gunicorn==20.1.0
 pymongo==4.8.0
 python-dotenv==1.0.0
+requests==2.31.0
 uvicorn==0.30.6

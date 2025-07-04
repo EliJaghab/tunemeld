@@ -2,6 +2,7 @@ import logging
 from enum import Enum
 
 from core.cache import Cache
+from django.conf import settings
 from django.http import JsonResponse
 
 from . import (
@@ -26,7 +27,16 @@ def create_response(status: ResponseStatus, message: str, data=None):
 
 
 def root(request):
-    return create_response(ResponseStatus.SUCCESS, "Welcome to the TuneMeld Backend!")
+    """Root endpoint with extensive debugging"""
+    print("\n=== ROOT ENDPOINT CALLED ===")
+    print(f"🏠 Request method: {request.method}")
+    print(f"📍 Request path: {request.path}")
+    print(f"🌍 Request host: {request.get_host()}")
+    print(f"📄 Request headers: {dict(request.headers)}")
+    print(f"⚙️ Django settings DEBUG: {settings.DEBUG}")
+    print(f"📍 Django ALLOWED_HOSTS: {settings.ALLOWED_HOSTS}")
+    print("=== END ROOT DEBUG ===\n")
+    return create_response(ResponseStatus.SUCCESS, "Welcome to the TuneMeld Backend! Django is running.")
 
 
 def health(request):
