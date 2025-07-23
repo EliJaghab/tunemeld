@@ -31,4 +31,9 @@ urlpatterns = [
         views.get_header_art,
         name="get_header_art_by_genre",
     ),
+    path(
+        "edm-events/",
+        views.get_edm_events,
+        name="get_edm_events",
+    ),
 ]

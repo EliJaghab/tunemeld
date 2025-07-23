@@ -1,8 +1,12 @@
 import logging
+import requests
 from enum import Enum
 
 from django.conf import settings
 from django.http import JsonResponse
+
+EDM_EVENTS_GITHUB_URL = "https://raw.githubusercontent.com/AidanJaghab/Beatmap/main/backend/data/latest_events.json"
+EDM_EVENTS_CACHE_KEY = "edm_events_data"
 
 print("[VIEWS] Loading Django views...")
 
@@ -197,3 +201,44 @@ def format_playlist_data(data):
                 "playlist_url": item.get("playlist_url", ""),
             }
     return result
+
+
+def get_edm_events(request):
+    try:
+        if cache:
+            cached_response = cache.get(EDM_EVENTS_CACHE_KEY)
+            if cached_response:
+                return create_response(
+                    ResponseStatus.SUCCESS, 
+                    "EDM events retrieved successfully from cache", 
+                    cached_response
+                )
+        
+        response = requests.get(EDM_EVENTS_GITHUB_URL, timeout=10)
+        response.raise_for_status()
+        
+        events_data = response.json()
+        
+        if cache:
+            cache.put(EDM_EVENTS_CACHE_KEY, events_data, timeout=300)
+        
+        return create_response(
+            ResponseStatus.SUCCESS, 
+            "EDM events retrieved successfully", 
+            events_data
+        )
+        
+    except requests.exceptions.RequestException as e:
+        logger.error(f"Failed to fetch EDM events from GitHub: {e}")
+        return create_response(
+            ResponseStatus.ERROR, 
+            f"Failed to fetch EDM events: {str(e)}", 
+            None
+        )
+    except Exception as e:
+        logger.error(f"Unexpected error in get_edm_events: {e}")
+        return create_response(
+            ResponseStatus.ERROR, 
+            f"Unexpected error: {str(e)}", 
+            None
+        )
