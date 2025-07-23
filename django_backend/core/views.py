@@ -36,6 +36,10 @@ except Exception as e:
 
 logger = logging.getLogger(__name__)
 
+# Constants
+EDM_EVENTS_GITHUB_URL = "https://raw.githubusercontent.com/AidanJaghab/Beatmap/main/backend/data/latest_events.json"
+EDM_EVENTS_CACHE_KEY = "edm_events_data"
+
 
 class ResponseStatus(Enum):
     SUCCESS = "success"
@@ -203,12 +207,8 @@ def format_playlist_data(data):
 def get_edm_events(request):
     """Fetch EDM events from Aidan's GitHub repository"""
     try:
-        github_url = "https://raw.githubusercontent.com/AidanJaghab/Beatmap/main/backend/data/latest_events.json"
-        
-        # Use cache if available
-        cache_key = "edm_events_data"
         if cache:
-            cached_response = cache.get(cache_key)
+            cached_response = cache.get(EDM_EVENTS_CACHE_KEY)
             if cached_response:
                 return create_response(
                     ResponseStatus.SUCCESS, 
@@ -216,15 +216,13 @@ def get_edm_events(request):
                     cached_response
                 )
         
-        # Fetch from GitHub
-        response = requests.get(github_url, timeout=10)
+        response = requests.get(EDM_EVENTS_GITHUB_URL, timeout=10)
         response.raise_for_status()
         
         events_data = response.json()
         
-        # Cache the response if cache is available
         if cache:
-            cache.put(cache_key, events_data, timeout=300)  # Cache for 5 minutes
+            cache.put(EDM_EVENTS_CACHE_KEY, events_data, timeout=300)
         
         return create_response(
             ResponseStatus.SUCCESS, 
