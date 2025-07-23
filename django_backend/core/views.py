@@ -220,7 +220,7 @@ def get_edm_events(request):
         events_data = response.json()
         
         if cache:
-            cache.put(EDM_EVENTS_CACHE_KEY, events_data, timeout=300)
+            cache.put(EDM_EVENTS_CACHE_KEY, events_data)
         
         return create_response(
             ResponseStatus.SUCCESS, 
