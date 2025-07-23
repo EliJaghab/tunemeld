@@ -204,7 +204,6 @@ def format_playlist_data(data):
 
 
 def get_edm_events(request):
-    """Fetch EDM events from Aidan's GitHub repository"""
     try:
         if cache:
             cached_response = cache.get(EDM_EVENTS_CACHE_KEY)
