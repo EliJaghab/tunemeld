@@ -5,6 +5,9 @@ from enum import Enum
 from django.conf import settings
 from django.http import JsonResponse
 
+EDM_EVENTS_GITHUB_URL = "https://raw.githubusercontent.com/AidanJaghab/Beatmap/main/backend/data/latest_events.json"
+EDM_EVENTS_CACHE_KEY = "edm_events_data"
+
 print("[VIEWS] Loading Django views...")
 
 # Safe cache import with fallback
@@ -35,10 +38,6 @@ except Exception as e:
     transformed_playlists_collection = None
 
 logger = logging.getLogger(__name__)
-
-# Constants
-EDM_EVENTS_GITHUB_URL = "https://raw.githubusercontent.com/AidanJaghab/Beatmap/main/backend/data/latest_events.json"
-EDM_EVENTS_CACHE_KEY = "edm_events_data"
 
 
 class ResponseStatus(Enum):
