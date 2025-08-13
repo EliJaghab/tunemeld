@@ -48,7 +48,7 @@ jobs:
       run: |
         cd django_backend
         python manage.py makemigrations --dry-run --check
-        python manage.py migrate --dry-run
+        python manage.py migrate --plan
       env:
         SECRET_KEY: test-secret-key-for-ci
         DATABASE_URL: sqlite:///test.db
