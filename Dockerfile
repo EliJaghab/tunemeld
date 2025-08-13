@@ -22,5 +22,5 @@ RUN pip install --upgrade pip && pip install -r requirements.txt && pip install 
 # Set Python path for Django
 ENV PYTHONPATH=/app
 
-# Expose port 8000
-EXPOSE 8000
+# Expose port 8080 (matches Railway configuration)
+EXPOSE 8080

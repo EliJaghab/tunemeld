@@ -37,26 +37,11 @@ ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "localhost,127.0.0.1,api.tunemeld.com
     ","
 )
 
-# Environment-specific logging with extensive Railway debugging
-print("\n=== DJANGO STARTUP DEBUG ===")
-print(f"🌍 Environment: {environment}")
-print(f"🐛 DEBUG: {DEBUG}")
-print(f"📍 ALLOWED_HOSTS: {ALLOWED_HOSTS}")
-print(f"🔑 SECRET_KEY set: {'Yes' if SECRET_KEY else 'No'}")
-print(f"🗃️ MONGO_URI set: {'Yes' if MONGO_URI else 'No'}")
-print(f"📂 BASE_DIR: {BASE_DIR}")
-print("⚙️ All Environment Variables:")
-for key, value in os.environ.items():
-    if "SECRET" in key or "PASSWORD" in key or "TOKEN" in key:
-        print(f"   {key}: [REDACTED]")
-    else:
-        print(f"   {key}: {value}")
-print("=== END DJANGO STARTUP DEBUG ===\n")
-
+# Minimal environment logging
 if environment == "production":
-    print("🚀 Railway Production Environment Confirmed")
+    print("Railway Production Environment")
 else:
-    print("🔧 Development Environment")
+    print("Development Environment")
 
 
 STATIC_URL = "/static/"
