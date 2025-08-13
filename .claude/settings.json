@@ -1,3 +1,5 @@
 {
-  "_note": "IMPORTANT: Always use 'agentree -b <branch-name>' to create isolated environments for tasks before starting work. This prevents contamination and creates clean PRs."
+  "toolUsePermissions": {
+    "allowedTools": ["mcp__railway__*"]
+  }
 }
