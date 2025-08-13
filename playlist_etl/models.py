@@ -3,18 +3,11 @@ from enum import Enum
 
 from pydantic import BaseModel, Field
 
+# Import centralized constants
+from playlist_etl.constants import GenreName, ServiceName
 
-class GenreName(str, Enum):
-    DANCE = "dance"
-    RAP = "rap"
-    COUNTRY = "country"
-    POP = "pop"
-
-
-class TrackSourceServiceName(str, Enum):
-    SPOTIFY = "Spotify"
-    SOUNDCLOUD = "SoundCloud"
-    APPLE_MUSIC = "AppleMusic"
+# Backward compatibility aliases
+TrackSourceServiceName = ServiceName
 
 
 class DataSourceServiceName(str, Enum):

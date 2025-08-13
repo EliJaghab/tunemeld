@@ -10,55 +10,14 @@ from unidecode import unidecode
 
 from playlist_etl.helpers import get_logger, set_secrets
 
-# Export TypedDict and key functions for external use
 __all__ = ["PLAYLIST_GENRES", "SERVICE_CONFIGS", "PlaylistMetadata", "SpotifyFetcher", "run_extraction"]
+from playlist_etl.constants import PLAYLIST_GENRES, SERVICE_CONFIGS
 from playlist_etl.utils import (
     WebDriverManager,
     clear_collection,
     get_mongo_client,
     insert_or_update_data_to_mongo,
 )
-
-PLAYLIST_GENRES = ["country", "dance", "pop", "rap"]
-
-SERVICE_CONFIGS = {
-    "AppleMusic": {
-        "base_url": "https://apple-music24.p.rapidapi.com/playlist1/",
-        "host": "apple-music24.p.rapidapi.com",
-        "param_key": "url",
-        "playlist_base_url": "https://music.apple.com/us/playlist/",
-        "links": {
-            "country": "https://music.apple.com/us/playlist/todays-country/pl.87bb5b36a9bd49db8c975607452bfa2b",
-            "dance": "https://music.apple.com/us/playlist/dancexl/pl.6bf4415b83ce4f3789614ac4c3675740",
-            "pop": "https://music.apple.com/us/playlist/a-list-pop/pl.5ee8333dbe944d9f9151e97d92d1ead9",
-            "rap": "https://music.apple.com/us/playlist/rap-life/pl.abe8ba42278f4ef490e3a9fc5ec8e8c5",
-        },
-    },
-    "SoundCloud": {
-        "base_url": "https://soundcloud-scraper.p.rapidapi.com/v1/playlist/tracks",
-        "host": "soundcloud-scraper.p.rapidapi.com",
-        "param_key": "playlist",
-        "playlist_base_url": "https://soundcloud.com/",
-        "links": {
-            "country": "https://soundcloud.com/soundcloud-shine/sets/backroads-best-country-now",
-            "dance": "https://soundcloud.com/soundcloud-the-peak/sets/on-the-up-new-edm-hits",
-            "pop": "https://soundcloud.com/soundcloud-shine/sets/ear-candy-fresh-pop-picks",
-            "rap": "https://soundcloud.com/soundcloud-hustle/sets/drippin-best-rap-right-now",
-        },
-    },
-    "Spotify": {
-        "base_url": "https://spotify23.p.rapidapi.com/playlist_tracks/",
-        "host": "spotify23.p.rapidapi.com",
-        "param_key": "id",
-        "playlist_base_url": "https://open.spotify.com/playlist/",
-        "links": {
-            "country": "https://open.spotify.com/playlist/37i9dQZF1DX1lVhptIYRda",
-            "dance": "https://open.spotify.com/playlist/37i9dQZF1DX4dyzvuaRJ0n",
-            "pop": "https://open.spotify.com/playlist/37i9dQZF1DXcBWIGoYBM5M",
-            "rap": "https://open.spotify.com/playlist/37i9dQZF1DX0XUsuxWHRQd",
-        },
-    },
-}
 
 DEBUG_MODE = False
 NO_RAPID = False
