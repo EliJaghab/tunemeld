@@ -28,7 +28,14 @@ CSRF_TRUSTED_ORIGINS = [
     "https://tunemeld.com",
 ]
 
-SECRET_KEY = os.getenv("SECRET_KEY", "django-insecure-!^u31q!@ui68(aook0g4w@jw*ei=%bbx1d8em_bm8hxm+6te#0")
+
+# Django secret key for cryptographic signing, sessions, CSRF protection, and password hashing
+# CRITICAL: Must be kept secret and unique per deployment environment
+# Used for: session security, CSRF tokens, password reset tokens, and cookie signing
+SECRET_KEY = os.getenv(
+    "DJANGO_SECRET_KEY",
+    "django-insecure-!^u31q!@ui68(aook0g4w@jw*ei=%bbx1d8em_bm8hxm+6te#0",  # Development fallback only
+)
 
 # Set DEBUG based on environment
 DEBUG = environment != "production"
@@ -160,12 +167,16 @@ USE_I18N = True
 
 USE_TZ = True
 
+# PostgreSQL database connection string from Railway
+# Format: postgresql://username:password@host:port/database_name
+# Used for: persistent storage of playlist data, user sessions, and application state
 DATABASE_URL = os.getenv("DATABASE_URL")
 
 if DATABASE_URL:
+    # Production: Use Railway PostgreSQL database
     DATABASES = {"default": dj_database_url.parse(DATABASE_URL)}
 else:
-    # Fallback to SQLite for testing/development
+    # Development/Testing: Fallback to in-memory SQLite
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.sqlite3",
