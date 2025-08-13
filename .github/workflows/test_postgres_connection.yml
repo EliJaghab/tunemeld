@@ -1,0 +1,81 @@
+name: Test PostgreSQL Connection
+
+on:
+  workflow_dispatch:
+    # Manual trigger only for testing
+
+jobs:
+  test-connection:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.11
+
+      - name: Install minimal dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install Django dj-database-url psycopg2-binary python-dotenv
+
+      - name: Set PYTHONPATH
+        run: echo "PYTHONPATH=$PWD" >> $GITHUB_ENV
+
+      - name: Test database connection
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
+          RAILWAY_ENVIRONMENT: production
+        run: |
+          cd django_backend
+          echo "🔍 Testing PostgreSQL connection..."
+
+          python -c "
+          import os
+          import django
+          from django.conf import settings
+          from django.db import connection
+
+          # Configure Django
+          os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'core.settings')
+          django.setup()
+
+          print('✅ Django configured successfully')
+          print(f'🔧 Database engine: {settings.DATABASES[\"default\"][\"ENGINE\"]}')
+          print(f'🗄️  Database name: {settings.DATABASES[\"default\"][\"NAME\"]}')
+
+          # Test database connection
+          with connection.cursor() as cursor:
+              cursor.execute('SELECT version()')
+              result = cursor.fetchone()
+              print(f'🐘 PostgreSQL version: {result[0]}')
+
+          print('🎉 PostgreSQL connection test PASSED!')
+          "
+
+      - name: Test Django checks
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
+          RAILWAY_ENVIRONMENT: production
+        run: |
+          cd django_backend
+          echo "🔍 Running Django system checks..."
+          python manage.py check --deploy
+          echo "✅ Django system checks PASSED!"
+
+      - name: Test migrations status
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
+          RAILWAY_ENVIRONMENT: production
+        run: |
+          cd django_backend
+          echo "🔍 Checking migrations status..."
+          python manage.py showmigrations
+          echo "✅ Migrations status check PASSED!"
