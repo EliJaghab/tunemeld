@@ -1,4 +1,4 @@
-name: PostgreSQL ETL Pipeline
+name: Playlist ETL 2
 
 on:
   schedule:
