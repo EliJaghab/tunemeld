@@ -3,8 +3,14 @@ repos:
     # Ruff version.
     rev: v0.8.4
     hooks:
-      # Run the linter with aggressive fixes.
+      # First check for linting issues (fail if found)
       - id: ruff
+        name: ruff-check
+        args: [--no-fix]
+        exclude: ".*\\.ipynb$"
+      # Then run the linter with aggressive fixes.
+      - id: ruff
+        name: ruff-fix
         args: [--fix, --unsafe-fixes]
         exclude: ".*\\.ipynb$"
       # Run the formatter.

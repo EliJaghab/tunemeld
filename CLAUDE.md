@@ -53,6 +53,7 @@ make install-pre-commit
 
 **Pre-commit hooks automatically:**
 
+- **First check** for linting violations (fails if found)
 - Run Ruff with aggressive fixes (including unsafe fixes)
 - Run Prettier on JavaScript files
 - Enforce double quotes in Python
@@ -97,6 +98,16 @@ make test-visual             # Full visual regression tests
 - No external API calls or costs incurred during testing
 - Comprehensive mocking of Spotify, YouTube, Apple Music, and RapidAPI services
 
+**Test File Naming Convention:**
+
+- Django management command tests: `{command_name}_test.py` (e.g., `raw_extract_test.py`)
+- General test files: `test_{module_name}.py` or `{module_name}_test.py`
+
+**Test Code Style:**
+
+- No docstrings or comments needed in test files
+- Test method names should be self-documenting
+
 **Visual Testing:** Screenshots saved to `screenshots/` directory (gitignored).
 
 ## Build & Deploy
@@ -119,8 +130,11 @@ make invalidate_cache
 3. **Format code:** `make format`
 4. **Test changes:** `make test-header-art` or `make test-visual`
 5. **Run tests:** `make test`
-6. **Commit:** Pre-commit hooks will run automatically
-7. **Deploy:** `make pull_push` then `make prod`
+6. **Run linting:** `ruff check .` (catches PEP 8 violations)
+7. **Run pre-commit hooks:** `pre-commit run --all-files` (fails first, then fixes)
+8. **Run type checking:** `mypy .` (catches type issues)
+9. **Commit:** Pre-commit hooks will run automatically (will fail if violations found)
+10. **Deploy:** `make pull_push` then `make prod`
 
 ## ETL Pipeline (Backend)
 
