@@ -1,6 +1,7 @@
 import os
 from pathlib import Path
 
+import dj_database_url
 from dotenv import load_dotenv
 
 environment = os.getenv("RAILWAY_ENVIRONMENT", "development")
@@ -63,6 +64,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 
 INSTALLED_APPS = [
+    "core.apps.CoreConfig",
     "corsheaders",
     "django.contrib.admin",
     "django.contrib.auth",
@@ -173,13 +175,9 @@ USE_I18N = True
 
 USE_TZ = True
 
-DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+DATABASE_URL = os.getenv("DATABASE_URL")
 
-# Database configuration for Django tests
-# Note: This app primarily uses MongoDB, but Django requires a database backend for testing
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": ":memory:",
-    }
-}
+if not DATABASE_URL:
+    raise ValueError("DATABASE_URL environment variable is required. " "Set it to your PostgreSQL connection string.")
+
+DATABASES = {"default": dj_database_url.parse(DATABASE_URL)}

@@ -83,7 +83,8 @@ exclude = [
     "site-packages",
     "venv",
     "staticfiles",
-    "backend/lib"
+    "backend/lib",
+    "**/migrations/**"
 ]
 
 [tool.ruff.lint]

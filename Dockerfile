@@ -16,14 +16,11 @@ RUN echo "=== VERIFYING FILE COPY ===" && \
     ls -la /app/manage.py && \
     echo "=== COPY VERIFICATION COMPLETE ==="
 
-# Install Python dependencies
-RUN pip install --upgrade pip && pip install -r requirements.txt
+# Install Python dependencies including gunicorn
+RUN pip install --upgrade pip && pip install -r requirements.txt && pip install gunicorn
 
 # Set Python path for Django
 ENV PYTHONPATH=/app
 
 # Expose port 8000
 EXPOSE 8000
-
-# Start Django development server on Railway's PORT
-CMD ["sh", "-c", "python manage.py runserver 0.0.0.0:${PORT:-8000}"]

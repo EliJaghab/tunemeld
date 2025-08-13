@@ -1,7 +1,7 @@
 import logging
-import requests
 from enum import Enum
 
+import requests
 from django.conf import settings
 from django.http import JsonResponse
 
@@ -209,36 +209,22 @@ def get_edm_events(request):
             cached_response = cache.get(EDM_EVENTS_CACHE_KEY)
             if cached_response:
                 return create_response(
-                    ResponseStatus.SUCCESS, 
-                    "EDM events retrieved successfully from cache", 
-                    cached_response
+                    ResponseStatus.SUCCESS, "EDM events retrieved successfully from cache", cached_response
                 )
-        
+
         response = requests.get(EDM_EVENTS_GITHUB_URL, timeout=10)
         response.raise_for_status()
-        
+
         events_data = response.json()
-        
+
         if cache:
             cache.put(EDM_EVENTS_CACHE_KEY, events_data)
-        
-        return create_response(
-            ResponseStatus.SUCCESS, 
-            "EDM events retrieved successfully", 
-            events_data
-        )
-        
+
+        return create_response(ResponseStatus.SUCCESS, "EDM events retrieved successfully", events_data)
+
     except requests.exceptions.RequestException as e:
         logger.error(f"Failed to fetch EDM events from GitHub: {e}")
-        return create_response(
-            ResponseStatus.ERROR, 
-            f"Failed to fetch EDM events: {str(e)}", 
-            None
-        )
+        return create_response(ResponseStatus.ERROR, f"Failed to fetch EDM events: {e!s}", None)
     except Exception as e:
         logger.error(f"Unexpected error in get_edm_events: {e}")
-        return create_response(
-            ResponseStatus.ERROR, 
-            f"Unexpected error: {str(e)}", 
-            None
-        )
+        return create_response(ResponseStatus.ERROR, f"Unexpected error: {e!s}", None)
