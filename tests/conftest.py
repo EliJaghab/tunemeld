@@ -42,7 +42,11 @@ def sample_raw_playlist_data():
         "service_name": "Spotify",
         "genre_name": "dance",
         "playlist_url": "https://open.spotify.com/playlist/37i9dQZF1DX4dyzvuaRJ0n",
-        "data_json": '{"tracks": [{"track_name": "Talk To Me", "artist_name": "Champion, Four Tet, Skrillex & Naisha", "track_url": "https://open.spotify.com/track/7nJVTcj5YWQVoI1vQqK7Ez", "album_cover_url": "https://i.scdn.co/image/ab67616d0000b2736e0b98630a3ae3d86a204121", "rank": 1}]}',
+        "data_json": (
+            '{"tracks": [{"track_name": "Talk To Me", "artist_name": "Champion, Four Tet, Skrillex & Naisha", '
+            '"track_url": "https://open.spotify.com/track/7nJVTcj5YWQVoI1vQqK7Ez", '
+            '"album_cover_url": "https://i.scdn.co/image/ab67616d0000b2736e0b98630a3ae3d86a204121", "rank": 1}]}'
+        ),
         "playlist_name": "Dance Hits",
         "playlist_cover_url": "https://i.scdn.co/image/ab67616d0000b273...",
         "playlist_cover_description_text": "The biggest dance tracks right now",
