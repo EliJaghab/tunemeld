@@ -7,9 +7,10 @@ Usage:
 """
 
 from core.models import Genre, RawPlaylistData, Service
+from core.utils import initialize_lookup_tables
 from django.core.management.base import BaseCommand
 
-from playlist_etl.constants import GENRE_DISPLAY_NAMES, PLAYLIST_GENRES, SERVICE_CONFIGS
+from playlist_etl.constants import PLAYLIST_GENRES, SERVICE_CONFIGS
 from playlist_etl.extract import (
     AppleMusicFetcher,
     RapidAPIClient,
@@ -25,7 +26,8 @@ class Command(BaseCommand):
     help = "Extract raw playlist data from RapidAPI and save to PostgreSQL"
 
     def handle(self, *args, **options):
-        self.initialize_lookup_tables()
+        initialize_lookup_tables()
+        logger.info("Lookup tables initialized")
 
         deleted_count = RawPlaylistData.objects.all().delete()[0]
         logger.info(f"Cleared {deleted_count} existing records")
@@ -46,18 +48,6 @@ class Command(BaseCommand):
                     failed += 1
 
         logger.info(f"Complete: {successful} success, {failed} failed")
-
-    def initialize_lookup_tables(self):
-        for genre_name, display_name in GENRE_DISPLAY_NAMES.items():
-            Genre.objects.get_or_create(name=genre_name, defaults={"display_name": display_name})
-
-        for service_name in SERVICE_CONFIGS:
-            Service.objects.get_or_create(
-                name=service_name,
-                defaults={"display_name": service_name},
-            )
-
-        logger.info("Lookup tables initialized")
 
     def get_extractor(self, client: RapidAPIClient, service_name: str, genre: str):
         if service_name == "AppleMusic":

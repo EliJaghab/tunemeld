@@ -420,5 +420,5 @@ if __name__ == "__main__":
 
     for service_name, config in SERVICE_CONFIGS.items():
         for genre in PLAYLIST_GENRES:
-            logger.info(f"Retrieving {genre} from {service_name} with credential " f"{config['links'][genre]}")
+            logger.info(f"Retrieving {genre} from {service_name} with credential {config['links'][genre]}")
             run_extraction(mongo_client, client, service_name, genre)

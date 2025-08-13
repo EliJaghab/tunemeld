@@ -535,7 +535,7 @@ class TestPipelinePerformance:
         print("📊 Performance Benchmark:")
         print(f"  - Processed {total_tracks} tracks across {total_playlists} playlists")
         print(f"  - Processing time: {processing_time:.2f} seconds")
-        print(f"  - Throughput: {total_tracks/processing_time:.1f} tracks/second")
+        print(f"  - Throughput: {total_tracks / processing_time:.1f} tracks/second")
 
         # Performance assertions
         assert processing_time < 30, f"Pipeline should complete in under 30 seconds, took {processing_time:.2f}s"
