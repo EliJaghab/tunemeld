@@ -52,7 +52,7 @@ jobs:
           RAILWAY_ENVIRONMENT: production
         run: |
           cd django_backend
-          python manage.py raw_extract
+can           python manage.py 02_raw_extract
 
       - name: Verify data extraction
         env:

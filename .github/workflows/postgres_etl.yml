@@ -1,0 +1,107 @@
+name: PostgreSQL ETL Pipeline
+
+on:
+  schedule:
+    # Run every Saturday at 3 AM UTC (1 hour after raw extract)
+    - cron: '0 3 * * 6'
+  workflow_dispatch:
+    # Allow manual trigger
+
+jobs:
+  run-etl:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.11
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Setup Chrome and ChromeDriver
+        uses: browser-actions/setup-chrome@v1
+        with:
+          chrome-version: stable
+          install-chromedriver: true
+
+      - name: Set PYTHONPATH
+        run: echo "PYTHONPATH=$PWD" >> $GITHUB_ENV
+
+      - name: Run database migrations
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
+          RAILWAY_ENVIRONMENT: production
+        run: |
+          cd django_backend
+          python manage.py migrate
+
+      - name: Initialize lookup tables
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
+          RAILWAY_ENVIRONMENT: production
+        run: |
+          cd django_backend
+          python manage.py 01_init_lookup_tables
+
+      - name: Extract raw playlist data
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
+          X_RAPIDAPI_KEY: ${{ secrets.X_RAPIDAPI_KEY }}
+          RAILWAY_ENVIRONMENT: production
+        run: |
+          cd django_backend
+          python manage.py 02_raw_extract
+
+      - name: Transform raw data into normalized tracks
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
+          RAILWAY_ENVIRONMENT: production
+        run: |
+          cd django_backend
+          python manage.py 03_transform
+
+      - name: Verify ETL pipeline results
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
+        run: |
+          cd django_backend
+          echo "📊 ETL Pipeline Results:"
+          python manage.py shell -c "
+          from core.models import RawPlaylistData, Track, TrackData, Playlist, Genre, Service
+          print(f'Raw playlist records: {RawPlaylistData.objects.count()}')
+          print(f'Unique tracks: {Track.objects.count()}')  
+          print(f'Track data entries: {TrackData.objects.count()}')
+          print(f'Service playlists: {Playlist.objects.filter(playlist_type=\"service\").count()}')
+          print(f'Genres: {Genre.objects.count()}')
+          print(f'Services: {Service.objects.count()}')
+          print()
+          print('📈 Breakdown by service:')
+          for service in Service.objects.all():
+              playlist_count = Playlist.objects.filter(service=service, playlist_type='service').count()
+              track_count = TrackData.objects.filter(service=service).count()
+              print(f'{service.name}: {playlist_count} playlists, {track_count} tracks')
+          "
+
+      - name: Log ETL completion
+        run: |
+          echo "✅ PostgreSQL ETL Pipeline completed successfully"
+          echo "🗄️  Data persisted to Railway PostgreSQL database"
+          echo "🔄 Next ETL run scheduled for next Saturday at 3 AM UTC"
+          echo "📋 Pipeline stages completed:"
+          echo "   1. ✅ Extract: Raw playlist data from RapidAPI"
+          echo "   2. ✅ Transform: Normalized tracks and playlists" 
+          echo "   3. ⏳ Aggregate: Cross-service ranking (coming soon)"
+          echo "   4. ⏳ View counts: YouTube/Spotify metrics (coming soon)"
