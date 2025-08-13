@@ -24,20 +24,7 @@ class Command(BaseCommand):
         logger.info("Starting data transformation...")
 
         # Clear existing transformed data
-        with transaction.atomic():
-            try:
-                track_count = Track.objects.count()
-                track_data_count = TrackData.objects.count()
-                playlist_count = Playlist.objects.count()
-
-                TrackPlaylist.objects.all().delete()
-                TrackData.objects.all().delete()
-                Track.objects.all().delete()
-                Playlist.objects.filter(playlist_type="service").delete()
-
-                logger.info(f"Cleared {track_count} tracks, {track_data_count} track data, {playlist_count} playlists")
-            except Exception:
-                logger.info("No existing data to clear (fresh database)")
+        self.clear_transformed_data()
 
         # Get all raw playlist data
         raw_data_queryset = RawPlaylistData.objects.select_related("genre", "service").all()
@@ -144,3 +131,15 @@ class Command(BaseCommand):
             f"Transformation complete: {tracks_created} tracks, "
             f"{track_data_created} track data entries, {playlists_created} playlists"
         )
+
+    def clear_transformed_data(self):
+        """Clear all transformed data tables for clean rebuild."""
+        try:
+            with transaction.atomic():
+                TrackPlaylist.objects.all().delete()
+                TrackData.objects.all().delete()
+                Track.objects.all().delete()
+                Playlist.objects.all().delete()
+            logger.info("Cleared existing transformed data")
+        except Exception:
+            logger.info("No existing data to clear (fresh database)")
