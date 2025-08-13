@@ -31,7 +31,6 @@ class Genre(models.Model):
         help_text="Internal genre identifier (lowercase, underscores only)",
     )
     display_name = models.CharField(max_length=100, help_text="Human-readable genre name")
-    created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         db_table = "genres"
@@ -52,9 +51,7 @@ class Service(models.Model):
     Example:
         spotify = Service(
             name="Spotify",
-            display_name="Spotify",
-            is_track_source=True,
-            is_data_source=True
+            display_name="Spotify"
         )
     """
 
@@ -66,21 +63,10 @@ class Service(models.Model):
         help_text="Internal service identifier",
     )
     display_name = models.CharField(max_length=100, help_text="Human-readable service name")
-    is_track_source = models.BooleanField(default=True, help_text="Whether this service provides track listings")
-    is_data_source = models.BooleanField(
-        default=False, help_text="Whether this service provides metadata (view counts, etc.)"
-    )
-    created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         db_table = "services"
         ordering: ClassVar = ["name"]
 
     def __str__(self):
-        capabilities = []
-        if self.is_track_source:
-            capabilities.append("tracks")
-        if self.is_data_source:
-            capabilities.append("data")
-        cap_str = "+".join(capabilities) if capabilities else "none"
-        return f"{self.display_name} ({cap_str})"
+        return self.display_name
