@@ -18,13 +18,12 @@ from .aggregate import Playlist, PlaylistMetadata, TrackPlaylist
 from .base import Genre, Service
 
 # Extract phase models (raw data)
-from .extract import ETLRun, RawPlaylistData
+from .extract import RawPlaylistData
 
 # Transform phase models (normalized data)
 from .transform import HistoricalViewCount, Track, TrackData, ViewCount
 
 __all__ = [
-    "ETLRun",
     # Base
     "Genre",
     "HistoricalViewCount",
