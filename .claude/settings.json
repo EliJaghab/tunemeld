@@ -1,4 +1,9 @@
 {
+  "permissions": {
+    "allow": ["mcp__railway__*"],
+    "deny": [],
+    "ask": []
+  },
   "toolUsePermissions": {
     "allowedTools": ["mcp__railway__*"]
   }
