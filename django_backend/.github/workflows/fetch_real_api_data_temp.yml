@@ -1,0 +1,81 @@
+name: Fetch Real API Data (Temporary)
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: 'Type "FETCH" to confirm you want to make real API calls'
+        required: true
+        default: ''
+
+jobs:
+  fetch-real-data:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Validate confirmation
+        if: ${{ github.event.inputs.confirm != 'FETCH' }}
+        run: |
+          echo "❌ You must type 'FETCH' to confirm API calls"
+          exit 1
+
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Install requests
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests
+
+      - name: Create folder structure
+        run: |
+          mkdir -p django_backend/real_api_data/spotify
+          mkdir -p django_backend/real_api_data/apple_music
+          mkdir -p django_backend/real_api_data/soundcloud
+
+      - name: Fetch real API data
+        env:
+          X_RAPIDAPI_KEY: ${{ secrets.X_RAPIDAPI_KEY }}
+        run: |
+          cd django_backend
+          python fetch_real_api_data.py
+
+      - name: List fetched files
+        run: |
+          echo "📁 Files created:"
+          find django_backend/real_api_data -type f -name "*.json" | while read file; do
+            echo "  - $file ($(wc -l < "$file") lines)"
+          done
+
+      - name: Commit real API data
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add django_backend/real_api_data/
+          git commit -m "Add real API data from RapidAPI
+
+          📊 One file per service/genre combination
+          🎯 Exact raw API responses
+          📁 Organized in folders by service
+
+          🤖 Generated with Claude Code
+
+          Co-Authored-By: Claude <noreply@anthropic.com>"
+          git push
+
+      - name: Summary
+        run: |
+          echo "🎉 SUCCESS: Real API data has been fetched!"
+          echo "📁 Structure:"
+          echo "  - real_api_data/spotify/{pop,rap,dance,country}.json"
+          echo "  - real_api_data/apple_music/{pop,rap,dance,country}.json"
+          echo "  - real_api_data/soundcloud/{pop,rap,dance,country}.json"
+          echo "⚠️  DELETE THIS WORKFLOW after data is fetched!"
