@@ -30,19 +30,33 @@ GRACEFUL HANDLING:
 - Apple Music tracks without Spotify matches are skipped (for now)
 """
 
-import re
+import os
 
 from core.models import PlaylistTrack, Track, TrackData
 from django.core.management.base import BaseCommand
 from django.db import transaction
 
+from playlist_etl.config import ISRC_CACHE_COLLECTION
 from playlist_etl.helpers import get_logger
+from playlist_etl.mongo_db_client import MongoDBClient
+from playlist_etl.services import SpotifyService
+from playlist_etl.utils import CacheManager, WebDriverManager
 
 logger = get_logger(__name__)
 
 
 class Command(BaseCommand):
     help = "Hydrate tracks with ISRC resolution and create canonical Track records"
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        mongo_client = MongoDBClient()
+        self.spotify_service = SpotifyService(
+            client_id=os.getenv("SPOTIFY_CLIENT_ID"),
+            client_secret=os.getenv("SPOTIFY_CLIENT_SECRET"),
+            isrc_cache_manager=CacheManager(mongo_client, ISRC_CACHE_COLLECTION),
+            webdriver_manager=WebDriverManager(),
+        )
 
     def handle(self, *args, **options) -> None:
         logger.info("Starting track hydration with ISRC resolution...")
@@ -96,13 +110,10 @@ class Command(BaseCommand):
 
     def clear_track_data(self) -> None:
         """Clear existing track hydration data for clean rebuild."""
-        try:
-            with transaction.atomic():
-                TrackData.objects.all().delete()
-                Track.objects.all().delete()
-                logger.info("Cleared existing track hydration data")
-        except Exception:
-            logger.info("No existing track data to clear")
+        with transaction.atomic():
+            TrackData.objects.all().delete()
+            Track.objects.all().delete()
+            logger.info("Cleared existing track hydration data")
 
     def resolve_isrc_from_playlist_track(self, playlist_track: PlaylistTrack) -> str | None:
         """Resolve ISRC for a PlaylistTrack."""
@@ -110,7 +121,7 @@ class Command(BaseCommand):
             return playlist_track.isrc
 
         if playlist_track.service.name == "AppleMusic":
-            return self.lookup_isrc_via_spotify(playlist_track.track_name, playlist_track.artist_name)
+            return self.spotify_service.get_isrc(playlist_track.track_name, playlist_track.artist_name)
 
         return None
 
@@ -123,56 +134,3 @@ class Command(BaseCommand):
         elif playlist_track.soundcloud_url:
             return playlist_track.soundcloud_url
         return ""
-
-    def lookup_isrc_via_spotify(self, track_name: str, artist_name: str) -> str | None:
-        """
-        Look up ISRC for Apple Music tracks using Spotify API.
-        Mirrors the exact logic from MongoDB Transform class.
-        """
-        # TODO: Implement cache manager for production
-        # isrc = self.isrc_cache_manager.get(cache_key)
-        # if isrc:
-        #     logger.info(f"Cache hit for ISRC: {cache_key}")
-        #     return isrc
-
-        logger.info(f"ISRC Spotify Lookup Cache miss for {track_name} by {artist_name}")
-
-        track_name_no_parens = self._get_track_name_with_no_parens(track_name)
-        queries = [
-            f"track:{track_name_no_parens} artist:{artist_name}",
-            f"{track_name_no_parens} {artist_name}",
-            f"track:{track_name.lower()} artist:{artist_name}",
-        ]
-
-        for query in queries:
-            isrc = self._get_isrc(query)
-            if isrc:
-                logger.info(f"Found ISRC for {track_name} by {artist_name}: {isrc}")
-                # TODO: Cache result in production
-                # self.isrc_cache_manager.set(cache_key, isrc)
-                return isrc
-
-        logger.info(f"No track found on Spotify using queries: {queries} for {track_name} by {artist_name}")
-        return None
-
-    def _get_track_name_with_no_parens(self, track_name: str) -> str:
-        """Remove parentheses from track name for better search matching."""
-        return re.sub(r"\([^()]*\)", "", track_name.lower())
-
-    def _get_isrc(self, query: str) -> str | None:
-        """
-        Search Spotify API for track and return ISRC.
-        This is a placeholder - in production, this would use actual Spotify client.
-        """
-        try:
-            # TODO: Implement actual Spotify API search
-            # results = self.spotify_client.search(q=query, type="track", limit=1)
-            # tracks = results["tracks"]["items"]
-            # if tracks:
-            #     return tracks[0]["external_ids"].get("isrc")
-            # return None
-            logger.debug(f"Spotify search query: {query}")
-            return None  # Placeholder - no external API calls during transformation
-        except Exception as e:
-            logger.info(f"Error searching Spotify with query '{query}': {e}")
-            return None

@@ -29,14 +29,31 @@ Uses structured track data (output from Phase 3) with realistic ISRC values
 to test the hydration process end-to-end.
 """
 
+from unittest.mock import Mock, patch
+
 from core.management.commands.d_hydrate_tracks import Command as HydrateCommand
 from core.models import Genre, PlaylistTrack, Service, Track, TrackData
 from django.test import TestCase
 
 
 class TestHydrateTracksCommand(TestCase):
-    def setUp(self):
+    @patch("core.management.commands.d_hydrate_tracks.WebDriverManager")
+    @patch("core.management.commands.d_hydrate_tracks.CacheManager")
+    @patch("core.management.commands.d_hydrate_tracks.MongoDBClient")
+    @patch("core.management.commands.d_hydrate_tracks.SpotifyService")
+    @patch("core.management.commands.d_hydrate_tracks.os.getenv")
+    def setUp(self, mock_getenv, mock_spotify_service, mock_mongo_client, mock_cache_manager, mock_webdriver_manager):
         """Set up test data."""
+        # Mock environment variables for Spotify credentials
+        mock_getenv.side_effect = lambda key: {
+            "SPOTIFY_CLIENT_ID": "test_client_id",
+            "SPOTIFY_CLIENT_SECRET": "test_client_secret",
+        }.get(key)
+
+        # Mock the Spotify service
+        self.mock_spotify_service = Mock()
+        mock_spotify_service.return_value = self.mock_spotify_service
+
         self.command = HydrateCommand()
 
         # Create test services and genre
@@ -86,7 +103,7 @@ class TestHydrateTracksCommand(TestCase):
         assert isrc == "USSM12301546"
 
     def test_resolve_isrc_apple_music(self):
-        """Test ISRC resolution for Apple Music tracks (should return None for now)."""
+        """Test ISRC resolution for Apple Music tracks via Spotify lookup."""
         apple_music_track = PlaylistTrack.objects.create(
             service=self.apple_music_service,
             genre=self.pop_genre,
@@ -96,10 +113,14 @@ class TestHydrateTracksCommand(TestCase):
             apple_music_url="https://music.apple.com/track/123",
         )
 
+        # Mock Spotify service to return an ISRC
+        self.mock_spotify_service.get_isrc.return_value = "USSM12301546"
+
         isrc = self.command.resolve_isrc_from_playlist_track(apple_music_track)
 
-        # Should return None since we haven't implemented Spotify API lookup yet
-        assert isrc is None
+        # Should return ISRC from Spotify lookup
+        assert isrc == "USSM12301546"
+        self.mock_spotify_service.get_isrc.assert_called_once_with("Flowers", "Miley Cyrus")
 
     def test_resolve_isrc_missing(self):
         """Test ISRC resolution when no ISRC is available."""
