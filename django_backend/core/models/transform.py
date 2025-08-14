@@ -4,11 +4,10 @@ Transform and Load phase models for TuneMeld ETL pipeline.
 
 from typing import ClassVar
 
+from core.models.a_lookup_tables import Service
 from django.core.validators import RegexValidator
 from django.db import models
 from django.utils import timezone
-
-from .base import Service
 
 
 class Track(models.Model):

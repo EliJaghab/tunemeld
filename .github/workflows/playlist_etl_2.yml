@@ -51,7 +51,7 @@ jobs:
           RAILWAY_ENVIRONMENT: production
         run: |
           cd django_backend
-          python manage.py 01_init_lookup_tables
+          python manage.py a_init_lookup_tables
 
       - name: Extract raw playlist data
         env:
@@ -61,16 +61,25 @@ jobs:
           RAILWAY_ENVIRONMENT: production
         run: |
           cd django_backend
-          python manage.py 02_raw_extract
+          python manage.py b_raw_extract
 
-      - name: Transform raw data into normalized tracks
+      - name: Normalize raw data into structured playlists
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
           RAILWAY_ENVIRONMENT: production
         run: |
           cd django_backend
-          python manage.py 03_transform
+          python manage.py c_normalize_raw_playlists
+
+      - name: Hydrate tracks with ISRC resolution
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
+          RAILWAY_ENVIRONMENT: production
+        run: |
+          cd django_backend
+          python manage.py d_hydrate_tracks
 
       - name: Verify ETL pipeline results
         env:
@@ -82,7 +91,7 @@ jobs:
           python manage.py shell -c "
           from core.models import RawPlaylistData, Track, TrackData, Playlist, Genre, Service
           print(f'Raw playlist records: {RawPlaylistData.objects.count()}')
-          print(f'Unique tracks: {Track.objects.count()}')  
+          print(f'Unique tracks: {Track.objects.count()}')
           print(f'Track data entries: {TrackData.objects.count()}')
           print(f'Service playlists: {Playlist.objects.filter(playlist_type=\"service\").count()}')
           print(f'Genres: {Genre.objects.count()}')
@@ -102,6 +111,7 @@ jobs:
           echo "🔄 Next ETL run scheduled for next Saturday at 3 AM UTC"
           echo "📋 Pipeline stages completed:"
           echo "   1. ✅ Extract: Raw playlist data from RapidAPI"
-          echo "   2. ✅ Transform: Normalized tracks and playlists" 
-          echo "   3. ⏳ Aggregate: Cross-service ranking (coming soon)"
-          echo "   4. ⏳ View counts: YouTube/Spotify metrics (coming soon)"
+          echo "   2. ✅ Normalize: Structured playlist data"
+          echo "   3. ✅ Hydrate: ISRC resolution and canonical tracks"
+          echo "   4. ⏳ Aggregate: Cross-service ranking (coming soon)"
+          echo "   5. ⏳ View counts: YouTube/Spotify metrics (coming soon)"

@@ -4,10 +4,9 @@ Aggregate phase models for TuneMeld ETL pipeline.
 
 from typing import ClassVar
 
+from core.models.a_lookup_tables import Genre, Service
+from core.models.transform import Track
 from django.db import models
-
-from .base import Genre, Service
-from .transform import Track
 
 
 class Playlist(models.Model):
