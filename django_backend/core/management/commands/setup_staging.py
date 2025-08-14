@@ -56,9 +56,9 @@ class Command(BaseCommand):
         Genre.objects.all().delete()
         Service.objects.all().delete()
 
-        # Step 2: Load sample data fixtures (includes lookup tables)
-        logger.info("📦 Loading staging fixtures...")
-        call_command("loaddata", "staging_data.json")
+        # Step 2: Load real staging data fixtures (includes lookup tables)
+        logger.info("📦 Loading real staging fixtures...")
+        call_command("loaddata", "real_staging_data.json")
 
         if not options["skip_etl"]:
             # Step 3: Run normalization on fixture data
