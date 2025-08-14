@@ -80,8 +80,11 @@ def fetch_simple_data():
                 playlist_url = config["links"][genre]
                 playlist_name = f"{service_name} {genre.title()} Playlist"
 
-                # Map service and genre to IDs
-                service_id = {"Spotify": 1, "AppleMusic": 2, "SoundCloud": 3}[service_name]
+                # Map service and genre to IDs (handle both enum and string values)
+                service_name_str = str(service_name).split(".")[-1] if "." in str(service_name) else service_name
+                service_id = {"Spotify": 1, "AppleMusic": 2, "SoundCloud": 3, "APPLE_MUSIC": 2, "SOUNDCLOUD": 3}[
+                    service_name_str
+                ]
                 genre_id = {"pop": 1, "rap": 2, "dance": 3, "country": 4}[genre]
 
                 # Store the result
@@ -133,8 +136,8 @@ def fetch_simple_data():
 
     complete_data = lookup_tables + real_data
 
-    # Save to fixture file
-    output_file = "/Users/eli/github/tunemeld/django_backend/core/fixtures/real_staging_data.json"
+    # Save to fixture file (use relative path that works in CI)
+    output_file = "core/fixtures/real_staging_data.json"
     with open(output_file, "w") as f:
         json.dump(complete_data, f, indent=2)
 
