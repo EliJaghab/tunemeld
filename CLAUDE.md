@@ -63,7 +63,7 @@ make install-pre-commit
 
 **Formatting Standards:**
 
-- **Python**: Double quotes, space indentation, no relative imports
+- **Python**: Double quotes, space indentation, no relative imports, no redundant inline comments
 - **JavaScript**: Prettier standard formatting
 - **Jupyter notebooks**: Excluded from formatting
 
