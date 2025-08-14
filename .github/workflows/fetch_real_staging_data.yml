@@ -1,0 +1,91 @@
+name: Fetch Real Staging Data (One Time)
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: 'Type "FETCH" to confirm you want to make real API calls'
+        required: true
+        default: ''
+
+jobs:
+  fetch-data:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Validate confirmation
+        if: ${{ github.event.inputs.confirm != 'FETCH' }}
+        run: |
+          echo "❌ You must type 'FETCH' to confirm API calls"
+          exit 1
+
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.GH_PAT }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Setup Chrome and ChromeDriver
+        uses: browser-actions/setup-chrome@v1
+        with:
+          chrome-version: stable
+          install-chromedriver: true
+
+      - name: Set PYTHONPATH
+        run: echo "PYTHONPATH=$PWD" >> $GITHUB_ENV
+
+      - name: Fetch real data from APIs
+        env:
+          X_RAPIDAPI_KEY: ${{ secrets.X_RAPIDAPI_KEY }}
+          MONGO_URI: ${{ secrets.MONGO_URI }}
+          GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+          SPOTIFY_CLIENT_ID: ${{ secrets.SPOTIFY_CLIENT_ID }}
+          SPOTIFY_CLIENT_SECRET: ${{ secrets.SPOTIFY_CLIENT_SECRET }}
+        run: |
+          cd django_backend
+          python one_time_data_fetch.py
+          echo "✅ Data fetch completed"
+
+      - name: Check if data was created
+        run: |
+          if [ -f "django_backend/core/fixtures/real_staging_data.json" ]; then
+            echo "✅ Real staging data file created successfully"
+            echo "📊 File size: $(wc -c < django_backend/core/fixtures/real_staging_data.json) bytes"
+            echo "📦 Records: $(jq length django_backend/core/fixtures/real_staging_data.json)"
+          else
+            echo "❌ Real staging data file was not created"
+            exit 1
+          fi
+
+      - name: Commit real staging data
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add django_backend/core/fixtures/real_staging_data.json
+          git commit -m "Add real staging data from API calls
+
+          🚀 Generated with one-time API fetch
+          📊 Contains real data from Spotify, Apple Music, SoundCloud
+          🎯 All genres: pop, rap, dance, country
+
+          🤖 Generated with Claude Code
+
+          Co-Authored-By: Claude <noreply@anthropic.com>"
+          git push
+
+      - name: Summary
+        run: |
+          echo "🎉 SUCCESS: Real staging data has been fetched and committed!"
+          echo "📁 File: django_backend/core/fixtures/real_staging_data.json"
+          echo "🔄 You can now use this data by updating setup_staging.py to load 'real_staging_data.json'"
+          echo "⚠️  This workflow should only be run once to avoid unnecessary API costs"

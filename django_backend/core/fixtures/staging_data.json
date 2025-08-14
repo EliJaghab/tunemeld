@@ -1,0 +1,144 @@
+[
+  {
+    "model": "core.service",
+    "pk": 1,
+    "fields": {
+      "name": "Spotify",
+      "display_name": "Spotify"
+    }
+  },
+  {
+    "model": "core.service",
+    "pk": 2,
+    "fields": {
+      "name": "AppleMusic",
+      "display_name": "Apple Music"
+    }
+  },
+  {
+    "model": "core.service",
+    "pk": 3,
+    "fields": {
+      "name": "SoundCloud",
+      "display_name": "SoundCloud"
+    }
+  },
+  {
+    "model": "core.genre",
+    "pk": 1,
+    "fields": {
+      "name": "pop",
+      "display_name": "Pop"
+    }
+  },
+  {
+    "model": "core.genre",
+    "pk": 2,
+    "fields": {
+      "name": "hip-hop",
+      "display_name": "Hip-Hop"
+    }
+  },
+  {
+    "model": "core.rawplaylistdata",
+    "pk": 1,
+    "fields": {
+      "service": 1,
+      "genre": 1,
+      "playlist_url": "https://open.spotify.com/playlist/37i9dQZF1DXcBWIGoYBM5M",
+      "playlist_name": "Today's Top Hits",
+      "created_at": "2025-01-01T00:00:00Z",
+      "data": {
+        "items": [
+          {
+            "track": {
+              "id": "4iV5W9uYEdYUVa79Axb7Rh",
+              "name": "Flowers",
+              "artists": [{ "name": "Miley Cyrus" }],
+              "album": {
+                "name": "Endless Summer Vacation",
+                "images": [{ "url": "https://i.scdn.co/image/ab67616d0000b273f58d971b7bca2b1f7b780ec8" }]
+              },
+              "duration_ms": 200000,
+              "popularity": 85,
+              "external_ids": { "isrc": "USSM12301546" },
+              "external_urls": { "spotify": "https://open.spotify.com/track/4iV5W9uYEdYUVa79Axb7Rh" },
+              "preview_url": "https://p.scdn.co/mp3-preview/preview.mp3"
+            }
+          },
+          {
+            "track": {
+              "id": "1BxfuPKGuaTgP7aM0Bbdwr",
+              "name": "Cruel Summer",
+              "artists": [{ "name": "Taylor Swift" }],
+              "album": {
+                "name": "Lover",
+                "images": [{ "url": "https://i.scdn.co/image/ab67616d0000b273e787cffec20aa2a396a61647" }]
+              },
+              "duration_ms": 178426,
+              "popularity": 88,
+              "external_ids": { "isrc": "USUG11901223" },
+              "external_urls": { "spotify": "https://open.spotify.com/track/1BxfuPKGuaTgP7aM0Bbdwr" },
+              "preview_url": "https://p.scdn.co/mp3-preview/preview2.mp3"
+            }
+          }
+        ]
+      }
+    }
+  },
+  {
+    "model": "core.rawplaylistdata",
+    "pk": 2,
+    "fields": {
+      "service": 2,
+      "genre": 1,
+      "playlist_url": "https://music.apple.com/playlist/top-hits",
+      "playlist_name": "Top 100: Global",
+      "created_at": "2025-01-01T00:00:00Z",
+      "data": {
+        "album_details": {
+          "0": {
+            "name": "Flowers",
+            "artist": "Miley Cyrus",
+            "album": "Endless Summer Vacation",
+            "link": "https://music.apple.com/track/1663973886"
+          },
+          "1": {
+            "name": "Unholy",
+            "artist": "Sam Smith, Kim Petras",
+            "album": "Gloria",
+            "link": "https://music.apple.com/track/1645740997"
+          }
+        }
+      }
+    }
+  },
+  {
+    "model": "core.rawplaylistdata",
+    "pk": 3,
+    "fields": {
+      "service": 3,
+      "genre": 2,
+      "playlist_url": "https://soundcloud.com/charts/top",
+      "playlist_name": "SoundCloud Hip-Hop Charts",
+      "created_at": "2025-01-01T00:00:00Z",
+      "data": {
+        "tracks": {
+          "items": [
+            {
+              "id": "123456789",
+              "title": "Drake - Rich Flex",
+              "user": { "name": "Drake" },
+              "duration": 210000,
+              "play_count": 5000000,
+              "publisher": { "isrc": "CAK231200123" },
+              "permalink": "https://soundcloud.com/drake/rich-flex",
+              "stream_url": "https://api.soundcloud.com/tracks/123456789/stream",
+              "artworkUrl": "https://i1.sndcdn.com/artworks-example.jpg"
+            }
+          ]
+        }
+      }
+    }
+  }
+]

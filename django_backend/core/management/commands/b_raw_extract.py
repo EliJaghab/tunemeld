@@ -6,6 +6,8 @@ Usage:
     python manage.py raw_extract
 """
 
+import os
+
 from core.models import Genre, RawPlaylistData, Service
 from core.utils import initialize_lookup_tables
 from django.core.management.base import BaseCommand
@@ -26,6 +28,12 @@ class Command(BaseCommand):
     help = "Extract raw playlist data from RapidAPI and save to PostgreSQL"
 
     def handle(self, *args, **options):
+        # Check if running in staging mode
+        if os.getenv("STAGING_MODE") == "true":
+            logger.info("🧪 Staging mode detected - skipping API extraction")
+            logger.info("💡 Use 'python manage.py setup_staging' to populate with fixture data")
+            return
+
         initialize_lookup_tables()
         logger.info("Lookup tables initialized")
 
