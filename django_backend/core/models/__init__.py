@@ -1,39 +1,45 @@
 """
 TuneMeld Django Models - PostgreSQL ETL Pipeline
 
-This package contains all Django models organized by ETL pipeline stage:
+This package contains all Django models organized by letter-prefixed ETL pipeline stages:
 
-- base: Core lookup tables (Genre, Service)
-- extract: Raw data models (RawPlaylistData, ETLRun)
-- transform: Normalized data models (Track, TrackData, ViewCount)
-- aggregate: Final output models (Playlist, TrackPlaylist)
+- a_lookup_tables: Core lookup tables (Genre, Service)
+- b_raw_data: Raw data models (RawPlaylistData)
+- c_playlist_track: Normalized playlist track data (PlaylistTrack)
+- Legacy files for remaining models: transform, aggregate
 
 All models use explicit BigAutoField primary keys and proper indexing
 for PostgreSQL performance.
 """
 
-# Base models (lookup tables)
-# Aggregate phase models (final output)
-from .aggregate import Playlist, PlaylistMetadata, TrackPlaylist
-from .base import Genre, Service
+# Phase 1: Lookup tables
+from core.models.a_lookup_tables import Genre, Service
 
-# Extract phase models (raw data)
-from .extract import RawPlaylistData
+# Legacy aggregate phase models
+from core.models.aggregate import Playlist, PlaylistMetadata, TrackPlaylist
 
-# Transform phase models (normalized data)
-from .transform import HistoricalViewCount, Track, TrackData, ViewCount
+# Phase 2: Raw data storage
+from core.models.b_raw_data import RawPlaylistData
+
+# Phase 3: Normalized playlist tracks
+from core.models.c_playlist_track import PlaylistTrack
+
+# Legacy transform phase models
+from core.models.transform import HistoricalViewCount, Track, TrackData, ViewCount
 
 __all__ = [
-    # Base
+    # Phase 1
     "Genre",
+    # Legacy transform
     "HistoricalViewCount",
-    # Aggregate
+    # Legacy aggregate
     "Playlist",
     "PlaylistMetadata",
-    # Extract
+    # Phase 3
+    "PlaylistTrack",
+    # Phase 2
     "RawPlaylistData",
     "Service",
-    # Transform
     "Track",
     "TrackData",
     "TrackPlaylist",
