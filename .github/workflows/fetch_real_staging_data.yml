@@ -33,25 +33,15 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Setup Chrome and ChromeDriver
-        uses: browser-actions/setup-chrome@v1
-        with:
-          chrome-version: stable
-          install-chromedriver: true
-
       - name: Set PYTHONPATH
         run: echo "PYTHONPATH=$PWD" >> $GITHUB_ENV
 
-      - name: Fetch real data from APIs
+      - name: Fetch real data from APIs (simplified)
         env:
           X_RAPIDAPI_KEY: ${{ secrets.X_RAPIDAPI_KEY }}
-          MONGO_URI: ${{ secrets.MONGO_URI }}
-          GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
-          SPOTIFY_CLIENT_ID: ${{ secrets.SPOTIFY_CLIENT_ID }}
-          SPOTIFY_CLIENT_SECRET: ${{ secrets.SPOTIFY_CLIENT_SECRET }}
         run: |
           cd django_backend
-          python one_time_data_fetch.py
+          python simple_api_fetch.py
           echo "✅ Data fetch completed"
 
       - name: Check if data was created
