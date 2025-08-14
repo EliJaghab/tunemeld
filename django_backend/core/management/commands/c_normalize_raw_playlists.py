@@ -20,7 +20,6 @@ import json
 
 from core.models import PlaylistTrack, RawPlaylistData
 from django.core.management.base import BaseCommand
-from django.db import transaction
 
 from playlist_etl.helpers import get_logger
 
@@ -47,23 +46,17 @@ class Command(BaseCommand):
         total_tracks = 0
 
         for raw_data in raw_data_queryset:
-            try:
-                track_count = self.create_playlist_tracks(raw_data)
-                total_tracks += track_count
-
-                logger.info(f"Created {raw_data.service.name}/{raw_data.genre.name}: {track_count} tracks")
-
-            except Exception as e:
-                logger.error(f"Failed to transform {raw_data.service.name}/{raw_data.genre.name}: {e}")
+            track_count = self.create_playlist_tracks(raw_data)
+            total_tracks += track_count
+            logger.info(f"Created {raw_data.service.name}/{raw_data.genre.name}: {track_count} tracks")
 
         logger.info(f"Transformation complete: {total_tracks} playlist tracks created")
 
     def clear_playlist_tracks(self) -> None:
         """Clear existing playlist tracks for clean rebuild."""
         try:
-            with transaction.atomic():
-                deleted_count = PlaylistTrack.objects.all().delete()[0]
-                logger.info(f"Cleared {deleted_count} existing playlist tracks")
+            deleted_count = PlaylistTrack.objects.all().delete()[0]
+            logger.info(f"Cleared {deleted_count} existing playlist tracks")
         except Exception:
             logger.info("No existing playlist tracks to clear")
 

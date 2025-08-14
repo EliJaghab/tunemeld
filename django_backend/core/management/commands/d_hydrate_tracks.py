@@ -30,6 +30,8 @@ GRACEFUL HANDLING:
 - Apple Music tracks without Spotify matches are skipped (for now)
 """
 
+import re
+
 from core.models import PlaylistTrack, Track, TrackData
 from django.core.management.base import BaseCommand
 from django.db import transaction
@@ -125,9 +127,52 @@ class Command(BaseCommand):
     def lookup_isrc_via_spotify(self, track_name: str, artist_name: str) -> str | None:
         """
         Look up ISRC for Apple Music tracks using Spotify API.
-        This is a placeholder - in production, this would use the actual Spotify service.
+        Mirrors the exact logic from MongoDB Transform class.
         """
-        # TODO: Implement actual Spotify API lookup
-        # For now, return None to avoid external API calls in transformation
-        logger.debug(f"ISRC lookup needed for: {track_name} by {artist_name}")
+        # TODO: Implement cache manager for production
+        # isrc = self.isrc_cache_manager.get(cache_key)
+        # if isrc:
+        #     logger.info(f"Cache hit for ISRC: {cache_key}")
+        #     return isrc
+
+        logger.info(f"ISRC Spotify Lookup Cache miss for {track_name} by {artist_name}")
+
+        track_name_no_parens = self._get_track_name_with_no_parens(track_name)
+        queries = [
+            f"track:{track_name_no_parens} artist:{artist_name}",
+            f"{track_name_no_parens} {artist_name}",
+            f"track:{track_name.lower()} artist:{artist_name}",
+        ]
+
+        for query in queries:
+            isrc = self._get_isrc(query)
+            if isrc:
+                logger.info(f"Found ISRC for {track_name} by {artist_name}: {isrc}")
+                # TODO: Cache result in production
+                # self.isrc_cache_manager.set(cache_key, isrc)
+                return isrc
+
+        logger.info(f"No track found on Spotify using queries: {queries} for {track_name} by {artist_name}")
         return None
+
+    def _get_track_name_with_no_parens(self, track_name: str) -> str:
+        """Remove parentheses from track name for better search matching."""
+        return re.sub(r"\([^()]*\)", "", track_name.lower())
+
+    def _get_isrc(self, query: str) -> str | None:
+        """
+        Search Spotify API for track and return ISRC.
+        This is a placeholder - in production, this would use actual Spotify client.
+        """
+        try:
+            # TODO: Implement actual Spotify API search
+            # results = self.spotify_client.search(q=query, type="track", limit=1)
+            # tracks = results["tracks"]["items"]
+            # if tracks:
+            #     return tracks[0]["external_ids"].get("isrc")
+            # return None
+            logger.debug(f"Spotify search query: {query}")
+            return None  # Placeholder - no external API calls during transformation
+        except Exception as e:
+            logger.info(f"Error searching Spotify with query '{query}': {e}")
+            return None
