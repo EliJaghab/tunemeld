@@ -1,0 +1,364 @@
+{
+  "album_details": {
+    "0": {
+      "name": "Don't Stop Believin' (2024 Remaster)",
+      "artist": "Journey",
+      "album": "Greatest Hits (2024 Remaster)",
+      "link": "https://music.apple.com/us/album/dont-stop-believin-2024-remaster/169003304?i=169003415&uo=4"
+    },
+    "1": {
+      "name": "Faithfully (2024 Remaster)",
+      "artist": "Journey",
+      "album": "Greatest Hits (2024 Remaster)",
+      "link": "https://music.apple.com/us/album/faithfully-2024-remaster/169003304?i=169003626&uo=4"
+    },
+    "2": {
+      "name": "Any Way You Want It (2024 Remaster)",
+      "artist": "Journey",
+      "album": "Greatest Hits (2024 Remaster)",
+      "link": "https://music.apple.com/us/album/any-way-you-want-it-2024-remaster/169003304?i=169004107&uo=4"
+    },
+    "3": {
+      "name": "Open Arms (2024 Remaster)",
+      "artist": "Journey",
+      "album": "Greatest Hits (2024 Remaster)",
+      "link": "https://music.apple.com/us/album/open-arms-2024-remaster/169003304?i=169004972&uo=4"
+    },
+    "4": {
+      "name": "Separate Ways (Worlds Apart) [2024 Remaster]",
+      "artist": "Journey",
+      "album": "Greatest Hits (2024 Remaster)",
+      "link": "https://music.apple.com/us/album/separate-ways-worlds-apart-2024-remaster/169003304?i=169004756&uo=4"
+    },
+    "5": {
+      "name": "Wheel In the Sky (2024 Remaster)",
+      "artist": "Journey",
+      "album": "Greatest Hits (2024 Remaster)",
+      "link": "https://music.apple.com/us/album/wheel-in-the-sky-2024-remaster/169003304?i=169003481&uo=4"
+    },
+    "6": {
+      "name": "Lovin', Touchin', Squeezin' (2024 Remaster)",
+      "artist": "Journey",
+      "album": "Greatest Hits (2024 Remaster)",
+      "link": "https://music.apple.com/us/album/lovin-touchin-squeezin-2024-remaster/169003304?i=169004870&uo=4"
+    },
+    "7": {
+      "name": "Lights (2024 Remaster)",
+      "artist": "Journey",
+      "album": "Greatest Hits (2024 Remaster)",
+      "link": "https://music.apple.com/us/album/lights-2024-remaster/169003304?i=169004832&uo=4"
+    },
+    "8": {
+      "name": "Only the Young (2024 Remaster)",
+      "artist": "Journey",
+      "album": "Greatest Hits (2024 Remaster)",
+      "link": "https://music.apple.com/us/album/only-the-young-2024-remaster/169003304?i=169003337&uo=4"
+    },
+    "9": {
+      "name": "When You Love a Woman (2024 Remaster)",
+      "artist": "Journey",
+      "album": "Greatest Hits (2024 Remaster)",
+      "link": "https://music.apple.com/us/album/when-you-love-a-woman-2024-remaster/169003304?i=169005711&uo=4"
+    },
+    "10": {
+      "name": "Send Her My Love (2024 Remaster)",
+      "artist": "Journey",
+      "album": "Greatest Hits (2024 Remaster)",
+      "link": "https://music.apple.com/us/album/send-her-my-love-2024-remaster/169003304?i=169005180&uo=4"
+    },
+    "11": {
+      "name": "I'll Be Alright Without You (2024 Remaster)",
+      "artist": "Journey",
+      "album": "Greatest Hits (2024 Remaster)",
+      "link": "https://music.apple.com/us/album/ill-be-alright-without-you-2024-remaster/169003304?i=169003869&uo=4"
+    },
+    "12": {
+      "name": "Girl Can't Help It (2024 Remaster)",
+      "artist": "Journey",
+      "album": "Greatest Hits (2024 Remaster)",
+      "link": "https://music.apple.com/us/album/girl-cant-help-it-2024-remaster/169003304?i=169005085&uo=4"
+    },
+    "13": {
+      "name": "Be Good to Yourself (2024 Remaster)",
+      "artist": "Journey",
+      "album": "Greatest Hits (2024 Remaster)",
+      "link": "https://music.apple.com/us/album/be-good-to-yourself-2024-remaster/169003304?i=169005529&uo=4"
+    },
+    "14": {
+      "name": "Ask the Lonely (2024 Remaster)",
+      "artist": "Journey",
+      "album": "Greatest Hits (2024 Remaster)",
+      "link": "https://music.apple.com/us/album/ask-the-lonely-2024-remaster/169003304?i=169004346&uo=4"
+    },
+    "15": {
+      "name": "Edge of Saturday Night",
+      "artist": "The Blessed Madonna & Kylie Minogue",
+      "album": "Pop Hits 2024",
+      "link": "https://music.apple.com/us/album/edge-of-saturday-night/1772268472?i=1772269676&uo=4"
+    },
+    "16": {
+      "name": "Midnight Ride",
+      "artist": "Orville Peck, Kylie Minogue & Diplo",
+      "album": "Pop Hits 2024",
+      "link": "https://music.apple.com/us/album/midnight-ride/1772268472?i=1772269288&uo=4"
+    },
+    "17": {
+      "name": "Pretty Little Devil",
+      "artist": "Shaya Zamora",
+      "album": "Pop Hits 2024",
+      "link": "https://music.apple.com/us/album/pretty-little-devil/1772268472?i=1772269674&uo=4"
+    },
+    "18": {
+      "name": "PASSENGER PRINCESS",
+      "artist": "Nessa Barrett",
+      "album": "Pop Hits 2024",
+      "link": "https://music.apple.com/us/album/passenger-princess/1772268472?i=1772269290&uo=4"
+    },
+    "19": {
+      "name": "Chase It (Mmm Da Da Da)",
+      "artist": "Bebe Rexha",
+      "album": "Pop Hits 2024",
+      "link": "https://music.apple.com/us/album/chase-it-mmm-da-da-da/1772268472?i=1772268974&uo=4"
+    },
+    "20": {
+      "name": "I Don't Wanna Wait",
+      "artist": "David Guetta & OneRepublic",
+      "album": "Pop Hits 2024",
+      "link": "https://music.apple.com/us/album/i-dont-wanna-wait/1772268472?i=1772268478&uo=4"
+    },
+    "21": {
+      "name": "I'm Good (Blue) [Today's Hits Remix]",
+      "artist": "Les Bleux",
+      "album": "#1 Club Hits 2024 (Best of Dance, House & EDM Playlist Compilation)",
+      "link": "https://music.apple.com/us/album/im-good-blue-todays-hits-remix/1757659611?i=1757664464&uo=4"
+    },
+    "22": {
+      "name": "These Walls",
+      "artist": "Dua Lipa",
+      "album": "Pop Hits 2024",
+      "link": "https://music.apple.com/us/album/these-walls/1772268472?i=1772269284&uo=4"
+    },
+    "23": {
+      "name": "Illusion",
+      "artist": "Dua Lipa",
+      "album": "Pop Hits 2024",
+      "link": "https://music.apple.com/us/album/illusion/1772268472?i=1772268628&uo=4"
+    },
+    "24": {
+      "name": "Scared to Start",
+      "artist": "Michael Marcagi",
+      "album": "Pop Hits 2024",
+      "link": "https://music.apple.com/us/album/scared-to-start/1772268472?i=1772268957&uo=4"
+    },
+    "25": {
+      "name": "Austin",
+      "artist": "Dasha",
+      "album": "Pop Hits 2024",
+      "link": "https://music.apple.com/us/album/austin/1772268472?i=1772268493&uo=4"
+    },
+    "26": {
+      "name": "Other People",
+      "artist": "Daniel Seavey",
+      "album": "Pop Hits 2024",
+      "link": "https://music.apple.com/us/album/other-people/1772268472?i=1772270417&uo=4"
+    },
+    "27": {
+      "name": "The Door",
+      "artist": "Teddy Swims",
+      "album": "Pop Hits 2024",
+      "link": "https://music.apple.com/us/album/the-door/1772268472?i=1772269473&uo=4"
+    },
+    "28": {
+      "name": "Immortal Queen (feat. Chaka Khan & Neneh Cherry)",
+      "artist": "Sia",
+      "album": "Pop Hits 2024",
+      "link": "https://music.apple.com/us/album/immortal-queen-feat-chaka-khan-neneh-cherry/1772268472?i=1772269463&uo=4"
+    },
+    "29": {
+      "name": "One Wish (feat. Childish Gambino)",
+      "artist": "Ravyn Lenae",
+      "album": "Pop Hits 2024",
+      "link": "https://music.apple.com/us/album/one-wish-feat-childish-gambino/1772268472?i=1772269671&uo=4"
+    },
+    "30": {
+      "name": "Ain't No Love in Oklahoma (From \"Twisters: The Album\")",
+      "artist": "Luke Combs",
+      "album": "Pop Hits 2024",
+      "link": "https://music.apple.com/us/album/aint-no-love-in-oklahoma-from-twisters-the-album/1772268472?i=1772268951&uo=4"
+    },
+    "31": {
+      "name": "KEHLANI (REMIX) [feat. Kehlani]",
+      "artist": "Jordan Adetunji",
+      "album": "Pop Hits 2024",
+      "link": "https://music.apple.com/us/album/kehlani-remix-feat-kehlani/1772268472?i=1772268967&uo=4"
+    },
+    "32": {
+      "name": "Hero",
+      "artist": "Charlie Puth",
+      "album": "Pop Hits 2024",
+      "link": "https://music.apple.com/us/album/hero/1772268472?i=1772268965&uo=4"
+    },
+    "33": {
+      "name": "Pop(P)-Titan [feat. Katyes Krass]",
+      "artist": "Harry Steil & James Blond",
+      "album": "Oktoberfest Wiesn Hits 2024",
+      "link": "https://music.apple.com/us/album/pop-p-titan-feat-katyes-krass/1766334203?i=1766338286&uo=4"
+    },
+    "34": {
+      "name": "Hot Honey",
+      "artist": "Ti\u00ebsto & Alana Springsteen",
+      "album": "Pop Hits 2024",
+      "link": "https://music.apple.com/us/album/hot-honey/1772268472?i=1772269459&uo=4"
+    },
+    "35": {
+      "name": "feelslikeimfallinginlove",
+      "artist": "Coldplay",
+      "album": "Pop Hits 2024",
+      "link": "https://music.apple.com/us/album/feelslikeimfallinginlove/1772268472?i=1772268643&uo=4"
+    },
+    "36": {
+      "name": "Under the Sun (feat. Alok)",
+      "artist": "Ella Henderson & Switch Disco",
+      "album": "Pop Hits 2024",
+      "link": "https://music.apple.com/us/album/under-the-sun-feat-alok/1772268472?i=1772269683&uo=4"
+    },
+    "37": {
+      "name": "Never Going Home Tonight (feat. Madison Love)",
+      "artist": "David Guetta & Alesso",
+      "album": "Pop Hits 2024",
+      "link": "https://music.apple.com/us/album/never-going-home-tonight-feat-madison-love/1772268472?i=1772269484&uo=4"
+    },
+    "38": {
+      "name": "Carry You Home",
+      "artist": "Alex Warren",
+      "album": "Pop Hits 2024",
+      "link": "https://music.apple.com/us/album/carry-you-home/1772268472?i=1772268636&uo=4"
+    },
+    "39": {
+      "name": "Apple",
+      "artist": "Charli xcx",
+      "album": "Pop Hits 2024",
+      "link": "https://music.apple.com/us/album/apple/1772268472?i=1772268619&uo=4"
+    },
+    "40": {
+      "name": "places to be",
+      "artist": "Fred again.., Anderson .Paak & CHIKA",
+      "album": "Pop Hits 2024",
+      "link": "https://music.apple.com/us/album/places-to-be/1772268472?i=1772268955&uo=4"
+    },
+    "41": {
+      "name": "Overtime (feat. Kacey Musgraves)",
+      "artist": "Rainbow Kitten Surprise",
+      "album": "Pop Hits 2024",
+      "link": "https://music.apple.com/us/album/overtime-feat-kacey-musgraves/1772268472?i=1772270107&uo=4"
+    },
+    "42": {
+      "name": "WE PRAY (feat. Little Simz, Burna Boy, Elyanna & TINI)",
+      "artist": "Coldplay",
+      "album": "Pop Hits 2024",
+      "link": "https://music.apple.com/us/album/we-pray-feat-little-simz-burna-boy-elyanna-tini/1772268472?i=1772269483&uo=4"
+    },
+    "43": {
+      "name": "Need You Tonight (Mendelsohn Extended Mix) [2024 Remaster]",
+      "artist": "INXS",
+      "album": "Need You Tonight (Mendelsohn Extended Mix) [2024 Remaster] - Single",
+      "link": "https://music.apple.com/us/album/need-you-tonight-mendelsohn-extended-mix-2024-remaster/1780096044?i=1780096046&uo=4"
+    },
+    "44": {
+      "name": "Pink Skies",
+      "artist": "Zach Bryan",
+      "album": "Pop Hits 2024",
+      "link": "https://music.apple.com/us/album/pink-skies/1772268472?i=1772268626&uo=4"
+    },
+    "45": {
+      "name": "Kisses (feat. bbyclose)",
+      "artist": "BL3SS & CamrinWatsin",
+      "album": "Pop Hits 2024",
+      "link": "https://music.apple.com/us/album/kisses-feat-bbyclose/1772268472?i=1772268978&uo=4"
+    },
+    "46": {
+      "name": "Thinkin Too Much",
+      "artist": "Jesse\u00ae",
+      "album": "Pop Hits 2024",
+      "link": "https://music.apple.com/us/album/thinkin-too-much/1772268472?i=1772270690&uo=4"
+    },
+    "47": {
+      "name": "Turn it up",
+      "artist": "PinkPantheress",
+      "album": "Pop Hits 2024",
+      "link": "https://music.apple.com/us/album/turn-it-up/1772268472?i=1772269474&uo=4"
+    },
+    "48": {
+      "name": "Die Party geht weiter (Baller Mix)",
+      "artist": "Robert W\u00f6rner",
+      "album": "Oktoberfest Wiesn Hits 2024",
+      "link": "https://music.apple.com/us/album/die-party-geht-weiter-baller-mix/1766334203?i=1766336119&uo=4"
+    },
+    "49": {
+      "name": "Heute schillern wir uns einen rein",
+      "artist": "Volle Paule",
+      "album": "Oktoberfest Wiesn Hits 2024",
+      "link": "https://music.apple.com/us/album/heute-schillern-wir-uns-einen-rein/1766334203?i=1766336535&uo=4"
+    },
+    "50": {
+      "name": "Was ist denn schon dabei",
+      "artist": "Dominik Grossner",
+      "album": "Schlager Top 40 - Die Hits Des Sommers 2024",
+      "link": "https://music.apple.com/us/album/was-ist-denn-schon-dabei/1736828889?i=1736832311&uo=4"
+    },
+    "51": {
+      "name": "Aus und vorbei",
+      "artist": "Celina Mars",
+      "album": "Schlager Top 40 - Die Hits Des Sommers 2024",
+      "link": "https://music.apple.com/us/album/aus-und-vorbei/1736828889?i=1736831367&uo=4"
+    },
+    "52": {
+      "name": "Platz da",
+      "artist": "Yvonne K\u00f6nig",
+      "album": "Schlager Top 40 - Die Hits Des Sommers 2024",
+      "link": "https://music.apple.com/us/album/platz-da/1736828889?i=1736830311&uo=4"
+    },
+    "53": {
+      "name": "K\u00fcss mich Halt mich Lieb' mich",
+      "artist": "Claudia Biltz",
+      "album": "Schlager Top 40 - Die Hits Des Sommers 2024",
+      "link": "https://music.apple.com/us/album/k%C3%BCss-mich-halt-mich-lieb-mich/1736828889?i=1736830007&uo=4"
+    },
+    "54": {
+      "name": "Winnitu",
+      "artist": "Franky Colonia",
+      "album": "Oktoberfest Wiesn Hits 2024",
+      "link": "https://music.apple.com/us/album/winnitu/1766334203?i=1766334911&uo=4"
+    },
+    "55": {
+      "name": "Pl\u00f6tzlich bist Du nicht mehr da",
+      "artist": "Lars Heise",
+      "album": "Schlager Top 40 - Die Hits Des Sommers 2024",
+      "link": "https://music.apple.com/us/album/pl%C3%B6tzlich-bist-du-nicht-mehr-da/1736828889?i=1736829839&uo=4"
+    },
+    "56": {
+      "name": "Herzflug",
+      "artist": "Steffan Lesser",
+      "album": "Schlager Top 40 - Die Hits Des Sommers 2024",
+      "link": "https://music.apple.com/us/album/herzflug/1736828889?i=1736832927&uo=4"
+    },
+    "57": {
+      "name": "Wenn du mich k\u00fcsst",
+      "artist": "Celina Mars",
+      "album": "Schlager Top 40 - Die Hits Des Sommers 2024",
+      "link": "https://music.apple.com/us/album/wenn-du-mich-k%C3%BCsst/1736828889?i=1736832303&uo=4"
+    },
+    "58": {
+      "name": "1 Million rote Rosen",
+      "artist": "Anna-Maria Zimmermann",
+      "album": "Schlager Top 40 - Die Hits Des Sommers 2024",
+      "link": "https://music.apple.com/us/album/1-million-rote-rosen/1736828889?i=1736829135&uo=4"
+    },
+    "59": {
+      "name": "Brennende N\u00e4chte",
+      "artist": "Alex Pahlke",
+      "album": "Schlager Top 40 - Die Hits Des Sommers 2024",
+      "link": "https://music.apple.com/us/album/brennende-n%C3%A4chte/1736828889?i=1736832671&uo=4"
+    }
+  }
+}

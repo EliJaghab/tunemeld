@@ -1,0 +1,364 @@
+{
+  "album_details": {
+    "0": {
+      "name": "Pack My Hometown",
+      "artist": "Eli Winders",
+      "album": "Country Hits 2024",
+      "link": "https://music.apple.com/us/album/pack-my-hometown/1726651812?i=1726655244&uo=4"
+    },
+    "1": {
+      "name": "Humble And Kind",
+      "artist": "Tim McGraw",
+      "album": "Country Hits 2024",
+      "link": "https://music.apple.com/us/album/humble-and-kind/1766559512?i=1766560924&uo=4"
+    },
+    "2": {
+      "name": "Rest Of My Life",
+      "artist": "Parker McCollum",
+      "album": "Country Hits 2024",
+      "link": "https://music.apple.com/us/album/rest-of-my-life/1766559512?i=1766561804&uo=4"
+    },
+    "3": {
+      "name": "Creek Will Rise",
+      "artist": "Conner Smith",
+      "album": "Country Hits 2024",
+      "link": "https://music.apple.com/us/album/creek-will-rise/1766559512?i=1766561228&uo=4"
+    },
+    "4": {
+      "name": "I Wanna Talk About Me",
+      "artist": "Toby Keith",
+      "album": "Country Hits 2024",
+      "link": "https://music.apple.com/us/album/i-wanna-talk-about-me/1766559512?i=1766562060&uo=4"
+    },
+    "5": {
+      "name": "I Remember Everything (feat. Kacey Musgraves)",
+      "artist": "Zach Bryan",
+      "album": "Country Hits 2024",
+      "link": "https://music.apple.com/us/album/i-remember-everything-feat-kacey-musgraves/1726651812?i=1726652093&uo=4"
+    },
+    "6": {
+      "name": "Wasting All These Tears",
+      "artist": "Austin Snell",
+      "album": "Country Hits 2024",
+      "link": "https://music.apple.com/us/album/wasting-all-these-tears/1726651812?i=1726652605&uo=4"
+    },
+    "7": {
+      "name": "Brown Eyes Baby",
+      "artist": "Keith Urban",
+      "album": "Country Hits 2024",
+      "link": "https://music.apple.com/us/album/brown-eyes-baby/1766559512?i=1766559965&uo=4"
+    },
+    "8": {
+      "name": "Straight To Hell (feat. Jason Aldean, Luke Bryan & Charles Kelley)",
+      "artist": "Darius Rucker",
+      "album": "Country Hits 2024",
+      "link": "https://music.apple.com/us/album/straight-to-hell-feat-jason-aldean-luke-bryan-charles/1766559512?i=1766560637&uo=4"
+    },
+    "9": {
+      "name": "Shenandoah Shakedown",
+      "artist": "John R. Miller",
+      "album": "Country Hits 2024",
+      "link": "https://music.apple.com/us/album/shenandoah-shakedown/1766559512?i=1766561469&uo=4"
+    },
+    "10": {
+      "name": "Light On in the Kitchen",
+      "artist": "Ashley McBryde",
+      "album": "Country Hits 2024",
+      "link": "https://music.apple.com/us/album/light-on-in-the-kitchen/1726651812?i=1726652621&uo=4"
+    },
+    "11": {
+      "name": "Dirt Cheap",
+      "artist": "Cody Johnson",
+      "album": "Country Hits 2024",
+      "link": "https://music.apple.com/us/album/dirt-cheap/1726651812?i=1726654157&uo=4"
+    },
+    "12": {
+      "name": "Somebody Like You",
+      "artist": "Keith Urban",
+      "album": "Country Hits 2024",
+      "link": "https://music.apple.com/us/album/somebody-like-you/1766559512?i=1766561463&uo=4"
+    },
+    "13": {
+      "name": "3 Feet Tall",
+      "artist": "Cole Swindell",
+      "album": "Country Hits 2024",
+      "link": "https://music.apple.com/us/album/3-feet-tall/1726651812?i=1726653095&uo=4"
+    },
+    "14": {
+      "name": "Next To You, Next To Me",
+      "artist": "Shenandoah",
+      "album": "Country Hits 2024",
+      "link": "https://music.apple.com/us/album/next-to-you-next-to-me/1766559512?i=1766560919&uo=4"
+    },
+    "15": {
+      "name": "Dust",
+      "artist": "Eli Young Band",
+      "album": "Country Hits 2024",
+      "link": "https://music.apple.com/us/album/dust/1766559512?i=1766560439&uo=4"
+    },
+    "16": {
+      "name": "Country State Of Mind (feat. Chris Janson)",
+      "artist": "Josh Turner",
+      "album": "Country Hits 2024",
+      "link": "https://music.apple.com/us/album/country-state-of-mind-feat-chris-janson/1766559512?i=1766560935&uo=4"
+    },
+    "17": {
+      "name": "Friends",
+      "artist": "Tyler Braden",
+      "album": "Country Hits 2024",
+      "link": "https://music.apple.com/us/album/friends/1726651812?i=1726654167&uo=4"
+    },
+    "18": {
+      "name": "These Boots Are Made For Walkin'",
+      "artist": "Billy Ray Cyrus",
+      "album": "Country Hits 2024",
+      "link": "https://music.apple.com/us/album/these-boots-are-made-for-walkin/1766559512?i=1766559959&uo=4"
+    },
+    "19": {
+      "name": "You Look Good In My Shirt",
+      "artist": "Keith Urban",
+      "album": "Country Hits 2024",
+      "link": "https://music.apple.com/us/album/you-look-good-in-my-shirt/1766559512?i=1766562056&uo=4"
+    },
+    "20": {
+      "name": "Spirits and Demons (feat. Meghan Patrick)",
+      "artist": "Michael Ray",
+      "album": "Country Hits 2024",
+      "link": "https://music.apple.com/us/album/spirits-and-demons-feat-meghan-patrick/1726651812?i=1726654184&uo=4"
+    },
+    "21": {
+      "name": "Frostbite",
+      "artist": "Jake Kohn",
+      "album": "Country Hits 2024",
+      "link": "https://music.apple.com/us/album/frostbite/1726651812?i=1726654968&uo=4"
+    },
+    "22": {
+      "name": "Straight and Narrow",
+      "artist": "Sam Barber",
+      "album": "Country Hits 2024",
+      "link": "https://music.apple.com/us/album/straight-and-narrow/1726651812?i=1726652325&uo=4"
+    },
+    "23": {
+      "name": "Save Me the Trouble",
+      "artist": "Dan + Shay",
+      "album": "Country Hits 2024",
+      "link": "https://music.apple.com/us/album/save-me-the-trouble/1726651812?i=1726652597&uo=4"
+    },
+    "24": {
+      "name": "Tiffany Blue",
+      "artist": "Tyler Halverson & Carter Faith",
+      "album": "Country Hits 2024",
+      "link": "https://music.apple.com/us/album/tiffany-blue/1726651812?i=1726655253&uo=4"
+    },
+    "25": {
+      "name": "White Buffalo",
+      "artist": "Ian Munsick",
+      "album": "Country Hits 2024",
+      "link": "https://music.apple.com/us/album/white-buffalo/1726651812?i=1726653381&uo=4"
+    },
+    "26": {
+      "name": "What I Can't Put Down",
+      "artist": "Jon Pardi",
+      "album": "Country Hits 2024",
+      "link": "https://music.apple.com/us/album/what-i-cant-put-down/1766559512?i=1766561461&uo=4"
+    },
+    "27": {
+      "name": "Pour Me A Drink (feat. Blake Shelton)",
+      "artist": "Post Malone",
+      "album": "Country Hits 2024",
+      "link": "https://music.apple.com/us/album/pour-me-a-drink-feat-blake-shelton/1766559512?i=1766559525&uo=4"
+    },
+    "28": {
+      "name": "Achy Breaky Heart",
+      "artist": "Billy Ray Cyrus",
+      "album": "Country Hits 2024",
+      "link": "https://music.apple.com/us/album/achy-breaky-heart/1766559512?i=1766559701&uo=4"
+    },
+    "29": {
+      "name": "Reasons to Come Home",
+      "artist": "Mason Ramsey",
+      "album": "Country Hits 2024",
+      "link": "https://music.apple.com/us/album/reasons-to-come-home/1726651812?i=1726655237&uo=4"
+    },
+    "30": {
+      "name": "Check Yes Or No",
+      "artist": "George Strait",
+      "album": "Country Hits 2024",
+      "link": "https://music.apple.com/us/album/check-yes-or-no/1766559512?i=1766560276&uo=4"
+    },
+    "31": {
+      "name": "Ain't Doin' Jack",
+      "artist": "Josh Ross",
+      "album": "Country Hits 2024",
+      "link": "https://music.apple.com/us/album/aint-doin-jack/1766559512?i=1766562459&uo=4"
+    },
+    "32": {
+      "name": "Burns Like Her",
+      "artist": "Randall King",
+      "album": "Country Hits 2024",
+      "link": "https://music.apple.com/us/album/burns-like-her/1726651812?i=1726653403&uo=4"
+    },
+    "33": {
+      "name": "Dial One Up",
+      "artist": "Jon Langston",
+      "album": "Country Hits 2024",
+      "link": "https://music.apple.com/us/album/dial-one-up/1766559512?i=1766562443&uo=4"
+    },
+    "34": {
+      "name": "Lucky For Me",
+      "artist": "Eli Young Band",
+      "album": "Country Hits 2024",
+      "link": "https://music.apple.com/us/album/lucky-for-me/1766559512?i=1766561787&uo=4"
+    },
+    "35": {
+      "name": "Roller Coaster",
+      "artist": "Luke Bryan",
+      "album": "Country Hits 2024",
+      "link": "https://music.apple.com/us/album/roller-coaster/1766559512?i=1766560795&uo=4"
+    },
+    "36": {
+      "name": "Church On Cumberland Road",
+      "artist": "Shenandoah",
+      "album": "Country Hits 2024",
+      "link": "https://music.apple.com/us/album/church-on-cumberland-road/1766559512?i=1766561467&uo=4"
+    },
+    "37": {
+      "name": "Seminole Wind",
+      "artist": "Luke Combs",
+      "album": "Country Hits 2024",
+      "link": "https://music.apple.com/us/album/seminole-wind/1766559512?i=1766560251&uo=4"
+    },
+    "38": {
+      "name": "I Ain't Going Nowhere",
+      "artist": "Parker McCollum",
+      "album": "Country Hits 2024",
+      "link": "https://music.apple.com/us/album/i-aint-going-nowhere/1766559512?i=1766560267&uo=4"
+    },
+    "39": {
+      "name": "How I Learned to Pray (feat. Luke Combs)",
+      "artist": "Charlie Worsham",
+      "album": "Country Hits 2024",
+      "link": "https://music.apple.com/us/album/how-i-learned-to-pray-feat-luke-combs/1726651812?i=1726653082&uo=4"
+    },
+    "40": {
+      "name": "Tell Me Tennessee",
+      "artist": "Matt Schuster",
+      "album": "Country Hits 2024",
+      "link": "https://music.apple.com/us/album/tell-me-tennessee/1726651812?i=1726653098&uo=4"
+    },
+    "41": {
+      "name": "Cracks",
+      "artist": "BRELAND",
+      "album": "Country Hits 2024",
+      "link": "https://music.apple.com/us/album/cracks/1726651812?i=1726654714&uo=4"
+    },
+    "42": {
+      "name": "Springsteen",
+      "artist": "Eric Church",
+      "album": "Country Hits 2024",
+      "link": "https://music.apple.com/us/album/springsteen/1766559512?i=1766559706&uo=4"
+    },
+    "43": {
+      "name": "Coal",
+      "artist": "Dylan Gossett",
+      "album": "Country Hits 2024",
+      "link": "https://music.apple.com/us/album/coal/1766559512?i=1766559690&uo=4"
+    },
+    "44": {
+      "name": "Dallas (feat. Danielle Bradbery)",
+      "artist": "Parker McCollum",
+      "album": "Country Hits 2024",
+      "link": "https://music.apple.com/us/album/dallas-feat-danielle-bradbery/1766559512?i=1766560634&uo=4"
+    },
+    "45": {
+      "name": "Your Man",
+      "artist": "Josh Turner",
+      "album": "Country Hits 2024",
+      "link": "https://music.apple.com/us/album/your-man/1766559512?i=1766560266&uo=4"
+    },
+    "46": {
+      "name": "Hurricane",
+      "artist": "The Castellows",
+      "album": "Country Hits 2024",
+      "link": "https://music.apple.com/us/album/hurricane/1726651812?i=1726653802&uo=4"
+    },
+    "47": {
+      "name": "Religiously",
+      "artist": "Bailey Zimmerman",
+      "album": "Country Hits 2024",
+      "link": "https://music.apple.com/us/album/religiously/1726651812?i=1726652314&uo=4"
+    },
+    "48": {
+      "name": "There Was This Girl",
+      "artist": "Riley Green",
+      "album": "Country Hits 2024",
+      "link": "https://music.apple.com/us/album/there-was-this-girl/1766559512?i=1766562073&uo=4"
+    },
+    "49": {
+      "name": "Jack and Diet Coke",
+      "artist": "Redferrin",
+      "album": "Country Hits 2024",
+      "link": "https://music.apple.com/us/album/jack-and-diet-coke/1726651812?i=1726653401&uo=4"
+    },
+    "50": {
+      "name": "Old Dirt Roads",
+      "artist": "Owen Riegling",
+      "album": "Country Hits 2024",
+      "link": "https://music.apple.com/us/album/old-dirt-roads/1766559512?i=1766559705&uo=4"
+    },
+    "51": {
+      "name": "Back Then Right Now",
+      "artist": "Tyler Hubbard",
+      "album": "Country Hits 2024",
+      "link": "https://music.apple.com/us/album/back-then-right-now/1766559512?i=1766560249&uo=4"
+    },
+    "52": {
+      "name": "Play It Again",
+      "artist": "Luke Bryan",
+      "album": "Country Hits 2024",
+      "link": "https://music.apple.com/us/album/play-it-again/1766559512?i=1766559961&uo=4"
+    },
+    "53": {
+      "name": "A Little More You",
+      "artist": "Little Big Town",
+      "album": "Country Hits 2024",
+      "link": "https://music.apple.com/us/album/a-little-more-you/1766559512?i=1766561801&uo=4"
+    },
+    "54": {
+      "name": "I\u2019ll Love You Longer",
+      "artist": "Drew Parker",
+      "album": "Country Hits 2024",
+      "link": "https://music.apple.com/us/album/ill-love-you-longer/1726651812?i=1726653817&uo=4"
+    },
+    "55": {
+      "name": "Burn It Down (Radio Edit)",
+      "artist": "Parker McCollum",
+      "album": "Country Hits 2024",
+      "link": "https://music.apple.com/us/album/burn-it-down-radio-edit/1766559512?i=1766559689&uo=4"
+    },
+    "56": {
+      "name": "5 Foot 9",
+      "artist": "Tyler Hubbard",
+      "album": "Country Hits 2024",
+      "link": "https://music.apple.com/us/album/5-foot-9/1766559512?i=1766561219&uo=4"
+    },
+    "57": {
+      "name": "Take Her Home",
+      "artist": "Kenny Chesney",
+      "album": "Country Hits 2024",
+      "link": "https://music.apple.com/us/album/take-her-home/1726651812?i=1726653091&uo=4"
+    },
+    "58": {
+      "name": "Tucson Too Late",
+      "artist": "Jordan Davis",
+      "album": "Country Hits 2024",
+      "link": "https://music.apple.com/us/album/tucson-too-late/1766559512?i=1766559955&uo=4"
+    },
+    "59": {
+      "name": "Dirt On My Boots",
+      "artist": "Jon Pardi",
+      "album": "Country Hits 2024",
+      "link": "https://music.apple.com/us/album/dirt-on-my-boots/1766559512?i=1766560259&uo=4"
+    }
+  }
+}

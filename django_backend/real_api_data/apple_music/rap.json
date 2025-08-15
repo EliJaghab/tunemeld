@@ -1,0 +1,364 @@
+{
+  "album_details": {
+    "0": {
+      "name": "Rap Up 2024",
+      "artist": "Uncle Murda",
+      "album": "Rap Up 2024 - EP",
+      "link": "https://music.apple.com/us/album/rap-up-2024/1788146059?i=1788146060&uo=4"
+    },
+    "1": {
+      "name": "(nendest) narkootikumidest ei tea me (k\u00fcll) midagi (Eurovision 2024 - Estonia)",
+      "artist": "5MIINUST & Puuluup",
+      "album": "Eurovision Song Contest Malm\u00f6 2024",
+      "link": "https://music.apple.com/us/album/nendest-narkootikumidest-ei-tea-me-k%C3%BCll-midagi-eurovision/1736817783?i=1736818064&uo=4"
+    },
+    "2": {
+      "name": "20-24 Hz",
+      "artist": "Bass Mekanik",
+      "album": "Quad Maximus",
+      "link": "https://music.apple.com/us/album/20-24-hz/68626958?i=68626127&uo=4"
+    },
+    "3": {
+      "name": "S\u0102N",
+      "artist": "Suboi & Saabirose",
+      "album": "RAP VI\u1ec6T 2024, T\u1eadp 15 - EP",
+      "link": "https://music.apple.com/us/album/s%C4%83n/1785328515?i=1785328793&uo=4"
+    },
+    "4": {
+      "name": "Trump 2024",
+      "artist": "GAMEGOD NATION",
+      "album": "Trump 2024 - Single",
+      "link": "https://music.apple.com/us/album/trump-2024/1750254495?i=1750254866&uo=4"
+    },
+    "5": {
+      "name": "2024",
+      "artist": "Tyson James",
+      "album": "Seek First",
+      "link": "https://music.apple.com/us/album/2024/1770367850?i=1770368098&uo=4"
+    },
+    "6": {
+      "name": "Numb (2024)",
+      "artist": "Rod Wave",
+      "album": "Numb (2024) - Single",
+      "link": "https://music.apple.com/us/album/numb-2024/1742301435?i=1742301500&uo=4"
+    },
+    "7": {
+      "name": "2024",
+      "artist": "Tyson James",
+      "album": "2024 - Single",
+      "link": "https://music.apple.com/us/album/2024/1725911739?i=1725911740&uo=4"
+    },
+    "8": {
+      "name": "go hard (2019/2024)",
+      "artist": "Chris Webby",
+      "album": "Lost Wednesday : The Demos",
+      "link": "https://music.apple.com/us/album/go-hard-2019-2024/1748954815?i=1748954835&uo=4"
+    },
+    "9": {
+      "name": "Garden Grooves",
+      "artist": "Jazz Hop",
+      "album": "Spring Fever 2024",
+      "link": "https://music.apple.com/us/album/garden-grooves/1734323903?i=1734323910&uo=4"
+    },
+    "10": {
+      "name": "Fallen Star",
+      "artist": "Misha",
+      "album": "Chillhop Essentials Winter 2024",
+      "link": "https://music.apple.com/us/album/fallen-star/1778439428?i=1778439600&uo=4"
+    },
+    "11": {
+      "name": "endo (2018/2024)",
+      "artist": "Chris Webby",
+      "album": "Lost Wednesday : The Demos",
+      "link": "https://music.apple.com/us/album/endo-2018-2024/1748954815?i=1748954823&uo=4"
+    },
+    "12": {
+      "name": "possessed (2016/2024)",
+      "artist": "Chris Webby",
+      "album": "Lost Wednesday : The Demos",
+      "link": "https://music.apple.com/us/album/possessed-2016-2024/1748954815?i=1748954833&uo=4"
+    },
+    "13": {
+      "name": "KH\u00d4NG SAO C\u1ea2",
+      "artist": "7dnight",
+      "album": "RAP VI\u1ec6T 2024, T\u1eadp 10 - EP",
+      "link": "https://music.apple.com/us/album/kh%C3%B4ng-sao-c%E1%BA%A3/1781291857?i=1781291859&uo=4"
+    },
+    "14": {
+      "name": "Trump 2024",
+      "artist": "Forgiato Blow",
+      "album": "Trump's Nephew",
+      "link": "https://music.apple.com/us/album/trump-2024/1610568583?i=1610568913&uo=4"
+    },
+    "15": {
+      "name": "Backup Dancer",
+      "artist": "Dotlights",
+      "album": "Chillhop Essentials Winter 2024",
+      "link": "https://music.apple.com/us/album/backup-dancer/1778439428?i=1778439611&uo=4"
+    },
+    "16": {
+      "name": "2024",
+      "artist": "Harry Mack",
+      "album": "The Singles Deluxe",
+      "link": "https://music.apple.com/us/album/2024/1784921463?i=1784921494&uo=4"
+    },
+    "17": {
+      "name": "C\u00d3 EM VUI",
+      "artist": "Ng\u1eafn",
+      "album": "RAP VI\u1ec6T 2024, T\u1eadp 3",
+      "link": "https://music.apple.com/us/album/c%C3%B3-em-vui/1772268736?i=1772268920&uo=4"
+    },
+    "18": {
+      "name": "GI\u00d3 Y\u00caU M\u00c2Y",
+      "artist": "V High",
+      "album": "RAP VI\u1ec6T 2024, T\u1eadp 3",
+      "link": "https://music.apple.com/us/album/gi%C3%B3-y%C3%AAu-m%C3%A2y/1772268736?i=1772268928&uo=4"
+    },
+    "19": {
+      "name": "BA \u0110I\u1ec0U \u01af\u1edaC",
+      "artist": "Lower",
+      "album": "RAP VI\u1ec6T 2024, T\u1eadp 3",
+      "link": "https://music.apple.com/us/album/ba-%C4%91i%E1%BB%81u-%C6%B0%E1%BB%9Bc/1772268736?i=1772268930&uo=4"
+    },
+    "20": {
+      "name": "S\u1ee8C M\u1ea0NH \u0110O\u00c0N K\u1ebeT",
+      "artist": "Quan Lee",
+      "album": "RAP VI\u1ec6T 2024, T\u1eadp 3",
+      "link": "https://music.apple.com/us/album/s%E1%BB%A9c-m%E1%BA%A1nh-%C4%91o%C3%A0n-k%E1%BA%BFt/1772268736?i=1772268738&uo=4"
+    },
+    "21": {
+      "name": "Vermont Canyon",
+      "artist": "Teddy Roxpin & Maximillian",
+      "album": "Chillhop Essentials Summer 2024",
+      "link": "https://music.apple.com/us/album/vermont-canyon/1745736093?i=1745736094&uo=4"
+    },
+    "22": {
+      "name": "Lost Call",
+      "artist": "Suuna & tulki",
+      "album": "Chillhop Essentials Summer 2024",
+      "link": "https://music.apple.com/us/album/lost-call/1745736093?i=1745736103&uo=4"
+    },
+    "23": {
+      "name": "Way Home (feat. BAKERMAN)",
+      "artist": "Afroham & No Spirit",
+      "album": "Chillhop Essentials Winter 2024",
+      "link": "https://music.apple.com/us/album/way-home-feat-bakerman/1778439428?i=1778439431&uo=4"
+    },
+    "24": {
+      "name": "Ethereal",
+      "artist": "Evil Needle",
+      "album": "Chillhop Essentials Winter 2024",
+      "link": "https://music.apple.com/us/album/ethereal/1778439428?i=1778439599&uo=4"
+    },
+    "25": {
+      "name": "Rain or Shine",
+      "artist": "Birocratic & Middle School",
+      "album": "Chillhop Essentials Summer 2024",
+      "link": "https://music.apple.com/us/album/rain-or-shine/1745736093?i=1745736100&uo=4"
+    },
+    "26": {
+      "name": "Summer",
+      "artist": "Mac Kay",
+      "album": "Chillhop Essentials Summer 2024",
+      "link": "https://music.apple.com/us/album/summer/1745736093?i=1745736191&uo=4"
+    },
+    "27": {
+      "name": "Crescent Lake",
+      "artist": "Sweeps & luv pug",
+      "album": "Chillhop Essentials Winter 2024",
+      "link": "https://music.apple.com/us/album/crescent-lake/1778439428?i=1778439615&uo=4"
+    },
+    "28": {
+      "name": "Cold Vein",
+      "artist": "Hanz & Shahly",
+      "album": "Chillhop Essentials Winter 2024",
+      "link": "https://music.apple.com/us/album/cold-vein/1778439428?i=1778439591&uo=4"
+    },
+    "29": {
+      "name": "Aste\u0301r",
+      "artist": "Kissamil\u00e9",
+      "album": "Chillhop Essentials Summer 2024",
+      "link": "https://music.apple.com/us/album/aste-r/1745736093?i=1745736175&uo=4"
+    },
+    "30": {
+      "name": "Lunes Al Sol",
+      "artist": "dennisivnvc & Dani Catal\u00e1",
+      "album": "Chillhop Essentials Winter 2024",
+      "link": "https://music.apple.com/us/album/lunes-al-sol/1778439428?i=1778439604&uo=4"
+    },
+    "31": {
+      "name": "Cirrus",
+      "artist": "Kupla & QMTZ",
+      "album": "Chillhop Essentials Winter 2024",
+      "link": "https://music.apple.com/us/album/cirrus/1778439428?i=1778439434&uo=4"
+    },
+    "32": {
+      "name": "Home",
+      "artist": "Yasper",
+      "album": "Chillhop Essentials Winter 2024",
+      "link": "https://music.apple.com/us/album/home/1778439428?i=1778439590&uo=4"
+    },
+    "33": {
+      "name": "Soulangeana (feat. Dom R)",
+      "artist": "Illiterate",
+      "album": "Chillhop Essentials Summer 2024",
+      "link": "https://music.apple.com/us/album/soulangeana-feat-dom-r/1745736093?i=1745736096&uo=4"
+    },
+    "34": {
+      "name": "Twins",
+      "artist": "Rose Noir",
+      "album": "Chillhop Essentials Summer 2024",
+      "link": "https://music.apple.com/us/album/twins/1745736093?i=1745736177&uo=4"
+    },
+    "35": {
+      "name": "Plush",
+      "artist": "Ward Wills",
+      "album": "Chillhop Essentials Winter 2024",
+      "link": "https://music.apple.com/us/album/plush/1778439428?i=1778439601&uo=4"
+    },
+    "36": {
+      "name": "Lozari",
+      "artist": "L\u2019ind\u00e9cis",
+      "album": "Chillhop Essentials Summer 2024",
+      "link": "https://music.apple.com/us/album/lozari/1745736093?i=1745736104&uo=4"
+    },
+    "37": {
+      "name": "First Snow",
+      "artist": "Emapea",
+      "album": "Chillhop Essentials Winter 2024",
+      "link": "https://music.apple.com/us/album/first-snow/1778439428?i=1778439606&uo=4"
+    },
+    "38": {
+      "name": "Irresistible",
+      "artist": "dryhope",
+      "album": "Chillhop Essentials Winter 2024",
+      "link": "https://music.apple.com/us/album/irresistible/1778439428?i=1778439605&uo=4"
+    },
+    "39": {
+      "name": "Savannah Vacation",
+      "artist": "Aduza Dolozi & Lofi Afrobeats",
+      "album": "Chillhop Essentials Summer 2024",
+      "link": "https://music.apple.com/us/album/savannah-vacation/1745736093?i=1745736181&uo=4"
+    },
+    "40": {
+      "name": "Kauai",
+      "artist": "Loyae",
+      "album": "Chillhop Essentials Summer 2024",
+      "link": "https://music.apple.com/us/album/kauai/1745736093?i=1745736102&uo=4"
+    },
+    "41": {
+      "name": "Hope It\u2019s Not",
+      "artist": "J.Folk",
+      "album": "Chillhop Essentials Winter 2024",
+      "link": "https://music.apple.com/us/album/hope-its-not/1778439428?i=1778439594&uo=4"
+    },
+    "42": {
+      "name": "Sunlight (feat. Jintonic)",
+      "artist": "Kendall Miles",
+      "album": "Chillhop Essentials Summer 2024",
+      "link": "https://music.apple.com/us/album/sunlight-feat-jintonic/1745736093?i=1745736182&uo=4"
+    },
+    "43": {
+      "name": "Meadow Terrain",
+      "artist": "Mama Aiuto",
+      "album": "Chillhop Essentials Summer 2024",
+      "link": "https://music.apple.com/us/album/meadow-terrain/1745736093?i=1745736172&uo=4"
+    },
+    "44": {
+      "name": "Cozy Af",
+      "artist": "Aves",
+      "album": "Chillhop Essentials Summer 2024",
+      "link": "https://music.apple.com/us/album/cozy-af/1745736093?i=1745736106&uo=4"
+    },
+    "45": {
+      "name": "Sum Sum",
+      "artist": "Ben Bada Boom",
+      "album": "Chillhop Essentials Summer 2024",
+      "link": "https://music.apple.com/us/album/sum-sum/1745736093?i=1745736174&uo=4"
+    },
+    "46": {
+      "name": "Bimmer M6",
+      "artist": "Kreatev",
+      "album": "Chillhop Essentials Summer 2024",
+      "link": "https://music.apple.com/us/album/bimmer-m6/1745736093?i=1745736176&uo=4"
+    },
+    "47": {
+      "name": "Sunkissed Cycles",
+      "artist": "lloom",
+      "album": "Chillhop Essentials Summer 2024",
+      "link": "https://music.apple.com/us/album/sunkissed-cycles/1745736093?i=1745736180&uo=4"
+    },
+    "48": {
+      "name": "Things Fall Apart Pt.3",
+      "artist": "Philanthrope",
+      "album": "Chillhop Essentials Winter 2024",
+      "link": "https://music.apple.com/us/album/things-fall-apart-pt-3/1778439428?i=1778439589&uo=4"
+    },
+    "49": {
+      "name": "Sundown",
+      "artist": "Enough Cereals",
+      "album": "Chillhop Essentials Summer 2024",
+      "link": "https://music.apple.com/us/album/sundown/1745736093?i=1745736098&uo=4"
+    },
+    "50": {
+      "name": "Lunar",
+      "artist": "Mac Kay",
+      "album": "Chillhop Essentials Winter 2024",
+      "link": "https://music.apple.com/us/album/lunar/1778439428?i=1778439616&uo=4"
+    },
+    "51": {
+      "name": "Dreams Come True",
+      "artist": "Drips Zacheer",
+      "album": "Chillhop Essentials Summer 2024",
+      "link": "https://music.apple.com/us/album/dreams-come-true/1745736093?i=1745736184&uo=4"
+    },
+    "52": {
+      "name": "7 Eleven",
+      "artist": "Nokiaa & Deauxnuts",
+      "album": "Chillhop Essentials Winter 2024",
+      "link": "https://music.apple.com/us/album/7-eleven/1778439428?i=1778439596&uo=4"
+    },
+    "53": {
+      "name": "Outside, Inside",
+      "artist": "Sleepy Fish",
+      "album": "Chillhop Essentials Winter 2024",
+      "link": "https://music.apple.com/us/album/outside-inside/1778439428?i=1778439612&uo=4"
+    },
+    "54": {
+      "name": "Dreamscape Lagoon",
+      "artist": "Enzalla",
+      "album": "Chillhop Essentials Summer 2024",
+      "link": "https://music.apple.com/us/album/dreamscape-lagoon/1745736093?i=1745736178&uo=4"
+    },
+    "55": {
+      "name": "Vanilla Candle",
+      "artist": "Nymano & Suuna",
+      "album": "Chillhop Essentials Winter 2024",
+      "link": "https://music.apple.com/us/album/vanilla-candle/1778439428?i=1778439610&uo=4"
+    },
+    "56": {
+      "name": "Casette",
+      "artist": "Ward Wills",
+      "album": "Chillhop Essentials Summer 2024",
+      "link": "https://music.apple.com/us/album/casette/1745736093?i=1745736101&uo=4"
+    },
+    "57": {
+      "name": "Delirious",
+      "artist": "Leavv",
+      "album": "Chillhop Essentials Winter 2024",
+      "link": "https://music.apple.com/us/album/delirious/1778439428?i=1778439609&uo=4"
+    },
+    "58": {
+      "name": "Clementine.",
+      "artist": "chromo, the dreamer",
+      "album": "Chillhop Essentials Summer 2024",
+      "link": "https://music.apple.com/us/album/clementine/1745736093?i=1745736173&uo=4"
+    },
+    "59": {
+      "name": "Breathe In (feat. less.people)",
+      "artist": "Psalm Trees",
+      "album": "Chillhop Essentials Winter 2024",
+      "link": "https://music.apple.com/us/album/breathe-in-feat-less-people/1778439428?i=1778439437&uo=4"
+    }
+  }
+}
