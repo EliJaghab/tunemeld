@@ -43,9 +43,9 @@ SERVICE_CONFIGS: dict[str, dict] = {
         "param_key": "playlist",
         "playlist_base_url": "https://soundcloud.com/",
         "links": {
-            GenreName.COUNTRY: "https://soundcloud.com/soundcloud-shine/sets/backroads-best-country-now",
+            GenreName.COUNTRY: "https://soundcloud.com/trending-music-us/sets/country",
             GenreName.DANCE: "https://soundcloud.com/soundcloud-the-peak/sets/on-the-up-new-edm-hits",
-            GenreName.POP: "https://soundcloud.com/soundcloud-shine/sets/ear-candy-fresh-pop-picks",
+            GenreName.POP: "https://soundcloud.com/nightsoul-ong-kh/sets/pop-hits-2024-top-100-trending",
             GenreName.RAP: "https://soundcloud.com/soundcloud-hustle/sets/drippin-best-rap-right-now",
         },
     },
