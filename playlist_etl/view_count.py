@@ -22,7 +22,7 @@ class ViewCountTrackProcessor:
         self.spotify_service = spotify_service
         self.youtube_service = youtube_service
 
-    def update_view_counts(self):
+    def update_view_counts(self) -> None:
         playlists = self.mongo_client.get_collection(TRACK_PLAYLIST_COLLECTION)
         tracks_collection = self.mongo_client.get_collection(TRACK_COLLECTION)
         updated_tracks = self._update_tracks(playlists, tracks_collection)
@@ -30,7 +30,7 @@ class ViewCountTrackProcessor:
         logger.info(f"Found updates for {len(updated_tracks)} out of {collection_count} total tracks")
         self._save_view_counts(updated_tracks)
 
-    def _update_tracks(self, playlists: Collection, tracks: Collection):
+    def _update_tracks(self, playlists: Collection, tracks: Collection) -> list:
         updated_tracks = []
         seen_isrc = set()
         total_tracks = self.mongo_client.get_collection_count(tracks)
@@ -101,6 +101,7 @@ class ViewCountTrackProcessor:
             and hasattr(track.spotify_view, "current_view")
             and track.spotify_view.current_view
             and hasattr(track.spotify_view.current_view, "timestamp")
+            and track.spotify_view.current_view.timestamp is not None
         ):
             return track.spotify_view.current_view.timestamp > cutoff_time
 
@@ -110,11 +111,12 @@ class ViewCountTrackProcessor:
             and hasattr(track.youtube_view, "current_view")
             and track.youtube_view.current_view
             and hasattr(track.youtube_view.current_view, "timestamp")
+            and track.youtube_view.current_view.timestamp is not None
         ):
             return track.youtube_view.current_view.timestamp > cutoff_time
 
         return False
 
-    def _save_view_counts(self, tracks):
+    def _save_view_counts(self, tracks: list) -> None:
         for track in tracks:
             self.mongo_client.update_track(track)

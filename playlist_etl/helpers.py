@@ -21,7 +21,7 @@ def get_logger(name: str) -> logging.Logger:
 logger = get_logger(__name__)
 
 
-def set_secrets():
+def set_secrets() -> None:
     if not os.getenv("GITHUB_ACTIONS"):
         env_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".env.dev"))
         logger.info("env_path" + env_path)

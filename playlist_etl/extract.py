@@ -1,14 +1,15 @@
 import html
-import os
 import re
-from typing import TypedDict
-from urllib.parse import quote, urlparse
+from typing import Any, TypedDict
+from urllib.parse import urlparse
 
 import requests
 from bs4 import BeautifulSoup
+from pymongo.mongo_client import MongoClient
 from unidecode import unidecode
 
 from playlist_etl.helpers import get_logger, set_secrets
+from playlist_etl.rapid_api_client import fetch_playlist_data
 
 __all__ = ["PLAYLIST_GENRES", "SERVICE_CONFIGS", "PlaylistMetadata", "SpotifyFetcher", "run_extraction"]
 from playlist_etl.constants import PLAYLIST_GENRES, SERVICE_CONFIGS
@@ -20,10 +21,10 @@ from playlist_etl.utils import (
 )
 
 DEBUG_MODE = False
-NO_RAPID = False
-
 
 logger = get_logger(__name__)
+
+JSON = dict[str, Any] | list[Any]
 
 
 class PlaylistMetadata(TypedDict, total=False):
@@ -107,7 +108,7 @@ def _extract_spotify_full_description(doc: BeautifulSoup) -> str | None:
         for element in elements:
             text = element.get_text(strip=True)
             if text and not text.isdigit() and "saves" not in text.lower():
-                return text
+                return str(text)
 
     return None
 
@@ -188,65 +189,22 @@ def _format_saves_count(raw_saves: str) -> str:
         return raw_saves  # Return original if conversion fails
 
 
-class RapidAPIClient:
-    def __init__(self):
-        self.api_key = self._get_api_key()
-        logger.info(f"apiKey: {self.api_key}")
-
-    @staticmethod
-    def _get_api_key():
-        api_key = os.getenv("X_RAPIDAPI_KEY")
-        if not api_key:
-            raise Exception("Failed to set API Key.")
-        return api_key
-
-
-def get_json_response(url, host, api_key):
-    if DEBUG_MODE or NO_RAPID:
-        logger.info("Debug Mode: not requesting RapidAPI")
-        return {}
-
-    headers = {
-        "X-RapidAPI-Key": api_key,
-        "X-RapidAPI-Host": host,
-        "Content-Type": "application/json",
-    }
-    response = requests.get(url, headers=headers)
-    response.raise_for_status()
-    return response.json()
-
-
 class Extractor:
-    def __init__(self, client, service_name, genre):
-        self.client = client
+    def __init__(self, service_name: str, genre: str) -> None:
         self.config = SERVICE_CONFIGS[service_name]
-        self.base_url = self.config["base_url"]
-        self.host = self.config["host"]
-        self.api_key = self.client.api_key
+        self.service_name = service_name
         self.genre = genre
-        self.playlist_param = self._prepare_param(self.config["links"][genre])
-        self.param_key = self.config["param_key"]
 
-    def _prepare_param(self, url):
-        if "spotify" in self.base_url:
-            return url.split("/")[-1]
-        else:
-            return quote(url)
-
-    def get_playlist(self):
-        raise NotImplementedError("Each service must implement its own `get_playlist` method.")
+    def get_playlist(self) -> JSON:
+        return fetch_playlist_data(self.service_name, self.genre)
 
 
 class AppleMusicFetcher(Extractor):
-    def __init__(self, client, service_name, genre):
-        super().__init__(client, service_name, genre)
+    def __init__(self, service_name: str, genre: str) -> None:
+        super().__init__(service_name, genre)
         self.webdriver_manager = WebDriverManager()
 
-    def get_playlist(self):
-        url = f"{self.base_url}?{self.param_key}={self.playlist_param}"
-        return get_json_response(url, self.host, self.api_key)
-
-    def set_playlist_details(self):
+    def set_playlist_details(self) -> None:
         url = self.config["links"][self.genre]
 
         response = requests.get(url)
@@ -275,11 +233,11 @@ class AppleMusicFetcher(Extractor):
         self.playlist_cover_description_text = playlist_cover_description_text
         self.playlist_stream_url = playlist_stream_url
 
-    def get_cover_url(self, url: str) -> str:
+    def get_cover_url(self, url: str) -> str | None:
         xpath = "//amp-ambient-video"
         src_attribute = self.webdriver_manager.find_element_by_xpath(url, xpath, attribute="src")
 
-        if src_attribute == "Element not found" or "An error occurred" in src_attribute:
+        if src_attribute is None or src_attribute == "Element not found" or "An error occurred" in src_attribute:
             raise ValueError(f"Could not find amp-ambient-video src attribute for Apple Music {self.genre}")
 
         if src_attribute.endswith(".m3u8"):
@@ -289,14 +247,10 @@ class AppleMusicFetcher(Extractor):
 
 
 class SoundCloudFetcher(Extractor):
-    def __init__(self, client, service_name, genre):
-        super().__init__(client, service_name, genre)
+    def __init__(self, service_name: str, genre: str) -> None:
+        super().__init__(service_name, genre)
 
-    def get_playlist(self):
-        url = f"{self.base_url}?{self.param_key}={self.playlist_param}"
-        return get_json_response(url, self.host, self.api_key)
-
-    def set_playlist_details(self):
+    def set_playlist_details(self) -> None:
         url = self.config["links"][self.genre]
         parsed_url = urlparse(url)
         clean_url = f"{parsed_url.netloc}{parsed_url.path}"
@@ -320,14 +274,10 @@ class SoundCloudFetcher(Extractor):
 
 
 class SpotifyFetcher(Extractor):
-    def __init__(self, client, service_name, genre):
-        super().__init__(client, service_name, genre)
+    def __init__(self, service_name: str, genre: str) -> None:
+        super().__init__(service_name, genre)
 
-    def get_playlist(self, offset=0, limit=100):
-        url = f"{self.base_url}?{self.param_key}={self.playlist_param}&offset={offset}&limit={limit}"
-        return get_json_response(url, self.host, self.api_key)
-
-    def set_playlist_details(self):
+    def set_playlist_details(self) -> None:
         url = self.config["links"][self.genre]
         response = requests.get(url)
         response.raise_for_status()
@@ -368,13 +318,14 @@ class SpotifyFetcher(Extractor):
         }
 
 
-def run_extraction(mongo_client, client, service_name, genre):
+def run_extraction(mongo_client: MongoClient, service_name: str, genre: str) -> None:
+    extractor: Extractor
     if service_name == "AppleMusic":
-        extractor = AppleMusicFetcher(client, service_name, genre)
+        extractor = AppleMusicFetcher(service_name, genre)
     elif service_name == "SoundCloud":
-        extractor = SoundCloudFetcher(client, service_name, genre)
+        extractor = SoundCloudFetcher(service_name, genre)
     elif service_name == "Spotify":
-        extractor = SpotifyFetcher(client, service_name, genre)
+        extractor = SpotifyFetcher(service_name, genre)
     else:
         raise ValueError(f"Unknown service: {service_name}")
 
@@ -410,7 +361,6 @@ def run_extraction(mongo_client, client, service_name, genre):
 
 if __name__ == "__main__":
     set_secrets()
-    client = RapidAPIClient()
     mongo_client = get_mongo_client()
 
     if DEBUG_MODE:
@@ -421,4 +371,4 @@ if __name__ == "__main__":
     for service_name, config in SERVICE_CONFIGS.items():
         for genre in PLAYLIST_GENRES:
             logger.info(f"Retrieving {genre} from {service_name} with credential {config['links'][genre]}")
-            run_extraction(mongo_client, client, service_name, genre)
+            run_extraction(mongo_client, service_name, genre)

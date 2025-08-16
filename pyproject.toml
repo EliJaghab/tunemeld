@@ -169,14 +169,20 @@ warn_unused_ignores = true
 show_column_numbers = true
 show_error_codes = true
 pretty = true
+mypy_path = "./django_backend"
 
-# Exclude directories
+# Exclude directories and test files
 exclude = [
     "venv/",
     "node_modules/",
     ".tox/",
     "staticfiles/",
-    "backend/lib/"
+    "backend/lib/",
+    "django_backend/core",
+    "kv_worker/",
+    "scripts/",
+    "tests/",
+    ".*_test\\.py$"
 ]
 
 [[tool.mypy.overrides]]
@@ -185,6 +191,10 @@ module = [
     "bs4.*",
     "unidecode.*",
     "pymongo.*",
-    "requests.*"
+    "requests.*",
+    "spotipy.*",
+    "fp.fp.*",
+    "spotipy.*",
+    "fp.fp.*"
 ]
 ignore_missing_imports = true

@@ -1,4 +1,5 @@
 import time
+from collections.abc import Generator
 
 import pytest
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
@@ -11,7 +12,7 @@ class TestWebDriverManager:
     """Test WebDriverManager with real browser - requires internet connection"""
 
     @pytest.fixture
-    def webdriver_manager(self):
+    def webdriver_manager(self) -> Generator[WebDriverManager, None, None]:
         """Create WebDriverManager instance"""
         manager = WebDriverManager(use_proxy=True)
         yield manager
@@ -23,7 +24,7 @@ class TestWebDriverManager:
 
     @pytest.mark.external_api
     @pytest.mark.slow
-    def test_find_element_by_xpath_real_spotify(self, webdriver_manager):
+    def test_find_element_by_xpath_real_spotify(self, webdriver_manager: WebDriverManager) -> None:
         """Test finding element on real Spotify page - requires internet"""
         url = "https://open.spotify.com/track/4boa7Bv0VijpxoP1SHjjUb"
 
@@ -48,7 +49,7 @@ class TestWebDriverManager:
 
     @pytest.mark.external_api
     @pytest.mark.slow
-    def test_webdriver_handles_invalid_url(self, webdriver_manager):
+    def test_webdriver_handles_invalid_url(self, webdriver_manager: WebDriverManager) -> None:
         """Test WebDriver gracefully handles invalid URLs"""
         invalid_url = "https://this-domain-does-not-exist-12345.com"
 
@@ -60,7 +61,7 @@ class TestWebDriverManager:
             # Expected - should handle network errors gracefully
             pass
 
-    def test_webdriver_initialization(self):
+    def test_webdriver_initialization(self) -> None:
         """Test WebDriverManager can be instantiated"""
         try:
             manager = WebDriverManager(use_proxy=True)
@@ -70,7 +71,7 @@ class TestWebDriverManager:
             pytest.skip(f"WebDriver not available: {e}")
 
     @pytest.mark.external_api
-    def test_close_driver_cleanup(self, webdriver_manager):
+    def test_close_driver_cleanup(self, webdriver_manager: WebDriverManager) -> None:
         """Test that driver cleanup works properly"""
         # Use the driver briefly
         from contextlib import suppress
@@ -86,7 +87,7 @@ class TestWebDriverManager:
 
 
 # Utility function to run only external API tests
-def run_external_tests():
+def run_external_tests() -> bool:
     """Run only the external API tests"""
     import subprocess
     import sys

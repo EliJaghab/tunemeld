@@ -2,7 +2,7 @@ import os
 
 from playlist_etl.aggregate import Aggregate
 from playlist_etl.config import ISRC_CACHE_COLLECTION, YOUTUBE_URL_CACHE_COLLECTION
-from playlist_etl.extract import PLAYLIST_GENRES, SERVICE_CONFIGS, RapidAPIClient, run_extraction
+from playlist_etl.extract import PLAYLIST_GENRES, SERVICE_CONFIGS, run_extraction
 from playlist_etl.helpers import set_secrets
 from playlist_etl.services import AppleMusicService, SpotifyService, YouTubeService
 from playlist_etl.transform_playlist import Transform
@@ -28,7 +28,6 @@ def aggregate(mongo_client: MongoDBClient) -> None:
 
 def extract() -> None:
     """Run the extract step of the ETL pipeline"""
-    client = RapidAPIClient()
     mongo_client = get_mongo_client()
 
     # Clear the raw_playlists collection before extraction
@@ -37,7 +36,7 @@ def extract() -> None:
     # Extract data from all services and genres
     for service_name, _config in SERVICE_CONFIGS.items():
         for genre in PLAYLIST_GENRES:
-            run_extraction(mongo_client, client, service_name, genre)
+            run_extraction(mongo_client, service_name, genre)
 
 
 def update_view_counts(
@@ -53,14 +52,25 @@ def main() -> None:
     webdriver_manager = WebDriverManager()
 
     try:
+        spotify_client_id = os.getenv("SPOTIFY_CLIENT_ID")
+        spotify_client_secret = os.getenv("SPOTIFY_CLIENT_SECRET")
+        google_api_key = os.getenv("GOOGLE_API_KEY")
+
+        if not spotify_client_id:
+            raise ValueError("SPOTIFY_CLIENT_ID environment variable is required")
+        if not spotify_client_secret:
+            raise ValueError("SPOTIFY_CLIENT_SECRET environment variable is required")
+        if not google_api_key:
+            raise ValueError("GOOGLE_API_KEY environment variable is required")
+
         spotify_service = SpotifyService(
-            client_id=os.getenv("SPOTIFY_CLIENT_ID"),
-            client_secret=os.getenv("SPOTIFY_CLIENT_SECRET"),
+            client_id=spotify_client_id,
+            client_secret=spotify_client_secret,
             isrc_cache_manager=CacheManager(mongo_client, ISRC_CACHE_COLLECTION),
             webdriver_manager=webdriver_manager,
         )
         youtube_service = YouTubeService(
-            api_key=os.getenv("GOOGLE_API_KEY"),
+            api_key=google_api_key,
             cache_manager=CacheManager(mongo_client, YOUTUBE_URL_CACHE_COLLECTION),
         )
         apple_music_service = AppleMusicService(CacheManager(mongo_client, YOUTUBE_URL_CACHE_COLLECTION))

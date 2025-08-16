@@ -1,5 +1,6 @@
 import os
 import time
+from collections.abc import Callable
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
 from typing import Any
@@ -12,6 +13,7 @@ from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
+from selenium.webdriver.remote.webdriver import WebDriver
 from spotipy import Spotify
 from spotipy.oauth2 import SpotifyClientCredentials
 from webdriver_manager.chrome import ChromeDriverManager
@@ -29,7 +31,7 @@ RETRIES = 3
 RETRY_DELAY = 8
 
 
-def get_mongo_client():
+def get_mongo_client() -> MongoClient:
     mongo_uri = os.getenv("MONGO_URI")
     if not mongo_uri:
         raise Exception("MONGO_URI environment variable not set")
@@ -53,7 +55,7 @@ def get_spotify_client() -> Spotify:
     return spotify
 
 
-def insert_or_update_data_to_mongo(client, collection_name, document):
+def insert_or_update_data_to_mongo(client: MongoClient, collection_name: str, document: dict[str, Any]) -> None:
     db = client[PLAYLIST_ETL_COLLECTION_NAME]
     collection = db[collection_name]
     if "_id" in document:
@@ -70,7 +72,7 @@ def insert_or_update_data_to_mongo(client, collection_name, document):
     logger.info(f"Data inserted with id: {result.inserted_id}")
 
 
-def insert_or_update_kv_data_to_mongo(client, collection_name, key, value):
+def insert_or_update_kv_data_to_mongo(client: MongoClient, collection_name: str, key: str, value: Any) -> None:
     db = client[PLAYLIST_ETL_COLLECTION_NAME]
     collection = db[collection_name]
     existing_document = collection.find_one({"key": key})
@@ -85,47 +87,47 @@ def insert_or_update_kv_data_to_mongo(client, collection_name, key, value):
         logger.info(f"KV data inserted with key: {key}")
 
 
-def read_cache_from_mongo(mongo_client, collection_name):
+def read_cache_from_mongo(mongo_client: MongoClient, collection_name: str) -> dict[str, Any]:
     db = mongo_client[PLAYLIST_ETL_COLLECTION_NAME]
     collection = db[collection_name]
-    cache = {}
+    cache: dict[str, Any] = {}
     for item in collection.find():
         cache[item["key"]] = item["value"]
     return cache
 
 
-def update_cache_in_mongo(mongo_client, collection_name, key, value):
+def update_cache_in_mongo(mongo_client: MongoClient, collection_name: str, key: str, value: Any) -> None:
     logger.info(f"Updating cache in collection: {collection_name} for key: {key} with value: {value}")
     db = mongo_client[PLAYLIST_ETL_COLLECTION_NAME]
     collection = db[collection_name]
     collection.replace_one({"key": key}, {"key": key, "value": value}, upsert=True)
 
 
-def read_data_from_mongo(client, collection_name):
+def read_data_from_mongo(client: MongoClient, collection_name: str) -> list[dict[str, Any]]:
     db = client[PLAYLIST_ETL_COLLECTION_NAME]
     collection = db[collection_name]
     return list(collection.find())
 
 
-def clear_collection(client, collection_name):
+def clear_collection(client: MongoClient, collection_name: str) -> None:
     db = client[PLAYLIST_ETL_COLLECTION_NAME]
     collection = db[collection_name]
     collection.delete_many({})
     logger.info(f"Cleared collection: {collection_name}")
 
 
-def collection_is_empty(collection_name, mongo_client) -> bool:
+def collection_is_empty(collection_name: str, mongo_client: MongoClient) -> bool:
     return not read_data_from_mongo(mongo_client, collection_name)
 
 
 class WebDriverManager:
-    def __init__(self, use_proxy=False, memory_threshold_percent=75):
+    def __init__(self, use_proxy: bool = False, memory_threshold_percent: int = 75) -> None:
         self.use_proxy = use_proxy
         self.memory_threshold_percent = memory_threshold_percent
-        self.driver = self._create_webdriver(self.use_proxy)
+        self.driver: WebDriver = self._create_webdriver(self.use_proxy)
         self.spotify_error_count = 0
 
-    def _create_webdriver(self, use_proxy: bool):
+    def _create_webdriver(self, use_proxy: bool) -> WebDriver:
         options = Options()
         options.add_argument("--headless")
         options.add_argument("--disable-gpu")
@@ -192,8 +194,8 @@ class WebDriverManager:
         url: str,
         xpath: str,
         attribute: str | None = None,
-    ) -> str:
-        def _attempt_find_element() -> str:
+    ) -> str | None:
+        def _attempt_find_element() -> str | None:
             self.driver.implicitly_wait(8)
             logger.info(f"Navigating to URL: {url}")
             self.driver.get(url)
@@ -218,7 +220,7 @@ class WebDriverManager:
         logger.info(f"Attempting to find element on URL: {url} using XPath: {xpath}")
         return self._retry_with_backoff(RETRIES, RETRY_DELAY, _attempt_find_element)
 
-    def _retry_with_backoff(self, retries: int, retry_delay: int, action):
+    def _retry_with_backoff(self, retries: int, retry_delay: int, action: Callable[[], str | None]) -> str | None:
         attempt = 1
         while attempt <= retries:
             try:
@@ -242,6 +244,7 @@ class WebDriverManager:
                     raise
                 time.sleep(retry_delay * (2 ** (attempt - 1)))
                 attempt += 1
+        raise Exception("Max retries exceeded")
 
     def _is_rate_limit_issue(self, error_message: str) -> bool:
         rate_limit_keywords = [
@@ -252,12 +255,12 @@ class WebDriverManager:
         ]
         return any(keyword in error_message.lower() for keyword in rate_limit_keywords)
 
-    def _restart_driver(self, new_proxy=False):
+    def _restart_driver(self, new_proxy: bool = False) -> None:
         logger.info("Restarting WebDriver to clear memory/cache.")
         self.driver.quit()
         self.driver = self._create_webdriver(use_proxy=new_proxy or self.use_proxy)
 
-    def close_driver(self):
+    def close_driver(self) -> None:
         if self.driver:
             self.driver.quit()
 
@@ -272,17 +275,18 @@ class WebDriverManager:
         except Exception as e:
             logger.error(f"Error with XPath {xpath}: {e}")
             raise ValueError(f"Could not find play count for {url}") from e
+        return 0
 
 
 class CacheManager:
-    def __init__(self, mongo_client: MongoDBClient, collection_name: str):
+    def __init__(self, mongo_client: MongoDBClient, collection_name: str) -> None:
         self.mongo_client = mongo_client
         self.collection_name = collection_name
-        self.cache = self.load_cache()
+        self.cache: dict[str, Any] = self.load_cache()
 
-    def load_cache(self) -> dict:
+    def load_cache(self) -> dict[str, Any]:
         logger.info(f"Loading {self.collection_name} cache into memory")
-        cache = {}
+        cache: dict[str, Any] = {}
         data = self.mongo_client.get_collection(self.collection_name).find()
         for item in data:
             cache[item["key"]] = item["value"]
@@ -295,6 +299,7 @@ class CacheManager:
     def _validate_cache_entry(self, key: str, value: Any) -> bool:
         if key is None or value is None:
             raise ValueError("Key or value cannot be None")
+        return True
 
     def set(self, key: str, value: Any) -> None:
         self._validate_cache_entry(key, value)
@@ -307,7 +312,7 @@ class CacheManager:
         )
 
 
-def overwrite_collection(client, collection_name: str, documents: list[dict]) -> None:
+def overwrite_collection(client: MongoClient, collection_name: str, documents: list[dict[str, Any]]) -> None:
     clear_collection(client, collection_name)
 
     with ThreadPoolExecutor() as executor:
@@ -316,7 +321,7 @@ def overwrite_collection(client, collection_name: str, documents: list[dict]) ->
             future.result()
 
 
-def overwrite_kv_collection(client, collection_name: str, kv_dict: dict) -> None:
+def overwrite_kv_collection(client: MongoClient, collection_name: str, kv_dict: dict[str, Any]) -> None:
     clear_collection(client, collection_name)
 
     with ThreadPoolExecutor() as executor:
@@ -331,4 +336,9 @@ def overwrite_kv_collection(client, collection_name: str, kv_dict: dict) -> None
 def get_delta_view_count(historical_views: list[HistoricalView], current_view_count: int) -> int:
     if not historical_views:
         return 0
-    return current_view_count - historical_views[-1].total_view_count
+
+    last_view = historical_views[-1].total_view_count
+    if last_view is None:
+        return 0
+
+    return current_view_count - last_view

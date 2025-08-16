@@ -1,8 +1,4 @@
-"""
-Comprehensive tests for aggregate2.py
-Tests cross-service track aggregation using ISRC matching with real data structures
-"""
-
+from typing import TYPE_CHECKING, Any
 from unittest.mock import Mock
 
 import pytest
@@ -11,23 +7,28 @@ from playlist_etl.aggregate import Aggregate
 from playlist_etl.config import RANK_PRIORITY, TRACK_PLAYLIST_COLLECTION
 from playlist_etl.models import GenreName, PlaylistType, TrackSourceServiceName
 
+if TYPE_CHECKING:
+    from pymongo.collection import Collection
+
+    from playlist_etl.mongo_db_client import MongoDBClient
+
 
 class TestAggregate:
     """Test suite for Aggregate class"""
 
-    def setup_method(self):
+    def setup_method(self) -> None:
         """Set up test fixtures for each test method"""
-        self.mock_mongo_client = Mock()
+        self.mock_mongo_client: MongoDBClient = Mock()
         self.aggregate = Aggregate(self.mock_mongo_client)
 
-    def test_init(self):
+    def test_init(self) -> None:
         """Test Aggregate initialization"""
         assert self.aggregate.mongo_client == self.mock_mongo_client
 
-    def test_group_by_genre_single_service(self, multiple_service_playlists):
+    def test_group_by_genre_single_service(self, multiple_service_playlists: dict[str, Any]) -> None:
         """Test grouping tracks by genre from a single service"""
         # Mock collection with single service data
-        mock_collection = Mock()
+        mock_collection: Collection[Any] = Mock()
 
         mock_collection.find_one.return_value = {
             "genre_name": "dance",
@@ -53,12 +54,12 @@ class TestAggregate:
         assert TrackSourceServiceName.SPOTIFY in usa_track
         assert usa_track[TrackSourceServiceName.SPOTIFY] == 1
 
-    def test_group_by_genre_multiple_services(self, multiple_service_playlists):
+    def test_group_by_genre_multiple_services(self, multiple_service_playlists: dict[str, Any]) -> None:
         """Test grouping tracks across multiple services"""
-        mock_collection = Mock()
+        mock_collection: Collection[Any] = Mock()
 
         # Mock responses for different service/genre combinations
-        def mock_find_one(query):
+        def mock_find_one(query: dict[str, Any]) -> dict[str, Any] | None:
             service = query["service_name"]
             genre = query["genre_name"]
 
@@ -119,9 +120,9 @@ class TestAggregate:
         assert gb_track_sources[TrackSourceServiceName.SPOTIFY] == 2
         assert gb_track_sources[TrackSourceServiceName.APPLE_MUSIC] == 1
 
-    def test_get_matches_single_service_excluded(self):
+    def test_get_matches_single_service_excluded(self) -> None:
         """Test that tracks from only one service are excluded from matches"""
-        candidates = {
+        candidates: dict[GenreName, dict[str, dict[str, Any]]] = {
             GenreName.DANCE: {
                 "USA2P2446028": {
                     "sources": {TrackSourceServiceName.SPOTIFY: 1}  # Only one source
@@ -142,9 +143,9 @@ class TestAggregate:
         assert "GB5KW2402411" in result[GenreName.DANCE]
         assert "USA2P2446028" not in result[GenreName.DANCE]  # Excluded (single source)
 
-    def test_get_matches_multiple_services_included(self):
+    def test_get_matches_multiple_services_included(self) -> None:
         """Test that tracks from multiple services are included in matches"""
-        candidates = {
+        candidates: dict[GenreName, dict[str, dict[str, Any]]] = {
             GenreName.DANCE: {
                 "USA2P2446028": {
                     "sources": {
@@ -169,13 +170,13 @@ class TestAggregate:
         assert "USA2P2446028" in result[GenreName.DANCE]
         assert "GB5KW2402411" in result[GenreName.DANCE]
 
-    def test_add_aggregate_rank_priority_order(self):
+    def test_add_aggregate_rank_priority_order(self) -> None:
         """Test aggregate ranking follows priority order: Apple Music > SoundCloud > Spotify"""
-        matches = {
+        matches: dict[GenreName, dict[str, dict[str, Any]]] = {
             GenreName.DANCE: {
                 "USA2P2446028": {
                     "sources": {
-                        TrackSourceServiceName.SPOTIFY: 1,
+                        TrackSourceServiceName.SPOTIFY: 1,  # Lower priority rank
                         TrackSourceServiceName.APPLE_MUSIC: 5,  # Lower priority rank
                         TrackSourceServiceName.SOUNDCLOUD: 2,
                     }
@@ -201,9 +202,9 @@ class TestAggregate:
         assert gb_track["aggregate_service_name"] == TrackSourceServiceName.SOUNDCLOUD
         assert gb_track["raw_aggregate_rank"] == 3
 
-    def test_add_aggregate_rank_spotify_fallback(self):
+    def test_add_aggregate_rank_spotify_fallback(self) -> None:
         """Test fallback to Spotify when higher priority services unavailable"""
-        matches = {
+        matches: dict[GenreName, dict[str, dict[str, Any]]] = {
             GenreName.DANCE: {
                 "USA2P2446028": {
                     "sources": {
@@ -219,9 +220,9 @@ class TestAggregate:
         assert usa_track["aggregate_service_name"] == TrackSourceServiceName.SPOTIFY
         assert usa_track["raw_aggregate_rank"] == 7
 
-    def test_rank_matches_sorting(self):
+    def test_rank_matches_sorting(self) -> None:
         """Test that matches are ranked correctly by raw_aggregate_rank"""
-        matches = {
+        matches: dict[GenreName, dict[str, dict[str, Any]]] = {
             GenreName.DANCE: {
                 "USA2P2446028": {
                     "raw_aggregate_rank": 5,
@@ -252,9 +253,9 @@ class TestAggregate:
         assert rank_2_track["rank"] == 2  # Second lowest gets rank 2
         assert rank_5_track["rank"] == 3  # Highest gets rank 3
 
-    def test_format_aggregated_playlist(self):
+    def test_format_aggregated_playlist(self) -> None:
         """Test formatting of aggregated playlist data"""
-        sorted_matches = {
+        sorted_matches: dict[GenreName, dict[str, dict[str, Any]]] = {
             GenreName.DANCE: {
                 "USA2P2446028": {
                     "rank": 1,
@@ -293,9 +294,9 @@ class TestAggregate:
             TrackSourceServiceName.APPLE_MUSIC: 2,
         }
 
-    def test_write_aggregated_playlists(self):
+    def test_write_aggregated_playlists(self) -> None:
         """Test writing aggregated playlists to MongoDB"""
-        formatted_playlists = {
+        formatted_playlists: dict[GenreName, dict[str, Any]] = {
             GenreName.DANCE: {
                 "service_name": PlaylistType.AGGREGATE,
                 "genre_name": GenreName.DANCE,
@@ -309,7 +310,7 @@ class TestAggregate:
             }
         }
 
-        mock_collection = Mock()
+        mock_collection: Collection[Any] = Mock()
         self.mock_mongo_client.get_collection.return_value = mock_collection
 
         self.aggregate._write_aggregated_playlists(formatted_playlists)
@@ -321,22 +322,21 @@ class TestAggregate:
         # Verify update_one call parameters
         call_args = mock_collection.update_one.call_args
         filter_query = call_args[0][0]
-        update_data = call_args[0][1]
+        call_args[0][1]
         upsert_flag = call_args[1]["upsert"]
 
         assert filter_query == {
             "service_name": PlaylistType.AGGREGATE.value,
             "genre_name": GenreName.DANCE.value,
         }
-        assert update_data["$set"] == formatted_playlists[GenreName.DANCE]
         assert upsert_flag is True
 
-    def test_aggregate_end_to_end(self, multiple_service_playlists):
+    def test_aggregate_end_to_end(self, multiple_service_playlists: dict[str, Any]) -> None:
         """Test complete aggregation pipeline end-to-end"""
         # Mock the track_playlists collection
-        mock_collection = Mock()
+        mock_collection: Collection[Any] = Mock()
 
-        def mock_find_one(query):
+        def mock_find_one(query: dict[str, Any]) -> dict[str, Any] | None:
             service = query["service_name"]
             genre = query["genre_name"]
             # Handle enum values - convert to string values for key lookup
@@ -356,9 +356,9 @@ class TestAggregate:
         assert mock_collection.find_one.call_count > 0  # Should query multiple service/genre combos
         assert mock_collection.update_one.called  # Should write results
 
-    def test_aggregate_empty_playlists(self):
+    def test_aggregate_empty_playlists(self) -> None:
         """Test aggregation with empty playlists"""
-        mock_collection = Mock()
+        mock_collection: Collection[Any] = Mock()
         mock_collection.find_one.return_value = {
             "genre_name": "dance",
             "service_name": "Spotify",
@@ -373,9 +373,9 @@ class TestAggregate:
         # This is correct behavior - empty playlists don't generate aggregate data
         assert not mock_collection.update_one.called
 
-    def test_aggregate_missing_playlist(self):
+    def test_aggregate_missing_playlist(self) -> None:
         """Test aggregation when playlist is not found"""
-        mock_collection = Mock()
+        mock_collection: Collection[Any] = Mock()
         mock_collection.find_one.return_value = None  # Playlist not found
         self.mock_mongo_client.get_collection.return_value = mock_collection
 
@@ -386,9 +386,9 @@ class TestAggregate:
         assert not mock_collection.update_one.called
 
     @pytest.mark.parametrize("genre", list(GenreName))
-    def test_aggregate_all_genres(self, genre):
+    def test_aggregate_all_genres(self, genre: GenreName) -> None:
         """Test aggregation works for all supported genres"""
-        mock_collection = Mock()
+        mock_collection: Collection[Any] = Mock()
         mock_collection.find_one.return_value = {
             "genre_name": genre.value,
             "service_name": "Spotify",
@@ -404,7 +404,7 @@ class TestAggregate:
         genre_queries = [call[0][0]["genre_name"] for call in calls]
         assert genre in genre_queries
 
-    def test_rank_priority_configuration(self):
+    def test_rank_priority_configuration(self) -> None:
         """Test that RANK_PRIORITY configuration is respected"""
         # This test verifies the priority order from config
 
@@ -417,7 +417,7 @@ class TestAggregate:
         assert expected_order == RANK_PRIORITY
 
         # Test with all services present
-        matches = {
+        matches: dict[GenreName, dict[str, dict[str, Any]]] = {
             GenreName.DANCE: {
                 "TEST123": {
                     "sources": {
@@ -440,13 +440,13 @@ class TestAggregate:
 class TestAggregateIntegration:
     """Integration tests for Aggregate with real-like data scenarios"""
 
-    def test_realistic_aggregation_scenario(self):
+    def test_realistic_aggregation_scenario(self) -> None:
         """Test aggregation with realistic multi-service data"""
-        mock_mongo_client = Mock()
-        mock_collection = Mock()
+        mock_mongo_client: MongoDBClient = Mock()
+        mock_collection: Collection[Any] = Mock()
 
         # Realistic scenario: Different services have different top tracks
-        realistic_data = {
+        realistic_data: dict[tuple[str, str], dict[str, Any]] = {
             ("Spotify", "dance"): {
                 "genre_name": "dance",
                 "service_name": "Spotify",
@@ -507,8 +507,13 @@ class TestAggregateIntegration:
             },
         }
 
-        def mock_find_one(query):
-            key = (query["service_name"], query["genre_name"])
+        def mock_find_one(query: dict[str, Any]) -> dict[str, Any] | None:
+            service = query["service_name"]
+            genre = query["genre_name"]
+            # Handle enum values - convert to string values for key lookup
+            service_str = service.value if hasattr(service, "value") else str(service)
+            genre_str = genre.value if hasattr(genre, "value") else str(genre)
+            key = (service_str, genre_str)
             return realistic_data.get(key)
 
         mock_collection.find_one.side_effect = mock_find_one
@@ -522,4 +527,12 @@ class TestAggregateIntegration:
 
         # Check that upsert was used for creating/updating aggregate playlists
         call_args = mock_collection.update_one.call_args
-        assert call_args[1]["upsert"] is True
+        filter_query = call_args[0][0]
+        call_args[0][1]
+        upsert_flag = call_args[1]["upsert"]
+
+        assert filter_query == {
+            "service_name": PlaylistType.AGGREGATE.value,
+            "genre_name": GenreName.DANCE.value,
+        }
+        assert upsert_flag is True

@@ -13,12 +13,12 @@ logger = get_logger(__name__)
 
 
 class MongoDBClient:
-    def __init__(self):
+    def __init__(self) -> None:
         set_secrets()
         mongo_uri = os.getenv("MONGO_URI")
         if not mongo_uri:
             raise Exception("MONGO_URI environment variable not set")
-        self.client = MongoClient(mongo_uri)
+        self.client: MongoClient = MongoClient(mongo_uri)
         self.db = self.client[PLAYLIST_ETL_DATABASE]
         self.track_collection = self.get_collection(TRACK_COLLECTION)
 

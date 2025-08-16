@@ -1,11 +1,13 @@
 import logging
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime
+from typing import Any
 
-from helpers import set_secrets
 from pymongo import MongoClient
 from pymongo.collection import Collection
-from utils import (
+
+from playlist_etl.helpers import set_secrets
+from playlist_etl.utils import (
     get_logger,
     get_mongo_client,
     get_mongo_collection,
@@ -19,7 +21,7 @@ CURRENT_TIMESTAMP = datetime.now().isoformat()
 logger = get_logger(__name__)
 
 
-def get_all_tracks(mongo_client: MongoClient) -> list[dict]:
+def get_all_tracks(mongo_client: MongoClient) -> list[dict[str, Any]]:
     """Fetch all tracks from the playlists."""
     logger.info("Reading data from MongoDB.")
     view_counts_playlists = read_data_from_mongo(mongo_client, VIEW_COUNTS_COLLECTION)
@@ -34,7 +36,8 @@ def get_previous_view_count(isrc: str, service_name: str, historical_collection:
     result = historical_collection.find_one({"isrc": isrc}, projection={f"view_counts.{service_name}": {"$slice": -1}})
 
     if result and service_name in result["view_counts"]:
-        return result["view_counts"][service_name][-1]["view_count"]
+        view_count_value = result["view_counts"][service_name][-1]["view_count"]
+        return int(view_count_value)
 
     return 0
 
@@ -45,7 +48,7 @@ def update_historical_view_count(
     service_name: str,
     current_view_count: int,
     delta_count: int,
-):
+) -> None:
     """Update historical view count in MongoDB."""
     logging.debug(f"Updating historical view count for ISRC: {isrc}, Service: {service_name}")
     new_reading = {
@@ -73,7 +76,7 @@ def update_historical_view_count(
         logger.info(f"No update performed for ISRC: {isrc}, Service: {service_name}")
 
 
-def process_track(track: dict, historical_collection: Collection) -> None:
+def process_track(track: dict[str, Any], historical_collection: Collection) -> None:
     """Process a single track's view counts."""
     isrc = track["isrc"]
     for service_name, service_data in track["view_count_data_json"].items():
@@ -83,7 +86,7 @@ def process_track(track: dict, historical_collection: Collection) -> None:
         update_historical_view_count(historical_collection, isrc, service_name, current_view_count, delta_count)
 
 
-def process_tracks(tracks: list[dict], mongo_client: MongoClient) -> None:
+def process_tracks(tracks: list[dict[str, Any]], mongo_client: MongoClient) -> None:
     """Process all tracks with concurrency."""
     historical_collection = get_mongo_collection(mongo_client, HISTORICAL_TRACK_VIEWS_COLLECTION)
 

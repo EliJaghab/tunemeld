@@ -170,8 +170,8 @@ print('Testing production-like cache configuration...')
 
 # Verify cache configuration
 cache_status = CacheManager.get_cache_status()
-print(f'Cache connected: {cache_status[\"connected\"]}')
-print(f'Cache backend: {cache_status[\"backend\"]}')
+print(f'Cache connected: {cache_status["connected"]}')
+print(f'Cache backend: {cache_status["backend"]}')
 
 # Test basic operations
 test_key = 'railway_test'

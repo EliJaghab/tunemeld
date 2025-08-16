@@ -43,7 +43,7 @@ class Aggregate:
                     for track in track_ranks:
                         candidates_by_genre[genre_name][track.isrc]["sources"][service_name] = track.rank
 
-        return dict(candidates_by_genre)
+        return {k: dict(v) for k, v in candidates_by_genre.items()}
 
     def _get_matches(
         self, candidates: dict[GenreName, dict[str, dict[str, Any]]]
@@ -91,7 +91,7 @@ class Aggregate:
     ) -> dict[GenreName, dict[str, Any]]:
         formatted_playlists: dict[GenreName, dict[str, Any]] = {}
         for genre_name, isrcs in sorted_matches.items():
-            tracks: list[dict[str, Any]] = []
+            tracks: list[TrackRank] = []
             for isrc, isrc_data in isrcs.items():
                 track = TrackRank(
                     isrc=isrc,
@@ -100,7 +100,7 @@ class Aggregate:
                     raw_aggregate_rank=isrc_data.get("raw_aggregate_rank"),
                     aggregate_service_name=isrc_data.get("aggregate_service_name"),
                 )
-                tracks.append(track.model_dump())
+                tracks.append(track)
 
             playlist = Playlist(
                 service_name=PlaylistType.AGGREGATE,

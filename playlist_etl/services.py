@@ -40,7 +40,7 @@ class SpotifyService:
         isrc = self.isrc_cache_manager.get(cache_key)
         if isrc:
             logger.info(f"Cache hit for ISRC: {cache_key}")
-            return isrc
+            return str(isrc)
 
         logger.info(f"ISRC Spotify Lookup Cache miss for {track_name} by {artist_name}")
 
@@ -69,7 +69,8 @@ class SpotifyService:
             results = self.spotify_client.search(q=query, type="track", limit=1)
             tracks = results["tracks"]["items"]
             if tracks:
-                return tracks[0]["external_ids"].get("isrc")
+                isrc_value = tracks[0]["external_ids"].get("isrc")
+                return str(isrc_value) if isrc_value is not None else None
             return None
         except Exception as e:
             logger.info(f"Error searching Spotify with query '{query}': {e}")
@@ -90,7 +91,8 @@ class SpotifyService:
         try:
             results = self.spotify_client.search(q=f"isrc:{isrc}", type="track", limit=1)
             if results["tracks"]["items"]:
-                return results["tracks"]["items"][0]["external_urls"]["spotify"]
+                spotify_url = results["tracks"]["items"][0]["external_urls"]["spotify"]
+                return str(spotify_url)
             else:
                 return ""
         except SpotifyException as e:
@@ -128,6 +130,9 @@ class SpotifyService:
 
         def _get_track_view_count(track: Track) -> int | None:
             track_url = track.spotify_track_data.track_url
+            if track_url is None:
+                logger.error(f"No Spotify track URL for {track.isrc}")
+                return None
             try:
                 return self.webdriver_manager.get_spotify_track_view_count(track_url)
             except Exception as e:
@@ -145,14 +150,18 @@ class SpotifyService:
 
         def _set_historical_view_count(track: Track) -> bool:
             historical_view = HistoricalView()
-            historical_view.total_view_count = track.spotify_view.current_view.view_count
+            current_view_count = track.spotify_view.current_view.view_count
+            if current_view_count is None:
+                return False
+            historical_view.total_view_count = current_view_count
             delta_view_count = get_delta_view_count(
                 track.spotify_view.historical_view,
-                track.spotify_view.current_view.view_count,
+                current_view_count,
             )
             historical_view.delta_view_count = delta_view_count
             historical_view.timestamp = CURRENT_TIMESTAMP
             track.spotify_view.historical_view.append(historical_view)
+            return True
 
         return _update_view_count(track)
 
@@ -192,7 +201,7 @@ class YouTubeService:
         youtube_url = self.cache_service.get(cache_key)
         if youtube_url:
             logger.info(f"Cache hit for YouTube URL: {cache_key}")
-            return youtube_url
+            return str(youtube_url)
 
         query = f"{track_name} {artist_name}"
         youtube_search_url = f"https://www.googleapis.com/youtube/v3/search?part=snippet&q={query}&key={self.api_key}"
@@ -236,6 +245,9 @@ class YouTubeService:
                 view_count = data["items"][0]["statistics"]["viewCount"]
                 logger.info(f"Video ID {video_id} has {view_count} views.")
                 return int(view_count)
+            else:
+                logger.error(f"No video found for ID {video_id}")
+                return 0
 
         except Exception as e:
             logger.exception(f"An unexpected error occurred: {e}")
@@ -264,6 +276,9 @@ class YouTubeService:
 
         def _get_track_view_count(track: Track) -> int | None:
             track_url = track.youtube_url
+            if track_url is None:
+                logger.error(f"No YouTube URL for {track.isrc}")
+                return None
             try:
                 return self.get_youtube_track_view_count(track_url)
             except Exception as e:
@@ -281,14 +296,18 @@ class YouTubeService:
 
         def _set_historical_view_count(track: Track) -> bool:
             historical_view = HistoricalView()
-            historical_view.total_view_count = track.youtube_view.current_view.view_count
+            current_view_count = track.youtube_view.current_view.view_count
+            if current_view_count is None:
+                return False
+            historical_view.total_view_count = current_view_count
             delta_view_count = get_delta_view_count(
                 track.youtube_view.historical_view,
-                track.youtube_view.current_view.view_count,
+                current_view_count,
             )
             historical_view.delta_view_count = delta_view_count
             historical_view.timestamp = CURRENT_TIMESTAMP
             track.youtube_view.historical_view.append(historical_view)
+            return True
 
         return _update_view_count(track)
 
@@ -302,7 +321,7 @@ class AppleMusicService:
         album_cover_url = self.cache_service.get(cache_key)
         if album_cover_url:
             logger.info(f"Cache hit for Apple Music Album Cover URL: {cache_key}")
-            return album_cover_url
+            return str(album_cover_url)
 
         logger.info(f"Apple Music Album Cover Cache miss for URL: {track_url}")
         try:
