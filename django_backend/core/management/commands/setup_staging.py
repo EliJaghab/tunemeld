@@ -50,9 +50,9 @@ class Command(BaseCommand):
         Genre.objects.all().delete()
         Service.objects.all().delete()
 
-        # Step 2: Load real API staging data fixtures (includes lookup tables)
-        logger.info("Loading real API staging fixtures...")
-        call_command("loaddata", "real_staging_data.json")
+        # Step 2: Load real API data from files (includes lookup tables)
+        logger.info("Loading real API data from files...")
+        call_command("load_real_api_data")
 
         if not options["skip_etl"]:
             # Step 3: Run normalization on fixture data
@@ -70,7 +70,7 @@ class Command(BaseCommand):
 
         logger.info("Staging environment setup complete!")
         logger.info("Database: SQLite staging.db")
-        logger.info("Sample data loaded from fixtures")
+        logger.info("Real API data loaded from files")
         logger.info("Ready for end-to-end testing")
 
     def show_staging_results(self):

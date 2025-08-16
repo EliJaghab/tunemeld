@@ -54,3 +54,8 @@ dist/
 
 # Temporary patch files (from agentree workflow)
 *.patch
+
+# Metabase
+django_backend/metabase.db*
+django_backend/plugins/
+django_backend/staging.db

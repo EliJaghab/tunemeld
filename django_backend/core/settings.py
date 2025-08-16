@@ -176,10 +176,10 @@ if DATABASE_URL:
     # Production: Use Railway PostgreSQL database
     DATABASES = {"default": dj_database_url.parse(DATABASE_URL)}
 else:
-    # Development/Testing: Fallback to in-memory SQLite
+    # Development/Testing: Use file-based SQLite for Metabase integration
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.sqlite3",
-            "NAME": ":memory:",
+            "NAME": BASE_DIR / "staging.db",
         }
     }
