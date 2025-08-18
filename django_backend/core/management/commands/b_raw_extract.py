@@ -1,11 +1,3 @@
-"""
-Raw playlist data extraction Django management command.
-Initializes genre/service lookup tables and extracts playlist data from RapidAPI.
-
-Usage:
-    python manage.py b_raw_extract
-"""
-
 import os
 
 from core.models import Genre, RawPlaylistData, Service

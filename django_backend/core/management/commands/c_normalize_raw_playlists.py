@@ -1,21 +1,3 @@
-"""
-Phase 3: Normalize Raw Playlist Data into Structured Format
-
-WHAT THIS DOES:
-Converts messy raw JSON from different services (Spotify, Apple Music, SoundCloud)
-into clean playlist positioning data. Extracts only ISRC and position information
-for playlist relationships, not track metadata.
-
-INPUT:
-- RawPlaylistData records containing raw JSON blobs from each service's API
-- Each service has different JSON structure and field names
-
-OUTPUT:
-- PlaylistTrack records (positioning table linking ISRC to playlist positions)
-- Track records (incomplete initially - missing ISRCs for Apple Music)
-- Apple Music tracks will have null ISRC until resolved in Phase D
-"""
-
 import json
 
 from core.models import PlaylistTrack, RawPlaylistData, Track
@@ -23,12 +5,13 @@ from django.core.management.base import BaseCommand
 
 from playlist_etl.constants import ServiceName
 from playlist_etl.helpers import get_logger
+from playlist_etl.models import AppleMusicTrack, NormalizedTrack, SoundCloudTrack, SpotifyTrack
 
 logger = get_logger(__name__)
 
 
 class Command(BaseCommand):
-    help = "Normalize raw playlist JSON data into PlaylistTrack positioning records"
+    help = "Normalize raw playlist JSON data into PlaylistTrack and Track tables"
 
     def handle(self, *args, **options) -> None:
         PlaylistTrack.objects.all().delete()
@@ -66,29 +49,25 @@ class Command(BaseCommand):
         playlist_tracks = []
 
         for track_data in tracks_data:
-            isrc = track_data.get("external_ids", {}).get("isrc")
-
             playlist_track = PlaylistTrack(
                 service=raw_data.service,
                 genre=raw_data.genre,
-                position=track_data["position"],
-                isrc=isrc,
+                position=track_data.position,
+                isrc=track_data.isrc,
             )
             playlist_tracks.append(playlist_track)
 
-            if isrc:
+            if track_data.isrc:
                 track, created = Track.objects.get_or_create(
-                    isrc=isrc,
+                    isrc=track_data.isrc,
                     defaults={
-                        "track_name": track_data["name"],
-                        "artist_name": track_data["artist"],
-                        "album_name": track_data.get("album"),
-                        "spotify_url": track_data.get("external_urls", {}).get("spotify"),
-                        "apple_music_url": track_data.get("external_urls", {}).get("apple_music"),
-                        "soundcloud_url": track_data.get("external_urls", {}).get("soundcloud"),
-                        "duration_ms": track_data.get("duration_ms"),
-                        "preview_url": track_data.get("preview_url"),
-                        "album_cover_url": track_data.get("album_cover_url"),
+                        "track_name": track_data.name,
+                        "artist_name": track_data.artist,
+                        "album_name": track_data.album,
+                        "spotify_url": track_data.spotify_url,
+                        "apple_music_url": track_data.apple_music_url,
+                        "soundcloud_url": track_data.soundcloud_url,
+                        "album_cover_url": track_data.album_cover_url,
                     },
                 )
 
@@ -98,35 +77,35 @@ class Command(BaseCommand):
         PlaylistTrack.objects.bulk_create(playlist_tracks)
         return len(playlist_tracks)
 
-    def update_track_from_service(self, track: Track, track_data: dict, service_name: str) -> None:
+    def update_track_from_service(self, track: Track, track_data: NormalizedTrack, service_name: str) -> None:
         """Update track with service-specific URLs only."""
         updated = False
 
         if service_name == ServiceName.SPOTIFY:
-            if not track.spotify_url and track_data.get("external_urls", {}).get("spotify"):
-                track.spotify_url = track_data["external_urls"]["spotify"]
+            if not track.spotify_url and track_data.spotify_url:
+                track.spotify_url = track_data.spotify_url
                 updated = True
-            if not track.album_cover_url and track_data.get("album_cover_url"):
-                track.album_cover_url = track_data["album_cover_url"]
+            if not track.album_cover_url and track_data.album_cover_url:
+                track.album_cover_url = track_data.album_cover_url
                 updated = True
 
         elif service_name == ServiceName.APPLE_MUSIC:
-            if not track.apple_music_url and track_data.get("external_urls", {}).get("apple_music"):
-                track.apple_music_url = track_data["external_urls"]["apple_music"]
+            if not track.apple_music_url and track_data.apple_music_url:
+                track.apple_music_url = track_data.apple_music_url
                 updated = True
 
         elif service_name == ServiceName.SOUNDCLOUD:
-            if not track.soundcloud_url and track_data.get("external_urls", {}).get("soundcloud"):
-                track.soundcloud_url = track_data["external_urls"]["soundcloud"]
+            if not track.soundcloud_url and track_data.soundcloud_url:
+                track.soundcloud_url = track_data.soundcloud_url
                 updated = True
-            if not track.album_cover_url and track_data.get("album_cover_url"):
-                track.album_cover_url = track_data["album_cover_url"]
+            if not track.album_cover_url and track_data.album_cover_url:
+                track.album_cover_url = track_data.album_cover_url
                 updated = True
 
         if updated:
             track.save()
 
-    def parse_spotify_tracks(self, raw_data: dict) -> list[dict]:
+    def parse_spotify_tracks(self, raw_data: dict) -> list[NormalizedTrack]:
         """Parse Spotify raw JSON into structured track data."""
         tracks = []
 
@@ -138,27 +117,12 @@ class Command(BaseCommand):
             if not track_info:
                 continue
 
-            album_images = track_info.get("album", {}).get("images", [])
-            album_cover_url = album_images[0]["url"] if album_images else None
-
-            track = {
-                "position": i + 1,
-                "service_track_id": track_info.get("id"),
-                "name": track_info.get("name"),
-                "artist": ", ".join(artist["name"] for artist in track_info.get("artists", [])),
-                "album": track_info.get("album", {}).get("name"),
-                "duration_ms": track_info.get("duration_ms"),
-                "popularity": track_info.get("popularity"),
-                "external_ids": track_info.get("external_ids", {}),
-                "external_urls": track_info.get("external_urls", {}),
-                "preview_url": track_info.get("preview_url"),
-                "album_cover_url": album_cover_url,
-            }
+            track = SpotifyTrack.from_raw(track_info, i + 1)
             tracks.append(track)
 
         return tracks
 
-    def parse_apple_music_tracks(self, raw_data: dict) -> list[dict]:
+    def parse_apple_music_tracks(self, raw_data: dict) -> list[NormalizedTrack]:
         """Parse Apple Music raw JSON into structured track data."""
         tracks = []
 
@@ -167,24 +131,12 @@ class Command(BaseCommand):
 
         for key, track_data in raw_data["album_details"].items():
             if key.isdigit():
-                track = {
-                    "position": int(key) + 1,
-                    "service_track_id": track_data.get("id"),
-                    "name": track_data.get("name"),
-                    "artist": track_data.get("artist"),
-                    "album": track_data.get("album"),
-                    "duration_ms": None,
-                    "popularity": None,
-                    "external_ids": {},
-                    "external_urls": {"apple_music": track_data.get("link")},
-                    "preview_url": track_data.get("preview_url"),
-                    "album_cover_url": None,
-                }
+                track = AppleMusicTrack.from_raw(track_data, int(key) + 1)
                 tracks.append(track)
 
         return tracks
 
-    def parse_soundcloud_tracks(self, raw_data: dict) -> list[dict]:
+    def parse_soundcloud_tracks(self, raw_data: dict) -> list[NormalizedTrack]:
         """Parse SoundCloud raw JSON into structured track data."""
         tracks = []
 
@@ -196,25 +148,7 @@ class Command(BaseCommand):
             if not isrc:
                 continue
 
-            track_name = item["title"]
-            artist_name = item["user"]["name"]
-
-            if " - " in track_name:
-                artist_name, track_name = track_name.split(" - ", 1)
-
-            track = {
-                "position": i + 1,
-                "service_track_id": item.get("id"),
-                "name": track_name,
-                "artist": artist_name,
-                "album": None,
-                "duration_ms": item.get("duration"),
-                "popularity": item.get("play_count"),
-                "external_ids": {"isrc": isrc},
-                "external_urls": {"soundcloud": item.get("permalink")},
-                "preview_url": item.get("stream_url"),
-                "album_cover_url": item.get("artworkUrl"),
-            }
+            track = SoundCloudTrack.from_raw(item, i + 1)
             tracks.append(track)
 
         return tracks
