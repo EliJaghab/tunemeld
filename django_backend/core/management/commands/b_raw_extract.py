@@ -9,11 +9,10 @@ Usage:
 import os
 
 from core.models import Genre, RawPlaylistData, Service
-from core.utils import initialize_lookup_tables
 from django.core.management import call_command
 from django.core.management.base import BaseCommand
 
-from playlist_etl.constants import PLAYLIST_GENRES, SERVICE_CONFIGS
+from playlist_etl.constants import PLAYLIST_GENRES, SERVICE_CONFIGS, ServiceName
 from playlist_etl.extract import (
     AppleMusicFetcher,
     SoundCloudFetcher,
@@ -32,35 +31,22 @@ class Command(BaseCommand):
             call_command("setup_staging")
             return
 
-        initialize_lookup_tables()
-
-        deleted_count = RawPlaylistData.objects.all().delete()[0]
-        logger.info(f"Cleared {deleted_count} existing records")
-
-        successful = 0
-        failed = 0
+        RawPlaylistData.objects.all().delete()[0]
 
         for service_name in SERVICE_CONFIGS:
             for genre in PLAYLIST_GENRES:
-                try:
-                    self.get_and_save_playlist(service_name, genre)
-                    successful += 1
-                except Exception as e:
-                    logger.error(f"Failed {service_name}/{genre}: {e}")
-                    failed += 1
-
-        logger.info(f"Complete: {successful} success, {failed} failed")
+                self.get_and_save_playlist(service_name, genre)
 
     def get_and_save_playlist(self, service_name: str, genre: str) -> RawPlaylistData:
-        """Extract playlist data for a specific genre from a specific service."""
+        logger.info(f"Getting playlist data for {service_name}/{genre}")
         service = Service.objects.get(name=service_name)
         genre_obj = Genre.objects.get(name=genre)
 
-        if service_name == "AppleMusic":
+        if service_name == ServiceName.APPLE_MUSIC:
             extractor = AppleMusicFetcher(service_name, genre)
-        elif service_name == "SoundCloud":
+        elif service_name == ServiceName.SOUNDCLOUD:
             extractor = SoundCloudFetcher(service_name, genre)
-        elif service_name == "Spotify":
+        elif service_name == ServiceName.SPOTIFY:
             extractor = SpotifyFetcher(service_name, genre)
         else:
             raise ValueError(f"Unknown service: {service_name}")
