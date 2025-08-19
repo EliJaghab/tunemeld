@@ -6,21 +6,21 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('core', '0003_track_aggregate_rank_track_aggregate_score'),
+        ("core", "0003_track_aggregate_rank_track_aggregate_score"),
     ]
 
     operations = [
         migrations.RenameModel(
-            old_name='Playlist',
-            new_name='PlaylistTrack',
+            old_name="Playlist",
+            new_name="PlaylistTrack",
         ),
         migrations.RenameIndex(
-            model_name='playlisttrack',
-            new_name='playlist_tr_service_bae90a_idx',
-            old_name='playlists_service_7e971b_idx',
+            model_name="playlisttrack",
+            new_name="playlist_tr_service_bae90a_idx",
+            old_name="playlists_service_7e971b_idx",
         ),
         migrations.AlterModelTable(
-            name='playlisttrack',
-            table='playlist_tracks',
+            name="playlisttrack",
+            table="playlist_tracks",
         ),
     ]

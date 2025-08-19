@@ -4,7 +4,6 @@ from typing import Any
 
 from core.models import Track
 from django.core.management.base import BaseCommand
-from django.db.models.query import QuerySet
 
 from playlist_etl.config import ISRC_CACHE_COLLECTION, YOUTUBE_URL_CACHE_COLLECTION
 from playlist_etl.helpers import get_logger
@@ -44,10 +43,6 @@ class Command(BaseCommand):
             return
 
         logger.info(f"Hydrating {tracks.count()} tracks...")
-        self.hydrate_tracks(tracks)
-        logger.info("Track hydration complete")
-
-    def hydrate_tracks(self, tracks: QuerySet[Track]) -> None:
         with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor:
             futures = [executor.submit(self.hydrate_single_track, track) for track in tracks]
             for future in concurrent.futures.as_completed(futures):
@@ -55,6 +50,7 @@ class Command(BaseCommand):
                     future.result()
                 except Exception as e:
                     logger.error(f"Error hydrating track: {e}")
+        logger.info("Track hydration complete")
 
     def hydrate_single_track(self, track: Track) -> None:
         if not track.youtube_url:

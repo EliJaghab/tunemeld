@@ -40,6 +40,15 @@ repos:
             staticfiles/.*
           )$
 
+  - repo: local
+    hooks:
+      - id: django-check
+        name: Django initialization check
+        entry: bash -c "cd django_backend && PYTHONPATH=.. python manage.py check --deploy"
+        language: system
+        pass_filenames: false
+        files: ^django_backend/.*\.py$
+
   # Temporarily disabled - tests depend on unstaged changes from other branches
   # - repo: local
   #   hooks:

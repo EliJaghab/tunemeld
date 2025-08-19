@@ -19,3 +19,4 @@ class Command(BaseCommand):
         call_command("b_raw_extract")
         call_command("c_normalize_raw_playlists")
         call_command("d_hydrate_tracks")
+        call_command("e_aggregate")

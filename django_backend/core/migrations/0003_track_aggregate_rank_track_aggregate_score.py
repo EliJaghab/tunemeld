@@ -6,18 +6,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('core', '0002_alter_playlist_isrc'),
+        ("core", "0002_alter_playlist_isrc"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='track',
-            name='aggregate_rank',
-            field=models.IntegerField(blank=True, help_text='Cross-service aggregate ranking', null=True),
+            model_name="track",
+            name="aggregate_rank",
+            field=models.IntegerField(blank=True, help_text="Cross-service aggregate ranking", null=True),
         ),
         migrations.AddField(
-            model_name='track',
-            name='aggregate_score',
-            field=models.FloatField(blank=True, help_text='Cross-service aggregate score', null=True),
+            model_name="track",
+            name="aggregate_score",
+            field=models.FloatField(blank=True, help_text="Cross-service aggregate score", null=True),
         ),
     ]

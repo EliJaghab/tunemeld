@@ -67,6 +67,7 @@ class ServiceView(BaseModel):
 
 class ETLTrack(BaseModel):
     """ETL Track model for MongoDB - distinct from Django Track model."""
+
     isrc: str
     apple_music_track_data: TrackData = Field(
         default_factory=lambda: TrackData(service_name=TrackSourceServiceName.APPLE_MUSIC)
@@ -98,6 +99,7 @@ class Playlist(BaseModel):
 
 class NormalizedTrack(BaseModel):
     """Normalized track data for Phase C - maps to Track model fields."""
+
     position: int
     isrc: str | None = None
     name: str

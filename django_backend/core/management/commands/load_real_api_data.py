@@ -6,11 +6,11 @@ from core.models import Genre, Service
 from core.utils import initialize_lookup_tables
 from django.core.management.base import BaseCommand
 
-from playlist_etl.constants import SERVICE_CONFIGS
+from playlist_etl.constants import SERVICE_CONFIGS, ServiceName
 
 
 class Command(BaseCommand):
-    help = "Load real API data from files"
+    help = "Load real API data from files for staging environment"
 
     def add_arguments(self, parser):
         parser.add_argument("--clear", action="store_true")
@@ -26,7 +26,11 @@ class Command(BaseCommand):
         if not real_api_data_dir.exists():
             return
 
-        mapping = {"spotify": "Spotify", "apple_music": "AppleMusic", "soundcloud": "SoundCloud"}
+        mapping = {
+            "spotify": ServiceName.SPOTIFY,
+            "apple_music": ServiceName.APPLE_MUSIC,
+            "soundcloud": ServiceName.SOUNDCLOUD,
+        }
 
         for service_dir in real_api_data_dir.iterdir():
             if not service_dir.is_dir() or service_dir.name not in mapping:
@@ -53,7 +57,12 @@ class Command(BaseCommand):
 
     def extract_playlist_metadata(self, service: str, genre: str, data: dict) -> dict[str, str]:
         """Extract playlist metadata from JSON data with realistic stub data for missing fields."""
-        service_name = {"spotify": "Spotify", "apple_music": "AppleMusic", "soundcloud": "SoundCloud"}[service]
+        service_mapping = {
+            "spotify": ServiceName.SPOTIFY,
+            "apple_music": ServiceName.APPLE_MUSIC,
+            "soundcloud": ServiceName.SOUNDCLOUD,
+        }
+        service_name = service_mapping[service]
         config = SERVICE_CONFIGS[service_name]
         playlist_url = config["links"][genre]
 
