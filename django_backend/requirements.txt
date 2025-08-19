@@ -1,10 +1,31 @@
+# Django Web Framework
 Django>=4.2,<5.0
 django-cors-headers==4.4.0
 django_distill==3.2.7
 dj-database-url==2.1.0
 psycopg2-binary==2.9.10
 gunicorn==20.1.0
-pymongo==4.8.0
-python-dotenv==1.0.0
-requests==2.31.0
 uvicorn==0.30.6
+
+# ETL Pipeline Dependencies
+beautifulsoup4==4.12.3
+selenium==4.22.0
+spotipy==2.23.0
+webdriver-manager==4.0.2
+tenacity==9.0.0
+pydantic==2.8.2
+Unidecode==1.3.8
+
+# External Services
+pymongo==4.8.0
+requests==2.32.2
+
+# Utilities
+python-dotenv==1.0.0
+psutil==6.0.0
+
+# Development/Testing
+flake8==7.1.0
+free-proxy==1.1.1
+lyricsgenius==3.0.1
+tox==4.16.0
