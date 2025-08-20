@@ -111,3 +111,8 @@ class NormalizedTrack(BaseModel):
     duration: int | None = None
     preview_url: str | None = None
     album_cover_url: str | None = None
+
+    @property
+    def service_url(self) -> str:
+        """Get the service-specific URL for this track."""
+        return self.spotify_url or self.apple_music_url or self.soundcloud_url or ""

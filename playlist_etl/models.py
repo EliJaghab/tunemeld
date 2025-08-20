@@ -1,89 +1,38 @@
-from datetime import datetime
-from enum import Enum
+# Re-export models from Django backend for backward compatibility
+from django_backend.core.models.f_etl_types import (
+    CurrentView,
+    DataSourceServiceName,
+    HistoricalView,
+    NormalizedTrack,
+    Playlist,
+    PlaylistType,
+    ServiceView,
+    StartView,
+    TrackData,
+    TrackRank,
+    TrackSourceServiceName,
+    YouTubeView,
+)
+from django_backend.core.models.f_etl_types import (
+    ETLTrack as Track,
+)
 
-from pydantic import BaseModel, Field
+# Import from constants for backward compatibility
+from playlist_etl.constants import GenreName
 
-# Import centralized constants
-from playlist_etl.constants import GenreName, ServiceName
-
-# Backward compatibility aliases
-TrackSourceServiceName = ServiceName
-
-
-class DataSourceServiceName(str, Enum):
-    SPOTIFY = TrackSourceServiceName.SPOTIFY.value
-    YOUTUBE = "YouTube"
-
-
-class PlaylistType(str, Enum):
-    SPOTIFY = TrackSourceServiceName.SPOTIFY.value
-    SOUNDCLOUD = TrackSourceServiceName.SOUNDCLOUD.value
-    APPLE_MUSIC = TrackSourceServiceName.APPLE_MUSIC.value
-    AGGREGATE = "Aggregate"
-
-
-class TrackData(BaseModel):
-    service_name: TrackSourceServiceName
-    track_name: str | None = None
-    artist_name: str | None = None
-    track_url: str | None = None
-    album_cover_url: str | None = None
-
-
-class StartView(BaseModel):
-    view_count: int | None = None
-    timestamp: datetime | None = None
-
-
-class CurrentView(BaseModel):
-    view_count: int | None = None
-    timestamp: datetime | None = None
-
-
-class HistoricalView(BaseModel):
-    total_view_count: int | None = None
-    delta_view_count: int | None = None
-    timestamp: datetime | None = None
-
-
-class YouTubeView(BaseModel):
-    view_count: int | None = None
-    timestamp: datetime | None = None
-
-
-class ServiceView(BaseModel):
-    service_name: DataSourceServiceName
-    start_view: StartView = Field(default_factory=StartView)
-    current_view: CurrentView = Field(default_factory=CurrentView)
-    historical_view: list[HistoricalView] = []
-    youtube_view: YouTubeView = Field(default_factory=YouTubeView)
-
-
-class Track(BaseModel):
-    isrc: str
-    apple_music_track_data: TrackData = Field(
-        default_factory=lambda: TrackData(service_name=TrackSourceServiceName.APPLE_MUSIC)
-    )
-    spotify_track_data: TrackData = Field(
-        default_factory=lambda: TrackData(service_name=TrackSourceServiceName.SPOTIFY)
-    )
-    soundcloud_track_data: TrackData = Field(
-        default_factory=lambda: TrackData(service_name=TrackSourceServiceName.SOUNDCLOUD)
-    )
-    youtube_url: str | None = None
-    spotify_view: ServiceView = Field(default_factory=lambda: ServiceView(service_name=DataSourceServiceName.SPOTIFY))
-    youtube_view: ServiceView = Field(default_factory=lambda: ServiceView(service_name=DataSourceServiceName.YOUTUBE))
-
-
-class TrackRank(BaseModel):
-    isrc: str
-    rank: int
-    sources: dict[TrackSourceServiceName, int]
-    raw_aggregate_rank: int | None = None
-    aggregate_service_name: TrackSourceServiceName | None = None
-
-
-class Playlist(BaseModel):
-    service_name: PlaylistType
-    genre_name: GenreName
-    tracks: list[TrackRank]
+__all__ = [
+    "CurrentView",
+    "DataSourceServiceName",
+    "GenreName",
+    "HistoricalView",
+    "NormalizedTrack",
+    "Playlist",
+    "PlaylistType",
+    "ServiceView",
+    "StartView",
+    "Track",
+    "TrackData",
+    "TrackRank",
+    "TrackSourceServiceName",
+    "YouTubeView",
+]

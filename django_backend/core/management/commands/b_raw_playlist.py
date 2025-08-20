@@ -18,7 +18,7 @@ logger = get_logger(__name__)
 class Command(BaseCommand):
     help = "Extract raw playlist data from RapidAPI and save to PostgreSQL"
 
-    def handle(self, *args, **options):
+    def handle(self, *args: object, **options: object) -> None:
         if os.getenv("STAGING_MODE") == "true":
             call_command("setup_staging")
             return
@@ -34,6 +34,7 @@ class Command(BaseCommand):
         service = Service.objects.get(name=service_name)
         genre_obj = Genre.objects.get(name=genre)
 
+        extractor: AppleMusicFetcher | SoundCloudFetcher | SpotifyFetcher
         if service_name == ServiceName.APPLE_MUSIC:
             extractor = AppleMusicFetcher(service_name, genre)
         elif service_name == ServiceName.SOUNDCLOUD:
