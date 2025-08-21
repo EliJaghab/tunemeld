@@ -2,11 +2,13 @@ import json
 from pathlib import Path
 from typing import Any
 
-from core.models import Genre, Service
+from core.models import Genre, RawPlaylistData, Service
 from core.utils import initialize_lookup_tables
 from django.core.management.base import BaseCommand
 
 from playlist_etl.constants import SERVICE_CONFIGS, ServiceName
+
+MAX_TRACKS_PER_PLAYLIST = 5
 
 
 class Command(BaseCommand):
@@ -17,11 +19,9 @@ class Command(BaseCommand):
 
     def handle(self, *args: Any, **options: Any) -> None:
         if options.get("clear"):
-            from core.models import RawPlaylistData
-
             RawPlaylistData.objects.all().delete()
         initialize_lookup_tables()
-        real_api_data_dir = Path("real_api_data")
+        real_api_data_dir = Path(__file__).parent.parent.parent.parent / "real_api_data"
 
         if not real_api_data_dir.exists():
             return
@@ -43,7 +43,9 @@ class Command(BaseCommand):
                 with open(json_file) as f:
                     data = json.load(f)
 
-                playlist_metadata = self.extract_playlist_metadata(service_dir.name, json_file.stem, data)
+                limited_data = self.limit_tracks_in_playlist(service_dir.name, data)
+
+                playlist_metadata = self.extract_playlist_metadata(service_dir.name, json_file.stem, limited_data)
 
                 RawPlaylistData.objects.create(
                     genre=genre,
@@ -52,7 +54,7 @@ class Command(BaseCommand):
                     playlist_name=playlist_metadata["name"],
                     playlist_cover_url=playlist_metadata["cover_url"],
                     playlist_cover_description_text=playlist_metadata["description"],
-                    data=data,
+                    data=limited_data,
                 )
 
     def extract_playlist_metadata(self, service: str, genre: str, data: dict) -> dict[str, str]:
@@ -161,3 +163,30 @@ class Command(BaseCommand):
                 )
 
         return metadata
+
+    def limit_tracks_in_playlist(self, service: str, data: dict) -> dict:
+        """Limit tracks in playlist to first MAX_TRACKS_PER_PLAYLIST positions."""
+        limited_data = data.copy()
+
+        if service == "spotify":
+            # Spotify format: {"items": [{"track": {...}}, ...]}
+            if "items" in limited_data:
+                limited_data["items"] = limited_data["items"][:MAX_TRACKS_PER_PLAYLIST]
+                limited_data["total"] = len(limited_data["items"])
+
+        elif service == "soundcloud":
+            # SoundCloud format: {"tracks": {"items": [...]}}
+            if "tracks" in limited_data and "items" in limited_data["tracks"]:
+                limited_data["tracks"]["items"] = limited_data["tracks"]["items"][:MAX_TRACKS_PER_PLAYLIST]
+
+        elif service == "apple_music" and "album_details" in limited_data:
+            # Apple Music format: {"album_details": {"0": {...}, "1": {...}, ...}}
+            # Keep only first N numbered keys (0, 1, 2, 3, 4 for MAX_TRACKS_PER_PLAYLIST=5)
+            album_details = limited_data["album_details"]
+            limited_album_details = {}
+            for i in range(min(MAX_TRACKS_PER_PLAYLIST, len(album_details))):
+                if str(i) in album_details:
+                    limited_album_details[str(i)] = album_details[str(i)]
+            limited_data["album_details"] = limited_album_details
+
+        return limited_data

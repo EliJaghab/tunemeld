@@ -1,17 +1,15 @@
 import json
 import os
 
-import spotipy
 from core.models import PlaylistModel as Playlist
 from core.models import RawPlaylistData, ServiceTrack
 from django.core.management.base import BaseCommand
-from spotipy.oauth2 import SpotifyClientCredentials
 
 from playlist_etl.constants import ServiceName
 from playlist_etl.helpers import get_logger
 from playlist_etl.models import NormalizedTrack
 from playlist_etl.mongo_db_client import MongoDBClient
-from playlist_etl.services import AppleMusicService
+from playlist_etl.services import AppleMusicService, SpotifyService
 from playlist_etl.utils import CacheManager
 
 logger = get_logger(__name__)
@@ -22,48 +20,15 @@ class Command(BaseCommand):
 
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
-        self.spotify_client = None
-        self.apple_music_service: AppleMusicService | None = None
-        self._setup_spotify_client()
-        self._setup_apple_music_service()
-
-    def _setup_spotify_client(self) -> None:
         client_id = os.getenv("SPOTIFY_CLIENT_ID")
         client_secret = os.getenv("SPOTIFY_CLIENT_SECRET")
 
-        if client_id and client_secret:
-            try:
-                client_credentials_manager = SpotifyClientCredentials(client_id=client_id, client_secret=client_secret)
-                self.spotify_client = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
-            except Exception:
-                self.spotify_client = None
+        mongo_client = MongoDBClient()
+        isrc_cache_manager = CacheManager(mongo_client, "isrc_cache")
+        album_cache_manager = CacheManager(mongo_client, "album_cover_cache")
 
-    def _setup_apple_music_service(self) -> None:
-        try:
-            mongo_client = MongoDBClient()
-            cache_manager = CacheManager(mongo_client, "album_cover_cache")
-            self.apple_music_service = AppleMusicService(cache_service=cache_manager)
-        except Exception:
-            self.apple_music_service = None
-
-    def lookup_isrc_from_spotify(self, track_name: str, artist_name: str) -> str | None:
-        if not self.spotify_client:
-            return None
-
-        try:
-            query = f"track:{track_name} artist:{artist_name}"
-            results = self.spotify_client.search(q=query, type="track", limit=1)
-
-            if results["tracks"]["items"]:
-                track = results["tracks"]["items"][0]
-                external_ids = track.get("external_ids", {})
-                if isinstance(external_ids, dict):
-                    return external_ids.get("isrc")
-                return None
-        except Exception:
-            pass
-
-        return None
+        self.spotify_service = SpotifyService(client_id, client_secret, isrc_cache_manager, None)
+        self.apple_music_service = AppleMusicService(cache_service=album_cache_manager)
 
     def handle(self, *args: object, **options: object) -> None:
         Playlist.objects.all().delete()
@@ -170,15 +135,13 @@ class Command(BaseCommand):
                 track_name = track_data["name"]
                 artist_name = track_data["artist"]
 
-                isrc = self.lookup_isrc_from_spotify(track_name, artist_name)
+                isrc = self.spotify_service.get_isrc(track_name, artist_name)
 
                 # Only create track if ISRC was found
                 if isrc:
                     apple_music_url = track_data["link"]
 
-                    album_cover_url = None
-                    if self.apple_music_service:
-                        album_cover_url = self.apple_music_service.get_album_cover_url(apple_music_url)
+                    album_cover_url = self.apple_music_service.get_album_cover_url(apple_music_url)
 
                     track = NormalizedTrack(
                         position=int(key) + 1,
@@ -202,7 +165,7 @@ class Command(BaseCommand):
                 position=i + 1,
                 name=item["title"],
                 artist=item["publisher"]["artist"],
-                soundcloud_url=item["url"],
+                soundcloud_url=item["permalink"],
                 isrc=item["publisher"].get("isrc"),
                 album_cover_url=item.get("artwork_url"),
             )

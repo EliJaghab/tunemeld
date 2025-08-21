@@ -9,7 +9,8 @@ environment = os.getenv("RAILWAY_ENVIRONMENT", "development")
 # Load environment file only in development
 # In production (Railway), environment variables are set directly
 if environment != "production":
-    load_dotenv("../.env.dev")
+    env_file = Path(__file__).resolve().parent.parent.parent / ".env.dev"
+    load_dotenv(env_file)
 
 MONGO_DATA_API_KEY = os.getenv("MONGO_DATA_API_KEY", "")
 MONGO_DATA_API_ENDPOINT = os.getenv("MONGO_DATA_API_ENDPOINT", "")

@@ -15,8 +15,8 @@ class Command(BaseCommand):
         if options.get("staging"):
             os.environ["STAGING_MODE"] = "true"
 
-        call_command("a_init_lookup_tables")
-        call_command("b_raw_extract")
-        call_command("c_normalize_raw_playlists")
-        call_command("d_hydrate_tracks")
+        call_command("a_genre_service")
+        call_command("b_raw_playlist")
+        call_command("c_playlist_service_track")
+        call_command("d_track")
         call_command("e_aggregate")
