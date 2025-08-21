@@ -1,6 +1,5 @@
-import os
-
 from core.models import Genre, RawPlaylistData, Service
+from django.conf import settings
 from django.core.management import call_command
 from django.core.management.base import BaseCommand
 
@@ -19,7 +18,7 @@ class Command(BaseCommand):
     help = "Extract raw playlist data from RapidAPI and save to PostgreSQL"
 
     def handle(self, *args: object, **options: object) -> None:
-        if os.getenv("STAGING_MODE") == "true":
+        if settings.STAGING_MODE:
             call_command("setup_staging")
             return
 

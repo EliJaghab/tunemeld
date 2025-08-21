@@ -4,11 +4,18 @@ from pathlib import Path
 import dj_database_url
 from dotenv import load_dotenv
 
+
+def is_staging_mode():
+    return os.getenv("STAGING_MODE", "false").lower() == "true"
+
+
+STAGING_MODE = is_staging_mode()
+
 environment = os.getenv("RAILWAY_ENVIRONMENT", "development")
 
-# Load environment file only in development
-# In production (Railway), environment variables are set directly
-if environment != "production":
+# Load environment file in staging mode
+# In production, environment variables are set directly by Railway
+if STAGING_MODE:
     env_file = Path(__file__).resolve().parent.parent.parent / ".env.dev"
     load_dotenv(env_file)
 
@@ -184,3 +191,5 @@ else:
             "NAME": BASE_DIR / "staging.db",
         }
     }
+
+USE_POSTGRES_API = STAGING_MODE
