@@ -35,17 +35,17 @@
           "images": [
             {
               "height": 640,
-              "url": "https://i.scdn.co/image/ab67616d0000b2737fd9dc3a93bd4fa2be8ed715",
+              "url": "https://i.scdn.co/image/ab67616d0000b273f9a2359739728d2af3284a8e",
               "width": 640
             },
             {
               "height": 300,
-              "url": "https://i.scdn.co/image/ab67616d00001e027fd9dc3a93bd4fa2be8ed715",
+              "url": "https://i.scdn.co/image/ab67616d0000b273f9a2359739728d2af3284a8e",
               "width": 300
             },
             {
               "height": 64,
-              "url": "https://i.scdn.co/image/ab67616d000048517fd9dc3a93bd4fa2be8ed715",
+              "url": "https://i.scdn.co/image/ab67616d0000b273f9a2359739728d2af3284a8e",
               "width": 64
             }
           ],
@@ -75,7 +75,7 @@
               "spotify": "https://open.spotify.com/artist/2hlmm7s2ICUX0LVIhVFlZQ"
             },
             "id": "2hlmm7s2ICUX0LVIhVFlZQ",
-            "name": "Gunna",
+            "name": "Lil Tecca",
             "type": "artist",
             "uri": "spotify:artist:2hlmm7s2ICUX0LVIhVFlZQ"
           },
@@ -93,13 +93,13 @@
         "track_number": 6,
         "duration_ms": 193466,
         "external_ids": {
-          "isrc": "USAT22505811"
+          "isrc": "USUM72502156"
         },
         "external_urls": {
-          "spotify": "https://open.spotify.com/track/338HvC3y58zPScamNZu4Dr"
+          "spotify": "https://open.spotify.com/track/7EW7Yivb93qKAtp5qEm5of"
         },
         "id": "338HvC3y58zPScamNZu4Dr",
-        "name": "at my purest (feat. Offset)",
+        "name": "Dark Thoughts",
         "popularity": 72,
         "uri": "spotify:track:338HvC3y58zPScamNZu4Dr",
         "is_local": false
@@ -135,17 +135,17 @@
           "images": [
             {
               "height": 640,
-              "url": "https://i.scdn.co/image/ab67616d0000b273b547c9858fee61547e6b0fd8",
+              "url": "https://i.scdn.co/image/ab67616d0000b273cc392813bfd8f63d4d5f4a95",
               "width": 640
             },
             {
               "height": 300,
-              "url": "https://i.scdn.co/image/ab67616d00001e02b547c9858fee61547e6b0fd8",
+              "url": "https://i.scdn.co/image/ab67616d0000b273cc392813bfd8f63d4d5f4a95",
               "width": 300
             },
             {
               "height": 64,
-              "url": "https://i.scdn.co/image/ab67616d00004851b547c9858fee61547e6b0fd8",
+              "url": "https://i.scdn.co/image/ab67616d0000b273cc392813bfd8f63d4d5f4a95",
               "width": 64
             }
           ],
@@ -184,7 +184,7 @@
               "spotify": "https://open.spotify.com/artist/0Y5tJX1MQlPlqiwlOH1tJY"
             },
             "id": "0Y5tJX1MQlPlqiwlOH1tJY",
-            "name": "Travis Scott",
+            "name": "Drake",
             "type": "artist",
             "uri": "spotify:artist:0Y5tJX1MQlPlqiwlOH1tJY"
           }
@@ -193,13 +193,13 @@
         "track_number": 4,
         "duration_ms": 170498,
         "external_ids": {
-          "isrc": "USSM12503073"
+          "isrc": "USLD91772032"
         },
         "external_urls": {
-          "spotify": "https://open.spotify.com/track/5P03xImM2uFukzoty7NDw7"
+          "spotify": "https://open.spotify.com/track/2u9S9JJ6hTZS3Vf22HOZKg"
         },
         "id": "5P03xImM2uFukzoty7NDw7",
-        "name": "KICK OUT",
+        "name": "NOKIA",
         "popularity": 82,
         "uri": "spotify:track:5P03xImM2uFukzoty7NDw7",
         "is_local": false
@@ -235,17 +235,17 @@
           "images": [
             {
               "height": 640,
-              "url": "https://i.scdn.co/image/ab67616d0000b273144b45267daf4ff4246f81cf",
+              "url": "https://i.scdn.co/image/ab67616d0000b273572a0f748d0801d7bea5f245",
               "width": 640
             },
             {
               "height": 300,
-              "url": "https://i.scdn.co/image/ab67616d00001e02144b45267daf4ff4246f81cf",
+              "url": "https://i.scdn.co/image/ab67616d0000b273572a0f748d0801d7bea5f245",
               "width": 300
             },
             {
               "height": 64,
-              "url": "https://i.scdn.co/image/ab67616d00004851144b45267daf4ff4246f81cf",
+              "url": "https://i.scdn.co/image/ab67616d0000b273572a0f748d0801d7bea5f245",
               "width": 64
             }
           ],
@@ -284,7 +284,7 @@
               "spotify": "https://open.spotify.com/artist/4Gso3d4CscCijv0lmajZWs"
             },
             "id": "4Gso3d4CscCijv0lmajZWs",
-            "name": "Don Toliver",
+            "name": "Offset, JID",
             "type": "artist",
             "uri": "spotify:artist:4Gso3d4CscCijv0lmajZWs"
           },
@@ -302,13 +302,13 @@
         "track_number": 1,
         "duration_ms": 171000,
         "external_ids": {
-          "isrc": "USAT22504476"
+          "isrc": "USUM72506534"
         },
         "external_urls": {
-          "spotify": "https://open.spotify.com/track/1NpHJ96ljWvqdbjlyc9GtT"
+          "spotify": "https://open.spotify.com/track/2PcZiMr9bRNtRikrN7s6bL"
         },
         "id": "1NpHJ96ljWvqdbjlyc9GtT",
-        "name": "FWU",
+        "name": "Bodies (with JID)",
         "popularity": 81,
         "uri": "spotify:track:1NpHJ96ljWvqdbjlyc9GtT",
         "is_local": false
@@ -344,17 +344,17 @@
           "images": [
             {
               "height": 640,
-              "url": "https://i.scdn.co/image/ab67616d0000b2739d22b70fe52340efb60ab681",
+              "url": "https://i.scdn.co/image/ab67616d0000b2731aa326c87f695ca446117d4a",
               "width": 640
             },
             {
               "height": 300,
-              "url": "https://i.scdn.co/image/ab67616d00001e029d22b70fe52340efb60ab681",
+              "url": "https://i.scdn.co/image/ab67616d0000b2731aa326c87f695ca446117d4a",
               "width": 300
             },
             {
               "height": 64,
-              "url": "https://i.scdn.co/image/ab67616d000048519d22b70fe52340efb60ab681",
+              "url": "https://i.scdn.co/image/ab67616d0000b2731aa326c87f695ca446117d4a",
               "width": 64
             }
           ],
@@ -384,7 +384,7 @@
               "spotify": "https://open.spotify.com/artist/3TVXtAsR1Inumwj472S9r4"
             },
             "id": "3TVXtAsR1Inumwj472S9r4",
-            "name": "Drake",
+            "name": "Gunna",
             "type": "artist",
             "uri": "spotify:artist:3TVXtAsR1Inumwj472S9r4"
           }
@@ -393,13 +393,13 @@
         "track_number": 1,
         "duration_ms": 194324,
         "external_ids": {
-          "isrc": "USUG12505774"
+          "isrc": "USAT22504357"
         },
         "external_urls": {
-          "spotify": "https://open.spotify.com/track/57GsLpRtEtrzcPGPop20rS"
+          "spotify": "https://open.spotify.com/track/4ugKUZExbqbkKXEmbTrTRW"
         },
         "id": "57GsLpRtEtrzcPGPop20rS",
-        "name": "What Did I Miss?",
+        "name": "Won't Stop",
         "popularity": 87,
         "uri": "spotify:track:57GsLpRtEtrzcPGPop20rS",
         "is_local": false
@@ -435,17 +435,17 @@
           "images": [
             {
               "height": 640,
-              "url": "https://i.scdn.co/image/ab67616d0000b273fd9d8d7b0698f683f38b01c9",
+              "url": "https://i.scdn.co/image/ab67616d0000b2733cf33f080e04f7d6400def5d",
               "width": 640
             },
             {
               "height": 300,
-              "url": "https://i.scdn.co/image/ab67616d00001e02fd9d8d7b0698f683f38b01c9",
+              "url": "https://i.scdn.co/image/ab67616d0000b2733cf33f080e04f7d6400def5d",
               "width": 300
             },
             {
               "height": 64,
-              "url": "https://i.scdn.co/image/ab67616d00004851fd9d8d7b0698f683f38b01c9",
+              "url": "https://i.scdn.co/image/ab67616d0000b2733cf33f080e04f7d6400def5d",
               "width": 64
             }
           ],
@@ -475,7 +475,7 @@
               "spotify": "https://open.spotify.com/artist/4DdkRBBYG6Yk9Ka8tdJ9BW"
             },
             "id": "4DdkRBBYG6Yk9Ka8tdJ9BW",
-            "name": "Offset",
+            "name": "Lil Wayne, BigXthaPlug, Jay Jones",
             "type": "artist",
             "uri": "spotify:artist:4DdkRBBYG6Yk9Ka8tdJ9BW"
           }
@@ -484,13 +484,13 @@
         "track_number": 1,
         "duration_ms": 177777,
         "external_ids": {
-          "isrc": "USUM72507839"
+          "isrc": "USUG12504629"
         },
         "external_urls": {
-          "spotify": "https://open.spotify.com/track/6vkHTGIAdDW7gTzliLM4ui"
+          "spotify": "https://open.spotify.com/track/0t5LNjml8LTuAPiEfD7zFN"
         },
         "id": "6vkHTGIAdDW7gTzliLM4ui",
-        "name": "Professional",
+        "name": "Hip-Hop (feat. BigXthaPlug, Jay Jones)",
         "popularity": 70,
         "uri": "spotify:track:6vkHTGIAdDW7gTzliLM4ui",
         "is_local": false
@@ -526,17 +526,17 @@
           "images": [
             {
               "height": 640,
-              "url": "https://i.scdn.co/image/ab67616d0000b273b547c9858fee61547e6b0fd8",
+              "url": "https://i.scdn.co/image/ab67616d0000b273f4f96a787e5dff3a03a4ac42",
               "width": 640
             },
             {
               "height": 300,
-              "url": "https://i.scdn.co/image/ab67616d00001e02b547c9858fee61547e6b0fd8",
+              "url": "https://i.scdn.co/image/ab67616d0000b273f4f96a787e5dff3a03a4ac42",
               "width": 300
             },
             {
               "height": 64,
-              "url": "https://i.scdn.co/image/ab67616d00004851b547c9858fee61547e6b0fd8",
+              "url": "https://i.scdn.co/image/ab67616d0000b273f4f96a787e5dff3a03a4ac42",
               "width": 64
             }
           ],
@@ -575,7 +575,7 @@
               "spotify": "https://open.spotify.com/artist/0Y5tJX1MQlPlqiwlOH1tJY"
             },
             "id": "0Y5tJX1MQlPlqiwlOH1tJY",
-            "name": "Travis Scott",
+            "name": "Young Thug, Future",
             "type": "artist",
             "uri": "spotify:artist:0Y5tJX1MQlPlqiwlOH1tJY"
           }
@@ -584,13 +584,13 @@
         "track_number": 5,
         "duration_ms": 238249,
         "external_ids": {
-          "isrc": "USSM12503074"
+          "isrc": "USAT22502845"
         },
         "external_urls": {
-          "spotify": "https://open.spotify.com/track/1rQEgtQNsj63xIUzEmKbML"
+          "spotify": "https://open.spotify.com/track/5eW508Gq23QlXHowyzW39m"
         },
         "id": "1rQEgtQNsj63xIUzEmKbML",
-        "name": "DUMBO",
+        "name": "Money On Money (feat. Future)",
         "popularity": 82,
         "uri": "spotify:track:1rQEgtQNsj63xIUzEmKbML",
         "is_local": false
@@ -626,17 +626,17 @@
           "images": [
             {
               "height": 640,
-              "url": "https://i.scdn.co/image/ab67616d0000b2730e251806162524debbb2c50a",
+              "url": "https://i.scdn.co/image/ab67616d0000b2738aa49982e7b60f391cea6eea",
               "width": 640
             },
             {
               "height": 300,
-              "url": "https://i.scdn.co/image/ab67616d00001e020e251806162524debbb2c50a",
+              "url": "https://i.scdn.co/image/ab67616d0000b2738aa49982e7b60f391cea6eea",
               "width": 300
             },
             {
               "height": 64,
-              "url": "https://i.scdn.co/image/ab67616d000048510e251806162524debbb2c50a",
+              "url": "https://i.scdn.co/image/ab67616d0000b2738aa49982e7b60f391cea6eea",
               "width": 64
             }
           ],
@@ -666,7 +666,7 @@
               "spotify": "https://open.spotify.com/artist/5yPzzu25VzEk8qrGTLIrE1"
             },
             "id": "5yPzzu25VzEk8qrGTLIrE1",
-            "name": "Young Nudy",
+            "name": "Quavo, Lil Baby",
             "type": "artist",
             "uri": "spotify:artist:5yPzzu25VzEk8qrGTLIrE1"
           },
@@ -693,13 +693,13 @@
         "track_number": 2,
         "duration_ms": 201306,
         "external_ids": {
-          "isrc": "USRC12501230"
+          "isrc": "USUG12500219"
         },
         "external_urls": {
-          "spotify": "https://open.spotify.com/track/6q2djm8drU3EWpLBK0mllz"
+          "spotify": "https://open.spotify.com/track/4LRxmoIbLJDcvEhqFgSF29"
         },
         "id": "6q2djm8drU3EWpLBK0mllz",
-        "name": "WHAT'S HAPPENIN' (feat. Latto & Coupe)",
+        "name": "Legends (with Lil Baby)",
         "popularity": 61,
         "uri": "spotify:track:6q2djm8drU3EWpLBK0mllz",
         "is_local": false
@@ -735,17 +735,17 @@
           "images": [
             {
               "height": 640,
-              "url": "https://i.scdn.co/image/ab67616d0000b2738028a7b8c9fce086d4a47ba7",
+              "url": "https://i.scdn.co/image/ab67616d0000b2732474acb55491f8b8c9b30147",
               "width": 640
             },
             {
               "height": 300,
-              "url": "https://i.scdn.co/image/ab67616d00001e028028a7b8c9fce086d4a47ba7",
+              "url": "https://i.scdn.co/image/ab67616d0000b2732474acb55491f8b8c9b30147",
               "width": 300
             },
             {
               "height": 64,
-              "url": "https://i.scdn.co/image/ab67616d000048518028a7b8c9fce086d4a47ba7",
+              "url": "https://i.scdn.co/image/ab67616d0000b2732474acb55491f8b8c9b30147",
               "width": 64
             }
           ],
@@ -784,7 +784,7 @@
               "spotify": "https://open.spotify.com/artist/3TVXtAsR1Inumwj472S9r4"
             },
             "id": "3TVXtAsR1Inumwj472S9r4",
-            "name": "Drake",
+            "name": "Lil Tecca",
             "type": "artist",
             "uri": "spotify:artist:3TVXtAsR1Inumwj472S9r4"
           },
@@ -802,13 +802,13 @@
         "track_number": 1,
         "duration_ms": 169134,
         "external_ids": {
-          "isrc": "USUG12506621"
+          "isrc": "USUM72505592"
         },
         "external_urls": {
-          "spotify": "https://open.spotify.com/track/5FMyXeZ0reYloRTiCkPprT"
+          "spotify": "https://open.spotify.com/track/5E3XPRJVgYnxhMAFI7nZ7N"
         },
         "id": "5FMyXeZ0reYloRTiCkPprT",
-        "name": "Which One (feat. Central Cee)",
+        "name": "OWA OWA",
         "popularity": 88,
         "uri": "spotify:track:5FMyXeZ0reYloRTiCkPprT",
         "is_local": false
@@ -844,17 +844,17 @@
           "images": [
             {
               "height": 640,
-              "url": "https://i.scdn.co/image/ab67616d0000b2737fd9dc3a93bd4fa2be8ed715",
+              "url": "https://i.scdn.co/image/ab67616d0000b27345d87e3f05f90ff6b5e106d3",
               "width": 640
             },
             {
               "height": 300,
-              "url": "https://i.scdn.co/image/ab67616d00001e027fd9dc3a93bd4fa2be8ed715",
+              "url": "https://i.scdn.co/image/ab67616d0000b27345d87e3f05f90ff6b5e106d3",
               "width": 300
             },
             {
               "height": 64,
-              "url": "https://i.scdn.co/image/ab67616d000048517fd9dc3a93bd4fa2be8ed715",
+              "url": "https://i.scdn.co/image/ab67616d0000b27345d87e3f05f90ff6b5e106d3",
               "width": 64
             }
           ],
@@ -884,7 +884,7 @@
               "spotify": "https://open.spotify.com/artist/2hlmm7s2ICUX0LVIhVFlZQ"
             },
             "id": "2hlmm7s2ICUX0LVIhVFlZQ",
-            "name": "Gunna",
+            "name": "Central Cee, Sexyy Red",
             "type": "artist",
             "uri": "spotify:artist:2hlmm7s2ICUX0LVIhVFlZQ"
           },
@@ -902,13 +902,13 @@
         "track_number": 10,
         "duration_ms": 173253,
         "external_ids": {
-          "isrc": "USAT22505815"
+          "isrc": "USSM12502707"
         },
         "external_urls": {
-          "spotify": "https://open.spotify.com/track/1m7j6RWUxeBzTOY4hcWsoj"
+          "spotify": "https://open.spotify.com/track/3yKgOMlm0LFpm9T2AhGWJJ"
         },
         "id": "1m7j6RWUxeBzTOY4hcWsoj",
-        "name": "forever be mine (feat. Wizkid)",
+        "name": "GUILT TRIPPIN (feat. Sexyy Red)",
         "popularity": 75,
         "uri": "spotify:track:1m7j6RWUxeBzTOY4hcWsoj",
         "is_local": false
@@ -944,17 +944,17 @@
           "images": [
             {
               "height": 640,
-              "url": "https://i.scdn.co/image/ab67616d0000b273b547c9858fee61547e6b0fd8",
+              "url": "https://i.scdn.co/image/ab67616d0000b2736b219c8d8462bfe254a20469",
               "width": 640
             },
             {
               "height": 300,
-              "url": "https://i.scdn.co/image/ab67616d00001e02b547c9858fee61547e6b0fd8",
+              "url": "https://i.scdn.co/image/ab67616d0000b2736b219c8d8462bfe254a20469",
               "width": 300
             },
             {
               "height": 64,
-              "url": "https://i.scdn.co/image/ab67616d00004851b547c9858fee61547e6b0fd8",
+              "url": "https://i.scdn.co/image/ab67616d0000b2736b219c8d8462bfe254a20469",
               "width": 64
             }
           ],
@@ -993,7 +993,7 @@
               "spotify": "https://open.spotify.com/artist/0Y5tJX1MQlPlqiwlOH1tJY"
             },
             "id": "0Y5tJX1MQlPlqiwlOH1tJY",
-            "name": "Travis Scott",
+            "name": "Playboi Carti, Travis Scott",
             "type": "artist",
             "uri": "spotify:artist:0Y5tJX1MQlPlqiwlOH1tJY"
           },
@@ -1020,13 +1020,13 @@
         "track_number": 10,
         "duration_ms": 272941,
         "external_ids": {
-          "isrc": "USSM12503079"
+          "isrc": "USUM72414869"
         },
         "external_urls": {
-          "spotify": "https://open.spotify.com/track/26N5kAVhlqFOWAkuMQ5Kwe"
+          "spotify": "https://open.spotify.com/track/3VdooJLOy4tLxKpnn46SMP"
         },
         "id": "26N5kAVhlqFOWAkuMQ5Kwe",
-        "name": "WHERE WAS YOU",
+        "name": "CRUSH (with Travis Scott)",
         "popularity": 80,
         "uri": "spotify:track:26N5kAVhlqFOWAkuMQ5Kwe",
         "is_local": false

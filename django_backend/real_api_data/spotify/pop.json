@@ -35,17 +35,17 @@
           "images": [
             {
               "height": 640,
-              "url": "https://i.scdn.co/image/ab67616d0000b2730b96f8824100aab118792442",
+              "url": "https://i.scdn.co/image/ab67616d0000b273df98c5b533f9feac6fa81061",
               "width": 640
             },
             {
               "height": 300,
-              "url": "https://i.scdn.co/image/ab67616d00001e020b96f8824100aab118792442",
+              "url": "https://i.scdn.co/image/ab67616d0000b273df98c5b533f9feac6fa81061",
               "width": 300
             },
             {
               "height": 64,
-              "url": "https://i.scdn.co/image/ab67616d000048510b96f8824100aab118792442",
+              "url": "https://i.scdn.co/image/ab67616d0000b273df98c5b533f9feac6fa81061",
               "width": 64
             }
           ],
@@ -75,7 +75,7 @@
               "spotify": "https://open.spotify.com/artist/7GlBOeep6PqTfFi59PTUUN"
             },
             "id": "7GlBOeep6PqTfFi59PTUUN",
-            "name": "Chappell Roan",
+            "name": "Benson Boone",
             "type": "artist",
             "uri": "spotify:artist:7GlBOeep6PqTfFi59PTUUN"
           }
@@ -84,13 +84,13 @@
         "track_number": 1,
         "duration_ms": 252276,
         "external_ids": {
-          "isrc": "USUG12506170"
+          "isrc": "USWB12500844"
         },
         "external_urls": {
-          "spotify": "https://open.spotify.com/track/2SsY5k7UWFqgye3PUMG3Oq"
+          "spotify": "https://open.spotify.com/track/221eHga9f9Ne4f8D7WVgPT"
         },
         "id": "2SsY5k7UWFqgye3PUMG3Oq",
-        "name": "The Subway",
+        "name": "Mystical Magical",
         "popularity": 92,
         "uri": "spotify:track:2SsY5k7UWFqgye3PUMG3Oq",
         "is_local": false
@@ -126,17 +126,17 @@
           "images": [
             {
               "height": 640,
-              "url": "https://i.scdn.co/image/ab67616d0000b273172de562840d588bfdda27f3",
+              "url": "https://i.scdn.co/image/ab67616d0000b273062c6573009fdebd43de443b",
               "width": 640
             },
             {
               "height": 300,
-              "url": "https://i.scdn.co/image/ab67616d00001e02172de562840d588bfdda27f3",
+              "url": "https://i.scdn.co/image/ab67616d0000b273062c6573009fdebd43de443b",
               "width": 300
             },
             {
               "height": 64,
-              "url": "https://i.scdn.co/image/ab67616d00004851172de562840d588bfdda27f3",
+              "url": "https://i.scdn.co/image/ab67616d0000b273062c6573009fdebd43de443b",
               "width": 64
             }
           ],
@@ -166,7 +166,7 @@
               "spotify": "https://open.spotify.com/artist/1uNFoZAHBGtllmzznpCI3s"
             },
             "id": "1uNFoZAHBGtllmzznpCI3s",
-            "name": "Justin Bieber",
+            "name": "Sabrina Carpenter",
             "type": "artist",
             "uri": "spotify:artist:1uNFoZAHBGtllmzznpCI3s"
           }
@@ -175,13 +175,13 @@
         "track_number": 2,
         "duration_ms": 176453,
         "external_ids": {
-          "isrc": "USUG12504304"
+          "isrc": "USUM72504354"
         },
         "external_urls": {
-          "spotify": "https://open.spotify.com/track/5BZsQlgw21vDOAjoqkNgKb"
+          "spotify": "https://open.spotify.com/track/42UBPzRMh5yyz0EDPr6fr1"
         },
         "id": "5BZsQlgw21vDOAjoqkNgKb",
-        "name": "DAISIES",
+        "name": "Manchild",
         "popularity": 95,
         "uri": "spotify:track:5BZsQlgw21vDOAjoqkNgKb",
         "is_local": false
@@ -217,17 +217,17 @@
           "images": [
             {
               "height": 640,
-              "url": "https://i.scdn.co/image/ab67616d0000b273062c6573009fdebd43de443b",
+              "url": "https://i.scdn.co/image/ab67616d0000b2739d24f74c1e2d8a12b1e591ec",
               "width": 640
             },
             {
               "height": 300,
-              "url": "https://i.scdn.co/image/ab67616d00001e02062c6573009fdebd43de443b",
+              "url": "https://i.scdn.co/image/ab67616d0000b2739d24f74c1e2d8a12b1e591ec",
               "width": 300
             },
             {
               "height": 64,
-              "url": "https://i.scdn.co/image/ab67616d00004851062c6573009fdebd43de443b",
+              "url": "https://i.scdn.co/image/ab67616d0000b2739d24f74c1e2d8a12b1e591ec",
               "width": 64
             }
           ],
@@ -257,7 +257,7 @@
               "spotify": "https://open.spotify.com/artist/74KM79TiuVKeVCqs8QtB0B"
             },
             "id": "74KM79TiuVKeVCqs8QtB0B",
-            "name": "Sabrina Carpenter",
+            "name": "sombr",
             "type": "artist",
             "uri": "spotify:artist:74KM79TiuVKeVCqs8QtB0B"
           }
@@ -266,13 +266,13 @@
         "track_number": 1,
         "duration_ms": 213645,
         "external_ids": {
-          "isrc": "USUM72504354"
+          "isrc": "USWB12405502"
         },
         "external_urls": {
-          "spotify": "https://open.spotify.com/track/42UBPzRMh5yyz0EDPr6fr1"
+          "spotify": "https://open.spotify.com/track/0FTmksd2dxiE5e3rWyJXs6"
         },
         "id": "42UBPzRMh5yyz0EDPr6fr1",
-        "name": "Manchild",
+        "name": "back to friends",
         "popularity": 94,
         "uri": "spotify:track:42UBPzRMh5yyz0EDPr6fr1",
         "is_local": false
@@ -308,17 +308,17 @@
           "images": [
             {
               "height": 640,
-              "url": "https://i.scdn.co/image/ab67616d0000b2739d24f74c1e2d8a12b1e591ec",
+              "url": "https://i.scdn.co/image/ab67616d0000b273ef985ba96e76a9574cc68a30",
               "width": 640
             },
             {
               "height": 300,
-              "url": "https://i.scdn.co/image/ab67616d00001e029d24f74c1e2d8a12b1e591ec",
+              "url": "https://i.scdn.co/image/ab67616d0000b273ef985ba96e76a9574cc68a30",
               "width": 300
             },
             {
               "height": 64,
-              "url": "https://i.scdn.co/image/ab67616d000048519d24f74c1e2d8a12b1e591ec",
+              "url": "https://i.scdn.co/image/ab67616d0000b273ef985ba96e76a9574cc68a30",
               "width": 64
             }
           ],
@@ -348,7 +348,7 @@
               "spotify": "https://open.spotify.com/artist/4G9NDjRyZFDlJKMRL8hx3S"
             },
             "id": "4G9NDjRyZFDlJKMRL8hx3S",
-            "name": "sombr",
+            "name": "Ravyn Lenae",
             "type": "artist",
             "uri": "spotify:artist:4G9NDjRyZFDlJKMRL8hx3S"
           }
@@ -357,13 +357,13 @@
         "track_number": 1,
         "duration_ms": 199032,
         "external_ids": {
-          "isrc": "USWB12405502"
+          "isrc": "USAT22401137"
         },
         "external_urls": {
-          "spotify": "https://open.spotify.com/track/0FTmksd2dxiE5e3rWyJXs6"
+          "spotify": "https://open.spotify.com/track/4WFgvKVfEhb3IUAFGrutTR"
         },
         "id": "0FTmksd2dxiE5e3rWyJXs6",
-        "name": "back to friends",
+        "name": "Love Me Not",
         "popularity": 98,
         "uri": "spotify:track:0FTmksd2dxiE5e3rWyJXs6",
         "is_local": false
@@ -399,17 +399,17 @@
           "images": [
             {
               "height": 640,
-              "url": "https://i.scdn.co/image/ab67616d0000b273fa2bcf3df669bde08b2e7d36",
+              "url": "https://i.scdn.co/image/ab67616d0000b2731dac3694b3289cd903cb3acf",
               "width": 640
             },
             {
               "height": 300,
-              "url": "https://i.scdn.co/image/ab67616d00001e02fa2bcf3df669bde08b2e7d36",
+              "url": "https://i.scdn.co/image/ab67616d0000b2731dac3694b3289cd903cb3acf",
               "width": 300
             },
             {
               "height": 64,
-              "url": "https://i.scdn.co/image/ab67616d00004851fa2bcf3df669bde08b2e7d36",
+              "url": "https://i.scdn.co/image/ab67616d0000b2731dac3694b3289cd903cb3acf",
               "width": 64
             }
           ],
@@ -439,7 +439,7 @@
               "spotify": "https://open.spotify.com/artist/0fTSzq9jAh4c36UVb4V7CB"
             },
             "id": "0fTSzq9jAh4c36UVb4V7CB",
-            "name": "Alex Warren",
+            "name": "Gracie Abrams",
             "type": "artist",
             "uri": "spotify:artist:0fTSzq9jAh4c36UVb4V7CB"
           }
@@ -448,13 +448,13 @@
         "track_number": 1,
         "duration_ms": 186964,
         "external_ids": {
-          "isrc": "USAT22500463"
+          "isrc": "USUG12406903"
         },
         "external_urls": {
-          "spotify": "https://open.spotify.com/track/6qqrTXSdwiJaq8SO0X2lSe"
+          "spotify": "https://open.spotify.com/track/7ne4VBA60CxGM75vw0EYad"
         },
         "id": "6qqrTXSdwiJaq8SO0X2lSe",
-        "name": "Ordinary",
+        "name": "That\u2019s So True",
         "popularity": 93,
         "uri": "spotify:track:6qqrTXSdwiJaq8SO0X2lSe",
         "is_local": false
@@ -490,17 +490,17 @@
           "images": [
             {
               "height": 640,
-              "url": "https://i.scdn.co/image/ab67616d0000b273ef985ba96e76a9574cc68a30",
+              "url": "https://i.scdn.co/image/ab67616d0000b27396e4cfdd4c3aa8088685b262",
               "width": 640
             },
             {
               "height": 300,
-              "url": "https://i.scdn.co/image/ab67616d00001e02ef985ba96e76a9574cc68a30",
+              "url": "https://i.scdn.co/image/ab67616d0000b27396e4cfdd4c3aa8088685b262",
               "width": 300
             },
             {
               "height": 64,
-              "url": "https://i.scdn.co/image/ab67616d00004851ef985ba96e76a9574cc68a30",
+              "url": "https://i.scdn.co/image/ab67616d0000b27396e4cfdd4c3aa8088685b262",
               "width": 64
             }
           ],
@@ -530,7 +530,7 @@
               "spotify": "https://open.spotify.com/artist/5RTLRtXjbXI2lSXc6jxlAz"
             },
             "id": "5RTLRtXjbXI2lSXc6jxlAz",
-            "name": "Ravyn Lenae",
+            "name": "Tate McRae, F1 The Album",
             "type": "artist",
             "uri": "spotify:artist:5RTLRtXjbXI2lSXc6jxlAz"
           }
@@ -539,13 +539,13 @@
         "track_number": 7,
         "duration_ms": 213466,
         "external_ids": {
-          "isrc": "USAT22401137"
+          "isrc": "USAT22503497"
         },
         "external_urls": {
-          "spotify": "https://open.spotify.com/track/4WFgvKVfEhb3IUAFGrutTR"
+          "spotify": "https://open.spotify.com/track/2yWlGEgEfPot0lv3OAjuG3"
         },
         "id": "4WFgvKVfEhb3IUAFGrutTR",
-        "name": "Love Me Not",
+        "name": "Just Keep Watching (From F1\u00ae The Movie)",
         "popularity": 91,
         "uri": "spotify:track:4WFgvKVfEhb3IUAFGrutTR",
         "is_local": false
@@ -581,17 +581,17 @@
           "images": [
             {
               "height": 640,
-              "url": "https://i.scdn.co/image/ab67616d0000b27396e4cfdd4c3aa8088685b262",
+              "url": "https://i.scdn.co/image/ab67616d0000b27382ea2e9e1858aa012c57cd45",
               "width": 640
             },
             {
               "height": 300,
-              "url": "https://i.scdn.co/image/ab67616d00001e0296e4cfdd4c3aa8088685b262",
+              "url": "https://i.scdn.co/image/ab67616d0000b27382ea2e9e1858aa012c57cd45",
               "width": 300
             },
             {
               "height": 64,
-              "url": "https://i.scdn.co/image/ab67616d0000485196e4cfdd4c3aa8088685b262",
+              "url": "https://i.scdn.co/image/ab67616d0000b27382ea2e9e1858aa012c57cd45",
               "width": 64
             }
           ],
@@ -630,7 +630,7 @@
               "spotify": "https://open.spotify.com/artist/45dkTj5sMRSjrmBSBeiHym"
             },
             "id": "45dkTj5sMRSjrmBSBeiHym",
-            "name": "Tate McRae",
+            "name": "Lady Gaga, Bruno Mars",
             "type": "artist",
             "uri": "spotify:artist:45dkTj5sMRSjrmBSBeiHym"
           },
@@ -648,13 +648,13 @@
         "track_number": 1,
         "duration_ms": 142550,
         "external_ids": {
-          "isrc": "USAT22503497"
+          "isrc": "USUM72409273"
         },
         "external_urls": {
-          "spotify": "https://open.spotify.com/track/2yWlGEgEfPot0lv3OAjuG3"
+          "spotify": "https://open.spotify.com/track/2plbrEY59IikOBgBGLjaoe"
         },
         "id": "2yWlGEgEfPot0lv3OAjuG3",
-        "name": "Just Keep Watching (From F1\u00ae The Movie)",
+        "name": "Die With A Smile",
         "popularity": 92,
         "uri": "spotify:track:2yWlGEgEfPot0lv3OAjuG3",
         "is_local": false
@@ -690,17 +690,17 @@
           "images": [
             {
               "height": 640,
-              "url": "https://i.scdn.co/image/ab67616d0000b273f67307349b14986af73d4fa0",
+              "url": "https://i.scdn.co/image/ab67616d0000b273fa2bcf3df669bde08b2e7d36",
               "width": 640
             },
             {
               "height": 300,
-              "url": "https://i.scdn.co/image/ab67616d00001e02f67307349b14986af73d4fa0",
+              "url": "https://i.scdn.co/image/ab67616d0000b273fa2bcf3df669bde08b2e7d36",
               "width": 300
             },
             {
               "height": 64,
-              "url": "https://i.scdn.co/image/ab67616d00004851f67307349b14986af73d4fa0",
+              "url": "https://i.scdn.co/image/ab67616d0000b273fa2bcf3df669bde08b2e7d36",
               "width": 64
             }
           ],
@@ -739,7 +739,7 @@
               "spotify": "https://open.spotify.com/artist/3ebS2RuCq8QeLyndUDmgB5"
             },
             "id": "3ebS2RuCq8QeLyndUDmgB5",
-            "name": "WizTheMc",
+            "name": "Alex Warren",
             "type": "artist",
             "uri": "spotify:artist:3ebS2RuCq8QeLyndUDmgB5"
           },
@@ -757,13 +757,13 @@
         "track_number": 1,
         "duration_ms": 176965,
         "external_ids": {
-          "isrc": "DE1FB2500005"
+          "isrc": "USAT22500463"
         },
         "external_urls": {
-          "spotify": "https://open.spotify.com/track/5ITV0zqzjOYfFWpW0xBmRa"
+          "spotify": "https://open.spotify.com/track/6qqrTXSdwiJaq8SO0X2lSe"
         },
         "id": "5ITV0zqzjOYfFWpW0xBmRa",
-        "name": "Show Me Love",
+        "name": "Ordinary",
         "popularity": 91,
         "uri": "spotify:track:5ITV0zqzjOYfFWpW0xBmRa",
         "is_local": false
@@ -799,17 +799,17 @@
           "images": [
             {
               "height": 640,
-              "url": "https://i.scdn.co/image/ab67616d0000b2736224d1236b0e0a0e1586efbb",
+              "url": "https://i.scdn.co/image/ab67616d0000b27371d62ea7ea8a5be92d3c1f62",
               "width": 640
             },
             {
               "height": 300,
-              "url": "https://i.scdn.co/image/ab67616d00001e026224d1236b0e0a0e1586efbb",
+              "url": "https://i.scdn.co/image/ab67616d0000b27371d62ea7ea8a5be92d3c1f62",
               "width": 300
             },
             {
               "height": 64,
-              "url": "https://i.scdn.co/image/ab67616d000048516224d1236b0e0a0e1586efbb",
+              "url": "https://i.scdn.co/image/ab67616d0000b27371d62ea7ea8a5be92d3c1f62",
               "width": 64
             }
           ],
@@ -839,7 +839,7 @@
               "spotify": "https://open.spotify.com/artist/41MozSoPIsD1dJM0CLPjZF"
             },
             "id": "41MozSoPIsD1dJM0CLPjZF",
-            "name": "BLACKPINK",
+            "name": "Billie Eilish",
             "type": "artist",
             "uri": "spotify:artist:41MozSoPIsD1dJM0CLPjZF"
           }
@@ -848,13 +848,13 @@
         "track_number": 1,
         "duration_ms": 164718,
         "external_ids": {
-          "isrc": "KRA402400094"
+          "isrc": "USUM72401994"
         },
         "external_urls": {
-          "spotify": "https://open.spotify.com/track/5H1sKFMzDeMtXwND3V6hRY"
+          "spotify": "https://open.spotify.com/track/6dOtVTDdiauQNBQEDOtlAB"
         },
         "id": "5H1sKFMzDeMtXwND3V6hRY",
-        "name": "JUMP",
+        "name": "BIRDS OF A FEATHER",
         "popularity": 95,
         "uri": "spotify:track:5H1sKFMzDeMtXwND3V6hRY",
         "is_local": false
@@ -890,17 +890,17 @@
           "images": [
             {
               "height": 640,
-              "url": "https://i.scdn.co/image/ab67616d0000b273de4b0388cb6e5267132a07bc",
+              "url": "https://i.scdn.co/image/ab67616d0000b273d9985092cd88bffd97653b58",
               "width": 640
             },
             {
               "height": 300,
-              "url": "https://i.scdn.co/image/ab67616d00001e02de4b0388cb6e5267132a07bc",
+              "url": "https://i.scdn.co/image/ab67616d0000b273d9985092cd88bffd97653b58",
               "width": 300
             },
             {
               "height": 64,
-              "url": "https://i.scdn.co/image/ab67616d00004851de4b0388cb6e5267132a07bc",
+              "url": "https://i.scdn.co/image/ab67616d0000b273d9985092cd88bffd97653b58",
               "width": 64
             }
           ],
@@ -930,7 +930,7 @@
               "spotify": "https://open.spotify.com/artist/33qOK5uJ8AR2xuQQAhHump"
             },
             "id": "33qOK5uJ8AR2xuQQAhHump",
-            "name": "Teddy Swims",
+            "name": "Kendrick Lamar, SZA",
             "type": "artist",
             "uri": "spotify:artist:33qOK5uJ8AR2xuQQAhHump"
           }
@@ -939,13 +939,13 @@
         "track_number": 1,
         "duration_ms": 184577,
         "external_ids": {
-          "isrc": "USWB12403749"
+          "isrc": "USUG12408496"
         },
         "external_urls": {
-          "spotify": "https://open.spotify.com/track/3nHuKdFJZm78CoeBnDcFKe"
+          "spotify": "https://open.spotify.com/track/45J4avUb9Ni0bnETYaYFVJ"
         },
         "id": "3nHuKdFJZm78CoeBnDcFKe",
-        "name": "Bad Dreams",
+        "name": "luther (with sza)",
         "popularity": 82,
         "uri": "spotify:track:3nHuKdFJZm78CoeBnDcFKe",
         "is_local": false

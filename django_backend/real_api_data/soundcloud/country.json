@@ -10,10 +10,10 @@
       {
         "type": "track",
         "id": 2022007873,
-        "permalink": "https://soundcloud.com/morgan-wallen/im-the-problem",
+        "permalink": "https://soundcloud.com/brettyoungofficial/you-still-got-it",
         "createdAt": "2025-01-30T16:48:44Z",
         "lastModified": "2025-05-23T19:50:41Z",
-        "title": "I'm The Problem",
+        "title": "You Still Got It",
         "caption": null,
         "description": null,
         "goPlus": false,
@@ -36,10 +36,10 @@
         "visuals": [],
         "publisher": {
           "albumTitle": "I'm The Problem",
-          "artist": "Morgan Wallen",
+          "artist": "Brett Young",
           "writerComposer": null,
           "upcOrEan": "00602475877783",
-          "isrc": "USUG12500975",
+          "isrc": "QZRD92506837",
           "pLine": "\u2117 2025 Big Loud Records, under exclusive license to Mercury Records, a division of UMG Records, Inc.",
           "cLine": "\u00a9 2025 Big Loud Records, under exclusive license to Mercury Records, a division of UMG Recordings, Inc."
         },
@@ -58,15 +58,16 @@
           "pro": false,
           "proUnlimited": true,
           "stationPermalink": "https://soundcloud.com/discover/sets/artist-stations:208010018"
-        }
+        },
+        "artwork_url": "https://i1.sndcdn.com/artworks-767NgHbmDM5H-0-original.jpg"
       },
       {
         "type": "track",
         "id": 2096390256,
-        "permalink": "https://soundcloud.com/morgan-wallen/i-got-better",
+        "permalink": "https://soundcloud.com/hudsonwestbrook/funny-seeing-you-here",
         "createdAt": "2025-05-15T15:07:50Z",
         "lastModified": "2025-05-23T19:50:46Z",
-        "title": "I Got Better",
+        "title": "Funny Seeing You Here",
         "caption": null,
         "description": null,
         "goPlus": false,
@@ -89,10 +90,10 @@
         "visuals": [],
         "publisher": {
           "albumTitle": "I\u2019m The Problem",
-          "artist": "Morgan Wallen",
+          "artist": "Hudson Westbrook",
           "writerComposer": null,
           "upcOrEan": "00602478099533",
-          "isrc": "USUG12501599",
+          "isrc": "USWB12501545",
           "pLine": "\u2117 2025 Big Loud Records, under exclusive license to Mercury Records, a division of UMG Records, Inc.",
           "cLine": "\u00a9 2025 Big Loud Records, under exclusive license to Mercury Records, a division of UMG Recordings, Inc."
         },
@@ -111,15 +112,16 @@
           "pro": false,
           "proUnlimited": true,
           "stationPermalink": "https://soundcloud.com/discover/sets/artist-stations:208010018"
-        }
+        },
+        "artwork_url": "https://i1.sndcdn.com/artworks-tu5p0W0E7kf1-0-original.jpg"
       },
       {
         "type": "track",
         "id": 2127011475,
-        "permalink": "https://soundcloud.com/tylernance/keeps-me-sane",
+        "permalink": "https://soundcloud.com/meganmoroneyofficial/6-months-later",
         "createdAt": "2025-07-09T08:38:21Z",
         "lastModified": "2025-07-09T08:38:37Z",
-        "title": "Keeps Me Sane",
+        "title": "6 Months Later",
         "caption": null,
         "description": null,
         "goPlus": false,
@@ -142,14 +144,16 @@
         "visuals": [],
         "publisher": {
           "albumTitle": "Keeps Me Sane",
-          "artist": "Tyler Nance",
+          "artist": "Megan Moroney",
           "writerComposer": null,
           "upcOrEan": "808391315679",
-          "isrc": "USLD91779673",
+          "isrc": "USQX92502917",
           "pLine": "\u2117 2025 Tyler Nance exclusively distributed by Santa Anna",
           "cLine": "\u00a9 2025 Tyler Nance exclusively distributed by Santa Anna"
         },
-        "tags": ["Singer/Songwriter"],
+        "tags": [
+          "Singer/Songwriter"
+        ],
         "user": {
           "type": "user",
           "id": 1421977965,
@@ -164,15 +168,16 @@
           "pro": false,
           "proUnlimited": false,
           "stationPermalink": "https://soundcloud.com/discover/sets/artist-stations:1421977965"
-        }
+        },
+        "artwork_url": "https://i1.sndcdn.com/artworks-SvnI1iYWeMh2-0-original.jpg"
       },
       {
         "type": "track",
         "id": 1927568495,
-        "permalink": "https://soundcloud.com/hudsonwestbrook/house-again",
+        "permalink": "https://soundcloud.com/zachtop/good-times-tan-lines",
         "createdAt": "2024-10-02T14:40:50Z",
         "lastModified": "2025-05-22T03:13:08Z",
-        "title": "House Again",
+        "title": "Good Times & Tan Lines",
         "caption": null,
         "description": null,
         "goPlus": false,
@@ -195,10 +200,10 @@
         "visuals": [],
         "publisher": {
           "albumTitle": "House Again",
-          "artist": "Hudson Westbrook",
+          "artist": "Zach Top",
           "writerComposer": null,
           "upcOrEan": "054391235046",
-          "isrc": "QZYG82300092",
+          "isrc": "QZWH32500400",
           "pLine": "\u2117 2024 River House Artists/Warner Music Nashville",
           "cLine": "\u00a9 2024 RiverHouse Artists"
         },
@@ -217,15 +222,16 @@
           "pro": false,
           "proUnlimited": true,
           "stationPermalink": "https://soundcloud.com/discover/sets/artist-stations:1392548952"
-        }
+        },
+        "artwork_url": "https://i1.sndcdn.com/artworks-UghNS2VeLOkn-0-original.png"
       },
       {
         "type": "track",
         "id": 2013742775,
-        "permalink": "https://soundcloud.com/tymyers-music/thought-it-was-love",
+        "permalink": "https://soundcloud.com/dierks-bentley/broken-branches-feat-john",
         "createdAt": "2025-01-20T21:32:47Z",
         "lastModified": "2025-06-15T01:19:24Z",
-        "title": "Thought It Was Love",
+        "title": "Broken Branches (feat. John Anderson & Riley Green)",
         "caption": null,
         "description": null,
         "goPlus": false,
@@ -248,10 +254,10 @@
         "visuals": [],
         "publisher": {
           "albumTitle": "The Select",
-          "artist": "Ty Myers",
+          "artist": "Dierks Bentley",
           "writerComposer": null,
           "upcOrEan": "196872607864",
-          "isrc": "USQX92406153",
+          "isrc": "USUG12502286",
           "pLine": "\u2117 2025 RECORDS Label, LLC/Columbia Records, under exclusive license from Ty Myers",
           "cLine": null
         },
@@ -270,15 +276,16 @@
           "pro": false,
           "proUnlimited": false,
           "stationPermalink": "https://soundcloud.com/discover/sets/artist-stations:1406199507"
-        }
+        },
+        "artwork_url": "https://i1.sndcdn.com/artworks-UZyCkd4a8f7V-0-original.jpg"
       },
       {
         "type": "track",
         "id": 2074237180,
-        "permalink": "https://soundcloud.com/hudsonwestbrook/sober",
+        "permalink": "https://soundcloud.com/tylerchilders/nose-on-the-grindstone",
         "createdAt": "2025-04-09T00:52:01Z",
         "lastModified": "2025-05-22T03:11:55Z",
-        "title": "Sober",
+        "title": "Nose On The Grindstone",
         "caption": null,
         "description": null,
         "goPlus": false,
@@ -301,10 +308,10 @@
         "visuals": [],
         "publisher": {
           "albumTitle": "Sober",
-          "artist": "Hudson Westbrook",
+          "artist": "tylerchilders",
           "writerComposer": null,
           "upcOrEan": "054391233998",
-          "isrc": "USWB12500856",
+          "isrc": "USRC12500852",
           "pLine": "\u2117 2025 River House Artists/Warner Music Nashville",
           "cLine": "\u00a9 2025 RiverHouse Artists"
         },
@@ -323,15 +330,16 @@
           "pro": false,
           "proUnlimited": true,
           "stationPermalink": "https://soundcloud.com/discover/sets/artist-stations:1392548952"
-        }
+        },
+        "artwork_url": "https://i1.sndcdn.com/artworks-t1CEmOf0Kq6l-0-original.jpg"
       },
       {
         "type": "track",
         "id": 1950603999,
-        "permalink": "https://soundcloud.com/shaboozey/good-news",
+        "permalink": "https://soundcloud.com/kane-brown-music/2-pair",
         "createdAt": "2024-11-06T01:16:51Z",
         "lastModified": "2025-07-02T18:45:28Z",
-        "title": "Good News",
+        "title": "2 Pair",
         "caption": null,
         "description": null,
         "goPlus": false,
@@ -354,10 +362,10 @@
         "visuals": [],
         "publisher": {
           "albumTitle": "Good News",
-          "artist": "Shaboozey",
+          "artist": "Kane Brown",
           "writerComposer": "Sean Cook, Nevin Sastry",
           "upcOrEan": "197342797344",
-          "isrc": "USUYG1580113",
+          "isrc": "US6XF2500163",
           "pLine": "\u2117 2024 American Dogwood / EMPIRE",
           "cLine": "\u00a9 2024 American Dogwood / EMPIRE"
         },
@@ -376,15 +384,16 @@
           "pro": false,
           "proUnlimited": false,
           "stationPermalink": "https://soundcloud.com/discover/sets/artist-stations:29475885"
-        }
+        },
+        "artwork_url": "https://i1.sndcdn.com/artworks-mLpHkmwgZosl-0-original.jpg"
       },
       {
         "type": "track",
         "id": 1936131269,
-        "permalink": "https://soundcloud.com/tymyers-music/ends-of-the-earth",
+        "permalink": "https://soundcloud.com/parkermccollum/killin-me",
         "createdAt": "2024-10-16T19:54:54Z",
         "lastModified": "2025-06-15T01:17:44Z",
-        "title": "Ends of the Earth",
+        "title": "Killin\u2019 Me",
         "caption": null,
         "description": null,
         "goPlus": false,
@@ -407,10 +416,10 @@
         "visuals": [],
         "publisher": {
           "albumTitle": "Ends of the Earth",
-          "artist": "Ty Myers",
+          "artist": "Parker McCollum",
           "writerComposer": null,
           "upcOrEan": "196872411874",
-          "isrc": "USQX92404450",
+          "isrc": "USUM72500586",
           "pLine": "\u2117 2024 RECORDS Label, LLC/Columbia Records, under exclusive license from Ty Myers",
           "cLine": null
         },
@@ -429,15 +438,16 @@
           "pro": false,
           "proUnlimited": false,
           "stationPermalink": "https://soundcloud.com/discover/sets/artist-stations:1406199507"
-        }
+        },
+        "artwork_url": "https://i1.sndcdn.com/artworks-z94hzxbMgeHR-0-original.jpg"
       },
       {
         "type": "track",
         "id": 1925093336,
-        "permalink": "https://soundcloud.com/sam-barber-321841066/thought-of-you",
+        "permalink": "https://soundcloud.com/cole-swindell/dale-jr",
         "createdAt": "2024-09-27T23:54:33Z",
         "lastModified": "2025-08-05T22:26:29Z",
-        "title": "Thought of You",
+        "title": "Dale Jr.",
         "caption": null,
         "description": null,
         "goPlus": false,
@@ -460,10 +470,10 @@
         "visuals": [],
         "publisher": {
           "albumTitle": "Thought of You",
-          "artist": "Sam Barber",
+          "artist": "Cole Swindell",
           "writerComposer": null,
           "upcOrEan": "075679629548",
-          "isrc": "USAT22408980",
+          "isrc": "USWB12500904",
           "pLine": "\u2117 2024 Sam Barber under exclusive license to Atlantic Recording Corporation.",
           "cLine": "\u00a9 2024 Sam Barber under exclusive license to Atlantic Recording Corporation."
         },
@@ -482,15 +492,16 @@
           "pro": false,
           "proUnlimited": true,
           "stationPermalink": "https://soundcloud.com/discover/sets/artist-stations:730240423"
-        }
+        },
+        "artwork_url": "https://i1.sndcdn.com/artworks-imFOTZkVExrx-0-original.jpg"
       },
       {
         "type": "track",
         "id": 2128192374,
-        "permalink": "https://soundcloud.com/vincentmason-music/damned-if-i-do",
+        "permalink": "https://soundcloud.com/achane/memphis-the-blues-feat-j-r",
         "createdAt": "2025-07-11T05:25:32Z",
         "lastModified": "2025-08-12T22:24:09Z",
-        "title": "Damned If I Do",
+        "title": "Memphis; The Blues (feat. J.R. Carroll)",
         "caption": null,
         "description": null,
         "goPlus": false,
@@ -513,10 +524,10 @@
         "visuals": [],
         "publisher": {
           "albumTitle": "Damned If I Do",
-          "artist": "Vincent Mason",
+          "artist": "Zach Bryan",
           "writerComposer": null,
           "upcOrEan": "00602478692758",
-          "isrc": "USUM72507195",
+          "isrc": "USWB12502035",
           "pLine": "\u2117 2025 Music Soup/Interscope Records",
           "cLine": "\u00a9 2025 Music Soup/Interscope Records"
         },
@@ -535,7 +546,8 @@
           "pro": false,
           "proUnlimited": false,
           "stationPermalink": "https://soundcloud.com/discover/sets/artist-stations:1223229814"
-        }
+        },
+        "artwork_url": "https://i1.sndcdn.com/artworks-lnHI69bKfTyC-0-original.jpg"
       },
       {
         "type": "track",
@@ -785,7 +797,9 @@
           "pLine": "\u2117 2025 Leo33",
           "cLine": "\u00a9 2025 Leo33"
         },
-        "tags": ["Traditional Country"],
+        "tags": [
+          "Traditional Country"
+        ],
         "user": {
           "type": "user",
           "id": 1383148506,
@@ -1050,7 +1064,9 @@
           "pLine": "\u2117 2025 Maoli Music",
           "cLine": "\u00a9 2025 Maoli Music under exclusive license to ONErpm"
         },
-        "tags": ["Reggae"],
+        "tags": [
+          "Reggae"
+        ],
         "user": {
           "type": "user",
           "id": 6938378,
@@ -1527,7 +1543,9 @@
           "pLine": "\u2117 2025 Maoli Music",
           "cLine": "\u00a9 2025 Maoli Music under exclusive license to ONErpm"
         },
-        "tags": ["Reggae"],
+        "tags": [
+          "Reggae"
+        ],
         "user": {
           "type": "user",
           "id": 6938378,
@@ -1739,7 +1757,9 @@
           "pLine": "\u2117 2024 Leo33",
           "cLine": "\u00a9 2024 Leo33"
         },
-        "tags": ["Traditional Country"],
+        "tags": [
+          "Traditional Country"
+        ],
         "user": {
           "type": "user",
           "id": 1383148506,
@@ -2428,7 +2448,9 @@
           "pLine": "\u2117 2025 Larry Fleet Music",
           "cLine": "\u00a9 2025 Larry Fleet Music"
         },
-        "tags": ["Americana"],
+        "tags": [
+          "Americana"
+        ],
         "user": {
           "type": "user",
           "id": 1223878126,
