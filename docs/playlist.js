@@ -1,4 +1,4 @@
-import { DJANGO_API_BASE_URL } from "./config.js";
+import { DJANGO_API_BASE_URL, getAggregatePlaylistEndpoint, getServicePlaylistEndpoint } from "./config.js";
 import { stateManager } from "./StateManager.js";
 
 export async function fetchAndDisplayLastUpdated(genre) {
@@ -45,7 +45,7 @@ export function setupSortButtons() {
 
 export async function updateMainPlaylist(genre, viewCountType) {
   try {
-    const url = `${DJANGO_API_BASE_URL}/playlist-data/${genre}`;
+    const url = getAggregatePlaylistEndpoint(genre);
     await fetchAndDisplayData(url, "main-playlist-data-placeholder", true, viewCountType);
   } catch (error) {
     console.error("Error updating main playlist:", error);
@@ -55,10 +55,8 @@ export async function updateMainPlaylist(genre, viewCountType) {
 export async function fetchAndDisplayPlaylists(genre) {
   const services = ["AppleMusic", "SoundCloud", "Spotify"];
   for (const service of services) {
-    await fetchAndDisplayData(
-      `${DJANGO_API_BASE_URL}/service-playlist/${genre}/${service}`,
-      `${service.toLowerCase()}-data-placeholder`
-    );
+    const url = getServicePlaylistEndpoint(genre, service);
+    await fetchAndDisplayData(url, `${service.toLowerCase()}-data-placeholder`);
   }
 }
 

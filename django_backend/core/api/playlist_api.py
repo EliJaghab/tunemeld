@@ -30,30 +30,31 @@ def get_aggregate_playlist(request, genre_name):
             service_track = position.service_track
             # Generate realistic fake view counts for staging TODO upgraaupgradede in next update
             import random
+
             youtube_views = random.randint(50000, 5000000)
             spotify_streams = random.randint(100000, 10000000)
-            
+
             # Find all services that have this ISRC for additional sources
             from core.models.c_playlist import ServiceTrack
-            cross_service_tracks = ServiceTrack.objects.filter(
-                isrc=position.isrc, 
-                genre=position.genre
-            ).select_related("service")
-            
+
+            cross_service_tracks = ServiceTrack.objects.filter(isrc=position.isrc, genre=position.genre).select_related(
+                "service"
+            )
+
             # Build additional sources from cross-service matches
             additional_sources = {}
             primary_service_name = None
             primary_track_url = None
-            
+
             for cs_track in cross_service_tracks:
                 service_name = cs_track.service.name
                 additional_sources[service_name] = cs_track.service_url
-                
+
                 # Use the reference service track as primary
                 if cs_track.id == service_track.id:
                     primary_service_name = service_name
                     primary_track_url = cs_track.service_url
-            
+
             track_data = {
                 "isrc": position.isrc or "",
                 "artist_name": service_track.artist_name,
@@ -68,22 +69,18 @@ def get_aggregate_playlist(request, genre_name):
                 "additional_sources": additional_sources,
                 "view_count_data_json": {
                     "Youtube": {
-                        "current_count_json": {
-                            "current_view_count": youtube_views
-                        },
+                        "current_count_json": {"current_view_count": youtube_views},
                         "initial_count_json": {
                             "initial_view_count": int(youtube_views * 0.8)  # 80% of current for initial
-                        }
+                        },
                     },
                     "Spotify": {
-                        "current_count_json": {
-                            "current_view_count": spotify_streams
-                        },
+                        "current_count_json": {"current_view_count": spotify_streams},
                         "initial_count_json": {
                             "initial_view_count": int(spotify_streams * 0.8)  # 80% of current for initial
-                        }
-                    }
-                }
+                        },
+                    },
+                },
             }
             tracks.append(track_data)
 
@@ -114,9 +111,10 @@ def get_playlist(request, genre_name, service_name):
             service_track = position.service_track
             # Generate realistic fake view counts for staging
             import random
+
             youtube_views = random.randint(50000, 5000000)
             spotify_streams = random.randint(100000, 10000000)
-            
+
             track_data = {
                 "isrc": position.isrc or "",
                 "artist_name": service_track.artist_name,
@@ -130,22 +128,18 @@ def get_playlist(request, genre_name, service_name):
                 "additional_sources": {},  # Empty for staging
                 "view_count_data_json": {
                     "Youtube": {
-                        "current_count_json": {
-                            "current_view_count": youtube_views
-                        },
+                        "current_count_json": {"current_view_count": youtube_views},
                         "initial_count_json": {
                             "initial_view_count": int(youtube_views * 0.8)  # 80% of current for initial
-                        }
+                        },
                     },
                     "Spotify": {
-                        "current_count_json": {
-                            "current_view_count": spotify_streams
-                        },
+                        "current_count_json": {"current_view_count": spotify_streams},
                         "initial_count_json": {
                             "initial_view_count": int(spotify_streams * 0.8)  # 80% of current for initial
-                        }
-                    }
-                }
+                        },
+                    },
+                },
             }
             tracks.append(track_data)
 
@@ -188,20 +182,15 @@ def get_last_updated(request, genre_name):
     try:
         # Import here to avoid circular imports
         from core.models.c_playlist import ServiceTrack
-        
+
         # Get the most recent service track update for this genre
-        latest_track = (
-            ServiceTrack.objects.filter(genre__name=genre_name)
-            .order_by('-updated_at')
-            .first()
-        )
+        latest_track = ServiceTrack.objects.filter(genre__name=genre_name).order_by("-updated_at").first()
 
         if not latest_track:
             return error_response("No data found for the specified genre", 404)
 
         return success_response(
-            {"last_updated": latest_track.updated_at.isoformat()},
-            "Last updated timestamp retrieved successfully"
+            {"last_updated": latest_track.updated_at.isoformat()}, "Last updated timestamp retrieved successfully"
         )
 
     except Exception as error:

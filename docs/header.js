@@ -1,4 +1,4 @@
-import { DJANGO_API_BASE_URL } from "./config.js";
+import { DJANGO_API_BASE_URL, getHeaderArtEndpoint } from "./config.js";
 
 export function showSkeletonLoaders() {
   document.querySelectorAll(".skeleton, .skeleton-text").forEach(el => {
@@ -16,7 +16,8 @@ export function hideSkeletonLoaders() {
 
 export async function fetchAndDisplayHeaderArt(genre) {
   try {
-    const response = await fetch(`${DJANGO_API_BASE_URL}/header-art/${genre}`);
+    const url = getHeaderArtEndpoint(genre);
+    const response = await fetch(url);
     if (!response.ok) {
       throw new Error(`Failed to fetch header art. Status: ${response.status}`);
     }
@@ -66,7 +67,7 @@ function displayServiceHeader(service, coverUrl, playlistUrl, playlistName, play
 
   if (coverUrl.endsWith(".m3u8") && service === "AppleMusic") {
     displayAppleMusicVideo(coverUrl);
-  } else {
+  } else if (imagePlaceholder) {
     imagePlaceholder.style.backgroundImage = `url('${coverUrl}')`;
   }
 

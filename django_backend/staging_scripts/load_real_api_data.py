@@ -76,23 +76,32 @@ class Command(BaseCommand):
             track_count = len(data.get("tracks", []))
             if genre == "dance":
                 metadata["name"] = "New EDM Hits: On The Up"
-                metadata["description"] = "Listen to New EDM Hits: On The Up, a playlist curated by SoundCloud on desktop and mobile."
+                metadata["description"] = (
+                    "Listen to New EDM Hits: On The Up, a playlist curated by SoundCloud on desktop and mobile."
+                )
                 metadata["cover_url"] = "https://i1.sndcdn.com/artworks-ZktqANNPL6Iv-0-t500x500.jpg"
             elif genre == "rap":
                 metadata["name"] = "Hip-Hop Central 2024"
-                metadata["description"] = "Listen to Hip-Hop Central, a playlist curated by SoundCloud on desktop and mobile."
+                metadata["description"] = (
+                    "Listen to Hip-Hop Central, a playlist curated by SoundCloud on desktop and mobile."
+                )
                 metadata["cover_url"] = "https://i1.sndcdn.com/artworks-BzofT6IH3SbJ-0-t500x500.jpg"
             elif genre == "pop":
                 metadata["name"] = "Pop Hits 2024 ⚡️ Top 100 Trending & Clean Pop Music"
-                metadata["description"] = "Listen to Pop Hits 2024 ⚡️ Top 100 Trending & Clean Pop Music, a playlist curated by NightSoul on desktop and mobile."
+                metadata["description"] = (
+                    "Listen to Pop Hits 2024 ⚡️ Top 100 Trending & Clean Pop Music, "
+                    "a playlist curated by NightSoul on desktop and mobile."
+                )
                 metadata["cover_url"] = "https://i1.sndcdn.com/artworks-ascSlTh2XuCP-0-t500x500.jpg"
             elif genre == "country":
                 metadata["name"] = "Country Gold"
-                metadata["description"] = "Listen to Country Gold, a playlist curated by SoundCloud on desktop and mobile."
+                metadata["description"] = (
+                    "Listen to Country Gold, a playlist curated by SoundCloud on desktop and mobile."
+                )
                 metadata["cover_url"] = "https://i1.sndcdn.com/artworks-qAFQzGJwGCcQ-0-t500x500.jpg"
 
         elif service == "spotify":
-            total_tracks = data.get("total", 0)
+            data.get("total", 0)
             if genre == "dance":
                 metadata["name"] = "Electronic Hits"
                 metadata["description"] = "Pulsing beats and electronic anthems to energize your day."
@@ -118,28 +127,36 @@ class Command(BaseCommand):
                     f"On danceXL, we highlight the biggest club tracks primed for mainstream crossover. "
                     f"{track_count} tracks from the global dance scene."
                 )
-                metadata["cover_url"] = "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/59/63/5e/59635e3b-7dce-3436-a0eb-8ecc564c426a/mza_17421468509622388447.png/296x296bb.jpg"
+                metadata["cover_url"] = (
+                    "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/59/63/5e/59635e3b-7dce-3436-a0eb-8ecc564c426a/mza_17421468509622388447.png/296x296bb.jpg"
+                )
             elif genre == "rap":
                 metadata["name"] = "Rap Life Apple Music Hip-Hop"
                 metadata["description"] = (
                     f"Rap Life is home to hip-hop's heavy hitters and its vanguard—the songs that speak "
                     f"to the moment. {track_count} tracks."
                 )
-                metadata["cover_url"] = "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/ad/71/dd/ad71dd2b-0673-c915-47b8-e46df99e8e5e/mza_5738536155853078823.png/296x296bb.jpg"
+                metadata["cover_url"] = (
+                    "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/ad/71/dd/ad71dd2b-0673-c915-47b8-e46df99e8e5e/mza_5738536155853078823.png/296x296bb.jpg"
+                )
             elif genre == "pop":
                 metadata["name"] = "A-List Pop Apple Music Pop"
                 metadata["description"] = (
                     f"The songs that define pop culture today. {track_count} tracks from pop's biggest "
                     "stars and rising artists."
                 )
-                metadata["cover_url"] = "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/04/a8/40/04a840d2-da7f-7894-4741-3e6ccd9b09b8/mza_8054457354980901388.png/296x296bb.jpg"
+                metadata["cover_url"] = (
+                    "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/04/a8/40/04a840d2-da7f-7894-4741-3e6ccd9b09b8/mza_8054457354980901388.png/296x296bb.jpg"
+                )
             elif genre == "country":
                 metadata["name"] = "Today's Country Apple Music Country"
                 metadata["description"] = (
                     f"This playlist tracks what's happening from the heart of the country scene to its "
                     f"outer edges. {track_count} tracks."
                 )
-                metadata["cover_url"] = "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/e1/7a/96/e17a96dc-f063-10a0-5d0e-bb8dd8a02c7f/mza_14127025726718981556.png/296x296bb.jpg"
+                metadata["cover_url"] = (
+                    "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/e1/7a/96/e17a96dc-f063-10a0-5d0e-bb8dd8a02c7f/mza_14127025726718981556.png/296x296bb.jpg"
+                )
 
         return metadata
 

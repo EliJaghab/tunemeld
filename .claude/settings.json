@@ -1,6 +1,6 @@
 {
   "permissions": {
-    "allow": ["mcp__railway__*"],
+    "allow": ["mcp__railway__*", "curl*"],
     "deny": [],
     "ask": []
   },
