@@ -18,8 +18,7 @@ logger = get_logger(__name__)
 class Command(BaseCommand):
     help = "Normalize raw playlist JSON data into Playlist and ServiceTrack tables"
 
-    def __init__(self, *args, **kwargs) -> None:
-        super().__init__(*args, **kwargs)
+    def handle(self, *args: object, **options: object) -> None:
         client_id = os.getenv("SPOTIFY_CLIENT_ID")
         client_secret = os.getenv("SPOTIFY_CLIENT_SECRET")
 
@@ -29,8 +28,6 @@ class Command(BaseCommand):
 
         self.spotify_service = SpotifyService(client_id, client_secret, isrc_cache_manager, None)
         self.apple_music_service = AppleMusicService(cache_service=album_cache_manager)
-
-    def handle(self, *args: object, **options: object) -> None:
         Playlist.objects.all().delete()
         ServiceTrack.objects.all().delete()
         raw_data_queryset = RawPlaylistData.objects.select_related("genre", "service").all()

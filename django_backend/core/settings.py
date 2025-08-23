@@ -6,14 +6,13 @@ from dotenv import load_dotenv
 
 
 def is_staging_mode():
-    return os.getenv("STAGING_MODE", "false").lower() == "true"
+    return os.getenv("RAILWAY_ENVIRONMENT") is None  # No Railway means local
 
 
 STAGING_MODE = is_staging_mode()
 
 environment = os.getenv("RAILWAY_ENVIRONMENT", "development")
 
-# Load environment file in staging mode
 # In production, environment variables are set directly by Railway
 if STAGING_MODE:
     env_file = Path(__file__).resolve().parent.parent.parent / ".env.dev"
@@ -128,6 +127,7 @@ LOGGING = {
 CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:5500",
     "http://localhost:3000",
+    "http://localhost:8080",
     "https://www.tunemeld.com",
     "https://api.tunemeld.com",
     "https://tunemeld.com",
@@ -175,21 +175,15 @@ USE_I18N = True
 
 USE_TZ = True
 
-# PostgreSQL database connection string from Railway
-# Format: postgresql://username:password@host:port/database_name
-# Used for: persistent storage of playlist data, user sessions, and application state
-DATABASE_URL = os.getenv("DATABASE_URL")
-
-if DATABASE_URL:
-    # Production: Use Railway PostgreSQL database
-    DATABASES = {"default": dj_database_url.parse(DATABASE_URL)}
-else:
-    # Development/Testing: Use file-based SQLite for Metabase integration
+if STAGING_MODE:
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.sqlite3",
             "NAME": BASE_DIR / "staging.db",
         }
     }
+else:
+    # Production: Use Railway PostgreSQL database
+    DATABASES = {"default": dj_database_url.parse(os.getenv("DATABASE_URL"))}
 
 USE_POSTGRES_API = STAGING_MODE

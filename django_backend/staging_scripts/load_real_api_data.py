@@ -8,7 +8,7 @@ from django.core.management.base import BaseCommand
 
 from playlist_etl.constants import SERVICE_CONFIGS, ServiceName
 
-MAX_TRACKS_PER_PLAYLIST = 5
+MAX_TRACKS_PER_PLAYLIST = 10
 
 
 class Command(BaseCommand):
@@ -70,58 +70,45 @@ class Command(BaseCommand):
 
         metadata = {"url": playlist_url, "name": "", "cover_url": "", "description": ""}
 
-        # this is webscraped data that does not come in the json payload
+        # Real production metadata from MongoDB
         if service == "soundcloud":
             metadata["url"] = data.get("permalinkUrl", playlist_url)
             track_count = len(data.get("tracks", []))
             if genre == "dance":
                 metadata["name"] = "New EDM Hits: On The Up"
-                metadata["description"] = (
-                    f"The freshest electronic dance music trending now. {track_count} tracks updated weekly "
-                    "to keep you moving."
-                )
+                metadata["description"] = "Listen to New EDM Hits: On The Up, a playlist curated by SoundCloud on desktop and mobile."
+                metadata["cover_url"] = "https://i1.sndcdn.com/artworks-ZktqANNPL6Iv-0-t500x500.jpg"
             elif genre == "rap":
                 metadata["name"] = "Hip-Hop Central 2024"
-                metadata["description"] = (
-                    f"The hottest rap tracks and hip-hop bangers. {track_count} songs featuring today's "
-                    "biggest artists."
-                )
+                metadata["description"] = "Listen to Hip-Hop Central, a playlist curated by SoundCloud on desktop and mobile."
+                metadata["cover_url"] = "https://i1.sndcdn.com/artworks-BzofT6IH3SbJ-0-t500x500.jpg"
             elif genre == "pop":
-                metadata["name"] = "Pop Hits 2024 ⚡️ Top 100 Trending"
-                metadata["description"] = (
-                    f"The biggest pop hits dominating the charts. {track_count} tracks updated weekly."
-                )
+                metadata["name"] = "Pop Hits 2024 ⚡️ Top 100 Trending & Clean Pop Music"
+                metadata["description"] = "Listen to Pop Hits 2024 ⚡️ Top 100 Trending & Clean Pop Music, a playlist curated by NightSoul on desktop and mobile."
+                metadata["cover_url"] = "https://i1.sndcdn.com/artworks-ascSlTh2XuCP-0-t500x500.jpg"
             elif genre == "country":
                 metadata["name"] = "Country Gold"
-                metadata["description"] = (
-                    f"The best of country music from Nashville and beyond. {track_count} tracks curated "
-                    "for country fans."
-                )
-            metadata["cover_url"] = f"https://i1.sndcdn.com/artworks-{genre}-playlist-large.jpg"
+                metadata["description"] = "Listen to Country Gold, a playlist curated by SoundCloud on desktop and mobile."
+                metadata["cover_url"] = "https://i1.sndcdn.com/artworks-qAFQzGJwGCcQ-0-t500x500.jpg"
 
         elif service == "spotify":
             total_tracks = data.get("total", 0)
             if genre == "dance":
                 metadata["name"] = "Electronic Hits"
-                metadata["description"] = (
-                    f"Pulsing beats and electronic anthems. {total_tracks} tracks to energize your day."
-                )
+                metadata["description"] = "Pulsing beats and electronic anthems to energize your day."
+                metadata["cover_url"] = "https://i.scdn.co/image/ab67706f00000002de32e22b3b9a42c05e61cf1e"
             elif genre == "rap":
                 metadata["name"] = "RapCaviar"
-                metadata["description"] = (
-                    f"New music from hip-hop's biggest names and rising stars. {total_tracks} tracks."
-                )
+                metadata["description"] = "New music from hip-hop's biggest names and rising stars."
+                metadata["cover_url"] = "https://i.scdn.co/image/ab67706f00000002dc222dc7e8ca2af6b3ba0eda"
             elif genre == "pop":
                 metadata["name"] = "Today's Top Hits"
-                metadata["description"] = (
-                    f"The most played songs right now. {total_tracks} tracks featuring today's biggest hits."
-                )
+                metadata["description"] = "The hottest 50. Cover: Ravyn Lenae"
+                metadata["cover_url"] = "https://i.scdn.co/image/ab67706f00000002a8be38445ab85cd96201e0f2"
             elif genre == "country":
                 metadata["name"] = "Hot Country"
-                metadata["description"] = (
-                    f"The biggest songs in country music. {total_tracks} tracks from country's finest."
-                )
-            metadata["cover_url"] = f"https://i.scdn.co/image/ab67706f00000002{genre[:8].zfill(8)}"
+                metadata["description"] = "The biggest songs in country music from country's finest."
+                metadata["cover_url"] = "https://i.scdn.co/image/ab67706f000000028e9cf01b5e2d83dfabece6c6"
 
         elif service == "apple_music":
             track_count = len(data.get("album_details", {}))
@@ -131,36 +118,28 @@ class Command(BaseCommand):
                     f"On danceXL, we highlight the biggest club tracks primed for mainstream crossover. "
                     f"{track_count} tracks from the global dance scene."
                 )
-                metadata["cover_url"] = (
-                    "https://mvod.itunes.apple.com/itunes-assets/HLSMusic115/v4/7a/c6/ca/7ac6ca6d-4a09-98a4-3f00-b828b72c9c9e/P359085557_default.m3u8"
-                )
+                metadata["cover_url"] = "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/59/63/5e/59635e3b-7dce-3436-a0eb-8ecc564c426a/mza_17421468509622388447.png/296x296bb.jpg"
             elif genre == "rap":
                 metadata["name"] = "Rap Life Apple Music Hip-Hop"
                 metadata["description"] = (
                     f"Rap Life is home to hip-hop's heavy hitters and its vanguard—the songs that speak "
                     f"to the moment. {track_count} tracks."
                 )
-                metadata["cover_url"] = (
-                    "https://mvod.itunes.apple.com/itunes-assets/HLSMusic122/v4/63/5f/47/635f47b8-d679-2d25-fae8-2dd0104ae786/P470409701_default.m3u8"
-                )
+                metadata["cover_url"] = "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/ad/71/dd/ad71dd2b-0673-c915-47b8-e46df99e8e5e/mza_5738536155853078823.png/296x296bb.jpg"
             elif genre == "pop":
                 metadata["name"] = "A-List Pop Apple Music Pop"
                 metadata["description"] = (
                     f"The songs that define pop culture today. {track_count} tracks from pop's biggest "
                     "stars and rising artists."
                 )
-                metadata["cover_url"] = (
-                    "https://mvod.itunes.apple.com/itunes-assets/HLSMusic120/v4/8b/3e/42/8b3e42d8-9c8f-2c45-d5bc-f1e7392cd8bb/P359220499_default.m3u8"
-                )
+                metadata["cover_url"] = "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/04/a8/40/04a840d2-da7f-7894-4741-3e6ccd9b09b8/mza_8054457354980901388.png/296x296bb.jpg"
             elif genre == "country":
                 metadata["name"] = "Today's Country Apple Music Country"
                 metadata["description"] = (
                     f"This playlist tracks what's happening from the heart of the country scene to its "
                     f"outer edges. {track_count} tracks."
                 )
-                metadata["cover_url"] = (
-                    "https://mvod.itunes.apple.com/itunes-assets/HLSMusic116/v4/cf/e3/25/cfe325dd-28c2-6396-d44d-12dae4f55ccb/P359220500_default.m3u8"
-                )
+                metadata["cover_url"] = "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/e1/7a/96/e17a96dc-f063-10a0-5d0e-bb8dd8a02c7f/mza_14127025726718981556.png/296x296bb.jpg"
 
         return metadata
 

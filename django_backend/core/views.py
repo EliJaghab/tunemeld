@@ -2,22 +2,17 @@ import logging
 from enum import Enum
 
 import requests
-from django.conf import settings
 from django.http import JsonResponse
 
 EDM_EVENTS_GITHUB_URL = "https://raw.githubusercontent.com/AidanJaghab/Beatmap/main/backend/data/latest_events.json"
 EDM_EVENTS_CACHE_KEY = "edm_events_data"
-
-print("[VIEWS] Loading Django views...")
 
 # Safe cache import with fallback
 try:
     from core.cache import Cache
 
     cache = Cache()
-    print("[VIEWS] Cache initialized successfully")
-except Exception as e:
-    print(f"[VIEWS] Cache initialization failed: {e}")
+except Exception:
     cache = None
 
 # Safe MongoDB imports with fallback
@@ -29,9 +24,7 @@ try:
         transformed_playlists_collection,
     )
 
-    print("[VIEWS] MongoDB collections imported successfully")
-except Exception as e:
-    print(f"[VIEWS] MongoDB import failed: {e}")
+except Exception:
     historical_track_views = None
     playlists_collection = None
     raw_playlists_collection = None
@@ -50,15 +43,7 @@ def create_response(status: ResponseStatus, message: str, data=None):
 
 
 def root(request):
-    """Root endpoint with extensive debugging"""
-    print("\n=== ROOT ENDPOINT CALLED ===")
-    print(f"🏠 Request method: {request.method}")
-    print(f"📍 Request path: {request.path}")
-    print(f"🌍 Request host: {request.get_host()}")
-    print(f"📄 Request headers: {dict(request.headers)}")
-    print(f"⚙️ Django settings DEBUG: {settings.DEBUG}")
-    print(f"📍 Django ALLOWED_HOSTS: {settings.ALLOWED_HOSTS}")
-    print("=== END ROOT DEBUG ===\n")
+    """Root endpoint"""
     return create_response(ResponseStatus.SUCCESS, "Welcome to the TuneMeld Backend! Django is running.")
 
 
