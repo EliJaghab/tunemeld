@@ -2,6 +2,7 @@ from core import views
 from django.conf import settings
 from django.urls import path
 from django.views.generic import RedirectView
+from graphene_django.views import GraphQLView
 
 if settings.STAGING_MODE:
     from core.api import playlist_api as api_views
@@ -39,6 +40,7 @@ if settings.STAGING_MODE:
             views.get_edm_events,
             name="get_edm_events",
         ),
+        path("gql/", GraphQLView.as_view(graphiql=True), name="graphql"),
     ]
 else:
     # Production mode: Legacy MongoDB endpoints
@@ -76,4 +78,5 @@ else:
             views.get_edm_events,
             name="get_edm_events",
         ),
+        path("gql/", GraphQLView.as_view(graphiql=True), name="graphql"),
     ]

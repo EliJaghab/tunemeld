@@ -65,6 +65,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static")
 INSTALLED_APPS = [
     "core.apps.CoreConfig",
     "corsheaders",
+    "graphene_django",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -187,3 +188,7 @@ else:
     DATABASES = {"default": dj_database_url.parse(os.getenv("DATABASE_URL"))}
 
 USE_POSTGRES_API = STAGING_MODE
+
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+GRAPHENE = {"SCHEMA": "core.graphql.schema.schema"}
