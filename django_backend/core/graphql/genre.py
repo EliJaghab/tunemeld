@@ -1,0 +1,25 @@
+import graphene
+from core.models import Genre
+from graphene_django import DjangoObjectType
+
+from playlist_etl.constants import GenreName
+
+
+class GenreType(DjangoObjectType):
+    class Meta:
+        model = Genre
+        fields = ("id", "name", "display_name")
+
+
+class GenreQuery(graphene.ObjectType):
+    genres = graphene.List(GenreType)
+    default_genre = graphene.String()
+
+    def resolve_genres(self, info):
+        return Genre.objects.filter(playlist__isnull=False).distinct().order_by("name")
+
+    def resolve_default_genre(self, info):
+        return GenreName.POP
+
+
+schema = graphene.Schema(query=GenreQuery)

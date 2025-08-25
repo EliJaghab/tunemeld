@@ -11,6 +11,12 @@ class NoCacheHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
         self.send_header("Expires", "0")
         super().end_headers()
 
+    def do_GET(self):  # noqa: N802
+        # SPA fallback: serve index.html for all routes that don't correspond to actual files
+        if not os.path.exists(self.translate_path(self.path)) and not self.path.startswith("/static/"):
+            self.path = "/index.html"
+        return super().do_GET()
+
 
 if __name__ == "__main__":
     os.chdir(os.path.join(os.path.dirname(__file__), "..", "docs"))

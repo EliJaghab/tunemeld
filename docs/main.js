@@ -1,34 +1,37 @@
 import { loadTitleContent } from "./title.js";
 import { setupSortButtons } from "./playlist.js";
-import { setupGenreSelector, setupViewCountTypeSelector, updateGenreData } from "./selectors.js";
+import { setupGenreSelector, setupViewCountTypeSelector } from "./selectors.js";
 import { setupBodyClickListener, setupClosePlayerButton } from "./servicePlayer.js";
 import { initializeTosPrivacyOverlay } from "./tosPrivacy.js";
 import { stateManager } from "./StateManager.js";
+import { loadGenresIntoSelector } from "./genre-loader.js";
+import { appRouter } from "./router.js";
 
 document.addEventListener("DOMContentLoaded", initializeApp);
 
-function initializeApp() {
-  loadTitleContent().then(() => {
-    applyStoredTheme();
-    setupThemeToggle();
+async function initializeApp() {
+  await loadTitleContent();
+  applyStoredTheme();
+  setupThemeToggle();
 
-    const genreSelector = document.getElementById("genre-selector");
-    const viewCountTypeSelector = document.getElementById("view-count-type-selector");
+  const genreSelector = document.getElementById("genre-selector");
+  const viewCountTypeSelector = document.getElementById("view-count-type-selector");
 
-    stateManager.initializeFromDOM();
+  stateManager.initializeFromDOM();
 
-    let currentGenre = genreSelector.value || "pop";
-    let viewCountType = stateManager.getViewCountType();
+  try {
+    await loadGenresIntoSelector();
+  } catch (error) {
+    console.error("Genre loader failed:", error);
+  }
 
-    updateGenreData(currentGenre, viewCountType, true);
+  await appRouter.initialize();
 
-    setupGenreSelector(genreSelector);
-    setupViewCountTypeSelector(viewCountTypeSelector);
-    setupBodyClickListener(currentGenre);
-    setupSortButtons();
-    setupClosePlayerButton();
-    initializeTosPrivacyOverlay();
-  });
+  setupGenreSelector(genreSelector);
+  setupViewCountTypeSelector(viewCountTypeSelector);
+  setupSortButtons();
+  setupClosePlayerButton();
+  initializeTosPrivacyOverlay();
 }
 
 function applyStoredTheme() {
