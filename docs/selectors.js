@@ -10,6 +10,7 @@ import {
 } from "./playlist.js";
 import { setupBodyClickListener } from "./servicePlayer.js";
 import { stateManager } from "./StateManager.js";
+import { appRouter } from "./router.js";
 
 export async function updateGenreData(genre, viewCountType, updateAll = false) {
   try {
@@ -33,7 +34,8 @@ export async function updateGenreData(genre, viewCountType, updateAll = false) {
 export function setupGenreSelector(genreSelector) {
   genreSelector.addEventListener("change", function () {
     const currentGenre = genreSelector.value;
-    updateGenreData(currentGenre, stateManager.getViewCountType(), true);
+
+    appRouter.navigateToGenre(currentGenre);
   });
 }
 
