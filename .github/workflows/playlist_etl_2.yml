@@ -51,7 +51,7 @@ jobs:
           RAILWAY_ENVIRONMENT: production
         run: |
           cd django_backend
-          python manage.py a_init_lookup_tables
+          python manage.py a_genre_service
 
       - name: Extract raw playlist data
         env:
@@ -61,7 +61,7 @@ jobs:
           RAILWAY_ENVIRONMENT: production
         run: |
           cd django_backend
-          python manage.py b_raw_extract
+          python manage.py b_raw_playlist
 
       - name: Normalize raw data into structured playlists
         env:
@@ -70,7 +70,7 @@ jobs:
           RAILWAY_ENVIRONMENT: production
         run: |
           cd django_backend
-          python manage.py c_normalize_raw_playlists
+          python manage.py c_playlist_service_track
 
       - name: Hydrate tracks with ISRC resolution
         env:
@@ -82,7 +82,7 @@ jobs:
           RAILWAY_ENVIRONMENT: production
         run: |
           cd django_backend
-          python manage.py d_hydrate_tracks
+          python manage.py d_track
 
       - name: Verify ETL pipeline results
         env:

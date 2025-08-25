@@ -1,0 +1,29 @@
+FROM python:3.11-slim
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    postgresql-client \
+    chromium \
+    chromium-driver \
+    && rm -rf /var/lib/apt/lists/*
+
+# Set working directory
+WORKDIR /app
+
+# Copy requirements
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy application code
+COPY django_backend/ ./django_backend/
+COPY playlist_etl/ ./playlist_etl/
+
+# Set environment variables
+ENV PYTHONPATH=/app
+ENV PYTHONUNBUFFERED=1
+
+# Make the cron script executable
+RUN chmod +x django_backend/etl_cron.py
+
+# Run the ETL pipeline
+CMD ["python", "django_backend/etl_cron.py"]
