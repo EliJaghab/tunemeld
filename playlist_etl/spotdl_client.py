@@ -1,5 +1,7 @@
 import json
 import subprocess
+import tempfile
+from pathlib import Path
 from typing import Any
 
 from playlist_etl.helpers import get_logger
@@ -21,37 +23,29 @@ def fetch_spotify_playlist_with_spotdl(playlist_url: str) -> JSON:
     except Exception as e:
         logger.warning(f"Could not get SpotDL version: {e}")
 
-    cmd = ["spotdl", "save", playlist_url, "--save-file", "-", "--lyrics", "genius"]
-
-    result = subprocess.run(cmd, capture_output=True, text=True, timeout=300)
-
-    if result.returncode != 0:
-        error_msg = f"SpotDL failed with exit code {result.returncode}"
-        if result.stderr:
-            error_msg += f": {result.stderr}"
-        if result.stdout:
-            error_msg += f" | stdout: {result.stdout}"
-        raise RuntimeError(error_msg)
-
-    # Parse the SpotDL JSON output from stdout
-    # SpotDL outputs some logging to stdout before the JSON, so we need to extract just the JSON part
-    stdout_lines = result.stdout.strip().split("\n")
-    json_start_idx = -1
-
-    # Find where the JSON array starts
-    for i, line in enumerate(stdout_lines):
-        if line.strip().startswith("["):
-            json_start_idx = i
-            break
-
-    if json_start_idx == -1:
-        raise RuntimeError(f"Could not find JSON array in SpotDL output: {result.stdout}")
-
-    json_output = "\n".join(stdout_lines[json_start_idx:])
+    # Create a temporary file with .spotdl extension
+    with tempfile.NamedTemporaryFile(mode="w+", suffix=".spotdl", delete=False) as temp_file:
+        temp_path = temp_file.name
 
     try:
-        spotdl_data = json.loads(json_output)
-    except json.JSONDecodeError as e:
-        raise RuntimeError(f"Failed to parse SpotDL output as JSON: {e}") from e
+        cmd = ["spotdl", "save", playlist_url, "--save-file", temp_path, "--lyrics", "genius"]
 
-    return spotdl_data
+        result = subprocess.run(cmd, capture_output=True, text=True, timeout=300)
+
+        if result.returncode != 0:
+            error_msg = f"SpotDL failed with exit code {result.returncode}"
+            if result.stderr:
+                error_msg += f": {result.stderr}"
+            if result.stdout:
+                error_msg += f" | stdout: {result.stdout}"
+            raise RuntimeError(error_msg)
+
+        # Read the JSON from the temp file
+        with open(temp_path) as f:
+            spotdl_data = json.load(f)
+
+        return spotdl_data
+
+    finally:
+        # Clean up the temp file
+        Path(temp_path).unlink(missing_ok=True)
