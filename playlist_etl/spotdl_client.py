@@ -14,12 +14,24 @@ def fetch_spotify_playlist_with_spotdl(playlist_url: str) -> JSON:
 
     logger.info(f"Fetching Spotify playlist {playlist_url} using SpotDL")
 
+    # Log SpotDL version for debugging
+    try:
+        version_result = subprocess.run(["spotdl", "--version"], capture_output=True, text=True, timeout=10)
+        logger.info(f"SpotDL version: {version_result.stdout.strip()}")
+    except Exception as e:
+        logger.warning(f"Could not get SpotDL version: {e}")
+
     cmd = ["spotdl", "save", playlist_url, "--save-file", "-", "--lyrics", "genius"]
 
     result = subprocess.run(cmd, capture_output=True, text=True, timeout=300)
 
     if result.returncode != 0:
-        raise RuntimeError(f"SpotDL failed with exit code {result.returncode}: {result.stderr}")
+        error_msg = f"SpotDL failed with exit code {result.returncode}"
+        if result.stderr:
+            error_msg += f": {result.stderr}"
+        if result.stdout:
+            error_msg += f" | stdout: {result.stdout}"
+        raise RuntimeError(error_msg)
 
     # Parse the SpotDL JSON output from stdout
     # SpotDL outputs some logging to stdout before the JSON, so we need to extract just the JSON part
