@@ -72,6 +72,7 @@ jobs:
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
+          MONGO_URI: ${{ secrets.MONGO_URI }}
           RAILWAY_ENVIRONMENT: production
         run: |
           cd django_backend
