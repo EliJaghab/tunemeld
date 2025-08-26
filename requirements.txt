@@ -30,4 +30,3 @@ psutil==6.0.0
 flake8==7.1.0
 free-proxy==1.1.1
 lyricsgenius==3.0.1
-tox==4.16.0
