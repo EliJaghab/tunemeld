@@ -1,5 +1,5 @@
 from core import views
-from core.graphql.genre import schema
+from core.graphql import schema
 from django.conf import settings
 from django.urls import path
 from django.views.decorators.csrf import csrf_exempt

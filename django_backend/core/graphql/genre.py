@@ -20,6 +20,3 @@ class GenreQuery(graphene.ObjectType):
 
     def resolve_default_genre(self, info):
         return GenreName.POP
-
-
-schema = graphene.Schema(query=GenreQuery)

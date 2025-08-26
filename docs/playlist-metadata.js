@@ -1,0 +1,184 @@
+import { graphqlClient } from "./graphql-client.js";
+
+export async function getPlaylistsByGenre(genre) {
+  const query = `
+    query GetPlaylistsByGenre($genre: String!) {
+      serviceOrder
+      playlistsByGenre(genre: $genre) {
+        playlistName
+        playlistCoverUrl
+        playlistCoverDescriptionText
+        playlistUrl
+        genreName
+        serviceName
+      }
+    }
+  `;
+
+  const data = await graphqlClient.query(query, { genre });
+  return {
+    serviceOrder: data.serviceOrder,
+    playlists: data.playlistsByGenre,
+  };
+}
+
+export async function displayPlaylistMetadata(genre, displayServiceCallback) {
+  try {
+    const { serviceOrder, playlists } = await getPlaylistsByGenre(genre);
+
+    serviceOrder.forEach(serviceName => {
+      const playlist = playlists.find(p => p.serviceName === serviceName);
+      if (playlist) {
+        displayServiceHeader(
+          serviceName,
+          playlist.playlistCoverUrl,
+          playlist.playlistUrl,
+          playlist.playlistName,
+          playlist.playlistCoverDescriptionText,
+          playlist.serviceName,
+          genre,
+          displayServiceCallback
+        );
+      } else {
+        console.warn(`No playlist data found for service: ${serviceName}`);
+      }
+    });
+  } catch (error) {
+    console.error("Error fetching playlist metadata:", error);
+    throw error;
+  }
+}
+
+function displayServiceHeader(
+  service,
+  coverUrl,
+  playlistUrl,
+  playlistName,
+  playlistDescription,
+  serviceName,
+  genre,
+  displayCallback
+) {
+  const imagePlaceholder = document.getElementById(`${service.toLowerCase()}-image-placeholder`);
+  const descriptionElement = document.getElementById(`${service.toLowerCase()}-description`);
+  const titleElement = document.getElementById(`${service.toLowerCase()}-playlist-title`);
+  const coverLinkElement = document.getElementById(`${service.toLowerCase()}-cover-link`);
+
+  if (coverUrl.endsWith(".m3u8") && service === "AppleMusic") {
+    displayAppleMusicVideo(coverUrl);
+  } else if (imagePlaceholder) {
+    imagePlaceholder.style.backgroundImage = `url('${coverUrl}')`;
+  }
+
+  if (titleElement) {
+    titleElement.textContent = playlistName;
+    titleElement.href = playlistUrl;
+  }
+
+  if (coverLinkElement) {
+    coverLinkElement.href = playlistUrl;
+  }
+
+  if (descriptionElement) {
+    setupDescriptionModal(descriptionElement, playlistDescription, playlistName, serviceName, genre);
+  }
+
+  // Call the optional display callback if provided
+  if (displayCallback) {
+    displayCallback({
+      service,
+      coverUrl,
+      playlistUrl,
+      playlistName,
+      description: playlistDescription,
+      serviceName,
+      genre,
+    });
+  }
+}
+
+function displayAppleMusicVideo(url) {
+  const videoContainer = document.getElementById("applemusic-video-container");
+  if (!videoContainer) return;
+
+  videoContainer.innerHTML = `
+    <video id="applemusic-video" class="video-js vjs-default-skin" muted autoplay loop playsinline controlsList="nodownload nofullscreen noremoteplayback"></video>
+  `;
+  const video = document.getElementById("applemusic-video");
+
+  if (typeof Hls !== "undefined" && Hls.isSupported()) {
+    const hls = new Hls();
+    hls.loadSource(url);
+    hls.attachMedia(video);
+    hls.on(Hls.Events.MANIFEST_PARSED, function () {
+      video.play();
+    });
+  } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
+    video.src = url;
+    video.addEventListener("canplay", function () {
+      video.play();
+    });
+  }
+}
+
+function setupDescriptionModal(descriptionElement, fullText, title, serviceName, genre) {
+  descriptionElement.removeEventListener("click", toggleDescriptionExpand);
+
+  const descriptionBoxWidth = descriptionElement.clientWidth;
+
+  let estimatedMaxTextLength;
+  if (isMobileView()) {
+    estimatedMaxTextLength = Math.floor((descriptionBoxWidth / 8) * 1.5) + 10;
+  } else {
+    estimatedMaxTextLength = Math.floor((descriptionBoxWidth / 8) * 1.5) + 15;
+  }
+
+  if (fullText.length > estimatedMaxTextLength) {
+    let truncatedText = fullText.substring(0, estimatedMaxTextLength);
+    truncatedText = truncatedText.substring(0, truncatedText.lastIndexOf(" ")) + "... ";
+
+    descriptionElement.innerHTML = `${truncatedText}<span class="more-button">MORE</span>`;
+    createAndAttachModal(descriptionElement, fullText, title, serviceName, genre);
+  } else {
+    descriptionElement.textContent = fullText;
+  }
+}
+
+function isMobileView() {
+  return window.innerWidth <= 480;
+}
+
+function createAndAttachModal(descriptionElement, fullText, title, serviceName, genre) {
+  const modal = document.createElement("div");
+  modal.className = "description-modal";
+  modal.innerHTML = `
+    <button class="description-modal-close">&times;</button>
+    <div class="description-modal-header">${title}</div>
+    <div class="description-modal-subheader">${serviceName} - ${genre}</div>
+    <div class="description-modal-content">${fullText}</div>
+  `;
+  document.body.appendChild(modal);
+
+  const overlay = document.createElement("div");
+  overlay.className = "description-overlay";
+  document.body.appendChild(overlay);
+
+  descriptionElement.querySelector(".more-button").addEventListener("click", function () {
+    modal.classList.add("active");
+    overlay.classList.add("active");
+  });
+
+  modal.querySelector(".description-modal-close").addEventListener("click", function () {
+    modal.classList.remove("active");
+    overlay.classList.remove("active");
+  });
+
+  overlay.addEventListener("click", function () {
+    modal.classList.remove("active");
+    overlay.classList.remove("active");
+  });
+}
+
+function toggleDescriptionExpand() {
+  this.classList.toggle("expanded");
+}

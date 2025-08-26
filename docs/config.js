@@ -19,10 +19,4 @@ export function getServicePlaylistEndpoint(genre, service) {
     : `${getDjangoApiBaseUrl()}/service-playlist/${genre}/${service}`;
 }
 
-export function getHeaderArtEndpoint(genre) {
-  return isLocalDevelopment()
-    ? `${getDjangoApiBaseUrl()}/playlist-metadata/${genre}`
-    : `${getDjangoApiBaseUrl()}/header-art/${genre}`;
-}
-
 export const DJANGO_API_BASE_URL = getDjangoApiBaseUrl();
