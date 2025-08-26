@@ -1,4 +1,3 @@
-import os
 from typing import Any
 
 from django.core.management import call_command
@@ -9,12 +8,9 @@ class Command(BaseCommand):
     help = "Run the complete playlist ETL pipeline"
 
     def add_arguments(self, parser):
-        parser.add_argument("--staging", action="store_true")
+        pass
 
     def handle(self, *args: Any, **options: Any) -> None:
-        if options.get("staging"):
-            os.environ["STAGING_MODE"] = "true"
-
         call_command("a_genre_service")
         call_command("b_raw_playlist")
         call_command("c_playlist_service_track")

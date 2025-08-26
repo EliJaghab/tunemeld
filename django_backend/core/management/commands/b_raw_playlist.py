@@ -18,7 +18,7 @@ class Command(BaseCommand):
     help = "Extract raw playlist data from RapidAPI and save to PostgreSQL"
 
     def handle(self, *args: object, **options: object) -> None:
-        if settings.STAGING_MODE:
+        if settings.ENVIRONMENT == settings.DEV:
             call_command("setup_staging")
             return
 
