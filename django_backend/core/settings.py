@@ -129,6 +129,20 @@ LOGGING = {
 }
 
 
+# Cache timeout - only cleared manually or by playlist ETL
+CACHE_TIMEOUT = 86400 * 7  # 7 days
+
+CACHES = {
+    "default": {
+        "BACKEND": "core.cache_backends.CloudflareKVCache",
+        "LOCATION": f"tunemeld-cache-{ENVIRONMENT}",
+        "TIMEOUT": CACHE_TIMEOUT,
+        "OPTIONS": {
+            "MAX_ENTRIES": 1000,
+        },
+    }
+}
+
 CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:5500",
     "http://localhost:3000",

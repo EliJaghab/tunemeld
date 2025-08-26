@@ -2,6 +2,7 @@ from core import views
 from core.graphql import schema
 from django.conf import settings
 from django.urls import path
+from django.views.decorators.cache import cache_page
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import RedirectView
 from graphene_django.views import GraphQLView
@@ -42,7 +43,11 @@ if settings.ENVIRONMENT == settings.DEV:
             views.get_edm_events,
             name="get_edm_events",
         ),
-        path("gql/", csrf_exempt(GraphQLView.as_view(graphiql=True, schema=schema)), name="graphql"),
+        path(
+            "gql/",
+            csrf_exempt(cache_page(settings.CACHE_TIMEOUT)(GraphQLView.as_view(graphiql=True, schema=schema))),
+            name="graphql",
+        ),
     ]
 else:
     # Production mode: Legacy MongoDB endpoints
@@ -80,5 +85,9 @@ else:
             views.get_edm_events,
             name="get_edm_events",
         ),
-        path("gql/", csrf_exempt(GraphQLView.as_view(graphiql=True, schema=schema)), name="graphql"),
+        path(
+            "gql/",
+            csrf_exempt(cache_page(settings.CACHE_TIMEOUT)(GraphQLView.as_view(graphiql=True, schema=schema))),
+            name="graphql",
+        ),
     ]
