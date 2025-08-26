@@ -52,7 +52,7 @@ dist/
 .ruff_cache/
 .venv/
 
-# Temporary patch files (from agentree workflow)
+# Temporary patch files
 *.patch
 
 # Metabase
