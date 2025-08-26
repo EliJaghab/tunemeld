@@ -30,3 +30,6 @@ ENV PYTHONPATH=/app
 
 # Expose port 8080 (matches Railway configuration)
 EXPOSE 8080
+
+# Start Django server
+CMD ["gunicorn", "--bind", "0.0.0.0:8080", "core.wsgi:application"]
