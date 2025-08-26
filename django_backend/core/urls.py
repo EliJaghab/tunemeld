@@ -6,12 +6,12 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import RedirectView
 from graphene_django.views import GraphQLView
 
-if settings.STAGING_MODE:
+if settings.ENVIRONMENT == settings.DEV:
     from core.api import playlist_api as api_views
 else:
     api_views = views
 
-if settings.STAGING_MODE:
+if settings.ENVIRONMENT == settings.DEV:
     # Staging mode: Only new PostgreSQL endpoints
     urlpatterns = [
         path("", views.root, name="root"),

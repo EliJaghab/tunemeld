@@ -1,22 +1,24 @@
 import os
 from pathlib import Path
+from typing import Final
 
 import dj_database_url
 from dotenv import load_dotenv
 
+DEV: Final = "dev"
+PROD: Final = "prod"
 
-def get_environment():
-    """Detect environment based on environment variables."""
+
+def get_environment() -> str:
     if os.getenv("RAILWAY_ENVIRONMENT") or os.getenv("GITHUB_ACTIONS"):
-        return "production"
-    return "development"
+        return PROD
+    return DEV
 
 
-environment = get_environment()
-STAGING_MODE = environment == "development"
+ENVIRONMENT = get_environment()
 
-# In production, environment variables are set directly by Railway
-if STAGING_MODE:
+# In dev, load environment variables from .env.dev file
+if ENVIRONMENT == DEV:
     env_file = Path(__file__).resolve().parent.parent.parent / ".env.dev"
     load_dotenv(env_file)
 
@@ -47,14 +49,14 @@ SECRET_KEY = os.getenv(
 )
 
 # Set DEBUG based on environment
-DEBUG = environment != "production"
+DEBUG = ENVIRONMENT == DEV
 
 ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "localhost,127.0.0.1,api.tunemeld.com,tunemeld.com,www.tunemeld.com").split(
     ","
 )
 
 # Minimal environment logging
-if environment == "production":
+if ENVIRONMENT == PROD:
     print("Railway Production Environment")
 else:
     print("Development Environment")
@@ -178,7 +180,7 @@ USE_I18N = True
 
 USE_TZ = True
 
-if STAGING_MODE:
+if ENVIRONMENT == DEV:
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.sqlite3",
@@ -189,7 +191,7 @@ else:
     # Production: Use Railway PostgreSQL database
     DATABASES = {"default": dj_database_url.parse(os.getenv("DATABASE_URL"))}
 
-USE_POSTGRES_API = STAGING_MODE
+USE_POSTGRES_API = ENVIRONMENT == DEV
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
