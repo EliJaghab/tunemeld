@@ -123,6 +123,32 @@ make prod
 make invalidate_cache
 ```
 
+## Railway Deployment & Debugging
+
+**Railway MCP Integration:** Claude has access to Railway MCP tools for deployment monitoring and debugging.
+
+**API Credentials:** Railway API token is available in `.env.dev` file:
+
+```bash
+RAILWAY_API_TOKEN=8000e980-7bb5-4d06-9288-22411eeeb73f
+```
+
+**Railway Commands Available:**
+
+- Monitor deployment status and logs
+- Check service health and configuration
+- Debug failed deployments
+- Manage environment variables
+- View project and service information
+
+**Project Information:**
+
+- Project ID: `b6a14488-05cf-43ad-85be-995c7bae75d1`
+- Service ID: `e791f98d-3033-4990-b159-b551f0e61f83` (tunemeld)
+- Environment ID: `8910d930-6bd7-4742-90a7-3c59b1b42217` (production)
+
+**Web Debugging:** Playwright MCP tools are available for browser automation and web testing.
+
 ## Development Workflow
 
 1. **Start servers:** `make serve-frontend` and `make serve-backend`
