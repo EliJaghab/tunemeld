@@ -106,19 +106,14 @@ class Command(BaseCommand):
         return [
             NormalizedTrack(
                 position=i + 1,
-                name=item["track"]["name"],
-                artist=", ".join(artist["name"] for artist in item["track"]["artists"]),
-                album=item["track"]["album"]["name"],
-                spotify_url=item["track"]["external_urls"]["spotify"],
-                isrc=item["track"]["external_ids"].get("isrc"),
-                duration=item["track"]["duration_ms"],
-                preview_url=item["track"]["preview_url"],
-                album_cover_url=item["track"]["album"]["images"][0]["url"]
-                if item["track"]["album"]["images"]
-                else None,
+                name=track.get("name", ""),
+                artist=", ".join(track.get("artists", [track.get("artist", "")])),
+                album=track.get("album_name", ""),
+                spotify_url=track.get("url", ""),
+                isrc=track.get("isrc"),
+                album_cover_url=track.get("cover_url"),
             )
-            for i, item in enumerate(raw_data["items"])
-            if item.get("track")
+            for i, track in enumerate(raw_data)
         ]
 
     def parse_apple_music_tracks(self, raw_data: dict) -> list[NormalizedTrack]:

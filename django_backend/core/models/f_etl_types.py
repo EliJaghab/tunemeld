@@ -108,8 +108,6 @@ class NormalizedTrack(BaseModel):
     spotify_url: str | None = None
     apple_music_url: str | None = None
     soundcloud_url: str | None = None
-    duration: int | None = None
-    preview_url: str | None = None
     album_cover_url: str | None = None
 
     @property

@@ -176,25 +176,51 @@ class Transform:
         # Handle case where data might be a JSON string instead of parsed dict
         if isinstance(data, str):
             data = json.loads(data)
-        for i, item in enumerate(data["items"]):
-            track_info = item["track"]
-            if not track_info:
-                continue
-            isrc = track_info["external_ids"]["isrc"]
 
-            track = self.get_track(isrc)
-            track.spotify_track_data.track_name = track_info["name"]
-            track.spotify_track_data.artist_name = ", ".join(artist["name"] for artist in track_info["artists"])
-            track.spotify_track_data.track_url = track_info["external_urls"]["spotify"]
-            track.spotify_track_data.album_cover_url = track_info["album"]["images"][0]["url"]
+        # Handle SpotDL raw format (list of tracks) vs old API format (items array)
+        if isinstance(data, list):
+            # SpotDL format - direct array of track objects
+            for i, track_data in enumerate(data):
+                isrc = track_data.get("isrc")
+                if not isrc:
+                    continue
 
-            self.playlist_ranks[(TrackSourceServiceName.SPOTIFY.value, genre_name)].append(
-                TrackRank(
-                    isrc=isrc,
-                    rank=i + 1,
-                    sources={TrackSourceServiceName.SPOTIFY: i + 1},
+                track = self.get_track(isrc)
+                track.spotify_track_data.track_name = track_data.get("name", "")
+                track.spotify_track_data.artist_name = ", ".join(
+                    track_data.get("artists", [track_data.get("artist", "")])
                 )
-            )
+                track.spotify_track_data.track_url = track_data.get("url", "")
+                track.spotify_track_data.album_cover_url = track_data.get("cover_url", "")
+
+                self.playlist_ranks[(TrackSourceServiceName.SPOTIFY.value, genre_name)].append(
+                    TrackRank(
+                        isrc=isrc,
+                        rank=i + 1,
+                        sources={TrackSourceServiceName.SPOTIFY: i + 1},
+                    )
+                )
+        else:
+            # Legacy format - items array with track objects
+            for i, item in enumerate(data["items"]):
+                track_info = item["track"]
+                if not track_info:
+                    continue
+                isrc = track_info["external_ids"]["isrc"]
+
+                track = self.get_track(isrc)
+                track.spotify_track_data.track_name = track_info["name"]
+                track.spotify_track_data.artist_name = ", ".join(artist["name"] for artist in track_info["artists"])
+                track.spotify_track_data.track_url = track_info["external_urls"]["spotify"]
+                track.spotify_track_data.album_cover_url = track_info["album"]["images"][0]["url"]
+
+                self.playlist_ranks[(TrackSourceServiceName.SPOTIFY.value, genre_name)].append(
+                    TrackRank(
+                        isrc=isrc,
+                        rank=i + 1,
+                        sources={TrackSourceServiceName.SPOTIFY: i + 1},
+                    )
+                )
 
     def set_youtube_urls(self) -> None:
         logger.info("Setting YouTube URLs for all tracks")
