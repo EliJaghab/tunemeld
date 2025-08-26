@@ -5,13 +5,15 @@ import dj_database_url
 from dotenv import load_dotenv
 
 
-def is_staging_mode():
-    return os.getenv("RAILWAY_ENVIRONMENT") is None  # No Railway means local
+def get_environment():
+    """Detect environment based on environment variables."""
+    if os.getenv("RAILWAY_ENVIRONMENT") or os.getenv("GITHUB_ACTIONS"):
+        return "production"
+    return "development"
 
 
-STAGING_MODE = is_staging_mode()
-
-environment = os.getenv("RAILWAY_ENVIRONMENT", "development")
+environment = get_environment()
+STAGING_MODE = environment == "development"
 
 # In production, environment variables are set directly by Railway
 if STAGING_MODE:
