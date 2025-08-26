@@ -73,6 +73,8 @@ jobs:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
           MONGO_URI: ${{ secrets.MONGO_URI }}
+          SPOTIFY_CLIENT_ID: ${{ secrets.SPOTIFY_CLIENT_ID }}
+          SPOTIFY_CLIENT_SECRET: ${{ secrets.SPOTIFY_CLIENT_SECRET }}
           RAILWAY_ENVIRONMENT: production
         run: |
           cd django_backend
