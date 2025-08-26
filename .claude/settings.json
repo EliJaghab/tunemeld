@@ -1,7 +1,13 @@
 {
   "permissions": {
     "allow": ["mcp__railway__*", "curl*"],
-    "deny": [],
+    "deny": [
+      "mcp__railway__project_create",
+      "mcp__railway__service_create",
+      "mcp__railway__database_create",
+      "mcp__railway__template_deploy",
+      "mcp__railway__volume_create"
+    ],
     "ask": []
   },
   "toolUsePermissions": {
