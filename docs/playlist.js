@@ -135,16 +135,20 @@ function createTableRow(track, isAggregated, viewCountType) {
   const youtubeStatCell = document.createElement("td");
   youtubeStatCell.className = "youtube-view-count";
 
-  // Debug log to see the actual data structure
-  console.log("Track data structure:", track.view_count_data_json);
-
-  youtubeStatCell.textContent =
-    track.view_count_data_json.Youtube.current_count_json.current_view_count.toLocaleString();
+  // Handle both production (MongoDB) and dev (PostgreSQL) data structures
+  const youtubeViews =
+    track.view_count_data_json?.Youtube?.current_count_json?.current_view_count ||
+    track.view_count_data_json?.YouTube?.current_count_json?.current_view_count ||
+    0;
+  youtubeStatCell.textContent = youtubeViews.toLocaleString();
 
   const spotifyStatCell = document.createElement("td");
   spotifyStatCell.className = "spotify-view-count";
-  spotifyStatCell.textContent =
-    track.view_count_data_json.Spotify.current_count_json.current_view_count.toLocaleString();
+  const spotifyViews =
+    track.view_count_data_json?.Spotify?.current_count_json?.current_view_count ||
+    track.view_count_data_json?.spotify?.current_count_json?.current_view_count ||
+    0;
+  spotifyStatCell.textContent = spotifyViews.toLocaleString();
 
   const seenOnCell = document.createElement("td");
   seenOnCell.className = "seen-on";
