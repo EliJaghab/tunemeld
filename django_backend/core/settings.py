@@ -33,6 +33,11 @@ CF_API_TOKEN = os.getenv("CF_API_TOKEN", "")
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+PROD_API_BASE_URL = "https://api.tunemeld.com"
+DEV_API_BASE_URL = "http://localhost:8000"
+
+INTERNAL_API_BASE_URL = DEV_API_BASE_URL if ENVIRONMENT == DEV else PROD_API_BASE_URL
+
 CSRF_TRUSTED_ORIGINS = [
     "https://www.tunemeld.com",
     "https://api.tunemeld.com",
@@ -55,7 +60,6 @@ ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "localhost,127.0.0.1,api.tunemeld.com
     ","
 )
 
-# Minimal environment logging
 if ENVIRONMENT == PROD:
     print("Railway Production Environment")
 else:

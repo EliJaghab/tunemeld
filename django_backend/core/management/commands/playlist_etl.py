@@ -16,3 +16,5 @@ class Command(BaseCommand):
         call_command("c_playlist_service_track")
         call_command("d_track")
         call_command("e_aggregate")
+        call_command("f_clear_cache")
+        call_command("g_warm_cache")
