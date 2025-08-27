@@ -16,11 +16,15 @@ export async function updateGenreData(genre, viewCountType, updateAll = false) {
   try {
     showSkeletonLoaders();
     if (updateAll) {
-      await fetchAndDisplayLastUpdated(genre);
-      await fetchAndDisplayHeaderArt(genre);
-      await fetchAndDisplayPlaylists(genre);
+      await Promise.all([
+        fetchAndDisplayLastUpdated(genre),
+        fetchAndDisplayHeaderArt(genre),
+        fetchAndDisplayPlaylists(genre),
+        updateMainPlaylist(genre, viewCountType),
+      ]);
+    } else {
+      await updateMainPlaylist(genre, viewCountType);
     }
-    await updateMainPlaylist(genre, viewCountType);
     sortTable("rank", "asc", "total-view-count");
     hideSkeletonLoaders();
     resetCollapseStates();

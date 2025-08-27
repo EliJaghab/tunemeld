@@ -115,6 +115,17 @@ class GraphQLClient {
       defaultGenre: data.defaultGenre,
     };
   }
+
+  async getAvailableServices() {
+    const query = `
+      query GetAvailableServices {
+        serviceOrder
+      }
+    `;
+
+    const data = await this.query(query);
+    return data.serviceOrder;
+  }
 }
 
 export const graphqlClient = new GraphQLClient();

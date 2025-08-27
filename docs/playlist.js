@@ -1,5 +1,6 @@
 import { DJANGO_API_BASE_URL, getAggregatePlaylistEndpoint, getServicePlaylistEndpoint } from "./config.js";
 import { stateManager } from "./StateManager.js";
+import { graphqlClient } from "./graphql-client.js";
 
 export async function fetchAndDisplayLastUpdated(genre) {
   try {
@@ -53,11 +54,12 @@ export async function updateMainPlaylist(genre, viewCountType) {
 }
 
 export async function fetchAndDisplayPlaylists(genre) {
-  const services = ["AppleMusic", "SoundCloud", "Spotify"];
-  for (const service of services) {
+  const services = await graphqlClient.getAvailableServices();
+  const promises = services.map(service => {
     const url = getServicePlaylistEndpoint(genre, service);
-    await fetchAndDisplayData(url, `${service.toLowerCase()}-data-placeholder`);
-  }
+    return fetchAndDisplayData(url, `${service.toLowerCase()}-data-placeholder`);
+  });
+  await Promise.all(promises);
 }
 
 async function fetchAndDisplayData(url, placeholderId, isAggregated = false, viewCountType) {
