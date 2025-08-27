@@ -4,6 +4,8 @@ import tempfile
 from pathlib import Path
 from typing import Any
 
+from tenacity import retry, stop_after_attempt, wait_exponential
+
 from playlist_etl.helpers import get_logger
 
 logger = get_logger(__name__)
@@ -12,7 +14,7 @@ JSON = dict[str, Any] | list[Any]
 
 
 def fetch_spotify_playlist_with_spotdl(playlist_url: str) -> JSON:
-    """Fetch Spotify playlist data using SpotDL and convert to Spotify API format"""
+    """Fetch Spotify playlist data using SpotDL with retry logic for intermittent failures"""
 
     logger.info(f"Fetching Spotify playlist {playlist_url} using SpotDL")
 
@@ -23,6 +25,16 @@ def fetch_spotify_playlist_with_spotdl(playlist_url: str) -> JSON:
     except Exception as e:
         logger.warning(f"Could not get SpotDL version: {e}")
 
+    return _fetch_spotify_playlist_with_retry(playlist_url)
+
+
+@retry(
+    wait=wait_exponential(multiplier=1, min=1, max=10),
+    stop=stop_after_attempt(3),
+    reraise=True,
+)
+def _fetch_spotify_playlist_with_retry(playlist_url: str) -> JSON:
+    """Internal function with retry decorator for SpotDL command execution"""
     # Create a temporary file with .spotdl extension
     with tempfile.NamedTemporaryFile(mode="w+", suffix=".spotdl", delete=False) as temp_file:
         temp_path = temp_file.name
