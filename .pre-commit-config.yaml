@@ -49,6 +49,14 @@ repos:
         pass_filenames: false
         files: ^django_backend/.*\.py$
 
+      - id: check-pip-dependencies
+        name: Check pip dependency compatibility
+        entry: python -m pip install --dry-run -r requirements.txt
+        language: system
+        files: requirements\.txt$
+        pass_filenames: false
+        verbose: false
+
   # Temporarily disabled - tests depend on unstaged changes from other branches
   # - repo: local
   #   hooks:
