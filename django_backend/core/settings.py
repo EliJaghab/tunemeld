@@ -134,7 +134,7 @@ CACHE_TIMEOUT = 86400 * 7  # 7 days
 
 CACHES = {
     "default": {
-        "BACKEND": "core.cache_backends.CloudflareKVCache",
+        "BACKEND": "core.cache.Cache",
         "LOCATION": f"tunemeld-cache-{ENVIRONMENT}",
         "TIMEOUT": CACHE_TIMEOUT,
         "OPTIONS": {
@@ -142,6 +142,11 @@ CACHES = {
         },
     }
 }
+
+# Cache middleware settings
+CACHE_MIDDLEWARE_ALIAS = "default"
+CACHE_MIDDLEWARE_SECONDS = CACHE_TIMEOUT
+CACHE_MIDDLEWARE_KEY_PREFIX = f"tunemeld-{ENVIRONMENT}"
 
 CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:5500",

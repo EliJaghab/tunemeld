@@ -56,13 +56,3 @@ repos:
         files: requirements\.txt$
         pass_filenames: false
         verbose: false
-
-  # Temporarily disabled - tests depend on unstaged changes from other branches
-  # - repo: local
-  #   hooks:
-  #     - id: unit-tests
-  #       name: Run basic unit tests (extract tests only)
-  #       entry: bash -c "source venv/bin/activate && python -m pytest tests/extract_test.py -v -m 'not external_api and not slow' --tb=short"
-  #       language: system
-  #       pass_filenames: false
-  #       stages: [pre-commit]

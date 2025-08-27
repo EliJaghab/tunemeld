@@ -1,53 +1,88 @@
+import json
+import logging
+import re
+from typing import Any
+
 import requests
 from core import settings
+from django.core.cache.backends.base import BaseCache
+
+logger = logging.getLogger(__name__)
 
 
-class Cache:
+class Cache(BaseCache):
     BASE_URL_TEMPLATE = "https://api.cloudflare.com/client/v4/accounts/{}/storage/kv/namespaces/{}/values/"
+    _session = None
 
-    def __init__(self):
-        print("[CACHE] Initializing Cache class...")
+    def __init__(self, server, params):
+        super().__init__(params)
+        logger.debug("Initializing Cache class...")
+
         self.CF_ACCOUNT_ID = settings.CF_ACCOUNT_ID or ""
         self.CF_NAMESPACE_ID = settings.CF_NAMESPACE_ID or ""
         self.CF_API_TOKEN = settings.CF_API_TOKEN or ""
 
+        if Cache._session is None:
+            Cache._session = requests.Session()
+            adapter = requests.adapters.HTTPAdapter(pool_connections=10, pool_maxsize=20, max_retries=0)
+            Cache._session.mount("https://", adapter)
+            Cache._session.headers.update(
+                {"Authorization": f"Bearer {self.CF_API_TOKEN}", "Content-Type": "application/json"}
+            )
+
         if self.CF_ACCOUNT_ID and self.CF_NAMESPACE_ID:
             self.BASE_URL = self.BASE_URL_TEMPLATE.format(self.CF_ACCOUNT_ID, self.CF_NAMESPACE_ID)
-            print("[CACHE] Cache initialized with Cloudflare KV")
+            logger.info("Cache initialized with Cloudflare KV + shared connection pool")
         else:
             self.BASE_URL = None
-            print("[CACHE] Cache running in fallback mode (no Cloudflare)")
+            logger.warning("Cache running in fallback mode (no Cloudflare)")
 
-    def get(self, key):
+    def get(self, key: str, default: Any = None, version: int | None = None) -> Any:
+        key = self.make_key(key, version=version)
+        sanitized_key = self._validate_key(key)
+
         if not self.BASE_URL:
-            return None
+            return default
 
         try:
-            url = self.BASE_URL + key
-            headers = {
-                "Authorization": f"Bearer {self.CF_API_TOKEN}",
-                "Content-Type": "application/json",
-            }
-            response = requests.get(url, headers=headers)
+            url = self.BASE_URL + sanitized_key
+            response = Cache._session.get(url)
             value = response.json().get("value")
-            return value
+            return json.loads(value) if value else default
         except Exception as e:
-            print(f"[CACHE] Error getting key {key}: {e}")
-            return None
+            logger.warning(f"Error getting key {key}: {e}")
+            return default
+
+    def set(self, key: str, value: Any, timeout: int | None = None, version: int | None = None) -> bool:
+        key = self.make_key(key, version=version)
+        sanitized_key = self._validate_key(key)
+
+        if not self.BASE_URL:
+            return False
+
+        try:
+            url = self.BASE_URL + sanitized_key
+            serialized_value = json.dumps(value)
+            response = Cache._session.put(url, json={"value": serialized_value})
+            response.raise_for_status()
+            result = response.json()
+            return result.get("success", False)
+        except Exception as e:
+            logger.warning(f"Error setting key {key}: {e}")
+            return False
 
     def put(self, key, value):
-        if not self.BASE_URL:
-            return {"success": False, "error": "Cache not configured"}
+        return self.set(key, value)
 
-        try:
-            url = self.BASE_URL + key
-            headers = {
-                "Authorization": f"Bearer {self.CF_API_TOKEN}",
-                "Content-Type": "application/json",
-            }
-            response = requests.put(url, headers=headers, json={"value": value})
-            response.raise_for_status()
-            return response.json()
-        except Exception as e:
-            print(f"[CACHE] Error putting key {key}: {e}")
-            return {"success": False, "error": str(e)}
+    def delete(self, key: str, version: int | None = None) -> bool:
+        return self.set(key, None, version=version)
+
+    def clear(self) -> bool:
+        return True
+
+    def has_key(self, key: str, version: int | None = None) -> bool:
+        return self.get(key, version=version) is not None
+
+    def _validate_key(self, key: str) -> str:
+        sanitized_key = re.sub(r"[^a-zA-Z0-9\-_]", "_", key)
+        return sanitized_key[:512] if len(sanitized_key) > 512 else sanitized_key

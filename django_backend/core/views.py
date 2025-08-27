@@ -56,15 +56,6 @@ def get_graph_data(request, genre_name):
     if playlists_collection is None:
         return create_response(ResponseStatus.ERROR, "Database not available", None)
 
-    key = f"graph_data_{genre_name}"
-
-    if cache:
-        cached_response = cache.get(key)
-        if cached_response:
-            return create_response(
-                ResponseStatus.SUCCESS, "Graph data retrieved successfully from cache", cached_response
-            )
-
     try:
 
         def get_tracks_from_playlist(genre_name: str) -> list[dict]:
@@ -103,7 +94,6 @@ def get_graph_data(request, genre_name):
                         ]
                         for view in view_counts
                     ]
-        cache.put(key, tracks)
         return create_response(ResponseStatus.SUCCESS, "Graph data retrieved successfully", tracks)
 
     except Exception as error:
