@@ -134,6 +134,10 @@ function createTableRow(track, isAggregated, viewCountType) {
 
   const youtubeStatCell = document.createElement("td");
   youtubeStatCell.className = "youtube-view-count";
+
+  // Debug log to see the actual data structure
+  console.log("Track data structure:", track.view_count_data_json);
+
   youtubeStatCell.textContent =
     track.view_count_data_json.Youtube.current_count_json.current_view_count.toLocaleString();
 
