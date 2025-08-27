@@ -3,6 +3,7 @@ import { updateGenreData } from "./selectors.js";
 import { stateManager } from "./StateManager.js";
 import { graphqlClient } from "./graphql-client.js";
 import { setupBodyClickListener } from "./servicePlayer.js";
+import { errorHandler } from "./error-handler.js";
 
 class AppRouter {
   constructor() {
@@ -13,6 +14,10 @@ class AppRouter {
   }
 
   async initialize() {
+    let graphqlError = null;
+
+    errorHandler.setRetryCallback(() => this.initialize());
+
     try {
       const data = await graphqlClient.getAvailableGenres();
       this.availableGenres = data.genres;
@@ -27,22 +32,39 @@ class AppRouter {
       console.log("Default genre from backend:", this.defaultGenre);
     } catch (error) {
       console.error("Failed to load genres from backend:", error);
-      this.showError("Unable to load genres from server. Please check your connection.");
-      return;
+      graphqlError = error;
+
+      this.availableGenres = [];
+      this.defaultGenre = null;
+
+      let technicalDetails = error.message;
+      if (error.stack) {
+        technicalDetails += "\n\nStack trace:\n" + error.stack;
+      }
+
+      errorHandler.showError(
+        "Genre loading service is currently unavailable. Some features may be limited.",
+        technicalDetails
+      );
     }
 
-    this.setupRoutes();
+    if (this.availableGenres.length > 0 && this.defaultGenre) {
+      this.setupRoutes();
+      this.router.resolve();
+    } else {
+      console.log("Skipping route setup - no genre data available. Static content only.");
+    }
 
-    this.router.resolve();
+    if (graphqlError) {
+      console.log("Continuing with limited functionality due to GraphQL error");
+    }
   }
 
   setupRoutes() {
-    // Genre route: /pop, /dance, etc.
     this.router.on("/:genre", async ({ data }) => {
       await this.handleGenreRoute(data.genre);
     });
 
-    // Default/root route
     this.router.on("/", () => {
       this.navigateToGenre(this.defaultGenre);
     });
@@ -54,7 +76,6 @@ class AppRouter {
   }
 
   async handleGenreRoute(genre) {
-    // Validate genre exists in backend data
     const isValidGenre = this.availableGenres.some(g => g.name === genre);
 
     if (!isValidGenre) {
@@ -63,24 +84,17 @@ class AppRouter {
       return;
     }
 
-    // Update current state
     this.currentGenre = genre;
 
-    // Update page title
     const genreDisplay = this.availableGenres.find(g => g.name === genre)?.displayName || genre;
     document.title = `tunemeld - ${genreDisplay}`;
-
-    // Update genre selector
     const genreSelector = document.getElementById("genre-selector");
     if (genreSelector && genreSelector.value !== genre) {
       genreSelector.value = genre;
     }
 
-    // Load genre data
     console.log(`Loading genre: ${genre}`);
     await updateGenreData(genre, stateManager.getViewCountType(), true);
-
-    // Setup body click listener for this genre
     setupBodyClickListener(genre);
   }
 
@@ -95,22 +109,6 @@ class AppRouter {
 
   getAvailableGenres() {
     return this.availableGenres;
-  }
-
-  showError(message) {
-    console.error("App Error:", message);
-
-    // Show error in the main content area
-    const mainContent = document.getElementById("main-content");
-    if (mainContent) {
-      mainContent.innerHTML = `
-        <div style="text-align: center; padding: 50px; color: #666;">
-          <h2>⚠️ Unable to Load</h2>
-          <p>${message}</p>
-          <p>Please refresh the page or check your internet connection.</p>
-        </div>
-      `;
-    }
   }
 }
 

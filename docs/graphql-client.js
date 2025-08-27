@@ -6,6 +6,8 @@ class GraphQLClient {
   }
 
   async query(query, variables = {}) {
+    const startTime = Date.now();
+
     try {
       const response = await fetch(this.endpoint, {
         method: "POST",
@@ -18,20 +20,80 @@ class GraphQLClient {
         }),
       });
 
+      const duration = Date.now() - startTime;
+
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        // Create detailed HTTP error
+        const errorDetails = {
+          status: response.status,
+          statusText: response.statusText,
+          url: this.endpoint,
+          duration: duration + "ms",
+          headers: Object.fromEntries(response.headers.entries()),
+        };
+
+        let responseBody = null;
+        try {
+          responseBody = await response.text();
+        } catch (e) {
+          responseBody = "Unable to read response body";
+        }
+
+        const error = new Error(`GraphQL HTTP Error: ${response.status} ${response.statusText}`);
+        error.details = errorDetails;
+        error.responseBody = responseBody;
+        error.isNetworkError = false;
+        error.isHttpError = true;
+        throw error;
       }
 
       const result = await response.json();
 
       if (result.errors) {
-        throw new Error(`GraphQL error: ${result.errors.map(e => e.message).join(", ")}`);
+        const error = new Error(`GraphQL Query Error: ${result.errors.map(e => e.message).join(", ")}`);
+        error.graphqlErrors = result.errors;
+        error.duration = duration + "ms";
+        error.endpoint = this.endpoint;
+        error.isNetworkError = false;
+        error.isGraphqlError = true;
+        throw error;
       }
 
       return result.data;
     } catch (error) {
-      console.error("GraphQL query failed:", error);
-      throw error;
+      const duration = Date.now() - startTime;
+
+      // If it's already our custom error, just add duration and re-throw
+      if (error.isNetworkError !== undefined) {
+        error.duration = duration + "ms";
+        console.error("GraphQL query failed:", error);
+        throw error;
+      }
+
+      // Handle network/fetch errors
+      let enhancedError;
+      if (error.name === "TypeError" && error.message.includes("fetch")) {
+        enhancedError = new Error(`Network Connection Failed: Unable to reach GraphQL server at ${this.endpoint}`);
+        enhancedError.originalMessage = error.message;
+        enhancedError.isNetworkError = true;
+        enhancedError.isConnectionError = true;
+      } else if (error.name === "AbortError") {
+        enhancedError = new Error(`Request Timeout: GraphQL query timed out after ${duration}ms`);
+        enhancedError.originalMessage = error.message;
+        enhancedError.isNetworkError = true;
+        enhancedError.isTimeoutError = true;
+      } else {
+        enhancedError = new Error(`Unexpected Error: ${error.message}`);
+        enhancedError.originalMessage = error.message;
+        enhancedError.isUnexpectedError = true;
+      }
+
+      enhancedError.duration = duration + "ms";
+      enhancedError.endpoint = this.endpoint;
+      enhancedError.stack = error.stack;
+
+      console.error("GraphQL query failed:", enhancedError);
+      throw enhancedError;
     }
   }
 
