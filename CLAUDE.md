@@ -127,11 +127,7 @@ make invalidate_cache
 
 **Railway MCP Integration:** Claude has access to Railway MCP tools for deployment monitoring and debugging.
 
-**API Credentials:** Railway API token is available in `.env.dev` file:
-
-```bash
-RAILWAY_API_TOKEN=8000e980-7bb5-4d06-9288-22411eeeb73f
-```
+**API Credentials:** Railway API token is stored securely in `.env.dev` file (not committed to git).
 
 **Railway Commands Available:**
 
