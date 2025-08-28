@@ -1,4 +1,4 @@
-import { DJANGO_API_BASE_URL, getAggregatePlaylistEndpoint, getServicePlaylistEndpoint } from "./config.js?v=20250828b";
+import { DJANGO_API_BASE_URL, getAggregatePlaylistEndpoint, getServicePlaylistEndpoint } from "./config.js?v=20250828c";
 import { stateManager } from "./StateManager.js";
 import { graphqlClient } from "./graphql-client.js";
 
