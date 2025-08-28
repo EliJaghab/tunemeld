@@ -1,4 +1,4 @@
-import { getDjangoApiBaseUrl } from "./config.js?v=20250828c";
+import { getDjangoApiBaseUrl } from "./config.js";
 
 class GraphQLClient {
   constructor() {
