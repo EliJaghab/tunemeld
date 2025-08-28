@@ -185,18 +185,26 @@ function displayViewCounts(track, row, viewCountType) {
   const youtubeCurrentViewCount =
     track.view_count_data_json?.Youtube?.current_count_json?.current_view_count ||
     track.view_count_data_json?.YouTube?.current_count_json?.current_view_count ||
+    track.view_counts?.Youtube?.[0]?.[1] ||
+    track.view_counts?.YouTube?.[0]?.[1] ||
     0;
   const youtubeInitialViewCount =
     track.view_count_data_json?.Youtube?.initial_count_json?.initial_view_count ||
     track.view_count_data_json?.YouTube?.initial_count_json?.initial_view_count ||
+    track.view_counts?.Youtube?.slice(-1)[0]?.[1] ||
+    track.view_counts?.YouTube?.slice(-1)[0]?.[1] ||
     0;
   const spotifyCurrentViewCount =
     track.view_count_data_json?.Spotify?.current_count_json?.current_view_count ||
     track.view_count_data_json?.spotify?.current_count_json?.current_view_count ||
+    track.view_counts?.Spotify?.[0]?.[1] ||
+    track.view_counts?.spotify?.[0]?.[1] ||
     0;
   const spotifyInitialViewCount =
     track.view_count_data_json?.Spotify?.initial_count_json?.initial_view_count ||
     track.view_count_data_json?.spotify?.initial_count_json?.initial_view_count ||
+    track.view_counts?.Spotify?.slice(-1)[0]?.[1] ||
+    track.view_counts?.spotify?.slice(-1)[0]?.[1] ||
     0;
 
   switch (viewCountType) {
