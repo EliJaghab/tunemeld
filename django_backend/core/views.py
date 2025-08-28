@@ -114,6 +114,77 @@ def get_playlist_data(request, genre_name):
         return create_response(ResponseStatus.ERROR, str(error), None)
 
 
+def get_aggregate_playlist(request, genre_name):
+    """Get aggregated playlist data from MongoDB by combining tracks across services."""
+    if transformed_playlists_collection is None:
+        return create_response(ResponseStatus.ERROR, "Database not available", None)
+
+    try:
+        from collections import defaultdict
+
+        # Get all service playlists for this genre
+        service_playlists = list(transformed_playlists_collection.find({"genre_name": genre_name}, {"_id": False}))
+
+        if not service_playlists:
+            return create_response(ResponseStatus.ERROR, "No data found for the specified genre", None)
+
+        # Group tracks by ISRC to find cross-service matches
+        isrc_tracks = defaultdict(dict)
+        service_priority = ["Spotify", "AppleMusic", "SoundCloud"]  # Priority order for ranking
+
+        for playlist in service_playlists:
+            service_name = playlist["service_name"]
+            for track in playlist.get("tracks", []):
+                if track.get("isrc"):
+                    isrc = track["isrc"]
+                    # Store the track data and rank for each service
+                    isrc_tracks[isrc][service_name] = {"track_data": track, "rank": track.get("rank", 999)}
+
+        # Create aggregate playlist from cross-service matches
+        aggregate_tracks = []
+        for _isrc, service_data in isrc_tracks.items():
+            # Only include ISRCs that appear in multiple services
+            if len(service_data) > 1:
+                # Use highest priority service for primary track data and ranking
+                primary_service = None
+                primary_rank = float("inf")
+
+                for service in service_priority:
+                    if service in service_data:
+                        primary_service = service
+                        primary_rank = service_data[service]["rank"]
+                        break
+
+                if primary_service:
+                    track_data = service_data[primary_service]["track_data"].copy()
+                    track_data["service"] = "Aggregate"
+                    track_data["rank"] = primary_rank
+
+                    # Add additional sources information
+                    additional_sources = {}
+                    for service, data in service_data.items():
+                        track = data["track_data"]
+                        if "service_url" in track:
+                            additional_sources[service] = track["service_url"]
+
+                    track_data["additional_sources"] = additional_sources
+                    track_data["source_name"] = primary_service
+                    aggregate_tracks.append(track_data)
+
+        # Sort by primary service rank and re-rank sequentially
+        aggregate_tracks.sort(key=lambda x: x["rank"])
+        for i, track in enumerate(aggregate_tracks, 1):
+            track["rank"] = i
+
+        data = [{"genre_name": genre_name, "service_name": "Aggregate", "tracks": aggregate_tracks}]
+
+        return create_response(ResponseStatus.SUCCESS, "Aggregate playlist data retrieved successfully", data)
+
+    except Exception as error:
+        logger.exception("Error in get_aggregate_playlist view")
+        return create_response(ResponseStatus.ERROR, str(error), None)
+
+
 def get_service_playlist(request, genre_name, service_name):
     if transformed_playlists_collection is None:
         return create_response(ResponseStatus.ERROR, "Database not available", None)

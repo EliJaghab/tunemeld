@@ -56,6 +56,11 @@ else:
         path("health/", views.health, name="health"),
         path("favicon.ico", RedirectView.as_view(url="/static/favicon.ico", permanent=True)),
         path(
+            "aggregate-playlist/<str:genre_name>",
+            views.get_aggregate_playlist,
+            name="get_aggregate_playlist_by_genre",
+        ),
+        path(
             "graph-data/<str:genre_name>",
             views.get_graph_data,
             name="get_graph_data_by_genre",
