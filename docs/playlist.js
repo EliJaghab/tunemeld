@@ -351,8 +351,8 @@ export function sortTable(column, order, viewCountType) {
 }
 
 function getViewCount(track, platform, viewCountType) {
-  const currentCount = track.view_count_data_json[platform].current_count_json.current_view_count;
-  const initialCount = track.view_count_data_json[platform].initial_count_json.initial_view_count;
+  const currentCount = track.view_count_data_json?.[platform]?.current_count_json?.current_view_count || 0;
+  const initialCount = track.view_count_data_json?.[platform]?.initial_count_json?.initial_view_count || 0;
 
   if (viewCountType === "total-view-count") {
     return currentCount;
