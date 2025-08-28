@@ -6,11 +6,8 @@ export function getDjangoApiBaseUrl() {
   return isLocalDevelopment() ? "http://localhost:8000" : "https://api.tunemeld.com";
 }
 
-// Centralized endpoint configuration during migration so we dont break Prod todo remove
 export function getAggregatePlaylistEndpoint(genre) {
-  return isLocalDevelopment()
-    ? `${getDjangoApiBaseUrl()}/aggregate-playlist/${genre}`
-    : `${getDjangoApiBaseUrl()}/playlist-data/${genre}`;
+  return `${getDjangoApiBaseUrl()}/aggregate-playlist/${genre}`;
 }
 
 export function getServicePlaylistEndpoint(genre, service) {
