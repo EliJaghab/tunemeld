@@ -3,12 +3,7 @@
 	aggregate \
 	view_count \
 	format \
-	format-js \
-	format-check \
-	clean-repo \
 	lint \
-	fix \
-	pull_push \
 	dev \
 	prod \
 	invalidate_cache \
@@ -74,35 +69,11 @@ historical_view_count:
 	@echo "Running view counts..."
 	PYTHONPATH=$(PROJECT_ROOT) python3 playlist_etl/historical_view_count.py
 
-format: setup_env
-	@echo "Running ruff to lint and format code aggressively..."
-	source venv/bin/activate && ruff check --fix --unsafe-fixes . && ruff format .
-	@echo "Formatting JavaScript files with Prettier..."
-	npx prettier --write "docs/**/*.js"
+format: install-pre-commit
+	@echo "🎨 Running pre-commit hooks to format and lint code..."
+	source venv/bin/activate && pre-commit run --all-files
+	@echo "✅ Code formatted and linted!"
 
-format-js:
-	@echo "Formatting JavaScript files with Prettier..."
-	npx prettier --write "docs/**/*.js"
-
-format-check:
-	@echo "Checking code formatting..."
-	source venv/bin/activate && ruff check . && ruff format --check .
-	@echo "Checking JavaScript formatting..."
-	npx prettier --check "docs/**/*.js"
-
-clean-repo: setup_env
-	@echo "🧹 Cleaning up repository with aggressive formatting..."
-	source venv/bin/activate && ruff check --fix --unsafe-fixes .
-	source venv/bin/activate && ruff format .
-	npx prettier --write "docs/**/*.js" "docs/**/*.html" "docs/**/*.css" "docs/**/*.md"
-	@echo "✅ Repository cleaned and formatted!"
-
-pull_push: setup_env
-	@git pull --rebase
-	@if [ $$? -ne 0 ]; then echo "Error: Failed to pull the latest changes. Aborting push."; exit 1; fi
-	@git push
-	@if [ $$? -ne 0 ]; then echo "Error: Failed to push the changes."; exit 1; fi
-	@echo "Successfully pulled, rebased, and pushed the changes."
 
 dev: setup_env
 	cd backend/backend && wrangler dev --env development src/index.ts
@@ -160,8 +131,8 @@ test-playlist-etl:
 	PYTHONPATH=$(PROJECT_ROOT) python3 playlist_etl/main.py
 
 lint: setup_env
-	@echo "Running linting checks..."
-	source venv/bin/activate && ruff check . && mypy .
+	@echo "Running type checking with mypy..."
+	source venv/bin/activate && mypy .
 
 install-dev: setup_env
 	@echo "Installing development dependencies..."
