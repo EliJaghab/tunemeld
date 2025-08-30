@@ -28,3 +28,5 @@ make format           # Format and lint all code (pre-commit hooks)
 4. Commit and push (hooks auto-run)
 
 **Claude Code must run `make format` (pre-commit hooks) before completing any coding task.**
+
+**DO NOT ADD COMMENTS unless explicitly asked. Write clean, self-documenting code.**

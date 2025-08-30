@@ -12,6 +12,7 @@ class ServiceName(str, Enum):
     SPOTIFY = "Spotify"
     APPLE_MUSIC = "AppleMusic"
     SOUNDCLOUD = "SoundCloud"
+    YOUTUBE = "YouTube"
 
 
 GENRE_DISPLAY_NAMES: dict[str, str] = {
@@ -30,6 +31,8 @@ SERVICE_CONFIGS: dict[str, dict] = {
         "host": "apple-music24.p.rapidapi.com",
         "param_key": "url",
         "playlist_base_url": "https://music.apple.com/us/playlist/",
+        "display_name": "Apple Music",
+        "icon_url": "images/apple_music_logo.png",
         "links": {
             GenreName.COUNTRY: "https://music.apple.com/us/playlist/todays-country/pl.87bb5b36a9bd49db8c975607452bfa2b",
             GenreName.DANCE: "https://music.apple.com/us/playlist/dancexl/pl.6bf4415b83ce4f3789614ac4c3675740",
@@ -42,6 +45,8 @@ SERVICE_CONFIGS: dict[str, dict] = {
         "host": "soundcloud-scraper.p.rapidapi.com",
         "param_key": "playlist",
         "playlist_base_url": "https://soundcloud.com/",
+        "display_name": "SoundCloud",
+        "icon_url": "images/soundcloud_logo.png",
         "links": {
             GenreName.COUNTRY: "https://soundcloud.com/trending-music-us/sets/country",
             GenreName.DANCE: "https://soundcloud.com/soundcloud-the-peak/sets/on-the-up-new-edm-hits",
@@ -54,11 +59,17 @@ SERVICE_CONFIGS: dict[str, dict] = {
         "host": "spotify23.p.rapidapi.com",
         "param_key": "id",
         "playlist_base_url": "https://open.spotify.com/playlist/",
+        "display_name": "Spotify",
+        "icon_url": "images/spotify_logo.png",
         "links": {
             GenreName.COUNTRY: "https://open.spotify.com/playlist/37i9dQZF1DX1lVhptIYRda",
             GenreName.DANCE: "https://open.spotify.com/playlist/37i9dQZF1DX4dyzvuaRJ0n",
             GenreName.POP: "https://open.spotify.com/playlist/37i9dQZF1DXcBWIGoYBM5M",
             GenreName.RAP: "https://open.spotify.com/playlist/37i9dQZF1DX0XUsuxWHRQd",
         },
+    },
+    ServiceName.YOUTUBE: {
+        "display_name": "YouTube",
+        "icon_url": "images/youtube_logo.png",
     },
 }

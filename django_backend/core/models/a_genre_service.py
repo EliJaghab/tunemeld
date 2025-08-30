@@ -66,6 +66,7 @@ class Service(models.Model):
         help_text="Internal service identifier",
     )
     display_name = models.CharField(max_length=100, help_text="Human-readable service name")
+    icon_url = models.CharField(max_length=200, help_text="URL to service icon image", default="")
 
     class Meta:
         db_table = "services"

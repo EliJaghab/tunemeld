@@ -1,11 +1,29 @@
+import os
+
 from core.models import ServiceTrack, Track
 from django.core.management.base import BaseCommand
 
 from playlist_etl.constants import ServiceName
+from playlist_etl.helpers import get_logger
+from playlist_etl.mongo_db_client import MongoDBClient
+from playlist_etl.services import AppleMusicService, YouTubeService
+from playlist_etl.utils import CacheManager
+
+logger = get_logger(__name__)
 
 
 class Command(BaseCommand):
     help = "Create canonical Track records from ServiceTrack records by ISRC"
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.mongo_client = MongoDBClient()
+        self.youtube_service = YouTubeService(
+            api_key=os.getenv("GOOGLE_API_KEY"), cache_manager=CacheManager(self.mongo_client, "youtube_url_cache")
+        )
+        self.apple_music_service = AppleMusicService(
+            cache_service=CacheManager(self.mongo_client, "apple_music_album_cover_cache")
+        )
 
     def handle(self, *args: object, **options: object) -> None:
         Track.objects.all().delete()
@@ -50,6 +68,7 @@ class Command(BaseCommand):
             "album_cover_url": primary_track.album_cover_url,
         }
 
+        apple_music_url = None
         for service_track in service_tracks:
             service_name = service_track.service.name
 
@@ -57,8 +76,18 @@ class Command(BaseCommand):
                 track_data["spotify_url"] = service_track.service_url
             elif service_name == ServiceName.APPLE_MUSIC:
                 track_data["apple_music_url"] = service_track.service_url
+                apple_music_url = service_track.service_url
             elif service_name == ServiceName.SOUNDCLOUD:
                 track_data["soundcloud_url"] = service_track.service_url
+
+        if not track_data["album_cover_url"] and apple_music_url:
+            album_cover_url = self.apple_music_service.get_album_cover_url(apple_music_url)
+            if album_cover_url:
+                track_data["album_cover_url"] = album_cover_url
+
+        youtube_url = self.youtube_service.get_youtube_url(primary_track.track_name, primary_track.artist_name)
+        if youtube_url:
+            track_data["youtube_url"] = youtube_url
 
         track = Track.objects.create(**track_data)
         service_tracks.update(track=track)
