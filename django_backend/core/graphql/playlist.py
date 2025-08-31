@@ -1,42 +1,40 @@
 import graphene
-from core.models.b_raw_playlist import RawPlaylistData
-from graphene_django import DjangoObjectType
+from core.graphql.track import TrackType
+from core.models.c_playlist import Playlist
 
 from playlist_etl.constants import ServiceName
 
 
-class PlaylistType(DjangoObjectType):
-    class Meta:
-        model = RawPlaylistData
-        fields = (
-            "id",
-            "playlist_name",
-            "playlist_cover_url",
-            "playlist_cover_description_text",
-            "playlist_url",
-            "created_at",
-        )
+class PlaylistType(graphene.ObjectType):
+    """GraphQL type for playlists with tracks."""
 
-    genre_name = graphene.String()
-    service_name = graphene.String()
-
-    def resolve_genre_name(self, info):
-        return self.genre.name
-
-    def resolve_service_name(self, info):
-        return self.service.name
+    genre_name = graphene.String(required=True)
+    service_name = graphene.String(required=True)
+    tracks = graphene.List(TrackType, required=True)
 
 
 class PlaylistQuery(graphene.ObjectType):
-    playlists_by_genre = graphene.List(PlaylistType, genre=graphene.String(required=True))
     service_order = graphene.List(graphene.String)
-
-    def resolve_playlists_by_genre(self, info, genre):
-        return (
-            RawPlaylistData.objects.select_related("genre", "service")
-            .filter(genre__name=genre)
-            .order_by("service__name")
-        )
+    playlist = graphene.Field(
+        PlaylistType, genre=graphene.String(required=True), service=graphene.String(required=True)
+    )
 
     def resolve_service_order(self, info):
+        """Used to order the header art."""
         return [ServiceName.SOUNDCLOUD, ServiceName.APPLE_MUSIC, ServiceName.SPOTIFY]
+
+    def resolve_playlist(self, info, genre, service):
+        """Get playlist data for any service (including Aggregate) and genre."""
+        playlists = (
+            Playlist.objects.select_related("service_track", "service_track__track")
+            .filter(genre__name=genre, service__name=service)
+            .order_by("position")
+        )
+
+        tracks = [
+            playlist_entry.service_track.track
+            for playlist_entry in playlists
+            if playlist_entry.service_track and playlist_entry.service_track.track
+        ]
+
+        return PlaylistType(genre_name=genre, service_name=service, tracks=tracks)
