@@ -28,6 +28,9 @@ RUN echo "=== VERIFYING FILE COPY ===" && \
 # Set Python path for Django
 ENV PYTHONPATH=/app
 
+# Collect static files for production
+RUN python manage.py collectstatic --noinput
+
 # Expose port 8080 (matches Railway configuration)
 EXPOSE 8080
 
