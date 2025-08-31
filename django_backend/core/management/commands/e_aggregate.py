@@ -25,7 +25,7 @@ class Command(BaseCommand):
     def handle(self, *args: Any, **options: Any) -> None:
         logger.info("Starting aggregate playlist generation...")
 
-        Playlist.objects.filter(service__name="Aggregate").delete()
+        Playlist.objects.filter(service__name=ServiceName.TUNEMELD).delete()
         cross_service_matches = self.find_cross_service_isrcs()
         self.create_aggregate_playlists(cross_service_matches)
 
@@ -79,8 +79,8 @@ class Command(BaseCommand):
     def create_aggregate_playlists(self, cross_service_matches: dict[int, list[dict]]) -> None:
         """Create aggregate playlist entries for cross-service tracks."""
 
-        # Get or create Aggregate service
-        aggregate_service, _ = Service.objects.get_or_create(name="Aggregate")
+        # Get or create tunemeld service
+        aggregate_service, _ = Service.objects.get_or_create(name=ServiceName.TUNEMELD)
 
         for genre_id, matches in cross_service_matches.items():
             genre = Genre.objects.get(id=genre_id)

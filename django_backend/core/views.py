@@ -4,6 +4,8 @@ from enum import Enum
 import requests
 from django.http import JsonResponse
 
+from playlist_etl.constants import ServiceName
+
 EDM_EVENTS_GITHUB_URL = "https://raw.githubusercontent.com/AidanJaghab/Beatmap/main/backend/data/latest_events.json"
 EDM_EVENTS_CACHE_KEY = "edm_events_data"
 
@@ -157,7 +159,7 @@ def get_aggregate_playlist(request, genre_name):
 
                 if primary_service:
                     track_data = service_data[primary_service]["track_data"].copy()
-                    track_data["service"] = "Aggregate"
+                    track_data["service"] = ServiceName.TUNEMELD
                     track_data["rank"] = primary_rank
 
                     # Add additional sources information
@@ -176,9 +178,9 @@ def get_aggregate_playlist(request, genre_name):
         for i, track in enumerate(aggregate_tracks, 1):
             track["rank"] = i
 
-        data = [{"genre_name": genre_name, "service_name": "Aggregate", "tracks": aggregate_tracks}]
+        data = [{"genre_name": genre_name, "service_name": ServiceName.TUNEMELD, "tracks": aggregate_tracks}]
 
-        return create_response(ResponseStatus.SUCCESS, "Aggregate playlist data retrieved successfully", data)
+        return create_response(ResponseStatus.SUCCESS, "tunemeld playlist data retrieved successfully", data)
 
     except Exception as error:
         logger.exception("Error in get_aggregate_playlist view")

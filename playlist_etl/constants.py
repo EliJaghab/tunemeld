@@ -9,10 +9,11 @@ class GenreName(str, Enum):
 
 
 class ServiceName(str, Enum):
-    SPOTIFY = "Spotify"
-    APPLE_MUSIC = "AppleMusic"
-    SOUNDCLOUD = "SoundCloud"
-    YOUTUBE = "YouTube"
+    SPOTIFY = "spotify"
+    APPLE_MUSIC = "apple_music"
+    SOUNDCLOUD = "soundcloud"
+    YOUTUBE = "youtube"
+    TUNEMELD = "tunemeld"
 
 
 GENRE_DISPLAY_NAMES: dict[str, str] = {
@@ -71,5 +72,9 @@ SERVICE_CONFIGS: dict[str, dict] = {
     ServiceName.YOUTUBE: {
         "display_name": "YouTube",
         "icon_url": "images/youtube_logo.png",
+    },
+    ServiceName.TUNEMELD: {
+        "display_name": "tunemeld",
+        "icon_url": "images/tunemeld_logo.png",
     },
 }

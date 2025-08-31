@@ -8,6 +8,8 @@ from core.api.utils import error_response, success_response
 from core.models.b_raw_playlist import RawPlaylistData
 from core.models.c_playlist import Playlist
 
+from playlist_etl.constants import ServiceName
+
 logger = logging.getLogger(__name__)
 
 
@@ -16,7 +18,7 @@ def get_aggregate_playlist(request, genre_name):
     try:
         # Get aggregate playlist positions (cross-service ISRC matches only)
         playlist_positions = (
-            Playlist.objects.filter(genre__name=genre_name, service__name="Aggregate")
+            Playlist.objects.filter(genre__name=genre_name, service__name=ServiceName.TUNEMELD)
             .select_related("service_track", "genre", "service")
             .order_by("position")
         )
@@ -60,7 +62,7 @@ def get_aggregate_playlist(request, genre_name):
                 "artist_name": service_track.artist_name,
                 "track_name": service_track.track_name,
                 "rank": position.position,
-                "service": "Aggregate",  # This is an aggregate playlist
+                "service": ServiceName.TUNEMELD,  # This is an aggregate playlist
                 "album_cover_url": service_track.album_cover_url or "",
                 "service_url": service_track.service_url,
                 # Add fields expected by frontend for source links
@@ -86,7 +88,7 @@ def get_aggregate_playlist(request, genre_name):
 
         data = [{"genre_name": genre_name, "tracks": tracks}]
 
-        return success_response(data, "Aggregate playlist data retrieved successfully")
+        return success_response(data, "tunemeld playlist data retrieved successfully")
 
     except Exception as error:
         logger.exception("Error in PostgreSQL get_aggregate_playlist view")
