@@ -66,7 +66,7 @@ function openPlayer(url, serviceType) {
       iframe.allow = "encrypted-media";
       iframe.height = "80";
       break;
-    case "applemusic":
+    case "apple_music":
       const appleMusicId = getAppleMusicId(url);
       iframe.src = `https://embed.music.apple.com/us/album/${appleMusicId}`;
       iframe.allow = "autoplay *; encrypted-media *;";

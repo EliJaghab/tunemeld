@@ -59,12 +59,21 @@ function displayServiceHeader(
   genre,
   displayCallback
 ) {
-  const imagePlaceholder = document.getElementById(`${service.toLowerCase()}-image-placeholder`);
-  const descriptionElement = document.getElementById(`${service.toLowerCase()}-description`);
-  const titleElement = document.getElementById(`${service.toLowerCase()}-playlist-title`);
-  const coverLinkElement = document.getElementById(`${service.toLowerCase()}-cover-link`);
+  // Map service names to HTML element ID prefixes
+  const serviceIdMapping = {
+    apple_music: "applemusic",
+    soundcloud: "soundcloud",
+    spotify: "spotify",
+  };
 
-  if (coverUrl.endsWith(".m3u8") && service === "AppleMusic") {
+  const elementPrefix = serviceIdMapping[service] || service.toLowerCase();
+
+  const imagePlaceholder = document.getElementById(`${elementPrefix}-image-placeholder`);
+  const descriptionElement = document.getElementById(`${elementPrefix}-description`);
+  const titleElement = document.getElementById(`${elementPrefix}-playlist-title`);
+  const coverLinkElement = document.getElementById(`${elementPrefix}-cover-link`);
+
+  if (coverUrl.endsWith(".m3u8") && service === "apple_music") {
     displayAppleMusicVideo(coverUrl);
   } else if (imagePlaceholder) {
     imagePlaceholder.style.backgroundImage = `url('${coverUrl}')`;
