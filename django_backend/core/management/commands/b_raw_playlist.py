@@ -18,11 +18,10 @@ class Command(BaseCommand):
     help = "Extract raw playlist data from RapidAPI and save to PostgreSQL"
 
     def handle(self, *args: object, **options: object) -> None:
+        RawPlaylistData.objects.all().delete()
         if settings.ENVIRONMENT == settings.DEV:
             call_command("setup_staging")
             return
-
-        RawPlaylistData.objects.all().delete()[0]
 
         for service_name in SERVICE_CONFIGS:
             for genre in PLAYLIST_GENRES:

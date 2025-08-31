@@ -3,7 +3,6 @@ from pathlib import Path
 from typing import Any
 
 from core.models import Genre, RawPlaylistData, Service
-from core.utils import initialize_lookup_tables
 from django.core.management.base import BaseCommand
 
 from playlist_etl.constants import SERVICE_CONFIGS, ServiceName
@@ -14,13 +13,7 @@ MAX_TRACKS_PER_PLAYLIST = 10
 class Command(BaseCommand):
     help = "Load real API data from files for staging environment"
 
-    def add_arguments(self, parser):
-        parser.add_argument("--clear", action="store_true")
-
     def handle(self, *args: Any, **options: Any) -> None:
-        if options.get("clear"):
-            RawPlaylistData.objects.all().delete()
-        initialize_lookup_tables()
         real_api_data_dir = Path(__file__).parent.parent.parent.parent / "real_api_data"
 
         if not real_api_data_dir.exists():
