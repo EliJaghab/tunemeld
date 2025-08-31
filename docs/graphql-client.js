@@ -126,6 +126,57 @@ class GraphQLClient {
     const data = await this.query(query);
     return data.serviceOrder;
   }
+
+  async getPlaylist(genre, service) {
+    const query = `
+      query GetPlaylist($genre: String!, $service: String!) {
+        playlist(genre: $genre, service: $service) {
+          genreName
+          serviceName
+          tracks {
+            rank(genre: $genre, service: $service)
+            isrc
+            trackName
+            artistName
+            albumName
+            albumCoverUrl
+            youtubeUrl
+            spotifyUrl
+            appleMusicUrl
+            soundcloudUrl
+            serviceUrl(genre: $genre, service: $service)
+            spotifySource {
+              name
+              displayName
+              url
+              iconUrl
+            }
+            appleMusicSource {
+              name
+              displayName
+              url
+              iconUrl
+            }
+            soundcloudSource {
+              name
+              displayName
+              url
+              iconUrl
+            }
+            youtubeSource {
+              name
+              displayName
+              url
+              iconUrl
+            }
+            viewCountDataJson
+          }
+        }
+      }
+    `;
+
+    return await this.query(query, { genre, service });
+  }
 }
 
 export const graphqlClient = new GraphQLClient();

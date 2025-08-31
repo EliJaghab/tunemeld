@@ -1,6 +1,7 @@
-import { DJANGO_API_BASE_URL, getAggregatePlaylistEndpoint, getServicePlaylistEndpoint } from "./config.js";
+import { DJANGO_API_BASE_URL } from "./config.js";
 import { stateManager } from "./StateManager.js";
 import { graphqlClient } from "./graphql-client.js";
+import { SERVICE_NAMES } from "./constants.js";
 
 export async function fetchAndDisplayLastUpdated(genre) {
   try {
@@ -46,8 +47,10 @@ export function setupSortButtons() {
 
 export async function updateMainPlaylist(genre, viewCountType) {
   try {
-    const url = getAggregatePlaylistEndpoint(genre);
-    await fetchAndDisplayData(url, "main-playlist-data-placeholder", true, viewCountType);
+    const response = await graphqlClient.getPlaylist(genre, SERVICE_NAMES.TUNEMELD);
+    const data = [response.playlist];
+    playlistData = data;
+    displayData(data, "main-playlist-data-placeholder", true, viewCountType);
   } catch (error) {
     console.error("Error updating main playlist:", error);
   }
@@ -55,9 +58,15 @@ export async function updateMainPlaylist(genre, viewCountType) {
 
 export async function fetchAndDisplayPlaylists(genre) {
   const services = await graphqlClient.getAvailableServices();
-  const promises = services.map(service => {
-    const url = getServicePlaylistEndpoint(genre, service);
-    return fetchAndDisplayData(url, `${service.toLowerCase()}-data-placeholder`);
+  const promises = services.map(async service => {
+    try {
+      const response = await graphqlClient.getPlaylist(genre, service);
+      const data = [response.playlist];
+      playlistData = data;
+      displayData(data, `${service.toLowerCase()}-data-placeholder`, false);
+    } catch (error) {
+      console.error(`Error fetching ${service} playlist:`, error);
+    }
   });
   await Promise.all(promises);
 }
@@ -108,7 +117,7 @@ function createTableRow(track, isAggregated, viewCountType) {
   coverCell.className = "cover";
   const albumCover = document.createElement("img");
   albumCover.className = "album-cover";
-  albumCover.src = track.album_cover_url || "";
+  albumCover.src = track.albumCoverUrl || "";
   albumCover.alt = "Album Cover";
   coverCell.appendChild(albumCover);
 
@@ -119,12 +128,12 @@ function createTableRow(track, isAggregated, viewCountType) {
 
   const trackTitle = document.createElement("a");
   trackTitle.className = "track-title";
-  trackTitle.href = track.youtube_url || "#";
-  trackTitle.textContent = track.track_name || "Unknown Track";
+  trackTitle.href = track.youtubeUrl || "#";
+  trackTitle.textContent = track.trackName || "Unknown Track";
 
   const artistNameElement = document.createElement("span");
   artistNameElement.className = "artist-name";
-  artistNameElement.textContent = track.artist_name || "Unknown Artist";
+  artistNameElement.textContent = track.artistName || "Unknown Artist";
 
   trackInfoDiv.appendChild(trackTitle);
   trackInfoDiv.appendChild(document.createElement("br"));
@@ -135,18 +144,17 @@ function createTableRow(track, isAggregated, viewCountType) {
   const youtubeStatCell = document.createElement("td");
   youtubeStatCell.className = "youtube-view-count";
 
-  // Handle both production (MongoDB) and dev (PostgreSQL) data structures
   const youtubeViews =
-    track.view_count_data_json?.Youtube?.current_count_json?.current_view_count ||
-    track.view_count_data_json?.YouTube?.current_count_json?.current_view_count ||
+    track.viewCountDataJson?.Youtube?.current_count_json?.current_view_count ||
+    track.viewCountDataJson?.YouTube?.current_count_json?.current_view_count ||
     0;
   youtubeStatCell.textContent = youtubeViews.toLocaleString();
 
   const spotifyStatCell = document.createElement("td");
   spotifyStatCell.className = "spotify-view-count";
   const spotifyViews =
-    track.view_count_data_json?.Spotify?.current_count_json?.current_view_count ||
-    track.view_count_data_json?.spotify?.current_count_json?.current_view_count ||
+    track.viewCountDataJson?.Spotify?.current_count_json?.current_view_count ||
+    track.viewCountDataJson?.spotify?.current_count_json?.current_view_count ||
     0;
   spotifyStatCell.textContent = spotifyViews.toLocaleString();
 
@@ -158,8 +166,8 @@ function createTableRow(track, isAggregated, viewCountType) {
 
   const externalLinksCell = document.createElement("td");
   externalLinksCell.className = "external";
-  if (track.youtube_url) {
-    const youtubeLink = createSourceLink("YouTube", track.youtube_url);
+  if (track.youtubeSource) {
+    const youtubeLink = createSourceLinkFromService(track.youtubeSource);
     externalLinksCell.appendChild(youtubeLink);
   }
 
@@ -183,20 +191,20 @@ function displayViewCounts(track, row, viewCountType) {
   spotifyStatCell.className = "spotify-view-count";
 
   const youtubeCurrentViewCount =
-    track.view_count_data_json?.Youtube?.current_count_json?.current_view_count ||
-    track.view_count_data_json?.YouTube?.current_count_json?.current_view_count ||
+    track.viewCountDataJson?.Youtube?.current_count_json?.current_view_count ||
+    track.viewCountDataJson?.YouTube?.current_count_json?.current_view_count ||
     0;
   const youtubeInitialViewCount =
-    track.view_count_data_json?.Youtube?.initial_count_json?.initial_view_count ||
-    track.view_count_data_json?.YouTube?.initial_count_json?.initial_view_count ||
+    track.viewCountDataJson?.Youtube?.initial_count_json?.initial_view_count ||
+    track.viewCountDataJson?.YouTube?.initial_count_json?.initial_view_count ||
     0;
   const spotifyCurrentViewCount =
-    track.view_count_data_json?.Spotify?.current_count_json?.current_view_count ||
-    track.view_count_data_json?.spotify?.current_count_json?.current_view_count ||
+    track.viewCountDataJson?.Spotify?.current_count_json?.current_view_count ||
+    track.viewCountDataJson?.spotify?.current_count_json?.current_view_count ||
     0;
   const spotifyInitialViewCount =
-    track.view_count_data_json?.Spotify?.initial_count_json?.initial_view_count ||
-    track.view_count_data_json?.spotify?.initial_count_json?.initial_view_count ||
+    track.viewCountDataJson?.Spotify?.initial_count_json?.initial_view_count ||
+    track.viewCountDataJson?.spotify?.initial_count_json?.initial_view_count ||
     0;
 
   switch (viewCountType) {
@@ -235,7 +243,7 @@ function createSmallPlaylistTableRow(track) {
   coverCell.className = "cover";
   const albumCover = document.createElement("img");
   albumCover.className = "album-cover";
-  albumCover.src = track.album_cover_url || "";
+  albumCover.src = track.albumCoverUrl || "";
   albumCover.alt = "Album Cover";
   coverCell.appendChild(albumCover);
 
@@ -246,12 +254,12 @@ function createSmallPlaylistTableRow(track) {
 
   const trackTitle = document.createElement("a");
   trackTitle.className = "track-title";
-  trackTitle.href = track.track_url || "#";
-  trackTitle.textContent = track.track_name || "Unknown Track";
+  trackTitle.href = track.youtubeUrl || "#";
+  trackTitle.textContent = track.trackName || "Unknown Track";
 
   const artistNameElement = document.createElement("span");
   artistNameElement.className = "artist-name";
-  artistNameElement.textContent = track.artist_name || "Unknown Artist";
+  artistNameElement.textContent = track.artistName || "Unknown Artist";
 
   trackInfoDiv.appendChild(trackTitle);
   trackInfoDiv.appendChild(document.createElement("br"));
@@ -261,8 +269,8 @@ function createSmallPlaylistTableRow(track) {
 
   const externalLinksCell = document.createElement("td");
   externalLinksCell.className = "external";
-  if (track.youtube_url) {
-    const youtubeLink = createSourceLink("YouTube", track.youtube_url);
+  if (track.youtubeSource) {
+    const youtubeLink = createSourceLinkFromService(track.youtubeSource);
     externalLinksCell.appendChild(youtubeLink);
   }
 
@@ -277,49 +285,32 @@ function createSmallPlaylistTableRow(track) {
 function displaySources(cell, track) {
   const sourcesContainer = document.createElement("div");
   sourcesContainer.className = "track-sources";
-  const allSources = {
-    ...track.additional_sources,
-    [track.source_name]: track.track_url,
-  };
-  Object.keys(allSources).forEach(source => {
-    const sourceLink = allSources[source];
-    const linkElement = createSourceLink(source, sourceLink);
+
+  // Add all service sources except YouTube (which goes in external links)
+  const serviceSources = [track.spotifySource, track.appleMusicSource, track.soundcloudSource].filter(
+    source => source !== null && source !== undefined
+  );
+
+  serviceSources.forEach(source => {
+    const linkElement = createSourceLinkFromService(source);
     sourcesContainer.appendChild(linkElement);
   });
+
   cell.appendChild(sourcesContainer);
 }
 
-function createSourceLink(source, sourceLink) {
-  if (!sourceLink) {
-    console.warn(`No Link available for source: ${source}`);
+function createSourceLinkFromService(source) {
+  if (!source.url) {
     return document.createTextNode("");
   }
 
   const sourceIcon = document.createElement("img");
   const linkElement = document.createElement("a");
-  linkElement.href = sourceLink;
+  linkElement.href = source.url;
   linkElement.target = "_blank";
   sourceIcon.className = "source-icon";
-  switch (source) {
-    case "SoundCloud":
-      sourceIcon.src = "images/soundcloud_logo.png";
-      sourceIcon.alt = "SoundCloud";
-      break;
-    case "Spotify":
-      sourceIcon.src = "images/spotify_logo.png";
-      sourceIcon.alt = "Spotify";
-      break;
-    case "AppleMusic":
-      sourceIcon.src = "images/apple_music_logo.png";
-      sourceIcon.alt = "Apple Music";
-      break;
-    case "YouTube":
-      sourceIcon.src = "images/youtube_logo.png";
-      sourceIcon.alt = "YouTube";
-      break;
-    default:
-      return document.createTextNode("");
-  }
+  sourceIcon.src = source.iconUrl;
+  sourceIcon.alt = source.displayName;
   linkElement.appendChild(sourceIcon);
   return linkElement;
 }
@@ -351,8 +342,8 @@ export function sortTable(column, order, viewCountType) {
 }
 
 function getViewCount(track, platform, viewCountType) {
-  const currentCount = track.view_count_data_json?.[platform]?.current_count_json?.current_view_count || 0;
-  const initialCount = track.view_count_data_json?.[platform]?.initial_count_json?.initial_view_count || 0;
+  const currentCount = track.viewCountDataJson?.[platform]?.current_count_json?.current_view_count || 0;
+  const initialCount = track.viewCountDataJson?.[platform]?.initial_count_json?.initial_view_count || 0;
 
   if (viewCountType === "total-view-count") {
     return currentCount;
