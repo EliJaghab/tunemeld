@@ -40,52 +40,17 @@ jobs:
       - name: Set PYTHONPATH
         run: echo "PYTHONPATH=$PWD" >> $GITHUB_ENV
 
-      - name: Run database migrations
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
-          DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
-        run: |
-          cd django_backend
-          python manage.py migrate
-
-      - name: Initialize lookup tables
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
-          DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
-        run: |
-          cd django_backend
-          python manage.py a_genre_service
-
-      - name: Extract raw playlist data
+      - name: Run Playlist ETL Pipeline
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
           X_RAPIDAPI_KEY: ${{ secrets.X_RAPIDAPI_KEY }}
-        run: |
-          cd django_backend
-          python manage.py b_raw_playlist
-
-      - name: Normalize raw data into structured playlists
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
-          DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
           MONGO_URI: ${{ secrets.MONGO_URI }}
           SPOTIFY_CLIENT_ID: ${{ secrets.SPOTIFY_CLIENT_ID }}
           SPOTIFY_CLIENT_SECRET: ${{ secrets.SPOTIFY_CLIENT_SECRET }}
         run: |
           cd django_backend
-          python manage.py c_playlist_service_track
-
-      - name: Hydrate tracks with ISRC resolution
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
-          DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
-          SPOTIFY_CLIENT_ID: ${{ secrets.SPOTIFY_CLIENT_ID }}
-          SPOTIFY_CLIENT_SECRET: ${{ secrets.SPOTIFY_CLIENT_SECRET }}
-          MONGO_URI: ${{ secrets.MONGO_URI }}
-        run: |
-          cd django_backend
-          python manage.py d_track
+          python manage.py playlist_etl
 
       - name: Verify ETL pipeline results
         env:
@@ -114,10 +79,4 @@ jobs:
         run: |
           echo "✅ PostgreSQL ETL Pipeline completed successfully"
           echo "🗄️  Data persisted to Railway PostgreSQL database"
-          echo "🔄 Next ETL run scheduled for next Saturday at 3 AM UTC"
-          echo "📋 Pipeline stages completed:"
-          echo "   1. ✅ Extract: Raw playlist data from RapidAPI"
-          echo "   2. ✅ Normalize: Structured playlist data"
-          echo "   3. ✅ Hydrate: ISRC resolution and canonical tracks"
-          echo "   4. ⏳ Aggregate: Cross-service ranking (coming soon)"
-          echo "   5. ⏳ View counts: YouTube/Spotify metrics (coming soon)"
+          echo "🔄 Next ETL run scheduled for next Saturday at 5 PM UTC"
