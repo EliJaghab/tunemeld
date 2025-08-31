@@ -2,7 +2,7 @@ name: Playlist ETL 2
 
 on:
   schedule:
-    # Run every Saturday at 5 PM UTC (same as old playlist_etl)
+    # Run every Saturday at 5 PM UTC
     - cron: '0 17 * * 6'
   workflow_dispatch:
     # Allow manual trigger
