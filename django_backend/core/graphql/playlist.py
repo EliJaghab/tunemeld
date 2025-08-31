@@ -14,8 +14,6 @@ class PlaylistType(graphene.ObjectType):
 
 
 class PlaylistMetadataType(graphene.ObjectType):
-    """GraphQL type for playlist metadata (for frontend display)."""
-
     playlist_name = graphene.String(required=True)
     playlist_cover_url = graphene.String(required=True)
     playlist_cover_description_text = graphene.String(required=True)
@@ -53,27 +51,33 @@ class PlaylistQuery(graphene.ObjectType):
 
     def resolve_playlists_by_genre(self, info, genre):
         """Get playlist metadata for all services for a given genre."""
-        from core.models import Genre, Service
+        from core.models import Genre
+        from core.models.b_raw_playlist import RawPlaylistData
 
         try:
-            Genre.objects.get(name=genre)
+            genre_obj = Genre.objects.get(name=genre)
         except Genre.DoesNotExist:
             return []
 
-        services = Service.objects.all()
-        playlist_metadata = []
+        # Get the latest raw playlist data for each service for this genre
+        raw_playlists = (
+            RawPlaylistData.objects.filter(genre=genre_obj)
+            .select_related("service", "genre")
+            .order_by("service", "-created_at")
+            .distinct("service")
+        )
 
-        for service in services:
-            # For now, return placeholder data - this will need to be implemented
-            # based on your actual playlist metadata models
+        playlist_metadata = []
+        for raw_playlist in raw_playlists:
             playlist_metadata.append(
                 PlaylistMetadataType(
-                    playlist_name=f"{service.name} {genre} Playlist",
-                    playlist_cover_url=f"https://example.com/covers/{service.name}_{genre}.jpg",
-                    playlist_cover_description_text=f"Curated {genre} tracks from {service.name}",
-                    playlist_url=f"https://{service.name.lower()}.com/playlist/{genre}",
+                    playlist_name=raw_playlist.playlist_name or f"{raw_playlist.service.display_name} {genre} Playlist",
+                    playlist_cover_url=raw_playlist.playlist_cover_url or "",
+                    playlist_cover_description_text=raw_playlist.playlist_cover_description_text
+                    or f"Curated {genre} tracks from {raw_playlist.service.display_name}",
+                    playlist_url=raw_playlist.playlist_url,
                     genre_name=genre,
-                    service_name=service.name,
+                    service_name=raw_playlist.service.name,
                 )
             )
 
