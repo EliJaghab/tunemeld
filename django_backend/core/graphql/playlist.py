@@ -69,6 +69,14 @@ class PlaylistQuery(graphene.ObjectType):
 
         playlist_metadata = []
         for raw_playlist in raw_playlists:
+            # Map database service names to frontend constant names
+            service_name_mapping = {
+                "AppleMusic": "apple_music",
+                "SoundCloud": "soundcloud",
+                "Spotify": "spotify",
+            }
+            service_name = service_name_mapping.get(raw_playlist.service.name, raw_playlist.service.name.lower())
+
             playlist_metadata.append(
                 PlaylistMetadataType(
                     playlist_name=raw_playlist.playlist_name or f"{raw_playlist.service.display_name} {genre} Playlist",
@@ -77,7 +85,7 @@ class PlaylistQuery(graphene.ObjectType):
                     or f"Curated {genre} tracks from {raw_playlist.service.display_name}",
                     playlist_url=raw_playlist.playlist_url,
                     genre_name=genre,
-                    service_name=raw_playlist.service.name,
+                    service_name=service_name,
                 )
             )
 
