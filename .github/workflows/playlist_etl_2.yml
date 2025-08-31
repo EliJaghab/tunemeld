@@ -2,8 +2,8 @@ name: Playlist ETL 2
 
 on:
   schedule:
-    # Run every Saturday at 3 AM UTC (1 hour after raw extract)
-    - cron: '0 3 * * 6'
+    # Run every Saturday at 5 PM UTC (same as old playlist_etl)
+    - cron: '0 17 * * 6'
   workflow_dispatch:
     # Allow manual trigger
 
