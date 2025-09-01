@@ -124,7 +124,6 @@ def get_playlist(request, genre_name, service_name):
                 "rank": position.position,
                 "album_cover_url": service_track.album_cover_url or "",
                 "service_url": service_track.service_url,
-                # Add fields expected by frontend for source links
                 "source_name": position.service.name,
                 "track_url": service_track.service_url,
                 "additional_sources": {},  # Empty for staging
