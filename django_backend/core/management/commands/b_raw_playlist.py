@@ -23,7 +23,12 @@ class Command(BaseCommand):
             call_command("b2_mock_raw_playlist")
             return
 
+        supported_services = [ServiceName.APPLE_MUSIC.value, ServiceName.SOUNDCLOUD.value, ServiceName.SPOTIFY.value]
+
         for service_name in SERVICE_CONFIGS:
+            if service_name not in supported_services:
+                continue
+
             for genre in PLAYLIST_GENRES:
                 self.get_and_save_playlist(service_name, genre)
 
