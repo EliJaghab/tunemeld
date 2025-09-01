@@ -7,19 +7,20 @@ import requests
 from bs4 import BeautifulSoup
 from unidecode import unidecode
 
+from playlist_etl.constants import PLAYLIST_GENRES, SERVICE_CONFIGS
 from playlist_etl.helpers import get_logger
 from playlist_etl.rapid_api_client import fetch_playlist_data
+from playlist_etl.utils import WebDriverManager
 
 __all__ = [
     "PLAYLIST_GENRES",
     "SERVICE_CONFIGS",
-    "AppleMusicFetcher",
+    "PlaylistData",
     "PlaylistMetadata",
-    "SoundCloudFetcher",
-    "SpotifyFetcher",
+    "get_apple_music_playlist",
+    "get_soundcloud_playlist",
+    "get_spotify_playlist",
 ]
-from playlist_etl.constants import PLAYLIST_GENRES, SERVICE_CONFIGS
-from playlist_etl.utils import WebDriverManager
 
 DEBUG_MODE = False
 
@@ -43,6 +44,13 @@ class PlaylistMetadata(TypedDict, total=False):
     playlist_saves_count: str | None
     playlist_creator: str | None
     playlist_stream_url: str | None  # Apple Music specific
+
+
+class PlaylistData(TypedDict):
+    """Complete playlist data including metadata and tracks"""
+
+    metadata: PlaylistMetadata
+    tracks: Any  # JSON data from RapidAPI
 
 
 def _extract_spotify_metadata_from_html(url: str, html_content: str) -> PlaylistMetadata:
@@ -190,130 +198,129 @@ def _format_saves_count(raw_saves: str) -> str:
         return raw_saves  # Return original if conversion fails
 
 
-class Extractor:
-    def __init__(self, service_name: str, genre: str) -> None:
-        self.config = SERVICE_CONFIGS[service_name]
-        self.service_name = service_name
-        self.genre = genre
+def get_apple_music_playlist(genre: str) -> PlaylistData:
+    """Get Apple Music playlist data and metadata for a given genre"""
+    config = SERVICE_CONFIGS["apple_music"]
+    url = config["links"][genre]
 
-    def get_playlist(self) -> JSON:
-        return fetch_playlist_data(self.service_name, self.genre)
+    # Get playlist tracks data
+    tracks_data = fetch_playlist_data("apple_music", genre)
 
+    # Scrape metadata from playlist page
+    response = requests.get(url)
+    response.raise_for_status()
+    doc = BeautifulSoup(response.text, "html.parser")
 
-class AppleMusicFetcher(Extractor):
-    def __init__(self, service_name: str, genre: str) -> None:
-        super().__init__(service_name, genre)
-        self.webdriver_manager = WebDriverManager()
+    title_tag = doc.select_one("a.click-action")
+    title = title_tag.get_text(strip=True) if title_tag else "Unknown"
 
-    def set_playlist_details(self) -> None:
-        url = self.config["links"][self.genre]
+    subtitle_tag = doc.select_one("h1")
+    subtitle = subtitle_tag.get_text(strip=True) if subtitle_tag else "Unknown"
 
-        response = requests.get(url)
-        response.raise_for_status()
-        doc = BeautifulSoup(response.text, "html.parser")
+    stream_tag = doc.find("amp-ambient-video", {"class": "editorial-video"})
+    playlist_stream_url = stream_tag["src"] if stream_tag and stream_tag.get("src") else None
 
-        title_tag = doc.select_one("a.click-action")
-        title = title_tag.get_text(strip=True) if title_tag else "Unknown"
+    playlist_cover_description_tag = doc.find("p", {"data-testid": "truncate-text"})
+    playlist_cover_description_text = (
+        unidecode(html.unescape(playlist_cover_description_tag.get_text(strip=True)))
+        if playlist_cover_description_tag
+        else None
+    )
 
-        subtitle_tag = doc.select_one("h1")
-        subtitle = subtitle_tag.get_text(strip=True) if subtitle_tag else "Unknown"
+    # Get cover URL using WebDriver
+    webdriver_manager = WebDriverManager()
+    try:
+        playlist_cover_url = _get_apple_music_cover_url(webdriver_manager, url, genre)
+    finally:
+        webdriver_manager.close_driver()
 
-        stream_tag = doc.find("amp-ambient-video", {"class": "editorial-video"})
-        playlist_stream_url = stream_tag["src"] if stream_tag and stream_tag.get("src") else None
+    metadata: PlaylistMetadata = {
+        "service_name": "apple_music",
+        "genre_name": genre,
+        "playlist_name": f"{subtitle} {title}",
+        "playlist_url": url,
+        "playlist_cover_url": playlist_cover_url,
+        "playlist_cover_description_text": playlist_cover_description_text,
+        "playlist_stream_url": playlist_stream_url,
+    }
 
-        playlist_cover_description_tag = doc.find("p", {"data-testid": "truncate-text"})
-        playlist_cover_description_text = (
-            unidecode(html.unescape(playlist_cover_description_tag.get_text(strip=True)))
-            if playlist_cover_description_tag
-            else None
-        )
-
-        self.playlist_url = url
-        self.playlist_name = f"{subtitle} {title}"
-        self.playlist_cover_url = self.get_cover_url(url)
-        self.playlist_cover_description_text = playlist_cover_description_text
-        self.playlist_stream_url = playlist_stream_url
-
-    def get_cover_url(self, url: str) -> str | None:
-        xpath = "//amp-ambient-video"
-        src_attribute = self.webdriver_manager.find_element_by_xpath(url, xpath, attribute="src")
-
-        if src_attribute is None or src_attribute == "Element not found" or "An error occurred" in src_attribute:
-            raise ValueError(f"Could not find amp-ambient-video src attribute for Apple Music {self.genre}")
-
-        if src_attribute.endswith(".m3u8"):
-            return src_attribute
-        else:
-            raise ValueError(f"Found src attribute, but it's not an m3u8 URL: {src_attribute}")
+    return {
+        "metadata": metadata,
+        "tracks": tracks_data,
+    }
 
 
-class SoundCloudFetcher(Extractor):
-    def __init__(self, service_name: str, genre: str) -> None:
-        super().__init__(service_name, genre)
+def _get_apple_music_cover_url(webdriver_manager: WebDriverManager, url: str, genre: str) -> str | None:
+    """Get Apple Music playlist cover URL using WebDriver"""
+    xpath = "//amp-ambient-video"
+    src_attribute = webdriver_manager.find_element_by_xpath(url, xpath, attribute="src")
 
-    def set_playlist_details(self) -> None:
-        url = self.config["links"][self.genre]
-        parsed_url = urlparse(url)
-        clean_url = f"{parsed_url.netloc}{parsed_url.path}"
+    if src_attribute is None or src_attribute == "Element not found" or "An error occurred" in src_attribute:
+        raise ValueError(f"Could not find amp-ambient-video src attribute for Apple Music {genre}")
 
-        response = requests.get(f"https://{clean_url}")
-        response.raise_for_status()
-        doc = BeautifulSoup(response.text, "html.parser")
-
-        playlist_name_tag = doc.find("meta", {"property": "og:title"})
-        self.playlist_name = playlist_name_tag["content"] if playlist_name_tag else "Unknown"
-
-        description_tag = doc.find("meta", {"name": "description"})
-        self.playlist_cover_description_text = (
-            description_tag["content"] if description_tag else "No description available"
-        )
-
-        playlist_cover_url_tag = doc.find("meta", {"property": "og:image"})
-        self.playlist_cover_url = playlist_cover_url_tag["content"] if playlist_cover_url_tag else None
-
-        self.playlist_url = url
+    if src_attribute.endswith(".m3u8"):
+        return src_attribute
+    else:
+        raise ValueError(f"Found src attribute, but it's not an m3u8 URL: {src_attribute}")
 
 
-class SpotifyFetcher(Extractor):
-    def __init__(self, service_name: str, genre: str) -> None:
-        super().__init__(service_name, genre)
+def get_soundcloud_playlist(genre: str) -> PlaylistData:
+    """Get SoundCloud playlist data and metadata for a given genre"""
+    config = SERVICE_CONFIGS["soundcloud"]
+    url = config["links"][genre]
 
-    def set_playlist_details(self) -> None:
-        url = self.config["links"][self.genre]
-        response = requests.get(url)
-        response.raise_for_status()
+    # Get playlist tracks data
+    tracks_data = fetch_playlist_data("soundcloud", genre)
 
-        # Extract metadata using the Spotify-specific parser
-        metadata = _extract_spotify_metadata_from_html(url, response.text)
-        metadata["genre_name"] = self.genre
+    # Scrape metadata from playlist page
+    parsed_url = urlparse(url)
+    clean_url = f"{parsed_url.netloc}{parsed_url.path}"
 
-        # Set attributes from parsed metadata
-        self.playlist_name = metadata.get("playlist_name", "Unknown")
-        self.playlist_cover_url = metadata.get("playlist_cover_url")
-        self.playlist_url = metadata.get("playlist_url", url)
-        self.playlist_tagline = metadata.get("playlist_tagline")
-        self.playlist_featured_artist = metadata.get("playlist_featured_artist")
-        self.playlist_track_count = metadata.get("playlist_track_count")
-        self.playlist_saves_count = metadata.get("playlist_saves_count")
-        self.playlist_creator = metadata.get("playlist_creator", "spotify")
+    response = requests.get(f"https://{clean_url}")
+    response.raise_for_status()
+    doc = BeautifulSoup(response.text, "html.parser")
 
-        # Set description text to tagline or fallback
-        self.playlist_cover_description_text = self.playlist_tagline or metadata.get(
-            "playlist_cover_description_text", "No description available"
-        )
+    playlist_name_tag = doc.find("meta", {"property": "og:title"})
+    playlist_name = playlist_name_tag["content"] if playlist_name_tag else "Unknown"
 
-    def get_metadata_as_typed_dict(self) -> PlaylistMetadata:
-        """Return metadata as a typed dict for use in transformation pipeline"""
-        return {
-            "service_name": "Spotify",
-            "genre_name": self.genre,
-            "playlist_name": getattr(self, "playlist_name", "Unknown"),
-            "playlist_url": getattr(self, "playlist_url", ""),
-            "playlist_cover_url": getattr(self, "playlist_cover_url", None),
-            "playlist_cover_description_text": getattr(self, "playlist_cover_description_text", None),
-            "playlist_tagline": getattr(self, "playlist_tagline", None),
-            "playlist_featured_artist": getattr(self, "playlist_featured_artist", None),
-            "playlist_track_count": getattr(self, "playlist_track_count", None),
-            "playlist_saves_count": getattr(self, "playlist_saves_count", None),
-            "playlist_creator": getattr(self, "playlist_creator", None),
-        }
+    description_tag = doc.find("meta", {"name": "description"})
+    playlist_cover_description_text = description_tag["content"] if description_tag else "No description available"
+
+    playlist_cover_url_tag = doc.find("meta", {"property": "og:image"})
+    playlist_cover_url = playlist_cover_url_tag["content"] if playlist_cover_url_tag else None
+
+    metadata: PlaylistMetadata = {
+        "service_name": "soundcloud",
+        "genre_name": genre,
+        "playlist_name": playlist_name,
+        "playlist_url": url,
+        "playlist_cover_url": playlist_cover_url,
+        "playlist_cover_description_text": playlist_cover_description_text,
+    }
+
+    return {
+        "metadata": metadata,
+        "tracks": tracks_data,
+    }
+
+
+def get_spotify_playlist(genre: str) -> PlaylistData:
+    """Get Spotify playlist data and metadata for a given genre"""
+    config = SERVICE_CONFIGS["spotify"]
+    url = config["links"][genre]
+
+    # Get playlist tracks data
+    tracks_data = fetch_playlist_data("spotify", genre)
+
+    # Scrape metadata from playlist page
+    response = requests.get(url)
+    response.raise_for_status()
+
+    # Extract metadata using the Spotify-specific parser
+    metadata = _extract_spotify_metadata_from_html(url, response.text)
+    metadata["genre_name"] = genre
+
+    return {
+        "metadata": metadata,
+        "tracks": tracks_data,
+    }

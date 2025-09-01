@@ -32,3 +32,11 @@ make format           # Format and lint all code (pre-commit hooks)
 **DO NOT ADD COMMENTS unless explicitly asked. Write clean, self-documenting code.**
 
 **NEVER add fallbacks or workarounds as fixes - identify and fix root causes in the backend/data pipeline instead.**
+
+**ALWAYS use Python 3.11+ built-in types for type hints:**
+
+- Use `list[str]` not `List[str]`
+- Use `dict[str, int]` not `Dict[str, int]`
+- Use `str | None` not `Optional[str]`
+- Use `int | str` not `Union[int, str]`
+- No imports from `typing` for basic types (list, dict, tuple, set)

@@ -5,9 +5,9 @@ from django.core.management.base import BaseCommand
 
 from playlist_etl.constants import PLAYLIST_GENRES, SERVICE_CONFIGS, ServiceName
 from playlist_etl.extract import (
-    AppleMusicFetcher,
-    SoundCloudFetcher,
-    SpotifyFetcher,
+    get_apple_music_playlist,
+    get_soundcloud_playlist,
+    get_spotify_playlist,
 )
 from playlist_etl.helpers import get_logger
 
@@ -53,28 +53,28 @@ class Command(BaseCommand):
         service = Service.objects.get(name=service_name)
         genre_obj = Genre.objects.get(name=genre)
 
-        extractor: AppleMusicFetcher | SoundCloudFetcher | SpotifyFetcher
-        if service_name == ServiceName.APPLE_MUSIC:
-            extractor = AppleMusicFetcher(service_name, genre)
-        elif service_name == ServiceName.SOUNDCLOUD:
-            extractor = SoundCloudFetcher(service_name, genre)
-        elif service_name == ServiceName.SPOTIFY:
-            extractor = SpotifyFetcher(service_name, genre)
-        else:
-            raise ValueError(f"Unknown service: {service_name}")
-
         try:
-            extractor.set_playlist_details()
-            playlist_data = extractor.get_playlist()
+            # Get playlist data using appropriate function
+            if service_name == ServiceName.APPLE_MUSIC:
+                playlist_data = get_apple_music_playlist(genre)
+            elif service_name == ServiceName.SOUNDCLOUD:
+                playlist_data = get_soundcloud_playlist(genre)
+            elif service_name == ServiceName.SPOTIFY:
+                playlist_data = get_spotify_playlist(genre)
+            else:
+                raise ValueError(f"Unknown service: {service_name}")
+
+            metadata = playlist_data["metadata"]
+            tracks = playlist_data["tracks"]
 
             raw_data = RawPlaylistData(
                 genre=genre_obj,
                 service=service,
-                playlist_url=extractor.playlist_url,
-                playlist_name=extractor.playlist_name,
-                playlist_cover_url=getattr(extractor, "playlist_cover_url", ""),
-                playlist_cover_description_text=getattr(extractor, "playlist_cover_description_text", ""),
-                data=playlist_data,
+                playlist_url=metadata["playlist_url"],
+                playlist_name=metadata["playlist_name"],
+                playlist_cover_url=metadata.get("playlist_cover_url", ""),
+                playlist_cover_description_text=metadata.get("playlist_cover_description_text", ""),
+                data=tracks,
             )
             raw_data.save()
             return raw_data
@@ -91,6 +91,3 @@ class Command(BaseCommand):
                 return None
             else:
                 raise
-        finally:
-            if hasattr(extractor, "webdriver_manager"):
-                extractor.webdriver_manager.close_driver()

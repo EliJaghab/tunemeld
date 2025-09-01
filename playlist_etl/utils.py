@@ -69,6 +69,21 @@ class WebDriverManager:
             self.driver.quit()
             self.driver = None
 
+    def find_element_by_xpath(self, url: str, xpath: str, attribute: str) -> str | None:
+        """Find element by XPath and return specified attribute value"""
+        driver = self.get_driver()
+
+        try:
+            driver.get(url)
+            element = driver.find_element(By.XPATH, xpath)
+            return element.get_attribute(attribute)
+        except NoSuchElementException:
+            logger.error(f"Element not found with xpath: {xpath}")
+            return "Element not found"
+        except Exception as e:
+            logger.error(f"Error finding element by xpath: {e}")
+            return f"An error occurred: {e}"
+
     def get_spotify_track_view_count(self, track_url: str) -> int:
         driver = self.get_driver()
         driver.get(track_url)
