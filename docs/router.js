@@ -1,106 +1,94 @@
 import Navigo from "https://cdn.jsdelivr.net/npm/navigo@8.11.1/+esm";
 import { updateGenreData } from "./selectors.js";
 import { stateManager } from "./StateManager.js";
-import { graphqlClient } from "./graphql-client.js";
 import { setupBodyClickListener } from "./servicePlayer.js";
 import { errorHandler } from "./error-handler.js";
+import { genreManager } from "./genre-manager.js";
 
 class AppRouter {
   constructor() {
     this.router = new Navigo("/");
     this.currentGenre = null;
-    this.availableGenres = [];
-    this.defaultGenre = null;
   }
 
   async initialize() {
-    let graphqlError = null;
-
     errorHandler.setRetryCallback(() => this.initialize());
 
-    try {
-      const data = await graphqlClient.getAvailableGenres();
-      this.availableGenres = data.genres;
-      this.defaultGenre = data.defaultGenre;
-      if (!this.availableGenres || this.availableGenres.length === 0) {
-        throw new Error("No genres returned from backend");
-      }
-      console.log(
-        "Available genres:",
-        this.availableGenres.map(g => g.name)
-      );
-      console.log("Default genre from backend:", this.defaultGenre);
-    } catch (error) {
-      console.error("Failed to load genres from backend:", error);
-      graphqlError = error;
+    await genreManager.initialize();
 
-      this.availableGenres = [];
-      this.defaultGenre = null;
-
-      let technicalDetails = error.message;
-      if (error.stack) {
-        technicalDetails += "\n\nStack trace:\n" + error.stack;
-      }
-
-      errorHandler.showError(
-        "Genre loading service is currently unavailable. Some features may be limited.",
-        technicalDetails
-      );
-    }
-
-    if (this.availableGenres.length > 0 && this.defaultGenre) {
+    if (genreManager.hasValidData()) {
       this.setupRoutes();
       this.router.resolve();
-    } else {
-      console.log("Skipping route setup - no genre data available. Static content only.");
-    }
-
-    if (graphqlError) {
-      console.log("Continuing with limited functionality due to GraphQL error");
     }
   }
 
   setupRoutes() {
-    this.router.on("/:genre", async ({ data }) => {
-      await this.handleGenreRoute(data.genre);
+    this.router.on("/:genre", async match => {
+      await this.handleGenreRoute(match.data.genre);
     });
 
-    this.router.on("/", () => {
-      this.navigateToGenre(this.defaultGenre);
+    this.router.on("/", async () => {
+      await this.handleGenreRoute(genreManager.getDefaultGenre());
     });
 
-    this.router.notFound(() => {
-      console.log("Route not found, redirecting to default genre");
-      this.navigateToGenre(this.defaultGenre);
+    this.router.notFound(async () => {
+      const defaultGenre = genreManager.getDefaultGenre();
+      this.router.navigate(`/${defaultGenre}`);
+      await this.handleGenreRoute(defaultGenre);
     });
   }
 
   async handleGenreRoute(genre) {
-    const isValidGenre = this.availableGenres.some(g => g.name === genre);
-
-    if (!isValidGenre) {
-      console.log(`Invalid genre: ${genre}, redirecting to default`);
-      this.navigateToGenre(this.defaultGenre);
+    if (!genreManager.hasValidData()) {
       return;
     }
 
-    this.currentGenre = genre;
+    if (!genreManager.isValidGenre(genre)) {
+      this.redirectToDefault();
+      return;
+    }
 
-    const genreDisplay = this.availableGenres.find(g => g.name === genre)?.displayName || genre;
+    await this.activateGenre(genre);
+  }
+
+  redirectToDefault() {
+    const defaultGenre = genreManager.getDefaultGenre();
+    if (defaultGenre) {
+      this.navigateToGenre(defaultGenre);
+    }
+  }
+
+  async activateGenre(genre) {
+    this.currentGenre = genre;
+    this.updatePageTitle(genre);
+    this.syncGenreDropdown(genre);
+    await this.loadGenreContent(genre);
+  }
+
+  updatePageTitle(genre) {
+    const genreDisplay = genreManager.getDisplayName(genre);
     document.title = `tunemeld - ${genreDisplay}`;
+  }
+
+  syncGenreDropdown(genre) {
     const genreSelector = document.getElementById("genre-selector");
     if (genreSelector && genreSelector.value !== genre) {
       genreSelector.value = genre;
     }
+  }
 
-    console.log(`Loading genre: ${genre}`);
+  async loadGenreContent(genre) {
     await updateGenreData(genre, stateManager.getViewCountType(), true);
     setupBodyClickListener(genre);
   }
 
-  // Public API
   navigateToGenre(genre) {
+    if (!this.router.routes || this.router.routes.length === 0) {
+      this.setupRoutes();
+    }
+
     this.router.navigate(`/${genre}`);
+    this.router.resolve();
   }
 
   getCurrentGenre() {
@@ -108,7 +96,7 @@ class AppRouter {
   }
 
   getAvailableGenres() {
-    return this.availableGenres;
+    return genreManager.getAvailableGenres();
   }
 }
 
