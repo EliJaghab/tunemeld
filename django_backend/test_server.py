@@ -21,7 +21,6 @@ class TestHandler(BaseHTTPRequestHandler):
                     "RAILWAY_ENVIRONMENT": os.environ.get("RAILWAY_ENVIRONMENT", "not set"),
                     "DJANGO_SETTINGS_MODULE": os.environ.get("DJANGO_SETTINGS_MODULE", "not set"),
                     "SECRET_KEY": "set" if os.environ.get("SECRET_KEY") else "not set",
-                    "MONGO_URI": "set" if os.environ.get("MONGO_URI") else "not set",
                 },
             }
             self.wfile.write(json.dumps(response).encode())

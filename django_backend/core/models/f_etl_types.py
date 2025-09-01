@@ -1,7 +1,7 @@
 """
-Phase F: ETL Pydantic Models for MongoDB Integration
+Phase F: ETL Pydantic Models for Legacy Integration
 
-These models support the legacy playlist ETL pipeline that uses MongoDB.
+These models support the legacy playlist ETL pipeline.
 They are Pydantic models (not Django models) for data validation and serialization.
 """
 
@@ -66,7 +66,7 @@ class ServiceView(BaseModel):
 
 
 class ETLTrack(BaseModel):
-    """ETL Track model for MongoDB - distinct from Django Track model."""
+    """ETL Track model - distinct from Django Track model."""
 
     isrc: str
     apple_music_track_data: TrackData = Field(

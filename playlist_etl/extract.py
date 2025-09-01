@@ -5,20 +5,21 @@ from urllib.parse import urlparse
 
 import requests
 from bs4 import BeautifulSoup
-from pymongo.mongo_client import MongoClient
 from unidecode import unidecode
 
-from playlist_etl.helpers import get_logger, set_secrets
+from playlist_etl.helpers import get_logger
 from playlist_etl.rapid_api_client import fetch_playlist_data
 
-__all__ = ["PLAYLIST_GENRES", "SERVICE_CONFIGS", "PlaylistMetadata", "SpotifyFetcher", "run_extraction"]
+__all__ = [
+    "PLAYLIST_GENRES",
+    "SERVICE_CONFIGS",
+    "AppleMusicFetcher",
+    "PlaylistMetadata",
+    "SoundCloudFetcher",
+    "SpotifyFetcher",
+]
 from playlist_etl.constants import PLAYLIST_GENRES, SERVICE_CONFIGS
-from playlist_etl.utils import (
-    WebDriverManager,
-    clear_collection,
-    get_mongo_client,
-    insert_or_update_data_to_mongo,
-)
+from playlist_etl.utils import WebDriverManager
 
 DEBUG_MODE = False
 
@@ -316,75 +317,3 @@ class SpotifyFetcher(Extractor):
             "playlist_saves_count": getattr(self, "playlist_saves_count", None),
             "playlist_creator": getattr(self, "playlist_creator", None),
         }
-
-
-def run_extraction(mongo_client: MongoClient, service_name: str, genre: str) -> None:
-    extractor: Extractor
-    if service_name == "AppleMusic":
-        extractor = AppleMusicFetcher(service_name, genre)
-    elif service_name == "SoundCloud":
-        extractor = SoundCloudFetcher(service_name, genre)
-    elif service_name == "Spotify":
-        extractor = SpotifyFetcher(service_name, genre)
-    else:
-        raise ValueError(f"Unknown service: {service_name}")
-
-    try:
-        extractor.set_playlist_details()
-        playlist_data = extractor.get_playlist()
-
-        document = {
-            "service_name": service_name,
-            "genre_name": genre,
-            "playlist_url": extractor.playlist_url,
-            "data_json": playlist_data,
-            "playlist_name": extractor.playlist_name,
-            "playlist_cover_url": extractor.playlist_cover_url,
-            "playlist_cover_description_text": extractor.playlist_cover_description_text,
-            "playlist_tagline": getattr(extractor, "playlist_tagline", None),
-            "playlist_featured_artist": getattr(extractor, "playlist_featured_artist", None),
-            "playlist_saves_count": getattr(extractor, "playlist_saves_count", None),
-            "playlist_track_count": getattr(extractor, "playlist_track_count", None),
-            "playlist_creator": getattr(extractor, "playlist_creator", None),
-        }
-
-        if not DEBUG_MODE:
-            insert_or_update_data_to_mongo(mongo_client, "raw_playlists", document)
-        else:
-            logger.info("Debug Mode: not updating mongo")
-
-    except requests.exceptions.HTTPError as e:
-        if "429" in str(e) and service_name == "AppleMusic":
-            logger.warning(
-                f"Apple Music API rate limited for {genre}. Skipping this service/genre and continuing ETL pipeline."
-            )
-            return
-        else:
-            raise
-    except Exception as e:
-        if "429" in str(e) and service_name == "AppleMusic":
-            logger.warning(
-                f"Apple Music API rate limited for {genre}. Skipping this service/genre and continuing ETL pipeline."
-            )
-            return
-        else:
-            raise
-    finally:
-        # Clean up WebDriver for AppleMusic extractor
-        if hasattr(extractor, "webdriver_manager"):
-            extractor.webdriver_manager.close_driver()
-
-
-if __name__ == "__main__":
-    set_secrets()
-    mongo_client = get_mongo_client()
-
-    if DEBUG_MODE:
-        logger.info("Debug Mode: not clearing mongo")
-    else:
-        clear_collection(mongo_client, "raw_playlists")
-
-    for service_name, config in SERVICE_CONFIGS.items():
-        for genre in PLAYLIST_GENRES:
-            logger.info(f"Retrieving {genre} from {service_name} with credential {config['links'][genre]}")
-            run_extraction(mongo_client, service_name, genre)

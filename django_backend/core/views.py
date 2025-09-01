@@ -4,8 +4,6 @@ from enum import Enum
 import requests
 from django.http import JsonResponse
 
-from playlist_etl.constants import ServiceName
-
 EDM_EVENTS_GITHUB_URL = "https://raw.githubusercontent.com/AidanJaghab/Beatmap/main/backend/data/latest_events.json"
 EDM_EVENTS_CACHE_KEY = "edm_events_data"
 
@@ -17,20 +15,6 @@ try:
 except Exception:
     cache = None
 
-# Safe MongoDB imports with fallback
-try:
-    from . import (
-        historical_track_views,
-        playlists_collection,
-        raw_playlists_collection,
-        transformed_playlists_collection,
-    )
-
-except Exception:
-    historical_track_views = None
-    playlists_collection = None
-    raw_playlists_collection = None
-    transformed_playlists_collection = None
 
 logger = logging.getLogger(__name__)
 
@@ -40,239 +24,93 @@ class ResponseStatus(Enum):
     ERROR = "error"
 
 
-def create_response(status: ResponseStatus, message: str, data=None):
-    return JsonResponse({"status": status.value, "message": message, "data": data})
+def create_response(status: ResponseStatus, message: str, data: dict | list | None) -> JsonResponse:
+    """Create a standardized JSON response."""
+    return JsonResponse(
+        {
+            "status": status.value,
+            "message": message,
+            "data": data,
+        }
+    )
 
 
 def root(request):
-    """Root endpoint"""
-    return create_response(ResponseStatus.SUCCESS, "Welcome to the TuneMeld Backend! Django is running.")
+    """Root endpoint - returns basic API information."""
+    return create_response(
+        ResponseStatus.SUCCESS,
+        "TuneMeld API is running",
+        {
+            "version": "1.0.0",
+            "endpoints": [
+                "/health/",
+                "/edm-events/",
+                "/gql/",
+            ],
+        },
+    )
 
 
 def health(request):
-    """Health check endpoint for Railway deployment monitoring"""
-    return create_response(ResponseStatus.SUCCESS, "Service is healthy")
-
-
-def get_graph_data(request, genre_name):
-    if playlists_collection is None:
-        return create_response(ResponseStatus.ERROR, "Database not available", None)
-
-    try:
-
-        def get_tracks_from_playlist(genre_name: str) -> list[dict]:
-            playlists = playlists_collection.find({"genre_name": genre_name}, {"_id": False})
-            tracks = [
-                {
-                    "isrc": track["isrc"],
-                    "artist_name": track["artist_name"],
-                    "youtube_url": track.get("youtube_url", ""),
-                    "album_cover_url": track.get("album_cover_url", ""),
-                }
-                for track in playlists[0]["tracks"]
-            ]
-            return tracks
-
-        def get_view_counts(isrc_list: list[str]) -> dict:
-            track_views_query = {"isrc": {"$in": isrc_list}}
-            track_views = historical_track_views.find(track_views_query)
-
-            isrc_to_track_views = {}
-            for track in track_views:
-                isrc_to_track_views[track["isrc"]] = track
-            return isrc_to_track_views
-
-        tracks = get_tracks_from_playlist(genre_name)
-        isrc_list = [track["isrc"] for track in tracks]
-        track_views = get_view_counts(isrc_list)
-        for track in tracks:
-            if track["isrc"] in track_views and "view_counts" in track_views[track["isrc"]]:
-                for service_name, view_counts in track_views[track["isrc"]]["view_counts"].items():
-                    track["view_counts"] = track.get("view_counts", {})
-                    track["view_counts"][service_name] = [
-                        [
-                            view["current_timestamp"],
-                            view["delta_count"],
-                        ]
-                        for view in view_counts
-                    ]
-        return create_response(ResponseStatus.SUCCESS, "Graph data retrieved successfully", tracks)
-
-    except Exception as error:
-        logger.exception("Error in get_graph_data view")
-        return create_response(ResponseStatus.ERROR, str(error), None)
-
-
-def get_playlist_data(request, genre_name):
-    if playlists_collection is None:
-        return create_response(ResponseStatus.ERROR, "Database not available", None)
-
-    try:
-        data = list(playlists_collection.find({"genre_name": genre_name}, {"_id": False}))
-        if not data:
-            return create_response(ResponseStatus.ERROR, "No data found for the specified genre", None)
-        return create_response(ResponseStatus.SUCCESS, "Playlist data retrieved successfully", data)
-    except Exception as error:
-        return create_response(ResponseStatus.ERROR, str(error), None)
-
-
-def get_aggregate_playlist(request, genre_name):
-    """Get aggregated playlist data from MongoDB by combining tracks across services."""
-    if transformed_playlists_collection is None:
-        return create_response(ResponseStatus.ERROR, "Database not available", None)
-
-    try:
-        from collections import defaultdict
-
-        # Get all service playlists for this genre
-        service_playlists = list(transformed_playlists_collection.find({"genre_name": genre_name}, {"_id": False}))
-
-        if not service_playlists:
-            return create_response(ResponseStatus.ERROR, "No data found for the specified genre", None)
-
-        # Group tracks by ISRC to find cross-service matches
-        isrc_tracks = defaultdict(dict)
-        service_priority = ["Spotify", "AppleMusic", "SoundCloud"]  # Priority order for ranking
-
-        for playlist in service_playlists:
-            service_name = playlist["service_name"]
-            for track in playlist.get("tracks", []):
-                if track.get("isrc"):
-                    isrc = track["isrc"]
-                    # Store the track data and rank for each service
-                    isrc_tracks[isrc][service_name] = {"track_data": track, "rank": track.get("rank", 999)}
-
-        # Create aggregate playlist from cross-service matches
-        aggregate_tracks = []
-        for _isrc, service_data in isrc_tracks.items():
-            # Only include ISRCs that appear in multiple services
-            if len(service_data) > 1:
-                # Use highest priority service for primary track data and ranking
-                primary_service = None
-                primary_rank = float("inf")
-
-                for service in service_priority:
-                    if service in service_data:
-                        primary_service = service
-                        primary_rank = service_data[service]["rank"]
-                        break
-
-                if primary_service:
-                    track_data = service_data[primary_service]["track_data"].copy()
-                    track_data["service"] = ServiceName.TUNEMELD
-                    track_data["rank"] = primary_rank
-
-                    # Add additional sources information
-                    additional_sources = {}
-                    for service, data in service_data.items():
-                        track = data["track_data"]
-                        if "service_url" in track:
-                            additional_sources[service] = track["service_url"]
-
-                    track_data["additional_sources"] = additional_sources
-                    track_data["source_name"] = primary_service
-                    aggregate_tracks.append(track_data)
-
-        # Sort by primary service rank and re-rank sequentially
-        aggregate_tracks.sort(key=lambda x: x["rank"])
-        for i, track in enumerate(aggregate_tracks, 1):
-            track["rank"] = i
-
-        data = [{"genre_name": genre_name, "service_name": ServiceName.TUNEMELD, "tracks": aggregate_tracks}]
-
-        return create_response(ResponseStatus.SUCCESS, "tunemeld playlist data retrieved successfully", data)
-
-    except Exception as error:
-        logger.exception("Error in get_aggregate_playlist view")
-        return create_response(ResponseStatus.ERROR, str(error), None)
-
-
-def get_service_playlist(request, genre_name, service_name):
-    if transformed_playlists_collection is None:
-        return create_response(ResponseStatus.ERROR, "Database not available", None)
-
-    try:
-        data = list(
-            transformed_playlists_collection.find(
-                {"genre_name": genre_name, "service_name": service_name}, {"_id": False}
-            )
-        )
-        if not data:
-            return create_response(ResponseStatus.ERROR, "No data found for the specified genre and service", None)
-        return create_response(ResponseStatus.SUCCESS, "Service playlist data retrieved successfully", data)
-    except Exception as error:
-        return create_response(ResponseStatus.ERROR, str(error), None)
-
-
-def get_last_updated(request, genre_name):
-    if playlists_collection is None:
-        return create_response(ResponseStatus.ERROR, "Database not available", None)
-
-    try:
-        data = list(playlists_collection.find({"genre_name": genre_name}, {"_id": False}))
-        if not data:
-            return create_response(ResponseStatus.ERROR, "No data found for the specified genre", None)
-
-        last_updated = data[0]["insert_timestamp"]
-        return create_response(
-            ResponseStatus.SUCCESS,
-            "Last updated timestamp retrieved successfully",
-            {"last_updated": last_updated},
-        )
-    except Exception as error:
-        return create_response(ResponseStatus.ERROR, str(error), None)
-
-
-def get_header_art(request, genre_name):
-    if raw_playlists_collection is None:
-        return create_response(ResponseStatus.ERROR, "Database not available", None)
-
-    try:
-        data = list(raw_playlists_collection.find({"genre_name": genre_name}, {"_id": False}))
-        if not data:
-            return create_response(ResponseStatus.ERROR, "No data found for the specified genre", None)
-
-        formatted_data = format_playlist_data(data)
-        return create_response(ResponseStatus.SUCCESS, "Header art data retrieved successfully", formatted_data)
-    except Exception as error:
-        return create_response(ResponseStatus.ERROR, str(error), None)
-
-
-def format_playlist_data(data):
-    result = {}
-    for item in data:
-        if item["service_name"] not in result:
-            result[item["service_name"]] = {
-                "playlist_cover_url": item.get("playlist_cover_url", ""),
-                "playlist_cover_description_text": item.get("playlist_cover_description_text", ""),
-                "playlist_name": item.get("playlist_name", ""),
-                "playlist_url": item.get("playlist_url", ""),
-            }
-    return result
+    """Health check endpoint."""
+    return create_response(ResponseStatus.SUCCESS, "Service is healthy", {"status": "ok"})
 
 
 def get_edm_events(request):
+    """Get EDM events data from GitHub with caching."""
+    # Check cache first
+    if cache:
+        cached_data = cache.get(EDM_EVENTS_CACHE_KEY)
+        if cached_data:
+            logger.info("Returning cached EDM events data")
+            return create_response(ResponseStatus.SUCCESS, "EDM events data retrieved from cache", cached_data)
+
     try:
-        if cache:
-            cached_response = cache.get(EDM_EVENTS_CACHE_KEY)
-            if cached_response:
-                return create_response(
-                    ResponseStatus.SUCCESS, "EDM events retrieved successfully from cache", cached_response
-                )
-
-        response = requests.get(EDM_EVENTS_GITHUB_URL, timeout=10)
+        # Fetch fresh data
+        response = requests.get(EDM_EVENTS_GITHUB_URL, timeout=30)
         response.raise_for_status()
+        data = response.json()
 
-        events_data = response.json()
-
+        # Cache the data if cache is available
         if cache:
-            cache.put(EDM_EVENTS_CACHE_KEY, events_data)
+            cache.put(EDM_EVENTS_CACHE_KEY, data, ttl=3600)  # 1 hour TTL
+            logger.info("EDM events data cached successfully")
 
-        return create_response(ResponseStatus.SUCCESS, "EDM events retrieved successfully", events_data)
+        logger.info("EDM events data fetched successfully from GitHub")
+        return create_response(ResponseStatus.SUCCESS, "EDM events data retrieved successfully", data)
 
     except requests.exceptions.RequestException as e:
-        logger.error(f"Failed to fetch EDM events from GitHub: {e}")
+        logger.error(f"Failed to fetch EDM events data: {e}")
         return create_response(ResponseStatus.ERROR, f"Failed to fetch EDM events: {e!s}", None)
-    except Exception as e:
-        logger.error(f"Unexpected error in get_edm_events: {e}")
-        return create_response(ResponseStatus.ERROR, f"Unexpected error: {e!s}", None)
+    except Exception as error:
+        logger.error(f"Unexpected error in get_edm_events: {error}")
+        return create_response(ResponseStatus.ERROR, str(error), None)
+
+
+# Legacy MongoDB-dependent endpoints - return appropriate error messages
+def get_aggregate_playlist(request, genre_name):
+    """Legacy MongoDB-dependent endpoint - now deprecated."""
+    return create_response(
+        ResponseStatus.ERROR, "This endpoint has been deprecated. MongoDB functionality has been removed.", None
+    )
+
+
+def get_service_playlist(request, genre_name, service_name):
+    """Legacy MongoDB-dependent endpoint - now deprecated."""
+    return create_response(
+        ResponseStatus.ERROR, "This endpoint has been deprecated. MongoDB functionality has been removed.", None
+    )
+
+
+def get_last_updated(request, genre_name):
+    """Legacy MongoDB-dependent endpoint - now deprecated."""
+    return create_response(
+        ResponseStatus.ERROR, "This endpoint has been deprecated. MongoDB functionality has been removed.", None
+    )
+
+
+def get_header_art(request, genre_name):
+    """Legacy MongoDB-dependent endpoint - now deprecated."""
+    return create_response(
+        ResponseStatus.ERROR, "This endpoint has been deprecated. MongoDB functionality has been removed.", None
+    )

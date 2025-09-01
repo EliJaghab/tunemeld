@@ -70,7 +70,7 @@ class Command(BaseCommand):
 
         metadata = {"url": playlist_url, "name": "", "cover_url": "", "description": ""}
 
-        # Real production metadata from MongoDB
+        # Real production metadata
         if service == "soundcloud":
             metadata["url"] = data.get("permalinkUrl", playlist_url)
             track_count = len(data.get("tracks", []))

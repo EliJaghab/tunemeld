@@ -22,10 +22,6 @@ if ENVIRONMENT == DEV:
     env_file = Path(__file__).resolve().parent.parent.parent / ".env.dev"
     load_dotenv(env_file)
 
-MONGO_DATA_API_KEY = os.getenv("MONGO_DATA_API_KEY", "")
-MONGO_DATA_API_ENDPOINT = os.getenv("MONGO_DATA_API_ENDPOINT", "")
-MONGO_URI = os.getenv("MONGO_URI", "")
-MONGO_DB_NAME = os.getenv("MONGO_DB_NAME", "")
 
 CF_ACCOUNT_ID = os.getenv("CF_ACCOUNT_ID", "")
 CF_NAMESPACE_ID = os.getenv("CF_NAMESPACE_ID", "")
@@ -122,11 +118,6 @@ LOGGING = {
         "django.server": {
             "handlers": ["console"],
             "level": "INFO",
-            "propagate": False,
-        },
-        "pymongo": {
-            "handlers": ["console"],
-            "level": "WARNING",
             "propagate": False,
         },
     },
