@@ -1,60 +1,60 @@
-"""Cache utilities for RapidAPI calls with 7-day TTL"""
-
 import hashlib
+from enum import Enum
 from typing import Any
 
 from django.core.cache import cache
 
 from playlist_etl.helpers import get_logger
 
+
+class CachePrefix(str, Enum):
+    """Strongly typed cache prefixes for different data types"""
+
+    RAPIDAPI = "rapidapi"
+    YOUTUBE_URL = "youtube_url"
+    SPOTIFY_ISRC = "spotify_isrc"
+    APPLE_COVER = "apple_cover"
+
+
 logger = get_logger(__name__)
 
-# 7 days in seconds
-CACHE_TTL = 7 * 24 * 60 * 60
+SEVEN_DAYS_TTL = 7 * 24 * 60 * 60
+NO_EXPIRATION_TTL = None
 
-JSON = dict[str, Any] | list[Any]
-
-
-def get_cache_key(service_name: str, genre: str, url: str) -> str:
-    """Generate a unique cache key for the API request"""
-    key_string = f"rapidapi:{service_name}:{genre}:{url}"
-    key_hash = hashlib.md5(key_string.encode()).hexdigest()
-    return f"rapidapi_cache_{key_hash}"
+CACHE_TTL_MAP = {
+    CachePrefix.RAPIDAPI: SEVEN_DAYS_TTL,
+    CachePrefix.YOUTUBE_URL: NO_EXPIRATION_TTL,
+    CachePrefix.SPOTIFY_ISRC: NO_EXPIRATION_TTL,
+    CachePrefix.APPLE_COVER: NO_EXPIRATION_TTL,
+}
 
 
-def get_cached_response(service_name: str, genre: str, url: str) -> JSON | None:
-    """Get cached response if available"""
-    cache_key = get_cache_key(service_name, genre, url)
+def _generate_cache_key(prefix: CachePrefix, key_data: str) -> str:
+    full_key = f"{prefix.value}:{key_data}"
+    return hashlib.md5(full_key.encode()).hexdigest()
+
+
+def cache_get(prefix: CachePrefix, key_data: str) -> Any:
+    cache_key = _generate_cache_key(prefix, key_data)
     cached_data = cache.get(cache_key)
 
     if cached_data:
-        logger.info(f"Cache HIT for {service_name}/{genre} - Using cached RapidAPI response")
+        logger.info(f"Cache HIT: {prefix.value}:{key_data}")
         return cached_data
 
-    logger.info(f"Cache MISS for {service_name}/{genre} - Will fetch from RapidAPI")
+    logger.info(f"Cache MISS: {prefix.value}:{key_data}")
     return None
 
 
-def set_cached_response(service_name: str, genre: str, url: str, data: JSON) -> None:
-    """Store response in cache with 7-day TTL"""
-    cache_key = get_cache_key(service_name, genre, url)
-    cache.set(cache_key, data, CACHE_TTL)
-    logger.info(f"Cached RapidAPI response for {service_name}/{genre} with 7-day TTL")
+def cache_set(prefix: CachePrefix, key_data: str, value: Any, ttl: int | None = None) -> None:
+    if ttl is None:
+        ttl = CACHE_TTL_MAP.get(prefix, NO_EXPIRATION_TTL)
 
+    cache_key = _generate_cache_key(prefix, key_data)
 
-def clear_playlist_cache(service_name: str | None = None, genre: str | None = None) -> None:
-    """Clear cached playlist data
-
-    Args:
-        service_name: Clear cache for specific service (optional)
-        genre: Clear cache for specific genre (optional)
-    """
-    if service_name and genre:
-        # Clear specific cache entry
-        # Note: We'd need to track URLs to clear specific entries
-        logger.info(f"Clearing cache for {service_name}/{genre}")
+    if ttl is None:
+        cache.set(cache_key, value)
+        logger.info(f"Cached: {prefix.value}:{key_data} (TTL: no expiration)")
     else:
-        # Clear all RapidAPI cache entries
-        # Django cache doesn't support pattern deletion, so we'd need to track keys
-        logger.info("Clearing all RapidAPI cache entries")
-        # For now, we can only clear individual keys when we know them
+        cache.set(cache_key, value, ttl)
+        logger.info(f"Cached: {prefix.value}:{key_data} (TTL: {ttl}s)")

@@ -3,7 +3,7 @@ from typing import Any, cast
 
 import requests
 
-from playlist_etl.cache_utils import get_cached_response, set_cached_response
+from playlist_etl.cache_utils import CachePrefix, cache_get, cache_set
 from playlist_etl.constants import SERVICE_CONFIGS, ServiceName
 from playlist_etl.helpers import get_logger
 from playlist_etl.spotdl_client import fetch_spotify_playlist_with_spotdl
@@ -24,23 +24,25 @@ def fetch_playlist_data(service_name: str, genre: str) -> JSON:
         apple_playlist_url = f"https://music.apple.com/us/playlist/playlist/{playlist_id}"
         url = f"{config['base_url']}?url={apple_playlist_url}"
 
-        cached_data = get_cached_response(service_name, genre, url)
+        key_data = f"{service_name}:{genre}:{url}"
+        cached_data = cache_get(CachePrefix.RAPIDAPI, key_data)
         if cached_data:
             return cached_data
 
         data = _make_rapidapi_request(url, config["host"])
-        set_cached_response(service_name, genre, url, data)
+        cache_set(CachePrefix.RAPIDAPI, key_data, data)
         return data
     elif service_name == ServiceName.SOUNDCLOUD.value:
         playlist_url = config["links"][genre]
         url = f"{config['base_url']}?playlist={playlist_url}"
 
-        cached_data = get_cached_response(service_name, genre, url)
+        key_data = f"{service_name}:{genre}:{url}"
+        cached_data = cache_get(CachePrefix.RAPIDAPI, key_data)
         if cached_data:
             return cached_data
 
         data = _make_rapidapi_request(url, config["host"])
-        set_cached_response(service_name, genre, url, data)
+        cache_set(CachePrefix.RAPIDAPI, key_data, data)
         return data
     else:
         raise ValueError(f"Unknown service: {service_name}")
@@ -60,6 +62,11 @@ def _make_rapidapi_request(url: str, host: str) -> JSON:
 
     logger.info(f"Making RapidAPI request to {host}")
     response = requests.get(url, headers=headers, timeout=30)
+
+    if response.status_code == 429:
+        logger.error(f"RapidAPI rate limit exceeded for {host}. Skipping this request.")
+        raise requests.exceptions.HTTPError(f"429 Rate limit exceeded for {host}")
+
     response.raise_for_status()
     logger.info(f"RapidAPI request successful - Status: {response.status_code}")
     return cast("JSON", response.json())

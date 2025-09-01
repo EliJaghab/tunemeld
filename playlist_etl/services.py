@@ -8,10 +8,11 @@ from spotipy.exceptions import SpotifyException
 from spotipy.oauth2 import SpotifyClientCredentials
 from tenacity import retry, stop_after_attempt, wait_exponential
 
+from playlist_etl.cache_utils import CachePrefix, cache_get, cache_set
 from playlist_etl.config import CURRENT_TIMESTAMP
 from playlist_etl.helpers import get_logger
 from playlist_etl.models import HistoricalView, Track
-from playlist_etl.utils import CacheManager, WebDriverManager, get_delta_view_count
+from playlist_etl.utils import WebDriverManager, get_delta_view_count
 
 SPOTIFY_ERROR_THRESHOLD = 5
 
@@ -23,7 +24,6 @@ class SpotifyService:
         self,
         client_id: str,
         client_secret: str,
-        isrc_cache_manager: CacheManager,
         webdriver_manager: WebDriverManager,
     ):
         if not client_id or not client_secret:
@@ -31,15 +31,13 @@ class SpotifyService:
         self.spotify_client = Spotify(
             client_credentials_manager=SpotifyClientCredentials(client_id=client_id, client_secret=client_secret)
         )
-        self.isrc_cache_manager = isrc_cache_manager
         self.webdriver_manager = webdriver_manager
         self.error_count = 0
 
     def get_isrc(self, track_name: str, artist_name: str) -> str | None:
-        cache_key = f"{track_name}|{artist_name}"
-        isrc = self.isrc_cache_manager.get(cache_key)
+        key_data = f"{track_name}|{artist_name}"
+        isrc = cache_get(CachePrefix.SPOTIFY_ISRC, key_data)
         if isrc:
-            logger.info(f"Cache hit for ISRC: {cache_key}")
             return str(isrc)
 
         logger.info(f"ISRC Spotify Lookup Cache miss for {track_name} by {artist_name}")
@@ -55,7 +53,7 @@ class SpotifyService:
             isrc = self._get_isrc(query)
             if isrc:
                 logger.info(f"Found ISRC for {track_name} by {artist_name}: {isrc}")
-                self.isrc_cache_manager.set(cache_key, isrc)
+                cache_set(CachePrefix.SPOTIFY_ISRC, key_data, isrc)
                 return isrc
 
         logger.info(f"No track found on Spotify using queries: {queries} for {track_name} by {artist_name}")
@@ -167,11 +165,10 @@ class SpotifyService:
 
 
 class YouTubeService:
-    def __init__(self, api_key: str, cache_manager: CacheManager) -> None:
+    def __init__(self, api_key: str) -> None:
         if not api_key:
             raise ValueError("YouTube API key not provided.")
         self.api_key = api_key
-        self.cache_service = cache_manager
 
     def set_track_url(self, track: Track) -> bool:
         if not track.youtube_url:
@@ -197,10 +194,9 @@ class YouTubeService:
         return True
 
     def get_youtube_url(self, track_name: str, artist_name: str) -> str | None:
-        cache_key = f"{track_name}|{artist_name}"
-        youtube_url = self.cache_service.get(cache_key)
+        key_data = f"{track_name}|{artist_name}"
+        youtube_url = cache_get(CachePrefix.YOUTUBE_URL, key_data)
         if youtube_url:
-            logger.info(f"Cache hit for YouTube URL: {cache_key}")
             return str(youtube_url)
 
         query = f"{track_name} {artist_name}"
@@ -214,7 +210,7 @@ class YouTubeService:
                 if video_id:
                     youtube_url = f"https://www.youtube.com/watch?v={video_id}"
                     logger.info(f"Found YouTube URL for {track_name} by {artist_name}: {youtube_url}")
-                    self.cache_service.set(cache_key, youtube_url)
+                    cache_set(CachePrefix.YOUTUBE_URL, key_data, youtube_url)
                     return youtube_url
             logger.info(f"No video found for {track_name} by {artist_name}")
             return None
@@ -313,14 +309,12 @@ class YouTubeService:
 
 
 class AppleMusicService:
-    def __init__(self, cache_service: CacheManager):
-        self.cache_service = cache_service
+    def __init__(self):
+        pass
 
     def get_album_cover_url(self, track_url: str) -> str | None:
-        cache_key = track_url
-        album_cover_url = self.cache_service.get(cache_key)
+        album_cover_url = cache_get(CachePrefix.APPLE_COVER, track_url)
         if album_cover_url:
-            logger.info(f"Cache hit for Apple Music Album Cover URL: {cache_key}")
             return str(album_cover_url)
 
         logger.info(f"Apple Music Album Cover Cache miss for URL: {track_url}")
@@ -335,7 +329,7 @@ class AppleMusicService:
 
             srcset = source_tag["srcset"]
             album_cover_url = unquote(srcset.split()[0])
-            self.cache_service.set(cache_key, album_cover_url)
+            cache_set(CachePrefix.APPLE_COVER, track_url, album_cover_url)
             return album_cover_url
         except Exception as e:
             logger.info(f"Error fetching album cover URL: {e}")
