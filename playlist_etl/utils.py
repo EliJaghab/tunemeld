@@ -2,7 +2,7 @@ import os
 import time
 from collections.abc import Callable
 from concurrent.futures import ThreadPoolExecutor
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from typing import Any
 
 from fp.fp import FreeProxy
@@ -29,6 +29,9 @@ logger = get_logger(__name__)
 
 RETRIES = 3
 RETRY_DELAY = 8
+
+# 7 days TTL for all cache entries
+CACHE_TTL_DAYS = 7
 
 
 def get_mongo_client() -> MongoClient:
@@ -75,32 +78,80 @@ def insert_or_update_data_to_mongo(client: MongoClient, collection_name: str, do
 def insert_or_update_kv_data_to_mongo(client: MongoClient, collection_name: str, key: str, value: Any) -> None:
     db = client[PLAYLIST_ETL_COLLECTION_NAME]
     collection = db[collection_name]
+
+    # Calculate expiration time (7 days from now)
+    expires_at = datetime.now(timezone.utc) + timedelta(days=CACHE_TTL_DAYS)
+    current_time = datetime.now(timezone.utc)
+
     existing_document = collection.find_one({"key": key})
 
     if existing_document:
-        update_data = {"key": key, "value": value, "update_timestamp": datetime.now(timezone.utc)}
+        update_data = {
+            "key": key,
+            "value": value,
+            "update_timestamp": current_time,
+            "expires_at": expires_at,
+            "created_at": existing_document.get("created_at", current_time),
+        }
         collection.replace_one({"key": key}, update_data)
-        logger.info(f"KV data updated for key: {key}")
+        logger.info(f"KV data updated for key: {key} with 7-day TTL")
     else:
-        insert_data = {"key": key, "value": value, "insert_timestamp": datetime.now(timezone.utc)}
+        insert_data = {
+            "key": key,
+            "value": value,
+            "insert_timestamp": current_time,
+            "expires_at": expires_at,
+            "created_at": current_time,
+        }
         collection.insert_one(insert_data)
-        logger.info(f"KV data inserted with key: {key}")
+        logger.info(f"KV data inserted with key: {key} with 7-day TTL")
 
 
 def read_cache_from_mongo(mongo_client: MongoClient, collection_name: str) -> dict[str, Any]:
     db = mongo_client[PLAYLIST_ETL_COLLECTION_NAME]
     collection = db[collection_name]
     cache: dict[str, Any] = {}
+    current_time = datetime.now(timezone.utc)
+
     for item in collection.find():
+        # Check if item has expired (7-day TTL)
+        if "expires_at" in item:
+            expires_at = item["expires_at"]
+            if current_time > expires_at:
+                logger.info(f"Cache entry expired for key: {item['key']} in {collection_name}")
+                # Remove expired entry from MongoDB
+                collection.delete_one({"key": item["key"]})
+                continue
+
         cache[item["key"]] = item["value"]
     return cache
 
 
 def update_cache_in_mongo(mongo_client: MongoClient, collection_name: str, key: str, value: Any) -> None:
-    logger.info(f"Updating cache in collection: {collection_name} for key: {key} with value: {value}")
+    logger.info(f"Updating cache in collection: {collection_name} for key: {key} with value: {value} with 7-day TTL")
+
+    # Calculate expiration time (7 days from now)
+    expires_at = datetime.now(timezone.utc) + timedelta(days=CACHE_TTL_DAYS)
+    current_time = datetime.now(timezone.utc)
+
     db = mongo_client[PLAYLIST_ETL_COLLECTION_NAME]
     collection = db[collection_name]
-    collection.replace_one({"key": key}, {"key": key, "value": value}, upsert=True)
+
+    # Get existing document to preserve created_at timestamp
+    existing_document = collection.find_one({"key": key})
+    created_at = existing_document.get("created_at", current_time) if existing_document else current_time
+
+    collection.replace_one(
+        {"key": key},
+        {
+            "key": key,
+            "value": value,
+            "expires_at": expires_at,
+            "created_at": created_at,
+            "update_timestamp": current_time,
+        },
+        upsert=True,
+    )
 
 
 def read_data_from_mongo(client: MongoClient, collection_name: str) -> list[dict[str, Any]]:
@@ -287,14 +338,41 @@ class CacheManager:
     def load_cache(self) -> dict[str, Any]:
         logger.info(f"Loading {self.collection_name} cache into memory")
         cache: dict[str, Any] = {}
+        current_time = datetime.now(timezone.utc)
+
         data = self.mongo_client.get_collection(self.collection_name).find()
         for item in data:
+            # Check if item has expired (7-day TTL)
+            if "expires_at" in item:
+                expires_at = item["expires_at"]
+                if current_time > expires_at:
+                    logger.info(f"Cache entry expired for key: {item['key']} in {self.collection_name}")
+                    # Remove expired entry from MongoDB
+                    self.mongo_client.get_collection(self.collection_name).delete_one({"key": item["key"]})
+                    continue
+
             cache[item["key"]] = item["value"]
         return cache
 
     def get(self, key: str) -> Any:
         logger.info(f"Getting cache for key: {key} in collection: {self.collection_name}")
-        return self.cache.get(key)
+
+        # Check if key exists in memory cache
+        if key in self.cache:
+            # Verify it hasn't expired by checking MongoDB
+            current_time = datetime.now(timezone.utc)
+            db_entry = self.mongo_client.get_collection(self.collection_name).find_one({"key": key})
+
+            if db_entry and "expires_at" in db_entry and current_time > db_entry["expires_at"]:
+                logger.info(f"Cache entry expired for key: {key} in {self.collection_name}")
+                # Remove from both memory and MongoDB
+                del self.cache[key]
+                self.mongo_client.get_collection(self.collection_name).delete_one({"key": key})
+                return None
+
+            return self.cache[key]
+
+        return None
 
     def _validate_cache_entry(self, key: str, value: Any) -> bool:
         if key is None or value is None:
@@ -303,11 +381,18 @@ class CacheManager:
 
     def set(self, key: str, value: Any) -> None:
         self._validate_cache_entry(key, value)
-        logger.info(f"Setting cache for key: {key} with value: {value} in collection: {self.collection_name}")
+        logger.info(
+            f"Setting cache for key: {key} with value: {value} in collection: {self.collection_name} with 7-day TTL"
+        )
+
+        # Calculate expiration time (7 days from now)
+        expires_at = datetime.now(timezone.utc) + timedelta(days=CACHE_TTL_DAYS)
+
+        # Update both memory cache and MongoDB with TTL
         self.cache[key] = value
         self.mongo_client.get_collection(self.collection_name).update_one(
             {"key": key},
-            {"$set": {"value": value}},
+            {"$set": {"value": value, "expires_at": expires_at, "created_at": datetime.now(timezone.utc)}},
             upsert=True,
         )
 
