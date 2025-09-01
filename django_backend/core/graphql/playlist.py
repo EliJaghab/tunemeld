@@ -59,12 +59,8 @@ class PlaylistQuery(graphene.ObjectType):
         except Genre.DoesNotExist:
             return []
 
-        # Get the latest raw playlist data for each service for this genre
         raw_playlists = (
-            RawPlaylistData.objects.filter(genre=genre_obj)
-            .select_related("service", "genre")
-            .order_by("service_id", "-created_at")
-            .distinct("service_id")
+            RawPlaylistData.objects.filter(genre=genre_obj).select_related("service", "genre").order_by("-created_at")
         )
 
         playlist_metadata = []
