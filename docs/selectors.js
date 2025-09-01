@@ -10,7 +10,7 @@ import {
 } from "./playlist.js";
 import { setupBodyClickListener } from "./servicePlayer.js";
 import { stateManager } from "./StateManager.js";
-import { appRouter } from "./router.js";
+import { appRouter } from "./router.js?v=20250828b";
 
 export async function updateGenreData(genre, viewCountType, updateAll = false) {
   try {
