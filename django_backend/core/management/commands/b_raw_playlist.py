@@ -20,7 +20,7 @@ class Command(BaseCommand):
     def handle(self, *args: object, **options: object) -> None:
         RawPlaylistData.objects.all().delete()
         if settings.ENVIRONMENT == settings.DEV:
-            call_command("setup_staging")
+            call_command("b2_mock_raw_playlist")
             return
 
         for service_name in SERVICE_CONFIGS:

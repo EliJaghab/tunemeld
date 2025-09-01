@@ -6,17 +6,22 @@ from core.models import Genre, RawPlaylistData, Service
 from django.core.management.base import BaseCommand
 
 from playlist_etl.constants import SERVICE_CONFIGS, ServiceName
+from playlist_etl.helpers import get_logger
 
 MAX_TRACKS_PER_PLAYLIST = 10
+logger = get_logger(__name__)
 
 
 class Command(BaseCommand):
-    help = "Load real API data from files for staging environment"
+    help = "Load real API data from files instead of making API calls"
 
     def handle(self, *args: Any, **options: Any) -> None:
+        logger.info("Loading real API data from files...")
+
         real_api_data_dir = Path(__file__).parent.parent.parent.parent / "real_api_data"
 
         if not real_api_data_dir.exists():
+            logger.warning("No real_api_data directory found")
             return
 
         mapping = {
@@ -49,6 +54,8 @@ class Command(BaseCommand):
                     playlist_cover_description_text=playlist_metadata["description"],
                     data=limited_data,
                 )
+
+        logger.info("Mock raw playlist data loaded")
 
     def extract_playlist_metadata(self, service: str, genre: str, data: dict) -> dict[str, str]:
         """Extract playlist metadata from JSON data with realistic stub data for missing fields."""
