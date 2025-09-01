@@ -1,6 +1,6 @@
+import concurrent.futures
+
 from core.models import Genre, RawPlaylistData, Service
-from django.conf import settings
-from django.core.management import call_command
 from django.core.management.base import BaseCommand
 
 from playlist_etl.constants import PLAYLIST_GENRES, SERVICE_CONFIGS, ServiceName
@@ -19,18 +19,32 @@ class Command(BaseCommand):
 
     def handle(self, *args: object, **options: object) -> None:
         RawPlaylistData.objects.all().delete()
-        if settings.ENVIRONMENT == settings.DEV:
-            call_command("b2_mock_raw_playlist")
-            return
 
         supported_services = [ServiceName.APPLE_MUSIC.value, ServiceName.SOUNDCLOUD.value, ServiceName.SPOTIFY.value]
 
+        # Create list of all service/genre combinations to process
+        tasks = []
         for service_name in SERVICE_CONFIGS:
             if service_name not in supported_services:
                 continue
-
             for genre in PLAYLIST_GENRES:
-                self.get_and_save_playlist(service_name, genre)
+                tasks.append((service_name, genre))
+
+        # Process tasks in parallel with thread pool
+        max_workers = min(len(tasks), 8)  # Limit concurrent API calls
+        with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
+            future_to_task = {
+                executor.submit(self.get_and_save_playlist, service_name, genre): (service_name, genre)
+                for service_name, genre in tasks
+            }
+
+            for future in concurrent.futures.as_completed(future_to_task):
+                service_name, genre = future_to_task[future]
+                try:
+                    future.result()
+                    logger.info(f"Completed {service_name}/{genre}")
+                except Exception as exc:
+                    logger.error(f"Failed {service_name}/{genre}: {exc}")
 
     def get_and_save_playlist(self, service_name: str, genre: str) -> RawPlaylistData:
         logger.info(f"Getting playlist data for {service_name}/{genre}")
