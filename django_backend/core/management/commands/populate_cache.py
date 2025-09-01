@@ -3,8 +3,8 @@ from pathlib import Path
 
 from django.core.management.base import BaseCommand
 
-from playlist_etl.cache_utils import set_cached_response
-from playlist_etl.constants import PLAYLIST_GENRES, SERVICE_CONFIGS, ServiceName
+from playlist_etl.cache_utils import cache_set
+from playlist_etl.constants import PLAYLIST_GENRES, SERVICE_CONFIGS, CachePrefix, ServiceName
 from playlist_etl.helpers import get_logger
 
 logger = get_logger(__name__)
@@ -58,7 +58,8 @@ class Command(BaseCommand):
                         continue
 
                     # Cache the data
-                    set_cached_response(service_name, genre, cache_url, data)
+                    key_data = f"{service_name}:{genre}:{cache_url}"
+                    cache_set(CachePrefix.RAPIDAPI, key_data, data)
                     total_cached += 1
                     logger.info(f"Cached {service_name}/{genre}")
 
