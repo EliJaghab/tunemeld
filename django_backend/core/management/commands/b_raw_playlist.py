@@ -46,7 +46,9 @@ class Command(BaseCommand):
                 except Exception as exc:
                     logger.error(f"Failed {service_name}/{genre}: {exc}")
 
-    def get_and_save_playlist(self, service_name: str, genre: str) -> RawPlaylistData:
+    def get_and_save_playlist(self, service_name: str, genre: str) -> RawPlaylistData | None:
+        import requests
+
         logger.info(f"Getting playlist data for {service_name}/{genre}")
         service = Service.objects.get(name=service_name)
         genre_obj = Genre.objects.get(name=genre)
@@ -61,21 +63,34 @@ class Command(BaseCommand):
         else:
             raise ValueError(f"Unknown service: {service_name}")
 
-        extractor.set_playlist_details()
-        playlist_data = extractor.get_playlist()
+        try:
+            extractor.set_playlist_details()
+            playlist_data = extractor.get_playlist()
 
-        raw_data = RawPlaylistData(
-            genre=genre_obj,
-            service=service,
-            playlist_url=extractor.playlist_url,
-            playlist_name=extractor.playlist_name,
-            playlist_cover_url=getattr(extractor, "playlist_cover_url", ""),
-            playlist_cover_description_text=getattr(extractor, "playlist_cover_description_text", ""),
-            data=playlist_data,
-        )
-        raw_data.save()
+            raw_data = RawPlaylistData(
+                genre=genre_obj,
+                service=service,
+                playlist_url=extractor.playlist_url,
+                playlist_name=extractor.playlist_name,
+                playlist_cover_url=getattr(extractor, "playlist_cover_url", ""),
+                playlist_cover_description_text=getattr(extractor, "playlist_cover_description_text", ""),
+                data=playlist_data,
+            )
+            raw_data.save()
+            return raw_data
 
-        if hasattr(extractor, "webdriver_manager"):
-            extractor.webdriver_manager.close_driver()
-
-        return raw_data
+        except requests.exceptions.HTTPError as e:
+            if "429" in str(e) and service_name == ServiceName.APPLE_MUSIC:
+                logger.warning(f"Apple Music API rate limited for {genre}. Skipping this service/genre.")
+                return None
+            else:
+                raise
+        except Exception as e:
+            if "429" in str(e) and service_name == ServiceName.APPLE_MUSIC:
+                logger.warning(f"Apple Music API rate limited for {genre}. Skipping this service/genre.")
+                return None
+            else:
+                raise
+        finally:
+            if hasattr(extractor, "webdriver_manager"):
+                extractor.webdriver_manager.close_driver()

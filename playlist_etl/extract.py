@@ -341,7 +341,6 @@ def run_extraction(mongo_client: MongoClient, service_name: str, genre: str) -> 
             "playlist_name": extractor.playlist_name,
             "playlist_cover_url": extractor.playlist_cover_url,
             "playlist_cover_description_text": extractor.playlist_cover_description_text,
-            # New enhanced fields
             "playlist_tagline": getattr(extractor, "playlist_tagline", None),
             "playlist_featured_artist": getattr(extractor, "playlist_featured_artist", None),
             "playlist_saves_count": getattr(extractor, "playlist_saves_count", None),
@@ -353,6 +352,23 @@ def run_extraction(mongo_client: MongoClient, service_name: str, genre: str) -> 
             insert_or_update_data_to_mongo(mongo_client, "raw_playlists", document)
         else:
             logger.info("Debug Mode: not updating mongo")
+
+    except requests.exceptions.HTTPError as e:
+        if "429" in str(e) and service_name == "AppleMusic":
+            logger.warning(
+                f"Apple Music API rate limited for {genre}. Skipping this service/genre and continuing ETL pipeline."
+            )
+            return
+        else:
+            raise
+    except Exception as e:
+        if "429" in str(e) and service_name == "AppleMusic":
+            logger.warning(
+                f"Apple Music API rate limited for {genre}. Skipping this service/genre and continuing ETL pipeline."
+            )
+            return
+        else:
+            raise
     finally:
         # Clean up WebDriver for AppleMusic extractor
         if hasattr(extractor, "webdriver_manager"):

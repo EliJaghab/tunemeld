@@ -8,9 +8,7 @@ from django.core.management.base import BaseCommand
 from playlist_etl.constants import ServiceName
 from playlist_etl.helpers import get_logger
 from playlist_etl.models import NormalizedTrack
-from playlist_etl.mongo_db_client import MongoDBClient
 from playlist_etl.services import AppleMusicService, SpotifyService
-from playlist_etl.utils import CacheManager
 
 logger = get_logger(__name__)
 
@@ -22,12 +20,12 @@ class Command(BaseCommand):
         client_id = os.getenv("SPOTIFY_CLIENT_ID")
         client_secret = os.getenv("SPOTIFY_CLIENT_SECRET")
 
-        mongo_client = MongoDBClient()
-        isrc_cache_manager = CacheManager(mongo_client, "isrc_cache")
-        album_cache_manager = CacheManager(mongo_client, "album_cover_cache")
+        from playlist_etl.utils import WebDriverManager
 
-        self.spotify_service = SpotifyService(client_id, client_secret, isrc_cache_manager, None)
-        self.apple_music_service = AppleMusicService(cache_service=album_cache_manager)
+        webdriver_manager = WebDriverManager()
+
+        self.spotify_service = SpotifyService(client_id, client_secret, webdriver_manager)
+        self.apple_music_service = AppleMusicService()
         Playlist.objects.all().delete()
         ServiceTrack.objects.all().delete()
         raw_data_queryset = RawPlaylistData.objects.select_related("genre", "service").all()

@@ -5,9 +5,7 @@ from django.core.management.base import BaseCommand
 
 from playlist_etl.constants import ServiceName
 from playlist_etl.helpers import get_logger
-from playlist_etl.mongo_db_client import MongoDBClient
 from playlist_etl.services import AppleMusicService, YouTubeService
-from playlist_etl.utils import CacheManager
 
 logger = get_logger(__name__)
 
@@ -17,13 +15,8 @@ class Command(BaseCommand):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.mongo_client = MongoDBClient()
-        self.youtube_service = YouTubeService(
-            api_key=os.getenv("GOOGLE_API_KEY"), cache_manager=CacheManager(self.mongo_client, "youtube_url_cache")
-        )
-        self.apple_music_service = AppleMusicService(
-            cache_service=CacheManager(self.mongo_client, "apple_music_album_cover_cache")
-        )
+        self.youtube_service = YouTubeService(api_key=os.getenv("GOOGLE_API_KEY"))
+        self.apple_music_service = AppleMusicService()
 
     def handle(self, *args: object, **options: object) -> None:
         Track.objects.all().delete()
