@@ -4,7 +4,7 @@ from typing import Any, cast
 import requests
 
 from playlist_etl.cache_utils import get_cached_response, set_cached_response
-from playlist_etl.constants import SERVICE_CONFIGS
+from playlist_etl.constants import SERVICE_CONFIGS, ServiceName
 from playlist_etl.helpers import get_logger
 from playlist_etl.spotdl_client import fetch_spotify_playlist_with_spotdl
 
@@ -16,10 +16,10 @@ JSON = dict[str, Any] | list[Any]
 def fetch_playlist_data(service_name: str, genre: str) -> JSON:
     config = SERVICE_CONFIGS[service_name]
 
-    if service_name == "Spotify":
+    if service_name == ServiceName.SPOTIFY.value:
         playlist_url = config["links"][genre]
         return fetch_spotify_playlist_with_spotdl(playlist_url)
-    elif service_name == "AppleMusic":
+    elif service_name == ServiceName.APPLE_MUSIC.value:
         playlist_id = config["links"][genre].split("/")[-1]
         apple_playlist_url = f"https://music.apple.com/us/playlist/playlist/{playlist_id}"
         url = f"{config['base_url']}?url={apple_playlist_url}"
@@ -31,7 +31,7 @@ def fetch_playlist_data(service_name: str, genre: str) -> JSON:
         data = _make_rapidapi_request(url, config["host"])
         set_cached_response(service_name, genre, url, data)
         return data
-    elif service_name == "SoundCloud":
+    elif service_name == ServiceName.SOUNDCLOUD.value:
         playlist_url = config["links"][genre]
         url = f"{config['base_url']}?playlist={playlist_url}"
 

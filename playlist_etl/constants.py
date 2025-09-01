@@ -27,7 +27,7 @@ PLAYLIST_GENRES: list[str] = [genre.value for genre in GenreName]
 SERVICES: list[str] = [service.value for service in ServiceName]
 
 SERVICE_CONFIGS: dict[str, dict] = {
-    ServiceName.APPLE_MUSIC: {
+    ServiceName.APPLE_MUSIC.value: {
         "base_url": "https://apple-music24.p.rapidapi.com/playlist1/",
         "host": "apple-music24.p.rapidapi.com",
         "param_key": "url",
@@ -41,7 +41,7 @@ SERVICE_CONFIGS: dict[str, dict] = {
             GenreName.RAP: "https://music.apple.com/us/playlist/rap-life/pl.abe8ba42278f4ef490e3a9fc5ec8e8c5",
         },
     },
-    ServiceName.SOUNDCLOUD: {
+    ServiceName.SOUNDCLOUD.value: {
         "base_url": "https://soundcloud-scraper.p.rapidapi.com/v1/playlist/tracks",
         "host": "soundcloud-scraper.p.rapidapi.com",
         "param_key": "playlist",
@@ -55,7 +55,7 @@ SERVICE_CONFIGS: dict[str, dict] = {
             GenreName.RAP: "https://soundcloud.com/soundcloud-hustle/sets/drippin-best-rap-right-now",
         },
     },
-    ServiceName.SPOTIFY: {
+    ServiceName.SPOTIFY.value: {
         "base_url": "https://spotify23.p.rapidapi.com/playlist_tracks/",
         "host": "spotify23.p.rapidapi.com",
         "param_key": "id",
@@ -69,11 +69,11 @@ SERVICE_CONFIGS: dict[str, dict] = {
             GenreName.RAP: "https://open.spotify.com/playlist/37i9dQZF1DX0XUsuxWHRQd",
         },
     },
-    ServiceName.YOUTUBE: {
+    ServiceName.YOUTUBE.value: {
         "display_name": "YouTube",
         "icon_url": "images/youtube_logo.png",
     },
-    ServiceName.TUNEMELD: {
+    ServiceName.TUNEMELD.value: {
         "display_name": "tunemeld",
         "icon_url": "images/tunemeld_logo.png",
     },

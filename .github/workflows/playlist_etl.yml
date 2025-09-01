@@ -1,4 +1,4 @@
-name: Playlist ETL 2
+name: Playlist ETL
 
 on:
   schedule:

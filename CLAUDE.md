@@ -30,3 +30,5 @@ make format           # Format and lint all code (pre-commit hooks)
 **Claude Code must run `make format` (pre-commit hooks) before completing any coding task.**
 
 **DO NOT ADD COMMENTS unless explicitly asked. Write clean, self-documenting code.**
+
+**NEVER add fallbacks or workarounds as fixes - identify and fix root causes in the backend/data pipeline instead.**
