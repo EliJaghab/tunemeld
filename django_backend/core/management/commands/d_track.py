@@ -1,11 +1,10 @@
-import os
-
 from core.models import ServiceTrack, Track
+from core.services.apple_music_service import get_apple_music_album_cover_url
+from core.services.youtube_service import get_youtube_url
+from core.utils.helpers import get_logger
 from django.core.management.base import BaseCommand
 
 from playlist_etl.constants import ServiceName
-from playlist_etl.helpers import get_logger
-from playlist_etl.services import AppleMusicService, YouTubeService
 
 logger = get_logger(__name__)
 
@@ -15,8 +14,6 @@ class Command(BaseCommand):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.youtube_service = YouTubeService(api_key=os.getenv("GOOGLE_API_KEY"))
-        self.apple_music_service = AppleMusicService()
 
     def handle(self, *args: object, **options: object) -> None:
         Track.objects.all().delete()
@@ -74,11 +71,11 @@ class Command(BaseCommand):
                 track_data["soundcloud_url"] = service_track.service_url
 
         if not track_data["album_cover_url"] and apple_music_url:
-            album_cover_url = self.apple_music_service.get_album_cover_url(apple_music_url)
+            album_cover_url = get_apple_music_album_cover_url(apple_music_url)
             if album_cover_url:
                 track_data["album_cover_url"] = album_cover_url
 
-        youtube_url = self.youtube_service.get_youtube_url(primary_track.track_name, primary_track.artist_name)
+        youtube_url = get_youtube_url(primary_track.track_name, primary_track.artist_name)
         if youtube_url:
             track_data["youtube_url"] = youtube_url
 
