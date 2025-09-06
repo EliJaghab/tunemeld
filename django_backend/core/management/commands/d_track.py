@@ -30,7 +30,6 @@ class Command(BaseCommand):
             items=unique_isrcs, process_func=self.process_isrc, max_workers=10, log_progress=True, progress_interval=50
         )
 
-        # Fail fast on ANY error - no graceful degradation
         for isrc, _result, exc in results:
             if exc:
                 logger.error(f"Failed to process ISRC {isrc}: {exc}")

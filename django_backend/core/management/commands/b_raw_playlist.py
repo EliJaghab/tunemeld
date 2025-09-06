@@ -36,22 +36,15 @@ class Command(BaseCommand):
             log_progress=False,
         )
 
-        # Fail fast on ANY error - no graceful degradation
         for task, _result, exc in results:
             service_name, genre = task
             if exc:
-                # Only allow rate limiting errors to be warnings for Apple Music
-                if "rate limit" in str(exc).lower() and service_name == "apple_music":
-                    logger.warning(f"Apple Music API rate limited for {genre}. Skipping this service/genre.")
-                else:
-                    logger.error(f"Failed {service_name}/{genre}: {exc}")
-                    raise CommandError(f"ETL step failed on {service_name}/{genre}: {exc}") from exc
+                logger.error(f"Failed {service_name}/{genre}: {exc}")
+                raise CommandError(f"ETL step failed on {service_name}/{genre}: {exc}") from exc
             else:
                 logger.info(f"Completed {service_name}/{genre}")
 
     def get_and_save_playlist(self, service_name: str, genre: str) -> RawPlaylistData | None:
-        import requests
-
         logger.info(f"Getting playlist data for {service_name}/{genre}")
         service = Service.objects.get(name=service_name)
         genre_obj = Genre.objects.get(name=genre)
@@ -82,15 +75,5 @@ class Command(BaseCommand):
             raw_data.save()
             return raw_data
 
-        except requests.exceptions.HTTPError as e:
-            if "429" in str(e) and service_name == ServiceName.APPLE_MUSIC:
-                logger.warning(f"Apple Music API rate limited for {genre}. Skipping this service/genre.")
-                return None
-            else:
-                raise
-        except Exception as e:
-            if "429" in str(e) and service_name == ServiceName.APPLE_MUSIC:
-                logger.warning(f"Apple Music API rate limited for {genre}. Skipping this service/genre.")
-                return None
-            else:
-                raise
+        except Exception:
+            raise
