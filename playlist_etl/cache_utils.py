@@ -2,9 +2,8 @@ import hashlib
 from enum import Enum
 from typing import Any
 
+from core.utils.utils import get_logger
 from django.core.cache import cache
-
-from playlist_etl.django_setup import get_logger
 
 
 class CachePrefix(str, Enum):

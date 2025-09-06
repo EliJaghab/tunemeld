@@ -4,9 +4,8 @@ import tempfile
 from pathlib import Path
 from typing import Any
 
+from core.utils.utils import get_logger
 from tenacity import retry, stop_after_attempt, wait_exponential
-
-from playlist_etl.django_setup import get_logger
 
 logger = get_logger(__name__)
 

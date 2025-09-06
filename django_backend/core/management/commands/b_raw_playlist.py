@@ -3,7 +3,7 @@ from core.services.apple_music_service import get_apple_music_playlist
 from core.services.soundcloud_service import get_soundcloud_playlist
 from core.services.spotify_service import get_spotify_playlist
 from core.utils.utils import get_logger
-from django.core.management.base import BaseCommand
+from django.core.management.base import BaseCommand, CommandError
 
 from playlist_etl.constants import PLAYLIST_GENRES, SERVICE_CONFIGS, ServiceName
 
@@ -37,12 +37,29 @@ class Command(BaseCommand):
         )
 
         # Log completion and failures
+        failures = []
+        successes = []
         for task, _result, exc in results:
             service_name, genre = task
             if exc:
                 logger.error(f"Failed {service_name}/{genre}: {exc}")
+                failures.append(f"{service_name}/{genre}")
             else:
                 logger.info(f"Completed {service_name}/{genre}")
+                successes.append(f"{service_name}/{genre}")
+
+        # Fail the command if there are too many failures
+        total_tasks = len(tasks)
+        failure_rate = len(failures) / total_tasks if total_tasks > 0 else 0
+
+        logger.info(f"Success: {len(successes)}, Failures: {len(failures)}, Total: {total_tasks}")
+
+        if failure_rate > 0.5:  # More than 50% failure rate
+            raise CommandError(
+                f"ETL step failed: {len(failures)} out of {total_tasks} tasks failed. Failures: {failures}"
+            )
+        elif len(failures) > 0:
+            logger.warning(f"Some tasks failed but continuing: {failures}")
 
     def get_and_save_playlist(self, service_name: str, genre: str) -> RawPlaylistData | None:
         import requests

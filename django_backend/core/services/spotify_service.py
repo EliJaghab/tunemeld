@@ -234,13 +234,13 @@ def _extract_spotify_metadata_from_html(url: str, html_content: str) -> Playlist
 def get_spotify_playlist(genre: str) -> PlaylistData:
     """Get Spotify playlist data and metadata for a given genre"""
     from playlist_etl.constants import SERVICE_CONFIGS
-    from playlist_etl.spotdl_client import fetch_spotify_playlist_data
+    from playlist_etl.spotdl_client import fetch_spotify_playlist_with_spotdl
 
     config = SERVICE_CONFIGS["spotify"]
     url = config["links"][genre]
 
     # Get playlist tracks data
-    tracks_data = fetch_spotify_playlist_data(genre)
+    tracks_data = fetch_spotify_playlist_with_spotdl(url)
 
     # Scrape metadata from playlist page
     response = requests.get(url)
