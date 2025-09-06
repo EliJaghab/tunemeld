@@ -8,9 +8,21 @@ from core.api.utils import error_response, success_response
 from core.models.d_raw_playlist import RawPlaylistData
 from core.models.e_playlist import Playlist
 
-from playlist_etl.constants import ServiceName
+from playlist_etl.constants import SERVICE_CONFIGS, ServiceName
 
 logger = logging.getLogger(__name__)
+
+
+def _get_service_display_name(service_name):
+    """Get service display name from constants"""
+    config = SERVICE_CONFIGS.get(service_name, {})
+    return config.get("display_name", service_name)
+
+
+def _get_service_icon_url(service_name):
+    """Get service icon URL from constants"""
+    config = SERVICE_CONFIGS.get(service_name, {})
+    return config.get("icon_url", "")
 
 
 def get_aggregate_playlist(request, genre_name):
@@ -40,13 +52,32 @@ def get_aggregate_playlist(request, genre_name):
                 "service"
             )
 
-            additional_sources = {}
+            # Build source data in the format frontend expects
+            spotify_source = None
+            apple_music_source = None
+            soundcloud_source = None
+            youtube_source = None
+
             primary_service_name = None
             primary_track_url = None
 
             for cs_track in cross_service_tracks:
                 service_name = cs_track.service.name
-                additional_sources[service_name] = cs_track.service_url
+                source_data = {
+                    "url": cs_track.service_url,
+                    "displayName": _get_service_display_name(service_name),
+                    "iconUrl": _get_service_icon_url(service_name),
+                }
+
+                # Map to frontend expected properties
+                if service_name == ServiceName.SPOTIFY:
+                    spotify_source = source_data
+                elif service_name == ServiceName.APPLE_MUSIC:
+                    apple_music_source = source_data
+                elif service_name == ServiceName.SOUNDCLOUD:
+                    soundcloud_source = source_data
+                elif service_name == ServiceName.YOUTUBE:
+                    youtube_source = source_data
 
                 # Use the reference service track as primary
                 if cs_track.id == service_track.id:
@@ -63,7 +94,10 @@ def get_aggregate_playlist(request, genre_name):
                 "service_url": service_track.service_url,
                 "source_name": primary_service_name or "Unknown",
                 "track_url": primary_track_url or service_track.service_url,
-                "additional_sources": additional_sources,
+                "spotifySource": spotify_source,
+                "appleMusicSource": apple_music_source,
+                "soundcloudSource": soundcloud_source,
+                "youtubeSource": youtube_source,
                 "view_count_data_json": {
                     "Youtube": {
                         "current_count_json": {"current_view_count": youtube_views},
