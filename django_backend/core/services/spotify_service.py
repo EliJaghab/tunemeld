@@ -1,8 +1,12 @@
 import os
 import re
 from functools import lru_cache
+from typing import TYPE_CHECKING
 
 import requests
+
+if TYPE_CHECKING:
+    from playlist_etl.constants import GenreName
 from bs4 import BeautifulSoup
 from core.models.playlist_types import PlaylistData, PlaylistMetadata
 from core.utils.cache_utils import CachePrefix, cache_get, cache_set
@@ -231,26 +235,32 @@ def _extract_spotify_metadata_from_html(url: str, html_content: str) -> Playlist
     return metadata
 
 
-def get_spotify_playlist(genre: str) -> PlaylistData:
+def get_spotify_playlist(genre: "GenreName") -> PlaylistData:
     """Get Spotify playlist data and metadata for a given genre"""
+    from playlist_etl.cache_utils import generate_spotify_cache_key_data
     from playlist_etl.constants import SERVICE_CONFIGS
     from playlist_etl.spotdl_client import fetch_spotify_playlist_with_spotdl
 
-    config = SERVICE_CONFIGS["spotify"]
-    url = config["links"][genre]
+    key_data = generate_spotify_cache_key_data(genre)
+    cached_data = cache_get(CachePrefix.SPOTIFY_PLAYLIST, key_data)
+    if cached_data:
+        return cached_data
 
-    # Get playlist tracks data
+    config = SERVICE_CONFIGS["spotify"]
+    url = config["links"][genre.value]
+
     tracks_data = fetch_spotify_playlist_with_spotdl(url)
 
-    # Scrape metadata from playlist page
     response = requests.get(url)
     response.raise_for_status()
 
-    # Extract metadata using the Spotify-specific parser
     metadata = _extract_spotify_metadata_from_html(url, response.text)
     metadata["genre_name"] = genre
 
-    return {
+    playlist_data = {
         "metadata": metadata,
         "tracks": tracks_data,
     }
+
+    cache_set(CachePrefix.SPOTIFY_PLAYLIST, key_data, playlist_data)
+    return playlist_data

@@ -1,22 +1,26 @@
+from typing import TYPE_CHECKING
 from urllib.parse import urlparse
 
 import requests
 from bs4 import BeautifulSoup
+
+if TYPE_CHECKING:
+    from playlist_etl.constants import GenreName
 from core.models.playlist_types import PlaylistData, PlaylistMetadata
 from core.utils.utils import get_logger
 
 logger = get_logger(__name__)
 
 
-def get_soundcloud_playlist(genre: str) -> PlaylistData:
+def get_soundcloud_playlist(genre: "GenreName") -> PlaylistData:
     """Get SoundCloud playlist data and metadata for a given genre"""
-    from playlist_etl.constants import SERVICE_CONFIGS
+    from playlist_etl.constants import SERVICE_CONFIGS, ServiceName
     from playlist_etl.rapid_api_client import fetch_playlist_data
 
     config = SERVICE_CONFIGS["soundcloud"]
-    url = config["links"][genre]
+    url = config["links"][genre.value]
 
-    tracks_data = fetch_playlist_data("soundcloud", genre)
+    tracks_data = fetch_playlist_data(ServiceName.SOUNDCLOUD, genre)
 
     parsed_url = urlparse(url)
     clean_url = f"{parsed_url.netloc}{parsed_url.path}"
@@ -36,7 +40,7 @@ def get_soundcloud_playlist(genre: str) -> PlaylistData:
 
     metadata: PlaylistMetadata = {
         "service_name": "soundcloud",
-        "genre_name": genre,
+        "genre_name": genre.value,
         "playlist_name": playlist_name,
         "playlist_url": url,
         "playlist_cover_url": playlist_cover_url,

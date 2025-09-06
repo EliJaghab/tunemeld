@@ -1,7 +1,11 @@
 import html
+from typing import TYPE_CHECKING
 from urllib.parse import unquote
 
 import requests
+
+if TYPE_CHECKING:
+    from playlist_etl.constants import GenreName
 from bs4 import BeautifulSoup
 from core.models.playlist_types import PlaylistData, PlaylistMetadata
 from core.utils.cache_utils import CachePrefix, cache_get, cache_set
@@ -36,13 +40,13 @@ def get_apple_music_album_cover_url(track_url: str) -> str | None:
         return None
 
 
-def _get_apple_music_cover_url(webdriver_manager, url: str, genre: str) -> str | None:
+def _get_apple_music_cover_url(webdriver_manager, url: str, genre: "GenreName") -> str | None:
     """Get Apple Music playlist cover URL using WebDriver"""
     xpath = "//amp-ambient-video"
     src_attribute = webdriver_manager.find_element_by_xpath(url, xpath, attribute="src")
 
     if src_attribute is None or src_attribute == "Element not found" or "An error occurred" in src_attribute:
-        raise ValueError(f"Could not find amp-ambient-video src attribute for Apple Music {genre}")
+        raise ValueError(f"Could not find amp-ambient-video src attribute for Apple Music {genre.value}")
 
     if src_attribute.endswith(".m3u8"):
         return src_attribute
@@ -50,15 +54,15 @@ def _get_apple_music_cover_url(webdriver_manager, url: str, genre: str) -> str |
         raise ValueError(f"Found src attribute, but it's not an m3u8 URL: {src_attribute}")
 
 
-def get_apple_music_playlist(genre: str) -> PlaylistData:
+def get_apple_music_playlist(genre: "GenreName") -> PlaylistData:
     """Get Apple Music playlist data and metadata for a given genre"""
-    from playlist_etl.constants import SERVICE_CONFIGS
+    from playlist_etl.constants import SERVICE_CONFIGS, ServiceName
     from playlist_etl.rapid_api_client import fetch_playlist_data
 
     config = SERVICE_CONFIGS["apple_music"]
-    url = config["links"][genre]
+    url = config["links"][genre.value]
 
-    tracks_data = fetch_playlist_data("apple_music", genre)
+    tracks_data = fetch_playlist_data(ServiceName.APPLE_MUSIC, genre)
 
     response = requests.get(url)
     response.raise_for_status()
