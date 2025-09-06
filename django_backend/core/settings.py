@@ -1,9 +1,21 @@
+import logging
 import os
+import zoneinfo
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Final
 
 import dj_database_url
 from dotenv import load_dotenv
+
+
+class ETFormatter(logging.Formatter):
+    def formatTime(self, record: logging.LogRecord, datefmt: str | None = None) -> str:  # noqa: N802
+        dt = datetime.fromtimestamp(record.created, tz=timezone.utc)
+        et_tz = zoneinfo.ZoneInfo("America/New_York")
+        dt.astimezone(et_tz)
+        return dt.strftime("%I:%M:%S%p ET").replace(" 0", " ")
+
 
 DEV: Final = "dev"
 PROD: Final = "prod"
@@ -98,15 +110,11 @@ LOGGING = {
         "verbose": {
             "format": "%(levelname)s %(asctime)s [%(name)s:%(lineno)d] %(message)s",
         },
-        "et_format": {
-            "()": "core.utils.utils.ETFormatter",
-            "format": "%(asctime)s %(message)s",
-        },
     },
     "handlers": {
         "console": {
             "class": "logging.StreamHandler",
-            "formatter": "et_format",
+            "formatter": "verbose",
         },
     },
     "loggers": {

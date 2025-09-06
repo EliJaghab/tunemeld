@@ -8,6 +8,7 @@ from django.core.cache import cache
 
 class CachePrefix(str, Enum):
     RAPIDAPI = "rapidapi"
+    SPOTIFY_PLAYLIST = "spotify_playlist"
     YOUTUBE_URL = "youtube_url"
     SPOTIFY_ISRC = "spotify_isrc"
     APPLE_COVER = "apple_cover"
@@ -20,6 +21,7 @@ NO_EXPIRATION_TTL = None
 
 CACHE_TTL_MAP = {
     CachePrefix.RAPIDAPI: SEVEN_DAYS_TTL,
+    CachePrefix.SPOTIFY_PLAYLIST: SEVEN_DAYS_TTL,
     CachePrefix.YOUTUBE_URL: NO_EXPIRATION_TTL,
     CachePrefix.SPOTIFY_ISRC: NO_EXPIRATION_TTL,
     CachePrefix.APPLE_COVER: SEVEN_DAYS_TTL,
