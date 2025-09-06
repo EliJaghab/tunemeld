@@ -52,7 +52,7 @@ jobs:
           CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
         run: |
           cd django_backend
-          python manage.py a_playlist_etl
+          python manage.py playlist_etl_main
 
       - name: Verify ETL pipeline results
         env:

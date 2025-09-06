@@ -10,7 +10,11 @@ if TYPE_CHECKING:
 from bs4 import BeautifulSoup
 from core.models.playlist_types import PlaylistData, PlaylistMetadata
 from core.utils.cache_utils import CachePrefix, cache_get, cache_set
+from core.utils.config import SPOTIFY_VIEW_COUNT_XPATH
 from core.utils.utils import get_logger
+from core.utils.webdriver import get_cached_webdriver
+from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.common.by import By
 from spotipy import Spotify
 from spotipy.exceptions import SpotifyException
 from spotipy.oauth2 import SpotifyClientCredentials
@@ -264,3 +268,23 @@ def get_spotify_playlist(genre: "GenreName") -> PlaylistData:
 
     cache_set(CachePrefix.SPOTIFY_PLAYLIST, key_data, playlist_data)
     return playlist_data
+
+
+@retry(wait=wait_exponential(multiplier=1, min=2, max=10), stop=stop_after_attempt(3), reraise=False)
+def get_spotify_track_view_count(track_url: str) -> int | None:
+    webdriver = get_cached_webdriver()
+    driver = webdriver.get_driver()
+    driver.get(track_url)
+
+    try:
+        view_count_element = driver.find_element(By.XPATH, SPOTIFY_VIEW_COUNT_XPATH)
+        view_count_text = view_count_element.text
+        view_count = int(view_count_text.replace(",", ""))
+        logger.info(f"Successfully retrieved Spotify view count: {view_count}")
+        return view_count
+    except NoSuchElementException:
+        logger.error(f"View count element not found for {track_url}")
+        return None
+    except Exception as e:
+        logger.error(f"Error getting Spotify view count: {e}")
+        return None

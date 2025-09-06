@@ -1,10 +1,10 @@
 from core.models.f_track import ETLTrack as Track
 from core.models.z_view_counts import HistoricalView
+from core.services.spotify_service import get_spotify_track_view_count
 from core.services.youtube_service import get_youtube_track_view_count
 from core.utils.config import CURRENT_TIMESTAMP
 from core.utils.track_utils import get_delta_view_count
 from core.utils.utils import get_logger
-from core.utils.webdriver import get_cached_webdriver
 
 logger = get_logger(__name__)
 
@@ -13,16 +13,14 @@ def update_spotify_track_view_count(track: Track) -> bool:
     if not track.spotify_track_data.track_url:
         return False
 
-    webdriver = get_cached_webdriver()
-
     if track.spotify_view.start_view.timestamp is None:
-        view_count = _get_spotify_view_count(webdriver, track.spotify_track_data.track_url)
+        view_count = _get_spotify_view_count(track.spotify_track_data.track_url)
         if view_count is None:
             return False
         track.spotify_view.start_view.view_count = view_count
         track.spotify_view.start_view.timestamp = CURRENT_TIMESTAMP
 
-    view_count = _get_spotify_view_count(webdriver, track.spotify_track_data.track_url)
+    view_count = _get_spotify_view_count(track.spotify_track_data.track_url)
     if view_count is None:
         return False
 
@@ -55,9 +53,9 @@ def update_youtube_track_view_count(track: Track) -> bool:
     return True
 
 
-def _get_spotify_view_count(webdriver, track_url: str) -> int | None:
+def _get_spotify_view_count(track_url: str) -> int | None:
     try:
-        return webdriver.get_spotify_track_view_count(track_url)
+        return get_spotify_track_view_count(track_url)
     except Exception as e:
         logger.error(f"Error getting Spotify view count for {track_url}: {e}")
         return None

@@ -64,8 +64,8 @@ aggregate:
 	PYTHONPATH=$(PROJECT_ROOT) python3 playlist_etl/aggregate.py
 
 view_count:
-	@echo "Running view counts..."
-	PYTHONPATH=$(PROJECT_ROOT) python3 playlist_etl/view_count.py
+	@echo "Running view count ETL pipeline..."
+	cd django_backend && python manage.py view_count.view_count
 
 historical_view_count:
 	@echo "Running view counts..."

@@ -38,11 +38,12 @@ class ViewCount(models.Model):
         )
     """
 
+    id = models.BigAutoField(primary_key=True)
     isrc = models.CharField(
         max_length=12,
-        primary_key=True,
         validators=[RegexValidator(r"^[A-Z]{2}[A-Z0-9]{3}[0-9]{7}$", "Invalid ISRC format")],
         help_text="International Standard Recording Code (12 characters)",
+        db_index=True,
     )
     service = models.ForeignKey(Service, on_delete=models.CASCADE)
     view_count = models.BigIntegerField(help_text="Current view/play count")
@@ -87,6 +88,7 @@ class HistoricalViewCount(models.Model):
     )
     service = models.ForeignKey(Service, on_delete=models.CASCADE)
     view_count = models.BigIntegerField(help_text="View count at this point in time")
+    delta_count = models.BigIntegerField(null=True, blank=True, help_text="Change in view count from previous day")
     recorded_date = models.DateField(help_text="Date this count was recorded", default=timezone.now)
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -100,9 +102,6 @@ class HistoricalViewCount(models.Model):
 
     def __str__(self):
         return f"{self.isrc} - {self.view_count:,} views on {self.recorded_date}"
-
-
-# Pydantic Models for View Count ETL and API
 
 
 class DataSourceServiceName(str, Enum):
