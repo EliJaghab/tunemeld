@@ -109,6 +109,13 @@ def get_last_updated(request, genre_name):
     )
 
 
+def get_graph_data(request, genre_name):
+    """Legacy MongoDB-dependent endpoint - now deprecated."""
+    return create_response(
+        ResponseStatus.ERROR, "This endpoint has been deprecated. MongoDB functionality has been removed.", None
+    )
+
+
 def get_header_art(request, genre_name):
     """Legacy MongoDB-dependent endpoint - now deprecated."""
     return create_response(
