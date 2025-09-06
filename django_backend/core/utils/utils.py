@@ -36,14 +36,16 @@ def to_et_format(timestamp: datetime | int | str) -> str:
     return et_dt.strftime("%m/%d/%y %I:%M:%S%p ET").replace(" 0", " ")
 
 
+class ETFormatter(logging.Formatter):
+    """Custom formatter for Eastern Time logs."""
+
+    def formatTime(self, record: logging.LogRecord, datefmt: str | None = None) -> str:  # noqa: N802
+        et_time = to_et_format(int(record.created))
+        return et_time.split()[1] + " ET"
+
+
 def get_logger(name: str) -> logging.Logger:
     """Setup and configure logger with slim ET format."""
-
-    class ETFormatter(logging.Formatter):
-        def formatTime(self, record: logging.LogRecord, datefmt: str | None = None) -> str:  # noqa: N802
-            et_time = to_et_format(int(record.created))
-            return et_time.split()[1] + " ET"
-
     logger = logging.getLogger(name)
     if not logger.hasHandlers():
         handler = logging.StreamHandler()

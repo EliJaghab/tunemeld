@@ -98,11 +98,15 @@ LOGGING = {
         "verbose": {
             "format": "%(levelname)s %(asctime)s [%(name)s:%(lineno)d] %(message)s",
         },
+        "et_format": {
+            "()": "core.utils.utils.ETFormatter",
+            "format": "%(asctime)s %(message)s",
+        },
     },
     "handlers": {
         "console": {
             "class": "logging.StreamHandler",
-            "formatter": "verbose",
+            "formatter": "et_format",
         },
     },
     "loggers": {
@@ -118,6 +122,27 @@ LOGGING = {
         "django.server": {
             "handlers": ["console"],
             "level": "INFO",
+            "propagate": False,
+        },
+        # Quiet noisy third-party loggers
+        "WDM": {
+            "handlers": ["console"],
+            "level": "WARNING",
+            "propagate": False,
+        },
+        "urllib3.connectionpool": {
+            "handlers": ["console"],
+            "level": "WARNING",
+            "propagate": False,
+        },
+        "selenium": {
+            "handlers": ["console"],
+            "level": "WARNING",
+            "propagate": False,
+        },
+        "webdriver_manager": {
+            "handlers": ["console"],
+            "level": "WARNING",
             "propagate": False,
         },
     },
