@@ -1,11 +1,10 @@
 from core.models.f_etl_types import ETLTrack as Track
 from core.models.f_etl_types import HistoricalView
-from core.utils.config import CURRENT_TIMESTAMP
-from core.utils.helpers import get_logger
-from core.utils.track_utils import get_delta_view_count
-from core.utils.webdriver import get_cached_webdriver
-
 from core.services.youtube_service import get_youtube_track_view_count
+from core.utils.config import CURRENT_TIMESTAMP
+from core.utils.track_utils import get_delta_view_count
+from core.utils.utils import get_logger
+from core.utils.webdriver import get_cached_webdriver
 
 logger = get_logger(__name__)
 

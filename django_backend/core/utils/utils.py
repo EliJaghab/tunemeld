@@ -68,18 +68,18 @@ def process_in_parallel(
     process_func: Callable[[Any], Any],
     max_workers: int | None = None,
     log_progress: bool = True,
-    progress_interval: int = 50
+    progress_interval: int = 50,
 ) -> list[tuple[Any, Any | None, Exception | None]]:
     """
     Process items in parallel using ThreadPoolExecutor.
-    
+
     Args:
         items: List of items to process
         process_func: Function to process each item
         max_workers: Maximum number of worker threads (default: min(len(items), 10))
         log_progress: Whether to log progress
         progress_interval: Log progress every N items
-    
+
     Returns:
         List of tuples: (item, result, exception)
     """

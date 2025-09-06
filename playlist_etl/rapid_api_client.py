@@ -5,7 +5,7 @@ import requests
 
 from playlist_etl.cache_utils import CachePrefix, cache_get, cache_set
 from playlist_etl.constants import SERVICE_CONFIGS, ServiceName
-from playlist_etl.helpers import get_logger
+from playlist_etl.django_setup import get_logger
 from playlist_etl.spotdl_client import fetch_spotify_playlist_with_spotdl
 
 logger = get_logger(__name__)

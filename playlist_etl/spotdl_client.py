@@ -6,7 +6,7 @@ from typing import Any
 
 from tenacity import retry, stop_after_attempt, wait_exponential
 
-from playlist_etl.helpers import get_logger
+from playlist_etl.django_setup import get_logger
 
 logger = get_logger(__name__)
 

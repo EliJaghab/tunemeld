@@ -2,7 +2,7 @@ import hashlib
 from enum import Enum
 from typing import Any
 
-from core.utils.helpers import get_logger
+from core.utils.utils import get_logger
 from django.core.cache import cache
 
 
@@ -22,7 +22,7 @@ CACHE_TTL_MAP = {
     CachePrefix.RAPIDAPI: SEVEN_DAYS_TTL,
     CachePrefix.YOUTUBE_URL: NO_EXPIRATION_TTL,
     CachePrefix.SPOTIFY_ISRC: NO_EXPIRATION_TTL,
-    CachePrefix.APPLE_COVER: NO_EXPIRATION_TTL,
+    CachePrefix.APPLE_COVER: SEVEN_DAYS_TTL,
 }
 
 

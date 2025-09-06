@@ -27,7 +27,9 @@
 	setup_backend_env \
 	serve \
 	serve-frontend \
-	serve-backend
+	serve-backend \
+	kill-frontend \
+	kill-backend
 
 PROJECT_ROOT := $(shell pwd)
 VENV := $(PROJECT_ROOT)/venv
@@ -45,7 +47,7 @@ setup_env:
 	@echo "Virtual environment: $(shell pwd)/venv"
 	@echo "PYTHONPATH: $(shell pwd)"
 	@echo "Creating sitecustomize.py to set PYTHONPATH in venv..."
-	@echo "import sys; sys.path.insert(0, '$(shell pwd)')" > venv/lib/python3.10/site-packages/sitecustomize.py
+	@echo "import sys; sys.path.insert(0, '$(shell pwd)')" > venv/lib/python3.11/site-packages/sitecustomize.py
 	@echo "Loading environment variables from .env.dev..."
 	@source venv/bin/activate && export $(cat .env.dev | xargs)
 
@@ -156,22 +158,37 @@ build_locally:
 
 serve-frontend:
 	@echo "🌐 Starting TuneMeld frontend server..."
-	@echo "📍 Website will be available at: http://localhost:8080"
-	@echo "🔄 Cache disabled for development"
-	@echo "🛑 Press Ctrl+C to stop the server"
-	@python scripts/dev-server.py
+	@if lsof -ti tcp:8080 > /dev/null 2>&1; then \
+		echo "📍 Frontend server already running at: http://localhost:8080"; \
+		echo "🔄 Use 'make kill-frontend' to stop existing server"; \
+	else \
+		echo "📍 Website will be available at: http://localhost:8080"; \
+		echo "🔄 Cache disabled for development"; \
+		echo "🛑 Press Ctrl+C to stop the server"; \
+		cd docs && python -m http.server 8080; \
+	fi
 
 serve:
 	@echo "🌐 Starting TuneMeld website..."
-	@echo "📍 Frontend: http://localhost:8080"
-	@echo "🛑 Press Ctrl+C to stop"
-	@cd docs && python -m http.server 8080
+	@if lsof -ti tcp:8080 > /dev/null 2>&1; then \
+		echo "📍 Frontend server already running at: http://localhost:8080"; \
+		echo "🔄 Use 'make kill-frontend' to stop existing server"; \
+	else \
+		echo "📍 Frontend: http://localhost:8080"; \
+		echo "🛑 Press Ctrl+C to stop"; \
+		cd docs && python -m http.server 8080; \
+	fi
 
 serve-backend:
 	@echo "🚀 Starting Django backend server..."
-	@echo "📍 Backend API: http://localhost:8000"
-	@echo "🛑 Press Ctrl+C to stop"
-	@cd django_backend && python manage.py runserver
+	@if lsof -ti tcp:8000 > /dev/null 2>&1; then \
+		echo "📍 Backend server already running at: http://localhost:8000"; \
+		echo "🔄 Use 'make kill-backend' to stop existing server"; \
+	else \
+		echo "📍 Backend API: http://localhost:8000"; \
+		echo "🛑 Press Ctrl+C to stop"; \
+		cd django_backend && python manage.py runserver; \
+	fi
 
 test-header-art:
 	@echo "🧪 Testing header art functionality..."
@@ -183,3 +200,19 @@ test-visual:
 	@if [ ! -f scripts/verify-header-art.js ]; then echo "❌ Puppeteer scripts not found. Run setup first."; exit 1; fi
 	@node scripts/verify-header-art.js http://localhost:8000
 	@node scripts/responsive-screenshots.js http://localhost:8000
+
+kill-frontend:
+	@echo "🛑 Stopping frontend server..."
+	@if lsof -ti tcp:8080 > /dev/null 2>&1; then \
+		lsof -ti tcp:8080 | xargs kill -9 && echo "✅ Frontend server stopped"; \
+	else \
+		echo "ℹ️  No frontend server running on port 8080"; \
+	fi
+
+kill-backend:
+	@echo "🛑 Stopping backend server..."
+	@if lsof -ti tcp:8000 > /dev/null 2>&1; then \
+		lsof -ti tcp:8000 | xargs kill -9 && echo "✅ Backend server stopped"; \
+	else \
+		echo "ℹ️  No backend server running on port 8000"; \
+	fi

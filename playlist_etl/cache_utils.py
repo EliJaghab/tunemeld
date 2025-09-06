@@ -4,7 +4,7 @@ from typing import Any
 
 from django.core.cache import cache
 
-from playlist_etl.helpers import get_logger
+from playlist_etl.django_setup import get_logger
 
 
 class CachePrefix(str, Enum):
