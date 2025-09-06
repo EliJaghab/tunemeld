@@ -2,7 +2,7 @@ import os
 
 import requests
 from core.utils.cache_utils import CachePrefix, cache_get, cache_set
-from core.utils.helpers import get_logger
+from core.utils.utils import get_logger
 from tenacity import retry, stop_after_attempt, wait_exponential
 
 logger = get_logger(__name__)

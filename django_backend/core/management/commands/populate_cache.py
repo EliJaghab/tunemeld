@@ -1,11 +1,11 @@
 import json
 from pathlib import Path
 
+from core.utils.utils import get_logger
 from django.core.management.base import BaseCommand
 
 from playlist_etl.cache_utils import cache_set
 from playlist_etl.constants import PLAYLIST_GENRES, SERVICE_CONFIGS, CachePrefix, ServiceName
-from playlist_etl.helpers import get_logger
 
 logger = get_logger(__name__)
 

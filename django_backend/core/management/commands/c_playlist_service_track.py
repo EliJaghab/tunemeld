@@ -1,14 +1,14 @@
 import json
-import os
 
 from core.models import PlaylistModel as Playlist
 from core.models import RawPlaylistData, ServiceTrack
+from core.models.f_etl_types import NormalizedTrack
+from core.services.apple_music_service import get_apple_music_album_cover_url
+from core.services.spotify_service import get_spotify_isrc
+from core.utils.utils import get_logger
 from django.core.management.base import BaseCommand
 
 from playlist_etl.constants import ServiceName
-from playlist_etl.helpers import get_logger
-from playlist_etl.models import NormalizedTrack
-from playlist_etl.services import AppleMusicService, SpotifyService
 
 logger = get_logger(__name__)
 
@@ -17,15 +17,6 @@ class Command(BaseCommand):
     help = "Normalize raw playlist JSON data into Playlist and ServiceTrack tables"
 
     def handle(self, *args: object, **options: object) -> None:
-        client_id = os.getenv("SPOTIFY_CLIENT_ID")
-        client_secret = os.getenv("SPOTIFY_CLIENT_SECRET")
-
-        from playlist_etl.utils import WebDriverManager
-
-        webdriver_manager = WebDriverManager()
-
-        self.spotify_service = SpotifyService(client_id, client_secret, webdriver_manager)
-        self.apple_music_service = AppleMusicService()
         Playlist.objects.all().delete()
         ServiceTrack.objects.all().delete()
         raw_data_queryset = RawPlaylistData.objects.select_related("genre", "service").all()
@@ -119,31 +110,53 @@ class Command(BaseCommand):
         if isinstance(raw_data, str):
             raw_data = json.loads(raw_data)
 
+        # Prepare track data for parallel processing
+        track_items = [(key, track_data) for key, track_data in raw_data["album_details"].items() if key.isdigit()]
+
+        # Process tracks in parallel using helper
+        from core.utils.utils import process_in_parallel
+
+        results = process_in_parallel(
+            items=track_items,
+            process_func=lambda item: self.process_apple_music_track(item[0], item[1]),
+            max_workers=8,
+            log_progress=False,
+        )
+
+        # Collect successful results
         tracks = []
-        for key, track_data in raw_data["album_details"].items():
-            if key.isdigit():
-                track_name = track_data["name"]
-                artist_name = track_data["artist"]
+        for item, track, exc in results:
+            if exc:
+                key, track_data = item
+                logger.error(f"Failed to process Apple Music track {track_data.get('name', 'unknown')}: {exc}")
+            elif track:
+                tracks.append(track)
 
-                isrc = self.spotify_service.get_isrc(track_name, artist_name)
-
-                # Only create track if ISRC was found
-                if isrc:
-                    apple_music_url = track_data["link"]
-
-                    album_cover_url = self.apple_music_service.get_album_cover_url(apple_music_url)
-
-                    track = NormalizedTrack(
-                        position=int(key) + 1,
-                        name=track_name,
-                        artist=artist_name,
-                        apple_music_url=apple_music_url,
-                        album_cover_url=album_cover_url,
-                        isrc=isrc,
-                    )
-                    tracks.append(track)
-
+        # Sort tracks by position
+        tracks.sort(key=lambda x: x.position)
         return tracks
+
+    def process_apple_music_track(self, key: str, track_data: dict) -> NormalizedTrack | None:
+        """Process a single Apple Music track to get ISRC."""
+        track_name = track_data["name"]
+        artist_name = track_data["artist"]
+
+        isrc = get_spotify_isrc(track_name, artist_name)
+
+        # Only create track if ISRC was found
+        if isrc:
+            apple_music_url = track_data["link"]
+            album_cover_url = get_apple_music_album_cover_url(apple_music_url)
+
+            return NormalizedTrack(
+                position=int(key) + 1,
+                name=track_name,
+                artist=artist_name,
+                apple_music_url=apple_music_url,
+                album_cover_url=album_cover_url,
+                isrc=isrc,
+            )
+        return None
 
     def parse_soundcloud_tracks(self, raw_data: dict) -> list[NormalizedTrack]:
         """Parse SoundCloud raw JSON into structured track data."""

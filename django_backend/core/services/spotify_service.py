@@ -2,8 +2,11 @@ import os
 import re
 from functools import lru_cache
 
+import requests
+from bs4 import BeautifulSoup
+from core.models.playlist_types import PlaylistData, PlaylistMetadata
 from core.utils.cache_utils import CachePrefix, cache_get, cache_set
-from core.utils.helpers import get_logger
+from core.utils.utils import get_logger
 from spotipy import Spotify
 from spotipy.exceptions import SpotifyException
 from spotipy.oauth2 import SpotifyClientCredentials
@@ -96,3 +99,158 @@ def _get_track_url_by_isrc_with_retry(spotify_client: Spotify, isrc: str) -> str
     except SpotifyException as e:
         logger.error(f"SpotifyException: {e}")
         raise
+
+
+def _get_meta_content(doc: BeautifulSoup, property_name: str) -> str | None:
+    """Extract content from meta tag"""
+    meta_tag = doc.find("meta", {"property": property_name})
+    return meta_tag.get("content") if meta_tag else None
+
+
+def _extract_spotify_full_description(doc: BeautifulSoup) -> str | None:
+    """Extract full description text from Spotify page (including Cover: part)"""
+    selectors = [
+        'span[data-encore-id="text"][variant="bodySmall"]',
+        "span.encore-text-body-small.encore-internal-color-text-subdued",
+        'span[class*="encore-text-body-small"]',
+    ]
+
+    for selector in selectors:
+        elements = doc.select(selector)
+        for element in elements:
+            text = element.get_text(strip=True)
+            if text and not text.isdigit() and "saves" not in text.lower():
+                return str(text)
+
+    return None
+
+
+def _extract_tagline_from_full_text(full_text: str) -> str | None:
+    """Extract clean tagline from full description text"""
+    if not full_text:
+        return None
+
+    if "Cover:" in full_text:
+        tagline_part = full_text.split("Cover:")[0].strip()
+        return tagline_part if tagline_part else None
+    else:
+        return full_text
+
+
+def _extract_featured_artist_from_text(text: str) -> str | None:
+    """Extract featured artist from text containing 'Cover: Artist Name'"""
+    if not text or "Cover:" not in text:
+        return None
+
+    cover_match = re.search(r"Cover:\s*([^,\d]+?)(?:\s*\d|$)", text)
+    if cover_match:
+        artist = cover_match.group(1).strip()
+        artist = re.sub(r"\s*\d+[,\d]*\s*(saves?|likes?|followers?).*$", "", artist)
+        return artist.strip() if artist else None
+
+    return None
+
+
+def _extract_saves_and_track_count(doc: BeautifulSoup) -> tuple[str | None, int | None]:
+    """Extract saves count and track count from Spotify page"""
+    saves_count = None
+    track_count = None
+
+    saves_elements = doc.find_all("span", string=re.compile(r"\d+[,\d]*\s*saves?"))
+    if saves_elements:
+        saves_text = saves_elements[0].get_text(strip=True)
+        saves_match = re.search(r"(\d+[,\d]*)\s*saves?", saves_text)
+        if saves_match:
+            raw_saves = saves_match.group(1)
+            saves_count = _format_saves_count(raw_saves)
+
+    og_desc = _get_meta_content(doc, "og:description")
+    if og_desc:
+        track_match = re.search(r"(\d+)\s*(?:items?|songs?|tracks?)", og_desc, re.IGNORECASE)
+        if track_match:
+            track_count = int(track_match.group(1))
+
+        saves_match = re.search(r"(\d+\.?\d*[KMB])\s*saves?", og_desc, re.IGNORECASE)
+        if saves_match and not saves_count:
+            saves_count = saves_match.group(1)
+
+    return saves_count, track_count
+
+
+def _format_saves_count(raw_saves: str) -> str:
+    """Format raw saves count to human-readable format"""
+    try:
+        num = int(raw_saves.replace(",", ""))
+        if num >= 1_000_000_000:
+            return f"{num / 1_000_000_000:.1f}B".rstrip("0").rstrip(".")
+        elif num >= 1_000_000:
+            return f"{num / 1_000_000:.1f}M".rstrip("0").rstrip(".")
+        elif num >= 1_000:
+            return f"{num / 1_000:.1f}K".rstrip("0").rstrip(".")
+        else:
+            return str(num)
+    except ValueError:
+        return raw_saves
+
+
+def _extract_spotify_metadata_from_html(url: str, html_content: str) -> PlaylistMetadata:
+    """Extract Spotify playlist metadata from HTML content"""
+    doc = BeautifulSoup(html_content, "html.parser")
+
+    metadata: PlaylistMetadata = {
+        "service_name": "Spotify",
+        "playlist_url": url,
+        "playlist_name": _get_meta_content(doc, "og:title") or "Unknown",
+        "playlist_cover_url": _get_meta_content(doc, "og:image"),
+        "playlist_creator": "spotify",
+    }
+
+    full_description_text = _extract_spotify_full_description(doc)
+
+    if full_description_text:
+        featured_artist = _extract_featured_artist_from_text(full_description_text)
+        if featured_artist:
+            metadata["playlist_featured_artist"] = featured_artist
+
+        tagline = _extract_tagline_from_full_text(full_description_text)
+        if tagline:
+            metadata["playlist_tagline"] = tagline
+            metadata["playlist_cover_description_text"] = tagline
+
+    saves_count, track_count = _extract_saves_and_track_count(doc)
+    if saves_count:
+        metadata["playlist_saves_count"] = saves_count
+    if track_count:
+        metadata["playlist_track_count"] = track_count
+
+    if not metadata.get("playlist_cover_description_text"):
+        og_desc = _get_meta_content(doc, "og:description")
+        if og_desc:
+            metadata["playlist_cover_description_text"] = og_desc
+
+    return metadata
+
+
+def get_spotify_playlist(genre: str) -> PlaylistData:
+    """Get Spotify playlist data and metadata for a given genre"""
+    from playlist_etl.constants import SERVICE_CONFIGS
+    from playlist_etl.spotdl_client import fetch_spotify_playlist_data
+
+    config = SERVICE_CONFIGS["spotify"]
+    url = config["links"][genre]
+
+    # Get playlist tracks data
+    tracks_data = fetch_spotify_playlist_data(genre)
+
+    # Scrape metadata from playlist page
+    response = requests.get(url)
+    response.raise_for_status()
+
+    # Extract metadata using the Spotify-specific parser
+    metadata = _extract_spotify_metadata_from_html(url, response.text)
+    metadata["genre_name"] = genre
+
+    return {
+        "metadata": metadata,
+        "tracks": tracks_data,
+    }

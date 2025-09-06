@@ -1,15 +1,11 @@
-import concurrent.futures
-
 from core.models import Genre, RawPlaylistData, Service
+from core.services.apple_music_service import get_apple_music_playlist
+from core.services.soundcloud_service import get_soundcloud_playlist
+from core.services.spotify_service import get_spotify_playlist
+from core.utils.utils import get_logger
 from django.core.management.base import BaseCommand
 
 from playlist_etl.constants import PLAYLIST_GENRES, SERVICE_CONFIGS, ServiceName
-from playlist_etl.extract import (
-    get_apple_music_playlist,
-    get_soundcloud_playlist,
-    get_spotify_playlist,
-)
-from playlist_etl.helpers import get_logger
 
 logger = get_logger(__name__)
 
@@ -30,21 +26,23 @@ class Command(BaseCommand):
             for genre in PLAYLIST_GENRES:
                 tasks.append((service_name, genre))
 
-        # Process tasks in parallel with thread pool
-        max_workers = min(len(tasks), 8)  # Limit concurrent API calls
-        with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
-            future_to_task = {
-                executor.submit(self.get_and_save_playlist, service_name, genre): (service_name, genre)
-                for service_name, genre in tasks
-            }
+        # Process tasks in parallel using helper
+        from core.utils.utils import process_in_parallel
 
-            for future in concurrent.futures.as_completed(future_to_task):
-                service_name, genre = future_to_task[future]
-                try:
-                    future.result()
-                    logger.info(f"Completed {service_name}/{genre}")
-                except Exception as exc:
-                    logger.error(f"Failed {service_name}/{genre}: {exc}")
+        results = process_in_parallel(
+            items=tasks,
+            process_func=lambda task: self.get_and_save_playlist(task[0], task[1]),
+            max_workers=8,
+            log_progress=False,
+        )
+
+        # Log completion and failures
+        for task, _result, exc in results:
+            service_name, genre = task
+            if exc:
+                logger.error(f"Failed {service_name}/{genre}: {exc}")
+            else:
+                logger.info(f"Completed {service_name}/{genre}")
 
     def get_and_save_playlist(self, service_name: str, genre: str) -> RawPlaylistData | None:
         import requests

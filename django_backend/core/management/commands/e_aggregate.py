@@ -3,11 +3,11 @@ from typing import Any
 
 from core.models import Genre, Service, ServiceTrack
 from core.models import PlaylistModel as Playlist
+from core.utils.utils import get_logger
 from django.core.management.base import BaseCommand
 from django.db.models import Count
 
 from playlist_etl.constants import ServiceName
-from playlist_etl.helpers import get_logger
 
 logger = get_logger(__name__)
 

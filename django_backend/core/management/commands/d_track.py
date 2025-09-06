@@ -1,7 +1,7 @@
 from core.models import ServiceTrack, Track
 from core.services.apple_music_service import get_apple_music_album_cover_url
 from core.services.youtube_service import get_youtube_url
-from core.utils.helpers import get_logger
+from core.utils.utils import get_logger
 from django.core.management.base import BaseCommand
 
 from playlist_etl.constants import ServiceName
@@ -18,14 +18,27 @@ class Command(BaseCommand):
     def handle(self, *args: object, **options: object) -> None:
         Track.objects.all().delete()
 
-        unique_isrcs = self.get_unique_isrcs()
+        unique_isrcs = list(self.get_unique_isrcs())
 
         if not unique_isrcs:
             return
 
-        for isrc in unique_isrcs:
-            service_tracks = ServiceTrack.objects.filter(isrc=isrc)
-            self.create_canonical_track(isrc, service_tracks)
+        # Process ISRCs in parallel using helper
+        from core.utils.utils import process_in_parallel
+
+        results = process_in_parallel(
+            items=unique_isrcs, process_func=self.process_isrc, max_workers=10, log_progress=True, progress_interval=50
+        )
+
+        # Log any failures
+        for isrc, _result, exc in results:
+            if exc:
+                logger.error(f"Failed to process ISRC {isrc}: {exc}")
+
+    def process_isrc(self, isrc: str) -> None:
+        """Process a single ISRC and create canonical track."""
+        service_tracks = ServiceTrack.objects.filter(isrc=isrc)
+        self.create_canonical_track(isrc, service_tracks)
 
     def get_unique_isrcs(self) -> list[str]:
         """Get all unique ISRCs that have ServiceTrack records."""
