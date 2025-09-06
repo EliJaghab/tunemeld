@@ -58,8 +58,10 @@ def get_apple_music_playlist(genre: str) -> PlaylistData:
     config = SERVICE_CONFIGS["apple_music"]
     url = config["links"][genre]
 
+    # Get playlist tracks data
     tracks_data = fetch_playlist_data("apple_music", genre)
 
+    # Scrape metadata from playlist page
     response = requests.get(url)
     response.raise_for_status()
     doc = BeautifulSoup(response.text, "html.parser")
@@ -80,6 +82,7 @@ def get_apple_music_playlist(genre: str) -> PlaylistData:
         else None
     )
 
+    # Get cover URL using WebDriver
     playlist_cover_url = None
     webdriver_manager = WebDriverManager()
     try:

@@ -32,6 +32,7 @@ class Command(BaseCommand):
     def find_cross_service_isrcs(self) -> dict[int, list[dict]]:
         """Find ISRCs that appear in multiple playlists (cross-service matches)."""
 
+        # Find ISRCs that appear more than once across services in the same genre
         duplicate_isrcs = (
             ServiceTrack.objects.values("isrc", "genre")
             .annotate(service_count=Count("service", distinct=True))
@@ -44,6 +45,7 @@ class Command(BaseCommand):
             isrc = item["isrc"]
             genre_id = item["genre"]
 
+            # Get all ServiceTrack entries for this ISRC in this genre
             service_tracks = ServiceTrack.objects.filter(isrc=isrc, genre_id=genre_id).select_related("service")
 
             # Collect service positions
@@ -77,11 +79,13 @@ class Command(BaseCommand):
     def create_aggregate_playlists(self, cross_service_matches: dict[int, list[dict]]) -> None:
         """Create aggregate playlist entries for cross-service tracks."""
 
+        # Get or create tunemeld service
         aggregate_service, _ = Service.objects.get_or_create(name=ServiceName.TUNEMELD)
 
         for genre_id, matches in cross_service_matches.items():
             genre = Genre.objects.get(id=genre_id)
 
+            # Sort matches by aggregate rank (lower rank = higher priority)
             sorted_matches = sorted(matches, key=lambda x: x["aggregate_rank"])
 
             playlist_entries = []

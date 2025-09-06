@@ -17,6 +17,7 @@ export async function handleGraphData(searchParams: URLSearchParams, env: any): 
   try {
     const playlists = await fetchFromMongoDB("view_counts_playlists", { genre_name: genre }, env);
 
+    // Extract ISRCs and associated track details
     const isrcList = playlists
       .flatMap(playlist =>
         playlist.tracks.map((track: any) => ({
@@ -36,6 +37,7 @@ export async function handleGraphData(searchParams: URLSearchParams, env: any): 
       });
     }
 
+    // Fetch view counts for the ISRCs
     const trackViewsQuery = {
       isrc: { $in: isrcList.map(track => track.isrc) },
     };
@@ -163,6 +165,7 @@ export async function handleCacheStatus(searchParams: URLSearchParams, env: any)
     const cachedResponse = await cache.match(testRequest);
     const isCacheWorking = cachedResponse !== undefined;
 
+    // Clean up test cache entry
     await cache.delete(testRequest);
 
     const status = {

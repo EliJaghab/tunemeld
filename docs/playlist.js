@@ -10,6 +10,7 @@ export async function fetchAndDisplayLastUpdated(genre) {
       throw new Error(`Failed to fetch last-updated. Status: ${response.status}`);
     }
     const responseData = await response.json();
+    // Handle Django's wrapped response format
     const lastUpdated = responseData.data || responseData;
     displayLastUpdated(lastUpdated);
   } catch (error) {
@@ -77,6 +78,7 @@ async function fetchAndDisplayData(url, placeholderId, isAggregated = false, vie
       throw new Error(`Failed to fetch ${url}. Status: ${response.status}`);
     }
     const responseData = await response.json();
+    // Handle Django's wrapped response format
     const data = responseData.data || responseData;
     playlistData = data;
     displayData(data, placeholderId, isAggregated, viewCountType);
@@ -284,6 +286,7 @@ function displaySources(cell, track) {
   const sourcesContainer = document.createElement("div");
   sourcesContainer.className = "track-sources";
 
+  // Add all service sources except YouTube (which goes in external links)
   const serviceSources = [track.spotifySource, track.appleMusicSource, track.soundcloudSource].filter(
     source => source !== null && source !== undefined
   );

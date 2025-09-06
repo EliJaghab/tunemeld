@@ -34,6 +34,7 @@ def fetch_spotify_playlist_with_spotdl(playlist_url: str) -> JSON:
 )
 def _fetch_spotify_playlist_with_retry(playlist_url: str) -> JSON:
     """Internal function with retry decorator for SpotDL command execution"""
+    # Create a temporary file with .spotdl extension
     with tempfile.NamedTemporaryFile(mode="w+", suffix=".spotdl", delete=False) as temp_file:
         temp_path = temp_file.name
 
@@ -50,10 +51,12 @@ def _fetch_spotify_playlist_with_retry(playlist_url: str) -> JSON:
                 error_msg += f" | stdout: {result.stdout}"
             raise RuntimeError(error_msg)
 
+        # Read the JSON from the temp file
         with open(temp_path) as f:
             spotdl_data = json.load(f)
 
         return spotdl_data
 
     finally:
+        # Clean up the temp file
         Path(temp_path).unlink(missing_ok=True)

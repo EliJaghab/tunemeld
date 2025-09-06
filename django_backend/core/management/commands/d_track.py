@@ -23,6 +23,7 @@ class Command(BaseCommand):
         if not unique_isrcs:
             return
 
+        # Process ISRCs in parallel using helper
         from core.utils.utils import process_in_parallel
 
         results = process_in_parallel(

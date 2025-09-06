@@ -31,23 +31,6 @@ make format           # Format and lint all code (pre-commit hooks)
 
 **DO NOT ADD COMMENTS unless explicitly asked. Write clean, self-documenting code.**
 
-## Comment Policy - Comments Are Code Smells
-
-**NEVER add these types of comments:**
-
-- **Redundant comments** that just repeat what the code does (e.g., `// Stores the user's name` above a property)
-- **Excessive comments** that narrate every single line of code
-- **Outdated comments** that no longer match the implementation
-- **Obvious comments** that state what's already clear from the code
-
-**Only acceptable comments:**
-
-- **Business logic explanations** that explain WHY something is done (e.g., payment gateway rounding requirements)
-- **External references** to documentation, specs, or contracts (e.g., SLA section references)
-- **API documentation** with proper structured format for public interfaces
-
-**When in doubt, remove the comment and make the code more self-documenting instead.**
-
 **NEVER add fallbacks or workarounds as fixes - identify and fix root causes in the backend/data pipeline instead.**
 
 **ALWAYS use Python 3.11+ built-in types for type hints:**

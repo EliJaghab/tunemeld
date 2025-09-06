@@ -1,7 +1,7 @@
 import graphene
 from core.graphql.service import ServiceType
-from core.models.b_genre_service import Service
-from core.models.e_playlist import Playlist
+from core.models.a_genre_service import Service
+from core.models.c_playlist import Playlist
 from core.models.d_track import Track
 from graphene_django import DjangoObjectType
 

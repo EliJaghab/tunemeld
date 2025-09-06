@@ -5,8 +5,8 @@ PostgreSQL-based playlist API views for staging environment. WIP
 import logging
 
 from core.api.utils import error_response, success_response
-from core.models.d_raw_playlist import RawPlaylistData
-from core.models.e_playlist import Playlist
+from core.models.b_raw_playlist import RawPlaylistData
+from core.models.c_playlist import Playlist
 
 from playlist_etl.constants import ServiceName
 
@@ -16,6 +16,7 @@ logger = logging.getLogger(__name__)
 def get_aggregate_playlist(request, genre_name):
     """Get aggregated playlist data from PostgreSQL tables."""
     try:
+        # Get aggregate playlist positions (cross-service ISRC matches only)
         playlist_positions = (
             Playlist.objects.filter(genre__name=genre_name, service__name=ServiceName.TUNEMELD)
             .select_related("service_track", "genre", "service")
@@ -25,6 +26,7 @@ def get_aggregate_playlist(request, genre_name):
         if not playlist_positions.exists():
             return error_response("No data found for the specified genre", 404)
 
+        # Process aggregate tracks with cross-service source information
         tracks = []
         for position in playlist_positions:
             service_track = position.service_track
@@ -34,12 +36,14 @@ def get_aggregate_playlist(request, genre_name):
             youtube_views = random.randint(50000, 5000000)
             spotify_streams = random.randint(100000, 10000000)
 
+            # Find all services that have this ISRC for additional sources
             from core.models.c_playlist import ServiceTrack
 
             cross_service_tracks = ServiceTrack.objects.filter(isrc=position.isrc, genre=position.genre).select_related(
                 "service"
             )
 
+            # Build additional sources from cross-service matches
             additional_sources = {}
             primary_service_name = None
             primary_track_url = None
@@ -61,6 +65,7 @@ def get_aggregate_playlist(request, genre_name):
                 "service": ServiceName.TUNEMELD,  # This is an aggregate playlist
                 "album_cover_url": service_track.album_cover_url or "",
                 "service_url": service_track.service_url,
+                # Add fields expected by frontend for source links
                 "source_name": primary_service_name or "Unknown",
                 "track_url": primary_track_url or service_track.service_url,
                 "additional_sources": additional_sources,
@@ -93,6 +98,7 @@ def get_aggregate_playlist(request, genre_name):
 def get_playlist(request, genre_name, service_name):
     """Get service-specific playlist data from PostgreSQL tables."""
     try:
+        # Get playlist positions for specific genre and service
         playlist_positions = (
             Playlist.objects.filter(genre__name=genre_name, service__name=service_name)
             .select_related("service_track", "genre", "service")
@@ -105,6 +111,7 @@ def get_playlist(request, genre_name, service_name):
         tracks = []
         for position in playlist_positions:
             service_track = position.service_track
+            # Generate realistic fake view counts for staging
             import random
 
             youtube_views = random.randint(50000, 5000000)

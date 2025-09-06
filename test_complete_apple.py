@@ -11,7 +11,7 @@ import django
 
 django.setup()
 
-from playlist_etl.extract import get_apple_music_playlist  # noqa: E402
+from playlist_etl.extract import get_apple_music_playlist
 
 
 def test_complete_apple_music():
@@ -38,9 +38,7 @@ def test_complete_apple_music():
         except Exception as e:
             print(f"❌ {genre}: Error - {e}")
             import traceback
-
             traceback.print_exc()
-
 
 if __name__ == "__main__":
     test_complete_apple_music()

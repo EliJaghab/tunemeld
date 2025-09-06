@@ -29,6 +29,7 @@ async function fetchChartData(genre, isrc) {
       throw new Error(`Failed to fetch chart data. Status: ${response.status}`);
     }
     const responseData = await response.json();
+    // Handle Django's wrapped response format
     const data = responseData.data || responseData;
     const trackData = data.find(track => track.isrc === isrc);
     if (!trackData) {

@@ -5,7 +5,7 @@ from playlist_etl.constants import GenreName
 
 
 class Command(BaseCommand):
-    help = "Warm up GraphQL cache by calling queries directly"
+    help = "Warm up cache by calling GraphQL queries directly"
 
     def handle(self, *args, **options):
         schema.execute("query { genres { id name displayName } defaultGenre }")

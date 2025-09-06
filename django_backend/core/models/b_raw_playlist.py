@@ -7,7 +7,7 @@ The data is then normalized in Phase 3 and hydrated in Phase 4.
 
 from typing import ClassVar
 
-from core.models.b_genre_service import Genre, Service
+from core.models.a_genre_service import Genre, Service
 from django.db import models
 
 
