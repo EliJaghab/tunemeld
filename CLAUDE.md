@@ -50,6 +50,8 @@ make format           # Format and lint all code (pre-commit hooks)
 
 **NEVER add fallbacks or workarounds as fixes - identify and fix root causes in the backend/data pipeline instead.**
 
+**NEVER add sneaky fallback values or default configurations - if something is required, make it fail explicitly rather than silently using defaults.**
+
 **ALWAYS use Python 3.11+ built-in types for type hints:**
 
 - Use `list[str]` not `List[str]`

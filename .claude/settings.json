@@ -12,5 +12,18 @@
   },
   "toolUsePermissions": {
     "allowedTools": ["mcp__railway__*"]
+  },
+  "bashRestrictions": {
+    "deny": [
+      "git add .",
+      "git add -A",
+      "git add --all",
+      "git commit -a",
+      "git commit --all",
+      "git stage .",
+      "git stage -A",
+      "git stage --all"
+    ],
+    "message": "NEVER stage all files without explicit user permission. Ask before staging changes."
   }
 }
