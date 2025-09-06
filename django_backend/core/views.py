@@ -58,7 +58,6 @@ def health(request):
 
 def get_edm_events(request):
     """Get EDM events data from GitHub with caching."""
-    # Check cache first
     if cache:
         cached_data = cache.get(EDM_EVENTS_CACHE_KEY)
         if cached_data:
@@ -66,12 +65,10 @@ def get_edm_events(request):
             return create_response(ResponseStatus.SUCCESS, "EDM events data retrieved from cache", cached_data)
 
     try:
-        # Fetch fresh data
         response = requests.get(EDM_EVENTS_GITHUB_URL, timeout=30)
         response.raise_for_status()
         data = response.json()
 
-        # Cache the data if cache is available
         if cache:
             cache.put(EDM_EVENTS_CACHE_KEY, data, ttl=3600)  # 1 hour TTL
             logger.info("EDM events data cached successfully")

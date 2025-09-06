@@ -92,7 +92,6 @@ function displayServiceHeader(
     setupDescriptionModal(descriptionElement, playlistDescription, playlistName, serviceName, genre);
   }
 
-  // Call the optional display callback if provided
   if (displayCallback) {
     displayCallback({
       service,
