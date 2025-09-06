@@ -85,39 +85,3 @@ def get_edm_events(request):
     except Exception as error:
         logger.error(f"Unexpected error in get_edm_events: {error}")
         return create_response(ResponseStatus.ERROR, str(error), None)
-
-
-# Legacy MongoDB-dependent endpoints - return appropriate error messages
-def get_aggregate_playlist(request, genre_name):
-    """Legacy MongoDB-dependent endpoint - now deprecated."""
-    return create_response(
-        ResponseStatus.ERROR, "This endpoint has been deprecated. MongoDB functionality has been removed.", None
-    )
-
-
-def get_service_playlist(request, genre_name, service_name):
-    """Legacy MongoDB-dependent endpoint - now deprecated."""
-    return create_response(
-        ResponseStatus.ERROR, "This endpoint has been deprecated. MongoDB functionality has been removed.", None
-    )
-
-
-def get_last_updated(request, genre_name):
-    """Legacy MongoDB-dependent endpoint - now deprecated."""
-    return create_response(
-        ResponseStatus.ERROR, "This endpoint has been deprecated. MongoDB functionality has been removed.", None
-    )
-
-
-def get_graph_data(request, genre_name):
-    """Legacy MongoDB-dependent endpoint - now deprecated."""
-    return create_response(
-        ResponseStatus.ERROR, "This endpoint has been deprecated. MongoDB functionality has been removed.", None
-    )
-
-
-def get_header_art(request, genre_name):
-    """Legacy MongoDB-dependent endpoint - now deprecated."""
-    return create_response(
-        ResponseStatus.ERROR, "This endpoint has been deprecated. MongoDB functionality has been removed.", None
-    )
