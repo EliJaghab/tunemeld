@@ -3,7 +3,7 @@ import logging
 import os
 import zoneinfo
 from collections.abc import Callable
-from datetime import UTC, datetime
+from datetime import datetime, timezone
 from typing import Any
 
 from dotenv import load_dotenv
@@ -20,15 +20,15 @@ def to_et_format(timestamp: datetime | int | str) -> str:
         Formatted timestamp string in ET (MM/DD/YY H:MM:SSPM ET format)
     """
     if isinstance(timestamp, int):
-        dt = datetime.fromtimestamp(timestamp, tz=UTC)
+        dt = datetime.fromtimestamp(timestamp, tz=timezone.utc)
     elif isinstance(timestamp, str):
         dt = datetime.fromisoformat(timestamp.replace("Z", "+00:00"))
         if dt.tzinfo is None:
-            dt = dt.replace(tzinfo=UTC)
+            dt = dt.replace(tzinfo=timezone.utc)
     else:
         dt = timestamp
         if dt.tzinfo is None:
-            dt = dt.replace(tzinfo=UTC)
+            dt = dt.replace(tzinfo=timezone.utc)
 
     et_tz = zoneinfo.ZoneInfo("America/New_York")
     et_dt = dt.astimezone(et_tz)

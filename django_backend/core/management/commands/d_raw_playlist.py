@@ -5,7 +5,7 @@ from core.services.spotify_service import get_spotify_playlist
 from core.utils.utils import get_logger
 from django.core.management.base import BaseCommand, CommandError
 
-from playlist_etl.constants import PLAYLIST_GENRES, SERVICE_CONFIGS, ServiceName
+from playlist_etl.constants import PLAYLIST_GENRES, SERVICE_CONFIGS, GenreName, ServiceName
 
 logger = get_logger(__name__)
 
@@ -22,8 +22,10 @@ class Command(BaseCommand):
         for service_name in SERVICE_CONFIGS:
             if service_name not in supported_services:
                 continue
-            for genre in PLAYLIST_GENRES:
-                tasks.append((service_name, genre))
+            for genre_str in PLAYLIST_GENRES:
+                genre = GenreName(genre_str)
+                service = ServiceName(service_name)
+                tasks.append((service, genre))
 
         from core.utils.utils import process_in_parallel
 
@@ -37,15 +39,15 @@ class Command(BaseCommand):
         for task, _result, exc in results:
             service_name, genre = task
             if exc:
-                logger.error(f"Failed {service_name}/{genre}: {exc}")
-                raise CommandError(f"ETL step failed on {service_name}/{genre}: {exc}") from exc
+                logger.error(f"Failed {service_name.value}/{genre.value}: {exc}")
+                raise CommandError(f"ETL step failed on {service_name.value}/{genre.value}: {exc}") from exc
             else:
-                logger.info(f"Completed {service_name}/{genre}")
+                logger.info(f"Completed {service_name.value}/{genre.value}")
 
-    def get_and_save_playlist(self, service_name: str, genre: str) -> RawPlaylistData | None:
-        logger.info(f"Getting playlist data for {service_name}/{genre}")
-        service = Service.objects.get(name=service_name)
-        genre_obj = Genre.objects.get(name=genre)
+    def get_and_save_playlist(self, service_name: ServiceName, genre: GenreName) -> RawPlaylistData | None:
+        logger.info(f"Getting playlist data for {service_name.value}/{genre.value}")
+        service = Service.objects.get(name=service_name.value)
+        genre_obj = Genre.objects.get(name=genre.value)
 
         try:
             if service_name == ServiceName.APPLE_MUSIC:
