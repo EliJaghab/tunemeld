@@ -23,6 +23,7 @@ class TrackType(DjangoObjectType):
             "album_cover_url",
             "aggregate_rank",
             "aggregate_score",
+            "updated_at",
         )
         convert_choices_to_enum = False
 

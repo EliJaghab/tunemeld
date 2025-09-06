@@ -175,6 +175,17 @@ class GraphQLClient {
 
     return await this.query(query, { genre, service });
   }
+
+  async getLastUpdated(genre) {
+    const query = `
+      query GetUpdatedAt($genre: String!) {
+        updatedAt(genre: $genre)
+      }
+    `;
+
+    const data = await this.query(query, { genre });
+    return data.updatedAt;
+  }
 }
 
 export const graphqlClient = new GraphQLClient();

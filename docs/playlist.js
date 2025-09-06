@@ -5,13 +5,10 @@ import { SERVICE_NAMES } from "./constants.js";
 
 export async function fetchAndDisplayLastUpdated(genre) {
   try {
-    const response = await fetch(`${DJANGO_API_BASE_URL}/last-updated/${genre}`);
-    if (!response.ok) {
-      throw new Error(`Failed to fetch last-updated. Status: ${response.status}`);
+    const lastUpdatedTimestamp = await graphqlClient.getLastUpdated(genre);
+    if (lastUpdatedTimestamp) {
+      displayLastUpdated({ last_updated: lastUpdatedTimestamp });
     }
-    const responseData = await response.json();
-    const lastUpdated = responseData.data || responseData;
-    displayLastUpdated(lastUpdated);
   } catch (error) {
     console.error("Error fetching last updated date:", error);
   }

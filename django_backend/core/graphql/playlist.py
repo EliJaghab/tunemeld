@@ -11,6 +11,7 @@ class PlaylistType(graphene.ObjectType):
     genre_name = graphene.String(required=True)
     service_name = graphene.String(required=True)
     tracks = graphene.List(TrackType, required=True)
+    updated_at = graphene.DateTime()
 
 
 class PlaylistMetadataType(graphene.ObjectType):
@@ -28,6 +29,7 @@ class PlaylistQuery(graphene.ObjectType):
         PlaylistType, genre=graphene.String(required=True), service=graphene.String(required=True)
     )
     playlists_by_genre = graphene.List(PlaylistMetadataType, genre=graphene.String(required=True))
+    updated_at = graphene.DateTime(genre=graphene.String(required=True))
 
     def resolve_service_order(self, info):
         """Used to order the header art."""
@@ -78,3 +80,16 @@ class PlaylistQuery(graphene.ObjectType):
             )
 
         return playlist_metadata
+
+    def resolve_updated_at(self, info, genre):
+        """Get the update timestamp of the TuneMeld playlist for a genre."""
+        playlist_entry = (
+            Playlist.objects.filter(genre__name=genre, service__name=ServiceName.TUNEMELD)
+            .select_related("service_track__track")
+            .first()
+        )
+
+        if playlist_entry and playlist_entry.service_track and playlist_entry.service_track.track:
+            return playlist_entry.service_track.track.updated_at
+
+        return None
