@@ -22,5 +22,6 @@ def test_apple_music_genres():
         except Exception as e:
             print(f"❌ {genre}: Error - {e}")
 
+
 if __name__ == "__main__":
     test_apple_music_genres()

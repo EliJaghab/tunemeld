@@ -239,14 +239,12 @@ def get_spotify_playlist(genre: str) -> PlaylistData:
     config = SERVICE_CONFIGS["spotify"]
     url = config["links"][genre]
 
-    # Get playlist tracks data
     tracks_data = fetch_spotify_playlist_with_spotdl(url)
 
     # Scrape metadata from playlist page
     response = requests.get(url)
     response.raise_for_status()
 
-    # Extract metadata using the Spotify-specific parser
     metadata = _extract_spotify_metadata_from_html(url, response.text)
     metadata["genre_name"] = genre
 

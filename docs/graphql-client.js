@@ -23,7 +23,6 @@ class GraphQLClient {
       const duration = Date.now() - startTime;
 
       if (!response.ok) {
-        // Create detailed HTTP error
         const errorDetails = {
           status: response.status,
           statusText: response.statusText,
@@ -70,7 +69,6 @@ class GraphQLClient {
         throw error;
       }
 
-      // Handle network/fetch errors
       let enhancedError;
       if (error.name === "TypeError" && error.message.includes("fetch")) {
         enhancedError = new Error(`Network Connection Failed: Unable to reach GraphQL server at ${this.endpoint}`);

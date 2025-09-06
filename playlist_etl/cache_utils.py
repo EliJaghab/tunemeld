@@ -5,6 +5,8 @@ from typing import Any
 from core.utils.utils import get_logger
 from django.core.cache import cache
 
+from playlist_etl.schedule_config import ScheduleConfig, is_within_scheduled_time_window
+
 
 class CachePrefix(str, Enum):
     """Strongly typed cache prefixes for different data types"""
@@ -57,3 +59,23 @@ def cache_set(prefix: CachePrefix, key_data: str, value: Any, ttl: int | None = 
     else:
         cache.set(cache_key, value, ttl)
         logger.info(f"Cached: {prefix.value}:{key_data} (TTL: {ttl}s)")
+
+
+def cache_clear_if_scheduled(
+    prefix: CachePrefix, key_data: str, schedule_config: ScheduleConfig = ScheduleConfig()
+) -> bool:
+    if not is_within_scheduled_time_window(schedule_config):
+        logger.info(f"Cache clear skipped - outside scheduled window: {prefix.value}:{key_data}")
+        return False
+
+    cache_key = _generate_cache_key(prefix, key_data)
+    cache.delete(cache_key)
+    logger.info(f"Cache cleared within scheduled window: {prefix.value}:{key_data}")
+    return True
+
+
+def cache_clear_rapidapi_if_scheduled(
+    service_name: str, genre: str, url: str, schedule_config: ScheduleConfig = ScheduleConfig()
+) -> bool:
+    key_data = f"{service_name}:{genre}:{url}"
+    return cache_clear_if_scheduled(CachePrefix.RAPIDAPI, key_data, schedule_config)

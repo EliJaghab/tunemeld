@@ -8,7 +8,7 @@ in the c_playlist_service_track management command.
 
 from typing import ClassVar
 
-from core.models.a_genre_service import Genre, Service
+from core.models.b_genre_service import Genre, Service
 from django.core.validators import RegexValidator
 from django.db import models
 

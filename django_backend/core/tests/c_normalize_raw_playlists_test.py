@@ -34,7 +34,6 @@ class TestNormalizeRawPlaylistsCommand(TestCase):
         """Set up test data."""
         self.command = NormalizeCommand()
 
-        # Create test service and genre
         self.spotify_service = Service.objects.create(name="Spotify", display_name="Spotify")
         self.pop_genre = Genre.objects.create(name="pop", display_name="Pop")
 

@@ -1,4 +1,5 @@
 import os
+import time
 from typing import Any, cast
 
 import requests
@@ -57,6 +58,7 @@ def _make_rapidapi_request(url: str, host: str) -> JSON:
     }
 
     logger.info(f"Making RapidAPI request to {host}")
+    time.sleep(1.5)
     response = requests.get(url, headers=headers, timeout=30)
 
     if response.status_code == 429:

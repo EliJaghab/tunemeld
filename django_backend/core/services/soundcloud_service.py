@@ -16,10 +16,8 @@ def get_soundcloud_playlist(genre: str) -> PlaylistData:
     config = SERVICE_CONFIGS["soundcloud"]
     url = config["links"][genre]
 
-    # Get playlist tracks data
     tracks_data = fetch_playlist_data("soundcloud", genre)
 
-    # Scrape metadata from playlist page
     parsed_url = urlparse(url)
     clean_url = f"{parsed_url.netloc}{parsed_url.path}"
 
