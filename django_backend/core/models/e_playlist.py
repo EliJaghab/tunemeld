@@ -1,16 +1,15 @@
-"""
-Playlist and ServiceTrack models for Phase C: Clean playlist positioning and service track data.
-
-This module contains both the Playlist model (playlist positioning data) and
-ServiceTrack model (normalized track data from services) which work together
-in the c_playlist_service_track management command.
-"""
-
-from typing import ClassVar
+from enum import Enum
+from typing import TYPE_CHECKING, ClassVar
 
 from core.models.b_genre_service import Genre, Service
 from django.core.validators import RegexValidator
 from django.db import models
+from pydantic import BaseModel
+
+from playlist_etl.constants import GenreName, ServiceName
+
+if TYPE_CHECKING:
+    from core.models.f_track import TrackRank
 
 
 class Playlist(models.Model):
@@ -108,3 +107,18 @@ class ServiceTrack(models.Model):
 
     def __str__(self) -> str:
         return f"{self.track_name} by {self.artist_name} ({self.service.name})"
+
+
+class PlaylistType(str, Enum):
+    SPOTIFY = ServiceName.SPOTIFY.value
+    SOUNDCLOUD = ServiceName.SOUNDCLOUD.value
+    APPLE_MUSIC = ServiceName.APPLE_MUSIC.value
+    TUNEMELD = ServiceName.TUNEMELD.value
+
+
+class PlaylistETL(BaseModel):
+    """Pydantic playlist model for aggregation and ranking."""
+
+    service_name: PlaylistType
+    genre_name: GenreName
+    tracks: list["TrackRank"]

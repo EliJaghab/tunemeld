@@ -1,17 +1,25 @@
 """
-View count models for tracking track popularity across services.
+Z: View count models (Django and Pydantic) for tracking track popularity across services.
 
 These models store current and historical view count data for tracks.
 Updated by: view count ETL processes
 Used by: Analytics and reporting
+
+Django models: Database storage for view counts
+Pydantic models: ETL data validation and API serialization
 """
 
+from datetime import datetime
+from enum import Enum
 from typing import ClassVar
 
 from core.models.b_genre_service import Service
 from django.core.validators import RegexValidator
 from django.db import models
 from django.utils import timezone
+from pydantic import BaseModel, Field
+
+from playlist_etl.constants import ServiceName
 
 
 class ViewCount(models.Model):
@@ -92,3 +100,40 @@ class HistoricalViewCount(models.Model):
 
     def __str__(self):
         return f"{self.isrc} - {self.view_count:,} views on {self.recorded_date}"
+
+
+# Pydantic Models for View Count ETL and API
+
+
+class DataSourceServiceName(str, Enum):
+    SPOTIFY = ServiceName.SPOTIFY.value
+    YOUTUBE = "YouTube"
+
+
+class StartView(BaseModel):
+    view_count: int | None = None
+    timestamp: datetime | None = None
+
+
+class CurrentView(BaseModel):
+    view_count: int | None = None
+    timestamp: datetime | None = None
+
+
+class HistoricalView(BaseModel):
+    total_view_count: int | None = None
+    delta_view_count: int | None = None
+    timestamp: datetime | None = None
+
+
+class YouTubeView(BaseModel):
+    view_count: int | None = None
+    timestamp: datetime | None = None
+
+
+class ServiceView(BaseModel):
+    service_name: DataSourceServiceName
+    start_view: StartView = Field(default_factory=StartView)
+    current_view: CurrentView = Field(default_factory=CurrentView)
+    historical_view: list[HistoricalView] = []
+    youtube_view: YouTubeView = Field(default_factory=YouTubeView)
