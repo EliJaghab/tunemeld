@@ -1,6 +1,6 @@
 import graphene
 from core.graphql.track import TrackType
-from core.models.c_playlist import Playlist
+from core.models.e_playlist import Playlist
 
 from playlist_etl.constants import ServiceName
 
@@ -52,7 +52,7 @@ class PlaylistQuery(graphene.ObjectType):
     def resolve_playlists_by_genre(self, info, genre):
         """Get playlist metadata for all services for a given genre."""
         from core.models import Genre
-        from core.models.b_raw_playlist import RawPlaylistData
+        from core.models.d_raw_playlist import RawPlaylistData
 
         try:
             genre_obj = Genre.objects.get(name=genre)

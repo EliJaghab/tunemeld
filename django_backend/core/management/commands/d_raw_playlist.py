@@ -18,7 +18,6 @@ class Command(BaseCommand):
 
         supported_services = [ServiceName.APPLE_MUSIC.value, ServiceName.SOUNDCLOUD.value, ServiceName.SPOTIFY.value]
 
-        # Create list of all service/genre combinations to process
         tasks = []
         for service_name in SERVICE_CONFIGS:
             if service_name not in supported_services:
@@ -26,7 +25,6 @@ class Command(BaseCommand):
             for genre in PLAYLIST_GENRES:
                 tasks.append((service_name, genre))
 
-        # Process tasks in parallel using helper
         from core.utils.utils import process_in_parallel
 
         results = process_in_parallel(
@@ -50,7 +48,6 @@ class Command(BaseCommand):
         genre_obj = Genre.objects.get(name=genre)
 
         try:
-            # Get playlist data using appropriate function
             if service_name == ServiceName.APPLE_MUSIC:
                 playlist_data = get_apple_music_playlist(genre)
             elif service_name == ServiceName.SOUNDCLOUD:

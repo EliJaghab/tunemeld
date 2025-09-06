@@ -49,7 +49,6 @@ class Command(BaseCommand):
         else:
             raise ValueError(f"Unknown service: {raw_data.service.name}")
 
-        # Create ServiceTrack records (only for tracks with ISRC)
         service_tracks = []
         for track in tracks_data:
             if track.isrc:  # Only create ServiceTrack if ISRC is available
@@ -68,7 +67,6 @@ class Command(BaseCommand):
 
         ServiceTrack.objects.bulk_create(service_tracks)
 
-        # Create Playlist records linked to ServiceTrack records
         created_tracks = ServiceTrack.objects.filter(service=raw_data.service, genre=raw_data.genre).order_by(
             "position"
         )
@@ -113,7 +111,6 @@ class Command(BaseCommand):
         # Prepare track data for parallel processing
         track_items = [(key, track_data) for key, track_data in raw_data["album_details"].items() if key.isdigit()]
 
-        # Process tracks in parallel using helper
         from core.utils.utils import process_in_parallel
 
         results = process_in_parallel(
@@ -132,7 +129,6 @@ class Command(BaseCommand):
             elif track:
                 tracks.append(track)
 
-        # Sort tracks by position
         tracks.sort(key=lambda x: x.position)
         return tracks
 
