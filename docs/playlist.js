@@ -90,6 +90,7 @@ function displayData(data, placeholderId, isAggregated = false, viewCountType) {
     console.error(`Placeholder with ID ${placeholderId} not found.`);
     return;
   }
+
   placeholder.innerHTML = "";
   data.forEach(playlist => {
     playlist.tracks.forEach(track => {

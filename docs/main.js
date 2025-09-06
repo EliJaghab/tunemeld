@@ -1,6 +1,6 @@
 import { loadTitleContent } from "./title.js?v=20250828b";
-import { setupSortButtons } from "./playlist.js?v=20250828b";
-import { setupGenreSelector, setupViewCountTypeSelector } from "./selectors.js?v=20250828b";
+import { setupSortButtons } from "./playlist.js?v=20250906a";
+import { setupGenreSelector, setupViewCountTypeSelector } from "./selectors.js?v=20250906a";
 import { setupBodyClickListener, setupClosePlayerButton } from "./servicePlayer.js?v=20250828b";
 import { initializeTosPrivacyOverlay } from "./tosPrivacy.js?v=20250828b";
 import { stateManager } from "./StateManager.js?v=20250828b";
