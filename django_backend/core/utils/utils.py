@@ -116,3 +116,19 @@ def process_in_parallel(
         logger.info(f"Completed processing {completed}/{total} items")
 
     return results
+
+
+def clean_unicode_text(text: str) -> str:
+    """
+    Fix double-encoded Unicode text where UTF-8 bytes were stored as Latin-1.
+
+    Common issue with scraped text containing emojis and special characters.
+    Example: 'â\\x9a¡ï\\x8f' -> '⚡️'
+    """
+    if not text:
+        return text
+
+    try:
+        return text.encode("latin-1").decode("utf-8")
+    except (UnicodeDecodeError, UnicodeEncodeError):
+        return text

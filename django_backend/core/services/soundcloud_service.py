@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 if TYPE_CHECKING:
     from playlist_etl.constants import GenreName
 from core.models.playlist_types import PlaylistData, PlaylistMetadata
-from core.utils.utils import get_logger
+from core.utils.utils import clean_unicode_text, get_logger
 
 logger = get_logger(__name__)
 
@@ -30,10 +30,12 @@ def get_soundcloud_playlist(genre: "GenreName") -> PlaylistData:
     doc = BeautifulSoup(response.text, "html.parser")
 
     playlist_name_tag = doc.find("meta", {"property": "og:title"})
-    playlist_name = playlist_name_tag["content"] if playlist_name_tag else "Unknown"
+    playlist_name = clean_unicode_text(playlist_name_tag["content"]) if playlist_name_tag else "Unknown"
 
     description_tag = doc.find("meta", {"name": "description"})
-    playlist_cover_description_text = description_tag["content"] if description_tag else "No description available"
+    playlist_cover_description_text = (
+        clean_unicode_text(description_tag["content"]) if description_tag else "No description available"
+    )
 
     playlist_cover_url_tag = doc.find("meta", {"property": "og:image"})
     playlist_cover_url = playlist_cover_url_tag["content"] if playlist_cover_url_tag else None
