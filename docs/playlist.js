@@ -61,8 +61,7 @@ export async function fetchAndDisplayPlaylists(genre) {
     try {
       const response = await graphqlClient.getPlaylist(genre, service);
       const data = [response.playlist];
-      playlistData = data;
-      displayData(data, `${service.toLowerCase()}-data-placeholder`, false);
+      displayData(data, `${service}-data-placeholder`, false);
     } catch (error) {
       console.error(`Error fetching ${service} playlist:`, error);
     }
