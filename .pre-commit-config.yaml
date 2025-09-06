@@ -1,4 +1,20 @@
 repos:
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.13.0
+    hooks:
+      - id: mypy
+        name: mypy-type-check
+        args: [--ignore-missing-imports, --show-error-codes]
+        additional_dependencies: [django-stubs, types-requests]
+        exclude: |
+          (?x)^(
+            venv/.*|
+            .venv/.*|
+            .tox/.*|
+            migrations/.*|
+            .*test.*\.py$
+          )$
+
   - repo: https://github.com/astral-sh/ruff-pre-commit
     # Ruff version.
     rev: v0.8.4
@@ -42,12 +58,26 @@ repos:
 
   - repo: local
     hooks:
+      - id: clear-python-cache
+        name: Clear Python cache files
+        entry: bash -c "find . -name '__pycache__' -type d -exec rm -rf {} + 2>/dev/null || true; find . -name '*.pyc' -delete 2>/dev/null || true; rm -rf .mypy_cache 2>/dev/null || true"
+        language: system
+        pass_filenames: false
+        always_run: true
+
       - id: django-check
         name: Django initialization check
         entry: bash -c "cd django_backend && PYTHONPATH=.. python manage.py check --deploy"
         language: system
         pass_filenames: false
         files: ^django_backend/.*\.py$
+
+      - id: django-import-check
+        name: Django management command import test
+        entry: bash -c "cd django_backend && PYTHONPATH=.. python -c 'import django; django.setup(); from core.management.commands import a_playlist_etl, e_playlist_service_track, f_track; print(\"✅ All management commands import successfully\")'"
+        language: system
+        pass_filenames: false
+        files: ^django_backend/core/management/commands/.*\.py$
 
       - id: check-pip-dependencies
         name: Check pip dependency compatibility
@@ -56,3 +86,16 @@ repos:
         files: requirements\.txt$
         pass_filenames: false
         verbose: false
+
+      - id: python-import-check
+        name: Python import validation
+        entry: bash -c "python -m py_compile"
+        language: system
+        files: \.py$
+        exclude: |
+          (?x)^(
+            venv/.*|
+            .venv/.*|
+            .tox/.*|
+            migrations/.*
+          )$
