@@ -5,44 +5,36 @@ from typing import Any, cast
 import requests
 from core.utils.utils import get_logger
 
-from playlist_etl.cache_utils import CachePrefix, cache_get, cache_set
-from playlist_etl.constants import SERVICE_CONFIGS, ServiceName
+from playlist_etl.cache_utils import CachePrefix, cache_get, cache_set, generate_rapidapi_cache_key_data
+from playlist_etl.constants import SERVICE_CONFIGS, GenreName, ServiceName
 
 logger = get_logger(__name__)
 
 JSON = dict[str, Any] | list[Any]
 
 
-def fetch_playlist_data(service_name: str, genre: str) -> JSON:
-    config = SERVICE_CONFIGS[service_name]
+def fetch_playlist_data(service_name: ServiceName, genre: GenreName) -> JSON:
+    key_data = generate_rapidapi_cache_key_data(service_name, genre)
 
-    if service_name == ServiceName.APPLE_MUSIC.value:
-        playlist_id = config["links"][genre].split("/")[-1]
+    cached_data = cache_get(CachePrefix.RAPIDAPI, key_data)
+    if cached_data:
+        return cast("JSON", cached_data)
+
+    config = SERVICE_CONFIGS[service_name.value]
+
+    if service_name == ServiceName.APPLE_MUSIC:
+        playlist_id = config["links"][genre.value].split("/")[-1]
         apple_playlist_url = f"https://music.apple.com/us/playlist/playlist/{playlist_id}"
         url = f"{config['base_url']}?url={apple_playlist_url}"
-
-        key_data = f"{service_name}:{genre}:{url}"
-        cached_data = cache_get(CachePrefix.RAPIDAPI, key_data)
-        if cached_data:
-            return cached_data
-
-        data = _make_rapidapi_request(url, config["host"])
-        cache_set(CachePrefix.RAPIDAPI, key_data, data)
-        return data
-    elif service_name == ServiceName.SOUNDCLOUD.value:
-        playlist_url = config["links"][genre]
+    elif service_name == ServiceName.SOUNDCLOUD:
+        playlist_url = config["links"][genre.value]
         url = f"{config['base_url']}?playlist={playlist_url}"
-
-        key_data = f"{service_name}:{genre}:{url}"
-        cached_data = cache_get(CachePrefix.RAPIDAPI, key_data)
-        if cached_data:
-            return cached_data
-
-        data = _make_rapidapi_request(url, config["host"])
-        cache_set(CachePrefix.RAPIDAPI, key_data, data)
-        return data
     else:
         raise ValueError(f"Unknown service: {service_name}")
+
+    data = _make_rapidapi_request(url, config["host"])
+    cache_set(CachePrefix.RAPIDAPI, key_data, data)
+    return data
 
 
 def _make_rapidapi_request(url: str, host: str) -> JSON:
