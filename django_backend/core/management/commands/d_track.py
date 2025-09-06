@@ -2,7 +2,7 @@ from core.models import ServiceTrack, Track
 from core.services.apple_music_service import get_apple_music_album_cover_url
 from core.services.youtube_service import get_youtube_url
 from core.utils.utils import get_logger
-from django.core.management.base import BaseCommand
+from django.core.management.base import BaseCommand, CommandError
 
 from playlist_etl.constants import ServiceName
 
@@ -30,10 +30,11 @@ class Command(BaseCommand):
             items=unique_isrcs, process_func=self.process_isrc, max_workers=10, log_progress=True, progress_interval=50
         )
 
-        # Log any failures
+        # Fail fast on ANY error - no graceful degradation
         for isrc, _result, exc in results:
             if exc:
                 logger.error(f"Failed to process ISRC {isrc}: {exc}")
+                raise CommandError(f"Pipeline failed on ISRC {isrc}: {exc}") from exc
 
     def process_isrc(self, isrc: str) -> None:
         """Process a single ISRC and create canonical track."""
