@@ -56,9 +56,6 @@ SERVICE_CONFIGS: dict[str, dict] = {
         },
     },
     ServiceName.SPOTIFY.value: {
-        "base_url": "https://spotify23.p.rapidapi.com/playlist_tracks/",
-        "host": "spotify23.p.rapidapi.com",
-        "param_key": "id",
         "playlist_base_url": "https://open.spotify.com/playlist/",
         "display_name": "Spotify",
         "icon_url": "images/spotify_logo.png",
