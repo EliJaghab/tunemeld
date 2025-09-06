@@ -37,12 +37,14 @@ class Command(BaseCommand):
         )
 
         for task, _result, exc in results:
-            service_name, genre = task
+            task_service: ServiceName
+            task_genre: GenreName
+            task_service, task_genre = task
             if exc:
-                logger.error(f"Failed {service_name.value}/{genre.value}: {exc}")
-                raise CommandError(f"ETL step failed on {service_name.value}/{genre.value}: {exc}") from exc
+                logger.error(f"Failed {task_service.value}/{task_genre.value}: {exc}")
+                raise CommandError(f"ETL step failed on {task_service.value}/{task_genre.value}: {exc}") from exc
             else:
-                logger.info(f"Completed {service_name.value}/{genre.value}")
+                logger.info(f"Completed {task_service.value}/{task_genre.value}")
 
     def get_and_save_playlist(self, service_name: ServiceName, genre: GenreName) -> RawPlaylistData | None:
         logger.info(f"Getting playlist data for {service_name.value}/{genre.value}")

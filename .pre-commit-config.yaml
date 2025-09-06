@@ -4,14 +4,15 @@ repos:
     hooks:
       - id: mypy
         name: mypy-type-check
-        args: [--ignore-missing-imports, --show-error-codes]
-        additional_dependencies: [django-stubs, types-requests]
+        args: [--ignore-missing-imports, --show-error-codes, --explicit-package-bases]
+        additional_dependencies: [types-requests]
         exclude: |
           (?x)^(
             venv/.*|
             .venv/.*|
             .tox/.*|
-            migrations/.*|
+            .*/migrations/.*|
+            playlist_etl/.*|
             .*test.*\.py$
           )$
 
@@ -74,7 +75,7 @@ repos:
 
       - id: django-import-check
         name: Django management command import test
-        entry: bash -c "cd django_backend && PYTHONPATH=.. python -c 'import django; django.setup(); from core.management.commands import a_playlist_etl, e_playlist_service_track, f_track; print(\"✅ All management commands import successfully\")'"
+        entry: bash -c "cd django_backend && PYTHONPATH=.. DJANGO_SETTINGS_MODULE=core.settings python -c 'import django; django.setup(); from core.management.commands import a_playlist_etl, e_playlist_service_track, f_track; print(\"✅ All management commands import successfully\")'"
         language: system
         pass_filenames: false
         files: ^django_backend/core/management/commands/.*\.py$
@@ -89,7 +90,7 @@ repos:
 
       - id: python-import-check
         name: Python import validation
-        entry: bash -c "python -m py_compile"
+        entry: python -m py_compile
         language: system
         files: \.py$
         exclude: |

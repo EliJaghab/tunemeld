@@ -11,6 +11,15 @@ from webdriver_manager.chrome import ChromeDriverManager
 
 logger = get_logger(__name__)
 
+_webdriver_manager = None
+
+
+def get_cached_webdriver() -> "WebDriverManager":
+    global _webdriver_manager
+    if _webdriver_manager is None:
+        _webdriver_manager = WebDriverManager()
+    return _webdriver_manager
+
 
 class WebDriverManager:
     def __init__(self) -> None:

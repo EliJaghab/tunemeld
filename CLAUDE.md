@@ -52,6 +52,8 @@ make format           # Format and lint all code (pre-commit hooks)
 
 **NEVER add sneaky fallback values or default configurations - if something is required, make it fail explicitly rather than silently using defaults.**
 
+**NEVER disable tools, linting, or validation to work around errors unless explicitly requested. Always fix the root cause.**
+
 **ALWAYS use Python 3.11+ built-in types for type hints:**
 
 - Use `list[str]` not `List[str]`

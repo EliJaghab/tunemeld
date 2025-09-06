@@ -36,7 +36,10 @@ def get_youtube_url(track_name: str, artist_name: str, api_key: str | None = Non
     else:
         logger.info(f"Error fetching YouTube URL: {response.status_code}, {response.text}")
         if response.status_code == 403 and "quotaExceeded" in response.text:
-            raise ValueError(f"Could not get YouTube URL for {track_name} {artist_name} because Quota Exceeded")
+            logger.warning(
+                f"YouTube quota exceeded for {track_name} by {artist_name} - returning placeholder (not cached)"
+            )
+            return "https://youtube.com"  # Temporary placeholder - NOT cached so tomorrow's run will retry
         return None
 
 

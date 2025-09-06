@@ -1,5 +1,5 @@
 from core.models.f_track import ETLTrack as Track
-from core.models.f_track import HistoricalView
+from core.models.z_view_counts import HistoricalView
 from core.services.youtube_service import get_youtube_track_view_count
 from core.utils.config import CURRENT_TIMESTAMP
 from core.utils.track_utils import get_delta_view_count

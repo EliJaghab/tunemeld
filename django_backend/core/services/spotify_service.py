@@ -257,7 +257,7 @@ def get_spotify_playlist(genre: "GenreName") -> PlaylistData:
     metadata = _extract_spotify_metadata_from_html(url, response.text)
     metadata["genre_name"] = genre
 
-    playlist_data = {
+    playlist_data: PlaylistData = {
         "metadata": metadata,
         "tracks": tracks_data,
     }

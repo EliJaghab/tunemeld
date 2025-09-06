@@ -1,7 +1,7 @@
 import os
 from functools import lru_cache
 
-from core.models.f_track import HistoricalView
+from core.models.z_view_counts import HistoricalView
 from core.utils.utils import get_logger
 from spotipy import Spotify
 from spotipy.oauth2 import SpotifyClientCredentials
@@ -24,4 +24,6 @@ def get_delta_view_count(historical_views: list[HistoricalView], current_view_co
     if not historical_views:
         return 0
     latest_view = historical_views[-1]
+    if latest_view.total_view_count is None:
+        return 0
     return current_view_count - latest_view.total_view_count

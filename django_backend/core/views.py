@@ -2,18 +2,13 @@ import logging
 from enum import Enum
 
 import requests
+from core.cache import Cache
 from django.http import JsonResponse
 
 EDM_EVENTS_GITHUB_URL = "https://raw.githubusercontent.com/AidanJaghab/Beatmap/main/backend/data/latest_events.json"
 EDM_EVENTS_CACHE_KEY = "edm_events_data"
 
-# Safe cache import with fallback
-try:
-    from core.cache import Cache
-
-    cache = Cache()
-except Exception:
-    cache = None
+cache = Cache("", {})
 
 
 logger = logging.getLogger(__name__)
@@ -58,20 +53,18 @@ def health(request):
 
 def get_edm_events(request):
     """Get EDM events data from GitHub with caching."""
-    if cache:
-        cached_data = cache.get(EDM_EVENTS_CACHE_KEY)
-        if cached_data:
-            logger.info("Returning cached EDM events data")
-            return create_response(ResponseStatus.SUCCESS, "EDM events data retrieved from cache", cached_data)
+    cached_data = cache.get(EDM_EVENTS_CACHE_KEY)
+    if cached_data:
+        logger.info("Returning cached EDM events data")
+        return create_response(ResponseStatus.SUCCESS, "EDM events data retrieved from cache", cached_data)
 
     try:
         response = requests.get(EDM_EVENTS_GITHUB_URL, timeout=30)
         response.raise_for_status()
         data = response.json()
 
-        if cache:
-            cache.put(EDM_EVENTS_CACHE_KEY, data, ttl=3600)  # 1 hour TTL
-            logger.info("EDM events data cached successfully")
+        cache.set(EDM_EVENTS_CACHE_KEY, data, timeout=3600)  # 1 hour TTL
+        logger.info("EDM events data cached successfully")
 
         logger.info("EDM events data fetched successfully from GitHub")
         return create_response(ResponseStatus.SUCCESS, "EDM events data retrieved successfully", data)

@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 
 class Cache(BaseCache):
     BASE_URL_TEMPLATE = "https://api.cloudflare.com/client/v4/accounts/{}/storage/kv/namespaces/{}/values/"
-    _session = None
+    _session: requests.Session | None = None
 
     def __init__(self, server, params):
         super().__init__(params)
@@ -46,6 +46,8 @@ class Cache(BaseCache):
 
         try:
             url = self.BASE_URL + sanitized_key
+            if Cache._session is None:
+                return default
             response = Cache._session.get(url)
             value = response.json().get("value")
             return json.loads(value) if value else default
@@ -63,6 +65,8 @@ class Cache(BaseCache):
         try:
             url = self.BASE_URL + sanitized_key
             serialized_value = json.dumps(value)
+            if Cache._session is None:
+                return False
             response = Cache._session.put(url, json={"value": serialized_value})
             response.raise_for_status()
             result = response.json()

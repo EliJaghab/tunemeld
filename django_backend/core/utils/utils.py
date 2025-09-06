@@ -91,7 +91,7 @@ def process_in_parallel(
     if max_workers is None:
         max_workers = min(len(items), 10)
 
-    results = []
+    results: list[tuple[Any, Any | None, Exception | None]] = []
     with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
         future_to_item = {executor.submit(process_func, item): item for item in items}
 
