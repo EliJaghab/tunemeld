@@ -56,13 +56,11 @@ class TestHydrateTracksCommand(TestCase):
 
         self.command = HydrateCommand()
 
-        # Create test services and genre
         self.spotify_service = Service.objects.create(name="Spotify", display_name="Spotify")
         self.soundcloud_service = Service.objects.create(name="SoundCloud", display_name="SoundCloud")
         self.apple_music_service = Service.objects.create(name="AppleMusic", display_name="Apple Music")
         self.pop_genre = Genre.objects.create(name="pop", display_name="Pop")
 
-        # Create PlaylistTrack records
         self.spotify_playlist_track = PlaylistTrack.objects.create(
             service=self.spotify_service,
             genre=self.pop_genre,
@@ -138,7 +136,6 @@ class TestHydrateTracksCommand(TestCase):
 
     def test_track_deduplication_by_isrc(self):
         """Test that tracks with same ISRC are deduplicated."""
-        # Run the full handle method with our test data
         self.command.handle()
 
         # Should only create one track for the same ISRC
@@ -147,13 +144,11 @@ class TestHydrateTracksCommand(TestCase):
         # Should create two TrackData records (one for each service)
         assert TrackData.objects.count() == 2
 
-        # Verify the canonical track has the right data
         track = Track.objects.first()
         assert track.isrc == "USSM12301546"
         assert track.track_name == "Flowers"
         assert track.artist_name == "Miley Cyrus"
 
-        # Verify both services have TrackData
         spotify_data = TrackData.objects.filter(service=self.spotify_service).first()
         soundcloud_data = TrackData.objects.filter(service=self.soundcloud_service).first()
 

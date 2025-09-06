@@ -177,7 +177,6 @@ class TuneMeldAPITestCase(TestCase):
         self.assertEqual(data["message"], "Graph data retrieved successfully from cache")
         self.assertEqual(data["data"], cached_data)
 
-        # Verify that database wasn't queried when cache hit
         mock_find.assert_not_called()
 
     @patch("core.views.cache.get")
@@ -202,7 +201,6 @@ class TuneMeldAPITestCase(TestCase):
         self.assertEqual(data["status"], "success")
         self.assertEqual(data["message"], "Graph data retrieved successfully")
 
-        # Verify cache was attempted to be populated
         mock_cache_put.assert_called_once()
 
     def test_invalid_endpoints(self):
@@ -239,13 +237,11 @@ class TuneMeldSettingsTestCase(TestCase):
         """Test that required Django settings are properly configured"""
         from django.conf import settings
 
-        # Test that critical settings are present
         self.assertTrue(hasattr(settings, "ALLOWED_HOSTS"))
         self.assertTrue(hasattr(settings, "SECRET_KEY"))
         self.assertTrue(hasattr(settings, "DEBUG"))
         self.assertTrue(hasattr(settings, "INSTALLED_APPS"))
 
-        # Test CORS settings
         self.assertTrue(hasattr(settings, "CORS_ALLOWED_ORIGINS"))
         self.assertIn("corsheaders", settings.INSTALLED_APPS)
 
@@ -253,8 +249,6 @@ class TuneMeldSettingsTestCase(TestCase):
         """Test that CORS is properly configured"""
         from django.conf import settings
 
-        # Check that CORS middleware is installed
         self.assertIn("corsheaders.middleware.CorsMiddleware", settings.MIDDLEWARE)
 
-        # Check that CORS allowed origins are set
         self.assertTrue(len(settings.CORS_ALLOWED_ORIGINS) > 0)
