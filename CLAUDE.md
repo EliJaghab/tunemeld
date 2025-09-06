@@ -61,3 +61,26 @@ make format           # Format and lint all code (pre-commit hooks)
 - Use `str | None` not `Optional[str]`
 - Use `int | str` not `Union[int, str]`
 - No imports from `typing` for basic types (list, dict, tuple, set)
+
+## Response Format
+
+**When completing tasks, always end with a summary that includes:**
+
+1. **Problem identified** - Brief description of what was wrong
+2. **Solution implemented** - List of changes with exact file paths and line numbers using `file_path:line_number` format
+3. **Verification** - How the fix was tested/verified
+
+**Example:**
+
+```
+## Problem Identified
+The SoundCloud playlist title was displaying malformed Unicode characters.
+
+## Solution Implemented
+1. Created Unicode cleaning utility at `/path/to/file.py:121`
+2. Updated SoundCloud service at `/path/to/service.py:33,36` to use cleaning function
+3. Fixed existing database records with migration script
+
+## Verification
+GraphQL now returns proper Unicode characters instead of malformed bytes.
+```
