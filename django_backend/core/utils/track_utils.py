@@ -1,7 +1,7 @@
 import os
 from functools import lru_cache
 
-from core.models.f_etl_types import HistoricalView
+from core.models.f_track import HistoricalView
 from core.utils.utils import get_logger
 from spotipy import Spotify
 from spotipy.oauth2 import SpotifyClientCredentials

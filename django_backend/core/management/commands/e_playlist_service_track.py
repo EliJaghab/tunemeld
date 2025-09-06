@@ -2,7 +2,7 @@ import json
 
 from core.models import PlaylistModel as Playlist
 from core.models import RawPlaylistData, ServiceTrack
-from core.models.f_etl_types import NormalizedTrack
+from core.models.f_track import NormalizedTrack
 from core.services.apple_music_service import get_apple_music_album_cover_url
 from core.services.spotify_service import get_spotify_isrc
 from core.utils.utils import get_logger
