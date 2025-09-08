@@ -18,7 +18,7 @@ urlpatterns = [
     ),
     path(
         "gql/",
-        csrf_exempt(cache_page(settings.CACHE_TIMEOUT)(GraphQLView.as_view(graphiql=True, schema=schema))),
+        csrf_exempt(GraphQLView.as_view(graphiql=True, schema=schema)),
         name="graphql",
     ),
 ]
