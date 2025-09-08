@@ -111,6 +111,7 @@ ignore = [
     "B008",   # do not perform function calls in argument defaults
     "C901",   # too complex
     "E722",   # bare except
+    "N802",   # function name should be lowercase (allows HTTP handler methods)
 ]
 
 # Allow fix for all enabled rules (when `--fix`) is provided.
