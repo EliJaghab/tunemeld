@@ -1,4 +1,3 @@
-from core.utils.config import SPOTIFY_VIEW_COUNT_XPATH
 from core.utils.utils import get_logger
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
@@ -62,21 +61,3 @@ class WebDriverManager:
             raise
 
         return None
-
-    @retry(wait=wait_exponential(multiplier=1, min=2, max=10), stop=stop_after_attempt(3), reraise=False)
-    def get_spotify_track_view_count(self, track_url: str) -> int:
-        driver = self.get_driver()
-        driver.get(track_url)
-
-        try:
-            view_count_element = driver.find_element(By.XPATH, SPOTIFY_VIEW_COUNT_XPATH)
-            view_count_text = view_count_element.text
-            view_count = int(view_count_text.replace(",", ""))
-            logger.info(f"Successfully retrieved Spotify view count: {view_count}")
-            return view_count
-        except NoSuchElementException:
-            logger.error(f"View count element not found for {track_url}")
-            raise
-        except Exception as e:
-            logger.error(f"Error getting Spotify view count: {e}")
-            raise
