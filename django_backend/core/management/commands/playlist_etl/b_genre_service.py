@@ -1,3 +1,8 @@
+"""
+Initialize Genre and Service lookup tables.
+Simple command for deployment - no output, just initialization.
+"""
+
 from core.models import Genre, Service
 from django.core.management.base import BaseCommand
 
