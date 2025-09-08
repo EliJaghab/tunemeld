@@ -1,6 +1,6 @@
-from django.core.management.base import BaseCommand
 from core.models import Track
 from core.utils.utils import get_logger
+from django.core.management.base import BaseCommand
 
 logger = get_logger(__name__)
 
@@ -17,16 +17,16 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         dry_run = options["dry_run"]
-        
+
         self.stdout.write("🧹 Cleaning placeholder YouTube URLs...")
         self.stdout.write("=" * 50)
-        
+
         # Find all tracks with placeholder URLs
         placeholder_tracks = Track.objects.filter(youtube_url="https://youtube.com")
         count = placeholder_tracks.count()
-        
+
         self.stdout.write(f"Found {count} tracks with placeholder URLs")
-        
+
         if count > 0:
             if dry_run:
                 self.stdout.write(f"[DRY RUN] Would clean {count} placeholder URLs")
@@ -42,17 +42,17 @@ class Command(BaseCommand):
                 logger.info(f"Cleaned {updated} placeholder YouTube URLs from database")
         else:
             self.stdout.write("✅ No placeholder URLs found")
-        
+
         # Verify cleanup
         remaining = Track.objects.filter(youtube_url="https://youtube.com").count()
         total_with_urls = Track.objects.filter(youtube_url__isnull=False).count()
         total_tracks = Track.objects.count()
-        
-        self.stdout.write(f"\n📊 Final status:")
+
+        self.stdout.write("\n📊 Final status:")
         self.stdout.write(f"   Total tracks: {total_tracks}")
         self.stdout.write(f"   With YouTube URLs: {total_with_urls}")
         self.stdout.write(f"   Remaining placeholders: {remaining}")
-        
+
         if not dry_run and remaining == 0:
             self.stdout.write(self.style.SUCCESS("✅ All placeholder URLs successfully removed!"))
         elif dry_run:

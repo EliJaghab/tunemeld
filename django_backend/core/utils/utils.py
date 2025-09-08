@@ -39,7 +39,7 @@ def to_et_format(timestamp: datetime | int | str) -> str:
 class ETFormatter(logging.Formatter):
     """Custom formatter for Eastern Time logs."""
 
-    def formatTime(self, record: logging.LogRecord, datefmt: str | None = None) -> str:  # noqa: N802
+    def formatTime(self, record: logging.LogRecord, datefmt: str | None = None) -> str:
         et_time = to_et_format(int(record.created))
         return et_time.split()[1] + " ET"
 

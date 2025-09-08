@@ -10,7 +10,7 @@ from dotenv import load_dotenv
 
 
 class ETFormatter(logging.Formatter):
-    def formatTime(self, record: logging.LogRecord, datefmt: str | None = None) -> str:  # noqa: N802
+    def formatTime(self, record: logging.LogRecord, datefmt: str | None = None) -> str:
         dt = datetime.fromtimestamp(record.created, tz=timezone.utc)
         et_tz = zoneinfo.ZoneInfo("America/New_York")
         dt.astimezone(et_tz)
