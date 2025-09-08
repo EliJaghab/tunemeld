@@ -75,7 +75,7 @@ repos:
 
       - id: django-import-check
         name: Django management command import test
-        entry: bash -c "cd django_backend && PYTHONPATH=.. DJANGO_SETTINGS_MODULE=core.settings python -c 'import django; django.setup(); from core.management.commands import playlist_etl_main, view_count_main, e_playlist_service_track, f_track; print(\"✅ All management commands import successfully\")'"
+        entry: bash -c "cd django_backend && PYTHONPATH=.. DJANGO_SETTINGS_MODULE=core.settings python -c 'import django; django.setup(); from core.management.commands import a_playlist_etl, view_count_main, e_playlist_service_track, f_track; print(\"✅ All management commands import successfully\")'"
         language: system
         pass_filenames: false
         files: ^django_backend/core/management/commands/.*\.py$
