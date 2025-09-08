@@ -88,7 +88,7 @@ class Command(BaseCommand):
                 track_data["album_cover_url"] = album_cover_url
 
         youtube_url = get_youtube_url(primary_track.track_name, primary_track.artist_name)
-        if youtube_url:
+        if youtube_url and youtube_url != "https://youtube.com":
             track_data["youtube_url"] = youtube_url
 
         track = Track.objects.create(**track_data)
