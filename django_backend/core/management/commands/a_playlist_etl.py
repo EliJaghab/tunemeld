@@ -1,8 +1,15 @@
 import time
 from typing import Any
 
+from core.management.commands.playlist_etl.b_genre_service import Command as GenreServiceCommand
+from core.management.commands.playlist_etl.c_clear_raw_playlist_cache import Command as ClearCacheCommand
+from core.management.commands.playlist_etl.d_raw_playlist import Command as RawPlaylistCommand
+from core.management.commands.playlist_etl.e_playlist_service_track import Command as ServiceTrackCommand
+from core.management.commands.playlist_etl.f_track import Command as TrackCommand
+from core.management.commands.playlist_etl.g_aggregate import Command as AggregateCommand
+from core.management.commands.playlist_etl.h_clear_gql_cache import Command as ClearGqlCacheCommand
+from core.management.commands.playlist_etl.i_warm_gql_cache import Command as WarmGqlCacheCommand
 from core.utils.utils import get_logger
-from django.core.management import call_command
 from django.core.management.base import BaseCommand, CommandError
 
 logger = get_logger(__name__)
@@ -11,36 +18,33 @@ logger = get_logger(__name__)
 class Command(BaseCommand):
     help = "Run the complete playlist ETL pipeline"
 
-    def add_arguments(self, parser):
-        pass
-
     def handle(self, *args: Any, **options: Any) -> None:
         start_time = time.time()
 
         try:
             logger.info("Step 1: Setting up genres and services...")
-            call_command("b_genre_service")
+            GenreServiceCommand().handle()
 
             logger.info("Step 2: Clearing raw playlist cache if within scheduled window...")
-            call_command("c_clear_raw_playlist_cache")
+            ClearCacheCommand().handle()
 
             logger.info("Step 3: Extracting raw playlist data...")
-            call_command("d_raw_playlist")
+            RawPlaylistCommand().handle()
 
             logger.info("Step 4: Creating service tracks...")
-            call_command("e_playlist_service_track")
+            ServiceTrackCommand().handle()
 
             logger.info("Step 5: Creating canonical tracks with YouTube URLs...")
-            call_command("f_track")
+            TrackCommand().handle()
 
             logger.info("Step 6: Aggregating tracks...")
-            call_command("g_aggregate")
+            AggregateCommand().handle()
 
             logger.info("Step 7: Clearing GraphQL cache...")
-            call_command("h_clear_gql_cache")
+            ClearGqlCacheCommand().handle()
 
             logger.info("Step 8: Warming GraphQL cache...")
-            call_command("i_warm_gql_cache")
+            WarmGqlCacheCommand().handle()
 
             elapsed_time = time.time() - start_time
             logger.info(f"ETL pipeline completed in {elapsed_time:.2f} seconds")
