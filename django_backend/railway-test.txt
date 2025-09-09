@@ -1,1 +1,0 @@
-Railway Django Test File - If you can see this, the Django container is serving files correctly.

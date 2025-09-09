@@ -59,3 +59,10 @@ dist/
 django_backend/metabase.db*
 django_backend/plugins/
 django_backend/staging.db
+
+# Playwright
+.playwright-mcp/
+
+# Build artifacts
+*.egg
+*.egg-info/
