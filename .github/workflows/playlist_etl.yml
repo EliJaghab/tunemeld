@@ -27,7 +27,6 @@ jobs:
         with:
           python-version: 3.11
 
-      # FFmpeg removed - SpotDL save command works without it for metadata-only operations
 
       - name: Install dependencies
         run: |
