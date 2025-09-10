@@ -169,7 +169,7 @@ class Command(BaseCommand):
                 artist=item["publisher"]["artist"],
                 soundcloud_url=item["permalink"],
                 isrc=item["publisher"].get("isrc"),
-                album_cover_url=item.get("artwork_url"),
+                album_cover_url=item["artworkUrl"],
             )
             for i, item in enumerate(raw_data["tracks"]["items"])
             if item["publisher"].get("isrc")
