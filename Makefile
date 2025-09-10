@@ -148,7 +148,7 @@ setup_backend_env:
 	@echo "Setting up backend virtual environment..."
 	python3 -m venv backend
 	@echo "Activating backend virtual environment and installing requirements..."
-	pip install --upgrade pip && pip install -r django_backend/requirements.txt
+	pip install --upgrade pip && pip install -e .
 
 build_locally:
 	@echo "Building locally..."

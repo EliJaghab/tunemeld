@@ -82,9 +82,9 @@ repos:
 
       - id: check-pip-dependencies
         name: Check pip dependency compatibility
-        entry: python -m pip install --dry-run -r requirements.txt
+        entry: python -m pip install --dry-run -e .
         language: system
-        files: requirements\.txt$
+        files: pyproject\.toml$
         pass_filenames: false
         verbose: false
 

@@ -6,11 +6,11 @@ ENV DJANGO_SETTINGS_MODULE=core.settings
 
 WORKDIR /app
 
-# Copy requirements first for better Docker layer caching
-COPY requirements.txt /app/requirements.txt
+# Copy pyproject.toml first for better Docker layer caching
+COPY pyproject.toml /app/pyproject.toml
 
-# Install Python dependencies including gunicorn
-RUN pip install --upgrade pip && pip install -r requirements.txt && pip install gunicorn
+# Install Python dependencies
+RUN pip install --upgrade pip && pip install -e .
 
 # Copy Django backend files to container
 COPY django_backend/ /app/
