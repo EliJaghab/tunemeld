@@ -1,3 +1,11 @@
+[build]
+builder = "DOCKERFILE"
+dockerfilePath = "Dockerfile"
+
+[deploy]
+releaseCommand = "python manage.py migrate --noinput && python manage.py 01_init_lookup_tables"
+startCommand = "gunicorn core.wsgi:application --bind 0.0.0.0:$PORT --workers 3 --timeout 120"
+
 [environments.production]
 projectId = "b6a14488-05cf-43ad-85be-995c7bae75d1"
 environmentId = "8910d930-6bd7-4742-90a7-3c59b1b42217"
