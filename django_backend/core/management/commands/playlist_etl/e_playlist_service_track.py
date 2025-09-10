@@ -50,12 +50,14 @@ class Command(BaseCommand):
             raise ValueError(f"Unknown service: {raw_data.service.name}")
 
         service_tracks = []
+        position = 1
+
         for track in tracks_data:
             if track.isrc:  # Only create ServiceTrack if ISRC is available
                 service_track = ServiceTrack(
                     service=raw_data.service,
                     genre=raw_data.genre,
-                    position=track.position,
+                    position=position,
                     track_name=track.name,
                     artist_name=track.artist,
                     album_name=track.album,
@@ -64,6 +66,7 @@ class Command(BaseCommand):
                     album_cover_url=track.album_cover_url,
                 )
                 service_tracks.append(service_track)
+                position += 1
 
         ServiceTrack.objects.bulk_create(service_tracks)
 
