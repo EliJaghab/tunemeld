@@ -32,19 +32,6 @@ class TrackType(DjangoObjectType):
         genre=graphene.String(required=True),
         service=graphene.String(required=True),
     )
-    service_url = graphene.String(
-        description="Service-specific URL", genre=graphene.String(required=True), service=graphene.String(required=True)
-    )
-    service_name = graphene.String(
-        description="Service name for the playlist context",
-        genre=graphene.String(required=True),
-        service=graphene.String(required=True),
-    )
-    genre_name = graphene.String(
-        description="Genre name for the playlist context",
-        genre=graphene.String(required=True),
-        service=graphene.String(required=True),
-    )
     spotify_source = graphene.Field(ServiceType, description="Spotify service source with metadata")
     apple_music_source = graphene.Field(ServiceType, description="Apple Music service source with metadata")
     soundcloud_source = graphene.Field(ServiceType, description="SoundCloud service source with metadata")
@@ -64,25 +51,6 @@ class TrackType(DjangoObjectType):
             return playlist_entry.position
         except Playlist.DoesNotExist:
             return None
-
-    def resolve_service_url(self, info, genre, service):
-        """
-        Returns: "https://open.spotify.com/track/xyz" or None
-        Example: serviceUrl(genre="pop", service="spotify") -> "https://open.spotify.com/track/2yWlGE..."
-        """
-        try:
-            playlist_entry = Playlist.objects.select_related("service_track").get(
-                service_track__track=self, genre__name=genre, service__name=service
-            )
-            return playlist_entry.service_track.service_url
-        except Playlist.DoesNotExist:
-            return None
-
-    def resolve_service_name(self, info, genre, service):
-        return service
-
-    def resolve_genre_name(self, info, genre, service):
-        return genre
 
     def resolve_spotify_source(self, info):
         """

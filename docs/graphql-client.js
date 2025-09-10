@@ -142,7 +142,6 @@ class GraphQLClient {
             spotifyUrl
             appleMusicUrl
             soundcloudUrl
-            serviceUrl(genre: $genre, service: $service)
             spotifySource {
               name
               displayName

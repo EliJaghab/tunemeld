@@ -1,5 +1,7 @@
 import graphene
 from core.graphql.track import TrackType
+from core.models import Genre, Track
+from core.models.d_raw_playlist import RawPlaylistData
 from core.models.e_playlist import Playlist
 
 from playlist_etl.constants import ServiceName
@@ -37,25 +39,21 @@ class PlaylistQuery(graphene.ObjectType):
 
     def resolve_playlist(self, info, genre, service):
         """Get playlist data for any service (including Aggregate) and genre."""
-        playlists = (
-            Playlist.objects.select_related("service_track", "service_track__track")
-            .filter(genre__name=genre, service__name=service)
-            .order_by("position")
-        )
+        playlists = Playlist.objects.filter(genre__name=genre, service__name=service).order_by("position")
 
-        tracks = [
-            playlist_entry.service_track.track
-            for playlist_entry in playlists
-            if playlist_entry.service_track and playlist_entry.service_track.track
-        ]
+        tracks = []
+        for playlist_entry in playlists:
+            if playlist_entry.isrc:
+                try:
+                    track = Track.objects.get(isrc=playlist_entry.isrc)
+                    tracks.append(track)
+                except Track.DoesNotExist:
+                    continue
 
         return PlaylistType(genre_name=genre, service_name=service, tracks=tracks)
 
     def resolve_playlists_by_genre(self, info, genre):
         """Get playlist metadata for all services for a given genre."""
-        from core.models import Genre
-        from core.models.d_raw_playlist import RawPlaylistData
-
         try:
             genre_obj = Genre.objects.get(name=genre)
         except Genre.DoesNotExist:

@@ -46,7 +46,7 @@ export async function updateMainPlaylist(genre, viewCountType) {
     const response = await graphqlClient.getPlaylist(genre, SERVICE_NAMES.TUNEMELD);
     const data = [response.playlist];
     playlistData = data;
-    displayData(data, "main-playlist-data-placeholder", true, viewCountType);
+    renderPlaylistTracks(data, "main-playlist-data-placeholder", viewCountType, SERVICE_NAMES.TUNEMELD);
   } catch (error) {
     console.error("Error updating main playlist:", error);
   }
@@ -58,7 +58,7 @@ export async function fetchAndDisplayPlaylists(genre) {
     try {
       const response = await graphqlClient.getPlaylist(genre, service);
       const data = [response.playlist];
-      displayData(data, `${service}-data-placeholder`, false);
+      renderPlaylistTracks(data, `${service}-data-placeholder`, null, service);
     } catch (error) {
       console.error(`Error fetching ${service} playlist:`, error);
     }
@@ -66,7 +66,7 @@ export async function fetchAndDisplayPlaylists(genre) {
   await Promise.all(promises);
 }
 
-async function fetchAndDisplayData(url, placeholderId, isAggregated = false, viewCountType) {
+async function fetchAndDisplayData(url, placeholderId, viewCountType, serviceName) {
   try {
     const response = await fetch(url);
     if (!response.ok) {
@@ -75,13 +75,13 @@ async function fetchAndDisplayData(url, placeholderId, isAggregated = false, vie
     const responseData = await response.json();
     const data = responseData.data || responseData;
     playlistData = data;
-    displayData(data, placeholderId, isAggregated, viewCountType);
+    renderPlaylistTracks(data, placeholderId, viewCountType, serviceName);
   } catch (error) {
     console.error("Error fetching and displaying data:", error);
   }
 }
 
-function displayData(data, placeholderId, isAggregated = false, viewCountType) {
+function renderPlaylistTracks(playlists, placeholderId, viewCountType, serviceName) {
   const placeholder = document.getElementById(placeholderId);
   if (!placeholder) {
     console.error(`Placeholder with ID ${placeholderId} not found.`);
@@ -89,17 +89,36 @@ function displayData(data, placeholderId, isAggregated = false, viewCountType) {
   }
 
   placeholder.innerHTML = "";
-  data.forEach(playlist => {
+  const isTuneMeldPlaylist = serviceName === SERVICE_NAMES.TUNEMELD;
+
+  playlists.forEach(playlist => {
     playlist.tracks.forEach(track => {
-      const row = isAggregated
-        ? createTableRow(track, isAggregated, viewCountType)
-        : createSmallPlaylistTableRow(track);
+      const row = isTuneMeldPlaylist
+        ? createTuneMeldPlaylistTableRow(track, viewCountType)
+        : createServicePlaylistTableRow(track, serviceName);
       placeholder.appendChild(row);
     });
   });
 }
 
-function createTableRow(track, isAggregated, viewCountType) {
+function getServiceUrl(track, serviceName) {
+  switch (serviceName) {
+    case SERVICE_NAMES.SPOTIFY:
+      return track.spotifyUrl;
+    case SERVICE_NAMES.APPLE_MUSIC:
+      return track.appleMusicUrl;
+    case SERVICE_NAMES.SOUNDCLOUD:
+      return track.soundcloudUrl;
+    case SERVICE_NAMES.YOUTUBE:
+      return track.youtubeUrl;
+    case SERVICE_NAMES.TUNEMELD:
+      return track.spotifyUrl || track.appleMusicUrl || track.soundcloudUrl || track.youtubeUrl;
+    default:
+      return track.youtubeUrl;
+  }
+}
+
+function createTuneMeldPlaylistTableRow(track, viewCountType) {
   const row = document.createElement("tr");
 
   row.setAttribute("data-isrc", track.isrc);
@@ -123,7 +142,7 @@ function createTableRow(track, isAggregated, viewCountType) {
 
   const trackTitle = document.createElement("a");
   trackTitle.className = "track-title";
-  trackTitle.href = track.youtubeUrl || "#";
+  trackTitle.href = getServiceUrl(track, SERVICE_NAMES.TUNEMELD) || "#";
   trackTitle.textContent = track.trackName || "Unknown Track";
 
   const artistNameElement = document.createElement("span");
@@ -155,9 +174,7 @@ function createTableRow(track, isAggregated, viewCountType) {
 
   const seenOnCell = document.createElement("td");
   seenOnCell.className = "seen-on";
-  if (isAggregated) {
-    displaySources(seenOnCell, track);
-  }
+  displaySources(seenOnCell, track);
 
   const externalLinksCell = document.createElement("td");
   externalLinksCell.className = "external";
@@ -169,9 +186,7 @@ function createTableRow(track, isAggregated, viewCountType) {
   row.appendChild(rankCell);
   row.appendChild(coverCell);
   row.appendChild(trackInfoCell);
-  if (isAggregated) {
-    displayViewCounts(track, row, viewCountType);
-  }
+  displayViewCounts(track, row, viewCountType);
   row.appendChild(seenOnCell);
   row.appendChild(externalLinksCell);
 
@@ -225,7 +240,7 @@ function displayViewCounts(track, row, viewCountType) {
   row.appendChild(spotifyStatCell);
 }
 
-function createSmallPlaylistTableRow(track) {
+function createServicePlaylistTableRow(track, serviceName) {
   const row = document.createElement("tr");
 
   row.setAttribute("data-isrc", track.isrc);
@@ -249,7 +264,7 @@ function createSmallPlaylistTableRow(track) {
 
   const trackTitle = document.createElement("a");
   trackTitle.className = "track-title";
-  trackTitle.href = track.youtubeUrl || "#";
+  trackTitle.href = getServiceUrl(track, serviceName) || "#";
   trackTitle.textContent = track.trackName || "Unknown Track";
 
   const artistNameElement = document.createElement("span");
@@ -332,7 +347,7 @@ export function sortTable(column, order, viewCountType) {
     return playlist;
   });
 
-  displayData(sortedData, "main-playlist-data-placeholder", true, viewCountType);
+  renderPlaylistTracks(sortedData, "main-playlist-data-placeholder", viewCountType, SERVICE_NAMES.TUNEMELD);
 }
 
 function getViewCount(track, platform, viewCountType) {
