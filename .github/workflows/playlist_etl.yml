@@ -3,6 +3,14 @@ name: Playlist ETL
 on:
   schedule:
     - cron: '0 17 * * 6'
+  push:
+    paths:
+      - 'django_backend/core/management/commands/playlist_etl/**'
+      - 'django_backend/core/management/commands/a_playlist_etl.py'
+  pull_request:
+    paths:
+      - 'django_backend/core/management/commands/playlist_etl/**'
+      - 'django_backend/core/management/commands/a_playlist_etl.py'
   workflow_dispatch:
 
 jobs:
