@@ -30,15 +30,23 @@ class Cache(BaseCache):
                 {"Authorization": f"Bearer {self.CF_API_TOKEN}", "Content-Type": "application/json"}
             )
 
+        # Allow cache to be initialized without credentials in CI/test environments
+        is_ci = settings.SECRET_KEY == "test-secret-key-for-ci" or getattr(settings, 'TESTING', False)
+        
         if not self.CF_ACCOUNT_ID or not self.CF_NAMESPACE_ID or not self.CF_API_TOKEN:
-            missing = []
-            if not self.CF_ACCOUNT_ID:
-                missing.append("CF_ACCOUNT_ID")
-            if not self.CF_NAMESPACE_ID:
-                missing.append("CF_NAMESPACE_ID")
-            if not self.CF_API_TOKEN:
-                missing.append("CF_API_TOKEN")
-            raise ValueError(f"Missing required Cloudflare KV credentials: {', '.join(missing)}")
+            if is_ci:
+                logger.warning("Cache initialized without Cloudflare KV credentials (CI/test environment)")
+                self.BASE_URL = ""
+                return
+            else:
+                missing = []
+                if not self.CF_ACCOUNT_ID:
+                    missing.append("CF_ACCOUNT_ID")
+                if not self.CF_NAMESPACE_ID:
+                    missing.append("CF_NAMESPACE_ID")
+                if not self.CF_API_TOKEN:
+                    missing.append("CF_API_TOKEN")
+                raise ValueError(f"Missing required Cloudflare KV credentials: {', '.join(missing)}")
 
         self.BASE_URL = self.BASE_URL_TEMPLATE.format(self.CF_ACCOUNT_ID, self.CF_NAMESPACE_ID)
         logger.info("Cache initialized with Cloudflare KV + shared connection pool")
