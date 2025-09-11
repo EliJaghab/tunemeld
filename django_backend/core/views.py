@@ -8,7 +8,14 @@ from django.http import JsonResponse
 EDM_EVENTS_GITHUB_URL = "https://raw.githubusercontent.com/AidanJaghab/Beatmap/main/backend/data/latest_events.json"
 EDM_EVENTS_CACHE_KEY = "edm_events_data"
 
-cache = Cache("", {})
+cache = None
+
+
+def get_cache():
+    global cache
+    if cache is None:
+        cache = Cache("", {})
+    return cache
 
 
 logger = logging.getLogger(__name__)
@@ -53,7 +60,7 @@ def health(request):
 
 def get_edm_events(request):
     """Get EDM events data from GitHub with caching."""
-    cached_data = cache.get(EDM_EVENTS_CACHE_KEY)
+    cached_data = get_cache().get(EDM_EVENTS_CACHE_KEY)
     if cached_data:
         logger.info("Returning cached EDM events data")
         return create_response(ResponseStatus.SUCCESS, "EDM events data retrieved from cache", cached_data)
@@ -63,7 +70,7 @@ def get_edm_events(request):
         response.raise_for_status()
         data = response.json()
 
-        cache.set(EDM_EVENTS_CACHE_KEY, data, timeout=3600)  # 1 hour TTL
+        get_cache().set(EDM_EVENTS_CACHE_KEY, data, timeout=3600)  # 1 hour TTL
         logger.info("EDM events data cached successfully")
 
         logger.info("EDM events data fetched successfully from GitHub")
