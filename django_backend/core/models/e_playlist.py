@@ -1,3 +1,4 @@
+import uuid
 from enum import Enum
 from typing import TYPE_CHECKING, ClassVar
 
@@ -46,14 +47,17 @@ class Playlist(models.Model):
         related_name="playlists",
     )
 
+    etl_run_id = models.UUIDField(default=uuid.uuid4, help_text="ETL run identifier for blue-green deployments")
+
     class Meta:
         db_table = "playlists"
         ordering: ClassVar = ["service", "genre", "position"]
         indexes: ClassVar = [
             models.Index(fields=["service", "genre"]),
             models.Index(fields=["isrc"]),
+            models.Index(fields=["etl_run_id"]),
         ]
-        unique_together: ClassVar = [("service", "genre", "position")]
+        unique_together: ClassVar = [("service", "genre", "position", "etl_run_id")]
 
     def __str__(self) -> str:
         return f"Position {self.position}: {self.isrc} ({self.service.name} {self.genre.name})"
@@ -94,15 +98,17 @@ class ServiceTrack(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    etl_run_id = models.UUIDField(default=uuid.uuid4, help_text="ETL run identifier for blue-green deployments")
 
     class Meta:
         db_table = "service_tracks"
-        unique_together: ClassVar = [("service", "genre", "position")]
+        unique_together: ClassVar = [("service", "genre", "position", "etl_run_id")]
         indexes: ClassVar = [
             models.Index(fields=["service", "genre"]),
             models.Index(fields=["isrc"]),
             models.Index(fields=["track_name", "artist_name"]),
             models.Index(fields=["service", "isrc"]),
+            models.Index(fields=["etl_run_id"]),
         ]
 
     def __str__(self) -> str:

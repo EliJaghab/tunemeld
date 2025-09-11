@@ -5,6 +5,7 @@ This model stores unprocessed playlist data as received from external APIs.
 The data is then normalized in Phase 3 and hydrated in Phase 4.
 """
 
+import uuid
 from typing import ClassVar
 
 from core.models.b_genre_service import Genre, Service
@@ -38,6 +39,7 @@ class RawPlaylistData(models.Model):
 
     data = models.JSONField(help_text="Raw JSON data from service API")
     created_at = models.DateTimeField(auto_now_add=True)
+    etl_run_id = models.UUIDField(default=uuid.uuid4, help_text="ETL run identifier for blue-green deployments")
 
     class Meta:
         db_table = "raw_playlist_data"
@@ -45,6 +47,7 @@ class RawPlaylistData(models.Model):
             models.Index(fields=["genre", "service"]),
             models.Index(fields=["created_at"]),
             models.Index(fields=["playlist_url"]),
+            models.Index(fields=["etl_run_id"]),
         ]
         ordering: ClassVar = ["-created_at"]
 

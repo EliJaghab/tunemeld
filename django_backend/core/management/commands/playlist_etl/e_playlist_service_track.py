@@ -1,4 +1,5 @@
 import json
+import uuid
 
 from core.models import PlaylistModel as Playlist
 from core.models import RawPlaylistData, ServiceTrack
@@ -16,10 +17,8 @@ logger = get_logger(__name__)
 class Command(BaseCommand):
     help = "Normalize raw playlist JSON data into Playlist and ServiceTrack tables"
 
-    def handle(self, *args: object, **options: object) -> None:
-        Playlist.objects.all().delete()
-        ServiceTrack.objects.all().delete()
-        raw_data_queryset = RawPlaylistData.objects.select_related("genre", "service").all()
+    def handle(self, *args: object, etl_run_id: uuid.UUID, **options: object) -> None:
+        raw_data_queryset = RawPlaylistData.objects.select_related("genre", "service").filter(etl_run_id=etl_run_id)
         total_raw = raw_data_queryset.count()
 
         if total_raw == 0:
@@ -31,13 +30,13 @@ class Command(BaseCommand):
         total_tracks = 0
 
         for raw_data in raw_data_queryset:
-            track_count = self.create_playlists(raw_data)
+            track_count = self.create_playlists(raw_data, etl_run_id)
             total_tracks += track_count
             logger.info(f"Created {raw_data.service.name}/{raw_data.genre.name}: {track_count} positions")
 
         logger.info(f"Transformation complete: {total_tracks} playlist positions created")
 
-    def create_playlists(self, raw_data: RawPlaylistData) -> int:
+    def create_playlists(self, raw_data: RawPlaylistData, etl_run_id: uuid.UUID) -> int:
         """Create ServiceTrack and Playlist records from raw playlist data."""
 
         if raw_data.service.name == ServiceName.SPOTIFY:
@@ -64,15 +63,16 @@ class Command(BaseCommand):
                     service_url=track.service_url,
                     isrc=track.isrc,
                     album_cover_url=track.album_cover_url,
+                    etl_run_id=etl_run_id,
                 )
                 service_tracks.append(service_track)
                 position += 1
 
         ServiceTrack.objects.bulk_create(service_tracks)
 
-        created_tracks = ServiceTrack.objects.filter(service=raw_data.service, genre=raw_data.genre).order_by(
-            "position"
-        )
+        created_tracks = ServiceTrack.objects.filter(
+            service=raw_data.service, genre=raw_data.genre, etl_run_id=etl_run_id
+        ).order_by("position")
 
         playlists = []
         for service_track in created_tracks:
@@ -82,6 +82,7 @@ class Command(BaseCommand):
                 position=service_track.position,
                 isrc=service_track.isrc,
                 service_track=service_track,
+                etl_run_id=etl_run_id,
             )
             playlists.append(playlist)
 

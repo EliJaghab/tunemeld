@@ -1,3 +1,5 @@
+import uuid
+
 from core.models import Genre, RawPlaylistData, Service
 from core.services.apple_music_service import get_apple_music_playlist
 from core.services.soundcloud_service import get_soundcloud_playlist
@@ -13,9 +15,7 @@ logger = get_logger(__name__)
 class Command(BaseCommand):
     help = "Extract raw playlist data from RapidAPI and save to PostgreSQL"
 
-    def handle(self, *args: object, **options: object) -> None:
-        RawPlaylistData.objects.all().delete()
-
+    def handle(self, *args: object, etl_run_id: uuid.UUID, **options: object) -> None:
         supported_services = [ServiceName.APPLE_MUSIC.value, ServiceName.SOUNDCLOUD.value, ServiceName.SPOTIFY.value]
 
         tasks = []
@@ -31,7 +31,7 @@ class Command(BaseCommand):
 
         results = process_in_parallel(
             items=tasks,
-            process_func=lambda task: self.get_and_save_playlist(task[0], task[1]),
+            process_func=lambda task: self.get_and_save_playlist(task[0], task[1], etl_run_id),
             max_workers=2,
             log_progress=False,
         )
@@ -46,7 +46,9 @@ class Command(BaseCommand):
             else:
                 logger.info(f"Completed {task_service.value}/{task_genre.value}")
 
-    def get_and_save_playlist(self, service_name: ServiceName, genre: GenreName) -> RawPlaylistData | None:
+    def get_and_save_playlist(
+        self, service_name: ServiceName, genre: GenreName, etl_run_id: uuid.UUID
+    ) -> RawPlaylistData | None:
         logger.info(f"Getting playlist data for {service_name.value}/{genre.value}")
         service = Service.objects.get(name=service_name.value)
         genre_obj = Genre.objects.get(name=genre.value)
@@ -72,6 +74,7 @@ class Command(BaseCommand):
                 playlist_cover_url=metadata.get("playlist_cover_url", ""),
                 playlist_cover_description_text=metadata.get("playlist_cover_description_text", ""),
                 data=tracks,
+                etl_run_id=etl_run_id,
             )
             raw_data.save()
             return raw_data

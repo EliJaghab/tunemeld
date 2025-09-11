@@ -1,3 +1,5 @@
+import uuid
+
 from core.models import ServiceTrack, Track
 from core.services.apple_music_service import get_apple_music_album_cover_url
 from core.services.youtube_service import get_youtube_url
@@ -15,10 +17,8 @@ class Command(BaseCommand):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-    def handle(self, *args: object, **options: object) -> None:
-        Track.objects.all().delete()
-
-        unique_isrcs = list(self.get_unique_isrcs())
+    def handle(self, *args: object, etl_run_id: uuid.UUID, **options: object) -> None:
+        unique_isrcs = list(self.get_unique_isrcs(etl_run_id))
 
         if not unique_isrcs:
             return
@@ -26,7 +26,11 @@ class Command(BaseCommand):
         from core.utils.utils import process_in_parallel
 
         results = process_in_parallel(
-            items=unique_isrcs, process_func=self.process_isrc, max_workers=10, log_progress=True, progress_interval=50
+            items=unique_isrcs,
+            process_func=lambda isrc: self.process_isrc(isrc, etl_run_id),
+            max_workers=10,
+            log_progress=True,
+            progress_interval=50,
         )
 
         for isrc, _result, exc in results:
@@ -34,14 +38,19 @@ class Command(BaseCommand):
                 logger.error(f"Failed to process ISRC {isrc}: {exc}")
                 raise CommandError(f"Pipeline failed on ISRC {isrc}: {exc}") from exc
 
-    def process_isrc(self, isrc: str) -> None:
+    def process_isrc(self, isrc: str, etl_run_id: uuid.UUID) -> None:
         """Process a single ISRC and create canonical track."""
-        service_tracks = ServiceTrack.objects.filter(isrc=isrc)
-        self.create_canonical_track(isrc, service_tracks)
+        service_tracks = ServiceTrack.objects.filter(isrc=isrc, etl_run_id=etl_run_id)
+        self.create_canonical_track(isrc, service_tracks, etl_run_id)
 
-    def get_unique_isrcs(self) -> list[str]:
+    def get_unique_isrcs(self, etl_run_id: uuid.UUID) -> list[str]:
         """Get all unique ISRCs that have ServiceTrack records."""
-        return ServiceTrack.objects.values_list("isrc", flat=True).distinct().order_by("isrc")
+        return (
+            ServiceTrack.objects.filter(etl_run_id=etl_run_id)
+            .values_list("isrc", flat=True)
+            .distinct()
+            .order_by("isrc")
+        )
 
     def choose_primary_service_track(self, service_tracks) -> ServiceTrack | None:
         """Choose the primary ServiceTrack based on service priority."""
@@ -55,7 +64,7 @@ class Command(BaseCommand):
         # Fallback to first track if no priority service found
         return service_tracks.first() if service_tracks else None
 
-    def create_canonical_track(self, isrc: str, service_tracks) -> Track | None:
+    def create_canonical_track(self, isrc: str, service_tracks, etl_run_id: uuid.UUID) -> Track | None:
         """Create a canonical Track record from multiple ServiceTrack records."""
 
         primary_track = self.choose_primary_service_track(service_tracks)
@@ -68,6 +77,7 @@ class Command(BaseCommand):
             "artist_name": primary_track.artist_name,
             "album_name": primary_track.album_name,
             "album_cover_url": primary_track.album_cover_url,
+            "etl_run_id": etl_run_id,
         }
 
         apple_music_url = None

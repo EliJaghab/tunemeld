@@ -1,3 +1,4 @@
+import uuid
 from collections import defaultdict
 from typing import Any
 
@@ -22,18 +23,18 @@ SERVICE_RANK_PRIORITY = [
 class Command(BaseCommand):
     help = "Generate cross-service aggregate playlists"
 
-    def handle(self, *args: Any, **options: Any) -> None:
+    def handle(self, *args: Any, etl_run_id: uuid.UUID, **options: Any) -> None:
         logger.info("Starting aggregate playlist generation...")
 
-        Playlist.objects.filter(service__name=ServiceName.TUNEMELD).delete()
-        cross_service_matches = self.find_cross_service_isrcs()
-        self.create_aggregate_playlists(cross_service_matches)
+        cross_service_matches = self.find_cross_service_isrcs(etl_run_id)
+        self.create_aggregate_playlists(cross_service_matches, etl_run_id)
 
-    def find_cross_service_isrcs(self) -> dict[int, list[dict]]:
+    def find_cross_service_isrcs(self, etl_run_id: uuid.UUID) -> dict[int, list[dict]]:
         """Find ISRCs that appear in multiple playlists (cross-service matches)."""
 
         duplicate_isrcs = (
-            ServiceTrack.objects.values("isrc", "genre")
+            ServiceTrack.objects.filter(etl_run_id=etl_run_id)
+            .values("isrc", "genre")
             .annotate(service_count=Count("service", distinct=True))
             .filter(service_count__gt=1)
         )
@@ -44,7 +45,9 @@ class Command(BaseCommand):
             isrc = item["isrc"]
             genre_id = item["genre"]
 
-            service_tracks = ServiceTrack.objects.filter(isrc=isrc, genre_id=genre_id).select_related("service")
+            service_tracks = ServiceTrack.objects.filter(
+                isrc=isrc, genre_id=genre_id, etl_run_id=etl_run_id
+            ).select_related("service")
 
             # Collect service positions
             service_positions = {}
@@ -74,7 +77,7 @@ class Command(BaseCommand):
         # Fallback to lowest position if no priority service found
         return float(min(service_positions.values())) if service_positions else float("inf")
 
-    def create_aggregate_playlists(self, cross_service_matches: dict[int, list[dict]]) -> None:
+    def create_aggregate_playlists(self, cross_service_matches: dict[int, list[dict]], etl_run_id: uuid.UUID) -> None:
         """Create aggregate playlist entries for cross-service tracks."""
 
         aggregate_service, _ = Service.objects.get_or_create(name=ServiceName.TUNEMELD)
@@ -95,6 +98,7 @@ class Command(BaseCommand):
                     position=position,
                     isrc=match["isrc"],
                     service_track=reference_service_track,
+                    etl_run_id=etl_run_id,
                 )
                 playlist_entries.append(playlist_entry)
 

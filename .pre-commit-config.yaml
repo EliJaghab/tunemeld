@@ -4,6 +4,7 @@ repos:
     hooks:
       - id: mypy
         name: mypy-type-check
+        language_version: python3.13
         args: [--ignore-missing-imports, --show-error-codes, --explicit-package-bases]
         additional_dependencies: [types-requests]
         exclude: |
@@ -23,15 +24,18 @@ repos:
       # First check for linting issues (fail if found)
       - id: ruff
         name: ruff-check
+        language_version: python3.13
         args: [--no-fix]
         exclude: ".*\\.ipynb$"
       # Then run the linter with aggressive fixes.
       - id: ruff
         name: ruff-fix
+        language_version: python3.13
         args: [--fix, --unsafe-fixes]
         exclude: ".*\\.ipynb$"
       # Run the formatter.
       - id: ruff-format
+        language_version: python3.13
         exclude: ".*\\.ipynb$"
 
   - repo: https://github.com/pre-commit/pre-commit-hooks
@@ -68,21 +72,21 @@ repos:
 
       - id: django-check
         name: Django initialization check
-        entry: bash -c "cd django_backend && PYTHONPATH=.. python manage.py check --deploy"
+        entry: bash -c "cd django_backend && source ../venv/bin/activate && PYTHONPATH=.. python manage.py check --deploy"
         language: system
         pass_filenames: false
         files: ^django_backend/.*\.py$
 
       - id: django-import-check
         name: Django management command import test
-        entry: bash -c "cd django_backend && PYTHONPATH=.. DJANGO_SETTINGS_MODULE=core.settings python -c 'import django; django.setup(); from core.management.commands import a_playlist_etl; print(\"✅ All management commands import successfully\")'"
+        entry: bash -c "cd django_backend && source ../venv/bin/activate && PYTHONPATH=.. DJANGO_SETTINGS_MODULE=core.settings python -c 'import django; django.setup(); from core.management.commands import a_playlist_etl; print(\"✅ All management commands import successfully\")'"
         language: system
         pass_filenames: false
         files: ^django_backend/core/management/commands/.*\.py$
 
       - id: check-pip-dependencies
         name: Check pip dependency compatibility
-        entry: python -m pip install --dry-run -e .
+        entry: bash -c "cd django_backend && source venv/bin/activate && python -m pip install --dry-run -e .."
         language: system
         files: pyproject\.toml$
         pass_filenames: false
@@ -90,7 +94,7 @@ repos:
 
       - id: python-import-check
         name: Python import validation
-        entry: python -m py_compile
+        entry: bash -c "cd django_backend && source venv/bin/activate && python -m py_compile"
         language: system
         files: \.py$
         exclude: |

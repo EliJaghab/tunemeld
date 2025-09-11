@@ -1,3 +1,4 @@
+import uuid
 from typing import ClassVar
 
 from django.core.validators import RegexValidator
@@ -46,21 +47,20 @@ class Track(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    etl_run_id = models.UUIDField(default=uuid.uuid4, help_text="ETL run identifier for blue-green deployments")
 
     class Meta:
         db_table = "tracks"
         indexes: ClassVar = [
             models.Index(fields=["track_name", "artist_name"]),
             models.Index(fields=["artist_name"]),
+            models.Index(fields=["etl_run_id"]),
         ]
 
     def __str__(self):
         return f"{self.track_name} by {self.artist_name} ({self.isrc})"
 
 
-# Pydantic Models for ETL Pipeline
-
-# Backward compatibility alias
 TrackSourceServiceName = ServiceName
 
 
