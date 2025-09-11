@@ -5,14 +5,20 @@
     <meta property="og:image" content="images/tunemeld.png" />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    />
     <link
       href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,600&display=swap"
       rel="stylesheet"
     />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
     <link rel="stylesheet" href="css/title.css" />
     <link rel="stylesheet" href="css/styles.css" />
     <link rel="stylesheet" href="css/header.css" />
@@ -27,9 +33,17 @@
       <div id="title-container"></div>
       <section id="header-art" class="header-art-section">
         <div id="applemusic" class="service">
-          <a id="applemusic-playlist-title" class="header-title skeleton-text" href="#" target="_blank"></a>
+          <a
+            id="applemusic-playlist-title"
+            class="header-title skeleton-text"
+            href="#"
+            target="_blank"
+          ></a>
           <a id="applemusic-cover-link" href="#" target="_blank">
-            <div id="applemusic-video-container" class="video-container skeleton">
+            <div
+              id="applemusic-video-container"
+              class="video-container skeleton"
+            >
               <video
                 id="applemusic-video"
                 muted
@@ -40,19 +54,41 @@
               ></video>
             </div>
           </a>
-          <div id="applemusic-description" class="description skeleton-text"></div>
+          <div
+            id="applemusic-description"
+            class="description skeleton-text"
+          ></div>
         </div>
         <div id="soundcloud" class="service">
-          <a id="soundcloud-playlist-title" class="header-title skeleton-text" href="#" target="_blank"></a>
+          <a
+            id="soundcloud-playlist-title"
+            class="header-title skeleton-text"
+            href="#"
+            target="_blank"
+          ></a>
           <a id="soundcloud-cover-link" href="#" target="_blank">
-            <div id="soundcloud-image-placeholder" class="image-placeholder skeleton"></div>
+            <div
+              id="soundcloud-image-placeholder"
+              class="image-placeholder skeleton"
+            ></div>
           </a>
-          <div id="soundcloud-description" class="description skeleton-text"></div>
+          <div
+            id="soundcloud-description"
+            class="description skeleton-text"
+          ></div>
         </div>
         <div id="spotify" class="service">
-          <a id="spotify-playlist-title" class="header-title skeleton-text" href="#" target="_blank"></a>
+          <a
+            id="spotify-playlist-title"
+            class="header-title skeleton-text"
+            href="#"
+            target="_blank"
+          ></a>
           <a id="spotify-cover-link" href="#" target="_blank">
-            <div id="spotify-image-placeholder" class="image-placeholder skeleton"></div>
+            <div
+              id="spotify-image-placeholder"
+              class="image-placeholder skeleton"
+            ></div>
           </a>
           <div id="spotify-description" class="description skeleton-text"></div>
         </div>
@@ -75,16 +111,25 @@
         <div class="playlist-header">
           <div class="playlist-title">
             <a id="tunemeld-playlist-link" target="_blank">
-              <img src="./images/tunemeld.png" alt="tunemeld" class="source-icon" />
+              <img
+                src="./images/tunemeld.png"
+                alt="tunemeld"
+                class="source-icon"
+              />
               <span id="tunemeld-playlist-title">tunemeld</span>
             </a>
-            <button class="collapse-button" data-target="#main-playlist">▼</button>
+            <button class="collapse-button" data-target="#main-playlist">
+              ▼
+            </button>
           </div>
         </div>
         <div class="playlist-content">
-          <div id="last-updated" class="last-updated">Last Updated: Loading...</div>
+          <div id="last-updated" class="last-updated">
+            Last Updated: Loading...
+          </div>
           <div class="playlist-description">
-            Tracks seen on more than one curated streaming playlist, updated every Saturday
+            Tracks seen on more than one curated streaming playlist, updated
+            every Saturday
           </div>
           <table class="playlist-table">
             <thead>
@@ -92,7 +137,11 @@
                 <th>
                   <div class="sortable-header">
                     <span class="title">#</span>
-                    <button class="sort-button" data-column="rank" data-order="desc">
+                    <button
+                      class="sort-button"
+                      data-column="rank"
+                      data-order="desc"
+                    >
                       <i class="fa fa-sort-up"></i>
                       <i class="fa fa-sort-down"></i>
                     </button>
@@ -103,7 +152,11 @@
                 <th>
                   <div class="sortable-header">
                     <span class="title">YouTube Views</span>
-                    <button class="sort-button" data-column="youtube_views" data-order="desc">
+                    <button
+                      class="sort-button"
+                      data-column="youtube_views"
+                      data-order="desc"
+                    >
                       <i class="fa fa-sort-up"></i>
                       <i class="fa fa-sort-down"></i>
                     </button>
@@ -112,7 +165,11 @@
                 <th>
                   <div class="sortable-header">
                     <span class="title">Spotify Views</span>
-                    <button class="sort-button" data-column="spotify_views" data-order="desc">
+                    <button
+                      class="sort-button"
+                      data-column="spotify_views"
+                      data-order="desc"
+                    >
                       <i class="fa fa-sort-up"></i>
                       <i class="fa fa-sort-down"></i>
                     </button>
@@ -132,10 +189,19 @@
             <div class="playlist-header">
               <div class="playlist-title">
                 <a id="soundcloud-playlist-link" target="_blank">
-                  <img src="./images/soundcloud_logo.png" alt="SoundCloud" class="source-icon" />
+                  <img
+                    src="./images/soundcloud_logo.png"
+                    alt="SoundCloud"
+                    class="source-icon"
+                  />
                   <span id="soundcloud-playlist-title">SoundCloud</span>
                 </a>
-                <button class="collapse-button" data-target="#soundcloud-playlist">▼</button>
+                <button
+                  class="collapse-button"
+                  data-target="#soundcloud-playlist"
+                >
+                  ▼
+                </button>
               </div>
             </div>
             <div class="playlist-content">
@@ -158,10 +224,19 @@
             <div class="playlist-header">
               <div class="playlist-title">
                 <a id="apple-music-playlist-link" target="_blank">
-                  <img src="./images/apple_music_logo.png" alt="Apple Music" class="source-icon" />
+                  <img
+                    src="./images/apple_music_logo.png"
+                    alt="Apple Music"
+                    class="source-icon"
+                  />
                   <span id="apple-music-playlist-title">Apple Music</span>
                 </a>
-                <button class="collapse-button" data-target="#apple-music-playlist">▼</button>
+                <button
+                  class="collapse-button"
+                  data-target="#apple-music-playlist"
+                >
+                  ▼
+                </button>
               </div>
             </div>
             <div class="playlist-content">
@@ -184,10 +259,16 @@
             <div class="playlist-header">
               <div class="playlist-title">
                 <a id="spotify-playlist-link" target="_blank">
-                  <img src="./images/spotify_logo.png" alt="Spotify" class="source-icon" />
+                  <img
+                    src="./images/spotify_logo.png"
+                    alt="Spotify"
+                    class="source-icon"
+                  />
                   <span id="spotify-playlist-title">Spotify</span>
                 </a>
-                <button class="collapse-button" data-target="#spotify-playlist">▼</button>
+                <button class="collapse-button" data-target="#spotify-playlist">
+                  ▼
+                </button>
               </div>
             </div>
             <div class="playlist-content">
@@ -208,33 +289,55 @@
       </div>
       <div class="row footer-row">
         <div class="col-md-12 text-center">
-          <a href="https://www.youtube.com/t/terms" target="_blank" class="footer-link">YouTube Terms of Service</a>
+          <a
+            href="https://www.youtube.com/t/terms"
+            target="_blank"
+            class="footer-link"
+            >YouTube Terms of Service</a
+          >
           <br />
-          <a href="https://www.google.com/policies/privacy/" target="_blank" class="footer-link">
+          <a
+            href="https://www.google.com/policies/privacy/"
+            target="_blank"
+            class="footer-link"
+          >
             Google Privacy Policy
           </a>
           <br />
-          <a href="privacy-policy.html" target="_blank" class="footer-link">Privacy Policy</a>
+          <a href="privacy-policy.html" target="_blank" class="footer-link"
+            >Privacy Policy</a
+          >
           <br />
-          <a href="terms-of-use.html" target="_blank" class="footer-link">Terms of Use</a>
+          <a href="terms-of-use.html" target="_blank" class="footer-link"
+            >Terms of Use</a
+          >
         </div>
       </div>
       <div id="tosPrivacyOverlay" class="overlay">
         <div class="overlay-content">
           <p>
             By using tunemeld, you agree to be bound by the
-            <a href="https://www.youtube.com/t/terms" target="_blank">YouTube Terms of Service</a>
+            <a href="https://www.youtube.com/t/terms" target="_blank"
+              >YouTube Terms of Service</a
+            >
             and the
-            <a href="https://www.google.com/policies/privacy/" target="_blank">Google Privacy Policy.</a>
+            <a href="https://www.google.com/policies/privacy/" target="_blank"
+              >Google Privacy Policy.</a
+            >
           </p>
-          <button id="acceptButton" class="btn btn-primary btn-sm acceptButton">I Accept</button>
+          <button id="acceptButton" class="btn btn-primary btn-sm acceptButton">
+            I Accept
+          </button>
         </div>
       </div>
 
       <script type="module" src="./main.js?v=20250906b"></script>
       <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
       <script src="https://w.soundcloud.com/player/api.js"></script>
-      <script src="https://open.spotify.com/embed-podcast/iframe-api/v1" async></script>
+      <script
+        src="https://open.spotify.com/embed-podcast/iframe-api/v1"
+        async
+      ></script>
       <script
         async
         src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8361030237626890"

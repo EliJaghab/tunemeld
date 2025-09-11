@@ -32,7 +32,9 @@ class StateManager {
   }
 
   initializeFromDOM() {
-    const viewCountSelector = document.getElementById("view-count-type-selector");
+    const viewCountSelector = document.getElementById(
+      "view-count-type-selector",
+    );
     if (viewCountSelector) {
       this.state.viewCountType = viewCountSelector.value || "total-view-count";
     }

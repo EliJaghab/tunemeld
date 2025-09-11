@@ -24,11 +24,13 @@ function displayLastUpdated(lastUpdated) {
     minute: "2-digit",
     timeZoneName: "short",
   });
-  document.getElementById("last-updated").textContent = `Last Updated - ${formattedDate}`;
+  document.getElementById(
+    "last-updated",
+  ).textContent = `Last Updated - ${formattedDate}`;
 }
 
 export function setupSortButtons() {
-  document.querySelectorAll(".sort-button").forEach(button => {
+  document.querySelectorAll(".sort-button").forEach((button) => {
     button.addEventListener("click", function () {
       const column = button.getAttribute("data-column");
       const order = button.getAttribute("data-order");
@@ -43,10 +45,18 @@ export function setupSortButtons() {
 
 export async function updateMainPlaylist(genre, viewCountType) {
   try {
-    const response = await graphqlClient.getPlaylist(genre, SERVICE_NAMES.TUNEMELD);
+    const response = await graphqlClient.getPlaylist(
+      genre,
+      SERVICE_NAMES.TUNEMELD,
+    );
     const data = [response.playlist];
     playlistData = data;
-    renderPlaylistTracks(data, "main-playlist-data-placeholder", viewCountType, SERVICE_NAMES.TUNEMELD);
+    renderPlaylistTracks(
+      data,
+      "main-playlist-data-placeholder",
+      viewCountType,
+      SERVICE_NAMES.TUNEMELD,
+    );
   } catch (error) {
     console.error("Error updating main playlist:", error);
   }
@@ -54,7 +64,7 @@ export async function updateMainPlaylist(genre, viewCountType) {
 
 export async function fetchAndDisplayPlaylists(genre) {
   const services = await graphqlClient.getAvailableServices();
-  const promises = services.map(async service => {
+  const promises = services.map(async (service) => {
     try {
       const response = await graphqlClient.getPlaylist(genre, service);
       const data = [response.playlist];
@@ -66,7 +76,12 @@ export async function fetchAndDisplayPlaylists(genre) {
   await Promise.all(promises);
 }
 
-async function fetchAndDisplayData(url, placeholderId, viewCountType, serviceName) {
+async function fetchAndDisplayData(
+  url,
+  placeholderId,
+  viewCountType,
+  serviceName,
+) {
   try {
     const response = await fetch(url);
     if (!response.ok) {
@@ -81,7 +96,12 @@ async function fetchAndDisplayData(url, placeholderId, viewCountType, serviceNam
   }
 }
 
-function renderPlaylistTracks(playlists, placeholderId, viewCountType, serviceName) {
+function renderPlaylistTracks(
+  playlists,
+  placeholderId,
+  viewCountType,
+  serviceName,
+) {
   const placeholder = document.getElementById(placeholderId);
   if (!placeholder) {
     console.error(`Placeholder with ID ${placeholderId} not found.`);
@@ -91,8 +111,8 @@ function renderPlaylistTracks(playlists, placeholderId, viewCountType, serviceNa
   placeholder.innerHTML = "";
   const isTuneMeldPlaylist = serviceName === SERVICE_NAMES.TUNEMELD;
 
-  playlists.forEach(playlist => {
-    playlist.tracks.forEach(track => {
+  playlists.forEach((playlist) => {
+    playlist.tracks.forEach((track) => {
       const row = isTuneMeldPlaylist
         ? createTuneMeldPlaylistTableRow(track, viewCountType)
         : createServicePlaylistTableRow(track, serviceName);
@@ -112,7 +132,12 @@ function getServiceUrl(track, serviceName) {
     case SERVICE_NAMES.YOUTUBE:
       return track.youtubeUrl;
     case SERVICE_NAMES.TUNEMELD:
-      return track.spotifyUrl || track.appleMusicUrl || track.soundcloudUrl || track.youtubeUrl;
+      return (
+        track.spotifyUrl ||
+        track.appleMusicUrl ||
+        track.soundcloudUrl ||
+        track.youtubeUrl
+      );
     default:
       return track.youtubeUrl;
   }
@@ -224,8 +249,10 @@ function displayViewCounts(track, row, viewCountType) {
       break;
 
     case "weekly-view-count":
-      const youtubeWeeklyViewCount = youtubeCurrentViewCount - youtubeInitialViewCount;
-      const spotifyWeeklyViewCount = spotifyCurrentViewCount - spotifyInitialViewCount;
+      const youtubeWeeklyViewCount =
+        youtubeCurrentViewCount - youtubeInitialViewCount;
+      const spotifyWeeklyViewCount =
+        spotifyCurrentViewCount - spotifyInitialViewCount;
 
       youtubeStatCell.textContent = youtubeWeeklyViewCount.toLocaleString();
       spotifyStatCell.textContent = spotifyWeeklyViewCount.toLocaleString();
@@ -296,11 +323,13 @@ function displaySources(cell, track) {
   const sourcesContainer = document.createElement("div");
   sourcesContainer.className = "track-sources";
 
-  const serviceSources = [track.spotifySource, track.appleMusicSource, track.soundcloudSource].filter(
-    source => source !== null && source !== undefined
-  );
+  const serviceSources = [
+    track.spotifySource,
+    track.appleMusicSource,
+    track.soundcloudSource,
+  ].filter((source) => source !== null && source !== undefined);
 
-  serviceSources.forEach(source => {
+  serviceSources.forEach((source) => {
     const linkElement = createSourceLinkFromService(source);
     sourcesContainer.appendChild(linkElement);
   });
@@ -327,7 +356,7 @@ function createSourceLinkFromService(source) {
 let playlistData = [];
 
 export function sortTable(column, order, viewCountType) {
-  const sortedData = playlistData.map(playlist => {
+  const sortedData = playlistData.map((playlist) => {
     playlist.tracks.sort((a, b) => {
       let aValue, bValue;
 
@@ -347,12 +376,21 @@ export function sortTable(column, order, viewCountType) {
     return playlist;
   });
 
-  renderPlaylistTracks(sortedData, "main-playlist-data-placeholder", viewCountType, SERVICE_NAMES.TUNEMELD);
+  renderPlaylistTracks(
+    sortedData,
+    "main-playlist-data-placeholder",
+    viewCountType,
+    SERVICE_NAMES.TUNEMELD,
+  );
 }
 
 function getViewCount(track, platform, viewCountType) {
-  const currentCount = track.viewCountDataJson?.[platform]?.current_count_json?.current_view_count || 0;
-  const initialCount = track.viewCountDataJson?.[platform]?.initial_count_json?.initial_view_count || 0;
+  const currentCount =
+    track.viewCountDataJson?.[platform]?.current_count_json
+      ?.current_view_count || 0;
+  const initialCount =
+    track.viewCountDataJson?.[platform]?.initial_count_json
+      ?.initial_view_count || 0;
 
   if (viewCountType === "total-view-count") {
     return currentCount;
@@ -365,20 +403,20 @@ function getViewCount(track, platform, viewCountType) {
 }
 
 export function resetCollapseStates() {
-  document.querySelectorAll(".playlist-content").forEach(content => {
+  document.querySelectorAll(".playlist-content").forEach((content) => {
     content.classList.remove("collapsed");
   });
-  document.querySelectorAll(".collapse-button").forEach(button => {
+  document.querySelectorAll(".collapse-button").forEach((button) => {
     button.textContent = "▼";
   });
 }
 
 export function addToggleEventListeners() {
-  document.querySelectorAll(".collapse-button").forEach(button => {
+  document.querySelectorAll(".collapse-button").forEach((button) => {
     button.removeEventListener("click", toggleCollapse);
   });
 
-  document.querySelectorAll(".collapse-button").forEach(button => {
+  document.querySelectorAll(".collapse-button").forEach((button) => {
     button.addEventListener("click", toggleCollapse);
   });
 }

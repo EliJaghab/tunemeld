@@ -16,7 +16,7 @@ export async function loadGenresIntoSelector() {
 
     genreSelector.innerHTML = "";
 
-    genres.forEach(genre => {
+    genres.forEach((genre) => {
       const option = document.createElement("option");
       option.value = genre.name;
       option.textContent = genre.displayName;
@@ -25,7 +25,7 @@ export async function loadGenresIntoSelector() {
 
     console.log(
       `Loaded ${genres.length} genres from backend:`,
-      genres.map(g => g.name)
+      genres.map((g) => g.name),
     );
     console.log(`Default genre from backend: ${defaultGenre}`);
     return defaultGenre;

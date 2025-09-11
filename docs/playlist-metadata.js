@@ -26,8 +26,8 @@ export async function displayPlaylistMetadata(genre, displayServiceCallback) {
   try {
     const { serviceOrder, playlists } = await getPlaylistsByGenre(genre);
 
-    serviceOrder.forEach(serviceName => {
-      const playlist = playlists.find(p => p.serviceName === serviceName);
+    serviceOrder.forEach((serviceName) => {
+      const playlist = playlists.find((p) => p.serviceName === serviceName);
       if (playlist) {
         displayServiceHeader(
           serviceName,
@@ -37,7 +37,7 @@ export async function displayPlaylistMetadata(genre, displayServiceCallback) {
           playlist.playlistCoverDescriptionText,
           playlist.serviceName,
           genre,
-          displayServiceCallback
+          displayServiceCallback,
         );
       } else {
         console.warn(`No playlist data found for service: ${serviceName}`);
@@ -57,7 +57,7 @@ function displayServiceHeader(
   playlistDescription,
   serviceName,
   genre,
-  displayCallback
+  displayCallback,
 ) {
   // Map service names to HTML element ID prefixes
   const serviceIdMapping = {
@@ -68,10 +68,18 @@ function displayServiceHeader(
 
   const elementPrefix = serviceIdMapping[service] || service.toLowerCase();
 
-  const imagePlaceholder = document.getElementById(`${elementPrefix}-image-placeholder`);
-  const descriptionElement = document.getElementById(`${elementPrefix}-description`);
-  const titleElement = document.getElementById(`${elementPrefix}-playlist-title`);
-  const coverLinkElement = document.getElementById(`${elementPrefix}-cover-link`);
+  const imagePlaceholder = document.getElementById(
+    `${elementPrefix}-image-placeholder`,
+  );
+  const descriptionElement = document.getElementById(
+    `${elementPrefix}-description`,
+  );
+  const titleElement = document.getElementById(
+    `${elementPrefix}-playlist-title`,
+  );
+  const coverLinkElement = document.getElementById(
+    `${elementPrefix}-cover-link`,
+  );
 
   if (coverUrl.endsWith(".m3u8") && service === "apple_music") {
     displayAppleMusicVideo(coverUrl);
@@ -89,7 +97,13 @@ function displayServiceHeader(
   }
 
   if (descriptionElement) {
-    setupDescriptionModal(descriptionElement, playlistDescription, playlistName, serviceName, genre);
+    setupDescriptionModal(
+      descriptionElement,
+      playlistDescription,
+      playlistName,
+      serviceName,
+      genre,
+    );
   }
 
   if (displayCallback) {
@@ -129,7 +143,13 @@ function displayAppleMusicVideo(url) {
   }
 }
 
-function setupDescriptionModal(descriptionElement, fullText, title, serviceName, genre) {
+function setupDescriptionModal(
+  descriptionElement,
+  fullText,
+  title,
+  serviceName,
+  genre,
+) {
   descriptionElement.removeEventListener("click", toggleDescriptionExpand);
 
   const descriptionBoxWidth = descriptionElement.clientWidth;
@@ -143,10 +163,17 @@ function setupDescriptionModal(descriptionElement, fullText, title, serviceName,
 
   if (fullText.length > estimatedMaxTextLength) {
     let truncatedText = fullText.substring(0, estimatedMaxTextLength);
-    truncatedText = truncatedText.substring(0, truncatedText.lastIndexOf(" ")) + "... ";
+    truncatedText =
+      truncatedText.substring(0, truncatedText.lastIndexOf(" ")) + "... ";
 
     descriptionElement.innerHTML = `${truncatedText}<span class="more-button">MORE</span>`;
-    createAndAttachModal(descriptionElement, fullText, title, serviceName, genre);
+    createAndAttachModal(
+      descriptionElement,
+      fullText,
+      title,
+      serviceName,
+      genre,
+    );
   } else {
     descriptionElement.textContent = fullText;
   }
@@ -156,7 +183,13 @@ function isMobileView() {
   return window.innerWidth <= 480;
 }
 
-function createAndAttachModal(descriptionElement, fullText, title, serviceName, genre) {
+function createAndAttachModal(
+  descriptionElement,
+  fullText,
+  title,
+  serviceName,
+  genre,
+) {
   const modal = document.createElement("div");
   modal.className = "description-modal";
   modal.innerHTML = `
@@ -171,15 +204,19 @@ function createAndAttachModal(descriptionElement, fullText, title, serviceName, 
   overlay.className = "description-overlay";
   document.body.appendChild(overlay);
 
-  descriptionElement.querySelector(".more-button").addEventListener("click", function () {
-    modal.classList.add("active");
-    overlay.classList.add("active");
-  });
+  descriptionElement
+    .querySelector(".more-button")
+    .addEventListener("click", function () {
+      modal.classList.add("active");
+      overlay.classList.add("active");
+    });
 
-  modal.querySelector(".description-modal-close").addEventListener("click", function () {
-    modal.classList.remove("active");
-    overlay.classList.remove("active");
-  });
+  modal
+    .querySelector(".description-modal-close")
+    .addEventListener("click", function () {
+      modal.classList.remove("active");
+      overlay.classList.remove("active");
+    });
 
   overlay.addEventListener("click", function () {
     modal.classList.remove("active");

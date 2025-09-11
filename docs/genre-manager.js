@@ -32,11 +32,13 @@ class GenreManager {
     this.defaultGenre = null;
     this.isLoaded = false;
 
-    const technicalDetails = error.stack ? `${error.message}\n\nStack trace:\n${error.stack}` : error.message;
+    const technicalDetails = error.stack
+      ? `${error.message}\n\nStack trace:\n${error.stack}`
+      : error.message;
 
     errorHandler.showError(
       "Genre loading service is currently unavailable. Some features may be limited.",
-      technicalDetails
+      technicalDetails,
     );
   }
 
@@ -49,16 +51,18 @@ class GenreManager {
   }
 
   isValidGenre(genre) {
-    return this.availableGenres.some(g => g.name === genre);
+    return this.availableGenres.some((g) => g.name === genre);
   }
 
   getDisplayName(genre) {
-    const found = this.availableGenres.find(g => g.name === genre);
+    const found = this.availableGenres.find((g) => g.name === genre);
     return found?.displayName || genre;
   }
 
   hasValidData() {
-    return this.isLoaded && this.availableGenres.length > 0 && this.defaultGenre;
+    return (
+      this.isLoaded && this.availableGenres.length > 0 && this.defaultGenre
+    );
   }
 }
 

@@ -1,4 +1,8 @@
-import { fetchAndDisplayHeaderArt, hideSkeletonLoaders, showSkeletonLoaders } from "./header.js";
+import {
+  fetchAndDisplayHeaderArt,
+  hideSkeletonLoaders,
+  showSkeletonLoaders,
+} from "./header.js";
 import {
   addToggleEventListeners,
   fetchAndDisplayLastUpdated,
@@ -47,6 +51,10 @@ export function setupViewCountTypeSelector(viewCountTypeSelector) {
   viewCountTypeSelector.addEventListener("change", function () {
     const viewCountType = viewCountTypeSelector.value;
     stateManager.setViewCountType(viewCountType);
-    sortTable(stateManager.getCurrentColumn(), stateManager.getCurrentOrder(), viewCountType);
+    sortTable(
+      stateManager.getCurrentColumn(),
+      stateManager.getCurrentOrder(),
+      viewCountType,
+    );
   });
 }

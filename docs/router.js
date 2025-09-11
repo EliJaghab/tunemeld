@@ -23,7 +23,7 @@ class AppRouter {
   }
 
   setupRoutes() {
-    this.router.on("/:genre", async match => {
+    this.router.on("/:genre", async (match) => {
       await this.handleGenreRoute(match.data.genre);
     });
 

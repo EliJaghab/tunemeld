@@ -30,7 +30,7 @@ async function fetchChartData(genre, isrc) {
     }
     const responseData = await response.json();
     const data = responseData.data || responseData;
-    const trackData = data.find(track => track.isrc === isrc);
+    const trackData = data.find((track) => track.isrc === isrc);
     if (!trackData) {
       console.error("No data found for the provided ISRC:", isrc);
       return null;
@@ -50,17 +50,22 @@ function prepareChartData(track) {
   const sortedSpotifyViewCounts = sortViewCounts(track.view_counts.Spotify);
   const sortedYoutubeViewCounts = sortViewCounts(track.view_counts.Youtube);
 
-  const labels = sortedYoutubeViewCounts.map(viewCount =>
+  const labels = sortedYoutubeViewCounts.map((viewCount) =>
     new Date(viewCount[0]).toLocaleDateString("en-US", {
       month: "numeric",
       day: "numeric",
       year: "2-digit",
-    })
+    }),
   );
-  const spotifyData = sortedSpotifyViewCounts.map(viewCount => viewCount[1]);
-  const youtubeData = sortedYoutubeViewCounts.map(viewCount => viewCount[1]);
+  const spotifyData = sortedSpotifyViewCounts.map((viewCount) => viewCount[1]);
+  const youtubeData = sortedYoutubeViewCounts.map((viewCount) => viewCount[1]);
 
-  return { labels, spotifyData, youtubeData, albumCover: track.album_cover_url };
+  return {
+    labels,
+    spotifyData,
+    youtubeData,
+    albumCover: track.album_cover_url,
+  };
 }
 
 function displayChart(track) {
@@ -70,7 +75,8 @@ function displayChart(track) {
     currentChart.destroy();
   }
 
-  const { labels, spotifyData, youtubeData, albumCover } = prepareChartData(track);
+  const { labels, spotifyData, youtubeData, albumCover } =
+    prepareChartData(track);
   const img = new Image();
   img.src = albumCover;
 
@@ -108,7 +114,7 @@ function displayChart(track) {
           position: "top",
           align: "end",
         },
-        afterDraw: chart => {
+        afterDraw: (chart) => {
           const ctx = chart.ctx;
           chart.data.datasets.forEach((dataset, datasetIndex) => {
             dataset.data.forEach((value, index) => {

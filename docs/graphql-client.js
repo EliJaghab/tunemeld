@@ -38,7 +38,9 @@ class GraphQLClient {
           responseBody = "Unable to read response body";
         }
 
-        const error = new Error(`GraphQL HTTP Error: ${response.status} ${response.statusText}`);
+        const error = new Error(
+          `GraphQL HTTP Error: ${response.status} ${response.statusText}`,
+        );
         error.details = errorDetails;
         error.responseBody = responseBody;
         error.isNetworkError = false;
@@ -49,7 +51,11 @@ class GraphQLClient {
       const result = await response.json();
 
       if (result.errors) {
-        const error = new Error(`GraphQL Query Error: ${result.errors.map(e => e.message).join(", ")}`);
+        const error = new Error(
+          `GraphQL Query Error: ${result.errors
+            .map((e) => e.message)
+            .join(", ")}`,
+        );
         error.graphqlErrors = result.errors;
         error.duration = duration + "ms";
         error.endpoint = this.endpoint;
@@ -71,12 +77,16 @@ class GraphQLClient {
 
       let enhancedError;
       if (error.name === "TypeError" && error.message.includes("fetch")) {
-        enhancedError = new Error(`Network Connection Failed: Unable to reach GraphQL server at ${this.endpoint}`);
+        enhancedError = new Error(
+          `Network Connection Failed: Unable to reach GraphQL server at ${this.endpoint}`,
+        );
         enhancedError.originalMessage = error.message;
         enhancedError.isNetworkError = true;
         enhancedError.isConnectionError = true;
       } else if (error.name === "AbortError") {
-        enhancedError = new Error(`Request Timeout: GraphQL query timed out after ${duration}ms`);
+        enhancedError = new Error(
+          `Request Timeout: GraphQL query timed out after ${duration}ms`,
+        );
         enhancedError.originalMessage = error.message;
         enhancedError.isNetworkError = true;
         enhancedError.isTimeoutError = true;
