@@ -13,10 +13,15 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Set up Python 3.13
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.13'
+
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y make python3-venv
+          sudo apt-get install -y make
           npm install -g wrangler
 
       - name: Set up Python environment

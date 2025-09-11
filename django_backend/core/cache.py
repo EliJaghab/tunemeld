@@ -30,12 +30,18 @@ class Cache(BaseCache):
                 {"Authorization": f"Bearer {self.CF_API_TOKEN}", "Content-Type": "application/json"}
             )
 
-        if self.CF_ACCOUNT_ID and self.CF_NAMESPACE_ID:
-            self.BASE_URL = self.BASE_URL_TEMPLATE.format(self.CF_ACCOUNT_ID, self.CF_NAMESPACE_ID)
-            logger.info("Cache initialized with Cloudflare KV + shared connection pool")
-        else:
-            self.BASE_URL = None
-            logger.warning("Cache running in fallback mode (no Cloudflare)")
+        if not self.CF_ACCOUNT_ID or not self.CF_NAMESPACE_ID or not self.CF_API_TOKEN:
+            missing = []
+            if not self.CF_ACCOUNT_ID:
+                missing.append("CF_ACCOUNT_ID")
+            if not self.CF_NAMESPACE_ID:
+                missing.append("CF_NAMESPACE_ID")
+            if not self.CF_API_TOKEN:
+                missing.append("CF_API_TOKEN")
+            raise ValueError(f"Missing required Cloudflare KV credentials: {', '.join(missing)}")
+        
+        self.BASE_URL = self.BASE_URL_TEMPLATE.format(self.CF_ACCOUNT_ID, self.CF_NAMESPACE_ID)
+        logger.info("Cache initialized with Cloudflare KV + shared connection pool")
 
     def get(self, key: str, default: Any = None, version: int | None = None) -> Any:
         key = self.make_key(key, version=version)
