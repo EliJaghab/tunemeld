@@ -4,13 +4,7 @@ import logging
 import os
 import zoneinfo
 from collections.abc import Callable
-from datetime import datetime
-
-try:
-    from datetime import UTC
-except ImportError:
-    from datetime import timezone
-    UTC = timezone.utc
+from datetime import UTC, datetime
 from typing import Any
 
 from dotenv import load_dotenv

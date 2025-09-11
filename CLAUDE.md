@@ -1,5 +1,9 @@
 # TuneMeld Development Guide
 
+## Requirements
+
+**Python 3.13+** - Project requires Python 3.13 or newer. Python 3.10-3.12 are obsolete for this project.
+
 ## Quick Start
 
 ```bash

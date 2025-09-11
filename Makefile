@@ -47,7 +47,7 @@ setup_env:
 	@echo "Virtual environment: $(shell pwd)/venv"
 	@echo "PYTHONPATH: $(shell pwd)"
 	@echo "Creating sitecustomize.py to set PYTHONPATH in venv..."
-	@echo "import sys; sys.path.insert(0, '$(shell pwd)')" > venv/lib/python3.11/site-packages/sitecustomize.py
+	@echo "import sys; sys.path.insert(0, '$(shell pwd)')" > venv/lib/python3.13/site-packages/sitecustomize.py
 	@echo "Loading environment variables from .env.dev..."
 	@source venv/bin/activate && export $(cat .env.dev | xargs)
 

@@ -12,7 +12,7 @@ version = "0.1.0"
 description = "Cross-platform music analytics and playlist aggregation"
 authors = [{name = "TuneMeld Team"}]
 readme = "README.md"
-requires-python = ">=3.11"
+requires-python = ">=3.13"
 dependencies = [
     # Core Django framework and web dependencies
     "Django>=4.2,<5.0",
