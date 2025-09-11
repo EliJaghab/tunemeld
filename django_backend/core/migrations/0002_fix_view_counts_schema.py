@@ -1,4 +1,4 @@
-# Generated manually for view count schema fix
+# Generated manually for view count schema fix - PostgreSQL optimized
 from django.db import migrations, models
 import django.core.validators
 
@@ -10,26 +10,26 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        # First, drop the existing view_counts table entirely
+        # Drop existing view_counts table if it exists
         migrations.RunSQL(
-            sql="DROP TABLE IF EXISTS view_counts;",
+            sql="DROP TABLE IF EXISTS view_counts CASCADE;",
             reverse_sql="-- Cannot reverse this operation"
         ),
 
-        # Recreate view_counts table with proper schema
+        # Create view_counts table with PostgreSQL syntax
         migrations.RunSQL(
             sql="""
                 CREATE TABLE view_counts (
-                    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                    id SERIAL PRIMARY KEY,
                     isrc VARCHAR(12) NOT NULL,
                     service_id INTEGER NOT NULL REFERENCES services(id) DEFERRABLE INITIALLY DEFERRED,
                     view_count BIGINT NOT NULL,
-                    last_updated DATETIME NOT NULL,
-                    created_at DATETIME NOT NULL,
+                    last_updated TIMESTAMP NOT NULL,
+                    created_at TIMESTAMP NOT NULL,
                     CONSTRAINT view_counts_unique_isrc_service UNIQUE (isrc, service_id)
                 );
             """,
-            reverse_sql="DROP TABLE IF EXISTS view_counts;"
+            reverse_sql="DROP TABLE IF EXISTS view_counts CASCADE;"
         ),
 
         # Create indexes for performance
@@ -50,7 +50,7 @@ class Migration(migrations.Migration):
 
         # Add delta_count field to historical_view_counts if it doesn't exist
         migrations.RunSQL(
-            sql="ALTER TABLE historical_view_counts ADD COLUMN delta_count BIGINT;",
-            reverse_sql="-- SQLite doesn't support DROP COLUMN"
+            sql="ALTER TABLE historical_view_counts ADD COLUMN IF NOT EXISTS delta_count BIGINT;",
+            reverse_sql="-- Cannot reverse: PostgreSQL doesn't support conditional DROP COLUMN"
         ),
     ]
