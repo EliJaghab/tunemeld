@@ -42,6 +42,19 @@ jobs:
       - name: Set PYTHONPATH
         run: echo "PYTHONPATH=$PWD" >> $GITHUB_ENV
 
+      - name: Apply database migrations to Railway PostgreSQL
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
+        run: |
+          cd django_backend
+          echo "🔄 Checking migration status on Railway PostgreSQL..."
+          python manage.py showmigrations
+          echo ""
+          echo "🚀 Applying migrations to Railway PostgreSQL..."
+          python manage.py migrate --noinput
+          echo "✅ Railway database schema updated successfully"
+
       - name: Run Playlist ETL Pipeline
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
