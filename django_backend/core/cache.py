@@ -39,7 +39,7 @@ class Cache(BaseCache):
             if not self.CF_API_TOKEN:
                 missing.append("CF_API_TOKEN")
             raise ValueError(f"Missing required Cloudflare KV credentials: {', '.join(missing)}")
-        
+
         self.BASE_URL = self.BASE_URL_TEMPLATE.format(self.CF_ACCOUNT_ID, self.CF_NAMESPACE_ID)
         logger.info("Cache initialized with Cloudflare KV + shared connection pool")
 

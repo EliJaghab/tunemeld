@@ -1,5 +1,5 @@
 import concurrent.futures
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 from core.management.commands.view_count.b2_extract_youtube import Command as YouTubeCommand
 from core.management.commands.view_count.b_extract_spotify import Command as SpotifyCommand
@@ -18,7 +18,7 @@ class Command(BaseCommand):
         parser.add_argument("--service", choices=["spotify", "youtube"], help="Process only specific service")
 
     def handle(self, *args, **options):
-        start_time = datetime.now(timezone.utc)
+        start_time = datetime.now(UTC)
         logger.info("VIEW COUNT ETL PIPELINE")
         logger.info(f"Started at: {start_time}")
 
@@ -82,6 +82,6 @@ class Command(BaseCommand):
         else:
             logger.info("No data to load")
 
-        end_time = datetime.now(timezone.utc)
+        end_time = datetime.now(UTC)
         duration = end_time - start_time
         logger.info(f"Duration: {duration}")

@@ -1,4 +1,4 @@
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 from core.models.f_track import Track
 from core.services.spotify_service import get_spotify_track_view_count
@@ -39,7 +39,7 @@ class Command(BaseCommand):
                             "service": "spotify",
                             "view_count": view_count,
                             "url": track.spotify_url,
-                            "timestamp": datetime.now(timezone.utc),
+                            "timestamp": datetime.now(UTC),
                         }
                         logger.info(f"Spotify {track.isrc}: {view_count:,}")
                 except Exception as e:

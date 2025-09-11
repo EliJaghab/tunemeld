@@ -1,7 +1,7 @@
 import logging
 import os
 import zoneinfo
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Final
 
@@ -11,7 +11,7 @@ from dotenv import load_dotenv
 
 class ETFormatter(logging.Formatter):
     def formatTime(self, record: logging.LogRecord, datefmt: str | None = None) -> str:
-        dt = datetime.fromtimestamp(record.created, tz=timezone.utc)
+        dt = datetime.fromtimestamp(record.created, tz=UTC)
         et_tz = zoneinfo.ZoneInfo("America/New_York")
         dt.astimezone(et_tz)
         return dt.strftime("%I:%M:%S%p ET").replace(" 0", " ")
