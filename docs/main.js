@@ -1,7 +1,13 @@
 import { loadTitleContent } from "./title.js?v=20250828b";
 import { setupSortButtons } from "./playlist.js?v=20250906b";
-import { setupGenreSelector, setupViewCountTypeSelector } from "./selectors.js?v=20250906a";
-import { setupBodyClickListener, setupClosePlayerButton } from "./servicePlayer.js?v=20250828b";
+import {
+  setupGenreSelector,
+  setupViewCountTypeSelector,
+} from "./selectors.js?v=20250906a";
+import {
+  setupBodyClickListener,
+  setupClosePlayerButton,
+} from "./servicePlayer.js?v=20250911a";
 import { initializeTosPrivacyOverlay } from "./tosPrivacy.js?v=20250828b";
 import { stateManager } from "./StateManager.js?v=20250828b";
 import { loadGenresIntoSelector } from "./genre-loader.js?v=20250828b";
@@ -15,7 +21,9 @@ async function initializeApp() {
   setupThemeToggle();
 
   const genreSelector = document.getElementById("genre-selector");
-  const viewCountTypeSelector = document.getElementById("view-count-type-selector");
+  const viewCountTypeSelector = document.getElementById(
+    "view-count-type-selector",
+  );
 
   stateManager.initializeFromDOM();
 
@@ -38,7 +46,8 @@ function applyStoredTheme() {
   const storedTheme = localStorage.getItem("theme");
   if (storedTheme) {
     document.body.classList.toggle("dark-mode", storedTheme === "dark");
-    document.getElementById("theme-toggle-button").checked = storedTheme === "dark";
+    document.getElementById("theme-toggle-button").checked =
+      storedTheme === "dark";
   } else {
     applyThemeBasedOnTime();
   }

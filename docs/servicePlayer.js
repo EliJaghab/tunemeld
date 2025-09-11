@@ -7,9 +7,13 @@ export function setupBodyClickListener(genre) {
     return;
   }
 
-  body.addEventListener("click", event => {
+  body.addEventListener("click", (event) => {
     const link = event.target.closest("a");
     if (link) {
+      const shouldIntercept = shouldInterceptLink(link);
+      if (!shouldIntercept) {
+        return;
+      }
       const row = link.closest("tr");
       const isrc = row ? row.getAttribute("data-isrc") : null;
       handleLinkClick(event, link, genre, isrc);
@@ -55,7 +59,9 @@ function openPlayer(url, serviceType) {
 
   switch (serviceType) {
     case "soundcloud":
-      iframe.src = `https://w.soundcloud.com/player/?url=${encodeURIComponent(url)}&auto_play=true`;
+      iframe.src = `https://w.soundcloud.com/player/?url=${encodeURIComponent(
+        url,
+      )}&auto_play=true`;
       iframe.allow = "autoplay";
       iframe.height = "166";
       showVolumeControl = true;
@@ -73,7 +79,9 @@ function openPlayer(url, serviceType) {
       iframe.height = "450";
       break;
     case "youtube":
-      iframe.src = `https://www.youtube.com/embed/${getYouTubeVideoId(url)}?autoplay=1`;
+      iframe.src = `https://www.youtube.com/embed/${getYouTubeVideoId(
+        url,
+      )}?autoplay=1`;
       iframe.allow = "autoplay; encrypted-media";
       iframe.referrerPolicy = "no-referrer-when-downgrade";
       iframe.height = "315";
@@ -87,6 +95,22 @@ function openPlayer(url, serviceType) {
   };
 
   placeholder.appendChild(iframe);
+}
+
+function shouldInterceptLink(link) {
+  /// does not intercept service playlists links from the header art - only track links open on tunemeld
+  const isHeaderLink =
+    link.classList.contains("header-title") ||
+    link.id?.includes("cover-link") ||
+    link.id?.includes("playlist-title") ||
+    link.id?.includes("playlist-link");
+
+  if (isHeaderLink) {
+    return false;
+  }
+
+  const isInTableRow = link.closest("tr") !== null;
+  return isInTableRow;
 }
 
 function closePlayer() {
@@ -110,7 +134,9 @@ function isSoundCloudLink(url) {
 }
 
 function isSpotifyLink(url) {
-  return /^https:\/\/open\.spotify\.com\/(track|album|playlist)\/[a-zA-Z0-9]+/.test(url);
+  return /^https:\/\/open\.spotify\.com\/(track|album|playlist)\/[a-zA-Z0-9]+/.test(
+    url,
+  );
 }
 
 function isAppleMusicLink(url) {
