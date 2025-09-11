@@ -11,7 +11,7 @@ from bs4 import BeautifulSoup
 from core.models.playlist_types import PlaylistData, PlaylistMetadata
 from core.utils.cache_utils import CachePrefix, cache_get, cache_set
 from core.utils.config import SPOTIFY_VIEW_COUNT_XPATH
-from core.utils.utils import get_logger
+from core.utils.utils import clean_unicode_text, get_logger
 from core.utils.webdriver import get_cached_webdriver
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
@@ -208,7 +208,7 @@ def _extract_spotify_metadata_from_html(url: str, html_content: str) -> Playlist
     metadata: PlaylistMetadata = {
         "service_name": "Spotify",
         "playlist_url": url,
-        "playlist_name": _get_meta_content(doc, "og:title") or "Unknown",
+        "playlist_name": clean_unicode_text(_get_meta_content(doc, "og:title") or "Unknown"),
         "playlist_cover_url": _get_meta_content(doc, "og:image"),
         "playlist_creator": "spotify",
     }
@@ -218,12 +218,12 @@ def _extract_spotify_metadata_from_html(url: str, html_content: str) -> Playlist
     if full_description_text:
         featured_artist = _extract_featured_artist_from_text(full_description_text)
         if featured_artist:
-            metadata["playlist_featured_artist"] = featured_artist
+            metadata["playlist_featured_artist"] = clean_unicode_text(featured_artist)
 
         tagline = _extract_tagline_from_full_text(full_description_text)
         if tagline:
-            metadata["playlist_tagline"] = tagline
-            metadata["playlist_cover_description_text"] = tagline
+            metadata["playlist_tagline"] = clean_unicode_text(tagline)
+            metadata["playlist_cover_description_text"] = clean_unicode_text(tagline)
 
     saves_count, track_count = _extract_saves_and_track_count(doc)
     if saves_count:

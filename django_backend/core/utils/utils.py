@@ -1,9 +1,15 @@
 import concurrent.futures
+import contextlib
 import logging
 import os
 import zoneinfo
 from collections.abc import Callable
-from datetime import datetime, timezone
+from datetime import datetime
+try:
+    from datetime import UTC
+except ImportError:
+    from datetime import timezone
+    UTC = timezone.utc
 from typing import Any
 
 from dotenv import load_dotenv
@@ -20,15 +26,15 @@ def to_et_format(timestamp: datetime | int | str) -> str:
         Formatted timestamp string in ET (MM/DD/YY H:MM:SSPM ET format)
     """
     if isinstance(timestamp, int):
-        dt = datetime.fromtimestamp(timestamp, tz=timezone.utc)
+        dt = datetime.fromtimestamp(timestamp, tz=UTC)
     elif isinstance(timestamp, str):
         dt = datetime.fromisoformat(timestamp.replace("Z", "+00:00"))
         if dt.tzinfo is None:
-            dt = dt.replace(tzinfo=timezone.utc)
+            dt = dt.replace(tzinfo=UTC)
     else:
         dt = timestamp
         if dt.tzinfo is None:
-            dt = dt.replace(tzinfo=timezone.utc)
+            dt = dt.replace(tzinfo=UTC)
 
     et_tz = zoneinfo.ZoneInfo("America/New_York")
     et_dt = dt.astimezone(et_tz)
@@ -120,15 +126,36 @@ def process_in_parallel(
 
 def clean_unicode_text(text: str) -> str:
     """
-    Fix double-encoded Unicode text where UTF-8 bytes were stored as Latin-1.
+    Comprehensive text cleaning for scraped data handling multiple encoding issues.
 
-    Common issue with scraped text containing emojis and special characters.
-    Example: 'â\\x9a¡ï\\x8f' -> '⚡️'
+    Handles:
+    - HTML entities (&amp; -> &, &#039; -> ', etc.)
+    - Double-encoded UTF-8 (stored as Latin-1)
+    - Unicode normalization
+    - Smart quotes and special characters
+
+    Examples:
+    - 'â\\x9a¡ï\\x8f' -> '⚡️'
+    - '&amp;' -> '&'
+    - 'Could&#039;ve' -> "Could've"
+    - 'Today's Country' -> "Today's Country"
     """
     if not text:
         return text
 
-    try:
-        return text.encode("latin-1").decode("utf-8")
-    except (UnicodeDecodeError, UnicodeEncodeError):
-        return text
+    import html
+
+    from unidecode import unidecode
+
+    # First, unescape HTML entities
+    text = html.unescape(text)
+
+    # Try to fix double-encoded UTF-8 stored as Latin-1
+    with contextlib.suppress(UnicodeDecodeError, UnicodeEncodeError):
+        text = text.encode("latin-1").decode("utf-8")
+
+    # Apply unidecode to normalize remaining special characters
+    # This converts things like smart quotes to regular quotes
+    text = unidecode(text)
+
+    return text

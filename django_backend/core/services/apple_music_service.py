@@ -1,4 +1,3 @@
-import html
 from typing import TYPE_CHECKING
 from urllib.parse import unquote
 
@@ -9,9 +8,8 @@ if TYPE_CHECKING:
 from bs4 import BeautifulSoup
 from core.models.playlist_types import PlaylistData, PlaylistMetadata
 from core.utils.cache_utils import CachePrefix, cache_get, cache_set
-from core.utils.utils import get_logger
+from core.utils.utils import clean_unicode_text, get_logger
 from core.utils.webdriver import WebDriverManager
-from unidecode import unidecode
 
 logger = get_logger(__name__)
 
@@ -69,17 +67,17 @@ def get_apple_music_playlist(genre: "GenreName") -> PlaylistData:
     doc = BeautifulSoup(response.text, "html.parser")
 
     title_tag = doc.select_one("a.click-action")
-    title = title_tag.get_text(strip=True) if title_tag else "Unknown"
+    title = clean_unicode_text(title_tag.get_text(strip=True)) if title_tag else "Unknown"
 
     subtitle_tag = doc.select_one("h1")
-    subtitle = subtitle_tag.get_text(strip=True) if subtitle_tag else "Unknown"
+    subtitle = clean_unicode_text(subtitle_tag.get_text(strip=True)) if subtitle_tag else "Unknown"
 
     stream_tag = doc.find("amp-ambient-video", {"class": "editorial-video"})
     playlist_stream_url = stream_tag["src"] if stream_tag and stream_tag.get("src") else None
 
     playlist_cover_description_tag = doc.find("p", {"data-testid": "truncate-text"})
     playlist_cover_description_text = (
-        unidecode(html.unescape(playlist_cover_description_tag.get_text(strip=True)))
+        clean_unicode_text(playlist_cover_description_tag.get_text(strip=True))
         if playlist_cover_description_tag
         else None
     )

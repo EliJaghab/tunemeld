@@ -5,7 +5,7 @@ from core.models import RawPlaylistData, ServiceTrack
 from core.models.f_track import NormalizedTrack
 from core.services.apple_music_service import get_apple_music_album_cover_url
 from core.services.spotify_service import get_spotify_isrc
-from core.utils.utils import get_logger
+from core.utils.utils import clean_unicode_text, get_logger
 from django.core.management.base import BaseCommand
 
 from playlist_etl.constants import ServiceName
@@ -96,9 +96,9 @@ class Command(BaseCommand):
         return [
             NormalizedTrack(
                 position=i + 1,
-                name=track.get("name", ""),
-                artist=", ".join(track.get("artists", [track.get("artist", "")])),
-                album=track.get("album_name", ""),
+                name=clean_unicode_text(track.get("name", "")),
+                artist=clean_unicode_text(", ".join(track.get("artists", [track.get("artist", "")]))),
+                album=clean_unicode_text(track.get("album_name", "")),
                 spotify_url=track.get("url", ""),
                 isrc=track.get("isrc"),
                 album_cover_url=track.get("cover_url"),
@@ -137,8 +137,8 @@ class Command(BaseCommand):
 
     def process_apple_music_track(self, key: str, track_data: dict) -> NormalizedTrack | None:
         """Process a single Apple Music track to get ISRC."""
-        track_name = track_data["name"]
-        artist_name = track_data["artist"]
+        track_name = clean_unicode_text(track_data["name"])
+        artist_name = clean_unicode_text(track_data["artist"])
 
         isrc = get_spotify_isrc(track_name, artist_name)
 
@@ -165,8 +165,8 @@ class Command(BaseCommand):
         return [
             NormalizedTrack(
                 position=i + 1,
-                name=item["title"],
-                artist=item["publisher"]["artist"],
+                name=clean_unicode_text(item["title"]),
+                artist=clean_unicode_text(item["publisher"]["artist"]),
                 soundcloud_url=item["permalink"],
                 isrc=item["publisher"].get("isrc"),
                 album_cover_url=item["artworkUrl"],
