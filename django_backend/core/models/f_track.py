@@ -10,10 +10,10 @@ from playlist_etl.constants import ServiceName
 
 class Track(models.Model):
     """
-    Represents a unique music track identified by ISRC.
+    Represents a unique music track identified by ISRC and ETL run.
 
     Contains all track metadata including service-specific information.
-    ISRC serves as the primary key for global uniqueness.
+    Uses composite unique constraint on (isrc, etl_run_id) for blue-green deployments.
 
     Example:
         track = Track(
@@ -25,9 +25,9 @@ class Track(models.Model):
         )
     """
 
+    id = models.BigAutoField(primary_key=True)
     isrc = models.CharField(
         max_length=12,
-        primary_key=True,
         validators=[RegexValidator(r"^[A-Z]{2}[A-Z0-9]{3}[0-9]{7}$", "Invalid ISRC format")],
         help_text="International Standard Recording Code (12 characters)",
     )
@@ -51,10 +51,12 @@ class Track(models.Model):
 
     class Meta:
         db_table = "tracks"
+        unique_together: ClassVar = [("isrc", "etl_run_id")]
         indexes: ClassVar = [
             models.Index(fields=["track_name", "artist_name"]),
             models.Index(fields=["artist_name"]),
             models.Index(fields=["etl_run_id"]),
+            models.Index(fields=["isrc"]),
         ]
 
     def __str__(self):
