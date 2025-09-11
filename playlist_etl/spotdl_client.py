@@ -38,7 +38,17 @@ def _fetch_spotify_playlist_with_retry(playlist_url: str) -> JSON:
         temp_path = temp_file.name
 
     try:
-        cmd = ["spotdl", "save", playlist_url, "--save-file", temp_path, "--lyrics", "genius"]
+        cmd = [
+            "spotdl",
+            "save",
+            playlist_url,
+            "--save-file",
+            temp_path,
+            "--lyrics",
+            "genius",
+            "--ffmpeg",
+            "/usr/bin/true",
+        ]
 
         result = subprocess.run(cmd, capture_output=True, text=True, timeout=300)
 
