@@ -1,5 +1,6 @@
 import json
 import logging
+import os
 import re
 from typing import Any
 
@@ -31,7 +32,13 @@ class Cache(BaseCache):
             )
 
         # Allow cache to be initialized without credentials in CI/test environments
-        is_ci = settings.SECRET_KEY == "test-secret-key-for-ci" or getattr(settings, 'TESTING', False)
+        secret_key = getattr(settings, 'SECRET_KEY', os.getenv('SECRET_KEY', ''))
+        is_ci = (
+            secret_key == "test-secret-key-for-ci" or 
+            getattr(settings, 'TESTING', False) or
+            os.getenv('CI', '').lower() == 'true'
+        )
+        logger.debug(f"Cache init: SECRET_KEY={secret_key}, is_ci={is_ci}")
         
         if not self.CF_ACCOUNT_ID or not self.CF_NAMESPACE_ID or not self.CF_API_TOKEN:
             if is_ci:
