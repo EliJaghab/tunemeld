@@ -14,7 +14,6 @@ class Track(models.Model):
 
     Contains all track metadata including service-specific information.
     Uses composite unique constraint on (isrc, etl_run_id) for blue-green deployments.
-    Primary key is isrc field (not auto-incrementing id).
 
     Example:
         track = Track(
@@ -26,11 +25,11 @@ class Track(models.Model):
         )
     """
 
+    id = models.BigAutoField(primary_key=True)
     isrc = models.CharField(
         max_length=12,
         validators=[RegexValidator(r"^[A-Z]{2}[A-Z0-9]{3}[0-9]{7}$", "Invalid ISRC format")],
         help_text="International Standard Recording Code (12 characters)",
-        primary_key=True,
     )
     track_name = models.CharField(max_length=500, help_text="Name of the track")
     artist_name = models.CharField(max_length=500, help_text="Primary artist name")
