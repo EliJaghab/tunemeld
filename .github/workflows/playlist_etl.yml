@@ -54,6 +54,9 @@ jobs:
           echo "🔄 Checking migration status on Railway PostgreSQL..."
           python manage.py showmigrations
           echo ""
+          echo "🔧 Fixing migration history inconsistencies..."
+          python fix_migration_history.py
+          echo ""
           echo "🚀 Applying migrations to Railway PostgreSQL..."
           python manage.py migrate --noinput
           echo "✅ Railway database schema updated successfully"
