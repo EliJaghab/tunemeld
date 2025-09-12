@@ -79,7 +79,7 @@ repos:
 
       - id: django-import-check
         name: Django management command import test
-        entry: bash -c "cd django_backend && source ../venv/bin/activate && PYTHONPATH=.. DJANGO_SETTINGS_MODULE=core.settings python -c 'import django; django.setup(); from core.management.commands import a_playlist_etl; print(\"✅ All management commands import successfully\")'"
+        entry: bash -c "cd django_backend && source ../venv/bin/activate && PYTHONPATH=.. DJANGO_SETTINGS_MODULE=core.settings python -c 'import django; django.setup(); from core.management.commands import a_playlist_etl; print(\"All management commands import successfully\")'"
         language: system
         pass_filenames: false
         files: ^django_backend/core/management/commands/.*\.py$

@@ -72,9 +72,9 @@ historical_view_count:
 	PYTHONPATH=$(PROJECT_ROOT) python3 playlist_etl/historical_view_count.py
 
 format: install-pre-commit
-	@echo "🎨 Running pre-commit hooks to format and lint code..."
+	@echo " Running pre-commit hooks to format and lint code..."
 	source venv/bin/activate && pre-commit run --all-files
-	@echo "✅ Code formatted and linted!"
+	@echo " Code formatted and linted!"
 
 
 dev: setup_env
@@ -85,12 +85,12 @@ prod:
 
 invalidate_cache:
 	@set -o allexport; source $(ENV_FILE); set +o allexport; \
-	echo "🗑️  Wiping entire Cloudflare cache (new data release)..." && \
+	echo "  Wiping entire Cloudflare cache (new data release)..." && \
 	RESPONSE=$$(curl -s -X POST "https://api.cloudflare.com/client/v4/zones/$$CF_ZONE_ID/purge_cache" \
 	-H "Authorization: Bearer $$CLOUDFLARE_API_TOKEN" \
 	-H "Content-Type: application/json" \
 	--data '{"purge_everything":true}'); \
-	echo "$$RESPONSE" | grep -q '"success":true' && echo "✅ Cache wiped successfully" || echo "❌ Failure: $$RESPONSE"
+	echo "$$RESPONSE" | grep -q '"success":true' && echo " Cache wiped successfully" || echo " Failure: $$RESPONSE"
 
 test: setup_env
 	@echo "Running all tests..."
@@ -157,62 +157,62 @@ build_locally:
 	python3 django_backend/manage.py runserver 0.0.0.0:8000
 
 serve-frontend:
-	@echo "🌐 Starting TuneMeld frontend server..."
+	@echo " Starting TuneMeld frontend server..."
 	@if lsof -ti tcp:8080 > /dev/null 2>&1; then \
-		echo "📍 Frontend server already running at: http://localhost:8080"; \
-		echo "🔄 Use 'make kill-frontend' to stop existing server"; \
+		echo " Frontend server already running at: http://localhost:8080"; \
+		echo " Use 'make kill-frontend' to stop existing server"; \
 	else \
-		echo "📍 Website will be available at: http://localhost:8080"; \
-		echo "🔄 Cache disabled for development"; \
-		echo "🛑 Press Ctrl+C to stop the server"; \
+		echo " Website will be available at: http://localhost:8080"; \
+		echo " Cache disabled for development"; \
+		echo " Press Ctrl+C to stop the server"; \
 		cd docs && python -m http.server 8080; \
 	fi
 
 serve:
-	@echo "🌐 Starting TuneMeld website..."
+	@echo " Starting TuneMeld website..."
 	@if lsof -ti tcp:8080 > /dev/null 2>&1; then \
-		echo "📍 Frontend server already running at: http://localhost:8080"; \
-		echo "🔄 Use 'make kill-frontend' to stop existing server"; \
+		echo " Frontend server already running at: http://localhost:8080"; \
+		echo " Use 'make kill-frontend' to stop existing server"; \
 	else \
-		echo "📍 Frontend: http://localhost:8080"; \
-		echo "🛑 Press Ctrl+C to stop"; \
+		echo " Frontend: http://localhost:8080"; \
+		echo " Press Ctrl+C to stop"; \
 		cd docs && python -m http.server 8080; \
 	fi
 
 serve-backend:
-	@echo "🚀 Starting Django backend server..."
+	@echo " Starting Django backend server..."
 	@if lsof -ti tcp:8000 > /dev/null 2>&1; then \
-		echo "📍 Backend server already running at: http://localhost:8000"; \
-		echo "🔄 Use 'make kill-backend' to stop existing server"; \
+		echo " Backend server already running at: http://localhost:8000"; \
+		echo " Use 'make kill-backend' to stop existing server"; \
 	else \
-		echo "📍 Backend API: http://localhost:8000"; \
-		echo "🛑 Press Ctrl+C to stop"; \
+		echo " Backend API: http://localhost:8000"; \
+		echo " Press Ctrl+C to stop"; \
 		cd django_backend && python manage.py runserver; \
 	fi
 
 test-header-art:
-	@echo "🧪 Testing header art functionality..."
-	@if [ ! -f scripts/verify-header-art.js ]; then echo "❌ Puppeteer scripts not found. Run setup first."; exit 1; fi
+	@echo " Testing header art functionality..."
+	@if [ ! -f scripts/verify-header-art.js ]; then echo " Puppeteer scripts not found. Run setup first."; exit 1; fi
 	@node scripts/verify-header-art.js http://localhost:8000
 
 test-visual:
-	@echo "📸 Running visual tests..."
-	@if [ ! -f scripts/verify-header-art.js ]; then echo "❌ Puppeteer scripts not found. Run setup first."; exit 1; fi
+	@echo " Running visual tests..."
+	@if [ ! -f scripts/verify-header-art.js ]; then echo " Puppeteer scripts not found. Run setup first."; exit 1; fi
 	@node scripts/verify-header-art.js http://localhost:8000
 	@node scripts/responsive-screenshots.js http://localhost:8000
 
 kill-frontend:
-	@echo "🛑 Stopping frontend server..."
+	@echo " Stopping frontend server..."
 	@if lsof -ti tcp:8080 > /dev/null 2>&1; then \
-		lsof -ti tcp:8080 | xargs kill -9 && echo "✅ Frontend server stopped"; \
+		lsof -ti tcp:8080 | xargs kill -9 && echo " Frontend server stopped"; \
 	else \
-		echo "ℹ️  No frontend server running on port 8080"; \
+		echo "  No frontend server running on port 8080"; \
 	fi
 
 kill-backend:
-	@echo "🛑 Stopping backend server..."
+	@echo " Stopping backend server..."
 	@if lsof -ti tcp:8000 > /dev/null 2>&1; then \
-		lsof -ti tcp:8000 | xargs kill -9 && echo "✅ Backend server stopped"; \
+		lsof -ti tcp:8000 | xargs kill -9 && echo " Backend server stopped"; \
 	else \
-		echo "ℹ️  No backend server running on port 8000"; \
+		echo "  No backend server running on port 8000"; \
 	fi

@@ -130,7 +130,7 @@ def clean_unicode_text(text: str) -> str:
     - Smart quotes and special characters
 
     Examples:
-    - 'â\\x9a¡ï\\x8f' -> '⚡️'
+    - 'â\\x9a¡ï\\x8f' -> 'lightning bolt character'
     - '&amp;' -> '&'
     - 'Could&#039;ve' -> "Could've"
     - 'Today's Country' -> "Today's Country"

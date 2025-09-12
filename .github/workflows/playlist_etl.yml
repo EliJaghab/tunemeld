@@ -42,6 +42,19 @@ jobs:
       - name: Set PYTHONPATH
         run: echo "PYTHONPATH=$PWD" >> $GITHUB_ENV
 
+      - name: Pre-migration database safety check
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
+          CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
+          CF_NAMESPACE_ID: ${{ secrets.CF_NAMESPACE_ID }}
+          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+        run: |
+          cd django_backend
+          echo " Running comprehensive database safety check..."
+          python migration_safety_check.py
+          echo " Database safety check passed"
+
       - name: Apply database migrations to Railway PostgreSQL
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
@@ -51,15 +64,15 @@ jobs:
           CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
         run: |
           cd django_backend
-          echo "🔄 Checking migration status on Railway PostgreSQL..."
+          echo " Checking migration status on Railway PostgreSQL..."
           python manage.py showmigrations
           echo ""
-          echo "🗑️  Wiping database schema for clean migration..."
-          echo "WIPE" | python wipe_schema.py
-          echo ""
-          echo "🚀 Applying fresh migrations to Railway PostgreSQL..."
+          echo " Applying migrations to Railway PostgreSQL..."
           python manage.py migrate --noinput
-          echo "✅ Railway database schema created successfully"
+          echo ""
+          echo " Verifying migration consistency..."
+          python manage.py showmigrations | grep -E "\\[ \\]" && echo "❌ Unapplied migrations detected!" && exit 1 || echo " All migrations applied successfully"
+          echo " Railway database migrations completed successfully"
 
       - name: Run Playlist ETL Pipeline
         env:
@@ -83,7 +96,7 @@ jobs:
           DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
         run: |
           cd django_backend
-          echo "📊 ETL Pipeline Results:"
+          echo " ETL Pipeline Results:"
           python manage.py shell -c "
           from core.models import RawPlaylistData, Track, ServiceTrack, PlaylistModel, Genre, Service
           print(f'Raw playlist records: {RawPlaylistData.objects.count()}')
@@ -93,15 +106,28 @@ jobs:
           print(f'Genres: {Genre.objects.count()}')
           print(f'Services: {Service.objects.count()}')
           print()
-          print('📈 Breakdown by service:')
+          print(' Breakdown by service:')
           for service in Service.objects.all():
               playlist_count = PlaylistModel.objects.filter(service=service).count()
               track_count = ServiceTrack.objects.filter(service=service).count()
               print(f'{service.name}: {playlist_count} playlists, {track_count} tracks')
           "
 
+      - name: Post-ETL database validation
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
+          CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
+          CF_NAMESPACE_ID: ${{ secrets.CF_NAMESPACE_ID }}
+          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+        run: |
+          cd django_backend
+          echo " Running post-ETL database validation..."
+          python migration_safety_check.py
+          echo " Post-ETL validation passed"
+
       - name: Log ETL completion
         run: |
-          echo "✅ PostgreSQL ETL Pipeline completed successfully"
-          echo "🗄️  Data persisted to Railway PostgreSQL database"
-          echo "🔄 Next ETL run scheduled for next Saturday at 5 PM UTC"
+          echo " PostgreSQL ETL Pipeline completed successfully"
+          echo "  Data persisted to Railway PostgreSQL database"
+          echo " Next ETL run scheduled for next Saturday at 5 PM UTC"

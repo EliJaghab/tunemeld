@@ -68,10 +68,11 @@ ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "localhost,127.0.0.1,api.tunemeld.com
     ","
 )
 
+logger = logging.getLogger(__name__)
 if ENVIRONMENT == PROD:
-    print("Railway Production Environment")
+    logger.info("Railway Production Environment")
 else:
-    print("Development Environment")
+    logger.info("Development Environment")
 
 
 STATIC_URL = "/static/"

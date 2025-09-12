@@ -51,7 +51,7 @@ jobs:
           DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
         run: |
           cd django_backend
-          echo "📊 View Count ETL Results:"
+          echo " View Count ETL Results:"
           python manage.py shell -c "
           from core.models.z_view_counts import ViewCount, HistoricalViewCount
           from datetime import date
@@ -67,7 +67,7 @@ jobs:
           print(f'Total view count records: {total_views}')
           print(f'Total historical records: {total_historical}')
           print()
-          print('📈 Breakdown by service:')
+          print(' Breakdown by service:')
           from core.models.b_genre_service import Service
           for service in Service.objects.all():
               view_count = ViewCount.objects.filter(service=service).count()

@@ -16,7 +16,7 @@ class ErrorHandler {
       const detailsSection = technicalDetails
         ? `
         <details class="error-banner-details">
-          <summary>🔍 Technical Details</summary>
+          <summary> Technical Details</summary>
           <div class="error-banner-technical">${technicalDetails}</div>
         </details>
       `
@@ -25,11 +25,11 @@ class ErrorHandler {
       errorBanner.innerHTML = `
         <div class="error-banner-content">
           <div class="error-banner-message">
-            <div class="error-banner-title">⚠️ Service Temporarily Unavailable</div>
+            <div class="error-banner-title"> Service Temporarily Unavailable</div>
             <div class="error-banner-description">${message}</div>
             ${detailsSection}
           </div>
-          <button id="error-retry-btn" class="error-banner-retry">🔄 RETRY</button>
+          <button id="error-retry-btn" class="error-banner-retry"> RETRY</button>
         </div>
       `;
 
