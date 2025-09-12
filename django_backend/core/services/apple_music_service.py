@@ -5,13 +5,16 @@ import requests
 
 if TYPE_CHECKING:
     from playlist_etl.constants import GenreName
+import time
+
 from bs4 import BeautifulSoup
 from core.models.playlist_types import PlaylistData, PlaylistMetadata
 from core.utils.cache_utils import CachePrefix, cache_get, cache_set
 from core.utils.utils import clean_unicode_text, get_logger
-from core.utils.webdriver import WebDriverManager
 
 logger = get_logger(__name__)
+
+APPLE_MUSIC_REQUEST_DELAY = 0.5
 
 
 def get_apple_music_album_cover_url(track_url: str) -> str | None:
@@ -21,7 +24,7 @@ def get_apple_music_album_cover_url(track_url: str) -> str | None:
 
     logger.info(f"Apple Music Album Cover Cache miss for URL: {track_url}")
     try:
-        response = requests.get(track_url, timeout=30)
+        response = requests.get(track_url, timeout=5)
         response.raise_for_status()
         doc = BeautifulSoup(response.text, "html.parser")
 
@@ -38,14 +41,17 @@ def get_apple_music_album_cover_url(track_url: str) -> str | None:
         return None
 
 
-def _get_apple_music_cover_url(webdriver_manager, url: str, genre: "GenreName") -> str | None:
-    """Get Apple Music playlist cover URL using WebDriver"""
-    xpath = "//amp-ambient-video"
-    src_attribute = webdriver_manager.find_element_by_xpath(url, xpath, attribute="src")
+def _get_apple_music_cover_url_static(url: str, genre: "GenreName") -> str | None:
+    """Get Apple Music playlist cover URL using static HTML extraction"""
+    response = requests.get(url, timeout=5)
+    response.raise_for_status()
+    doc = BeautifulSoup(response.text, "html.parser")
 
-    if src_attribute is None or src_attribute == "Element not found" or "An error occurred" in src_attribute:
+    stream_tag = doc.find("amp-ambient-video", {"class": "editorial-video"})
+    if not stream_tag or not stream_tag.get("src"):
         raise ValueError(f"Could not find amp-ambient-video src attribute for Apple Music {genre.value}")
 
+    src_attribute = stream_tag["src"]
     if src_attribute.endswith(".m3u8"):
         return src_attribute
     else:
@@ -62,7 +68,7 @@ def get_apple_music_playlist(genre: "GenreName") -> PlaylistData:
 
     tracks_data = fetch_playlist_data(ServiceName.APPLE_MUSIC, genre)
 
-    response = requests.get(url)
+    response = requests.get(url, timeout=5)
     response.raise_for_status()
     doc = BeautifulSoup(response.text, "html.parser")
 
@@ -82,16 +88,9 @@ def get_apple_music_playlist(genre: "GenreName") -> PlaylistData:
         else None
     )
 
-    playlist_cover_url = None
-    webdriver_manager = WebDriverManager()
-    try:
-        playlist_cover_url = _get_apple_music_cover_url(webdriver_manager, url, genre)
-        logger.info(f"Successfully extracted Apple Music cover URL for {genre}")
-    except Exception as e:
-        logger.warning(f"WebDriver extraction failed for Apple Music {genre}: {e}")
-        playlist_cover_url = None
-    finally:
-        webdriver_manager.close_driver()
+    playlist_cover_url = _get_apple_music_cover_url_static(url, genre)
+    logger.info(f"Successfully extracted Apple Music cover URL for {genre}")
+    time.sleep(APPLE_MUSIC_REQUEST_DELAY)
 
     metadata: PlaylistMetadata = {
         "service_name": "apple_music",
