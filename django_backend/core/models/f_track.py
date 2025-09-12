@@ -25,7 +25,6 @@ class Track(models.Model):
         )
     """
 
-    id = models.BigAutoField(primary_key=True)
     isrc = models.CharField(
         max_length=12,
         validators=[RegexValidator(r"^[A-Z]{2}[A-Z0-9]{3}[0-9]{7}$", "Invalid ISRC format")],
