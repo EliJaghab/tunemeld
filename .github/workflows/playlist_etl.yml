@@ -54,12 +54,12 @@ jobs:
           echo "🔄 Checking migration status on Railway PostgreSQL..."
           python manage.py showmigrations
           echo ""
-          echo "🔧 Fixing migration history inconsistencies..."
-          python fix_migration_history.py
+          echo "🗑️  Wiping database schema for clean migration..."
+          echo "WIPE" | python wipe_schema.py
           echo ""
-          echo "🚀 Applying migrations to Railway PostgreSQL..."
+          echo "🚀 Applying fresh migrations to Railway PostgreSQL..."
           python manage.py migrate --noinput
-          echo "✅ Railway database schema updated successfully"
+          echo "✅ Railway database schema created successfully"
 
       - name: Run Playlist ETL Pipeline
         env:
