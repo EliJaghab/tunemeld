@@ -53,5 +53,3 @@ class HistoricalTrackViewCount(models.Model):
 
     def __str__(self):
         return f"{self.isrc} - {self.view_count:,} views on {self.recorded_date}"
-
-

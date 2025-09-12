@@ -33,6 +33,15 @@ make format           # Format and lint all code (pre-commit hooks)
 
 **Claude Code must run `make format` (pre-commit hooks) before completing any coding task.**
 
+## ETL Commands
+
+**Historical View Count ETL:** `django_backend/core/management/commands/a_historical_view_count.py`
+
+- Django management command: `python manage.py a_historical_view_count`
+- Extracts Spotify and YouTube view counts for tracks with URLs
+- Stores data in HistoricalTrackViewCount model
+- Supports `--limit` parameter for testing
+
 **DO NOT ADD COMMENTS unless explicitly asked. Write clean, self-documenting code.**
 
 ## Comment Policy - Comments Are Code Smells

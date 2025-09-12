@@ -27,7 +27,7 @@ class Command(BaseCommand):
         start_time = time.time()
         limit = options.get("limit")
         max_workers = 3
-        
+
         tracks = Track.objects.filter(
             models.Q(spotify_url__isnull=False) | models.Q(youtube_url__isnull=False)
         ).order_by("isrc")
@@ -45,7 +45,7 @@ class Command(BaseCommand):
             for track in tracks_list:
                 future = executor.submit(self._process_track, track, spotify_service, youtube_service)
                 futures.append(future)
-            
+
             completed = 0
             for future in concurrent.futures.as_completed(futures):
                 try:
@@ -57,7 +57,8 @@ class Command(BaseCommand):
                     logger.error(f"Error processing track: {e}")
 
         duration = time.time() - start_time
-        logger.info(f"Processed {len(tracks_list)} tracks in {duration:.1f} seconds ({duration/len(tracks_list):.2f}s per track)")
+        avg_per_track = duration / len(tracks_list) if tracks_list else 0
+        logger.info(f"Processed {len(tracks_list)} tracks in {duration:.1f} seconds ({avg_per_track:.2f}s per track)")
 
     def _process_track(self, track, spotify_service, youtube_service):
         try:
@@ -65,8 +66,10 @@ class Command(BaseCommand):
                 count = get_spotify_track_view_count(track.spotify_url)
                 if count:
                     HistoricalTrackViewCount.objects.update_or_create(
-                        isrc=track.isrc, service=spotify_service, recorded_date=timezone.now().date(),
-                        defaults={"view_count": count}
+                        isrc=track.isrc,
+                        service=spotify_service,
+                        recorded_date=timezone.now().date(),
+                        defaults={"view_count": count},
                     )
                     logger.info(f"{track.isrc} Spotify: {count:,}")
 
@@ -74,8 +77,10 @@ class Command(BaseCommand):
                 count = get_youtube_track_view_count(track.youtube_url)
                 if count:
                     HistoricalTrackViewCount.objects.update_or_create(
-                        isrc=track.isrc, service=youtube_service, recorded_date=timezone.now().date(),
-                        defaults={"view_count": count}
+                        isrc=track.isrc,
+                        service=youtube_service,
+                        recorded_date=timezone.now().date(),
+                        defaults={"view_count": count},
                     )
                     logger.info(f"{track.isrc} YouTube: {count:,}")
         except Exception as e:

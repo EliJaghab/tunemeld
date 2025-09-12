@@ -94,9 +94,9 @@ repos:
 
       - id: python-import-check
         name: Python import validation
-        entry: bash -c "cd django_backend && source venv/bin/activate && python -m py_compile"
-        language: system
-        files: \.py$
+        entry: python -m py_compile
+        language: python
+        types: [python]
         exclude: |
           (?x)^(
             venv/.*|
