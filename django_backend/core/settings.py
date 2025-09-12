@@ -13,8 +13,8 @@ class ETFormatter(logging.Formatter):
     def formatTime(self, record: logging.LogRecord, datefmt: str | None = None) -> str:
         dt = datetime.fromtimestamp(record.created, tz=UTC)
         et_tz = zoneinfo.ZoneInfo("America/New_York")
-        dt.astimezone(et_tz)
-        return dt.strftime("%I:%M:%S%p ET").replace(" 0", " ")
+        et_dt = dt.astimezone(et_tz)
+        return et_dt.strftime("%Y-%m-%d %I:%M:%S%p ET").replace(" 0", " ")
 
 
 DEV: Final = "dev"
@@ -111,11 +111,15 @@ LOGGING = {
         "verbose": {
             "format": "%(levelname)s %(asctime)s [%(name)s:%(lineno)d] %(message)s",
         },
+        "et_formatter": {
+            "()": "core.settings.ETFormatter",
+            "format": "%(levelname)s %(asctime)s [%(name)s:%(lineno)d] %(message)s",
+        },
     },
     "handlers": {
         "console": {
             "class": "logging.StreamHandler",
-            "formatter": "verbose",
+            "formatter": "et_formatter",
         },
     },
     "loggers": {
