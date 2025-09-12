@@ -16,7 +16,7 @@ class GenreQuery(graphene.ObjectType):
     default_genre = graphene.String()
 
     def resolve_genres(self, info):
-        return Genre.objects.filter(playlist__isnull=False).distinct().order_by("name")
+        return Genre.objects.all().order_by("name")
 
     def resolve_default_genre(self, info):
         return GenreName.POP
