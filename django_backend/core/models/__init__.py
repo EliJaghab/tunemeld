@@ -10,24 +10,12 @@ from core.models.f_track import (
     TrackRank,
     TrackSourceServiceName,
 )
-from core.models.z_view_counts import (
-    CurrentView,
-    DataSourceServiceName,
-    HistoricalView,
-    HistoricalViewCount,
-    ServiceView,
-    StartView,
-    ViewCount,
-    YouTubeView,
-)
+from core.models.z_view_counts import HistoricalTrackViewCount
 
 __all__ = [
-    "CurrentView",
-    "DataSourceServiceName",
     "ETLTrack",
     "Genre",
-    "HistoricalView",
-    "HistoricalViewCount",
+    "HistoricalTrackViewCount",
     "NormalizedTrack",
     "PlaylistETL",
     "PlaylistModel",
@@ -35,12 +23,8 @@ __all__ = [
     "RawPlaylistData",
     "Service",
     "ServiceTrack",
-    "ServiceView",
-    "StartView",
     "Track",
     "TrackData",
     "TrackRank",
     "TrackSourceServiceName",
-    "ViewCount",
-    "YouTubeView",
 ]
