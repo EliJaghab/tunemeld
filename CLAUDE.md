@@ -35,10 +35,12 @@ make format           # Format and lint all code (pre-commit hooks)
 
 ## ETL Commands
 
-**Historical View Count ETL:** `django_backend/core/management/commands/a_historical_view_count.py`
+**View Count ETL Pipeline:** `django_backend/core/management/commands/a_view_count.py`
 
-- Django management command: `python manage.py a_historical_view_count`
-- Extracts Spotify and YouTube view counts for tracks with URLs
+- Django management command: `python manage.py a_view_count`
+- Orchestrates complete view count extraction pipeline
+- Sub-commands in `view_count/` directory:
+  - `a_historical_view_count.py` - Extracts Spotify and YouTube view counts
 - Stores data in HistoricalTrackViewCount model
 - Supports `--limit` parameter for testing
 
