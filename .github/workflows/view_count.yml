@@ -1,4 +1,4 @@
-name: update_view_counts
+name: Historical Track View Count ETL
 
 on:
   schedule:
@@ -6,53 +6,114 @@ on:
   workflow_dispatch:
 
 jobs:
-  run-tasks:
+  run-etl:
     runs-on: ubuntu-latest
-
-    timeout-minutes: 20
+    timeout-minutes: 360
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v2
+      - name: Set up Python 3.13
+        uses: actions/setup-python@v4
         with:
-          python-version: '3.x'
+          python-version: 3.13
 
-      - name: Create virtual environment
-        run: python -m venv venv
-
-      - name: Activate virtual environment and install dependencies
+      - name: Install dependencies
         run: |
-          source venv/bin/activate
           python -m pip install --upgrade pip
           pip install -e .
 
-      - name: Set up ChromeDriver
-        uses: nanasess/setup-chromedriver@v2
+      - name: Setup Chrome and ChromeDriver
+        uses: browser-actions/setup-chrome@v1
+        with:
+          chrome-version: stable
+          install-chromedriver: true
 
-      - name: Run view counts
+      - name: Set PYTHONPATH
+        run: echo "PYTHONPATH=$PWD" >> $GITHUB_ENV
+
+      - name: Pre-migration database safety check
         env:
-          GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
-          MONGO_URI: ${{ secrets.MONGO_URI }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
+          CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
+          CF_NAMESPACE_ID: ${{ secrets.CF_NAMESPACE_ID }}
+          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+        run: |
+          cd django_backend
+          echo " Running comprehensive database safety check..."
+          python migration_safety_check.py
+          echo " Database safety check passed"
+
+      - name: Apply database migrations to Railway PostgreSQL
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
+          CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
+          CF_NAMESPACE_ID: ${{ secrets.CF_NAMESPACE_ID }}
+          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+        run: |
+          cd django_backend
+          echo " Checking migration status on Railway PostgreSQL..."
+          python manage.py showmigrations
+          echo ""
+          echo " Applying migrations to Railway PostgreSQL..."
+          python manage.py migrate --noinput
+          echo ""
+          echo " Verifying migration consistency..."
+          python manage.py showmigrations | grep -E "\\[ \\]" && echo "❌ Unapplied migrations detected!" && exit 1 || echo " All migrations applied successfully"
+          echo " Railway database migrations completed successfully"
+
+      - name: Run Historical Track View Count ETL
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
+          X_RAPIDAPI_KEY: ${{ secrets.X_RAPIDAPI_KEY }}
           SPOTIFY_CLIENT_ID: ${{ secrets.SPOTIFY_CLIENT_ID }}
           SPOTIFY_CLIENT_SECRET: ${{ secrets.SPOTIFY_CLIENT_SECRET }}
-          SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
-          DJANGO_SETTINGS_MODULE: core.settings
-          PYTHONPATH: ${{ github.workspace }}:${{ github.workspace }}/django_backend
+          GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+          CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
+          CF_NAMESPACE_ID: ${{ secrets.CF_NAMESPACE_ID }}
+          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
         run: |
-          source venv/bin/activate
           cd django_backend
-          python3 ../playlist_etl/view_count.py
+          python manage.py a_historical_view_count
 
-      - name: Run historical view counts
+      - name: Verify ETL pipeline results
         env:
-          MONGO_URI: ${{ secrets.MONGO_URI }}
-          SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
-          DJANGO_SETTINGS_MODULE: core.settings
-          PYTHONPATH: ${{ github.workspace }}:${{ github.workspace }}/django_backend
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
         run: |
-          source venv/bin/activate
           cd django_backend
-          python3 ../playlist_etl/historical_view_count.py
+          echo " Historical Track View Count ETL Results:"
+          python manage.py shell -c "
+          from core.models.z_view_counts import HistoricalTrackViewCount
+          from core.models.b_genre_service import Service
+          print(f'Historical track view count records: {HistoricalTrackViewCount.objects.count()}')
+          print()
+          print(' Breakdown by service:')
+          for service in Service.objects.all():
+              count = HistoricalTrackViewCount.objects.filter(service=service).count()
+              if count > 0:
+                  print(f'{service.name}: {count} historical view count records')
+          "
+
+      - name: Post-ETL database validation
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
+          CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
+          CF_NAMESPACE_ID: ${{ secrets.CF_NAMESPACE_ID }}
+          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+        run: |
+          cd django_backend
+          echo " Running post-ETL database validation..."
+          python migration_safety_check.py
+          echo " Post-ETL validation passed"
+
+      - name: Log ETL completion
+        run: |
+          echo " Historical Track View Count ETL Pipeline completed successfully"
+          echo "  Data persisted to Railway PostgreSQL database"
+          echo " Next ETL run scheduled for tomorrow at 2 AM UTC"
