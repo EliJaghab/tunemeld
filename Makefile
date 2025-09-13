@@ -1,11 +1,8 @@
 .PHONY: extract \
 	transform \
 	aggregate \
-	view_count \
 	format \
 	lint \
-	dev \
-	prod \
 	invalidate_cache \
 	test \
 	test-unit \
@@ -14,18 +11,7 @@
 	test-all \
 	test-coverage \
 	test-ci \
-	test-header-art \
-	test-visual \
 	setup_env \
-	activate \
-	install_deps \
-	build \
-	run \
-	build_and_run \
-	build_and_debug \
-	build_locally \
-	setup_backend_env \
-	serve \
 	serve-frontend \
 	serve-backend \
 	kill-frontend \
@@ -72,13 +58,6 @@ aggregate:
 	@echo "Running aggregate..."
 	PYTHONPATH=$(PROJECT_ROOT) python3 playlist_etl/aggregate.py
 
-view_count:
-	@echo "Running view count ETL pipeline..."
-	cd django_backend && python manage.py view_count.view_count
-
-historical_view_count:
-	@echo "Running view counts..."
-	PYTHONPATH=$(PROJECT_ROOT) python3 playlist_etl/historical_view_count.py
 
 format: install-pre-commit
 	@echo " Running pre-commit hooks to format and lint code..."
@@ -86,11 +65,6 @@ format: install-pre-commit
 	@echo " Code formatted and linted!"
 
 
-dev: setup_env
-	cd backend/backend && wrangler dev --env development src/index.ts
-
-prod:
-	cd backend/backend && wrangler deploy --env production src/index.ts
 
 invalidate_cache:
 	@set -o allexport; source $(ENV_FILE); set +o allexport; \
@@ -136,10 +110,6 @@ test-ci: setup_env
 	@set -o allexport; source .env.test; set +o allexport; \
 	source venv/bin/activate && python -m pytest tests/ -v --tb=short --cov=playlist_etl --cov-report=xml -m "not slow"
 
-test-playlist-etl:
-	@echo "Testing playlist ETL pipeline (simulates playlist_etl workflow)..."
-	@set -o allexport; source .env.test; set +o allexport; \
-	PYTHONPATH=$(PROJECT_ROOT) python3 playlist_etl/main.py
 
 lint: setup_env
 	@echo "Running type checking with mypy..."
@@ -153,17 +123,6 @@ install-pre-commit: install-dev
 	@echo "Installing pre-commit hooks..."
 	source venv/bin/activate && pre-commit install
 
-setup_backend_env:
-	@echo "Setting up backend virtual environment..."
-	python3 -m venv backend
-	@echo "Activating backend virtual environment and installing requirements..."
-	pip install --upgrade pip && pip install -e .
-
-build_locally:
-	@echo "Building locally..."
-	@echo "Killing any process using port 8000..."
-	-lsof -ti tcp:8000 | xargs kill -9
-	python3 django_backend/manage.py runserver 0.0.0.0:8000
 
 serve-frontend:
 	@echo " Starting TuneMeld frontend server..."
@@ -177,16 +136,6 @@ serve-frontend:
 		cd docs && python -m http.server 8080; \
 	fi
 
-serve:
-	@echo " Starting TuneMeld website..."
-	@if lsof -ti tcp:8080 > /dev/null 2>&1; then \
-		echo " Frontend server already running at: http://localhost:8080"; \
-		echo " Use 'make kill-frontend' to stop existing server"; \
-	else \
-		echo " Frontend: http://localhost:8080"; \
-		echo " Press Ctrl+C to stop"; \
-		cd docs && python -m http.server 8080; \
-	fi
 
 serve-backend:
 	@echo " Starting Django backend server..."
@@ -199,16 +148,6 @@ serve-backend:
 		cd django_backend && python manage.py runserver; \
 	fi
 
-test-header-art:
-	@echo " Testing header art functionality..."
-	@if [ ! -f scripts/verify-header-art.js ]; then echo " Puppeteer scripts not found. Run setup first."; exit 1; fi
-	@node scripts/verify-header-art.js http://localhost:8000
-
-test-visual:
-	@echo " Running visual tests..."
-	@if [ ! -f scripts/verify-header-art.js ]; then echo " Puppeteer scripts not found. Run setup first."; exit 1; fi
-	@node scripts/verify-header-art.js http://localhost:8000
-	@node scripts/responsive-screenshots.js http://localhost:8000
 
 kill-frontend:
 	@echo " Stopping frontend server..."
