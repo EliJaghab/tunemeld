@@ -88,8 +88,7 @@ class Command(BaseCommand):
                 if service_name in service_positions:
                     return 1000.0 + float(service_positions[service_name])
 
-        # Fallback to lowest position if no priority service found
-        return float(min(service_positions.values())) if service_positions else float("inf")
+        raise ValueError(f"No valid service found in positions: {service_positions}")
 
     def create_aggregate_playlists(self, cross_service_matches: dict[int, list[dict]], etl_run_id: uuid.UUID) -> None:
         """Create aggregate playlist entries for cross-service tracks."""
