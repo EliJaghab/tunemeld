@@ -34,7 +34,11 @@
 	migrate \
 	migrate-dev \
 	migration-safety-check \
-	run-view-count-etl
+	run-view-count-etl \
+	ci-db-safety-check \
+	ci-db-migrate \
+	ci-db-validate \
+	run-playlist-etl
 
 PROJECT_ROOT := $(shell pwd)
 VENV := $(PROJECT_ROOT)/venv
@@ -248,3 +252,30 @@ run-view-count-etl:
 	@echo " Running View Count ETL..."
 	@cd django_backend && $(VENV)/bin/python manage.py a_view_count
 	@echo " View Count ETL completed"
+
+# CI/CD Database Operations
+ci-db-safety-check:
+	@echo " Running comprehensive database safety check..."
+	@cd django_backend && python migration_safety_check.py
+	@echo " Database safety check passed"
+
+ci-db-migrate:
+	@echo " Checking migration status on Railway PostgreSQL..."
+	@cd django_backend && python manage.py showmigrations
+	@echo ""
+	@echo " Applying migrations to Railway PostgreSQL..."
+	@cd django_backend && python manage.py migrate --noinput
+	@echo ""
+	@echo " Verifying migration consistency..."
+	@cd django_backend && python manage.py showmigrations | grep -E "\\[ \\]" && echo "❌ Unapplied migrations detected!" && exit 1 || echo " All migrations applied successfully"
+	@echo " Railway database migrations completed successfully"
+
+ci-db-validate:
+	@echo " Running post-ETL database validation..."
+	@cd django_backend && python migration_safety_check.py
+	@echo " Post-ETL validation passed"
+
+run-playlist-etl:
+	@echo " Running Playlist ETL Pipeline..."
+	@cd django_backend && python manage.py a_playlist_etl
+	@echo " Playlist ETL Pipeline completed"

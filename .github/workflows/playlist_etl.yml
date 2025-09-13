@@ -49,11 +49,7 @@ jobs:
           CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
           CF_NAMESPACE_ID: ${{ secrets.CF_NAMESPACE_ID }}
           CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
-        run: |
-          cd django_backend
-          echo " Running comprehensive database safety check..."
-          python migration_safety_check.py
-          echo " Database safety check passed"
+        run: make ci-db-safety-check
 
       - name: Apply database migrations to Railway PostgreSQL
         env:
@@ -62,17 +58,7 @@ jobs:
           CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
           CF_NAMESPACE_ID: ${{ secrets.CF_NAMESPACE_ID }}
           CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
-        run: |
-          cd django_backend
-          echo " Checking migration status on Railway PostgreSQL..."
-          python manage.py showmigrations
-          echo ""
-          echo " Applying migrations to Railway PostgreSQL..."
-          python manage.py migrate --noinput
-          echo ""
-          echo " Verifying migration consistency..."
-          python manage.py showmigrations | grep -E "\\[ \\]" && echo "❌ Unapplied migrations detected!" && exit 1 || echo " All migrations applied successfully"
-          echo " Railway database migrations completed successfully"
+        run: make ci-db-migrate
 
       - name: Run Playlist ETL Pipeline
         env:
@@ -86,9 +72,7 @@ jobs:
           CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
           CF_NAMESPACE_ID: ${{ secrets.CF_NAMESPACE_ID }}
           CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
-        run: |
-          cd django_backend
-          python manage.py a_playlist_etl
+        run: make run-playlist-etl
 
       - name: Verify ETL pipeline results
         env:
@@ -120,11 +104,7 @@ jobs:
           CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
           CF_NAMESPACE_ID: ${{ secrets.CF_NAMESPACE_ID }}
           CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
-        run: |
-          cd django_backend
-          echo " Running post-ETL database validation..."
-          python migration_safety_check.py
-          echo " Post-ETL validation passed"
+        run: make ci-db-validate
 
       - name: Log ETL completion
         run: |
