@@ -1,0 +1,136 @@
+:root {
+  /* Colors - Light Mode */
+  --color-text-light: #333;
+  --color-background-light: #fff;
+  --color-container-light: #f9f9f9;
+  --color-link-light: teal;
+  --color-button-bg-light: #ddd;
+  --color-button-text-light: #333;
+  --color-soundcloud-bg-light: #f5f5f5;
+  --color-soundcloud-hover-light: #e0e0e0;
+  --color-skeleton-light: lightgray;
+
+  /* Colors - Dark Mode */
+  --color-text-dark: #f9f9f9;
+  --color-background-dark: #333;
+  --color-container-dark: #444;
+  --color-link-dark: #ffffff;
+  --color-button-bg-dark: #555;
+  --color-button-text-dark: #fff;
+  --color-soundcloud-bg-dark: #444;
+  --color-soundcloud-hover-dark: #555;
+  --color-skeleton-dark: #2e2e2e;
+
+  /* Shadows */
+  --shadow-light: 0 8px 24px rgba(0, 0, 0, 0.2);
+  --shadow-dark: 0 8px 24px rgba(0, 0, 0, 0.2);
+
+  /* Border Radius */
+  --radius-large: 10px;
+  --radius-small: 5px;
+
+  /* Other theme-specific variables */
+  --overlay-bg-light: rgba(255, 255, 255, 0.9);
+  --overlay-text-light: #333;
+  --table-header-bg-light: #e0e0e0;
+  --table-header-text-light: #333;
+
+  --overlay-bg-dark: rgba(0, 0, 0, 0.5);
+  --overlay-text-dark: #fff;
+  --table-header-bg-dark: #555;
+  --table-header-text-dark: #fff;
+
+  /* Toggle-specific variables */
+  --toggle-width: 45px;
+  --toggle-height: 20px;
+  --toggle-border-radius: calc(var(--toggle-height) / 2);
+  --toggle-background: #ebebeb;
+  --toggle-background-checked: #242424;
+  --toggle-shadow: inset 0px 3px 7px rgba(0, 0, 0, 0.3),
+    inset 0px -3px 7px rgba(255, 255, 255, 0.4);
+  --toggle-ball-size: calc(var(--toggle-height) - 4px);
+  --ball-position-offset: 2px;
+  --sun-icon-size: calc(var(--toggle-height) / 2);
+  --moon-icon-size: calc(var(--toggle-height) / 2);
+  --gooey-effect-size: calc(var(--toggle-ball-size) + 10px);
+}
+
+/* ==========================================================================
+   LIGHT MODE (Default)
+   ========================================================================== */
+
+body {
+  /* Active color variables */
+  --text-color: var(--color-text-light);
+  --background-color: var(--color-background-light);
+  --container-background: var(--color-container-light);
+  --link-color: var(--color-link-light);
+  --btn-background: var(--color-button-bg-light);
+  --btn-text-color: var(--color-button-text-light);
+  --soundcloud-link-background: var(--color-soundcloud-bg-light);
+  --soundcloud-link-hover: var(--color-soundcloud-hover-light);
+  --skeleton-color: var(--color-skeleton-light);
+
+  /* Active layout variables */
+  --box-shadow: var(--shadow-light);
+  --border-radius-large: var(--radius-large);
+  --border-radius-small: var(--radius-small);
+
+  /* Active overlay variables */
+  --overlay-background: var(--overlay-bg-light);
+  --overlay-text-color: var(--overlay-text-light);
+  --table-header-background: var(--table-header-bg-light);
+  --table-header-text-color: var(--table-header-text-light);
+
+  /* Apply global styles */
+  background-color: var(--background-color);
+  color: var(--text-color);
+  font-size: 16px;
+}
+
+/* ==========================================================================
+   DARK MODE
+   ========================================================================== */
+
+body.dark-mode {
+  /* Active color variables */
+  --text-color: var(--color-text-dark);
+  --background-color: var(--color-background-dark);
+  --container-background: var(--color-container-dark);
+  --link-color: var(--color-link-dark);
+  --btn-background: var(--color-button-bg-dark);
+  --btn-text-color: var(--color-button-text-dark);
+  --soundcloud-link-background: var(--color-soundcloud-bg-dark);
+  --soundcloud-link-hover: var(--color-soundcloud-hover-dark);
+  --skeleton-color: var(--color-skeleton-dark);
+
+  /* Active layout variables */
+  --box-shadow: var(--shadow-dark);
+  /* Note: border-radius stays the same in dark mode */
+
+  /* Active overlay variables */
+  --overlay-background: var(--overlay-bg-dark);
+  --overlay-text-color: var(--overlay-text-dark);
+  --table-header-background: var(--table-header-bg-dark);
+  --table-header-text-color: var(--table-header-text-dark);
+}
+
+/* ==========================================================================
+   DESKTOP RESPONSIVE VARIABLES
+   ========================================================================== */
+
+@media screen and (min-width: 768px) {
+  :root {
+    --toggle-width: 90px;
+    --toggle-height: 40px;
+    --ball-position-margin: 9px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  :root {
+    --toggle-width: 45px;
+    --toggle-height: 20px;
+    --ball-position-margin: 5px;
+  }
+}
