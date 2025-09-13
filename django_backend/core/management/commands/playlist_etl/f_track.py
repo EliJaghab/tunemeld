@@ -6,7 +6,7 @@ from core.services.youtube_service import get_youtube_url
 from core.utils.utils import get_logger
 from django.core.management.base import BaseCommand, CommandError
 
-from playlist_etl.constants import ServiceName
+from django_backend.core.utils.constants import ServiceName
 
 logger = get_logger(__name__)
 

@@ -12,7 +12,7 @@ from django.core.management.base import BaseCommand
 from django.db import models
 from django.utils import timezone
 
-from playlist_etl.constants import ServiceName
+from django_backend.core.utils.constants import ServiceName
 
 logger = get_logger(__name__)
 

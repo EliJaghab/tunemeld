@@ -7,7 +7,7 @@ from core.services.spotify_service import get_spotify_playlist
 from core.utils.utils import get_logger
 from django.core.management.base import BaseCommand, CommandError
 
-from playlist_etl.constants import PLAYLIST_GENRES, SERVICE_CONFIGS, GenreName, ServiceName
+from django_backend.core.utils.constants import PLAYLIST_GENRES, SERVICE_CONFIGS, GenreName, ServiceName
 
 logger = get_logger(__name__)
 

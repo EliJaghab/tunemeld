@@ -6,7 +6,7 @@ from core.models.f_track import Track
 from core.models.z_view_counts import HistoricalTrackViewCount
 from graphene_django import DjangoObjectType
 
-from playlist_etl.constants import ServiceName
+from django_backend.core.utils.constants import ServiceName
 
 
 class TrackType(DjangoObjectType):

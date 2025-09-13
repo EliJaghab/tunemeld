@@ -1,8 +1,6 @@
 from datetime import datetime
 from enum import Enum
 
-from django_backend.core.models.f_etl_types import TrackSourceServiceName
-
 
 class GenreName(str, Enum):
     DANCE = "dance"
@@ -22,9 +20,9 @@ class ServiceName(str, Enum):
 CURRENT_TIMESTAMP = datetime.now()
 
 RANK_PRIORITY = [
-    TrackSourceServiceName.APPLE_MUSIC,
-    TrackSourceServiceName.SOUNDCLOUD,
-    TrackSourceServiceName.SPOTIFY,
+    ServiceName.APPLE_MUSIC,
+    ServiceName.SOUNDCLOUD,
+    ServiceName.SPOTIFY,
 ]
 
 # View count vars

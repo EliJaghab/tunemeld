@@ -123,8 +123,6 @@ lint: setup_env
 	@source venv/bin/activate && \
 	echo "Checking kv_worker..." && \
 	(cd kv_worker && ../venv/bin/mypy . --ignore-missing-imports --show-error-codes) && \
-	echo "Checking playlist_etl..." && \
-	(cd playlist_etl && ../venv/bin/mypy . --ignore-missing-imports --show-error-codes) && \
 	echo "Checking django_backend..." && \
 	(cd django_backend && ../venv/bin/mypy . --ignore-missing-imports --show-error-codes --explicit-package-bases)
 

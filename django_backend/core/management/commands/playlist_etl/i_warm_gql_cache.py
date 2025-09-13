@@ -1,7 +1,7 @@
 from core.graphql.schema import schema
 from django.core.management.base import BaseCommand
 
-from playlist_etl.constants import GenreName
+from django_backend.core.utils.constants import GenreName
 
 
 class Command(BaseCommand):

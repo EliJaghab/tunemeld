@@ -9,7 +9,7 @@ from core.services.spotify_service import get_spotify_isrc
 from core.utils.utils import clean_unicode_text, get_logger
 from django.core.management.base import BaseCommand
 
-from playlist_etl.constants import ServiceName
+from django_backend.core.utils.constants import ServiceName
 
 logger = get_logger(__name__)
 

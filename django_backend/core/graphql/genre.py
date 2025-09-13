@@ -2,7 +2,7 @@ import graphene
 from core.models import Genre
 from graphene_django import DjangoObjectType
 
-from playlist_etl.constants import GenreName
+from django_backend.core.utils.constants import GenreName
 
 
 class GenreType(DjangoObjectType):

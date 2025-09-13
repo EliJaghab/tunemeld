@@ -4,7 +4,7 @@ from core.models import Genre, Track
 from core.models.d_raw_playlist import RawPlaylistData
 from core.models.e_playlist import Playlist
 
-from playlist_etl.constants import ServiceName
+from django_backend.core.utils.constants import ServiceName
 
 
 class PlaylistType(graphene.ObjectType):

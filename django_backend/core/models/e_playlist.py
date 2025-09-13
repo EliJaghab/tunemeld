@@ -7,7 +7,7 @@ from django.core.validators import RegexValidator
 from django.db import models
 from pydantic import BaseModel
 
-from playlist_etl.constants import GenreName, ServiceName
+from django_backend.core.utils.constants import GenreName, ServiceName
 
 if TYPE_CHECKING:
     from core.models.f_track import TrackRank

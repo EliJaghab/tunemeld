@@ -1,11 +1,18 @@
 import uuid
+from enum import Enum
 from typing import ClassVar
 
 from django.core.validators import RegexValidator
 from django.db import models
 from pydantic import BaseModel, Field
 
-from playlist_etl.constants import ServiceName
+
+class ServiceName(str, Enum):
+    SPOTIFY = "spotify"
+    APPLE_MUSIC = "apple_music"
+    SOUNDCLOUD = "soundcloud"
+    YOUTUBE = "youtube"
+    TUNEMELD = "tunemeld"
 
 
 class Track(models.Model):

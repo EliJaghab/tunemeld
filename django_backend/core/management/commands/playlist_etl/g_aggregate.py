@@ -8,7 +8,7 @@ from core.utils.utils import get_logger
 from django.core.management.base import BaseCommand
 from django.db.models import Count
 
-from playlist_etl.constants import ServiceName
+from django_backend.core.utils.constants import ServiceName
 
 logger = get_logger(__name__)
 
