@@ -68,10 +68,25 @@ class Command(BaseCommand):
         return cross_service_matches
 
     def get_aggregate_rank(self, service_positions: dict[str, int]) -> float:
-        """Get aggregate rank based on highest priority service."""
-        for service_name in SERVICE_RANK_PRIORITY:
-            if service_name in service_positions:
-                return float(service_positions[service_name])
+        """Get aggregate rank prioritizing tracks on all three services first."""
+        # Check if track appears on all three main services
+        has_all_three_services = all(
+            service in service_positions
+            for service in [ServiceName.SPOTIFY, ServiceName.APPLE_MUSIC, ServiceName.SOUNDCLOUD]
+        )
+
+        # Tracks on all three services get priority (0-999 range)
+        if has_all_three_services:
+            # Use highest priority service position for tracks on all three services
+            for service_name in SERVICE_RANK_PRIORITY:
+                if service_name in service_positions:
+                    return float(service_positions[service_name])
+
+        # Tracks on 2 services get secondary priority (1000+ range)
+        else:
+            for service_name in SERVICE_RANK_PRIORITY:
+                if service_name in service_positions:
+                    return 1000.0 + float(service_positions[service_name])
 
         # Fallback to lowest position if no priority service found
         return float(min(service_positions.values())) if service_positions else float("inf")

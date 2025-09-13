@@ -59,7 +59,10 @@ class PlaylistQuery(graphene.ObjectType):
             return []
 
         raw_playlists = (
-            RawPlaylistData.objects.filter(genre=genre_obj).select_related("service", "genre").order_by("-created_at")
+            RawPlaylistData.objects.filter(genre=genre_obj)
+            .select_related("service", "genre")
+            .order_by("service", "-created_at")
+            .distinct("service")
         )
 
         playlist_metadata = []
