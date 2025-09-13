@@ -8,12 +8,6 @@ class GraphQLClient {
   async query(query, variables = {}) {
     const startTime = Date.now();
 
-    // Debug logging for all GraphQL requests
-    console.log("GraphQL Request:", {
-      query: query.trim(),
-      variables,
-    });
-
     try {
       const response = await fetch(this.endpoint, {
         method: "POST",
@@ -35,6 +29,8 @@ class GraphQLClient {
           url: this.endpoint,
           duration: duration + "ms",
           headers: Object.fromEntries(response.headers.entries()),
+          query: query.trim(),
+          variables,
         };
 
         let responseBody = null;
@@ -44,7 +40,8 @@ class GraphQLClient {
           responseBody = "Unable to read response body";
         }
 
-        console.error("GraphQL HTTP Error Response Body:", responseBody);
+        console.error("GraphQL HTTP Error:", errorDetails);
+        console.error("Response Body:", responseBody);
 
         const error = new Error(
           `GraphQL HTTP Error: ${response.status} ${response.statusText}`,
@@ -59,6 +56,13 @@ class GraphQLClient {
       const result = await response.json();
 
       if (result.errors) {
+        console.error("GraphQL Query Error:", {
+          errors: result.errors,
+          query: query.trim(),
+          variables,
+          duration: duration + "ms",
+        });
+
         const error = new Error(
           `GraphQL Query Error: ${result.errors
             .map((e) => e.message)
@@ -67,6 +71,8 @@ class GraphQLClient {
         error.graphqlErrors = result.errors;
         error.duration = duration + "ms";
         error.endpoint = this.endpoint;
+        error.query = query.trim();
+        error.variables = variables;
         error.isNetworkError = false;
         error.isGraphqlError = true;
         throw error;
