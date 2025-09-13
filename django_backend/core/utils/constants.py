@@ -1,4 +1,3 @@
-from datetime import datetime
 from enum import Enum
 
 
@@ -17,17 +16,12 @@ class ServiceName(str, Enum):
     TUNEMELD = "tunemeld"
 
 
-CURRENT_TIMESTAMP = datetime.now()
-
 RANK_PRIORITY = [
     ServiceName.APPLE_MUSIC,
     ServiceName.SOUNDCLOUD,
     ServiceName.SPOTIFY,
 ]
 
-# View count vars
-SPOTIFY_ERROR_THRESHOLD = 5
-SPOTIFY_VIEW_COUNT_XPATH = '(//*[contains(concat(" ", @class, " "), concat(" ", "w1TBi3o5CTM7zW1EB3Bm", " "))])[4]'
 
 GENRE_DISPLAY_NAMES: dict[str, str] = {
     GenreName.DANCE: "Dance/Electronic",

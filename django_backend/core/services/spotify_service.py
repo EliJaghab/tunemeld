@@ -10,7 +10,6 @@ if TYPE_CHECKING:
 from bs4 import BeautifulSoup, Tag
 from core.models.playlist_types import PlaylistData, PlaylistMetadata
 from core.utils.cache_utils import CachePrefix, cache_get, cache_set
-from core.utils.config import SPOTIFY_VIEW_COUNT_XPATH
 from core.utils.utils import clean_unicode_text, get_logger
 from core.utils.webdriver import get_cached_webdriver
 from selenium.common.exceptions import NoSuchElementException
@@ -21,6 +20,8 @@ from spotipy.oauth2 import SpotifyClientCredentials
 from tenacity import retry, stop_after_attempt, wait_exponential
 
 logger = get_logger(__name__)
+
+SPOTIFY_VIEW_COUNT_SELECTOR = '[data-testid="playcount"]'
 
 
 @lru_cache(maxsize=4)
@@ -279,7 +280,7 @@ def get_spotify_track_view_count(track_url: str) -> int | None:
     driver.get(track_url)
 
     try:
-        view_count_element = driver.find_element(By.XPATH, SPOTIFY_VIEW_COUNT_XPATH)
+        view_count_element = driver.find_element(By.CSS_SELECTOR, SPOTIFY_VIEW_COUNT_SELECTOR)
         view_count_text = view_count_element.text
         view_count = int(view_count_text.replace(",", ""))
         logger.info(f"Successfully retrieved Spotify view count: {view_count}")
