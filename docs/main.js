@@ -1,17 +1,14 @@
-import { loadTitleContent } from "./title.js?v=20250828b";
-import { setupSortButtons } from "./playlist.js?v=20250906b";
-import {
-  setupGenreSelector,
-  setupViewCountTypeSelector,
-} from "./selectors.js?v=20250906a";
+import { loadTitleContent } from "./title.js";
+import { setupSortButtons } from "./playlist.js";
+import { setupGenreSelector, setupViewCountTypeSelector } from "./selectors.js";
 import {
   setupBodyClickListener,
   setupClosePlayerButton,
-} from "./servicePlayer.js?v=20250911a";
-import { initializeTosPrivacyOverlay } from "./tosPrivacy.js?v=20250828b";
-import { stateManager } from "./StateManager.js?v=20250828b";
-import { loadGenresIntoSelector } from "./genre-loader.js?v=20250828b";
-import { appRouter } from "./router.js?v=20250828b";
+} from "./servicePlayer.js";
+import { initializeTosPrivacyOverlay } from "./tosPrivacy.js";
+import { stateManager } from "./StateManager.js";
+import { loadGenresIntoSelector } from "./genre-loader.js";
+import { appRouter } from "./router.js";
 
 document.addEventListener("DOMContentLoaded", initializeApp);
 

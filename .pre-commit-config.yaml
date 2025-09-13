@@ -78,6 +78,7 @@ repos:
         name: Python import validation
         entry: python -m py_compile
         language: python
+        language_version: python3.13
         types: [python]
         exclude: |
           (?x)^(

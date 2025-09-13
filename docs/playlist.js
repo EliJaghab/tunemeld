@@ -183,19 +183,17 @@ function createTuneMeldPlaylistTableRow(track, viewCountType) {
   const youtubeStatCell = document.createElement("td");
   youtubeStatCell.className = "youtube-view-count";
 
-  const youtubeViews =
-    track.viewCountDataJson?.Youtube?.current_count_json?.current_view_count ||
-    track.viewCountDataJson?.YouTube?.current_count_json?.current_view_count ||
-    0;
-  youtubeStatCell.textContent = youtubeViews.toLocaleString();
+  const youtubeViews = track.youtubeCurrentViewCount;
+  youtubeStatCell.textContent = youtubeViews
+    ? youtubeViews.toLocaleString()
+    : "";
 
   const spotifyStatCell = document.createElement("td");
   spotifyStatCell.className = "spotify-view-count";
-  const spotifyViews =
-    track.viewCountDataJson?.Spotify?.current_count_json?.current_view_count ||
-    track.viewCountDataJson?.spotify?.current_count_json?.current_view_count ||
-    0;
-  spotifyStatCell.textContent = spotifyViews.toLocaleString();
+  const spotifyViews = track.spotifyCurrentViewCount;
+  spotifyStatCell.textContent = spotifyViews
+    ? spotifyViews.toLocaleString()
+    : "";
 
   const seenOnCell = document.createElement("td");
   seenOnCell.className = "seen-on";
@@ -225,37 +223,22 @@ function displayViewCounts(track, row, viewCountType) {
   const spotifyStatCell = document.createElement("td");
   spotifyStatCell.className = "spotify-view-count";
 
-  const youtubeCurrentViewCount =
-    track.viewCountDataJson?.Youtube?.current_count_json?.current_view_count ||
-    track.viewCountDataJson?.YouTube?.current_count_json?.current_view_count ||
-    0;
-  const youtubeInitialViewCount =
-    track.viewCountDataJson?.Youtube?.initial_count_json?.initial_view_count ||
-    track.viewCountDataJson?.YouTube?.initial_count_json?.initial_view_count ||
-    0;
-  const spotifyCurrentViewCount =
-    track.viewCountDataJson?.Spotify?.current_count_json?.current_view_count ||
-    track.viewCountDataJson?.spotify?.current_count_json?.current_view_count ||
-    0;
-  const spotifyInitialViewCount =
-    track.viewCountDataJson?.Spotify?.initial_count_json?.initial_view_count ||
-    track.viewCountDataJson?.spotify?.initial_count_json?.initial_view_count ||
-    0;
+  const youtubeCurrentViewCount = track.youtubeCurrentViewCount;
+  const spotifyCurrentViewCount = track.spotifyCurrentViewCount;
 
   switch (viewCountType) {
     case "total-view-count":
-      youtubeStatCell.textContent = youtubeCurrentViewCount.toLocaleString();
-      spotifyStatCell.textContent = spotifyCurrentViewCount.toLocaleString();
+      youtubeStatCell.textContent = youtubeCurrentViewCount
+        ? youtubeCurrentViewCount.toLocaleString()
+        : "";
+      spotifyStatCell.textContent = spotifyCurrentViewCount
+        ? spotifyCurrentViewCount.toLocaleString()
+        : "";
       break;
 
     case "weekly-view-count":
-      const youtubeWeeklyViewCount =
-        youtubeCurrentViewCount - youtubeInitialViewCount;
-      const spotifyWeeklyViewCount =
-        spotifyCurrentViewCount - spotifyInitialViewCount;
-
-      youtubeStatCell.textContent = youtubeWeeklyViewCount.toLocaleString();
-      spotifyStatCell.textContent = spotifyWeeklyViewCount.toLocaleString();
+      youtubeStatCell.textContent = "";
+      spotifyStatCell.textContent = "";
       break;
 
     default:
@@ -385,20 +368,20 @@ export function sortTable(column, order, viewCountType) {
 }
 
 function getViewCount(track, platform, viewCountType) {
-  const currentCount =
-    track.viewCountDataJson?.[platform]?.current_count_json
-      ?.current_view_count || 0;
-  const initialCount =
-    track.viewCountDataJson?.[platform]?.initial_count_json
-      ?.initial_view_count || 0;
+  let currentCount;
+  if (platform === "Youtube" || platform === "YouTube") {
+    currentCount = track.youtubeCurrentViewCount;
+  } else if (platform === "Spotify" || platform === "spotify") {
+    currentCount = track.spotifyCurrentViewCount;
+  }
 
   if (viewCountType === "total-view-count") {
     return currentCount;
   } else if (viewCountType === "weekly-view-count") {
-    return currentCount - initialCount;
+    return null;
   } else {
     console.error("Unknown view count type:", viewCountType);
-    return 0;
+    return null;
   }
 }
 

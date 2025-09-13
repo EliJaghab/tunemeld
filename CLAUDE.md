@@ -4,13 +4,27 @@
 
 **Python 3.13+** - Project requires Python 3.13 or newer. Python 3.10-3.12 are obsolete for this project.
 
-## Quick Start
+## Server Management - ALWAYS USE MAKEFILE COMMANDS
+
+**NEVER start servers manually. ALWAYS use these Makefile commands:**
 
 ```bash
-make serve-frontend    # Frontend at http://localhost:8080
-make serve-backend     # Backend at http://localhost:8000
-make format           # Format and lint all code (pre-commit hooks)
+# Start servers (use these commands ONLY)
+make serve-frontend    # Starts frontend at http://localhost:8080
+make serve-backend     # Starts backend at http://localhost:8000
+
+# Stop servers (use these commands ONLY)
+make kill-frontend     # Stops frontend server
+make kill-backend      # Stops backend server
 ```
+
+**DO NOT use manual commands like:**
+
+- ❌ `python -m http.server 8080`
+- ❌ `cd django_backend && python manage.py runserver`
+- ❌ `source venv/bin/activate && ...`
+
+**The Makefile handles all environment setup, virtual environment activation, and proper server configuration.**
 
 ## Railway & Playwright
 

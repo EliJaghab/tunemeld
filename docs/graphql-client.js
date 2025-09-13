@@ -8,6 +8,12 @@ class GraphQLClient {
   async query(query, variables = {}) {
     const startTime = Date.now();
 
+    // Debug logging for all GraphQL requests
+    console.log("GraphQL Request:", {
+      query: query.trim(),
+      variables,
+    });
+
     try {
       const response = await fetch(this.endpoint, {
         method: "POST",
@@ -37,6 +43,8 @@ class GraphQLClient {
         } catch (e) {
           responseBody = "Unable to read response body";
         }
+
+        console.error("GraphQL HTTP Error Response Body:", responseBody);
 
         const error = new Error(
           `GraphQL HTTP Error: ${response.status} ${response.statusText}`,
@@ -152,6 +160,8 @@ class GraphQLClient {
             spotifyUrl
             appleMusicUrl
             soundcloudUrl
+            youtubeCurrentViewCount
+            spotifyCurrentViewCount
             spotifySource {
               name
               displayName
@@ -176,7 +186,6 @@ class GraphQLClient {
               url
               iconUrl
             }
-            viewCountDataJson
           }
         }
       }
