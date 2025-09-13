@@ -1,49 +1,36 @@
 repos:
-  - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.13.0
+  - repo: local
     hooks:
       - id: mypy
         name: mypy-type-check
-        language_version: python3.13
-        args: [--ignore-missing-imports, --show-error-codes, --explicit-package-bases]
-        additional_dependencies: [types-requests]
-        exclude: |
-          (?x)^(
-            venv/.*|
-            .venv/.*|
-            .tox/.*|
-            .*/migrations/.*|
-            playlist_etl/.*|
-            .*test.*\.py$
-          )$
-
-  - repo: https://github.com/astral-sh/ruff-pre-commit
-    # Ruff version.
-    rev: v0.8.4
-    hooks:
-      # First check for linting issues (fail if found)
-      - id: ruff
+        entry: make lint
+        language: system
+        pass_filenames: false
+        types: [python]
+      - id: ruff-check
         name: ruff-check
-        language_version: python3.13
-        args: [--no-fix]
-        exclude: ".*\\.ipynb$"
-      # Then run the linter with aggressive fixes.
-      - id: ruff
+        entry: make ruff-check
+        language: system
+        pass_filenames: false
+        types: [python]
+      - id: ruff-fix
         name: ruff-fix
-        language_version: python3.13
-        args: [--fix, --unsafe-fixes]
-        exclude: ".*\\.ipynb$"
-      # Run the formatter.
+        entry: make ruff-fix
+        language: system
+        pass_filenames: false
+        types: [python]
       - id: ruff-format
-        language_version: python3.13
-        exclude: ".*\\.ipynb$"
+        name: ruff-format
+        entry: make ruff-format
+        language: system
+        pass_filenames: false
+        types: [python]
 
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.4.0
     hooks:
       - id: trailing-whitespace
       - id: end-of-file-fixer
-      # - id: check-yaml
       - id: check-added-large-files
       - id: check-merge-conflict
       - id: check-toml
@@ -56,39 +43,34 @@ repos:
         exclude: |
           (?x)^(
             node_modules/.*|
-            venv/.*|
-            .tox/.*|
-            staticfiles/.*
+            venv/.*
           )$
 
   - repo: local
     hooks:
       - id: clear-python-cache
         name: Clear Python cache files
-        entry: bash -c "find . -name '__pycache__' -type d -exec rm -rf {} + 2>/dev/null || true; find . -name '*.pyc' -delete 2>/dev/null || true; rm -rf .mypy_cache 2>/dev/null || true"
+        entry: make clean-cache
         language: system
         pass_filenames: false
         always_run: true
 
       - id: django-check
         name: Django initialization check
-        entry: bash -c "cd django_backend && source ../venv/bin/activate && PYTHONPATH=.. python manage.py check --deploy"
+        entry: make django-check
         language: system
         pass_filenames: false
-        files: ^django_backend/.*\.py$
 
       - id: django-import-check
         name: Django management command import test
-        entry: bash -c "cd django_backend && source ../venv/bin/activate && PYTHONPATH=.. DJANGO_SETTINGS_MODULE=core.settings python -c 'import django; django.setup(); from core.management.commands import a_playlist_etl; print(\"All management commands import successfully\")'"
+        entry: make django-import-check
         language: system
         pass_filenames: false
-        files: ^django_backend/core/management/commands/.*\.py$
 
       - id: check-pip-dependencies
         name: Check pip dependency compatibility
         entry: bash -c "cd django_backend && source venv/bin/activate && python -m pip install --dry-run -e .."
         language: system
-        files: pyproject\.toml$
         pass_filenames: false
         verbose: false
 
@@ -101,6 +83,11 @@ repos:
           (?x)^(
             venv/.*|
             .venv/.*|
-            .tox/.*|
-            migrations/.*
+            .*/migrations/.*
           )$
+
+      - id: backend-startup-check
+        name: Backend startup validation
+        entry: make backend-startup-check
+        language: system
+        pass_filenames: false

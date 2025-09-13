@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("core", "0001_initial"),
     ]
@@ -13,8 +12,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name="rawplaylistdata",
             name="playlist_cover_url",
-            field=models.URLField(
-                blank=True, help_text="Playlist cover image URL", null=True
-            ),
+            field=models.URLField(blank=True, help_text="Playlist cover image URL", null=True),
         ),
     ]

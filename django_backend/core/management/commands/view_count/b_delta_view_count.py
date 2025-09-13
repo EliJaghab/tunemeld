@@ -52,7 +52,7 @@ class Command(BaseCommand):
                 record.save(update_fields=["daily_view_change", "daily_change_percentage"])
 
                 logger.info(
-                    f"{record.isrc} on {record.service.name}: " f"{record.current_view_count:,} views (first record)"
+                    f"{record.isrc} on {record.service.name}: {record.current_view_count:,} views (first record)"
                 )
                 updated_count += 1
 

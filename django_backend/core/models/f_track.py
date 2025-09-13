@@ -62,7 +62,7 @@ class Track(models.Model):
         return f"{self.track_name} by {self.artist_name} ({self.isrc})"
 
 
-TrackSourceServiceName = ServiceName
+type TrackSourceServiceName = ServiceName
 
 
 class TrackData(BaseModel):
@@ -77,15 +77,9 @@ class ETLTrack(BaseModel):
     """ETL Track model - distinct from Django Track model."""
 
     isrc: str
-    apple_music_track_data: TrackData = Field(
-        default_factory=lambda: TrackData(service_name=TrackSourceServiceName.APPLE_MUSIC)
-    )
-    spotify_track_data: TrackData = Field(
-        default_factory=lambda: TrackData(service_name=TrackSourceServiceName.SPOTIFY)
-    )
-    soundcloud_track_data: TrackData = Field(
-        default_factory=lambda: TrackData(service_name=TrackSourceServiceName.SOUNDCLOUD)
-    )
+    apple_music_track_data: TrackData = Field(default_factory=lambda: TrackData(service_name=ServiceName.APPLE_MUSIC))
+    spotify_track_data: TrackData = Field(default_factory=lambda: TrackData(service_name=ServiceName.SPOTIFY))
+    soundcloud_track_data: TrackData = Field(default_factory=lambda: TrackData(service_name=ServiceName.SOUNDCLOUD))
     youtube_url: str | None = None
 
 

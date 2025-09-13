@@ -1,6 +1,6 @@
 {
   "permissions": {
-    "allow": ["mcp__railway__*", "curl*"],
+    "allow": ["mcp__railway__*", "Curl*", "WebSearch*", "WebFetch*"],
     "deny": [
       "mcp__railway__project_create",
       "mcp__railway__service_create",
@@ -11,10 +11,65 @@
     "ask": []
   },
   "toolUsePermissions": {
-    "allowedTools": ["mcp__railway__*"]
+    "allowedTools": [
+      "mcp__railway__*",
+      "mcp__playwright__*",
+      "Read",
+      "Write",
+      "Edit",
+      "MultiEdit",
+      "Glob",
+      "Grep",
+      "WebSearch",
+      "WebFetch"
+    ]
   },
   "bashRestrictions": {
+    "allow": [
+      "make serve-frontend",
+      "make serve-backend",
+      "make kill-frontend",
+      "make kill-backend",
+      "make format",
+      "make lint",
+      "make test",
+      "make test-unit",
+      "make test-integration",
+      "make ruff-check",
+      "make ruff-fix",
+      "make ruff-format",
+      "make django-check",
+      "make clean-cache",
+      "make check",
+      "make format-quick",
+      "make pre-commit-check",
+      "make pre-commit-install",
+      "python*",
+      "curl*",
+      "ls*",
+      "cat*",
+      "pwd",
+      "cd*",
+      "echo*",
+      "grep*",
+      "find*",
+      "head*",
+      "tail*",
+      "less*",
+      "git status",
+      "git diff",
+      "git log*",
+      "git show*",
+      "git branch*"
+    ],
     "deny": [
+      "python -m http.server*",
+      "python manage.py runserver*",
+      "source venv/bin/activate*",
+      "django-admin*",
+      "pip install*",
+      "npm*",
+      "yarn*",
       "git add .",
       "git add -A",
       "git add --all",
@@ -24,6 +79,6 @@
       "git stage -A",
       "git stage --all"
     ],
-    "message": "NEVER stage all files without explicit user permission. Ask before staging changes."
+    "message": "Use Makefile commands only. Manual server startup commands are blocked. Use 'make serve-frontend' and 'make serve-backend' instead."
   }
 }

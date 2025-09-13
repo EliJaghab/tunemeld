@@ -53,45 +53,24 @@ dev = [
 ]
 
 [tool.ruff]
-# Set line length to 120 characters (more reasonable for modern development)
 line-length = 120
 indent-width = 4
 
-# Assume Python 3.13+.
 target-version = "py313"
 
-# Exclude Jupyter notebooks and common non-Python directories
 exclude = [
     "*.ipynb",
-    ".bzr",
-    ".direnv",
-    ".eggs",
     ".git",
-    ".git-rewrite",
-    ".hg",
-    ".ipynb_checkpoints",
     ".mypy_cache",
-    ".nox",
-    ".pants.d",
-    ".pyenv",
     ".pytest_cache",
-    ".pytype",
     ".ruff_cache",
-    ".svn",
-    ".tox",
     ".venv",
     ".vscode",
-    "__pypackages__",
     "__pycache__",
-    "_build",
-    "buck-out",
     "build",
     "dist",
     "node_modules",
-    "site-packages",
     "venv",
-    "staticfiles",
-    "backend/lib",
     "**/migrations/**"
 ]
 
@@ -117,9 +96,6 @@ select = [
 ignore = [
     "COM812", # trailing-comma-missing (conflicts with formatter)
     "ISC001", # single-line-implicit-string-concatenation (conflicts with formatter)
-    "B008",   # do not perform function calls in argument defaults
-    "C901",   # too complex
-    "E722",   # bare except
     "N802",   # function name should be lowercase (allows HTTP handler methods)
 ]
 
@@ -178,20 +154,13 @@ warn_unused_ignores = true
 show_column_numbers = true
 show_error_codes = true
 pretty = true
-mypy_path = "./django_backend"
+namespace_packages = true
+explicit_package_bases = true
 
-# Exclude directories and test files
 exclude = [
     "venv/",
     "node_modules/",
-    ".tox/",
-    "staticfiles/",
-    "backend/lib/",
-    "django_backend/core",
-    "kv_worker/",
-    "scripts/",
-    "tests/",
-    ".*_test\\.py$"
+    ".*/migrations/.*"
 ]
 
 [[tool.mypy.overrides]]
@@ -200,8 +169,6 @@ module = [
     "bs4.*",
     "unidecode.*",
     "requests.*",
-    "spotipy.*",
-    "fp.fp.*",
     "spotipy.*",
     "fp.fp.*"
 ]

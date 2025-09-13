@@ -7,7 +7,7 @@ import requests
 
 if TYPE_CHECKING:
     from playlist_etl.constants import GenreName
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup, Tag
 from core.models.playlist_types import PlaylistData, PlaylistMetadata
 from core.utils.cache_utils import CachePrefix, cache_get, cache_set
 from core.utils.config import SPOTIFY_VIEW_COUNT_XPATH
@@ -112,7 +112,9 @@ def _get_track_url_by_isrc_with_retry(spotify_client: Spotify, isrc: str) -> str
 def _get_meta_content(doc: BeautifulSoup, property_name: str) -> str | None:
     """Extract content from meta tag"""
     meta_tag = doc.find("meta", {"property": property_name})
-    return meta_tag.get("content") if meta_tag else None
+    if meta_tag and isinstance(meta_tag, Tag) and meta_tag.get("content"):
+        return str(meta_tag["content"])
+    return None
 
 
 def _extract_spotify_full_description(doc: BeautifulSoup) -> str | None:

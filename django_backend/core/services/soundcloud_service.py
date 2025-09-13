@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 from urllib.parse import urlparse
 
 import requests
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup, Tag
 
 if TYPE_CHECKING:
     from playlist_etl.constants import GenreName
@@ -30,15 +30,25 @@ def get_soundcloud_playlist(genre: "GenreName") -> PlaylistData:
     doc = BeautifulSoup(response.text, "html.parser")
 
     playlist_name_tag = doc.find("meta", {"property": "og:title"})
-    playlist_name = clean_unicode_text(playlist_name_tag["content"]) if playlist_name_tag else "Unknown"
+    playlist_name = (
+        clean_unicode_text(str(playlist_name_tag["content"]))
+        if playlist_name_tag and isinstance(playlist_name_tag, Tag) and playlist_name_tag.get("content")
+        else "Unknown"
+    )
 
     description_tag = doc.find("meta", {"name": "description"})
     playlist_cover_description_text = (
-        clean_unicode_text(description_tag["content"]) if description_tag else "No description available"
+        clean_unicode_text(str(description_tag["content"]))
+        if description_tag and isinstance(description_tag, Tag) and description_tag.get("content")
+        else "No description available"
     )
 
     playlist_cover_url_tag = doc.find("meta", {"property": "og:image"})
-    playlist_cover_url = playlist_cover_url_tag["content"] if playlist_cover_url_tag else None
+    playlist_cover_url = (
+        str(playlist_cover_url_tag["content"])
+        if playlist_cover_url_tag and isinstance(playlist_cover_url_tag, Tag) and playlist_cover_url_tag.get("content")
+        else None
+    )
 
     metadata: PlaylistMetadata = {
         "service_name": "soundcloud",

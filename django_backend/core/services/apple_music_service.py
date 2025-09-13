@@ -7,7 +7,7 @@ if TYPE_CHECKING:
     from playlist_etl.constants import GenreName
 import time
 
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup, Tag
 from core.models.playlist_types import PlaylistData, PlaylistMetadata
 from core.utils.cache_utils import CachePrefix, cache_get, cache_set
 from core.utils.utils import clean_unicode_text, get_logger
@@ -29,10 +29,10 @@ def get_apple_music_album_cover_url(track_url: str) -> str | None:
         doc = BeautifulSoup(response.text, "html.parser")
 
         source_tag = doc.find("source", attrs={"type": "image/jpeg"})
-        if not source_tag or not source_tag.has_attr("srcset"):
+        if not source_tag or not isinstance(source_tag, Tag) or not source_tag.has_attr("srcset"):
             raise ValueError("Album cover URL not found")
 
-        srcset = source_tag["srcset"]
+        srcset = str(source_tag["srcset"])
         album_cover_url = unquote(srcset.split()[0])
         cache_set(CachePrefix.APPLE_COVER, track_url, album_cover_url)
         return album_cover_url
@@ -48,10 +48,10 @@ def _get_apple_music_cover_url_static(url: str, genre: "GenreName") -> str | Non
     doc = BeautifulSoup(response.text, "html.parser")
 
     stream_tag = doc.find("amp-ambient-video", {"class": "editorial-video"})
-    if not stream_tag or not stream_tag.get("src"):
+    if not stream_tag or not isinstance(stream_tag, Tag) or not stream_tag.get("src"):
         raise ValueError(f"Could not find amp-ambient-video src attribute for Apple Music {genre.value}")
 
-    src_attribute = stream_tag["src"]
+    src_attribute = str(stream_tag["src"])
     if src_attribute.endswith(".m3u8"):
         return src_attribute
     else:
@@ -79,7 +79,9 @@ def get_apple_music_playlist(genre: "GenreName") -> PlaylistData:
     subtitle = clean_unicode_text(subtitle_tag.get_text(strip=True)) if subtitle_tag else "Unknown"
 
     stream_tag = doc.find("amp-ambient-video", {"class": "editorial-video"})
-    playlist_stream_url = stream_tag["src"] if stream_tag and stream_tag.get("src") else None
+    playlist_stream_url = (
+        str(stream_tag["src"]) if stream_tag and isinstance(stream_tag, Tag) and stream_tag.get("src") else None
+    )
 
     playlist_cover_description_tag = doc.find("p", {"data-testid": "truncate-text"})
     playlist_cover_description_text = (

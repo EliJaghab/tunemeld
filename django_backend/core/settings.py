@@ -3,7 +3,7 @@ import os
 import zoneinfo
 from datetime import UTC, datetime
 from pathlib import Path
-from typing import Final
+from typing import Final, cast
 
 import dj_database_url
 from dotenv import load_dotenv
@@ -241,7 +241,10 @@ if ENVIRONMENT == DEV:
     }
 else:
     # Production: Use Railway PostgreSQL database
-    DATABASES = {"default": dj_database_url.parse(os.getenv("DATABASE_URL"))}
+    database_url = os.getenv("DATABASE_URL")
+    if not database_url:
+        raise ValueError("DATABASE_URL environment variable is required in production")
+    DATABASES = {"default": cast("dict[str, object]", dj_database_url.parse(database_url))}
 
 USE_POSTGRES_API = ENVIRONMENT == DEV
 

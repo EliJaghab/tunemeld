@@ -128,7 +128,7 @@ class Command(BaseCommand):
         tracks = []
         for item, track, exc in results:
             if exc:
-                key, track_data = item
+                _key, track_data = item
                 logger.error(f"Failed to process Apple Music track {track_data.get('name', 'unknown')}: {exc}")
             elif track:
                 tracks.append(track)

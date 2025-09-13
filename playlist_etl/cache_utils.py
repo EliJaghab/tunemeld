@@ -60,14 +60,8 @@ CACHE_TTL_MAP = {
 }
 
 
-def is_within_scheduled_time_window(
-    schedule_config: ScheduleConfig = ScheduleConfig(), current_time: datetime | None = None
-) -> bool:
-    if current_time is None:
-        current_time = datetime.now(pytz.UTC)
-
-    if current_time.tzinfo is None:
-        current_time = pytz.UTC.localize(current_time)
+def is_within_scheduled_time_window(schedule_config: ScheduleConfig) -> bool:
+    current_time = datetime.now(pytz.UTC)
 
     schedule_tz = pytz.timezone(schedule_config.timezone)
     current_time = current_time.astimezone(schedule_tz)
@@ -120,7 +114,7 @@ def cache_set(prefix: CachePrefix, key_data: str, value: Any, ttl: int | None = 
 
 
 def cache_clear_if_scheduled(
-    prefix: CachePrefix, key_data: str, schedule_config: ScheduleConfig = ScheduleConfig()
+    prefix: CachePrefix, key_data: str, schedule_config: ScheduleConfig
 ) -> bool:
     if not is_within_scheduled_time_window(schedule_config):
         logger.info(f"Cache clear skipped - outside scheduled window: {prefix.value}:{key_data}")
@@ -151,7 +145,7 @@ def generate_rapidapi_cache_key_data(service_name: ServiceName, genre: GenreName
 
 
 def cache_clear_rapidapi_if_scheduled(
-    service_name: ServiceName, genre: GenreName, schedule_config: ScheduleConfig = ScheduleConfig()
+    service_name: ServiceName, genre: GenreName, schedule_config: ScheduleConfig
 ) -> bool:
     key_data = generate_rapidapi_cache_key_data(service_name, genre)
     return cache_clear_if_scheduled(CachePrefix.RAPIDAPI, key_data, schedule_config)

@@ -24,7 +24,16 @@
 	ci-db-safety-check \
 	ci-db-migrate \
 	ci-db-validate \
-	run-playlist-etl
+	run-playlist-etl \
+	pre-commit-check \
+	pre-commit-install \
+	ruff-check \
+	ruff-fix \
+	ruff-format \
+	django-check \
+	clean-cache \
+	check \
+	format-quick
 
 PROJECT_ROOT := $(shell pwd)
 VENV := $(PROJECT_ROOT)/venv
@@ -63,8 +72,6 @@ format: install-pre-commit
 	@echo " Running pre-commit hooks to format and lint code..."
 	source venv/bin/activate && pre-commit run --all-files
 	@echo " Code formatted and linted!"
-
-
 
 invalidate_cache:
 	@set -o allexport; source $(ENV_FILE); set +o allexport; \
@@ -113,7 +120,58 @@ test-ci: setup_env
 
 lint: setup_env
 	@echo "Running type checking with mypy..."
-	source venv/bin/activate && mypy .
+	@source venv/bin/activate && \
+	echo "Checking kv_worker..." && \
+	(cd kv_worker && ../venv/bin/mypy . --ignore-missing-imports --show-error-codes) && \
+	echo "Checking playlist_etl..." && \
+	(cd playlist_etl && ../venv/bin/mypy . --ignore-missing-imports --show-error-codes) && \
+	echo "Checking django_backend..." && \
+	(cd django_backend && ../venv/bin/mypy . --ignore-missing-imports --show-error-codes --explicit-package-bases)
+
+ruff-check: setup_env
+	@echo "Running ruff linter checks..."
+	source venv/bin/activate && ruff check --no-fix
+
+ruff-fix: setup_env
+	@echo "Running ruff with auto-fixes..."
+	source venv/bin/activate && ruff check --fix --unsafe-fixes
+
+ruff-format: setup_env
+	@echo "Running ruff formatter..."
+	source venv/bin/activate && ruff format
+
+django-check: setup_env
+	@echo "Running Django deployment checks..."
+	cd django_backend && source ../venv/bin/activate && PYTHONPATH=.. python manage.py check --deploy
+
+django-import-check: setup_env
+	@echo "Testing Django management command imports..."
+	@cd django_backend && source ../venv/bin/activate && PYTHONPATH=.. DJANGO_SETTINGS_MODULE=core.settings python -c 'import django; django.setup(); from core.management.commands import a_playlist_etl; print("All management commands import successfully")'
+
+backend-startup-check: setup_env
+	@echo "Validating backend startup..."
+	cd django_backend && source ../venv/bin/activate && PYTHONPATH=.. python manage.py check --deploy --fail-level ERROR
+
+clean-cache:
+	@echo "Cleaning Python cache files..."
+	@find . -name '__pycache__' -type d -exec rm -rf {} + 2>/dev/null || true
+	@find . -name '*.pyc' -delete 2>/dev/null || true
+	@rm -rf .mypy_cache 2>/dev/null || true
+	@echo "Cache cleaned"
+
+check: lint ruff-check django-check
+	@echo "All checks passed!"
+
+format-quick: ruff-fix ruff-format clean-cache
+	@echo "Quick format completed (ruff + cache cleanup)"
+
+pre-commit-check: setup_env
+	@echo "Running all pre-commit hooks..."
+	source venv/bin/activate && pre-commit run --all-files
+
+pre-commit-install: setup_env
+	@echo "Installing pre-commit hooks..."
+	source venv/bin/activate && pre-commit install
 
 install-dev: setup_env
 	@echo "Installing development dependencies..."

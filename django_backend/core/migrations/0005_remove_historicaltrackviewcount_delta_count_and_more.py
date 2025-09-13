@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("core", "0004_rename_historicalviewcount_historicaltrackviewcount_and_more"),
     ]
@@ -21,17 +20,13 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name="historicaltrackviewcount",
             name="current_view_count",
-            field=models.BigIntegerField(
-                default=0, help_text="Current total view count"
-            ),
+            field=models.BigIntegerField(default=0, help_text="Current total view count"),
             preserve_default=False,
         ),
         migrations.AddField(
             model_name="historicaltrackviewcount",
             name="daily_change_percentage",
-            field=models.FloatField(
-                blank=True, help_text="Percentage change from previous day", null=True
-            ),
+            field=models.FloatField(blank=True, help_text="Percentage change from previous day", null=True),
         ),
         migrations.AddField(
             model_name="historicaltrackviewcount",
