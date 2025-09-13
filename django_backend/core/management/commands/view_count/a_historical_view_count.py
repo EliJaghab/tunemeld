@@ -88,3 +88,7 @@ class Command(BaseCommand):
                     logger.info(f"{track.isrc} YouTube: {count:,}")
         except Exception as e:
             logger.error(f"Error processing track {track.isrc}: {e}")
+            # Fail fast on API quota/auth errors in worker threads
+            if "403" in str(e) or "401" in str(e) or "429" in str(e):
+                logger.error("Critical API error detected in worker thread - failing fast to prevent resource waste")
+                raise
