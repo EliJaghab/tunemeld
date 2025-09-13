@@ -52,6 +52,12 @@ def get_youtube_track_view_count(youtube_url: str, api_key: str | None = None) -
         raise ValueError("YouTube API key not provided.")
 
     video_id = youtube_url.split("v=")[-1]
+
+    cached_count = cache_get(CachePrefix.YOUTUBE_VIEW_COUNT, video_id)
+    if cached_count:
+        logger.info(f"Video ID {video_id} view count from cache: {cached_count}")
+        return int(cached_count)
+
     youtube_api_url = f"https://www.googleapis.com/youtube/v3/videos?part=statistics&id={video_id}&key={api_key}"
 
     try:
@@ -62,6 +68,9 @@ def get_youtube_track_view_count(youtube_url: str, api_key: str | None = None) -
         if data["items"]:
             view_count = data["items"][0]["statistics"]["viewCount"]
             logger.info(f"Video ID {video_id} has {view_count} views.")
+
+            cache_set(CachePrefix.YOUTUBE_VIEW_COUNT, video_id, view_count)
+
             return int(view_count)
         else:
             logger.error(f"No video found for ID {video_id}")

@@ -10,6 +10,7 @@ class CachePrefix(str, Enum):
     RAPIDAPI = "rapidapi"
     SPOTIFY_PLAYLIST = "spotify_playlist"
     YOUTUBE_URL = "youtube_url"
+    YOUTUBE_VIEW_COUNT = "youtube_view_count"
     SPOTIFY_ISRC = "spotify_isrc"
     APPLE_COVER = "apple_cover"
 
@@ -17,12 +18,14 @@ class CachePrefix(str, Enum):
 logger = get_logger(__name__)
 
 SEVEN_DAYS_TTL = 7 * 24 * 60 * 60
+TWO_HOURS_TTL = 2 * 60 * 60
 NO_EXPIRATION_TTL = None
 
 CACHE_TTL_MAP = {
     CachePrefix.RAPIDAPI: SEVEN_DAYS_TTL,
     CachePrefix.SPOTIFY_PLAYLIST: SEVEN_DAYS_TTL,
     CachePrefix.YOUTUBE_URL: NO_EXPIRATION_TTL,
+    CachePrefix.YOUTUBE_VIEW_COUNT: TWO_HOURS_TTL,
     CachePrefix.SPOTIFY_ISRC: NO_EXPIRATION_TTL,
     CachePrefix.APPLE_COVER: SEVEN_DAYS_TTL,
 }

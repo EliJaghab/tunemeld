@@ -45,8 +45,10 @@ class Command(BaseCommand):
                 future = executor.submit(self._process_track, track, spotify_service, youtube_service)
                 futures.append(future)
 
-            for completed, future in enumerate(concurrent.futures.as_completed(futures), 1):
-                future.result()  # This will raise any exception that occurred in the worker thread
+            completed = 0
+            for future in concurrent.futures.as_completed(futures):
+                future.result()
+                completed += 1  # noqa: SIM113
                 if completed % 10 == 0:
                     logger.info(f"Completed {completed}/{len(tracks_list)} tracks...")
 
