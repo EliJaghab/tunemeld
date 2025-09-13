@@ -25,7 +25,7 @@ class HistoricalTrackViewCount(models.Model):
         historical = HistoricalTrackViewCount(
             isrc="USSM12201546",
             service=youtube_service,
-            view_count=45000000,
+            current_view_count=45000000,
             recorded_date=date(2024, 1, 15)
         )
     """
@@ -38,8 +38,11 @@ class HistoricalTrackViewCount(models.Model):
         db_index=True,
     )
     service = models.ForeignKey(Service, on_delete=models.CASCADE)
-    view_count = models.BigIntegerField(help_text="View count at this point in time")
-    delta_count = models.BigIntegerField(null=True, blank=True, help_text="Change in view count from previous day")
+    current_view_count = models.BigIntegerField(help_text="Current total view count")
+    daily_view_change = models.BigIntegerField(
+        null=True, blank=True, help_text="Absolute change in views from previous day"
+    )
+    daily_change_percentage = models.FloatField(null=True, blank=True, help_text="Percentage change from previous day")
     recorded_date = models.DateField(help_text="Date this count was recorded", default=timezone.now)
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -52,4 +55,4 @@ class HistoricalTrackViewCount(models.Model):
         unique_together: ClassVar = [("isrc", "service", "recorded_date")]
 
     def __str__(self):
-        return f"{self.isrc} - {self.view_count:,} views on {self.recorded_date}"
+        return f"{self.isrc} - {self.current_view_count:,} views on {self.recorded_date}"

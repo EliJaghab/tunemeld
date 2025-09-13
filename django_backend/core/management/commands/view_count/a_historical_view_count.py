@@ -26,7 +26,6 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         start_time = time.time()
         limit = options.get("limit")
-        max_workers = 3
 
         tracks = Track.objects.filter(
             models.Q(spotify_url__isnull=False) | models.Q(youtube_url__isnull=False)
@@ -35,12 +34,12 @@ class Command(BaseCommand):
             tracks = tracks[:limit]
 
         tracks_list = list(tracks)
-        logger.info(f"Processing {len(tracks_list)} tracks with {max_workers} workers...")
+        logger.info(f"Processing {len(tracks_list)} tracks with 3 workers...")
 
         spotify_service = Service.objects.get(name=ServiceName.SPOTIFY)
         youtube_service = Service.objects.get(name=ServiceName.YOUTUBE)
 
-        with ThreadPoolExecutor(max_workers=max_workers) as executor:
+        with ThreadPoolExecutor(max_workers=3) as executor:
             futures = []
             for track in tracks_list:
                 future = executor.submit(self._process_track, track, spotify_service, youtube_service)
@@ -69,7 +68,7 @@ class Command(BaseCommand):
                         isrc=track.isrc,
                         service=spotify_service,
                         recorded_date=timezone.now().date(),
-                        defaults={"view_count": count},
+                        defaults={"current_view_count": count},
                     )
                     logger.info(f"{track.isrc} Spotify: {count:,}")
 
@@ -80,7 +79,7 @@ class Command(BaseCommand):
                         isrc=track.isrc,
                         service=youtube_service,
                         recorded_date=timezone.now().date(),
-                        defaults={"view_count": count},
+                        defaults={"current_view_count": count},
                     )
                     logger.info(f"{track.isrc} YouTube: {count:,}")
         except Exception as e:

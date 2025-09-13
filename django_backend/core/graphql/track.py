@@ -3,6 +3,7 @@ from core.graphql.service import ServiceType
 from core.models.b_genre_service import Service
 from core.models.e_playlist import Playlist
 from core.models.f_track import Track
+from core.models.z_view_counts import HistoricalTrackViewCount
 from graphene_django import DjangoObjectType
 
 from playlist_etl.constants import ServiceName
@@ -37,7 +38,11 @@ class TrackType(DjangoObjectType):
     soundcloud_source = graphene.Field(ServiceType, description="SoundCloud service source with metadata")
     youtube_source = graphene.Field(ServiceType, description="YouTube service source with metadata")
 
-    view_count_data_json = graphene.JSONString(description="View count data")
+    youtube_current_view_count = graphene.Int(description="Current YouTube view count")
+    spotify_current_view_count = graphene.Int(description="Current Spotify view count")
+    youtube_view_count_delta_percentage = graphene.Float(description="YouTube view count % change from yesterday")
+    spotify_view_count_delta_percentage = graphene.Float(description="Spotify view count % change from yesterday")
+
 
     def resolve_rank(self, info, genre, service):
         """
@@ -109,6 +114,50 @@ class TrackType(DjangoObjectType):
                 icon_url=service.icon_url,
             )
         except Service.DoesNotExist:
+            return None
+
+    def resolve_youtube_current_view_count(self, info):
+        try:
+            youtube_service = Service.objects.get(name=ServiceName.YOUTUBE)
+            latest = HistoricalTrackViewCount.objects.filter(
+                isrc=self.isrc,
+                service=youtube_service
+            ).order_by('-recorded_date').first()
+            return latest.current_view_count if latest else None
+        except (Service.DoesNotExist, HistoricalTrackViewCount.DoesNotExist):
+            return None
+
+    def resolve_spotify_current_view_count(self, info):
+        try:
+            spotify_service = Service.objects.get(name=ServiceName.SPOTIFY)
+            latest = HistoricalTrackViewCount.objects.filter(
+                isrc=self.isrc,
+                service=spotify_service
+            ).order_by('-recorded_date').first()
+            return latest.current_view_count if latest else None
+        except (Service.DoesNotExist, HistoricalTrackViewCount.DoesNotExist):
+            return None
+
+    def resolve_youtube_view_count_delta_percentage(self, info):
+        try:
+            youtube_service = Service.objects.get(name=ServiceName.YOUTUBE)
+            latest = HistoricalTrackViewCount.objects.filter(
+                isrc=self.isrc,
+                service=youtube_service
+            ).order_by('-recorded_date').first()
+            return latest.daily_change_percentage if latest else None
+        except (Service.DoesNotExist, HistoricalTrackViewCount.DoesNotExist):
+            return None
+
+    def resolve_spotify_view_count_delta_percentage(self, info):
+        try:
+            spotify_service = Service.objects.get(name=ServiceName.SPOTIFY)
+            latest = HistoricalTrackViewCount.objects.filter(
+                isrc=self.isrc,
+                service=spotify_service
+            ).order_by('-recorded_date').first()
+            return latest.daily_change_percentage if latest else None
+        except (Service.DoesNotExist, HistoricalTrackViewCount.DoesNotExist):
             return None
 
 

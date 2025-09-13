@@ -29,7 +29,12 @@
 	serve-frontend \
 	serve-backend \
 	kill-frontend \
-	kill-backend
+	kill-backend \
+	makemigrations \
+	migrate \
+	migrate-dev \
+	migration-safety-check \
+	run-view-count-etl
 
 PROJECT_ROOT := $(shell pwd)
 VENV := $(PROJECT_ROOT)/venv
@@ -216,3 +221,30 @@ kill-backend:
 	else \
 		echo "  No backend server running on port 8000"; \
 	fi
+
+# Django Migration Commands
+makemigrations:
+	@echo " Creating Django migrations..."
+	@cd django_backend && echo "1\n0" | $(VENV)/bin/python manage.py makemigrations core
+	@echo " Migrations created successfully"
+
+migrate:
+	@echo " Applying migrations to Railway PostgreSQL..."
+	@cd django_backend && $(VENV)/bin/python manage.py migrate --noinput
+	@echo " Migrations applied successfully"
+
+migrate-dev:
+	@echo " Applying migrations to local SQLite database..."
+	@cd django_backend && $(VENV)/bin/python manage.py migrate --noinput
+	@echo " Local migrations applied successfully"
+
+# Database Safety and ETL Commands
+migration-safety-check:
+	@echo " Running comprehensive database safety check..."
+	@cd django_backend && $(VENV)/bin/python migration_safety_check.py
+	@echo " Database safety check passed"
+
+run-view-count-etl:
+	@echo " Running View Count ETL..."
+	@cd django_backend && $(VENV)/bin/python manage.py a_view_count
+	@echo " View Count ETL completed"
