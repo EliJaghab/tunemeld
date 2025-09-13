@@ -54,6 +54,10 @@ class Command(BaseCommand):
                         logger.info(f"Completed {completed}/{len(tracks_list)} tracks...")
                 except Exception as e:
                     logger.error(f"Error processing track: {e}")
+                    # Fail fast on API quota/auth errors
+                    if "403" in str(e) or "401" in str(e) or "429" in str(e):
+                        logger.error("Critical API error detected - failing fast to prevent resource waste")
+                        raise
 
         duration = time.time() - start_time
         avg_per_track = duration / len(tracks_list) if tracks_list else 0

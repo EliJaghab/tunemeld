@@ -68,5 +68,7 @@ def get_youtube_track_view_count(youtube_url: str, api_key: str | None = None) -
             return 0
 
     except Exception as e:
-        logger.exception(f"An unexpected error occurred: {e}")
-        raise ValueError(f"Unexpected error occurred for {youtube_url}: {e}") from e
+        # Hide API key from logs by not including full exception details
+        error_msg = str(e).replace(api_key, "***")
+        logger.error(f"An unexpected error occurred: {error_msg}")
+        raise ValueError(f"Unexpected error occurred for {youtube_url}: {error_msg}") from e
