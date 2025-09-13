@@ -15,9 +15,6 @@ RUN pip install --upgrade pip && pip install -e .
 # Copy Django backend files to container
 COPY django_backend/ /app/
 
-# Copy playlist_etl module (required by Django models)
-COPY playlist_etl/ /app/playlist_etl/
-
 # Debug: List files to verify copy worked
 RUN echo "=== VERIFYING FILE COPY ===" && \
     ls -la /app/ && \
