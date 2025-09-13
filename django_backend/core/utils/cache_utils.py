@@ -34,7 +34,7 @@ def _load_centralized_schedule_config() -> dict:
         if not on_section:
             raise ValueError("No 'on' section found in workflow YAML")
         cron_expr = on_section["schedule"][0]["cron"]
-        return {"cron_expression": cron_expr, "timezone": "UTC", "cache_clear_window_minutes": 30}
+        return {"cron_expression": cron_expr, "timezone": "UTC", "cache_clear_window_minutes": 20}
 
 
 _CENTRALIZED_CONFIG = _load_centralized_schedule_config()
