@@ -49,6 +49,7 @@ class RawPlaylistData(models.Model):
             models.Index(fields=["playlist_url"]),
             models.Index(fields=["etl_run_id"]),
         ]
+        unique_together: ClassVar = [("service", "genre", "etl_run_id")]
         ordering: ClassVar = ["-created_at"]
 
     def __str__(self) -> str:

@@ -65,17 +65,18 @@ class Command(BaseCommand):
             metadata = playlist_data["metadata"]
             tracks = playlist_data["tracks"]
 
-            raw_data = RawPlaylistData(
-                genre=genre_obj,
+            raw_data, _created = RawPlaylistData.objects.update_or_create(
                 service=service,
-                playlist_url=metadata["playlist_url"],
-                playlist_name=metadata["playlist_name"],
-                playlist_cover_url=metadata.get("playlist_cover_url", ""),
-                playlist_cover_description_text=metadata.get("playlist_cover_description_text", ""),
-                data=tracks,
+                genre=genre_obj,
                 etl_run_id=etl_run_id,
+                defaults={
+                    "playlist_url": metadata["playlist_url"],
+                    "playlist_name": metadata["playlist_name"],
+                    "playlist_cover_url": metadata["playlist_cover_url"],
+                    "playlist_cover_description_text": metadata["playlist_cover_description_text"],
+                    "data": tracks,
+                },
             )
-            raw_data.save()
             return raw_data
 
         except Exception:

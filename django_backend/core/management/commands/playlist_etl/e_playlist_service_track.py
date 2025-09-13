@@ -96,14 +96,15 @@ class Command(BaseCommand):
         return [
             NormalizedTrack(
                 position=i + 1,
-                name=clean_unicode_text(track.get("name", "")),
-                artist=clean_unicode_text(", ".join(track.get("artists", [track.get("artist", "")]))),
-                album=clean_unicode_text(track.get("album_name", "")),
-                spotify_url=track.get("url", ""),
-                isrc=track.get("isrc"),
-                album_cover_url=track.get("cover_url"),
+                name=clean_unicode_text(track["name"]),
+                artist=clean_unicode_text(", ".join(track["artists"]) if "artists" in track else track["artist"]),
+                album=clean_unicode_text(track["album_name"]),
+                spotify_url=track["url"],
+                isrc=track["isrc"],
+                album_cover_url=track["cover_url"],
             )
             for i, track in enumerate(raw_data)
+            if track.get("isrc")
         ]
 
     def parse_apple_music_tracks(self, raw_data: dict) -> list[NormalizedTrack]:
@@ -128,7 +129,7 @@ class Command(BaseCommand):
         for item, track, exc in results:
             if exc:
                 _key, track_data = item
-                logger.error(f"Failed to process Apple Music track {track_data.get('name', 'unknown')}: {exc}")
+                logger.error(f"Failed to process Apple Music track {track_data['name']}: {exc}")
             elif track:
                 tracks.append(track)
 
@@ -168,7 +169,7 @@ class Command(BaseCommand):
                 name=clean_unicode_text(item["title"]),
                 artist=clean_unicode_text(item["publisher"]["artist"]),
                 soundcloud_url=item["permalink"],
-                isrc=item["publisher"].get("isrc"),
+                isrc=item["publisher"]["isrc"],
                 album_cover_url=item["artworkUrl"],
             )
             for i, item in enumerate(raw_data["tracks"]["items"])
