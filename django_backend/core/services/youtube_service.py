@@ -1,4 +1,5 @@
 import os
+from enum import Enum
 
 import requests
 from core.utils.cache_utils import CachePrefix, cache_get, cache_set
@@ -8,7 +9,17 @@ from tenacity import retry, stop_after_attempt, wait_exponential
 logger = get_logger(__name__)
 
 
-def get_youtube_url(track_name: str, artist_name: str, api_key: str | None = None) -> str | None:
+class YouTubeUrlResult(Enum):
+    CACHE_HIT = "cache_hit"
+    API_SUCCESS = "api_success"
+    API_FAILURE_QUOTA = "api_failure_quota"
+    API_FAILURE_NOT_FOUND = "api_failure_not_found"
+    API_FAILURE_ERROR = "api_failure_error"
+
+
+def get_youtube_url(
+    track_name: str, artist_name: str, api_key: str | None = None
+) -> tuple[str | None, YouTubeUrlResult]:
     api_key = api_key or os.getenv("GOOGLE_API_KEY")
     if not api_key:
         raise ValueError("YouTube API key not provided.")
@@ -16,7 +27,7 @@ def get_youtube_url(track_name: str, artist_name: str, api_key: str | None = Non
     key_data = f"{track_name}|{artist_name}"
     youtube_url = cache_get(CachePrefix.YOUTUBE_URL, key_data)
     if youtube_url:
-        return str(youtube_url)
+        return str(youtube_url), YouTubeUrlResult.CACHE_HIT
 
     query = f"{track_name} {artist_name}"
     youtube_search_url = f"https://www.googleapis.com/youtube/v3/search?part=snippet&q={query}&key={api_key}"
@@ -30,15 +41,15 @@ def get_youtube_url(track_name: str, artist_name: str, api_key: str | None = Non
                 youtube_url = f"https://www.youtube.com/watch?v={video_id}"
                 logger.info(f"Found YouTube URL for {track_name} by {artist_name}: {youtube_url}")
                 cache_set(CachePrefix.YOUTUBE_URL, key_data, youtube_url)
-                return youtube_url
+                return youtube_url, YouTubeUrlResult.API_SUCCESS
         logger.info(f"No video found for {track_name} by {artist_name}")
-        return None
+        return None, YouTubeUrlResult.API_FAILURE_NOT_FOUND
     else:
         logger.info(f"Error fetching YouTube URL: {response.status_code}, {response.text}")
         if response.status_code == 403 and "quotaExceeded" in response.text:
             logger.warning(f"YouTube quota exceeded for {track_name} by {artist_name} - will retry later")
-            return None
-        return None
+            return None, YouTubeUrlResult.API_FAILURE_QUOTA
+        return None, YouTubeUrlResult.API_FAILURE_ERROR
 
 
 @retry(

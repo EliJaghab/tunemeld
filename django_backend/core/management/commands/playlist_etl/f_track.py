@@ -1,8 +1,9 @@
 import uuid
+from collections import Counter
 
 from core.models import ServiceTrack, Track
 from core.services.apple_music_service import get_apple_music_album_cover_url
-from core.services.youtube_service import get_youtube_url
+from core.services.youtube_service import YouTubeUrlResult, get_youtube_url
 from core.utils.constants import ServiceName
 from core.utils.utils import get_logger
 from django.core.management.base import BaseCommand, CommandError
@@ -32,15 +33,30 @@ class Command(BaseCommand):
             progress_interval=50,
         )
 
-        for isrc, _result, exc in results:
+        youtube_stats: Counter[YouTubeUrlResult] = Counter()
+        for isrc, result, exc in results:
             if exc:
                 logger.error(f"Failed to process ISRC {isrc}: {exc}")
                 raise CommandError(f"Pipeline failed on ISRC {isrc}: {exc}") from exc
 
-    def process_isrc(self, isrc: str, etl_run_id: uuid.UUID) -> None:
+            if result and isinstance(result, YouTubeUrlResult):
+                youtube_stats[result] += 1
+
+        self.log_youtube_summary(len(unique_isrcs), youtube_stats)
+
+    def log_youtube_summary(self, total_tracks: int, stats: Counter) -> None:
+        """Log YouTube URL retrieval summary statistics."""
+        logger.info("YouTube URL Retrieval Summary:")
+        logger.info(f"- Total tracks processed: {total_tracks}")
+
+        for result_type, count in stats.items():
+            percentage = (count / total_tracks * 100) if total_tracks > 0 else 0
+            logger.info(f"- {result_type.value.replace('_', ' ').title()}: {count} ({percentage:.1f}%)")
+
+    def process_isrc(self, isrc: str, etl_run_id: uuid.UUID) -> YouTubeUrlResult | None:
         """Process a single ISRC and create canonical track."""
         service_tracks = ServiceTrack.objects.filter(isrc=isrc, etl_run_id=etl_run_id)
-        self.create_canonical_track(isrc, service_tracks, etl_run_id)
+        return self.create_canonical_track(isrc, service_tracks, etl_run_id)
 
     def get_unique_isrcs(self, etl_run_id: uuid.UUID) -> list[str]:
         """Get all unique ISRCs that have ServiceTrack records."""
@@ -63,7 +79,7 @@ class Command(BaseCommand):
         # Fallback to first track if no priority service found
         return service_tracks.first() if service_tracks else None
 
-    def create_canonical_track(self, isrc: str, service_tracks, etl_run_id: uuid.UUID) -> Track | None:
+    def create_canonical_track(self, isrc: str, service_tracks, etl_run_id: uuid.UUID) -> YouTubeUrlResult | None:
         """Create a canonical Track record from multiple ServiceTrack records."""
 
         primary_track = self.choose_primary_service_track(service_tracks)
@@ -96,11 +112,11 @@ class Command(BaseCommand):
             if album_cover_url:
                 track_data["album_cover_url"] = album_cover_url
 
-        youtube_url = get_youtube_url(primary_track.track_name, primary_track.artist_name)
+        youtube_url, youtube_result = get_youtube_url(primary_track.track_name, primary_track.artist_name)
         if youtube_url and youtube_url != "https://youtube.com":
             track_data["youtube_url"] = youtube_url
 
         track = Track.objects.create(**track_data)
         service_tracks.update(track=track)
 
-        return track
+        return youtube_result
