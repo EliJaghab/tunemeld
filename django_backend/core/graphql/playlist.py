@@ -3,8 +3,7 @@ from core.graphql.track import TrackType
 from core.models import Genre, Track
 from core.models.d_raw_playlist import RawPlaylistData
 from core.models.e_playlist import Playlist
-
-from django_backend.core.utils.constants import ServiceName
+from core.utils.constants import ServiceName
 
 
 class PlaylistType(graphene.ObjectType):

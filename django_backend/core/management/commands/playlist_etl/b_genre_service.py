@@ -4,9 +4,8 @@ Simple command for deployment - no output, just initialization.
 """
 
 from core.models import Genre, Service
+from core.utils.constants import GENRE_DISPLAY_NAMES, SERVICE_CONFIGS
 from django.core.management.base import BaseCommand
-
-from django_backend.core.utils.constants import GENRE_DISPLAY_NAMES, SERVICE_CONFIGS
 
 
 class Command(BaseCommand):

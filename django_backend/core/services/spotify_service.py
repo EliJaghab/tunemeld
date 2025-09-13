@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING
 import requests
 
 if TYPE_CHECKING:
-    from django_backend.core.utils.constants import GenreName
+    from core.utils.constants import GenreName
 from bs4 import BeautifulSoup, Tag
 from core.models.playlist_types import PlaylistData, PlaylistMetadata
 from core.utils.cache_utils import CachePrefix, cache_get, cache_set
@@ -243,9 +243,9 @@ def _extract_spotify_metadata_from_html(url: str, html_content: str) -> Playlist
 
 def get_spotify_playlist(genre: "GenreName") -> PlaylistData:
     """Get Spotify playlist data and metadata for a given genre"""
-    from django_backend.core.utils.cache_utils import generate_spotify_cache_key_data
-    from django_backend.core.utils.constants import SERVICE_CONFIGS
-    from django_backend.core.utils.spotdl_client import fetch_spotify_playlist_with_spotdl
+    from core.utils.cache_utils import generate_spotify_cache_key_data
+    from core.utils.constants import SERVICE_CONFIGS
+    from core.utils.spotdl_client import fetch_spotify_playlist_with_spotdl
 
     key_data = generate_spotify_cache_key_data(genre)
     cached_data = cache_get(CachePrefix.SPOTIFY_PLAYLIST, key_data)

@@ -1,8 +1,7 @@
 import graphene
 from core.models import Genre
+from core.utils.constants import GenreName
 from graphene_django import DjangoObjectType
-
-from django_backend.core.utils.constants import GenreName
 
 
 class GenreType(DjangoObjectType):

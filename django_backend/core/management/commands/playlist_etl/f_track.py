@@ -3,10 +3,9 @@ import uuid
 from core.models import ServiceTrack, Track
 from core.services.apple_music_service import get_apple_music_album_cover_url
 from core.services.youtube_service import get_youtube_url
+from core.utils.constants import ServiceName
 from core.utils.utils import get_logger
 from django.core.management.base import BaseCommand, CommandError
-
-from django_backend.core.utils.constants import ServiceName
 
 logger = get_logger(__name__)
 

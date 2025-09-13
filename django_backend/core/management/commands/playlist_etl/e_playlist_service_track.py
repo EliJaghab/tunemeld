@@ -6,10 +6,9 @@ from core.models import RawPlaylistData, ServiceTrack
 from core.models.f_track import NormalizedTrack
 from core.services.apple_music_service import get_apple_music_album_cover_url
 from core.services.spotify_service import get_spotify_isrc
+from core.utils.constants import ServiceName
 from core.utils.utils import clean_unicode_text, get_logger
 from django.core.management.base import BaseCommand
-
-from django_backend.core.utils.constants import ServiceName
 
 logger = get_logger(__name__)
 

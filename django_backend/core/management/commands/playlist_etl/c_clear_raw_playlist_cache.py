@@ -1,14 +1,13 @@
 import logging
 
-from django.core.cache import cache
-from django.core.management.base import BaseCommand
-
-from django_backend.core.utils.cache_utils import (
+from core.utils.cache_utils import (
     ScheduleConfig,
     _generate_cache_key,
     get_all_raw_playlist_cache_keys,
     is_within_scheduled_time_window,
 )
+from django.core.cache import cache
+from django.core.management.base import BaseCommand
 
 logger = logging.getLogger(__name__)
 

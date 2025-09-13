@@ -3,11 +3,10 @@ from enum import Enum
 from typing import TYPE_CHECKING, ClassVar
 
 from core.models.b_genre_service import Genre, Service
+from core.utils.constants import GenreName, ServiceName
 from django.core.validators import RegexValidator
 from django.db import models
 from pydantic import BaseModel
-
-from django_backend.core.utils.constants import GenreName, ServiceName
 
 if TYPE_CHECKING:
     from core.models.f_track import TrackRank

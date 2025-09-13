@@ -4,7 +4,7 @@ from urllib.parse import unquote
 import requests
 
 if TYPE_CHECKING:
-    from django_backend.core.utils.constants import GenreName
+    from core.utils.constants import GenreName
 import time
 
 from bs4 import BeautifulSoup, Tag
@@ -60,8 +60,8 @@ def _get_apple_music_cover_url_static(url: str, genre: "GenreName") -> str | Non
 
 def get_apple_music_playlist(genre: "GenreName") -> PlaylistData:
     """Get Apple Music playlist data and metadata for a given genre"""
-    from django_backend.core.utils.constants import SERVICE_CONFIGS, ServiceName
-    from django_backend.core.utils.rapid_api_client import fetch_playlist_data
+    from core.utils.constants import SERVICE_CONFIGS, ServiceName
+    from core.utils.rapid_api_client import fetch_playlist_data
 
     config = SERVICE_CONFIGS["apple_music"]
     url = config["links"][genre.value]

@@ -7,12 +7,11 @@ from core.models.f_track import Track
 from core.models.z_view_counts import HistoricalTrackViewCount
 from core.services.spotify_service import get_spotify_track_view_count
 from core.services.youtube_service import get_youtube_track_view_count
+from core.utils.constants import ServiceName
 from core.utils.utils import get_logger
 from django.core.management.base import BaseCommand
 from django.db import models
 from django.utils import timezone
-
-from django_backend.core.utils.constants import ServiceName
 
 logger = get_logger(__name__)
 

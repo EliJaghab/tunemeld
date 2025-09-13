@@ -4,9 +4,8 @@ from core.models.b_genre_service import Service
 from core.models.e_playlist import Playlist
 from core.models.f_track import Track
 from core.models.z_view_counts import HistoricalTrackViewCount
+from core.utils.constants import ServiceName
 from graphene_django import DjangoObjectType
-
-from django_backend.core.utils.constants import ServiceName
 
 
 class TrackType(DjangoObjectType):

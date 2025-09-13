@@ -1,7 +1,6 @@
 from core.graphql.schema import schema
+from core.utils.constants import GenreName
 from django.core.management.base import BaseCommand
-
-from django_backend.core.utils.constants import GenreName
 
 
 class Command(BaseCommand):

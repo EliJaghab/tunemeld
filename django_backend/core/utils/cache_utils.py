@@ -6,11 +6,10 @@ from typing import Any, NamedTuple
 
 import pytz
 import yaml
+from core.utils.constants import GenreName, ServiceName
 from core.utils.utils import get_logger
 from croniter import croniter
 from django.core.cache import cache
-
-from django_backend.core.utils.constants import GenreName, ServiceName
 
 
 class CachePrefix(str, Enum):
@@ -126,7 +125,7 @@ def cache_clear_if_scheduled(prefix: CachePrefix, key_data: str, schedule_config
 
 
 def generate_rapidapi_cache_key_data(service_name: ServiceName, genre: GenreName) -> str:
-    from django_backend.core.utils.constants import SERVICE_CONFIGS
+    from core.utils.constants import SERVICE_CONFIGS
 
     config = SERVICE_CONFIGS[service_name.value]
 
@@ -151,7 +150,7 @@ def cache_clear_rapidapi_if_scheduled(
 
 
 def generate_spotify_cache_key_data(genre: GenreName) -> str:
-    from django_backend.core.utils.constants import SERVICE_CONFIGS
+    from core.utils.constants import SERVICE_CONFIGS
 
     config = SERVICE_CONFIGS["spotify"]
     url = config["links"][genre.value]
@@ -159,7 +158,7 @@ def generate_spotify_cache_key_data(genre: GenreName) -> str:
 
 
 def get_all_rapidapi_cache_keys() -> list[str]:
-    from django_backend.core.utils.constants import SERVICE_CONFIGS
+    from core.utils.constants import SERVICE_CONFIGS
 
     cache_keys = []
     for service_name in [ServiceName.APPLE_MUSIC, ServiceName.SOUNDCLOUD]:
@@ -173,7 +172,7 @@ def get_all_rapidapi_cache_keys() -> list[str]:
 
 
 def get_all_spotify_cache_keys() -> list[str]:
-    from django_backend.core.utils.constants import SERVICE_CONFIGS
+    from core.utils.constants import SERVICE_CONFIGS
 
     cache_keys = []
     service_config = SERVICE_CONFIGS["spotify"]

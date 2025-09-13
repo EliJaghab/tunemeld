@@ -4,10 +4,9 @@ from core.models import Genre, RawPlaylistData, Service
 from core.services.apple_music_service import get_apple_music_playlist
 from core.services.soundcloud_service import get_soundcloud_playlist
 from core.services.spotify_service import get_spotify_playlist
+from core.utils.constants import PLAYLIST_GENRES, SERVICE_CONFIGS, GenreName, ServiceName
 from core.utils.utils import get_logger
 from django.core.management.base import BaseCommand, CommandError
-
-from django_backend.core.utils.constants import PLAYLIST_GENRES, SERVICE_CONFIGS, GenreName, ServiceName
 
 logger = get_logger(__name__)
 

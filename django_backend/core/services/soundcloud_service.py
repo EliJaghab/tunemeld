@@ -5,7 +5,7 @@ import requests
 from bs4 import BeautifulSoup, Tag
 
 if TYPE_CHECKING:
-    from django_backend.core.utils.constants import GenreName
+    from core.utils.constants import GenreName
 from core.models.playlist_types import PlaylistData, PlaylistMetadata
 from core.utils.utils import clean_unicode_text, get_logger
 
@@ -14,8 +14,8 @@ logger = get_logger(__name__)
 
 def get_soundcloud_playlist(genre: "GenreName") -> PlaylistData:
     """Get SoundCloud playlist data and metadata for a given genre"""
-    from django_backend.core.utils.constants import SERVICE_CONFIGS, ServiceName
-    from django_backend.core.utils.rapid_api_client import fetch_playlist_data
+    from core.utils.constants import SERVICE_CONFIGS, ServiceName
+    from core.utils.rapid_api_client import fetch_playlist_data
 
     config = SERVICE_CONFIGS["soundcloud"]
     url = config["links"][genre.value]
