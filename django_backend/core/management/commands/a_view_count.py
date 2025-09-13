@@ -25,7 +25,7 @@ class Command(BaseCommand):
             logger.info("Step 1: Running Historical View Count extraction")
             historical_command = HistoricalViewCountCommand()
             historical_command.handle(limit=limit)
-            
+
             logger.info("Step 2: Computing delta view counts")
             delta_command = DeltaViewCountCommand()
             delta_command.handle()

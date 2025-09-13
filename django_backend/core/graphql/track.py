@@ -43,7 +43,6 @@ class TrackType(DjangoObjectType):
     youtube_view_count_delta_percentage = graphene.Float(description="YouTube view count % change from yesterday")
     spotify_view_count_delta_percentage = graphene.Float(description="Spotify view count % change from yesterday")
 
-
     def resolve_rank(self, info, genre, service):
         """
         Returns: 1, 2, 3... or None if track not in playlist
@@ -119,10 +118,11 @@ class TrackType(DjangoObjectType):
     def resolve_youtube_current_view_count(self, info):
         try:
             youtube_service = Service.objects.get(name=ServiceName.YOUTUBE)
-            latest = HistoricalTrackViewCount.objects.filter(
-                isrc=self.isrc,
-                service=youtube_service
-            ).order_by('-recorded_date').first()
+            latest = (
+                HistoricalTrackViewCount.objects.filter(isrc=self.isrc, service=youtube_service)
+                .order_by("-recorded_date")
+                .first()
+            )
             return latest.current_view_count if latest else None
         except (Service.DoesNotExist, HistoricalTrackViewCount.DoesNotExist):
             return None
@@ -130,10 +130,11 @@ class TrackType(DjangoObjectType):
     def resolve_spotify_current_view_count(self, info):
         try:
             spotify_service = Service.objects.get(name=ServiceName.SPOTIFY)
-            latest = HistoricalTrackViewCount.objects.filter(
-                isrc=self.isrc,
-                service=spotify_service
-            ).order_by('-recorded_date').first()
+            latest = (
+                HistoricalTrackViewCount.objects.filter(isrc=self.isrc, service=spotify_service)
+                .order_by("-recorded_date")
+                .first()
+            )
             return latest.current_view_count if latest else None
         except (Service.DoesNotExist, HistoricalTrackViewCount.DoesNotExist):
             return None
@@ -141,10 +142,11 @@ class TrackType(DjangoObjectType):
     def resolve_youtube_view_count_delta_percentage(self, info):
         try:
             youtube_service = Service.objects.get(name=ServiceName.YOUTUBE)
-            latest = HistoricalTrackViewCount.objects.filter(
-                isrc=self.isrc,
-                service=youtube_service
-            ).order_by('-recorded_date').first()
+            latest = (
+                HistoricalTrackViewCount.objects.filter(isrc=self.isrc, service=youtube_service)
+                .order_by("-recorded_date")
+                .first()
+            )
             return latest.daily_change_percentage if latest else None
         except (Service.DoesNotExist, HistoricalTrackViewCount.DoesNotExist):
             return None
@@ -152,10 +154,11 @@ class TrackType(DjangoObjectType):
     def resolve_spotify_view_count_delta_percentage(self, info):
         try:
             spotify_service = Service.objects.get(name=ServiceName.SPOTIFY)
-            latest = HistoricalTrackViewCount.objects.filter(
-                isrc=self.isrc,
-                service=spotify_service
-            ).order_by('-recorded_date').first()
+            latest = (
+                HistoricalTrackViewCount.objects.filter(isrc=self.isrc, service=spotify_service)
+                .order_by("-recorded_date")
+                .first()
+            )
             return latest.daily_change_percentage if latest else None
         except (Service.DoesNotExist, HistoricalTrackViewCount.DoesNotExist):
             return None
