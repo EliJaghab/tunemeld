@@ -37,8 +37,8 @@ class TrackType(DjangoObjectType):
     soundcloud_source = graphene.Field(ServiceType, description="SoundCloud service source with metadata")
     youtube_source = graphene.Field(ServiceType, description="YouTube service source with metadata")
 
-    youtube_current_view_count = graphene.Int(description="Current YouTube view count")
-    spotify_current_view_count = graphene.Int(description="Current Spotify view count")
+    youtube_current_view_count = graphene.BigInt(description="Current YouTube view count")
+    spotify_current_view_count = graphene.BigInt(description="Current Spotify view count")
     youtube_view_count_delta_percentage = graphene.Float(description="YouTube view count % change from yesterday")
     spotify_view_count_delta_percentage = graphene.Float(description="Spotify view count % change from yesterday")
 
