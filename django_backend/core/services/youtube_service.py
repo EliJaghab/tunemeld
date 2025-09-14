@@ -87,8 +87,19 @@ def get_youtube_track_view_count(youtube_url: str, api_key: str | None = None) -
             logger.error(f"No video found for ID {video_id}")
             return 0
 
+    except requests.exceptions.HTTPError as e:
+        if e.response.status_code == 403 and "quotaExceeded" in str(e):
+            logger.warning(f"YouTube quota exceeded for video {video_id}")
+            raise ValueError(f"YouTube quota exceeded for {youtube_url}") from e
+        elif e.response.status_code == 429:
+            logger.warning(f"YouTube rate limit hit for video {video_id}")
+            raise ValueError(f"YouTube rate limit hit for {youtube_url}") from e
+        else:
+            error_msg = str(e).replace(api_key, "***")
+            logger.error(f"YouTube HTTP error: {error_msg}")
+            raise ValueError(f"YouTube HTTP error for {youtube_url}: {error_msg}") from e
     except Exception as e:
         # Hide API key from logs by not including full exception details
         error_msg = str(e).replace(api_key, "***")
-        logger.error(f"An unexpected error occurred: {error_msg}")
-        raise ValueError(f"Unexpected error occurred for {youtube_url}: {error_msg}") from e
+        logger.error(f"YouTube unexpected error: {error_msg}")
+        raise ValueError(f"YouTube unexpected error for {youtube_url}: {error_msg}") from e
