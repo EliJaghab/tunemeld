@@ -3,70 +3,74 @@ import { stateManager } from "./StateManager.js";
 import { graphqlClient } from "./graphql-client.js";
 import { SERVICE_NAMES } from "./constants.js";
 
-export async function fetchAndDisplayLastUpdated(genre) {
-  try {
-    const lastUpdatedTimestamp = await graphqlClient.getLastUpdated(genre);
-    if (lastUpdatedTimestamp) {
-      displayLastUpdated({ last_updated: lastUpdatedTimestamp });
-    }
-  } catch (error) {
-    console.error("Error fetching last updated date:", error);
-  }
-}
-
-function displayLastUpdated(lastUpdated) {
-  const lastUpdatedDate = new Date(lastUpdated.last_updated);
-  const formattedDate = lastUpdatedDate.toLocaleString("en-US", {
-    month: "long",
-    day: "numeric",
-    year: "numeric",
-    hour: "numeric",
-    minute: "2-digit",
-    timeZoneName: "short",
-  });
-  document.getElementById(
-    "last-updated",
-  ).textContent = `Last Updated - ${formattedDate}`;
-}
-
 export function setupSortButtons() {
-  document.querySelectorAll(".sort-button").forEach((button) => {
+  document.querySelectorAll(".sort-controls .sort-button").forEach((button) => {
     button.addEventListener("click", function () {
-      const column = button.getAttribute("data-column");
-      const order = button.getAttribute("data-order");
-      const newOrder = order === "desc" ? "asc" : "desc";
-      button.setAttribute("data-order", newOrder);
+      const sortType = button.getAttribute("data-sort");
+
+      document
+        .querySelectorAll(".sort-controls .sort-button")
+        .forEach((btn) => {
+          btn.classList.remove("active");
+        });
+      button.classList.add("active");
+
+      let column = sortType;
+      let order = "asc";
+
+      if (sortType === "rank") {
+        order = "asc";
+      } else if (sortType === "youtube_views" || sortType === "spotify_views") {
+        order = "desc";
+      }
+
       stateManager.setCurrentColumn(column);
-      stateManager.setCurrentOrder(newOrder);
-      sortTable(column, newOrder, stateManager.getViewCountType());
+      stateManager.setCurrentOrder(order);
+      sortTable(column, order, stateManager.getViewCountType());
     });
   });
 }
 
 export async function updateMainPlaylist(genre, viewCountType) {
   try {
-    const response = await graphqlClient.getPlaylist(
+    const response = await graphqlClient.getPlaylistTracks(
       genre,
       SERVICE_NAMES.TUNEMELD,
     );
     const data = [response.playlist];
     playlistData = data;
+
     renderPlaylistTracks(
       data,
       "main-playlist-data-placeholder",
       viewCountType,
       SERVICE_NAMES.TUNEMELD,
     );
+
+    if (response?.playlist?.playlistCoverDescriptionText) {
+      const descriptionElement = document.getElementById(
+        "playlist-description",
+      );
+      if (descriptionElement) {
+        descriptionElement.textContent =
+          response.playlist.playlistCoverDescriptionText;
+      }
+    }
   } catch (error) {
     console.error("Error updating main playlist:", error);
   }
 }
 
 export async function fetchAndDisplayPlaylists(genre) {
-  const services = await graphqlClient.getAvailableServices();
-  const promises = services.map(async (service) => {
+  const { serviceOrder } = await graphqlClient.getPlaylistMetadata(genre);
+
+  return fetchAndDisplayPlaylistsWithOrder(genre, serviceOrder);
+}
+
+export async function fetchAndDisplayPlaylistsWithOrder(genre, serviceOrder) {
+  const promises = serviceOrder.map(async (service) => {
     try {
-      const response = await graphqlClient.getPlaylist(genre, service);
+      const response = await graphqlClient.getPlaylistTracks(genre, service);
       const data = [response.playlist];
       renderPlaylistTracks(data, `${service}-data-placeholder`, null, service);
     } catch (error) {

@@ -29,20 +29,49 @@
   display: none;
 }
 
-.playlist-description {
+.playlist-subtitle {
   color: var(--text-color);
   font-family: "DM Sans", sans-serif;
   font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+  margin-bottom: 15px;
+  padding: 0 20px;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.playlist-description {
+  color: var(--text-color);
   font-weight: 400;
-  margin-bottom: 10px;
-  text-align: center;
+  flex-shrink: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.subtitle-separator {
+  color: var(--text-color);
+  opacity: 0.5;
+}
+
+.last-updated {
+  color: var(--text-color);
+  font-weight: 400;
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 
 .playlist-header {
   align-items: center;
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   position: relative;
+  padding: 0 20px;
 }
 
 .playlist-link {
@@ -74,7 +103,6 @@
   border: none;
 }
 
-.playlist-table th,
 .playlist-table td {
   border-bottom: 1px solid var(--container-background);
   padding: 5px;
@@ -82,49 +110,35 @@
   vertical-align: middle;
 }
 
-.playlist-table th {
-  text-align: center;
-  background-color: var(--container-background);
-  color: var(--text-color);
-  position: relative;
-}
-
-.playlist-table th.rank,
 .playlist-table td.rank {
   text-align: center;
   width: 2%;
 }
 
-.playlist-table th.cover,
 .playlist-table td.cover {
   text-align: center;
   width: 0%;
 }
 
-.playlist-table th.info,
 .playlist-table td.info {
   width: 10%;
 }
 
-.playlist-table th.stat,
 .playlist-table td.spotify-view-count {
   width: 10%;
   text-align: center;
 }
 
-.playlist-table th.stat,
 .playlist-table td.youtube-view-count {
   width: 10%;
   text-align: center;
 }
 
-.playlist-table th.seen-on,
 .playlist-table td.seen-on {
   width: 5%;
   text-align: center;
 }
 
-.playlist-table th.external,
 .playlist-table td.external {
   width: 0%;
   text-align: center;
@@ -214,50 +228,35 @@
   height: 60px;
 }
 
-.sortable-header {
+.sort-controls {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-}
-
-.sortable-header .title {
-  margin-right: 5px;
-  color: var(--text-color);
+  gap: 12px;
+  margin-bottom: 20px;
+  padding: 0 20px;
+  justify-content: flex-start;
 }
 
 .sort-button {
-  background: none;
-  border: none;
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  line-height: 1;
-  padding: 0;
-  padding-left: 5px;
-}
-
-.sort-button i {
-  display: block;
-  margin: 0;
-  padding: 0;
-  line-height: 1;
+  background: var(--container-background);
+  border: 1px solid var(--container-background);
   color: var(--text-color);
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: "DM Sans", sans-serif;
 }
 
-.sort-button i + i {
-  margin-top: -10px;
+.sort-button:hover {
+  background: var(--btn-background);
+  border-color: var(--btn-background);
 }
 
-.sort-button[data-order="asc"] .fa-sort-up {
-  display: inline;
-  color: lightskyblue;
-}
-
-.sort-button[data-order="desc"] .fa-sort-down {
-  display: inline;
-  color: lightskyblue;
+.sort-button.active {
+  background: var(--link-color);
+  color: var(--background-color);
+  border-color: var(--link-color);
 }
 
 @media screen and (max-width: 768px) {

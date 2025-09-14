@@ -14,27 +14,30 @@ class AppRouter {
   async initialize() {
     errorHandler.setRetryCallback(() => this.initialize());
 
-    await genreManager.initialize();
-
-    if (genreManager.hasValidData()) {
+    try {
+      await genreManager.initialize();
       this.setupRoutes();
       this.router.resolve();
+    } catch (error) {
+      console.error("Router initialization failed:", error);
     }
   }
 
   setupRoutes() {
-    this.router.on("/:genre", async (match) => {
-      await this.handleGenreRoute(match.data.genre);
-    });
-
     this.router.on("/", async () => {
-      await this.handleGenreRoute(genreManager.getDefaultGenre());
+      const urlParams = new URLSearchParams(window.location.search);
+      const genre = urlParams.get("genre");
+
+      if (genre && genreManager.isValidGenre(genre)) {
+        await this.handleGenreRoute(genre);
+      } else {
+        const defaultGenre = genreManager.getDefaultGenre();
+        this.navigateToGenre(defaultGenre);
+      }
     });
 
     this.router.notFound(async () => {
-      const defaultGenre = genreManager.getDefaultGenre();
-      this.router.navigate(`/${defaultGenre}`);
-      await this.handleGenreRoute(defaultGenre);
+      this.redirectToDefault();
     });
   }
 
@@ -87,7 +90,8 @@ class AppRouter {
       this.setupRoutes();
     }
 
-    this.router.navigate(`/${genre}`);
+    const url = `/?genre=${encodeURIComponent(genre)}`;
+    window.history.pushState({}, "", url);
     this.router.resolve();
   }
 

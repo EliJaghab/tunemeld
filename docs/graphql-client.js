@@ -138,20 +138,31 @@ class GraphQLClient {
     };
   }
 
-  async getAvailableServices() {
+  async getPlaylistMetadata(genre) {
     const query = `
-      query GetAvailableServices {
+      query GetPlaylistMetadata($genre: String!) {
         serviceOrder
+        playlistsByGenre(genre: $genre) {
+          playlistName
+          playlistCoverUrl
+          playlistCoverDescriptionText
+          playlistUrl
+          genreName
+          serviceName
+        }
       }
     `;
 
-    const data = await this.query(query);
-    return data.serviceOrder;
+    const data = await this.query(query, { genre });
+    return {
+      serviceOrder: data.serviceOrder,
+      playlists: data.playlistsByGenre,
+    };
   }
 
-  async getPlaylist(genre, service) {
+  async getPlaylistTracks(genre, service) {
     const query = `
-      query GetPlaylist($genre: String!, $service: String!) {
+      query GetPlaylistTracks($genre: String!, $service: String!) {
         playlist(genre: $genre, service: $service) {
           genreName
           serviceName
@@ -198,17 +209,6 @@ class GraphQLClient {
     `;
 
     return await this.query(query, { genre, service });
-  }
-
-  async getLastUpdated(genre) {
-    const query = `
-      query GetUpdatedAt($genre: String!) {
-        updatedAt(genre: $genre)
-      }
-    `;
-
-    const data = await this.query(query, { genre });
-    return data.updatedAt;
   }
 }
 

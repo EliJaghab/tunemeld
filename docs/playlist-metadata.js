@@ -1,35 +1,20 @@
 import { graphqlClient } from "./graphql-client.js";
-
-export async function getPlaylistsByGenre(genre) {
-  const query = `
-    query GetPlaylistsByGenre($genre: String!) {
-      serviceOrder
-      playlistsByGenre(genre: $genre) {
-        playlistName
-        playlistCoverUrl
-        playlistCoverDescriptionText
-        playlistUrl
-        genreName
-        serviceName
-      }
-    }
-  `;
-
-  const data = await graphqlClient.query(query, { genre });
-  return {
-    serviceOrder: data.serviceOrder,
-    playlists: data.playlistsByGenre,
-  };
-}
+import { SERVICE_NAMES } from "./constants.js";
 
 export async function displayPlaylistMetadata(genre, displayServiceCallback) {
   try {
-    const { serviceOrder, playlists } = await getPlaylistsByGenre(genre);
+    const { serviceOrder, playlists } =
+      await graphqlClient.getPlaylistMetadata(genre);
+
+    const tuneMeldPlaylist = playlists.find(
+      (p) => p.serviceName === SERVICE_NAMES.TUNEMELD,
+    );
+    updateTuneMeldDescription(tuneMeldPlaylist?.playlistCoverDescriptionText);
 
     serviceOrder.forEach((serviceName) => {
       const playlist = playlists.find((p) => p.serviceName === serviceName);
       if (playlist) {
-        displayServiceHeader(
+        updateServiceHeaderArt(
           serviceName,
           playlist.playlistCoverUrl,
           playlist.playlistUrl,
@@ -49,7 +34,21 @@ export async function displayPlaylistMetadata(genre, displayServiceCallback) {
   }
 }
 
-function displayServiceHeader(
+function updateTuneMeldDescription(description) {
+  const descriptionElement = document.getElementById("playlist-description");
+  if (descriptionElement && description) {
+    descriptionElement.textContent = description;
+  } else if (descriptionElement) {
+    // Set fallback text instead of leaving "Loading..."
+    const genre =
+      window.location.search.match(/genre=([^&]+)/)?.[1] || "playlist";
+    descriptionElement.textContent = `TuneMeld ${
+      genre.charAt(0).toUpperCase() + genre.slice(1)
+    } Playlist`;
+  }
+}
+
+function updateServiceHeaderArt(
   service,
   coverUrl,
   playlistUrl,

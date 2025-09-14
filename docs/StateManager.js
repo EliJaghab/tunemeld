@@ -38,12 +38,8 @@ class StateManager {
     if (viewCountSelector) {
       this.state.viewCountType = viewCountSelector.value || "total-view-count";
     }
-
-    const sortButton = document.querySelector(".sort-button[data-order]");
-    if (sortButton) {
-      this.state.sortColumn = sortButton.getAttribute("data-column") || "rank";
-      this.state.sortOrder = sortButton.getAttribute("data-order") || "asc";
-    }
+    this.state.sortColumn = "rank";
+    this.state.sortOrder = "asc";
   }
 
   getViewCountType() {

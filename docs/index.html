@@ -125,61 +125,21 @@
           </div>
         </div>
         <div class="playlist-content">
-          <div id="last-updated" class="last-updated">
-            Last Updated: Loading...
+          <div class="playlist-subtitle">
+            <span class="playlist-description" id="playlist-description"
+              >Loading...</span
+            >
           </div>
-          <div class="playlist-description">
-            Tracks seen on more than one curated streaming playlist, updated
-            every Saturday
+          <div class="sort-controls">
+            <button class="sort-button active" data-sort="rank">Rank</button>
+            <button class="sort-button" data-sort="youtube_views">
+              YouTube Views
+            </button>
+            <button class="sort-button" data-sort="spotify_views">
+              Spotify Views
+            </button>
           </div>
           <table class="playlist-table">
-            <thead>
-              <tr>
-                <th>
-                  <div class="sortable-header">
-                    <span class="title">#</span>
-                    <button
-                      class="sort-button"
-                      data-column="rank"
-                      data-order="desc"
-                    >
-                      <i class="fa fa-sort-up"></i>
-                      <i class="fa fa-sort-down"></i>
-                    </button>
-                  </div>
-                </th>
-                <th>Cover</th>
-                <th>Info</th>
-                <th>
-                  <div class="sortable-header">
-                    <span class="title">YouTube Views</span>
-                    <button
-                      class="sort-button"
-                      data-column="youtube_views"
-                      data-order="desc"
-                    >
-                      <i class="fa fa-sort-up"></i>
-                      <i class="fa fa-sort-down"></i>
-                    </button>
-                  </div>
-                </th>
-                <th>
-                  <div class="sortable-header">
-                    <span class="title">Spotify Views</span>
-                    <button
-                      class="sort-button"
-                      data-column="spotify_views"
-                      data-order="desc"
-                    >
-                      <i class="fa fa-sort-up"></i>
-                      <i class="fa fa-sort-down"></i>
-                    </button>
-                  </div>
-                </th>
-                <th>Seen On</th>
-                <th>YT</th>
-              </tr>
-            </thead>
             <tbody id="main-playlist-data-placeholder"></tbody>
           </table>
         </div>
@@ -207,14 +167,6 @@
             </div>
             <div class="playlist-content">
               <table class="playlist-table">
-                <thead>
-                  <tr>
-                    <th>Rank</th>
-                    <th>Cover</th>
-                    <th>Info</th>
-                    <th>YT</th>
-                  </tr>
-                </thead>
                 <tbody id="soundcloud-data-placeholder"></tbody>
               </table>
             </div>
@@ -242,14 +194,6 @@
             </div>
             <div class="playlist-content">
               <table class="playlist-table">
-                <thead>
-                  <tr>
-                    <th>Rank</th>
-                    <th>Cover</th>
-                    <th>Info</th>
-                    <th>YT</th>
-                  </tr>
-                </thead>
                 <tbody id="apple_music-data-placeholder"></tbody>
               </table>
             </div>
@@ -274,14 +218,6 @@
             </div>
             <div class="playlist-content">
               <table class="playlist-table">
-                <thead>
-                  <tr>
-                    <th>Rank</th>
-                    <th>Cover</th>
-                    <th>Info</th>
-                    <th>YT</th>
-                  </tr>
-                </thead>
                 <tbody id="spotify-data-placeholder"></tbody>
               </table>
             </div>

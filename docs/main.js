@@ -26,11 +26,10 @@ async function initializeApp() {
 
   try {
     await loadGenresIntoSelector();
+    await appRouter.initialize();
   } catch (error) {
-    console.error("Genre loader failed:", error);
+    console.error("App initialization failed:", error);
   }
-
-  await appRouter.initialize();
 
   setupGenreSelector(genreSelector);
   setupViewCountTypeSelector(viewCountTypeSelector);

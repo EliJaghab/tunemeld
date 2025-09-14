@@ -5,8 +5,8 @@ import {
 } from "./header.js";
 import {
   addToggleEventListeners,
-  fetchAndDisplayLastUpdated,
   fetchAndDisplayPlaylists,
+  fetchAndDisplayPlaylistsWithOrder,
   resetCollapseStates,
   setupSortButtons,
   sortTable,
@@ -15,15 +15,19 @@ import {
 import { setupBodyClickListener } from "./servicePlayer.js";
 import { stateManager } from "./StateManager.js";
 import { appRouter } from "./router.js";
+import { genreManager } from "./genre-manager.js";
+import { graphqlClient } from "./graphql-client.js";
+import { displayPlaylistMetadata } from "./playlist-metadata.js";
 
 export async function updateGenreData(genre, viewCountType, updateAll = false) {
   try {
     showSkeletonLoaders();
     if (updateAll) {
+      const { serviceOrder } = await graphqlClient.getPlaylistMetadata(genre);
+
       await Promise.all([
-        fetchAndDisplayLastUpdated(genre),
-        fetchAndDisplayHeaderArt(genre),
-        fetchAndDisplayPlaylists(genre),
+        displayPlaylistMetadata(genre),
+        fetchAndDisplayPlaylistsWithOrder(genre, serviceOrder),
         updateMainPlaylist(genre, viewCountType),
       ]);
     } else {
@@ -40,10 +44,19 @@ export async function updateGenreData(genre, viewCountType, updateAll = false) {
 }
 
 export function setupGenreSelector(genreSelector) {
-  genreSelector.addEventListener("change", function () {
+  genreSelector.addEventListener("change", async function () {
     const currentGenre = genreSelector.value;
 
-    appRouter.navigateToGenre(currentGenre);
+    const genreObj = genreManager.availableGenres.find(
+      (g) => g.name === currentGenre,
+    );
+    const genreDisplay = genreObj ? genreObj.displayName : currentGenre;
+    document.title = `tunemeld - ${genreDisplay}`;
+
+    const url = `/?genre=${encodeURIComponent(currentGenre)}`;
+    window.history.pushState({}, "", url);
+
+    await updateGenreData(currentGenre, stateManager.getViewCountType(), true);
   });
 }
 
