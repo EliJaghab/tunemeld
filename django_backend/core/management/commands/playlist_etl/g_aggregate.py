@@ -4,7 +4,8 @@ from typing import Any
 
 from core.models import Genre, Service, ServiceTrack
 from core.models import PlaylistModel as Playlist
-from core.utils.constants import ServiceName
+from core.models.d_raw_playlist import RawPlaylistData
+from core.utils.constants import GENRE_DISPLAY_NAMES, SERVICE_CONFIGS, ServiceName
 from core.utils.utils import get_logger
 from django.core.management.base import BaseCommand
 from django.db.models import Count
@@ -27,6 +28,7 @@ class Command(BaseCommand):
 
         cross_service_matches = self.find_cross_service_isrcs(etl_run_id)
         self.create_aggregate_playlists(cross_service_matches, etl_run_id)
+        self.create_tunemeld_raw_playlist_data(etl_run_id)
 
     def find_cross_service_isrcs(self, etl_run_id: uuid.UUID) -> dict[int, list[dict]]:
         """Find ISRCs that appear in multiple playlists (cross-service matches)."""
@@ -117,3 +119,53 @@ class Command(BaseCommand):
 
             Playlist.objects.bulk_create(playlist_entries)
             logger.info(f"Created aggregate playlist for {genre.name}: {len(playlist_entries)} tracks")
+
+    def create_tunemeld_raw_playlist_data(self, etl_run_id: uuid.UUID) -> None:
+        """Create TuneMeld RawPlaylistData entries with complete descriptions including timestamps."""
+
+        aggregate_service, _ = Service.objects.get_or_create(name=ServiceName.TUNEMELD)
+        tunemeld_config = SERVICE_CONFIGS[ServiceName.TUNEMELD.value]
+
+        genres_with_playlists = Genre.objects.filter(playlist__service=aggregate_service).distinct()
+
+        for genre in genres_with_playlists:
+            genre_display_name = GENRE_DISPLAY_NAMES.get(genre.name, genre.name.title())
+
+            playlist_entry = (
+                Playlist.objects.filter(genre=genre, service=aggregate_service)
+                .select_related("service_track__track")
+                .first()
+            )
+
+            if not (
+                playlist_entry
+                and playlist_entry.service_track
+                and playlist_entry.service_track.track
+                and playlist_entry.service_track.track.updated_at
+            ):
+                raise ValueError(
+                    f"Missing required playlist data or updated_at timestamp for TuneMeld {genre.name} playlist"
+                )
+
+            last_updated = playlist_entry.service_track.track.updated_at
+            formatted_date = last_updated.strftime("%b %d")
+            description = (
+                f"{genre_display_name} tracks seen on more than one curated playlist, last updated on {formatted_date}"
+            )
+
+            _raw_data, created = RawPlaylistData.objects.update_or_create(
+                service=aggregate_service,
+                genre=genre,
+                etl_run_id=etl_run_id,
+                defaults={
+                    "playlist_url": f"https://tunemeld.com/{genre.name}",
+                    "playlist_name": f"TuneMeld {genre_display_name}",
+                    "playlist_cover_url": tunemeld_config["icon_url"],
+                    "playlist_cover_description_text": description,
+                    "data": {},
+                },
+            )
+
+            logger.info(
+                f"{'Created' if created else 'Updated'} TuneMeld raw playlist data for {genre.name}: {description}"
+            )
