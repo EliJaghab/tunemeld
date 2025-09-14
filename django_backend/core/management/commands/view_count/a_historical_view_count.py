@@ -4,6 +4,7 @@ from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
 
 from core.models.b_genre_service import Service
+from core.models.e_playlist import Playlist
 from core.models.f_track import Track
 from core.models.z_view_counts import HistoricalTrackViewCount
 from core.services.spotify_service import get_spotify_track_view_count
@@ -42,14 +43,26 @@ class Command(BaseCommand):
         limit = options.get("limit")
         failure_threshold = 0.25
 
-        tracks = Track.objects.filter(
-            models.Q(spotify_url__isnull=False) | models.Q(youtube_url__isnull=False)
-        ).order_by("isrc")
+        tunemeld_isrcs = set(
+            Playlist.objects.filter(service__name=ServiceName.TUNEMELD).values_list("isrc", flat=True).distinct()
+        )
+
+        if not tunemeld_isrcs:
+            logger.warning("No TuneMeld playlist tracks found. Ensure playlist aggregation has run.")
+            return
+
+        tracks = (
+            Track.objects.filter(isrc__in=tunemeld_isrcs)
+            .filter(models.Q(spotify_url__isnull=False) | models.Q(youtube_url__isnull=False))
+            .order_by("isrc")
+        )
+
         if limit:
             tracks = tracks[:limit]
 
         tracks_list = list(tracks)
-        logger.info(f"Processing {len(tracks_list)} tracks with 3 workers...")
+        logger.info(f"Found {len(tunemeld_isrcs)} unique TuneMeld playlist tracks")
+        logger.info(f"Processing {len(tracks_list)} tracks with valid URLs using 3 workers...")
         logger.info("Fail-fast enabled: Will terminate if >25% of tracks fail")
 
         spotify_service = Service.objects.get(name=ServiceName.SPOTIFY)

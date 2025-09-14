@@ -1,5 +1,6 @@
 import os
 import re
+import time
 from functools import lru_cache
 from typing import TYPE_CHECKING
 
@@ -279,15 +280,33 @@ def get_spotify_track_view_count(track_url: str) -> int | None:
     driver = webdriver.get_driver()
     driver.get(track_url)
 
+    # Wait for page to load
+    time.sleep(3)
+
     try:
         view_count_element = driver.find_element(By.CSS_SELECTOR, SPOTIFY_VIEW_COUNT_SELECTOR)
-        view_count_text = view_count_element.text
-        view_count = int(view_count_text.replace(",", ""))
+        view_count_text = view_count_element.text.strip()
+        logger.info(f"Found Spotify view count text: '{view_count_text}' for {track_url}")
+
+        if not view_count_text:
+            logger.warning(f"Empty text in view count element for {track_url}")
+            return None
+
+        # Remove commas and convert to int
+        clean_text = view_count_text.replace(",", "")
+        if not clean_text.isdigit():
+            logger.warning(f"Non-numeric view count text: '{view_count_text}' for {track_url}")
+            return None
+
+        view_count = int(clean_text)
         logger.info(f"Successfully retrieved Spotify view count: {view_count}")
         return view_count
     except NoSuchElementException:
         logger.error(f"View count element not found for {track_url}")
         return None
+    except ValueError as e:
+        logger.error(f"Error converting view count text to int: {e} for {track_url}")
+        return None
     except Exception as e:
-        logger.error(f"Error getting Spotify view count: {e}")
+        logger.error(f"Error getting Spotify view count: {e} for {track_url}")
         return None

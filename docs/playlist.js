@@ -205,10 +205,6 @@ function createTuneMeldPlaylistTableRow(track, viewCountType) {
 
   const externalLinksCell = document.createElement("td");
   externalLinksCell.className = "external";
-  if (track.youtubeSource) {
-    const youtubeLink = createSourceLinkFromService(track.youtubeSource);
-    externalLinksCell.appendChild(youtubeLink);
-  }
 
   row.appendChild(rankCell);
   row.appendChild(coverCell);
@@ -218,6 +214,34 @@ function createTuneMeldPlaylistTableRow(track, viewCountType) {
   row.appendChild(externalLinksCell);
 
   return row;
+}
+
+function createViewCountElement(viewCount, source, url = null) {
+  const container = document.createElement("div");
+  container.className = "view-count-container";
+
+  const logo = document.createElement("img");
+  logo.src = source.iconUrl;
+  logo.alt = source.displayName;
+  logo.className = "view-count-logo";
+
+  const text = document.createElement("span");
+  text.textContent = viewCount.toLocaleString();
+
+  container.appendChild(logo);
+  container.appendChild(text);
+
+  if (url) {
+    const link = document.createElement("a");
+    link.href = url;
+    link.target = "_blank";
+    link.style.textDecoration = "none";
+    link.style.color = "inherit";
+    link.appendChild(container);
+    return link;
+  }
+
+  return container;
 }
 
 function displayViewCounts(track, row, viewCountType) {
@@ -232,12 +256,23 @@ function displayViewCounts(track, row, viewCountType) {
 
   switch (viewCountType) {
     case "total-view-count":
-      youtubeStatCell.textContent = youtubeCurrentViewCount
-        ? youtubeCurrentViewCount.toLocaleString()
-        : "";
-      spotifyStatCell.textContent = spotifyCurrentViewCount
-        ? spotifyCurrentViewCount.toLocaleString()
-        : "";
+      if (youtubeCurrentViewCount && track.youtubeSource) {
+        const element = createViewCountElement(
+          youtubeCurrentViewCount,
+          track.youtubeSource,
+          track.youtubeUrl,
+        );
+        youtubeStatCell.appendChild(element);
+      }
+
+      if (spotifyCurrentViewCount && track.spotifySource) {
+        const element = createViewCountElement(
+          spotifyCurrentViewCount,
+          track.spotifySource,
+          track.spotifyUrl,
+        );
+        spotifyStatCell.appendChild(element);
+      }
       break;
 
     case "weekly-view-count":
@@ -293,10 +328,6 @@ function createServicePlaylistTableRow(track, serviceName) {
 
   const externalLinksCell = document.createElement("td");
   externalLinksCell.className = "external";
-  if (track.youtubeSource) {
-    const youtubeLink = createSourceLinkFromService(track.youtubeSource);
-    externalLinksCell.appendChild(youtubeLink);
-  }
 
   row.appendChild(rankCell);
   row.appendChild(coverCell);
@@ -360,6 +391,11 @@ export function sortTable(column, order, viewCountType) {
 
       return order === "asc" ? aValue - bValue : bValue - aValue;
     });
+
+    playlist.tracks.forEach((track, index) => {
+      track.rank = index + 1;
+    });
+
     return playlist;
   });
 
