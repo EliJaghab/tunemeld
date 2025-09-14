@@ -69,7 +69,7 @@ class Track(models.Model):
         return f"{self.track_name} by {self.artist_name} ({self.isrc})"
 
 
-type TrackSourceServiceName = ServiceName
+TrackSourceServiceName = ServiceName
 
 
 class TrackData(BaseModel):

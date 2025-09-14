@@ -84,7 +84,7 @@
 
 .playlist-table th {
   text-align: center;
-  background-color: var(--btn-background);
+  background-color: var(--container-background);
   color: var(--text-color);
   position: relative;
 }

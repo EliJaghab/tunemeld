@@ -232,19 +232,10 @@ USE_I18N = True
 
 USE_TZ = True
 
-if ENVIRONMENT == DEV:
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.sqlite3",
-            "NAME": BASE_DIR / "staging.db",
-        }
-    }
-else:
-    # Production: Use Railway PostgreSQL database
-    database_url = os.getenv("DATABASE_URL")
-    if not database_url:
-        raise ValueError("DATABASE_URL environment variable is required in production")
-    DATABASES = {"default": cast("dict[str, object]", dj_database_url.parse(database_url))}
+database_url = os.getenv("DATABASE_URL")
+if not database_url:
+    raise ValueError("DATABASE_URL environment variable is required")
+DATABASES = {"default": cast("dict[str, object]", dj_database_url.parse(database_url))}
 
 USE_POSTGRES_API = ENVIRONMENT == DEV
 
