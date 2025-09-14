@@ -6,6 +6,7 @@ from typing import Any
 
 import requests
 from core import settings
+from core.settings import DEV
 from django.core.cache.backends.base import BaseCache
 
 logger = logging.getLogger(__name__)
@@ -59,6 +60,9 @@ class Cache(BaseCache):
         logger.info("Cache initialized with Cloudflare KV + shared connection pool")
 
     def get(self, key: str, default: Any = None, version: int | None = None) -> Any:
+        if settings.ENVIRONMENT == DEV:
+            return default
+
         key = self.make_key(key, version=version)
         sanitized_key = self._validate_key(key)
 
@@ -77,6 +81,9 @@ class Cache(BaseCache):
             return default
 
     def set(self, key: str, value: Any, timeout: int | None = None, version: int | None = None) -> bool:
+        if settings.ENVIRONMENT == DEV:
+            return True
+
         key = self.make_key(key, version=version)
         sanitized_key = self._validate_key(key)
 

@@ -1,5 +1,6 @@
 import graphene
 from core.graphql.service import ServiceType
+from core.graphql.utils import truncate_to_words
 from core.models.b_genre_service import Service
 from core.models.e_playlist import Playlist
 from core.models.f_track import Track
@@ -13,8 +14,6 @@ class TrackType(DjangoObjectType):
         model = Track
         fields = (
             "isrc",
-            "track_name",
-            "artist_name",
             "album_name",
             "spotify_url",
             "apple_music_url",
@@ -26,6 +25,9 @@ class TrackType(DjangoObjectType):
             "updated_at",
         )
         convert_choices_to_enum = False
+
+    track_name = graphene.String(description="Track name truncated to 30 characters at word boundaries")
+    artist_name = graphene.String(description="Artist name truncated to 30 characters at word boundaries")
 
     rank = graphene.Int(
         description="Position in the playlist",
@@ -41,6 +43,12 @@ class TrackType(DjangoObjectType):
     spotify_current_view_count = graphene.BigInt(description="Current Spotify view count")
     youtube_view_count_delta_percentage = graphene.Float(description="YouTube view count % change from yesterday")
     spotify_view_count_delta_percentage = graphene.Float(description="Spotify view count % change from yesterday")
+
+    def resolve_track_name(self, info):
+        return truncate_to_words(self.track_name, 30) if self.track_name else None
+
+    def resolve_artist_name(self, info):
+        return truncate_to_words(self.artist_name, 30) if self.artist_name else None
 
     def resolve_rank(self, info, genre, service):
         """
