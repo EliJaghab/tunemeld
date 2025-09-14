@@ -59,7 +59,7 @@ class Command(BaseCommand):
         with ThreadPoolExecutor(max_workers=3) as executor:
             futures = []
             for track in tracks_list:
-                future = executor.submit(self._process_track_safe, track, spotify_service, youtube_service)
+                future = executor.submit(self.process_track, track, spotify_service, youtube_service)
                 futures.append(future)
 
             for completed, future in enumerate(concurrent.futures.as_completed(futures), start=1):
@@ -119,7 +119,7 @@ class Command(BaseCommand):
                 f"Pipeline completed but {stats.failure_rate:.1%} failure rate exceeds acceptable threshold"
             )
 
-    def _process_track_safe(self, track, spotify_service, youtube_service):
+    def process_track(self, track, spotify_service, youtube_service):
         """Process a track with comprehensive error handling and rate limit detection."""
         result = {"success": False, "successful_counts": 0, "rate_limited": False, "errors": []}
 
@@ -156,10 +156,7 @@ class Command(BaseCommand):
                     result["successful_counts"] += 1
             except Exception as e:
                 error_msg = str(e).lower()
-                is_rate_limited = any(
-                    keyword in error_msg
-                    for keyword in ["quota", "rate limit", "429", "too many requests", "quotaExceeded"]
-                )
+                is_rate_limited = "youtube quota exceeded" in error_msg or "youtube rate limit hit" in error_msg
 
                 if is_rate_limited:
                     result["rate_limited"] = True
@@ -174,27 +171,3 @@ class Command(BaseCommand):
         result["success"] = has_urls and result["successful_counts"] > 0
 
         return result
-
-    def _process_track(self, track, spotify_service, youtube_service):
-        """Legacy method - kept for compatibility but not used in new implementation."""
-        if track.spotify_url:
-            count = get_spotify_track_view_count(track.spotify_url)
-            if count:
-                HistoricalTrackViewCount.objects.update_or_create(
-                    isrc=track.isrc,
-                    service=spotify_service,
-                    recorded_date=timezone.now().date(),
-                    defaults={"current_view_count": count},
-                )
-                logger.info(f"{track.isrc} Spotify: {count:,}")
-
-        if track.youtube_url:
-            count = get_youtube_track_view_count(track.youtube_url)
-            if count:
-                HistoricalTrackViewCount.objects.update_or_create(
-                    isrc=track.isrc,
-                    service=youtube_service,
-                    recorded_date=timezone.now().date(),
-                    defaults={"current_view_count": count},
-                )
-                logger.info(f"{track.isrc} YouTube: {count:,}")
