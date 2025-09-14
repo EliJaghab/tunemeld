@@ -396,9 +396,13 @@ export function sortTable(column, order, viewCountType) {
       return order === "asc" ? aValue - bValue : bValue - aValue;
     });
 
-    playlist.tracks.forEach((track, index) => {
-      track.rank = index + 1;
-    });
+    // Only reassign rank numbers if we're not sorting by rank
+    // When sorting by rank, preserve the original backend ranking
+    if (column !== "rank") {
+      playlist.tracks.forEach((track, index) => {
+        track.rank = index + 1;
+      });
+    }
 
     return playlist;
   });
