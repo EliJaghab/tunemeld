@@ -328,6 +328,10 @@ function createServicePlaylistTableRow(track, serviceName) {
 
   const externalLinksCell = document.createElement("td");
   externalLinksCell.className = "external";
+  if (track.youtubeSource) {
+    const youtubeLink = createSourceLinkFromService(track.youtubeSource);
+    externalLinksCell.appendChild(youtubeLink);
+  }
 
   row.appendChild(rankCell);
   row.appendChild(coverCell);
