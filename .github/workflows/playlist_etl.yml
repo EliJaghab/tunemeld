@@ -2,7 +2,7 @@ name: Playlist ETL
 
 on:
   schedule:
-    - cron: '0 17 * * 6'
+    - cron: '30 2 * * *'
   push:
     paths:
       - 'django_backend/core/management/commands/playlist_etl/**'
@@ -110,4 +110,4 @@ jobs:
         run: |
           echo " PostgreSQL ETL Pipeline completed successfully"
           echo "  Data persisted to Railway PostgreSQL database"
-          echo " Next ETL run scheduled for next Saturday at 5 PM UTC"
+          echo " Next ETL run scheduled for tomorrow at 2:30 AM UTC"

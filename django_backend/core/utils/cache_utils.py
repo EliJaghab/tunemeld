@@ -46,6 +46,14 @@ class ScheduleConfig(NamedTuple):
     cache_clear_window_minutes: int = _CENTRALIZED_CONFIG["cache_clear_window_minutes"]
 
 
+class SaturdayCacheClearScheduleConfig(NamedTuple):
+    # we only clear the cache on Saturday because this is the only time that we get new
+    # raw playlist data from services
+    cron_expression: str = "0 17 * * 6"  # Saturdays at 5 PM UTC only
+    timezone: str = "UTC"
+    cache_clear_window_minutes: int = 20
+
+
 SEVEN_DAYS_TTL = 7 * 24 * 60 * 60
 TWENTY_FOUR_HOURS_TTL = 24 * 60 * 60
 NO_EXPIRATION_TTL = None

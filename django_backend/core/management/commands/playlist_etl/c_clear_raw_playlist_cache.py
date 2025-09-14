@@ -1,7 +1,7 @@
 import logging
 
 from core.utils.cache_utils import (
-    ScheduleConfig,
+    SaturdayCacheClearScheduleConfig,
     _generate_cache_key,
     get_all_raw_playlist_cache_keys,
     is_within_scheduled_time_window,
@@ -21,7 +21,7 @@ class Command(BaseCommand):
         )
 
     def handle(self, *args, **options):
-        schedule_config = ScheduleConfig()
+        schedule_config = SaturdayCacheClearScheduleConfig()
 
         if options.get("force") or is_within_scheduled_time_window(schedule_config):
             if options.get("force"):
