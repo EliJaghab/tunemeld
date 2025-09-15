@@ -83,7 +83,7 @@ django-check: setup_env
 
 django-import-check: setup_env
 	@echo "Testing Django management command imports..."
-	@cd backend && source ../.venv/bin/activate && PYTHONPATH=.. DJANGO_SETTINGS_MODULE=core.settings python -c 'import django; django.setup(); from core.management.commands import a_playlist_etl; print("All management commands import successfully")'
+	@cd backend && source ../.venv/bin/activate && PYTHONPATH=.. DJANGO_SETTINGS_MODULE=core.settings python -c 'import django; django.setup(); from core.management.commands import playlist_etl; print("All management commands import successfully")'
 
 backend-startup-check: setup_env
 	@echo "Validating backend startup..."
@@ -184,7 +184,7 @@ migration-safety-check:
 
 test-view-count-etl:
 	@echo " Running View Count ETL (limited for testing)..."
-	@cd backend && $(VENV)/bin/python manage.py a_view_count --limit 10
+	@cd backend && $(VENV)/bin/python manage.py view_count --limit 10
 	@echo " View Count ETL test completed"
 
 # CI/CD Database Operations
@@ -211,10 +211,10 @@ ci-db-validate:
 
 run-view-count-etl:
 	@echo " Running View Count ETL Pipeline..."
-	@cd backend && $(VENV)/bin/python manage.py a_view_count
+	@cd backend && $(VENV)/bin/python manage.py view_count
 	@echo " View Count ETL Pipeline completed"
 
 run-playlist-etl:
 	@echo " Running Playlist ETL Pipeline..."
-	@cd backend && $(VENV)/bin/python manage.py a_playlist_etl
+	@cd backend && $(VENV)/bin/python manage.py playlist_etl
 	@echo " Playlist ETL Pipeline completed"

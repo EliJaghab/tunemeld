@@ -3,7 +3,9 @@ from typing import Any
 
 from core.management.commands.view_count.a_historical_view_count import Command as HistoricalViewCountCommand
 from core.management.commands.view_count.b_delta_view_count import Command as DeltaViewCountCommand
-from core.models.z_view_counts import HistoricalTrackViewCount
+from core.management.commands.view_count.c_clear_view_count_cache import Command as ClearViewCountCacheCommand
+from core.management.commands.view_count.d_warm_gql_cache import Command as WarmGqlCacheCommand
+from core.models.view_counts import HistoricalTrackViewCount
 from core.utils.utils import get_logger
 from django.core.management.base import BaseCommand
 from django.db import models
@@ -31,6 +33,14 @@ class Command(BaseCommand):
             logger.info("Step 2: Computing delta view counts")
             delta_command = DeltaViewCountCommand()
             delta_command.handle()
+
+            logger.info("Step 3: Clearing view count GraphQL cache...")
+            clear_cache_command = ClearViewCountCacheCommand()
+            clear_cache_command.handle()
+
+            logger.info("Step 4: Warming view count GraphQL cache...")
+            warm_cache_command = WarmGqlCacheCommand()
+            warm_cache_command.handle()
 
             duration = time.time() - start_time
             logger.info(f"View Count ETL Pipeline completed in {duration:.1f} seconds")

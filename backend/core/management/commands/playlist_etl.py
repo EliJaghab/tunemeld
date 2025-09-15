@@ -2,14 +2,14 @@ import time
 import uuid
 from typing import Any
 
-from core.management.commands.playlist_etl.b_genre_service import Command as GenreServiceCommand
-from core.management.commands.playlist_etl.c_clear_raw_playlist_cache import Command as ClearCacheCommand
-from core.management.commands.playlist_etl.d_raw_playlist import Command as RawPlaylistCommand
-from core.management.commands.playlist_etl.e_playlist_service_track import Command as ServiceTrackCommand
-from core.management.commands.playlist_etl.f_track import Command as TrackCommand
-from core.management.commands.playlist_etl.g_aggregate import Command as AggregateCommand
-from core.management.commands.playlist_etl.h_clear_gql_cache import Command as ClearGqlCacheCommand
-from core.management.commands.playlist_etl.i_warm_gql_cache import Command as WarmGqlCacheCommand
+from core.management.commands.playlist_etl.a_genre_service import Command as GenreServiceCommand
+from core.management.commands.playlist_etl.b_clear_raw_playlist_cache import Command as ClearCacheCommand
+from core.management.commands.playlist_etl.c_raw_playlist import Command as RawPlaylistCommand
+from core.management.commands.playlist_etl.d_playlist_service_track import Command as ServiceTrackCommand
+from core.management.commands.playlist_etl.e_track import Command as TrackCommand
+from core.management.commands.playlist_etl.f_aggregate import Command as AggregateCommand
+from core.management.commands.playlist_etl.g_clear_playlist_cache import Command as ClearPlaylistCacheCommand
+from core.management.commands.playlist_etl.h_warm_gql_cache import Command as WarmGqlCacheCommand
 from core.models import PlaylistModel as Playlist
 from core.models import RawPlaylistData, ServiceTrack, Track
 from core.utils.utils import get_logger
@@ -46,8 +46,8 @@ class Command(BaseCommand):
             logger.info("Step 6: Aggregating tracks...")
             AggregateCommand().handle(etl_run_id=etl_run_id)
 
-            logger.info("Step 7: Clearing GraphQL cache...")
-            ClearGqlCacheCommand().handle()
+            logger.info("Step 7: Clearing playlist GraphQL cache...")
+            ClearPlaylistCacheCommand().handle()
 
             logger.info("Step 8: Warming GraphQL cache...")
             WarmGqlCacheCommand().handle()

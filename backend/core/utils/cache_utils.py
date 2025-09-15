@@ -1,9 +1,10 @@
 import hashlib
+from collections.abc import Callable
 from datetime import datetime, timedelta
 from enum import Enum
 from functools import wraps
 from pathlib import Path
-from typing import Any, Callable, NamedTuple
+from typing import Any, NamedTuple
 
 import pytz
 import yaml
@@ -218,19 +219,20 @@ def clear_cache_by_prefix(prefix: CachePrefix) -> int:
     pattern = f"{prefix.value}:*"
 
     # Try to use delete_pattern if available (Redis)
-    if hasattr(cache, 'delete_pattern'):
+    if hasattr(cache, "delete_pattern"):
         deleted = cache.delete_pattern(pattern)
         logger.info(f"Cleared {deleted} cache entries with prefix {prefix.value}")
         return deleted
 
     # Fallback: clear all cache (less efficient but works with all backends)
     cache.clear()
-    logger.info(f"Cleared all cache (backend doesn't support pattern deletion)")
+    logger.info("Cleared all cache (backend doesn't support pattern deletion)")
     return -1  # Unknown count
 
 
 def cached_resolver(prefix: CachePrefix):
     """Decorator for caching GraphQL resolver results."""
+
     def decorator(resolver_func: Callable) -> Callable:
         @wraps(resolver_func)
         def wrapper(self, info, *args, **kwargs):
@@ -259,4 +261,5 @@ def cached_resolver(prefix: CachePrefix):
             return result
 
         return wrapper
+
     return decorator
