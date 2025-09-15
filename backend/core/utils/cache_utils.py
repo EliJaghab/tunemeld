@@ -31,14 +31,26 @@ logger = get_logger(__name__)
 def _load_centralized_schedule_config() -> dict:
     """Load schedule configuration from playlist_etl.yml workflow"""
     workflow_file = Path(__file__).parent.parent.parent.parent / ".github" / "workflows" / "playlist_etl.yml"
-    with open(workflow_file) as f:
-        config = yaml.safe_load(f)
-        # PyYAML parses 'on:' key as boolean True
-        on_section = config.get("on") or config.get(True)
-        if not on_section:
-            raise ValueError("No 'on' section found in workflow YAML")
-        cron_expr = on_section["schedule"][0]["cron"]
-        return {"cron_expression": cron_expr, "timezone": "UTC", "cache_clear_window_minutes": 20}
+
+    # Fallback configuration for production deployments where .github/ isn't available
+    fallback_config = {
+        "cron_expression": "30 2 * * *",  # 2:30 AM UTC daily
+        "timezone": "UTC",
+        "cache_clear_window_minutes": 20
+    }
+
+    try:
+        with open(workflow_file) as f:
+            config = yaml.safe_load(f)
+            # PyYAML parses 'on:' key as boolean True
+            on_section = config.get("on") or config.get(True)
+            if not on_section:
+                return fallback_config
+            cron_expr = on_section["schedule"][0]["cron"]
+            return {"cron_expression": cron_expr, "timezone": "UTC", "cache_clear_window_minutes": 20}
+    except (FileNotFoundError, KeyError, IndexError):
+        # Use fallback config in production or when workflow file is missing/malformed
+        return fallback_config
 
 
 _CENTRALIZED_CONFIG = _load_centralized_schedule_config()
