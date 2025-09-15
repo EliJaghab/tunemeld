@@ -240,6 +240,57 @@ def clear_cache_by_prefix(prefix: CachePrefix) -> int:
     return -1  # Unknown count
 
 
+def _serialize_graphql_object(obj):
+    """Convert GraphQL objects to dict for JSON serialization."""
+    from datetime import datetime
+
+    if obj is None:
+        return None
+    elif isinstance(obj, (str, int, float, bool)):
+        return obj
+    elif isinstance(obj, datetime):
+        return obj.isoformat()
+    elif isinstance(obj, list):
+        return [_serialize_graphql_object(item) for item in obj]
+    elif hasattr(obj, '__dict__'):
+        result = {'__type__': obj.__class__.__name__}
+        for key, value in obj.__dict__.items():
+            if not key.startswith('_'):
+                result[key] = _serialize_graphql_object(value)
+        return result
+    else:
+        return str(obj)
+
+
+def _deserialize_graphql_object(data, resolver_name):
+    """Reconstruct GraphQL objects from cached dict."""
+    if data is None:
+        return None
+    elif isinstance(data, dict) and '__type__' in data:
+        if resolver_name == 'resolve_playlist' and data['__type__'] == 'PlaylistType':
+            from core.graphql.playlist import PlaylistType
+            from core.graphql.track import TrackType
+
+            tracks = []
+            if 'tracks' in data:
+                for track_data in data['tracks']:
+                    if isinstance(track_data, dict) and '__type__' in track_data:
+                        track = TrackType()
+                        for key, value in track_data.items():
+                            if key != '__type__':
+                                setattr(track, key, value)
+                        tracks.append(track)
+
+            playlist = PlaylistType()
+            for key, value in data.items():
+                if key == 'tracks':
+                    setattr(playlist, key, tracks)
+                elif key != '__type__':
+                    setattr(playlist, key, value)
+            return playlist
+    return data
+
+
 def cached_resolver(prefix: CachePrefix):
     """Decorator for caching GraphQL resolver results."""
 
@@ -259,14 +310,14 @@ def cached_resolver(prefix: CachePrefix):
 
             key_data = ":".join(cache_key_parts)
 
-            # Try to get from cache
             cached_result = cache_get(prefix, key_data)
             if cached_result is not None:
-                return cached_result
+                return _deserialize_graphql_object(cached_result, resolver_func.__name__)
 
-            # Execute resolver and cache result
             result = resolver_func(self, info, *args, **kwargs)
-            cache_set(prefix, key_data, result)
+
+            serializable_result = _serialize_graphql_object(result)
+            cache_set(prefix, key_data, serializable_result)
 
             return result
 
