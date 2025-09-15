@@ -69,7 +69,7 @@ repos:
 
       - id: check-pip-dependencies
         name: Check pip dependency compatibility
-        entry: bash -c "cd django_backend && source venv/bin/activate && python -m pip install --dry-run -e .."
+        entry: bash -c "cd backend && source venv/bin/activate && python -m pip install --dry-run -e .."
         language: system
         pass_filenames: false
         verbose: false
