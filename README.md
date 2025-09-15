@@ -6,8 +6,6 @@ I built TuneMeld because I found myself constantly checking different streaming 
 
 **TuneMeld solves this by aggregating playlist data from major streaming services to show where they agree on top tracks** - essentially saving time by finding the tracks that matter across all platforms.
 
-<img width="894" alt="Screenshot 2024-08-07 at 9 37 06 PM" src="https://github.com/user-attachments/assets/618ab389-cbae-4e77-ab29-3256e2422e1e">
-
 ## Architecture Overview
 
 TuneMeld is a data pipeline and web application that aggregates music playlist data from multiple streaming services.
