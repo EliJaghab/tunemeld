@@ -5,6 +5,7 @@ from core.models.genre_service import Service
 from core.models.playlist import Playlist
 from core.models.track import Track
 from core.models.view_counts import HistoricalTrackViewCount
+from core.utils.cache_utils import CachePrefix, cached_resolver
 from core.utils.utils import truncate_to_words
 from graphene_django import DjangoObjectType
 
@@ -122,6 +123,7 @@ class TrackType(DjangoObjectType):
         except Service.DoesNotExist:
             return None
 
+    @cached_resolver(CachePrefix.GQL_VIEW_COUNT)
     def resolve_youtube_current_view_count(self, info):
         try:
             youtube_service = Service.objects.get(name=ServiceName.YOUTUBE)
@@ -134,6 +136,7 @@ class TrackType(DjangoObjectType):
         except (Service.DoesNotExist, HistoricalTrackViewCount.DoesNotExist):
             return None
 
+    @cached_resolver(CachePrefix.GQL_VIEW_COUNT)
     def resolve_spotify_current_view_count(self, info):
         try:
             spotify_service = Service.objects.get(name=ServiceName.SPOTIFY)
@@ -146,6 +149,7 @@ class TrackType(DjangoObjectType):
         except (Service.DoesNotExist, HistoricalTrackViewCount.DoesNotExist):
             return None
 
+    @cached_resolver(CachePrefix.GQL_VIEW_COUNT)
     def resolve_youtube_view_count_delta_percentage(self, info):
         try:
             youtube_service = Service.objects.get(name=ServiceName.YOUTUBE)
@@ -158,6 +162,7 @@ class TrackType(DjangoObjectType):
         except (Service.DoesNotExist, HistoricalTrackViewCount.DoesNotExist):
             return None
 
+    @cached_resolver(CachePrefix.GQL_VIEW_COUNT)
     def resolve_spotify_view_count_delta_percentage(self, info):
         try:
             spotify_service = Service.objects.get(name=ServiceName.SPOTIFY)

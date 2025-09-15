@@ -1,8 +1,9 @@
 import hashlib
 from datetime import datetime, timedelta
 from enum import Enum
+from functools import wraps
 from pathlib import Path
-from typing import Any, NamedTuple
+from typing import Any, Callable, NamedTuple
 
 import pytz
 import yaml
@@ -19,6 +20,8 @@ class CachePrefix(str, Enum):
     YOUTUBE_VIEW_COUNT = "youtube_view_count"
     SPOTIFY_ISRC = "spotify_isrc"
     APPLE_COVER = "apple_cover"
+    GQL_PLAYLIST = "gql_playlist"
+    GQL_VIEW_COUNT = "gql_view_count"
 
 
 logger = get_logger(__name__)
@@ -65,6 +68,8 @@ CACHE_TTL_MAP = {
     CachePrefix.YOUTUBE_VIEW_COUNT: TWENTY_FOUR_HOURS_TTL,
     CachePrefix.SPOTIFY_ISRC: NO_EXPIRATION_TTL,
     CachePrefix.APPLE_COVER: SEVEN_DAYS_TTL,
+    CachePrefix.GQL_PLAYLIST: SEVEN_DAYS_TTL,
+    CachePrefix.GQL_VIEW_COUNT: TWENTY_FOUR_HOURS_TTL,
 }
 
 
@@ -203,3 +208,55 @@ def get_all_raw_playlist_cache_keys() -> list[tuple[CachePrefix, str]]:
         cache_keys.append((CachePrefix.SPOTIFY_PLAYLIST, key_data))
 
     return cache_keys
+
+
+def clear_cache_by_prefix(prefix: CachePrefix) -> int:
+    """Clear all cache entries with the given prefix."""
+    from django.core.cache import cache
+
+    # For Redis/Memcached backends with KEY_PREFIX support
+    pattern = f"{prefix.value}:*"
+
+    # Try to use delete_pattern if available (Redis)
+    if hasattr(cache, 'delete_pattern'):
+        deleted = cache.delete_pattern(pattern)
+        logger.info(f"Cleared {deleted} cache entries with prefix {prefix.value}")
+        return deleted
+
+    # Fallback: clear all cache (less efficient but works with all backends)
+    cache.clear()
+    logger.info(f"Cleared all cache (backend doesn't support pattern deletion)")
+    return -1  # Unknown count
+
+
+def cached_resolver(prefix: CachePrefix):
+    """Decorator for caching GraphQL resolver results."""
+    def decorator(resolver_func: Callable) -> Callable:
+        @wraps(resolver_func)
+        def wrapper(self, info, *args, **kwargs):
+            # Generate cache key from resolver name and arguments
+            cache_key_parts = [resolver_func.__name__]
+
+            # Add positional arguments
+            for arg in args:
+                cache_key_parts.append(str(arg))
+
+            # Add keyword arguments (sorted for consistency)
+            for key in sorted(kwargs.keys()):
+                cache_key_parts.append(f"{key}={kwargs[key]}")
+
+            key_data = ":".join(cache_key_parts)
+
+            # Try to get from cache
+            cached_result = cache_get(prefix, key_data)
+            if cached_result is not None:
+                return cached_result
+
+            # Execute resolver and cache result
+            result = resolver_func(self, info, *args, **kwargs)
+            cache_set(prefix, key_data, result)
+
+            return result
+
+        return wrapper
+    return decorator

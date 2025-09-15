@@ -3,6 +3,7 @@ from core.constants import ServiceName
 from core.graphql.track import TrackType
 from core.models import Genre, Track
 from core.models.playlist import Playlist, RawPlaylistData
+from core.utils.cache_utils import CachePrefix, cached_resolver
 
 
 class PlaylistType(graphene.ObjectType):
@@ -35,6 +36,7 @@ class PlaylistQuery(graphene.ObjectType):
         """Used to order the header art."""
         return [ServiceName.SOUNDCLOUD, ServiceName.APPLE_MUSIC, ServiceName.SPOTIFY]
 
+    @cached_resolver(CachePrefix.GQL_PLAYLIST)
     def resolve_playlist(self, info, genre, service):
         """Get playlist data for any service (including Aggregate) and genre."""
         playlists = Playlist.objects.filter(genre__name=genre, service__name=service).order_by("position")
@@ -50,6 +52,7 @@ class PlaylistQuery(graphene.ObjectType):
 
         return PlaylistType(genre_name=genre, service_name=service, tracks=tracks)
 
+    @cached_resolver(CachePrefix.GQL_PLAYLIST)
     def resolve_playlists_by_genre(self, info, genre):
         """Get playlist metadata for all services for a given genre."""
         try:
