@@ -73,7 +73,7 @@ class Command(BaseCommand):
         """Get aggregate rank prioritizing tracks on all three services first."""
         # Check if track appears on all three main services
         has_all_three_services = all(
-            service in service_positions
+            service.value in service_positions
             for service in [ServiceName.SPOTIFY, ServiceName.APPLE_MUSIC, ServiceName.SOUNDCLOUD]
         )
 
@@ -81,14 +81,14 @@ class Command(BaseCommand):
         if has_all_three_services:
             # Use highest priority service position for tracks on all three services
             for service_name in SERVICE_RANK_PRIORITY:
-                if service_name in service_positions:
-                    return float(service_positions[service_name])
+                if service_name.value in service_positions:
+                    return float(service_positions[service_name.value])
 
         # Tracks on 2 services get secondary priority (1000+ range)
         else:
             for service_name in SERVICE_RANK_PRIORITY:
-                if service_name in service_positions:
-                    return 1000.0 + float(service_positions[service_name])
+                if service_name.value in service_positions:
+                    return 1000.0 + float(service_positions[service_name.value])
 
         raise ValueError(f"No valid service found in positions: {service_positions}")
 
