@@ -5,12 +5,12 @@ on:
     - cron: '30 2 * * *'
   push:
     paths:
-      - 'backend/core/management/commands/playlist_etl/**'
-      - 'backend/core/management/commands/a_playlist_etl.py'
+      - 'backend/core/management/commands/playlist_etl_modules/**'
+      - 'backend/core/management/commands/playlist_etl.py'
   pull_request:
     paths:
-      - 'backend/core/management/commands/playlist_etl/**'
-      - 'backend/core/management/commands/a_playlist_etl.py'
+      - 'backend/core/management/commands/playlist_etl_modules/**'
+      - 'backend/core/management/commands/playlist_etl.py'
   workflow_dispatch:
 
 jobs:
