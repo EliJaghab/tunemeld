@@ -33,20 +33,20 @@
     <div class="container" id="main-content">
       <div id="title-container"></div>
       <section id="header-art" class="header-art-section">
-        <div id="applemusic" class="service">
+        <div id="apple_music" class="service">
           <a
-            id="applemusic-playlist-title"
+            id="apple_music-playlist-title"
             class="header-title skeleton-text"
             href="#"
             target="_blank"
           ></a>
-          <a id="applemusic-cover-link" href="#" target="_blank">
+          <a id="apple_music-cover-link" href="#" target="_blank">
             <div
-              id="applemusic-video-container"
+              id="apple_music-video-container"
               class="video-container skeleton"
             >
               <video
-                id="applemusic-video"
+                id="apple_music-video"
                 muted
                 autoplay
                 loop
@@ -56,7 +56,7 @@
             </div>
           </a>
           <div
-            id="applemusic-description"
+            id="apple_music-description"
             class="description skeleton-text"
           ></div>
         </div>
@@ -173,20 +173,20 @@
           </div>
         </div>
         <div class="playlist-column">
-          <div class="playlist" id="apple-music-playlist">
+          <div class="playlist" id="apple_music-playlist">
             <div class="playlist-header">
               <div class="playlist-title">
-                <a id="apple-music-playlist-link" target="_blank">
+                <a id="apple_music-playlist-link" target="_blank">
                   <img
                     src="./images/apple_music_logo.png"
                     alt="Apple Music"
                     class="source-icon"
                   />
-                  <span id="apple-music-playlist-title">Apple Music</span>
+                  <span id="apple_music-playlist-title">Apple Music</span>
                 </a>
                 <button
                   class="collapse-button"
-                  data-target="#apple-music-playlist"
+                  data-target="#apple_music-playlist"
                 >
                   ▼
                 </button>
@@ -268,6 +268,18 @@
         </div>
       </div>
 
+      <script type="importmap">
+        {
+          "imports": {
+            "@/components/": "/src/components/",
+            "@/services/": "/src/services/",
+            "@/state/": "/src/state/",
+            "@/routing/": "/src/routing/",
+            "@/utils/": "/src/utils/",
+            "@/config/": "/src/config/"
+          }
+        }
+      </script>
       <script type="module" src="./main.js"></script>
       <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
       <script src="https://w.soundcloud.com/player/api.js"></script>

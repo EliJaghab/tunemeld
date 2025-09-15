@@ -1,28 +1,31 @@
-import { loadTitleContent } from "./title.js";
-import { setupSortButtons } from "./playlist.js";
-import { setupGenreSelector, setupViewCountTypeSelector } from "./selectors.js";
+import { loadTitleContent } from "@/components/title.js";
+import { setupSortButtons } from "@/components/playlist.js";
+import {
+  setupGenreSelector,
+  setupViewCountTypeSelector,
+} from "@/utils/selectors.js";
 import {
   setupBodyClickListener,
   setupClosePlayerButton,
-} from "./servicePlayer.js";
+} from "@/components/servicePlayer.js";
 import { initializeTosPrivacyOverlay } from "./tosPrivacy.js";
-import { stateManager } from "./StateManager.js";
-import { loadGenresIntoSelector } from "./genre-loader.js";
-import { appRouter } from "./router.js";
+import { stateManager } from "@/state/StateManager.js";
+import { loadGenresIntoSelector } from "@/utils/genre-loader.js";
+import { appRouter } from "@/routing/router.js";
 
 document.addEventListener("DOMContentLoaded", initializeApp);
 
 async function initializeApp() {
   await loadTitleContent();
-  applyStoredTheme();
-  setupThemeToggle();
-
-  const genreSelector = document.getElementById("genre-selector");
-  const viewCountTypeSelector = document.getElementById(
-    "view-count-type-selector",
-  );
 
   stateManager.initializeFromDOM();
+  stateManager.applyTheme(stateManager.getTheme());
+  setupThemeToggle();
+
+  const genreSelector = stateManager.getElement("genre-selector");
+  const viewCountTypeSelector = stateManager.getElement(
+    "view-count-type-selector",
+  );
 
   try {
     await loadGenresIntoSelector();
@@ -38,38 +41,11 @@ async function initializeApp() {
   initializeTosPrivacyOverlay();
 }
 
-function applyStoredTheme() {
-  const storedTheme = localStorage.getItem("theme");
-  if (storedTheme) {
-    document.body.classList.toggle("dark-mode", storedTheme === "dark");
-    document.getElementById("theme-toggle-button").checked =
-      storedTheme === "dark";
-  } else {
-    applyThemeBasedOnTime();
-  }
-}
-
-function applyThemeBasedOnTime() {
-  const hour = new Date().getHours();
-  const isDarkMode = hour >= 19 || hour < 7;
-
-  if (isDarkMode) {
-    document.body.classList.add("dark-mode");
-    document.getElementById("theme-toggle-button").checked = true;
-  } else {
-    document.body.classList.remove("dark-mode");
-    document.getElementById("theme-toggle-button").checked = false;
-  }
-}
-
-function toggleTheme() {
-  const isDarkMode = document.body.classList.toggle("dark-mode");
-  localStorage.setItem("theme", isDarkMode ? "dark" : "light");
-}
-
 function setupThemeToggle() {
-  const themeToggleButton = document.getElementById("theme-toggle-button");
+  const themeToggleButton = stateManager.getElement("theme-toggle-button");
   if (themeToggleButton) {
-    themeToggleButton.addEventListener("change", toggleTheme);
+    themeToggleButton.addEventListener("change", () => {
+      stateManager.toggleTheme();
+    });
   }
 }
