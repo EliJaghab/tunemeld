@@ -26,6 +26,7 @@ npm-debug.log*
 # Environment variables
 .env.dev
 .env.prod
+.env
 
 # Tox
 .tox/
@@ -54,6 +55,9 @@ dist/
 
 # Temporary patch files
 *.patch
+
+# Temporary scripts
+run_*.sh
 
 # Metabase
 backend/metabase.db*
