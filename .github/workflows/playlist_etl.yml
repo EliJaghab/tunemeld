@@ -5,12 +5,12 @@ on:
     - cron: '30 2 * * *'
   push:
     paths:
-      - 'django_backend/core/management/commands/playlist_etl/**'
-      - 'django_backend/core/management/commands/a_playlist_etl.py'
+      - 'backend/core/management/commands/playlist_etl/**'
+      - 'backend/core/management/commands/a_playlist_etl.py'
   pull_request:
     paths:
-      - 'django_backend/core/management/commands/playlist_etl/**'
-      - 'django_backend/core/management/commands/a_playlist_etl.py'
+      - 'backend/core/management/commands/playlist_etl/**'
+      - 'backend/core/management/commands/a_playlist_etl.py'
   workflow_dispatch:
 
 jobs:
@@ -79,7 +79,7 @@ jobs:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
         run: |
-          cd django_backend
+          cd backend
           echo " ETL Pipeline Results:"
           python manage.py shell -c "
           from core.models import RawPlaylistData, Track, ServiceTrack, PlaylistModel, Genre, Service

@@ -13,7 +13,7 @@ COPY pyproject.toml /app/pyproject.toml
 RUN pip install --upgrade pip && pip install -e .
 
 # Copy Django backend files to container
-COPY django_backend/ /app/
+COPY backend/ /app/
 
 # Debug: List files to verify copy worked
 RUN echo "=== VERIFYING FILE COPY ===" && \

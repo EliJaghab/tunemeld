@@ -63,7 +63,7 @@ jobs:
           CF_NAMESPACE_ID: ${{ secrets.CF_NAMESPACE_ID }}
           CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
         run: |
-          cd django_backend
+          cd backend
           python manage.py a_view_count
 
       - name: Verify ETL pipeline results
@@ -71,7 +71,7 @@ jobs:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
         run: |
-          cd django_backend
+          cd backend
           echo " Historical Track View Count ETL Results:"
           python manage.py shell -c "
           from core.models.z_view_counts import HistoricalTrackViewCount
