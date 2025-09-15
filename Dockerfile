@@ -15,6 +15,9 @@ RUN pip install --upgrade pip && pip install -e .
 # Copy Django backend files to container
 COPY backend/ /app/
 
+# Copy .github directory for workflow configuration
+COPY .github/ /app/.github/
+
 # Debug: List files to verify copy worked
 RUN echo "=== VERIFYING FILE COPY ===" && \
     ls -la /app/ && \
