@@ -1,7 +1,7 @@
-import { DJANGO_API_BASE_URL } from "./config.js";
-import { stateManager } from "./StateManager.js";
-import { graphqlClient } from "./graphql-client.js";
-import { SERVICE_NAMES } from "./constants.js";
+import { DJANGO_API_BASE_URL } from "@/config/config.js";
+import { stateManager } from "@/state/StateManager.js";
+import { graphqlClient } from "@/services/graphql-client.js";
+import { SERVICE_NAMES } from "@/config/constants.js";
 
 export function setupSortButtons() {
   document.querySelectorAll(".sort-controls .sort-button").forEach((button) => {

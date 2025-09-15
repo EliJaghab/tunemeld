@@ -1,5 +1,5 @@
-import { graphqlClient } from "./graphql-client.js";
-import { SERVICE_NAMES } from "./constants.js";
+import { graphqlClient } from "@/services/graphql-client.js";
+import { SERVICE_NAMES } from "@/config/constants.js";
 
 export async function displayPlaylistMetadata(genre, displayServiceCallback) {
   try {
@@ -60,7 +60,7 @@ function updateServiceHeaderArt(
 ) {
   // Map service names to HTML element ID prefixes
   const serviceIdMapping = {
-    apple_music: "applemusic",
+    apple_music: "apple_music",
     soundcloud: "soundcloud",
     spotify: "spotify",
   };
@@ -119,13 +119,13 @@ function updateServiceHeaderArt(
 }
 
 function displayAppleMusicVideo(url) {
-  const videoContainer = document.getElementById("applemusic-video-container");
+  const videoContainer = document.getElementById("apple_music-video-container");
   if (!videoContainer) return;
 
   videoContainer.innerHTML = `
-    <video id="applemusic-video" class="video-js vjs-default-skin" muted autoplay loop playsinline controlsList="nodownload nofullscreen noremoteplayback"></video>
+    <video id="apple_music-video" class="video-js vjs-default-skin" muted autoplay loop playsinline controlsList="nodownload nofullscreen noremoteplayback"></video>
   `;
-  const video = document.getElementById("applemusic-video");
+  const video = document.getElementById("apple_music-video");
 
   if (typeof Hls !== "undefined" && Hls.isSupported()) {
     const hls = new Hls();

@@ -1,5 +1,5 @@
-import { graphqlClient } from "./graphql-client.js";
-import { errorHandler } from "./error-handler.js";
+import { graphqlClient } from "@/services/graphql-client.js";
+import { errorHandler } from "@/utils/error-handler.js";
 
 class GenreManager {
   constructor() {

@@ -1,4 +1,4 @@
-import { displayPlaylistMetadata } from "./playlist-metadata.js";
+import { displayPlaylistMetadata } from "@/utils/playlist-metadata.js";
 
 export function showSkeletonLoaders() {
   document.querySelectorAll(".skeleton, .skeleton-text").forEach((el) => {

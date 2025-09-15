@@ -2,7 +2,7 @@ import {
   fetchAndDisplayHeaderArt,
   hideSkeletonLoaders,
   showSkeletonLoaders,
-} from "./header.js";
+} from "@/components/header.js";
 import {
   addToggleEventListeners,
   fetchAndDisplayPlaylists,
@@ -11,13 +11,13 @@ import {
   setupSortButtons,
   sortTable,
   updateMainPlaylist,
-} from "./playlist.js";
-import { setupBodyClickListener } from "./servicePlayer.js";
-import { stateManager } from "./StateManager.js";
-import { appRouter } from "./router.js";
-import { genreManager } from "./genre-manager.js";
-import { graphqlClient } from "./graphql-client.js";
-import { displayPlaylistMetadata } from "./playlist-metadata.js";
+} from "@/components/playlist.js";
+import { setupBodyClickListener } from "@/components/servicePlayer.js";
+import { stateManager } from "@/state/StateManager.js";
+import { appRouter } from "@/routing/router.js";
+import { genreManager } from "@/utils/genre-manager.js";
+import { graphqlClient } from "@/services/graphql-client.js";
+import { displayPlaylistMetadata } from "@/utils/playlist-metadata.js";
 
 export async function updateGenreData(genre, viewCountType, updateAll = false) {
   try {

@@ -1,10 +1,11 @@
-import { graphqlClient } from "./graphql-client.js";
+import { graphqlClient } from "@/services/graphql-client.js";
+import { stateManager } from "@/state/StateManager.js";
 
 export async function loadGenresIntoSelector() {
   try {
     const data = await graphqlClient.getAvailableGenres();
     const { genres, defaultGenre } = data;
-    const genreSelector = document.getElementById("genre-selector");
+    const genreSelector = stateManager.getElement("genre-selector");
 
     if (!genreSelector) {
       throw new Error("Genre selector not found");

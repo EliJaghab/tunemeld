@@ -28,7 +28,10 @@ class StateManager {
       viewCountType: "total-view-count",
       sortColumn: "rank",
       sortOrder: "asc",
+      theme: null,
+      currentGenre: null,
     };
+    this.domElements = new Map();
   }
 
   initializeFromDOM() {
@@ -40,6 +43,15 @@ class StateManager {
     }
     this.state.sortColumn = "rank";
     this.state.sortOrder = "asc";
+
+    // Initialize theme from localStorage
+    const storedTheme = localStorage.getItem("theme");
+    this.state.theme = storedTheme || this.getTimeBasedTheme();
+  }
+
+  getTimeBasedTheme() {
+    const hour = new Date().getHours();
+    return hour >= 19 || hour < 7 ? "dark" : "light";
   }
 
   getViewCountType() {
@@ -64,6 +76,57 @@ class StateManager {
 
   setCurrentOrder(order) {
     this.state.sortOrder = order;
+  }
+
+  // Theme Management
+  getTheme() {
+    return this.state.theme;
+  }
+
+  setTheme(theme) {
+    this.state.theme = theme;
+    localStorage.setItem("theme", theme);
+    this.applyTheme(theme);
+  }
+
+  toggleTheme() {
+    const newTheme = this.state.theme === "dark" ? "light" : "dark";
+    this.setTheme(newTheme);
+    return newTheme;
+  }
+
+  applyTheme(theme) {
+    const isDarkMode = theme === "dark";
+    document.body.classList.toggle("dark-mode", isDarkMode);
+
+    const themeToggleButton = this.getElement("theme-toggle-button");
+    if (themeToggleButton) {
+      themeToggleButton.checked = isDarkMode;
+    }
+  }
+
+  // Genre Management
+  getCurrentGenre() {
+    return this.state.currentGenre;
+  }
+
+  setCurrentGenre(genre) {
+    this.state.currentGenre = genre;
+  }
+
+  // DOM Element Caching
+  getElement(id) {
+    if (!this.domElements.has(id)) {
+      const element = document.getElementById(id);
+      if (element) {
+        this.domElements.set(id, element);
+      }
+    }
+    return this.domElements.get(id);
+  }
+
+  clearElementCache() {
+    this.domElements.clear();
   }
 }
 

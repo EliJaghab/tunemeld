@@ -1,4 +1,4 @@
-import { DJANGO_API_BASE_URL } from "./config.js";
+import { DJANGO_API_BASE_URL } from "@/config/config.js";
 
 let currentChart = null;
 

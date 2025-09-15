@@ -1,9 +1,9 @@
 import Navigo from "https://cdn.jsdelivr.net/npm/navigo@8.11.1/+esm";
-import { updateGenreData } from "./selectors.js";
-import { stateManager } from "./StateManager.js";
-import { setupBodyClickListener } from "./servicePlayer.js";
-import { errorHandler } from "./error-handler.js";
-import { genreManager } from "./genre-manager.js";
+import { updateGenreData } from "@/utils/selectors.js";
+import { stateManager } from "@/state/StateManager.js";
+import { setupBodyClickListener } from "@/components/servicePlayer.js";
+import { errorHandler } from "@/utils/error-handler.js";
+import { genreManager } from "@/utils/genre-manager.js";
 
 class AppRouter {
   constructor() {

@@ -1,4 +1,4 @@
-import { fetchAndDisplayChartData } from "./chart.js";
+import { fetchAndDisplayChartData } from "@/components/chart.js";
 
 export function setupBodyClickListener(genre) {
   const body = document.body;
@@ -124,7 +124,7 @@ function closePlayer() {
 function getServiceType(url) {
   if (isSoundCloudLink(url)) return "soundcloud";
   if (isSpotifyLink(url)) return "spotify";
-  if (isAppleMusicLink(url)) return "applemusic";
+  if (isAppleMusicLink(url)) return "apple_music";
   if (isYouTubeLink(url)) return "youtube";
   return "none";
 }
