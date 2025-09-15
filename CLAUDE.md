@@ -21,7 +21,7 @@ make kill-backend      # Stops backend server
 **DO NOT use manual commands like:**
 
 - ❌ `python -m http.server 8080`
-- ❌ `cd django_backend && python manage.py runserver`
+- ❌ `cd backend && python manage.py runserver`
 - ❌ `source venv/bin/activate && ...`
 
 **The Makefile handles all environment setup, virtual environment activation, and proper server configuration.**
@@ -61,14 +61,11 @@ make kill-backend      # Stops backend server
 
 ## ETL Commands
 
-**View Count ETL Pipeline:** `django_backend/core/management/commands/a_view_count.py`
-
-- Django management command: `python manage.py a_view_count`
-- Orchestrates complete view count extraction pipeline
-- Sub-commands in `view_count/` directory:
-  - `a_historical_view_count.py` - Extracts Spotify and YouTube view counts
-- Stores data in HistoricalTrackViewCount model
-- Supports `--limit` parameter for testing
+```bash
+make run-view-count-etl      # Full view count extraction
+make test-view-count-etl     # Limited extraction for testing (10 tracks)
+make run-playlist-etl        # Full playlist extraction
+```
 
 **DO NOT ADD COMMENTS unless explicitly asked. Write clean, self-documenting code.**
 
