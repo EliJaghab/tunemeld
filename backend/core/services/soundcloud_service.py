@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup, Tag
 
 if TYPE_CHECKING:
     from core.constants import GenreName
-from core.models.playlist_types import PlaylistData, PlaylistMetadata
+from core.models.playlist import PlaylistData, PlaylistMetadata
 from core.utils.utils import clean_unicode_text, get_logger
 
 logger = get_logger(__name__)

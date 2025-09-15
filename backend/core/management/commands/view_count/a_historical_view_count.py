@@ -4,10 +4,10 @@ from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
 
 from core.constants import ServiceName
-from core.models.b_genre_service import Service
-from core.models.e_playlist import Playlist
-from core.models.f_track import Track
-from core.models.z_view_counts import HistoricalTrackViewCount
+from core.models.genre_service import Service
+from core.models.playlist import Playlist
+from core.models.track import Track
+from core.models.view_counts import HistoricalTrackViewCount
 from core.services.spotify_service import get_spotify_track_view_count
 from core.services.youtube_service import get_youtube_track_view_count
 from core.utils.utils import get_logger

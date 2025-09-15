@@ -5,7 +5,7 @@ from typing import Any
 from core.constants import GENRE_DISPLAY_NAMES, SERVICE_CONFIGS, ServiceName
 from core.models import Genre, Service, ServiceTrack
 from core.models import PlaylistModel as Playlist
-from core.models.d_raw_playlist import RawPlaylistData
+from core.models.playlist import RawPlaylistData
 from core.utils.utils import get_logger
 from django.core.management.base import BaseCommand
 from django.db.models import Count

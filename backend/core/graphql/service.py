@@ -1,5 +1,5 @@
 import graphene
-from core.models.b_genre_service import Service
+from core.models.genre_service import Service
 from graphene_django import DjangoObjectType
 
 

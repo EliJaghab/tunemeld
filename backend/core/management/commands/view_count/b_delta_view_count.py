@@ -1,7 +1,7 @@
 import logging
 from datetime import timedelta
 
-from core.models.z_view_counts import HistoricalTrackViewCount
+from core.models.view_counts import HistoricalTrackViewCount
 from django.core.management.base import BaseCommand
 from django.utils import timezone
 

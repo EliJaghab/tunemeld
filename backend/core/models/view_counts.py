@@ -8,7 +8,7 @@ Used by: Analytics and reporting
 
 from typing import ClassVar
 
-from core.models.b_genre_service import Service
+from core.models.genre_service import Service
 from django.core.validators import RegexValidator
 from django.db import models
 from django.utils import timezone

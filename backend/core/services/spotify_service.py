@@ -12,7 +12,7 @@ import builtins
 import contextlib
 
 from bs4 import BeautifulSoup, Tag
-from core.models.playlist_types import PlaylistData, PlaylistMetadata
+from core.models.playlist import PlaylistData, PlaylistMetadata
 from core.utils.cache_utils import CachePrefix, cache_get, cache_set
 from core.utils.utils import clean_unicode_text, get_logger
 from core.utils.webdriver import get_cached_webdriver

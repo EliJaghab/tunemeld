@@ -2,8 +2,7 @@ import graphene
 from core.constants import ServiceName
 from core.graphql.track import TrackType
 from core.models import Genre, Track
-from core.models.d_raw_playlist import RawPlaylistData
-from core.models.e_playlist import Playlist
+from core.models.playlist import Playlist, RawPlaylistData
 
 
 class PlaylistType(graphene.ObjectType):

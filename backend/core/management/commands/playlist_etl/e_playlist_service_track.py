@@ -4,7 +4,7 @@ import uuid
 from core.constants import ServiceName
 from core.models import PlaylistModel as Playlist
 from core.models import RawPlaylistData, ServiceTrack
-from core.models.f_track import NormalizedTrack
+from core.models.track import NormalizedTrack
 from core.services.apple_music_service import get_apple_music_album_cover_url
 from core.services.spotify_service import get_spotify_isrc
 from core.utils.utils import clean_unicode_text, get_logger
