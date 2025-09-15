@@ -1,10 +1,10 @@
 import time
 from typing import Any
 
-from core.management.commands.view_count.a_historical_view_count import Command as HistoricalViewCountCommand
-from core.management.commands.view_count.b_delta_view_count import Command as DeltaViewCountCommand
-from core.management.commands.view_count.c_clear_view_count_cache import Command as ClearViewCountCacheCommand
-from core.management.commands.view_count.d_warm_gql_cache import Command as WarmGqlCacheCommand
+from core.management.commands.view_count_modules.a_historical_view_count import Command as HistoricalViewCountCommand
+from core.management.commands.view_count_modules.b_delta_view_count import Command as DeltaViewCountCommand
+from core.management.commands.view_count_modules.c_clear_view_count_cache import Command as ClearViewCountCacheCommand
+from core.management.commands.view_count_modules.d_warm_gql_cache import Command as WarmGqlCacheCommand
 from core.models.view_counts import HistoricalTrackViewCount
 from core.utils.utils import get_logger
 from django.core.management.base import BaseCommand
