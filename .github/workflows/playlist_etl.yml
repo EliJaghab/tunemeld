@@ -12,6 +12,12 @@ on:
       - 'backend/core/management/commands/playlist_etl_modules/**'
       - 'backend/core/management/commands/playlist_etl.py'
   workflow_dispatch:
+    inputs:
+      clear_gql_cache:
+        description: 'Clear GraphQL cache (playlist and view count data)'
+        required: false
+        default: false
+        type: boolean
 
 jobs:
   run-etl:
@@ -59,6 +65,25 @@ jobs:
           CF_NAMESPACE_ID: ${{ secrets.CF_NAMESPACE_ID }}
           CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
         run: make ci-db-migrate
+
+      - name: Clear GraphQL cache (conditional)
+        if: ${{ inputs.clear_gql_cache == true }}
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
+          CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
+          CF_NAMESPACE_ID: ${{ secrets.CF_NAMESPACE_ID }}
+          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+        run: |
+          echo "🗑️ Clearing GraphQL cache (playlist and view count data)..."
+          cd backend
+          python manage.py shell -c "
+          from core.utils.cache_utils import clear_cache_by_prefix, CachePrefix
+          playlist_cleared = clear_cache_by_prefix(CachePrefix.GQL_PLAYLIST)
+          view_count_cleared = clear_cache_by_prefix(CachePrefix.GQL_VIEW_COUNT)
+          print(f'✅ Cleared {playlist_cleared} playlist cache entries')
+          print(f'✅ Cleared {view_count_cleared} view count cache entries')
+          "
 
       - name: Run Playlist ETL Pipeline
         env:
