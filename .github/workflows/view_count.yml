@@ -4,6 +4,12 @@ on:
   schedule:
     - cron: '0 2 * * *'
   workflow_dispatch:
+    inputs:
+      clear_view_count_cache:
+        description: 'Clear view count cache before running ETL'
+        required: false
+        default: false
+        type: boolean
 
 jobs:
   run-etl:
@@ -50,6 +56,23 @@ jobs:
           CF_NAMESPACE_ID: ${{ secrets.CF_NAMESPACE_ID }}
           CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
         run: make ci-db-migrate
+
+      - name: Clear view count cache (conditional)
+        if: ${{ inputs.clear_view_count_cache == true }}
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
+          CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
+          CF_NAMESPACE_ID: ${{ secrets.CF_NAMESPACE_ID }}
+          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+        run: |
+          echo "🗑️ Clearing view count cache..."
+          cd backend
+          python manage.py shell -c "
+          from core.utils.cache_utils import clear_cache_by_prefix, CachePrefix
+          view_count_cleared = clear_cache_by_prefix(CachePrefix.GQL_VIEW_COUNT)
+          print(f'✅ Cleared {view_count_cleared} view count cache entries')
+          "
 
       - name: Run Historical Track View Count ETL
         env:

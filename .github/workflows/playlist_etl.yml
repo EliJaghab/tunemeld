@@ -14,7 +14,7 @@ on:
   workflow_dispatch:
     inputs:
       clear_gql_cache:
-        description: 'Clear GraphQL cache (playlist and view count data)'
+        description: 'Clear GraphQL playlist cache only'
         required: false
         default: false
         type: boolean
@@ -75,14 +75,12 @@ jobs:
           CF_NAMESPACE_ID: ${{ secrets.CF_NAMESPACE_ID }}
           CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
         run: |
-          echo "🗑️ Clearing GraphQL cache (playlist and view count data)..."
+          echo "🗑️ Clearing GraphQL playlist cache only..."
           cd backend
           python manage.py shell -c "
           from core.utils.cache_utils import clear_cache_by_prefix, CachePrefix
           playlist_cleared = clear_cache_by_prefix(CachePrefix.GQL_PLAYLIST)
-          view_count_cleared = clear_cache_by_prefix(CachePrefix.GQL_VIEW_COUNT)
           print(f'✅ Cleared {playlist_cleared} playlist cache entries')
-          print(f'✅ Cleared {view_count_cleared} view count cache entries')
           "
 
       - name: Run Playlist ETL Pipeline
