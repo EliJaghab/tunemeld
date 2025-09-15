@@ -4,6 +4,7 @@
 	setup_env \
 	serve-frontend \
 	serve-backend \
+	serve \
 	kill-frontend \
 	kill-backend \
 	makemigrations \
@@ -160,6 +161,14 @@ kill-backend:
 		echo "  No backend server running on port 8000"; \
 	fi
 
+serve:
+	@echo " Starting both frontend and backend servers..."
+	@echo " Frontend: http://localhost:8080"
+	@echo " Backend API: http://localhost:8000"
+	@echo " Press Ctrl+C to stop both servers"
+	@echo ""
+	@$(MAKE) serve-frontend & $(MAKE) serve-backend & wait
+
 # Django Migration Commands
 makemigrations:
 	@echo " Creating Django migrations..."
@@ -184,7 +193,11 @@ migration-safety-check:
 
 test-view-count-etl:
 	@echo " Running View Count ETL (limited for testing)..."
+ifeq ($(GITHUB_ACTIONS),)
 	@cd backend && $(VENV)/bin/python manage.py view_count --limit 10
+else
+	@cd backend && python manage.py view_count --limit 10
+endif
 	@echo " View Count ETL test completed"
 
 # CI/CD Database Operations
@@ -211,10 +224,18 @@ ci-db-validate:
 
 run-view-count-etl:
 	@echo " Running View Count ETL Pipeline..."
+ifeq ($(GITHUB_ACTIONS),)
 	@cd backend && $(VENV)/bin/python manage.py view_count
+else
+	@cd backend && python manage.py view_count
+endif
 	@echo " View Count ETL Pipeline completed"
 
 run-playlist-etl:
 	@echo " Running Playlist ETL Pipeline..."
+ifeq ($(GITHUB_ACTIONS),)
 	@cd backend && $(VENV)/bin/python manage.py playlist_etl
+else
+	@cd backend && python manage.py playlist_etl
+endif
 	@echo " Playlist ETL Pipeline completed"
