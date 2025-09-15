@@ -3,7 +3,7 @@ requires = ["setuptools>=45", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools.packages.find]
-include = ["playlist_etl*", "django_backend*"]
+include = ["playlist_etl*", "backend*"]
 exclude = ["venv*", "node_modules*", "staticfiles*", "backend*", "kv_worker*", "output_static*", "tests*"]
 
 [project]
@@ -120,7 +120,7 @@ skip-magic-trailing-comma = false
 line-ending = "auto"
 
 [tool.ruff.lint.isort]
-known-first-party = ["playlist_etl", "django_backend"]
+known-first-party = ["playlist_etl", "backend"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

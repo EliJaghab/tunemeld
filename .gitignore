@@ -56,6 +56,9 @@ dist/
 *.patch
 
 # Metabase
+backend/metabase.db*
+backend/plugins/
+backend/staging.db
 django_backend/metabase.db*
 django_backend/plugins/
 django_backend/staging.db

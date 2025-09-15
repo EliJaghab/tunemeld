@@ -1,0 +1,21 @@
+import graphene
+from core.constants import GenreName
+from core.models import Genre
+from graphene_django import DjangoObjectType
+
+
+class GenreType(DjangoObjectType):
+    class Meta:
+        model = Genre
+        fields = ("id", "name", "display_name")
+
+
+class GenreQuery(graphene.ObjectType):
+    genres = graphene.List(GenreType)
+    default_genre = graphene.String()
+
+    def resolve_genres(self, info):
+        return Genre.objects.all().order_by("name")
+
+    def resolve_default_genre(self, info):
+        return GenreName.POP
