@@ -30,7 +30,17 @@ logger = get_logger(__name__)
 
 def _load_centralized_schedule_config() -> dict:
     """Load schedule configuration from playlist_etl.yml workflow"""
-    workflow_file = Path(__file__).parent.parent.parent.parent / ".github" / "workflows" / "playlist_etl.yml"
+    # Start from current file and walk up to find .github directory
+    current_path = Path(__file__).parent
+    while current_path != current_path.parent:  # Stop at filesystem root
+        github_path = current_path / ".github" / "workflows" / "playlist_etl.yml"
+        if github_path.exists():
+            workflow_file = github_path
+            break
+        current_path = current_path.parent
+    else:
+        raise FileNotFoundError("Could not find .github/workflows/playlist_etl.yml in parent directories")
+
     with open(workflow_file) as f:
         config = yaml.safe_load(f)
         # PyYAML parses 'on:' key as boolean True
