@@ -57,10 +57,13 @@ class TrackType(DjangoObjectType):
         Example: rank(genre="pop", service="spotify") -> 5
         """
         try:
-            playlist_entry = Playlist.objects.select_related("service_track").get(
-                service_track__track=self, genre__name=genre, service__name=service
+            playlist_entry = (
+                Playlist.objects.select_related("service_track")
+                .filter(service_track__track=self, genre__name=genre, service__name=service)
+                .order_by("position")
+                .first()
             )
-            return playlist_entry.position
+            return playlist_entry.position if playlist_entry else None
         except Playlist.DoesNotExist:
             return None
 
