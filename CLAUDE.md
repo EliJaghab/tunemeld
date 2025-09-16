@@ -32,18 +32,6 @@ make kill-backend      # Stops backend server
 
 **Playwright MCP:** Browser automation and web testing.
 
-**Local Playwright Configuration:** Uses local Playwright implementation at `/Users/eli/github/playwright/` with HTTP cache disabled for proper debugging. Configure in Claude Code settings:
-
-```json
-"playwright": {
-  "command": "node",
-  "args": ["/Users/eli/github/playwright/packages/playwright/lib/mcp/index.js", "--disable-http-cache"],
-  "env": {
-    "PLAYWRIGHT_MCP_DISABLE_HTTP_CACHE": "true"
-  }
-}
-```
-
 **Project Info:**
 
 - Project: `b6a14488-05cf-43ad-85be-995c7bae75d1`

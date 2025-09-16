@@ -12,6 +12,9 @@ import { initializeTosPrivacyOverlay } from "./tosPrivacy.js";
 import { stateManager } from "@/state/StateManager.js";
 import { loadGenresIntoSelector } from "@/utils/genre-loader.js";
 import { appRouter } from "@/routing/router.js";
+import { applyCacheBusting } from "@/config/config.js";
+
+applyCacheBusting();
 
 document.addEventListener("DOMContentLoaded", initializeApp);
 

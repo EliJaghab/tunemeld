@@ -1,8 +1,29 @@
-function isLocalDevelopment() {
+export function isLocalDevelopment() {
   return (
     window.location.hostname === "localhost" ||
-    window.location.hostname === "127.0.0.1"
+    window.location.hostname === "127.0.0.1" ||
+    window.location.hostname === ""
   );
+}
+
+export function applyCacheBusting() {
+  if (isLocalDevelopment()) {
+    const timestamp = Date.now();
+
+    document.querySelectorAll('link[rel="stylesheet"]').forEach((link) => {
+      const href = link.getAttribute("href");
+      if (href && !href.includes("http") && !href.includes("?")) {
+        link.setAttribute("href", href + "?v=" + timestamp);
+      }
+    });
+
+    document.querySelectorAll("script[src]").forEach((script) => {
+      const src = script.getAttribute("src");
+      if (src && !src.includes("http") && !src.includes("?")) {
+        script.setAttribute("src", src + "?v=" + timestamp);
+      }
+    });
+  }
 }
 
 export function getDjangoApiBaseUrl() {
