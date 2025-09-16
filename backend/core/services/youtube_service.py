@@ -2,7 +2,7 @@ import os
 from enum import Enum
 
 import requests
-from core.utils.cache_utils import CachePrefix, cache_get, cache_set
+from core.utils.cloudflare_cache import CachePrefix, cloudflare_cache_get, cloudflare_cache_set
 from core.utils.utils import get_logger
 from tenacity import retry, stop_after_attempt, wait_exponential
 
@@ -25,7 +25,7 @@ def get_youtube_url(
         raise ValueError("YouTube API key not provided.")
 
     key_data = f"{track_name}|{artist_name}"
-    youtube_url = cache_get(CachePrefix.YOUTUBE_URL, key_data)
+    youtube_url = cloudflare_cache_get(CachePrefix.YOUTUBE_URL, key_data)
     if youtube_url:
         return str(youtube_url), YouTubeUrlResult.CACHE_HIT
 
@@ -40,7 +40,7 @@ def get_youtube_url(
             if video_id:
                 youtube_url = f"https://www.youtube.com/watch?v={video_id}"
                 logger.info(f"Found YouTube URL for {track_name} by {artist_name}: {youtube_url}")
-                cache_set(CachePrefix.YOUTUBE_URL, key_data, youtube_url)
+                cloudflare_cache_set(CachePrefix.YOUTUBE_URL, key_data, youtube_url)
                 return youtube_url, YouTubeUrlResult.API_SUCCESS
         logger.info(f"No video found for {track_name} by {artist_name}")
         return None, YouTubeUrlResult.API_FAILURE_NOT_FOUND
@@ -64,7 +64,7 @@ def get_youtube_track_view_count(youtube_url: str, api_key: str | None = None) -
 
     video_id = youtube_url.split("v=")[-1]
 
-    cached_count = cache_get(CachePrefix.YOUTUBE_VIEW_COUNT, video_id)
+    cached_count = cloudflare_cache_get(CachePrefix.YOUTUBE_VIEW_COUNT, video_id)
     if cached_count:
         logger.info(f"Video ID {video_id} view count from cache: {cached_count}")
         return int(cached_count)
@@ -80,7 +80,7 @@ def get_youtube_track_view_count(youtube_url: str, api_key: str | None = None) -
             view_count = data["items"][0]["statistics"]["viewCount"]
             logger.info(f"Video ID {video_id} has {view_count} views.")
 
-            cache_set(CachePrefix.YOUTUBE_VIEW_COUNT, video_id, view_count)
+            cloudflare_cache_set(CachePrefix.YOUTUBE_VIEW_COUNT, video_id, view_count)
 
             return int(view_count)
         else:

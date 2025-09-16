@@ -2,14 +2,13 @@ import time
 import uuid
 from typing import Any
 
+from core.management.commands.clear_and_warm_cache import Command as ClearAndWarmCacheCommand
 from core.management.commands.playlist_etl_modules.a_genre_service import Command as GenreServiceCommand
 from core.management.commands.playlist_etl_modules.b_clear_raw_playlist_cache import Command as ClearCacheCommand
 from core.management.commands.playlist_etl_modules.c_raw_playlist import Command as RawPlaylistCommand
 from core.management.commands.playlist_etl_modules.d_playlist_service_track import Command as ServiceTrackCommand
 from core.management.commands.playlist_etl_modules.e_track import Command as TrackCommand
 from core.management.commands.playlist_etl_modules.f_aggregate import Command as AggregateCommand
-from core.management.commands.playlist_etl_modules.g_clear_playlist_cache import Command as ClearPlaylistCacheCommand
-from core.management.commands.playlist_etl_modules.h_warm_gql_cache import Command as WarmGqlCacheCommand
 from core.models import PlaylistModel as Playlist
 from core.models import RawPlaylistData, ServiceTrack, Track
 from core.utils.utils import get_logger
@@ -46,11 +45,8 @@ class Command(BaseCommand):
             logger.info("Step 6: Aggregating tracks...")
             AggregateCommand().handle(etl_run_id=etl_run_id)
 
-            logger.info("Step 7: Clearing playlist GraphQL cache...")
-            ClearPlaylistCacheCommand().handle()
-
-            logger.info("Step 8: Warming GraphQL cache...")
-            WarmGqlCacheCommand().handle()
+            logger.info("Step 7: Clearing and warming GraphQL cache...")
+            ClearAndWarmCacheCommand().handle()
 
             logger.info("Step 9: Removing previous ETL run data...")
             self.remove_previous_etl_run(etl_run_id)

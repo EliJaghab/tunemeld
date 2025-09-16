@@ -13,7 +13,7 @@ import contextlib
 
 from bs4 import BeautifulSoup, Tag
 from core.models.playlist import PlaylistData, PlaylistMetadata
-from core.utils.cache_utils import CachePrefix, cache_get, cache_set
+from core.utils.cloudflare_cache import CachePrefix, cloudflare_cache_get, cloudflare_cache_set
 from core.utils.utils import clean_unicode_text, get_logger
 from core.utils.webdriver import get_cached_webdriver
 from selenium.webdriver.common.by import By
@@ -44,7 +44,7 @@ def get_spotify_isrc(
     client_secret = client_secret or os.getenv("SPOTIFY_CLIENT_SECRET")
 
     key_data = f"{track_name}|{artist_name}"
-    isrc = cache_get(CachePrefix.SPOTIFY_ISRC, key_data)
+    isrc = cloudflare_cache_get(CachePrefix.SPOTIFY_ISRC, key_data)
     if isrc:
         return str(isrc)
 
@@ -63,7 +63,7 @@ def get_spotify_isrc(
         isrc = _search_spotify_for_isrc(spotify_client, query)
         if isrc:
             logger.info(f"Found ISRC for {track_name} by {artist_name}: {isrc}")
-            cache_set(CachePrefix.SPOTIFY_ISRC, key_data, isrc)
+            cloudflare_cache_set(CachePrefix.SPOTIFY_ISRC, key_data, isrc)
             return isrc
 
     logger.info(f"No track found on Spotify for {track_name} by {artist_name}")
@@ -248,11 +248,11 @@ def _extract_spotify_metadata_from_html(url: str, html_content: str) -> Playlist
 def get_spotify_playlist(genre: "GenreName") -> PlaylistData:
     """Get Spotify playlist data and metadata for a given genre"""
     from core.constants import SERVICE_CONFIGS
-    from core.utils.cache_utils import generate_spotify_cache_key_data
+    from core.utils.cloudflare_cache import generate_spotify_cache_key_data
     from core.utils.spotdl_client import fetch_spotify_playlist_with_spotdl
 
     key_data = generate_spotify_cache_key_data(genre)
-    cached_data = cache_get(CachePrefix.SPOTIFY_PLAYLIST, key_data)
+    cached_data = cloudflare_cache_get(CachePrefix.SPOTIFY_PLAYLIST, key_data)
     if cached_data:
         return cached_data
 
@@ -272,7 +272,7 @@ def get_spotify_playlist(genre: "GenreName") -> PlaylistData:
         "tracks": tracks_data,
     }
 
-    cache_set(CachePrefix.SPOTIFY_PLAYLIST, key_data, playlist_data)
+    cloudflare_cache_set(CachePrefix.SPOTIFY_PLAYLIST, key_data, playlist_data)
     return playlist_data
 
 

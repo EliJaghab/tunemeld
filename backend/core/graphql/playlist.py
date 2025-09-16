@@ -2,8 +2,10 @@ import graphene
 from core.constants import ServiceName
 from core.graphql.track import TrackType
 from core.models import Genre, Track
+from core.models.genre_service import Service
 from core.models.playlist import Playlist, RawPlaylistData
-from core.utils.cache_utils import CachePrefix, cached_resolver
+from core.models.view_counts import HistoricalTrackViewCount
+from core.utils.local_cache import CachePrefix, local_cache_get, local_cache_set
 
 
 class PlaylistType(graphene.ObjectType):
@@ -32,13 +34,78 @@ class PlaylistQuery(graphene.ObjectType):
     playlists_by_genre = graphene.List(PlaylistMetadataType, genre=graphene.String(required=True))
     updated_at = graphene.DateTime(genre=graphene.String(required=True))
 
+    @staticmethod
+    def _enrich_tracks_with_view_counts(tracks):
+        """Pre-populate track objects with view count data to avoid individual cache calls."""
+        if not tracks:
+            return tracks
+
+        track_isrcs = [track.isrc for track in tracks]
+
+        try:
+            youtube_service = Service.objects.get(name=ServiceName.YOUTUBE)
+            spotify_service = Service.objects.get(name=ServiceName.SPOTIFY)
+        except Service.DoesNotExist:
+            return tracks
+
+        youtube_counts = {
+            vc.isrc: vc
+            for vc in HistoricalTrackViewCount.objects.filter(isrc__in=track_isrcs, service=youtube_service)
+            .order_by("isrc", "-recorded_date")
+            .distinct("isrc")
+        }
+
+        spotify_counts = {
+            vc.isrc: vc
+            for vc in HistoricalTrackViewCount.objects.filter(isrc__in=track_isrcs, service=spotify_service)
+            .order_by("isrc", "-recorded_date")
+            .distinct("isrc")
+        }
+
+        for track in tracks:
+            youtube_data = youtube_counts.get(track.isrc)
+            spotify_data = spotify_counts.get(track.isrc)
+
+            track._youtube_current_view_count = youtube_data.current_view_count if youtube_data else None
+            track._spotify_current_view_count = spotify_data.current_view_count if spotify_data else None
+            track._youtube_view_count_delta_percentage = youtube_data.daily_change_percentage if youtube_data else None
+            track._spotify_view_count_delta_percentage = spotify_data.daily_change_percentage if spotify_data else None
+
+        return tracks
+
     def resolve_service_order(self, info):
         """Used to order the header art."""
         return [ServiceName.SOUNDCLOUD, ServiceName.APPLE_MUSIC, ServiceName.SPOTIFY]
 
-    @cached_resolver(CachePrefix.GQL_PLAYLIST)
     def resolve_playlist(self, info, genre, service):
         """Get playlist data for any service (including Aggregate) and genre."""
+        cache_key_data = f"resolve_playlist:genre={genre}:service={service}"
+
+        cached_result = local_cache_get(CachePrefix.GQL_PLAYLIST, cache_key_data)
+        if cached_result is not None:
+            # Reconstruct Track objects from cached data for GraphQL compatibility
+            cached_tracks = []
+            for track_data in cached_result["tracks"]:
+                track = Track()
+                track._state.adding = False
+                track._state.db = "default"
+
+                # Set all the cached attributes
+                for key, value in track_data.items():
+                    if key == "updated_at" and isinstance(value, str):
+                        # Convert ISO string back to datetime
+                        from datetime import datetime
+
+                        setattr(track, key, datetime.fromisoformat(value))
+                    else:
+                        setattr(track, key, value)
+
+                cached_tracks.append(track)
+
+            return PlaylistType(
+                genre_name=cached_result["genre_name"], service_name=cached_result["service_name"], tracks=cached_tracks
+            )
+
         playlists = Playlist.objects.filter(genre__name=genre, service__name=service).order_by("position")
 
         tracks = []
@@ -50,9 +117,40 @@ class PlaylistQuery(graphene.ObjectType):
                 except Track.DoesNotExist:
                     continue
 
+        tracks = PlaylistQuery._enrich_tracks_with_view_counts(tracks)
+
+        # Serialize tracks to GraphQL-ready format for caching (only GraphQL-relevant fields)
+        serialized_tracks = []
+        for track in tracks:
+            track_data = {
+                "id": track.id,
+                "isrc": track.isrc,
+                "track_name": track.track_name,
+                "artist_name": track.artist_name,
+                "album_name": track.album_name,
+                "spotify_url": track.spotify_url,
+                "apple_music_url": track.apple_music_url,
+                "youtube_url": track.youtube_url,
+                "soundcloud_url": track.soundcloud_url,
+                "album_cover_url": track.album_cover_url,
+                "aggregate_rank": track.aggregate_rank,
+                "aggregate_score": track.aggregate_score,
+                "updated_at": track.updated_at.isoformat() if track.updated_at else None,
+                # Only include view count enrichment data (no internal ETL fields)
+                "_youtube_current_view_count": getattr(track, "_youtube_current_view_count", None),
+                "_spotify_current_view_count": getattr(track, "_spotify_current_view_count", None),
+                "_youtube_view_count_delta_percentage": getattr(track, "_youtube_view_count_delta_percentage", None),
+                "_spotify_view_count_delta_percentage": getattr(track, "_spotify_view_count_delta_percentage", None),
+            }
+            serialized_tracks.append(track_data)
+
+        # Cache the GraphQL-ready data
+        cache_data = {"genre_name": genre, "service_name": service, "tracks": serialized_tracks}
+        local_cache_set(CachePrefix.GQL_PLAYLIST, cache_key_data, cache_data)
+
+        # Return PlaylistType with actual Track objects for non-cached response
         return PlaylistType(genre_name=genre, service_name=service, tracks=tracks)
 
-    @cached_resolver(CachePrefix.GQL_PLAYLIST)
     def resolve_playlists_by_genre(self, info, genre):
         """Get playlist metadata for all services for a given genre."""
         try:

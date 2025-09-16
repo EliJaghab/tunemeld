@@ -4,7 +4,7 @@ from typing import Any, cast
 
 import requests
 from core.constants import SERVICE_CONFIGS, GenreName, ServiceName
-from core.utils.cache_utils import CachePrefix, cache_get, cache_set
+from core.utils.cloudflare_cache import CachePrefix, cloudflare_cache_get, cloudflare_cache_set
 from core.utils.utils import get_logger
 
 logger = get_logger(__name__)
@@ -15,7 +15,7 @@ JSON = dict[str, Any] | list[Any]
 def fetch_playlist_data(service_name: ServiceName, genre: GenreName) -> JSON:
     key_data = f"{service_name.value}_{genre.value}"
 
-    cached_data = cache_get(CachePrefix.RAPIDAPI, key_data)
+    cached_data = cloudflare_cache_get(CachePrefix.RAPIDAPI, key_data)
     if cached_data:
         return cast("JSON", cached_data)
 
@@ -32,7 +32,7 @@ def fetch_playlist_data(service_name: ServiceName, genre: GenreName) -> JSON:
         raise ValueError(f"Unknown service: {service_name}")
 
     data = _make_rapidapi_request(url, config["host"])
-    cache_set(CachePrefix.RAPIDAPI, key_data, data)
+    cloudflare_cache_set(CachePrefix.RAPIDAPI, key_data, data)
     return data
 
 

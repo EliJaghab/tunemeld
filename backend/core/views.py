@@ -2,7 +2,7 @@ import logging
 from enum import Enum
 
 import requests
-from core.cache import Cache
+from core.utils.cloudflare_cache import CloudflareKVCache
 from django.http import JsonResponse
 
 EDM_EVENTS_GITHUB_URL = "https://raw.githubusercontent.com/AidanJaghab/Beatmap/main/backend/data/latest_events.json"
@@ -14,7 +14,7 @@ cache = None
 def get_cache():
     global cache
     if cache is None:
-        cache = Cache("", {})
+        cache = CloudflareKVCache("", {})
     return cache
 
 

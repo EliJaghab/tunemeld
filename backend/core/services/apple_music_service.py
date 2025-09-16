@@ -9,7 +9,7 @@ import time
 
 from bs4 import BeautifulSoup, Tag
 from core.models.playlist import PlaylistData, PlaylistMetadata
-from core.utils.cache_utils import CachePrefix, cache_get, cache_set
+from core.utils.cloudflare_cache import CachePrefix, cloudflare_cache_get, cloudflare_cache_set
 from core.utils.utils import clean_unicode_text, get_logger
 
 logger = get_logger(__name__)
@@ -18,7 +18,7 @@ APPLE_MUSIC_REQUEST_DELAY = 0.5
 
 
 def get_apple_music_album_cover_url(track_url: str) -> str | None:
-    album_cover_url = cache_get(CachePrefix.APPLE_COVER, track_url)
+    album_cover_url = cloudflare_cache_get(CachePrefix.APPLE_COVER, track_url)
     if album_cover_url:
         return str(album_cover_url)
 
@@ -34,7 +34,7 @@ def get_apple_music_album_cover_url(track_url: str) -> str | None:
 
         srcset = str(source_tag["srcset"])
         album_cover_url = unquote(srcset.split()[0])
-        cache_set(CachePrefix.APPLE_COVER, track_url, album_cover_url)
+        cloudflare_cache_set(CachePrefix.APPLE_COVER, track_url, album_cover_url)
         return album_cover_url
     except Exception as e:
         logger.info(f"Error fetching album cover URL: {e}")

@@ -5,7 +5,6 @@ from core.models.genre_service import Service
 from core.models.playlist import Playlist
 from core.models.track import Track
 from core.models.view_counts import HistoricalTrackViewCount
-from core.utils.cache_utils import CachePrefix, cached_resolver
 from core.utils.utils import truncate_to_words
 from graphene_django import DjangoObjectType
 
@@ -14,6 +13,7 @@ class TrackType(DjangoObjectType):
     class Meta:
         model = Track
         fields = (
+            "id",
             "isrc",
             "album_name",
             "spotify_url",
@@ -123,8 +123,13 @@ class TrackType(DjangoObjectType):
         except Service.DoesNotExist:
             return None
 
-    @cached_resolver(CachePrefix.GQL_VIEW_COUNT)
     def resolve_youtube_current_view_count(self, info):
+        # Always prefer pre-populated data from cache (including explicit None for Saturdays)
+        if hasattr(self, "_youtube_current_view_count"):
+            return self._youtube_current_view_count
+
+        # Fallback to database only when cache is completely empty
+        # This handles edge cases where cache warming failed
         try:
             youtube_service = Service.objects.get(name=ServiceName.YOUTUBE)
             latest = (
@@ -136,8 +141,10 @@ class TrackType(DjangoObjectType):
         except (Service.DoesNotExist, HistoricalTrackViewCount.DoesNotExist):
             return None
 
-    @cached_resolver(CachePrefix.GQL_VIEW_COUNT)
     def resolve_spotify_current_view_count(self, info):
+        if hasattr(self, "_spotify_current_view_count"):
+            return self._spotify_current_view_count
+
         try:
             spotify_service = Service.objects.get(name=ServiceName.SPOTIFY)
             latest = (
@@ -149,8 +156,10 @@ class TrackType(DjangoObjectType):
         except (Service.DoesNotExist, HistoricalTrackViewCount.DoesNotExist):
             return None
 
-    @cached_resolver(CachePrefix.GQL_VIEW_COUNT)
     def resolve_youtube_view_count_delta_percentage(self, info):
+        if hasattr(self, "_youtube_view_count_delta_percentage"):
+            return self._youtube_view_count_delta_percentage
+
         try:
             youtube_service = Service.objects.get(name=ServiceName.YOUTUBE)
             latest = (
@@ -162,8 +171,10 @@ class TrackType(DjangoObjectType):
         except (Service.DoesNotExist, HistoricalTrackViewCount.DoesNotExist):
             return None
 
-    @cached_resolver(CachePrefix.GQL_VIEW_COUNT)
     def resolve_spotify_view_count_delta_percentage(self, info):
+        if hasattr(self, "_spotify_view_count_delta_percentage"):
+            return self._spotify_view_count_delta_percentage
+
         try:
             spotify_service = Service.objects.get(name=ServiceName.SPOTIFY)
             latest = (

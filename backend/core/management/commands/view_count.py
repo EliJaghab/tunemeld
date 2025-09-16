@@ -1,10 +1,10 @@
 import time
 from typing import Any
 
+from core.management.commands.clear_and_warm_cache import Command as ClearAndWarmCacheCommand
 from core.management.commands.view_count_modules.a_historical_view_count import Command as HistoricalViewCountCommand
 from core.management.commands.view_count_modules.b_delta_view_count import Command as DeltaViewCountCommand
 from core.management.commands.view_count_modules.c_clear_view_count_cache import Command as ClearViewCountCacheCommand
-from core.management.commands.view_count_modules.d_warm_gql_cache import Command as WarmGqlCacheCommand
 from core.models.view_counts import HistoricalTrackViewCount
 from core.utils.utils import get_logger
 from django.core.management.base import BaseCommand
@@ -38,9 +38,8 @@ class Command(BaseCommand):
             clear_cache_command = ClearViewCountCacheCommand()
             clear_cache_command.handle()
 
-            logger.info("Step 4: Warming view count GraphQL cache...")
-            warm_cache_command = WarmGqlCacheCommand()
-            warm_cache_command.handle()
+            logger.info("Step 4: Clearing and warming GraphQL cache...")
+            ClearAndWarmCacheCommand().handle()
 
             duration = time.time() - start_time
             logger.info(f"View Count ETL Pipeline completed in {duration:.1f} seconds")

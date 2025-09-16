@@ -166,14 +166,22 @@ LOGGING = {
 CACHE_TIMEOUT = 86400 * 7  # 7 days
 
 CACHES = {
-    "default": {
-        "BACKEND": "core.cache.Cache",
+    "default": {  # Cloudflare KV for persistent storage of raw API data
+        "BACKEND": "core.utils.cloudflare_cache.CloudflareKVCache",
         "LOCATION": f"tunemeld-cache-{ENVIRONMENT}",
         "TIMEOUT": CACHE_TIMEOUT,
         "OPTIONS": {
             "MAX_ENTRIES": 1000,
         },
-    }
+    },
+    "local": {  # Local memory cache for GraphQL and L1 caching
+        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+        "LOCATION": "tunemeld-local-cache",
+        "TIMEOUT": 86400 * 7,  # 7 days for GraphQL caches
+        "OPTIONS": {
+            "MAX_ENTRIES": 10000,  # Increased for GraphQL data
+        },
+    },
 }
 
 # Cache middleware settings
