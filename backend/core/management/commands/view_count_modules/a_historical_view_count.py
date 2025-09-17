@@ -1,7 +1,7 @@
 import concurrent.futures
 import time
 from concurrent.futures import ThreadPoolExecutor
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from core.constants import ServiceName
 from core.models.genre_service import Service
@@ -28,11 +28,7 @@ class ServiceStats:
     missing_data_errors: int = 0
     network_errors: int = 0
     other_errors: int = 0
-    error_messages: dict[str, int] = None  # type: ignore
-
-    def __post_init__(self):
-        if self.error_messages is None:
-            self.error_messages = {}
+    error_messages: dict[str, int] = field(default_factory=dict)
 
     @property
     def total_failed(self) -> int:
@@ -55,14 +51,8 @@ class ProcessingStats:
     total_tracks_processed: int = 0
     tracks_with_spotify_urls: int = 0
     tracks_with_youtube_urls: int = 0
-    spotify: ServiceStats = None  # type: ignore
-    youtube: ServiceStats = None  # type: ignore
-
-    def __post_init__(self):
-        if self.spotify is None:
-            self.spotify = ServiceStats()
-        if self.youtube is None:
-            self.youtube = ServiceStats()
+    spotify: ServiceStats = field(default_factory=ServiceStats)
+    youtube: ServiceStats = field(default_factory=ServiceStats)
 
     @property
     def overall_success_rate(self) -> float:
