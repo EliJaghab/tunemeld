@@ -15,10 +15,10 @@ class CoreConfig(AppConfig):
         logger.debug(f"STATIC_URL: {settings.STATIC_URL}")
         logger.debug(f"STATIC_ROOT: {settings.STATIC_ROOT}")
 
-        # Only warm cache when running on Railway production server
-        if os.getenv("RAILWAY_ENVIRONMENT"):
-            logger.info("Starting cache warming on Railway server startup...")
+        # Skip cache warming in GitHub Actions CI
+        if not os.getenv("GITHUB_ACTIONS"):
+            logger.info("Starting cache warming on server startup...")
             warm_local_cache_from_postgres()
             logger.info("Cache warming completed")
         else:
-            logger.info("Skipping cache warming (not on Railway)")
+            logger.info("Skipping cache warming (running in GitHub Actions)")
