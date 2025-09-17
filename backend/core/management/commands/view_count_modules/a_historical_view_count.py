@@ -28,7 +28,7 @@ class ServiceStats:
     missing_data_errors: int = 0
     network_errors: int = 0
     other_errors: int = 0
-    error_messages: dict | None = None
+    error_messages: dict[str, int] = None  # type: ignore
 
     def __post_init__(self):
         if self.error_messages is None:
@@ -55,8 +55,8 @@ class ProcessingStats:
     total_tracks_processed: int = 0
     tracks_with_spotify_urls: int = 0
     tracks_with_youtube_urls: int = 0
-    spotify: ServiceStats | None = None
-    youtube: ServiceStats | None = None
+    spotify: ServiceStats = None  # type: ignore
+    youtube: ServiceStats = None  # type: ignore
 
     def __post_init__(self):
         if self.spotify is None:
