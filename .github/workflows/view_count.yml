@@ -69,9 +69,10 @@ jobs:
           echo "🗑️ Clearing view count cache..."
           cd backend
           python manage.py shell -c "
-          from core.utils.cache_utils import clear_cache_by_prefix, CachePrefix
-          view_count_cleared = clear_cache_by_prefix(CachePrefix.GQL_VIEW_COUNT)
-          print(f'✅ Cleared {view_count_cleared} view count cache entries')
+          from core.utils.local_cache import local_cache_clear, CachePrefix
+          gql_playlist_cleared = local_cache_clear(CachePrefix.GQL_PLAYLIST)
+          gql_metadata_cleared = local_cache_clear(CachePrefix.GQL_PLAYLIST_METADATA)
+          print(f'✅ Cleared {gql_playlist_cleared + gql_metadata_cleared} cache entries')
           "
 
       - name: Run Historical Track View Count ETL

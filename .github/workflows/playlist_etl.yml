@@ -78,8 +78,8 @@ jobs:
           echo "🗑️ Clearing GraphQL playlist cache only..."
           cd backend
           python manage.py shell -c "
-          from core.utils.cache_utils import clear_cache_by_prefix, CachePrefix
-          playlist_cleared = clear_cache_by_prefix(CachePrefix.GQL_PLAYLIST)
+          from core.utils.local_cache import local_cache_clear, CachePrefix
+          playlist_cleared = local_cache_clear(CachePrefix.GQL_PLAYLIST)
           print(f'✅ Cleared {playlist_cleared} playlist cache entries')
           "
 
