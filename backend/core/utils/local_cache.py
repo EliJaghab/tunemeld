@@ -1,5 +1,7 @@
+import datetime
 import hashlib
 import time
+import uuid
 from enum import Enum
 from typing import Any
 
@@ -29,9 +31,6 @@ def _generate_cache_key(prefix: CachePrefix, key_data: str) -> str:
 
 def _serialize_for_local_cache(data):
     """Simple serialization for local cache storage."""
-    import datetime
-    import uuid
-
     # Handle basic GraphQL-ready data structures
     if isinstance(data, dict):
         result = {}
@@ -50,8 +49,6 @@ def _serialize_for_local_cache(data):
 
 def _deserialize_from_local_cache(data):
     """Simple deserialization for basic data types."""
-    import datetime
-
     if isinstance(data, dict):
         result = {}
         for key, value in data.items():

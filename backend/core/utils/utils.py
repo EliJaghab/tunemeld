@@ -1,5 +1,6 @@
 import concurrent.futures
 import contextlib
+import html
 import logging
 import os
 import zoneinfo
@@ -137,8 +138,6 @@ def clean_unicode_text(text: str) -> str:
     """
     if not text:
         return text
-
-    import html
 
     from unidecode import unidecode
 

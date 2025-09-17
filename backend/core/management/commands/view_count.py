@@ -9,6 +9,7 @@ from core.models.view_counts import HistoricalTrackViewCount
 from core.utils.utils import get_logger
 from django.core.management.base import BaseCommand
 from django.db import models
+from django.utils import timezone
 
 logger = get_logger(__name__)
 
@@ -53,8 +54,6 @@ class Command(BaseCommand):
             raise
 
     def _print_final_summary(self):
-        from django.utils import timezone
-
         today = timezone.now().date()
         records = HistoricalTrackViewCount.objects.filter(recorded_date=today)
         total_records = records.count()
