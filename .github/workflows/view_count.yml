@@ -87,7 +87,7 @@ jobs:
           CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
         run: |
           cd backend
-          python manage.py a_view_count
+          python manage.py view_count
 
       - name: Verify ETL pipeline results
         env:
@@ -97,8 +97,8 @@ jobs:
           cd backend
           echo " Historical Track View Count ETL Results:"
           python manage.py shell -c "
-          from core.models.z_view_counts import HistoricalTrackViewCount
-          from core.models.b_genre_service import Service
+          from core.models.view_counts import HistoricalTrackViewCount
+          from core.models.genre_service import Service
           print(f'Historical track view count records: {HistoricalTrackViewCount.objects.count()}')
           print()
           print(' Breakdown by service:')
