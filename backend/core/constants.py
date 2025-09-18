@@ -33,6 +33,40 @@ GENRE_DISPLAY_NAMES: dict[str, str] = {
 PLAYLIST_GENRES: list[str] = [genre.value for genre in GenreName]
 SERVICES: list[str] = [service.value for service in ServiceName]
 
+
+class RankType(str, Enum):
+    TUNEMELD_RANK = "tunemeld_rank"
+    SPOTIFY_VIEWS_RANK = "spotify_views_rank"
+    YOUTUBE_VIEWS_RANK = "youtube_views_rank"
+
+
+DEFAULT_RANK_TYPE = RankType.TUNEMELD_RANK
+
+
+RANK_CONFIGS: dict[str, dict] = {
+    RankType.TUNEMELD_RANK.value: {
+        "display_name": "Tunemeld Rank",
+        "sort_field": "tunemeld-rank",
+        "sort_order": "asc",
+        "data_field": "tunemeldRank",
+        "preserves_backend_order": True,  # This rank uses pre-computed backend positions
+    },
+    RankType.SPOTIFY_VIEWS_RANK.value: {
+        "display_name": "Spotify Views",
+        "sort_field": "spotify-views",
+        "sort_order": "desc",
+        "data_field": "spotifyCurrentViewCount",
+        "preserves_backend_order": False,  # This rank sorts dynamically by view count
+    },
+    RankType.YOUTUBE_VIEWS_RANK.value: {
+        "display_name": "YouTube Views",
+        "sort_field": "youtube-views",
+        "sort_order": "desc",
+        "data_field": "youtubeCurrentViewCount",
+        "preserves_backend_order": False,  # This rank sorts dynamically by view count
+    },
+}
+
 SERVICE_CONFIGS: dict[str, dict] = {
     ServiceName.APPLE_MUSIC.value: {
         "base_url": "https://apple-music24.p.rapidapi.com/playlist1/",

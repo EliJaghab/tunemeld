@@ -26,10 +26,11 @@ class StateManager {
   constructor() {
     this.state = {
       viewCountType: "total-view-count",
-      sortColumn: "rank",
+      sortColumn: null, // Will be set from backend default
       sortOrder: "asc",
       theme: null,
       currentGenre: null,
+      defaultRankField: null, // Store the default from backend
     };
     this.domElements = new Map();
   }
@@ -41,7 +42,7 @@ class StateManager {
     if (viewCountSelector) {
       this.state.viewCountType = viewCountSelector.value || "total-view-count";
     }
-    this.state.sortColumn = "rank";
+    // Sort column will be set from backend default
     this.state.sortOrder = "asc";
 
     // Initialize theme from localStorage
@@ -74,8 +75,28 @@ class StateManager {
     return this.state.sortOrder;
   }
 
+  isRankActive(rankSortField) {
+    return rankSortField === this.getCurrentColumn();
+  }
+
   setCurrentOrder(order) {
     this.state.sortOrder = order;
+  }
+
+  setDefaultRankField(field) {
+    this.state.defaultRankField = field;
+    // If no sort column set yet, use the default
+    if (!this.state.sortColumn) {
+      this.state.sortColumn = field;
+    }
+  }
+
+  getDefaultRankField() {
+    return this.state.defaultRankField;
+  }
+
+  isSortingByDefaultRank() {
+    return this.state.sortColumn === this.state.defaultRankField;
   }
 
   // Theme Management

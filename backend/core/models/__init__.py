@@ -5,6 +5,7 @@ from core.models.playlist import (
 from core.models.playlist import (
     PlaylistETL,
     PlaylistType,
+    Rank,
     RawPlaylistData,
     ServiceTrack,
 )
@@ -26,6 +27,7 @@ __all__ = [
     "PlaylistETL",
     "PlaylistModel",
     "PlaylistType",
+    "Rank",
     "RawPlaylistData",
     "Service",
     "ServiceTrack",

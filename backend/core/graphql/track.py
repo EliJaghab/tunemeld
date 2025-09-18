@@ -30,7 +30,7 @@ class TrackType(DjangoObjectType):
     track_name = graphene.String(description="Track name truncated to 30 characters at word boundaries")
     artist_name = graphene.String(description="Artist name truncated to 30 characters at word boundaries")
 
-    rank = graphene.Int(
+    tunemeld_rank = graphene.Int(
         description="Position in the playlist",
         genre=graphene.String(required=True),
         service=graphene.String(required=True),
@@ -51,10 +51,10 @@ class TrackType(DjangoObjectType):
     def resolve_artist_name(self, info):
         return truncate_to_words(self.artist_name, 30) if self.artist_name else None
 
-    def resolve_rank(self, info, genre, service):
+    def resolve_tunemeld_rank(self, info, genre, service):
         """
         Returns: 1, 2, 3... or None if track not in playlist
-        Example: rank(genre="pop", service="spotify") -> 5
+        Example: tunemeld_rank(genre="pop", service="spotify") -> 5
         """
         try:
             playlist_entry = (

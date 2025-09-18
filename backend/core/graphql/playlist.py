@@ -3,7 +3,7 @@ from core.constants import ServiceName
 from core.graphql.track import TrackType
 from core.models import Genre, Track
 from core.models.genre_service import Service
-from core.models.playlist import Playlist, RawPlaylistData
+from core.models.playlist import Playlist, Rank, RawPlaylistData
 from core.models.view_counts import HistoricalTrackViewCount
 from core.utils.local_cache import CachePrefix, local_cache_get, local_cache_set
 
@@ -26,6 +26,16 @@ class PlaylistMetadataType(graphene.ObjectType):
     service_name = graphene.String(required=True)
 
 
+class RankType(graphene.ObjectType):
+    """GraphQL type for ranking/sorting options."""
+
+    display_name = graphene.String(required=True)
+    sort_field = graphene.String(required=True)
+    sort_order = graphene.String(required=True)
+    is_default = graphene.Boolean(required=True)
+    data_field = graphene.String(required=True)
+
+
 class PlaylistQuery(graphene.ObjectType):
     service_order = graphene.List(graphene.String)
     playlist = graphene.Field(
@@ -33,6 +43,7 @@ class PlaylistQuery(graphene.ObjectType):
     )
     playlists_by_genre = graphene.List(PlaylistMetadataType, genre=graphene.String(required=True))
     updated_at = graphene.DateTime(genre=graphene.String(required=True))
+    ranks = graphene.List(RankType, description="Get playlist ranking options")
 
     @staticmethod
     def _enrich_tracks_with_view_counts(tracks):
@@ -119,7 +130,6 @@ class PlaylistQuery(graphene.ObjectType):
 
         tracks = PlaylistQuery._enrich_tracks_with_view_counts(tracks)
 
-        # Serialize tracks to GraphQL-ready format for caching (only GraphQL-relevant fields)
         serialized_tracks = []
         for track in tracks:
             track_data = {
@@ -144,11 +154,9 @@ class PlaylistQuery(graphene.ObjectType):
             }
             serialized_tracks.append(track_data)
 
-        # Cache the GraphQL-ready data
         cache_data = {"genre_name": genre, "service_name": service, "tracks": serialized_tracks}
         local_cache_set(CachePrefix.GQL_PLAYLIST, cache_key_data, cache_data)
 
-        # Return PlaylistType with actual Track objects for non-cached response
         return PlaylistType(genre_name=genre, service_name=service, tracks=tracks)
 
     def resolve_playlists_by_genre(self, info, genre):
@@ -193,3 +201,20 @@ class PlaylistQuery(graphene.ObjectType):
             return playlist_entry.service_track.track.updated_at
 
         return None
+
+    def resolve_ranks(self, info):
+        """Get playlist ranking options."""
+        from core.constants import DEFAULT_RANK_TYPE
+
+        ranks = Rank.objects.all().order_by("id")
+
+        return [
+            RankType(
+                display_name=rank.display_name,
+                sort_field=rank.sort_field,
+                sort_order=rank.sort_order,
+                is_default=rank.name == DEFAULT_RANK_TYPE.value,
+                data_field=rank.data_field,
+            )
+            for rank in ranks
+        ]

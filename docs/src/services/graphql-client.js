@@ -167,7 +167,7 @@ class GraphQLClient {
           genreName
           serviceName
           tracks {
-            rank(genre: $genre, service: $service)
+            tunemeldRank(genre: $genre, service: $service)
             isrc
             trackName
             artistName
@@ -209,6 +209,22 @@ class GraphQLClient {
     `;
 
     return await this.query(query, { genre, service });
+  }
+
+  async fetchPlaylistRanks() {
+    const query = `
+      query GetPlaylistRanks {
+        ranks {
+          displayName
+          sortField
+          sortOrder
+          isDefault
+          dataField
+        }
+      }
+    `;
+
+    return await this.query(query);
   }
 }
 

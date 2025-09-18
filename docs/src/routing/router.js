@@ -3,19 +3,34 @@ import { updateGenreData } from "@/utils/selectors.js";
 import { stateManager } from "@/state/StateManager.js";
 import { setupBodyClickListener } from "@/components/servicePlayer.js";
 import { errorHandler } from "@/utils/error-handler.js";
-import { genreManager } from "@/utils/genre-manager.js";
+import { graphqlClient } from "@/services/graphql-client.js";
 
 class AppRouter {
   constructor() {
     this.router = new Navigo("/");
     this.currentGenre = null;
+    this.genres = null;
+    this.ranks = null;
   }
 
   async initialize() {
     errorHandler.setRetryCallback(() => this.initialize());
 
     try {
-      await genreManager.initialize();
+      const [genreData, rankData] = await Promise.all([
+        graphqlClient.getAvailableGenres(),
+        graphqlClient.fetchPlaylistRanks(),
+      ]);
+
+      this.genres = genreData;
+      this.ranks = rankData.ranks;
+
+      // Set the default rank field in StateManager
+      const defaultRank = this.ranks?.find((rank) => rank.isDefault);
+      if (defaultRank) {
+        stateManager.setDefaultRankField(defaultRank.sortField);
+      }
+
       this.setupRoutes();
       this.router.resolve();
     } catch (error) {
@@ -27,12 +42,16 @@ class AppRouter {
     this.router.on("/", async () => {
       const urlParams = new URLSearchParams(window.location.search);
       const genre = urlParams.get("genre");
+      const rank = urlParams.get("rank");
 
-      if (genre && genreManager.isValidGenre(genre)) {
-        await this.handleGenreRoute(genre);
+      if (genre && this.isValidGenre(genre)) {
+        // Use default rank if none specified, but don't redirect
+        const rankToUse = rank || this.getDefaultRank();
+        await this.handleGenreRoute(genre, rankToUse);
       } else {
-        const defaultGenre = genreManager.getDefaultGenre();
-        this.navigateToGenre(defaultGenre);
+        const defaultGenre = this.getDefaultGenre();
+        const defaultRank = this.getDefaultRank();
+        this.navigateToGenre(defaultGenre, defaultRank);
       }
     });
 
@@ -41,35 +60,38 @@ class AppRouter {
     });
   }
 
-  async handleGenreRoute(genre) {
-    if (!genreManager.hasValidData()) {
+  async handleGenreRoute(genre, rank) {
+    if (!this.hasValidData()) {
       return;
     }
 
-    if (!genreManager.isValidGenre(genre)) {
+    if (!this.isValidGenre(genre)) {
       this.redirectToDefault();
       return;
     }
 
-    await this.activateGenre(genre);
+    await this.activateGenre(genre, rank);
   }
 
   redirectToDefault() {
-    const defaultGenre = genreManager.getDefaultGenre();
+    const defaultGenre = this.getDefaultGenre();
     if (defaultGenre) {
-      this.navigateToGenre(defaultGenre);
+      const defaultRank = this.getDefaultRank();
+      this.navigateToGenre(defaultGenre, defaultRank);
     }
   }
 
-  async activateGenre(genre) {
+  async activateGenre(genre, rank) {
+    const genreChanged = this.currentGenre !== genre;
     this.currentGenre = genre;
     this.updatePageTitle(genre);
     this.syncGenreDropdown(genre);
-    await this.loadGenreContent(genre);
+    this.syncRankState(rank);
+    await this.loadGenreContent(genre, genreChanged);
   }
 
   updatePageTitle(genre) {
-    const genreDisplay = genreManager.getDisplayName(genre);
+    const genreDisplay = this.getGenreDisplayName(genre);
     document.title = `tunemeld - ${genreDisplay}`;
   }
 
@@ -80,27 +102,87 @@ class AppRouter {
     }
   }
 
-  async loadGenreContent(genre) {
-    await updateGenreData(genre, stateManager.getViewCountType(), true);
-    setupBodyClickListener(genre);
+  syncRankState(rank) {
+    // Use backend default if no rank specified
+    const sortField = rank || this.getDefaultRank();
+    stateManager.setCurrentColumn(sortField);
   }
 
-  navigateToGenre(genre) {
+  async loadGenreContent(genre, fullUpdate = true) {
+    await updateGenreData(genre, stateManager.getViewCountType(), fullUpdate);
+    if (fullUpdate) {
+      setupBodyClickListener(genre);
+    }
+  }
+
+  navigateToGenre(genre, rank = null) {
     if (!this.router.routes || this.router.routes.length === 0) {
       this.setupRoutes();
     }
 
-    const url = `/?genre=${encodeURIComponent(genre)}`;
+    let url = `/?genre=${encodeURIComponent(genre)}`;
+    if (rank) {
+      url += `&rank=${encodeURIComponent(rank)}`;
+    }
     window.history.pushState({}, "", url);
     this.router.resolve();
+  }
+
+  navigateToRank(sortField) {
+    const currentGenre = this.getCurrentGenre();
+    if (currentGenre) {
+      this.navigateToGenre(currentGenre, sortField);
+    }
   }
 
   getCurrentGenre() {
     return this.currentGenre;
   }
 
+  // Genre helpers
   getAvailableGenres() {
-    return genreManager.getAvailableGenres();
+    return this.genres?.genres || [];
+  }
+
+  getDefaultGenre() {
+    return this.genres?.defaultGenre;
+  }
+
+  isValidGenre(genre) {
+    return this.getAvailableGenres().some((g) => g.name === genre);
+  }
+
+  getGenreDisplayName(genre) {
+    const found = this.getAvailableGenres().find((g) => g.name === genre);
+    return found?.displayName || genre;
+  }
+
+  // Rank helpers
+  getAvailableRanks() {
+    return this.ranks || [];
+  }
+
+  getDefaultRank() {
+    const defaultRank = this.ranks?.find((rank) => rank.isDefault);
+    return defaultRank?.sortField || stateManager.getDefaultRankField();
+  }
+
+  isValidRank(rank) {
+    return this.ranks?.some((r) => r.sortField === rank) || false;
+  }
+
+  getRankDisplayName(rank) {
+    const found = this.ranks?.find((r) => r.sortField === rank);
+    return found?.displayName || rank;
+  }
+
+  hasValidData() {
+    return (
+      this.genres &&
+      this.ranks &&
+      this.getAvailableGenres().length > 0 &&
+      this.getDefaultGenre()
+    );
   }
 }
 

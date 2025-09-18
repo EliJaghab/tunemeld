@@ -1,35 +1,8 @@
 import { DJANGO_API_BASE_URL } from "@/config/config.js";
 import { stateManager } from "@/state/StateManager.js";
+import { appRouter } from "@/routing/router.js";
 import { graphqlClient } from "@/services/graphql-client.js";
-import { SERVICE_NAMES } from "@/config/constants.js";
-
-export function setupSortButtons() {
-  document.querySelectorAll(".sort-controls .sort-button").forEach((button) => {
-    button.addEventListener("click", function () {
-      const sortType = button.getAttribute("data-sort");
-
-      document
-        .querySelectorAll(".sort-controls .sort-button")
-        .forEach((btn) => {
-          btn.classList.remove("active");
-        });
-      button.classList.add("active");
-
-      let column = sortType;
-      let order = "asc";
-
-      if (sortType === "rank") {
-        order = "asc";
-      } else if (sortType === "youtube_views" || sortType === "spotify_views") {
-        order = "desc";
-      }
-
-      stateManager.setCurrentColumn(column);
-      stateManager.setCurrentOrder(order);
-      sortTable(column, order, stateManager.getViewCountType());
-    });
-  });
-}
+import { SERVICE_NAMES, TUNEMELD_RANK_FIELD } from "@/config/constants.js";
 
 export async function updateMainPlaylist(genre, viewCountType) {
   try {
@@ -154,7 +127,7 @@ function createTuneMeldPlaylistTableRow(track, viewCountType) {
 
   const rankCell = document.createElement("td");
   rankCell.className = "rank";
-  rankCell.textContent = track.rank;
+  rankCell.textContent = track.tunemeldRank;
 
   const coverCell = document.createElement("td");
   coverCell.className = "cover";
@@ -296,7 +269,7 @@ function createServicePlaylistTableRow(track, serviceName) {
 
   const rankCell = document.createElement("td");
   rankCell.className = "rank";
-  rankCell.textContent = track.rank || "";
+  rankCell.textContent = track.tunemeldRank || "";
 
   const coverCell = document.createElement("td");
   coverCell.className = "cover";
@@ -378,29 +351,27 @@ function createSourceLinkFromService(source) {
 let playlistData = [];
 
 export function sortTable(column, order, viewCountType) {
+  const ranks = appRouter.getAvailableRanks();
+  const rankConfig = ranks.find((rank) => rank.sortField === column);
+
+  if (!rankConfig) {
+    console.error(`Unknown sort column: ${column}`);
+    return;
+  }
+
   const sortedData = playlistData.map((playlist) => {
     playlist.tracks.sort((a, b) => {
-      let aValue, bValue;
-
-      if (column === "rank") {
-        aValue = a.rank;
-        bValue = b.rank;
-      } else if (column === "spotify_views") {
-        aValue = getViewCount(a, "Spotify", viewCountType);
-        bValue = getViewCount(b, "Spotify", viewCountType);
-      } else if (column === "youtube_views") {
-        aValue = getViewCount(a, "Youtube", viewCountType);
-        bValue = getViewCount(b, "Youtube", viewCountType);
-      }
-
+      const aValue = a[rankConfig.dataField];
+      const bValue = b[rankConfig.dataField];
       return order === "asc" ? aValue - bValue : bValue - aValue;
     });
 
-    // Only reassign rank numbers if we're not sorting by rank
-    // When sorting by rank, preserve the original backend ranking
-    if (column !== "rank") {
+    // Only reassign rank numbers if we're not sorting by tunemeld-rank
+    // TuneMeld rank is special - it preserves the backend-computed positions
+    // For all other sorts (spotify views, youtube views, etc.), assign new positions based on sort
+    if (column !== TUNEMELD_RANK_FIELD) {
       playlist.tracks.forEach((track, index) => {
-        track.rank = index + 1;
+        track.tunemeldRank = index + 1;
       });
     }
 

@@ -198,3 +198,27 @@ class PlaylistMetadata(TypedDict, total=False):
 class PlaylistData(TypedDict):
     metadata: PlaylistMetadata
     tracks: Any
+
+
+class Rank(models.Model):
+    """
+    Represents different ranking/sorting options for playlists.
+    Backend-driven configuration for frontend sort buttons.
+    """
+
+    name = models.CharField(max_length=50, unique=True)
+    display_name = models.CharField(max_length=100)
+    sort_field = models.CharField(max_length=50)
+    sort_order = models.CharField(max_length=4, choices=[("asc", "Ascending"), ("desc", "Descending")], default="asc")
+    data_field = models.CharField(
+        max_length=50,
+        default="rank",
+        help_text="Exact field name in track data (e.g., 'rank', 'spotifyCurrentViewCount')",
+    )
+
+    class Meta:
+        db_table = "ranks"
+        ordering: ClassVar = ["id"]
+
+    def __str__(self):
+        return f"{self.display_name} ({self.name})"

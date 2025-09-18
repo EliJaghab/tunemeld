@@ -12,3 +12,6 @@ export const GENRE_NAMES = {
   COUNTRY: "country",
   POP: "pop",
 };
+
+// The rank that preserves backend-computed positions
+export const TUNEMELD_RANK_FIELD = "tunemeld-rank";

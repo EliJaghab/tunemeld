@@ -8,14 +8,13 @@ import {
   fetchAndDisplayPlaylists,
   fetchAndDisplayPlaylistsWithOrder,
   resetCollapseStates,
-  setupSortButtons,
   sortTable,
   updateMainPlaylist,
 } from "@/components/playlist.js";
+import { loadAndRenderRankButtons } from "@/components/ranks.js";
 import { setupBodyClickListener } from "@/components/servicePlayer.js";
 import { stateManager } from "@/state/StateManager.js";
 import { appRouter } from "@/routing/router.js";
-import { genreManager } from "@/utils/genre-manager.js";
 import { graphqlClient } from "@/services/graphql-client.js";
 import { displayPlaylistMetadata } from "@/utils/playlist-metadata.js";
 
@@ -30,10 +29,16 @@ export async function updateGenreData(genre, viewCountType, updateAll = false) {
         fetchAndDisplayPlaylistsWithOrder(genre, serviceOrder),
         updateMainPlaylist(genre, viewCountType),
       ]);
+      // Only render rank buttons on full update (genre change)
+      await loadAndRenderRankButtons();
     } else {
       await updateMainPlaylist(genre, viewCountType);
     }
-    sortTable("rank", "asc", "total-view-count");
+    sortTable(
+      stateManager.getCurrentColumn(),
+      stateManager.getCurrentOrder(),
+      stateManager.getViewCountType(),
+    );
     hideSkeletonLoaders();
     resetCollapseStates();
     addToggleEventListeners();
@@ -46,17 +51,7 @@ export async function updateGenreData(genre, viewCountType, updateAll = false) {
 export function setupGenreSelector(genreSelector) {
   genreSelector.addEventListener("change", async function () {
     const currentGenre = genreSelector.value;
-
-    const genreObj = genreManager.availableGenres.find(
-      (g) => g.name === currentGenre,
-    );
-    const genreDisplay = genreObj ? genreObj.displayName : currentGenre;
-    document.title = `tunemeld - ${genreDisplay}`;
-
-    const url = `/?genre=${encodeURIComponent(currentGenre)}`;
-    window.history.pushState({}, "", url);
-
-    await updateGenreData(currentGenre, stateManager.getViewCountType(), true);
+    appRouter.navigateToGenre(currentGenre);
   });
 }
 

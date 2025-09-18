@@ -1,5 +1,5 @@
 import { loadTitleContent } from "@/components/title.js";
-import { setupSortButtons } from "@/components/playlist.js";
+import { loadAndRenderRankButtons } from "@/components/ranks.js";
 import {
   setupGenreSelector,
   setupViewCountTypeSelector,
@@ -39,7 +39,7 @@ async function initializeApp() {
 
   setupGenreSelector(genreSelector);
   setupViewCountTypeSelector(viewCountTypeSelector);
-  setupSortButtons();
+  await loadAndRenderRankButtons();
   setupClosePlayerButton();
   initializeTosPrivacyOverlay();
 }
