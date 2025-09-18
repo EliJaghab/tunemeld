@@ -38,9 +38,7 @@ export async function loadAndRenderRankButtons() {
 
         stateManager.setCurrentColumn(sortField);
         stateManager.setCurrentOrder(sortOrder);
-        sortTable(sortField, sortOrder, stateManager.getViewCountType());
 
-        // Update URL with rank parameter (use sort field)
         appRouter.navigateToRank(rank.sortField);
       });
 
