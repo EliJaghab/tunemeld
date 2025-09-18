@@ -109,7 +109,7 @@ class AppRouter {
   }
 
   async loadGenreContent(genre, fullUpdate = true) {
-    await updateGenreData(genre, stateManager.getViewCountType(), fullUpdate);
+    await updateGenreData(genre, fullUpdate);
     if (fullUpdate) {
       setupBodyClickListener(genre);
     }

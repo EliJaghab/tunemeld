@@ -18,7 +18,7 @@ import { appRouter } from "@/routing/router.js";
 import { graphqlClient } from "@/services/graphql-client.js";
 import { displayPlaylistMetadata } from "@/utils/playlist-metadata.js";
 
-export async function updateGenreData(genre, viewCountType, updateAll = false) {
+export async function updateGenreData(genre, updateAll = false) {
   try {
     showSkeletonLoaders();
     if (updateAll) {
@@ -27,18 +27,14 @@ export async function updateGenreData(genre, viewCountType, updateAll = false) {
       await Promise.all([
         displayPlaylistMetadata(genre),
         fetchAndDisplayPlaylistsWithOrder(genre, serviceOrder),
-        updateMainPlaylist(genre, viewCountType),
+        updateMainPlaylist(genre),
       ]);
       // Only render rank buttons on full update (genre change)
       await loadAndRenderRankButtons();
     } else {
-      await updateMainPlaylist(genre, viewCountType);
+      await updateMainPlaylist(genre);
     }
-    sortTable(
-      stateManager.getCurrentColumn(),
-      stateManager.getCurrentOrder(),
-      stateManager.getViewCountType(),
-    );
+    sortTable(stateManager.getCurrentColumn(), stateManager.getCurrentOrder());
     hideSkeletonLoaders();
     resetCollapseStates();
     addToggleEventListeners();
@@ -52,17 +48,5 @@ export function setupGenreSelector(genreSelector) {
   genreSelector.addEventListener("change", async function () {
     const currentGenre = genreSelector.value;
     appRouter.navigateToGenre(currentGenre);
-  });
-}
-
-export function setupViewCountTypeSelector(viewCountTypeSelector) {
-  viewCountTypeSelector.addEventListener("change", function () {
-    const viewCountType = viewCountTypeSelector.value;
-    stateManager.setViewCountType(viewCountType);
-    sortTable(
-      stateManager.getCurrentColumn(),
-      stateManager.getCurrentOrder(),
-      viewCountType,
-    );
   });
 }

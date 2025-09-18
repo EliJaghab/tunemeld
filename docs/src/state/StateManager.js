@@ -25,7 +25,6 @@
 class StateManager {
   constructor() {
     this.state = {
-      viewCountType: "total-view-count",
       sortColumn: null, // Will be set from backend default
       sortOrder: "asc",
       theme: null,
@@ -36,12 +35,6 @@ class StateManager {
   }
 
   initializeFromDOM() {
-    const viewCountSelector = document.getElementById(
-      "view-count-type-selector",
-    );
-    if (viewCountSelector) {
-      this.state.viewCountType = viewCountSelector.value || "total-view-count";
-    }
     // Sort column will be set from backend default
     this.state.sortOrder = "asc";
 
@@ -53,14 +46,6 @@ class StateManager {
   getTimeBasedTheme() {
     const hour = new Date().getHours();
     return hour >= 19 || hour < 7 ? "dark" : "light";
-  }
-
-  getViewCountType() {
-    return this.state.viewCountType;
-  }
-
-  setViewCountType(type) {
-    this.state.viewCountType = type;
   }
 
   getCurrentColumn() {

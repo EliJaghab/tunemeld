@@ -1,9 +1,6 @@
 import { loadTitleContent } from "@/components/title.js";
 import { loadAndRenderRankButtons } from "@/components/ranks.js";
-import {
-  setupGenreSelector,
-  setupViewCountTypeSelector,
-} from "@/utils/selectors.js";
+import { setupGenreSelector } from "@/utils/selectors.js";
 import {
   setupBodyClickListener,
   setupClosePlayerButton,
@@ -26,9 +23,6 @@ async function initializeApp() {
   setupThemeToggle();
 
   const genreSelector = stateManager.getElement("genre-selector");
-  const viewCountTypeSelector = stateManager.getElement(
-    "view-count-type-selector",
-  );
 
   try {
     await loadGenresIntoSelector();
@@ -38,7 +32,6 @@ async function initializeApp() {
   }
 
   setupGenreSelector(genreSelector);
-  setupViewCountTypeSelector(viewCountTypeSelector);
   await loadAndRenderRankButtons();
   setupClosePlayerButton();
   initializeTosPrivacyOverlay();
