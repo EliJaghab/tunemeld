@@ -11,6 +11,7 @@ class AppRouter {
     this.currentGenre = null;
     this.genres = null;
     this.ranks = null;
+    this.isInitialLoad = true;
   }
 
   async initialize() {
@@ -51,7 +52,13 @@ class AppRouter {
       } else {
         const defaultGenre = this.getDefaultGenre();
         const defaultRank = this.getDefaultRank();
-        this.navigateToGenre(defaultGenre, defaultRank);
+        // Update URL without triggering another resolve to prevent double-loading
+        let url = `/?genre=${encodeURIComponent(defaultGenre)}`;
+        if (defaultRank) {
+          url += `&rank=${encodeURIComponent(defaultRank)}`;
+        }
+        window.history.replaceState({}, "", url);
+        await this.handleGenreRoute(defaultGenre, defaultRank);
       }
     });
 
@@ -83,11 +90,15 @@ class AppRouter {
 
   async activateGenre(genre, rank) {
     const genreChanged = this.currentGenre !== genre;
+    const needsFullUpdate = genreChanged || this.isInitialLoad;
+
     this.currentGenre = genre;
     this.updatePageTitle(genre);
-    this.syncGenreDropdown(genre);
+    this.syncGenreButtons(genre);
     this.syncRankState(rank);
-    await this.loadGenreContent(genre, genreChanged);
+    await this.loadGenreContent(genre, needsFullUpdate);
+
+    this.isInitialLoad = false;
   }
 
   updatePageTitle(genre) {
@@ -95,11 +106,13 @@ class AppRouter {
     document.title = `tunemeld - ${genreDisplay}`;
   }
 
-  syncGenreDropdown(genre) {
-    const genreSelector = document.getElementById("genre-selector");
-    if (genreSelector && genreSelector.value !== genre) {
-      genreSelector.value = genre;
-    }
+  syncGenreButtons(genre) {
+    document.querySelectorAll(".genre-controls .sort-button").forEach((btn) => {
+      btn.classList.remove("active");
+      if (btn.getAttribute("data-genre") === genre) {
+        btn.classList.add("active");
+      }
+    });
   }
 
   syncRankState(rank) {

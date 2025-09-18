@@ -4,14 +4,16 @@
 }
 
 .playlist {
-  background-color: var(--background-color);
+  --playlist-padding: 15px;
+  background-color: var(--container-background);
   border: 1px solid var(--container-background);
   border-radius: var(--border-radius-large);
   box-shadow: var(--box-shadow);
   margin-top: 10px;
   margin-bottom: 20px;
   overflow-y: auto;
-  padding: 5px;
+  padding: var(--playlist-padding) var(--playlist-padding) 0
+    var(--playlist-padding);
   width: 100%;
 }
 
@@ -23,10 +25,15 @@
 
 .playlist-content {
   display: block;
+  padding-bottom: var(--playlist-padding);
 }
 
 .playlist-content.collapsed {
   display: none;
+}
+
+.playlist.collapsed {
+  padding-bottom: var(--playlist-padding);
 }
 
 .playlist-subtitle {
@@ -37,11 +44,11 @@
   align-items: center;
   justify-content: flex-start;
   gap: 10px;
-  margin-bottom: 15px;
+  margin-bottom: 0px;
   padding: 0 20px;
-  flex-wrap: nowrap;
-  white-space: nowrap;
-  overflow: hidden;
+  flex-wrap: wrap;
+  white-space: normal;
+  overflow: visible;
 }
 
 .playlist-description {
@@ -49,9 +56,10 @@
   font-weight: 400;
   flex-shrink: 1;
   min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  overflow: visible;
+  white-space: normal;
+  font-family: "DM Sans", sans-serif;
+  font-size: 14px;
 }
 
 .subtitle-separator {
@@ -71,7 +79,7 @@
   display: flex;
   justify-content: flex-start;
   position: relative;
-  padding: 0 20px;
+  padding: 0;
 }
 
 .playlist-link {
@@ -146,8 +154,13 @@
 
 .playlist-title {
   font-weight: bold;
-  text-align: center;
+  text-align: left;
   color: var(--text-color);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  flex: 1;
 }
 
 .source-icon {
@@ -244,21 +257,47 @@
   font-size: 0.8rem;
   padding: 3px 8px;
   position: absolute;
-  right: 1px;
+  right: 0;
+  top: 0;
+}
+
+#soundcloud-playlist {
+  box-shadow: none;
 }
 
 .album-cover {
   border-radius: 5px;
   width: 60px;
   height: 60px;
+  background-color: var(--container-background);
+}
+
+.control-group {
+  margin-bottom: 0px;
+  padding: 0;
+}
+
+.control-label {
+  display: block;
+  color: var(--text-color);
+  font-family: "DM Sans", sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 12px;
 }
 
 .sort-controls {
   display: flex;
   gap: 12px;
-  margin-bottom: 20px;
-  padding: 0 20px;
   justify-content: flex-start;
+  flex-wrap: wrap;
+}
+
+.genre-controls {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-start;
+  flex-wrap: wrap;
 }
 
 .sort-button {
@@ -292,5 +331,22 @@
 
   .playlist-column {
     width: 100%;
+  }
+
+  .sort-button {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+
+  .playlist {
+    --playlist-padding: 10px;
+  }
+
+  .sort-controls {
+    gap: 8px;
+  }
+
+  .genre-controls {
+    gap: 8px;
   }
 }

@@ -1,5 +1,5 @@
 import graphene
-from core.constants import GenreName
+from core.constants import GENRE_ORDER, GenreName
 from core.models import Genre
 from graphene_django import DjangoObjectType
 
@@ -15,7 +15,8 @@ class GenreQuery(graphene.ObjectType):
     default_genre = graphene.String()
 
     def resolve_genres(self, info):
-        return Genre.objects.all().order_by("name")
+        genres = Genre.objects.all()
+        return sorted(genres, key=lambda g: (GENRE_ORDER.index(g.name) if g.name in GENRE_ORDER else 999, g.name))
 
     def resolve_default_genre(self, info):
         return GenreName.POP

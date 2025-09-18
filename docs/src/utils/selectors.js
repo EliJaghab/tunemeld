@@ -28,9 +28,8 @@ export async function updateGenreData(genre, updateAll = false) {
         displayPlaylistMetadata(genre),
         fetchAndDisplayPlaylistsWithOrder(genre, serviceOrder),
         updateMainPlaylist(genre),
+        loadAndRenderRankButtons(),
       ]);
-      // Only render rank buttons on full update (genre change)
-      await loadAndRenderRankButtons();
     } else {
       await updateMainPlaylist(genre);
     }

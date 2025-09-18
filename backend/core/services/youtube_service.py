@@ -1,5 +1,6 @@
 import os
 from enum import Enum
+from urllib.parse import quote_plus
 
 import requests
 from core.utils.cloudflare_cache import CachePrefix, cloudflare_cache_get, cloudflare_cache_set
@@ -17,6 +18,21 @@ class YouTubeUrlResult(Enum):
     API_FAILURE_ERROR = "api_failure_error"
 
 
+def _basic_title_check(track_name: str, youtube_url: str) -> bool:
+    """Simple check - does track name appear in YouTube video title?"""
+    try:
+        response = requests.get(youtube_url, timeout=5)
+        if response.status_code == 200:
+            title_start = response.text.find("<title>")
+            title_end = response.text.find("</title>")
+            if title_start != -1 and title_end != -1:
+                title = response.text[title_start + 7 : title_end].lower()
+                return track_name.lower() in title
+    except Exception:
+        pass
+    return True  # If check fails, assume it's fine
+
+
 def get_youtube_url(
     track_name: str, artist_name: str, api_key: str | None = None
 ) -> tuple[str | None, YouTubeUrlResult]:
@@ -29,8 +45,11 @@ def get_youtube_url(
     if youtube_url:
         return str(youtube_url), YouTubeUrlResult.CACHE_HIT
 
-    query = f"{track_name} {artist_name}"
-    youtube_search_url = f"https://www.googleapis.com/youtube/v3/search?part=snippet&q={query}&key={api_key}"
+    # Simple search with basic validation for new results only
+    query = f'"{track_name}" "{artist_name}"'
+    youtube_search_url = (
+        f"https://www.googleapis.com/youtube/v3/search?part=snippet&q={quote_plus(query)}&type=video&key={api_key}"
+    )
 
     response = requests.get(youtube_search_url)
     if response.status_code == 200:
@@ -39,9 +58,15 @@ def get_youtube_url(
             video_id = data["items"][0]["id"].get("videoId")
             if video_id:
                 youtube_url = f"https://www.youtube.com/watch?v={video_id}"
-                logger.info(f"Found YouTube URL for {track_name} by {artist_name}: {youtube_url}")
-                cloudflare_cache_set(CachePrefix.YOUTUBE_URL, key_data, youtube_url)
-                return youtube_url, YouTubeUrlResult.API_SUCCESS
+
+                # Light validation - just check if track name appears in title
+                if _basic_title_check(track_name, youtube_url):
+                    logger.info(f"Found YouTube URL for {track_name} by {artist_name}: {youtube_url}")
+                    cloudflare_cache_set(CachePrefix.YOUTUBE_URL, key_data, youtube_url)
+                    return youtube_url, YouTubeUrlResult.API_SUCCESS
+                else:
+                    logger.info(f"YouTube result failed basic check for {track_name}, skipping")
+
         logger.info(f"No video found for {track_name} by {artist_name}")
         return None, YouTubeUrlResult.API_FAILURE_NOT_FOUND
     else:

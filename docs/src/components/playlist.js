@@ -374,6 +374,9 @@ export function resetCollapseStates() {
   document.querySelectorAll(".playlist-content").forEach((content) => {
     content.classList.remove("collapsed");
   });
+  document.querySelectorAll(".playlist").forEach((playlist) => {
+    playlist.classList.remove("collapsed");
+  });
   document.querySelectorAll(".collapse-button").forEach((button) => {
     button.textContent = "▼";
   });
@@ -393,6 +396,8 @@ function toggleCollapse(event) {
   const button = event.currentTarget;
   const targetId = button.getAttribute("data-target");
   const content = document.querySelector(`${targetId} .playlist-content`);
+  const playlist = document.querySelector(targetId);
   content.classList.toggle("collapsed");
+  playlist.classList.toggle("collapsed");
   button.textContent = content.classList.contains("collapsed") ? "▲" : "▼";
 }

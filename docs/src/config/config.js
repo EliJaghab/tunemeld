@@ -12,15 +12,19 @@ export function applyCacheBusting() {
 
     document.querySelectorAll('link[rel="stylesheet"]').forEach((link) => {
       const href = link.getAttribute("href");
-      if (href && !href.includes("http") && !href.includes("?")) {
-        link.setAttribute("href", href + "?v=" + timestamp);
+      if (href && !href.includes("http")) {
+        // Remove existing query params and add new timestamp
+        const baseHref = href.split("?")[0];
+        link.setAttribute("href", baseHref + "?v=" + timestamp);
       }
     });
 
     document.querySelectorAll("script[src]").forEach((script) => {
       const src = script.getAttribute("src");
-      if (src && !src.includes("http") && !src.includes("?")) {
-        script.setAttribute("src", src + "?v=" + timestamp);
+      if (src && !src.includes("http")) {
+        // Remove existing query params and add new timestamp
+        const baseSrc = src.split("?")[0];
+        script.setAttribute("src", baseSrc + "?v=" + timestamp);
       }
     });
   }

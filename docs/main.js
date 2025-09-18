@@ -1,13 +1,12 @@
 import { loadTitleContent } from "@/components/title.js";
 import { loadAndRenderRankButtons } from "@/components/ranks.js";
-import { setupGenreSelector } from "@/utils/selectors.js";
+import { loadAndRenderGenreButtons } from "@/components/genres.js";
 import {
   setupBodyClickListener,
   setupClosePlayerButton,
 } from "@/components/servicePlayer.js";
 import { initializeTosPrivacyOverlay } from "./tosPrivacy.js";
 import { stateManager } from "@/state/StateManager.js";
-import { loadGenresIntoSelector } from "@/utils/genre-loader.js";
 import { appRouter } from "@/routing/router.js";
 import { applyCacheBusting } from "@/config/config.js";
 
@@ -22,17 +21,13 @@ async function initializeApp() {
   stateManager.applyTheme(stateManager.getTheme());
   setupThemeToggle();
 
-  const genreSelector = stateManager.getElement("genre-selector");
-
   try {
-    await loadGenresIntoSelector();
     await appRouter.initialize();
   } catch (error) {
     console.error("App initialization failed:", error);
   }
 
-  setupGenreSelector(genreSelector);
-  await loadAndRenderRankButtons();
+  await loadAndRenderGenreButtons();
   setupClosePlayerButton();
   initializeTosPrivacyOverlay();
 }

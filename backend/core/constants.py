@@ -33,6 +33,14 @@ GENRE_DISPLAY_NAMES: dict[str, str] = {
 PLAYLIST_GENRES: list[str] = [genre.value for genre in GenreName]
 SERVICES: list[str] = [service.value for service in ServiceName]
 
+# Genre order for frontend display (pop, dance, rap, country)
+GENRE_ORDER: list[str] = [
+    GenreName.POP.value,
+    GenreName.DANCE.value,
+    GenreName.RAP.value,
+    GenreName.COUNTRY.value,
+]
+
 
 class RankType(str, Enum):
     TUNEMELD_RANK = "tunemeld_rank"
