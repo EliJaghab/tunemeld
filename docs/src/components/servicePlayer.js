@@ -1,4 +1,4 @@
-import { fetchAndDisplayChartData } from "@/components/chart.js";
+import { fetchAndDisplayChartData, hideChart } from "@/components/chart.js";
 
 export function setupBodyClickListener(genre) {
   const body = document.body;
@@ -91,6 +91,8 @@ function openPlayer(url, serviceType) {
   }
 
   iframe.onload = function () {
+    const playerContainer = document.getElementById("player-container");
+    if (playerContainer) playerContainer.style.display = "block";
     closeButton.style.display = "block";
   };
 
@@ -116,9 +118,12 @@ function shouldInterceptLink(link) {
 function closePlayer() {
   const placeholder = document.getElementById("service-player-placeholder");
   const closeButton = document.getElementById("close-player-button");
+  const playerContainer = document.getElementById("player-container");
 
   if (placeholder) placeholder.innerHTML = "";
   if (closeButton) closeButton.style.display = "none";
+  if (playerContainer) playerContainer.style.display = "none";
+  hideChart();
 }
 
 function getServiceType(url) {

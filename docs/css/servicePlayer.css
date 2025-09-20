@@ -10,6 +10,12 @@
 
 #close-player-button {
   display: none;
+  margin-top: 12px;
+}
+
+#player-container {
+  display: none;
+  margin-bottom: var(--section-spacing, 24px);
 }
 
 .player_content iframe,
