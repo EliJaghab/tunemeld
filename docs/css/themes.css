@@ -1,25 +1,54 @@
 :root {
+  /* ==========================================================================
+     SEMANTIC COLOR PALETTE - Human-readable color names
+     ========================================================================== */
+
+  /* Core Colors */
+  --pure-white: #ffffff;
+  --pure-black: #333333;
+  --light-gray: #f9f9f9;
+  --medium-gray: #444444;
+  --dark-gray: #555555;
+  --off-white: #f9f9f9;
+
+  /* Brand Colors */
+  --brand-teal: teal;
+  --bright-blue: #4a9eff;
+
+  /* Neutral Tones */
+  --light-neutral: #ddd;
+  --medium-neutral: #e5e5e5;
+  --dark-neutral: #2e2e2e;
+
+  /* ==========================================================================
+     THEME COLOR ASSIGNMENTS - Maps semantic names to actual colors
+     ========================================================================== */
+
   /* Colors - Light Mode */
-  --color-text-light: #333;
-  --color-background-light: #fff;
-  --color-container-light: #f9f9f9;
-  --color-link-light: teal;
-  --color-button-bg-light: #ddd;
-  --color-button-text-light: #333;
-  --color-soundcloud-bg-light: #f9f9f9;
-  --color-soundcloud-hover-light: #e5e5e5;
+  --color-text-light: var(--pure-black);
+  --color-background-light: var(--pure-white);
+  --color-container-light: var(--light-gray);
+  --color-link-light: var(--brand-teal);
+  --color-active-button-light: var(--brand-teal);
+  --color-active-button-text-light: var(--pure-white);
+  --color-button-bg-light: var(--light-neutral);
+  --color-button-text-light: var(--pure-black);
+  --color-soundcloud-bg-light: var(--light-gray);
+  --color-soundcloud-hover-light: var(--medium-neutral);
   --color-skeleton-light: lightgray;
 
   /* Colors - Dark Mode */
-  --color-text-dark: #f9f9f9;
-  --color-background-dark: #333;
-  --color-container-dark: #444;
-  --color-link-dark: #ffffff;
-  --color-button-bg-dark: #555;
-  --color-button-text-dark: #fff;
-  --color-soundcloud-bg-dark: #444;
-  --color-soundcloud-hover-dark: #555;
-  --color-skeleton-dark: #2e2e2e;
+  --color-text-dark: var(--off-white);
+  --color-background-dark: var(--pure-black);
+  --color-container-dark: var(--medium-gray);
+  --color-link-dark: var(--pure-white);
+  --color-active-button-dark: var(--bright-blue);
+  --color-active-button-text-dark: var(--pure-white);
+  --color-button-bg-dark: var(--dark-gray);
+  --color-button-text-dark: var(--pure-white);
+  --color-soundcloud-bg-dark: var(--medium-gray);
+  --color-soundcloud-hover-dark: var(--dark-gray);
+  --color-skeleton-dark: var(--dark-neutral);
 
   /* Shadows */
   --shadow-light: 0 8px 24px rgba(0, 0, 0, 0.2);
@@ -28,6 +57,15 @@
   /* Border Radius */
   --radius-large: 10px;
   --radius-small: 5px;
+
+  /* Spacing */
+  --section-spacing: 20px;
+  --gap-small: 8px;
+  --gap-medium: 10px;
+  --gap-large: 12px;
+
+  /* Typography */
+  --font-family-primary: "DM Sans", sans-serif;
 
   /* Other theme-specific variables */
   --overlay-bg-light: rgba(255, 255, 255, 0.9);
@@ -65,6 +103,8 @@ body {
   --background-color: var(--color-background-light);
   --container-background: var(--color-container-light);
   --link-color: var(--color-link-light);
+  --active-button-color: var(--color-active-button-light);
+  --active-button-text-color: var(--color-active-button-text-light);
   --btn-background: var(--color-button-bg-light);
   --btn-text-color: var(--color-button-text-light);
   --soundcloud-link-background: var(--color-soundcloud-bg-light);
@@ -98,6 +138,8 @@ body.dark-mode {
   --background-color: var(--color-background-dark);
   --container-background: var(--color-container-dark);
   --link-color: var(--color-link-dark);
+  --active-button-color: var(--color-active-button-dark);
+  --active-button-text-color: var(--color-active-button-text-dark);
   --btn-background: var(--color-button-bg-dark);
   --btn-text-color: var(--color-button-text-dark);
   --soundcloud-link-background: var(--color-soundcloud-bg-dark);

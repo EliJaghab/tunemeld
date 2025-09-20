@@ -9,11 +9,8 @@
   border: 1px solid var(--container-background);
   border-radius: var(--border-radius-large);
   box-shadow: var(--box-shadow);
-  margin-top: 10px;
-  margin-bottom: 20px;
   overflow-y: auto;
-  padding: var(--playlist-padding) var(--playlist-padding) 0
-    var(--playlist-padding);
+  padding: var(--playlist-padding);
   width: 100%;
 }
 
@@ -25,7 +22,7 @@
 
 .playlist-content {
   display: block;
-  padding-bottom: var(--playlist-padding);
+  padding-bottom: 0;
 }
 
 .playlist-content.collapsed {
@@ -38,17 +35,18 @@
 
 .playlist-subtitle {
   color: var(--text-color);
-  font-family: "DM Sans", sans-serif;
+  font-family: var(--font-family-primary);
   font-size: 14px;
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  gap: 10px;
-  margin-bottom: 0px;
+  gap: var(--gap-medium);
+  margin: 0;
   padding: 0 20px;
   flex-wrap: wrap;
   white-space: normal;
   overflow: visible;
+  line-height: 1;
 }
 
 .playlist-description {
@@ -58,7 +56,7 @@
   min-width: 0;
   overflow: visible;
   white-space: normal;
-  font-family: "DM Sans", sans-serif;
+  font-family: var(--font-family-primary);
   font-size: 14px;
 }
 
@@ -80,6 +78,8 @@
   justify-content: flex-start;
   position: relative;
   padding: 0;
+  margin: 0;
+  line-height: 1;
 }
 
 .playlist-link {
@@ -107,7 +107,7 @@
 .playlist-table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 10px;
+  margin: 0;
   border: none;
 }
 
@@ -158,9 +158,11 @@
   color: var(--text-color);
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: var(--gap-medium);
   flex-wrap: wrap;
   flex: 1;
+  margin: 0;
+  line-height: 1;
 }
 
 .source-icon {
@@ -255,7 +257,12 @@
   color: var(--text-color);
   cursor: pointer;
   font-size: 0.8rem;
-  padding: 3px 8px;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
   position: absolute;
   right: 0;
   top: 0;
@@ -276,47 +283,79 @@
 .control-label {
   display: block;
   color: var(--text-color);
-  font-family: "DM Sans", sans-serif;
+  font-family: var(--font-family-primary);
   font-size: 14px;
   font-weight: 600;
-  margin-bottom: 12px;
+  margin-bottom: 8px;
 }
 
 .sort-controls {
-  display: flex;
-  gap: 12px;
-  justify-content: flex-start;
-  flex-wrap: wrap;
+  gap: var(--gap-large);
+  margin-bottom: 16px;
 }
 
 .genre-controls {
-  display: flex;
-  gap: 12px;
-  justify-content: flex-start;
-  flex-wrap: wrap;
+  gap: var(--gap-large);
 }
 
 .sort-button {
   background: var(--container-background);
-  border: 1px solid var(--container-background);
+  border: 1px solid rgba(0, 0, 0, 0.1);
   color: var(--text-color);
-  padding: 8px 16px;
-  border-radius: 20px;
+  padding: 10px 20px;
+  border-radius: 25px;
   font-size: 14px;
   cursor: pointer;
-  transition: all 0.2s ease;
-  font-family: "DM Sans", sans-serif;
+  transition: all 0.3s ease;
+  font-family: var(--font-family-primary);
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-small);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  position: relative;
+  overflow: hidden;
+}
+
+.button-icon {
+  width: 20px;
+  height: 20px;
+  margin-right: 1px;
+}
+
+.sort-button i {
+  font-size: 16px;
+  opacity: 0.8;
+  transition: all 0.3s ease;
 }
 
 .sort-button:hover {
   background: var(--btn-background);
-  border-color: var(--btn-background);
+  border-color: rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.sort-button:hover i {
+  opacity: 1;
+  transform: scale(1.1);
 }
 
 .sort-button.active {
-  background: var(--link-color);
-  color: var(--background-color);
-  border-color: var(--link-color);
+  background: var(--active-button-color);
+  color: var(--active-button-text-color);
+  border-color: var(--active-button-color);
+  box-shadow: 0 4px 12px rgba(0, 128, 128, 0.3);
+  font-weight: 600;
+}
+
+.sort-button.active i {
+  opacity: 1;
+}
+
+.sort-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 @media screen and (max-width: 768px) {
@@ -338,11 +377,19 @@
     --playlist-padding: 10px;
   }
 
+  .playlist-column {
+    margin-bottom: var(--section-spacing);
+  }
+
+  .playlist-column:last-child {
+    margin-bottom: 0;
+  }
+
   .sort-controls {
-    gap: 8px;
+    gap: var(--gap-small);
   }
 
   .genre-controls {
-    gap: 8px;
+    gap: var(--gap-small);
   }
 }

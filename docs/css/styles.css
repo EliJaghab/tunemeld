@@ -64,8 +64,14 @@ a {
   text-decoration: underline;
 }
 
-.footer-row {
-  margin-top: 20px;
+.vertical-spacing {
+  height: var(--section-spacing);
+}
+
+.flex-row {
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
 }
 
 /* Overlay */
@@ -171,6 +177,13 @@ label {
 }
 
 /* Mobile Styles */
+@media screen and (max-width: 768px) {
+  .container {
+    max-width: 100%;
+    padding: 0 10px;
+  }
+}
+
 @media screen and (max-width: 480px) {
   body {
     font-size: 10px;
