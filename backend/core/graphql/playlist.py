@@ -34,6 +34,7 @@ class RankType(graphene.ObjectType):
     sort_order = graphene.String(required=True)
     is_default = graphene.Boolean(required=True)
     data_field = graphene.String(required=True)
+    icon_class = graphene.String(required=False)
 
 
 class PlaylistQuery(graphene.ObjectType):
@@ -215,6 +216,7 @@ class PlaylistQuery(graphene.ObjectType):
                 sort_order=rank.sort_order,
                 is_default=rank.name == DEFAULT_RANK_TYPE.value,
                 data_field=rank.data_field,
+                icon_class=rank.icon_class,
             )
             for rank in ranks
         ]
