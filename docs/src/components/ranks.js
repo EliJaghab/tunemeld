@@ -23,7 +23,15 @@ export async function loadAndRenderRankButtons() {
         : "sort-button";
       button.setAttribute("data-sort", rank.sortField);
       button.setAttribute("data-order", rank.sortOrder);
-      button.textContent = rank.displayName;
+
+      const icon = document.createElement("img");
+      icon.src = rank.iconUrl;
+      icon.alt = rank.displayName;
+      icon.className = "button-icon";
+      button.appendChild(icon);
+
+      const text = document.createTextNode(rank.displayName);
+      button.appendChild(text);
 
       button.addEventListener("click", function () {
         document
