@@ -60,11 +60,11 @@ def _get_apple_music_cover_url_static(url: str, genre: "GenreName") -> str | Non
 
 def get_apple_music_playlist(genre: "GenreName") -> PlaylistData:
     """Get Apple Music playlist data and metadata for a given genre"""
-    from core.constants import SERVICE_CONFIGS, ServiceName
+    from core.constants import GENRE_CONFIGS, SERVICE_CONFIGS, ServiceName
     from core.utils.rapid_api_client import fetch_playlist_data
 
-    config = SERVICE_CONFIGS["apple_music"]
-    url = config["links"][genre.value]
+    SERVICE_CONFIGS["apple_music"]
+    url = GENRE_CONFIGS[genre.value]["links"][ServiceName.APPLE_MUSIC.value]
 
     tracks_data = fetch_playlist_data(ServiceName.APPLE_MUSIC, genre)
 

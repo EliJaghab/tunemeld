@@ -20,7 +20,15 @@ export async function loadAndRenderGenreButtons() {
         ? "sort-button active"
         : "sort-button";
       button.setAttribute("data-genre", genre.name);
-      button.textContent = genre.displayName;
+
+      const icon = document.createElement("img");
+      icon.src = genre.iconUrl;
+      icon.alt = genre.displayName;
+      icon.className = "button-icon";
+      button.appendChild(icon);
+
+      const text = document.createTextNode(genre.displayName);
+      button.appendChild(text);
 
       button.addEventListener("click", function () {
         document

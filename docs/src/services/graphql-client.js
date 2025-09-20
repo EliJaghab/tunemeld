@@ -126,6 +126,7 @@ class GraphQLClient {
           id
           name
           displayName
+          iconUrl
         }
         defaultGenre
       }
@@ -220,6 +221,7 @@ class GraphQLClient {
           sortOrder
           isDefault
           dataField
+          iconUrl
         }
       }
     `;

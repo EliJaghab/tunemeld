@@ -14,11 +14,11 @@ logger = get_logger(__name__)
 
 def get_soundcloud_playlist(genre: "GenreName") -> PlaylistData:
     """Get SoundCloud playlist data and metadata for a given genre"""
-    from core.constants import SERVICE_CONFIGS, ServiceName
+    from core.constants import GENRE_CONFIGS, SERVICE_CONFIGS, ServiceName
     from core.utils.rapid_api_client import fetch_playlist_data
 
-    config = SERVICE_CONFIGS["soundcloud"]
-    url = config["links"][genre.value]
+    SERVICE_CONFIGS["soundcloud"]
+    url = GENRE_CONFIGS[genre.value]["links"][ServiceName.SOUNDCLOUD.value]
 
     tracks_data = fetch_playlist_data(ServiceName.SOUNDCLOUD, genre)
 

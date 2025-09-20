@@ -2,7 +2,7 @@ import uuid
 from collections import defaultdict
 from typing import Any
 
-from core.constants import GENRE_DISPLAY_NAMES, SERVICE_CONFIGS, ServiceName
+from core.constants import GENRE_CONFIGS, SERVICE_CONFIGS, ServiceName
 from core.models import Genre, Service, ServiceTrack
 from core.models import PlaylistModel as Playlist
 from core.models.playlist import RawPlaylistData
@@ -129,7 +129,7 @@ class Command(BaseCommand):
         genres_with_playlists = Genre.objects.filter(playlist__service=aggregate_service).distinct()
 
         for genre in genres_with_playlists:
-            genre_display_name = GENRE_DISPLAY_NAMES.get(genre.name, genre.name.title())
+            genre_display_name = GENRE_CONFIGS.get(genre.name, {}).get("display_name", genre.name.title())
 
             playlist_entry = (
                 Playlist.objects.filter(genre=genre, service=aggregate_service)

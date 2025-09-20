@@ -3,7 +3,7 @@ import time
 from typing import Any, cast
 
 import requests
-from core.constants import SERVICE_CONFIGS, GenreName, ServiceName
+from core.constants import GENRE_CONFIGS, SERVICE_CONFIGS, GenreName, ServiceName
 from core.utils.cloudflare_cache import CachePrefix, cloudflare_cache_get, cloudflare_cache_set
 from core.utils.utils import get_logger
 
@@ -22,11 +22,11 @@ def fetch_playlist_data(service_name: ServiceName, genre: GenreName) -> JSON:
     config = SERVICE_CONFIGS[service_name.value]
 
     if service_name == ServiceName.APPLE_MUSIC:
-        playlist_id = config["links"][genre.value].split("/")[-1]
+        playlist_id = GENRE_CONFIGS[genre.value]["links"][service_name.value].split("/")[-1]
         apple_playlist_url = f"https://music.apple.com/us/playlist/playlist/{playlist_id}"
         url = f"{config['base_url']}?url={apple_playlist_url}"
     elif service_name == ServiceName.SOUNDCLOUD:
-        playlist_url = config["links"][genre.value]
+        playlist_url = GENRE_CONFIGS[genre.value]["links"][service_name.value]
         url = f"{config['base_url']}?playlist={playlist_url}"
     else:
         raise ValueError(f"Unknown service: {service_name}")

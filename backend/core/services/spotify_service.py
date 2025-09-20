@@ -247,7 +247,7 @@ def _extract_spotify_metadata_from_html(url: str, html_content: str) -> Playlist
 
 def get_spotify_playlist(genre: "GenreName") -> PlaylistData:
     """Get Spotify playlist data and metadata for a given genre"""
-    from core.constants import SERVICE_CONFIGS
+    from core.constants import GENRE_CONFIGS, SERVICE_CONFIGS, ServiceName
     from core.utils.cloudflare_cache import generate_spotify_cache_key_data
     from core.utils.spotdl_client import fetch_spotify_playlist_with_spotdl
 
@@ -256,8 +256,8 @@ def get_spotify_playlist(genre: "GenreName") -> PlaylistData:
     if cached_data:
         return cached_data
 
-    config = SERVICE_CONFIGS["spotify"]
-    url = config["links"][genre.value]
+    SERVICE_CONFIGS["spotify"]
+    url = GENRE_CONFIGS[genre.value]["links"][ServiceName.SPOTIFY.value]
 
     tracks_data = fetch_spotify_playlist_with_spotdl(url)
 

@@ -260,10 +260,9 @@ def is_within_scheduled_time_window(schedule_config: ScheduleConfig) -> bool:
 
 def generate_spotify_cache_key_data(genre: GenreName) -> str:
     """Generate cache key data for Spotify playlists."""
-    from core.constants import SERVICE_CONFIGS
+    from core.constants import GENRE_CONFIGS, ServiceName
 
-    config = SERVICE_CONFIGS["spotify"]
-    url = config["links"][genre.value]
+    url = GENRE_CONFIGS[genre.value]["links"][ServiceName.SPOTIFY.value]
     return f"spotify:{genre.value}:{url}"
 
 
