@@ -13,17 +13,14 @@ from webdriver_manager.chrome import ChromeDriverManager
 logger = get_logger(__name__)
 
 
-_webdriver_manager = None
-_webdriver_lock = threading.Lock()
+_thread_local = threading.local()
 
 
 def get_cached_webdriver() -> "WebDriverManager":
-    global _webdriver_manager
-    if _webdriver_manager is None:
-        with _webdriver_lock:
-            if _webdriver_manager is None:
-                _webdriver_manager = WebDriverManager()
-    return _webdriver_manager
+    """Get a thread-local WebDriverManager to prevent race conditions."""
+    if not hasattr(_thread_local, "webdriver_manager"):
+        _thread_local.webdriver_manager = WebDriverManager()
+    return _thread_local.webdriver_manager
 
 
 class WebDriverManager:
