@@ -155,7 +155,19 @@ export async function fetchAndDisplayChartData(genre, isrc) {
   await loadChartJsLibrary();
 
   const trackData = await fetchChartData(genre, isrc);
+  const chartContainer = document.getElementById("chart-container");
+
   if (trackData) {
     displayChart(trackData);
+    chartContainer.classList.add("show");
+  } else {
+    chartContainer.classList.remove("show");
+  }
+}
+
+export function hideChart() {
+  const chartContainer = document.getElementById("chart-container");
+  if (chartContainer) {
+    chartContainer.classList.remove("show");
   }
 }
