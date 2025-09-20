@@ -215,12 +215,6 @@ class Rank(models.Model):
         default="rank",
         help_text="Exact field name in track data (e.g., 'rank', 'spotifyCurrentViewCount')",
     )
-    icon_class = models.CharField(
-        max_length=50,
-        blank=True,
-        default="",
-        help_text="Font Awesome icon class (e.g., 'fab fa-spotify', 'fab fa-youtube')",
-    )
 
     class Meta:
         db_table = "ranks"

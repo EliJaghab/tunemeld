@@ -298,56 +298,25 @@
 
 .sort-button {
   background: var(--container-background);
-  border: 1px solid rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--container-background);
   color: var(--text-color);
-  padding: 10px 20px;
-  border-radius: 25px;
+  padding: 8px 16px;
+  border-radius: 20px;
   font-size: 14px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
   font-family: "DM Sans", sans-serif;
-  font-weight: 500;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  position: relative;
-  overflow: hidden;
-}
-
-.sort-button i {
-  font-size: 16px;
-  opacity: 0.8;
-  transition: all 0.3s ease;
 }
 
 .sort-button:hover {
   background: var(--btn-background);
-  border-color: rgba(0, 0, 0, 0.15);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-}
-
-.sort-button:hover i {
-  opacity: 1;
-  transform: scale(1.1);
+  border-color: var(--btn-background);
 }
 
 .sort-button.active {
   background: var(--link-color);
-  color: #fff;
+  color: var(--background-color);
   border-color: var(--link-color);
-  box-shadow: 0 4px 12px rgba(0, 128, 128, 0.3);
-  font-weight: 600;
-}
-
-.sort-button.active i {
-  opacity: 1;
-}
-
-.sort-button:active {
-  transform: translateY(0);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 @media screen and (max-width: 768px) {

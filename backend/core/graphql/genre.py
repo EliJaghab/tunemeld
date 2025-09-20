@@ -7,7 +7,7 @@ from graphene_django import DjangoObjectType
 class GenreType(DjangoObjectType):
     class Meta:
         model = Genre
-        fields = ("id", "name", "display_name", "icon_class")
+        fields = ("id", "name", "display_name")
 
 
 class GenreQuery(graphene.ObjectType):

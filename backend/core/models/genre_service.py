@@ -34,12 +34,6 @@ class Genre(models.Model):
         help_text="Internal genre identifier (lowercase, underscores only)",
     )
     display_name = models.CharField(max_length=100, help_text="Human-readable genre name")
-    icon_class = models.CharField(
-        max_length=50,
-        blank=True,
-        default="",
-        help_text="Font Awesome icon class (e.g., 'fab fa-spotify')",
-    )
 
     class Meta:
         db_table = "genres"
