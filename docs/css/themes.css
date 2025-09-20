@@ -6,8 +6,8 @@
   --color-link-light: teal;
   --color-button-bg-light: #ddd;
   --color-button-text-light: #333;
-  --color-soundcloud-bg-light: #f5f5f5;
-  --color-soundcloud-hover-light: #e0e0e0;
+  --color-soundcloud-bg-light: #f9f9f9;
+  --color-soundcloud-hover-light: #e5e5e5;
   --color-skeleton-light: lightgray;
 
   /* Colors - Dark Mode */
@@ -113,6 +113,10 @@ body.dark-mode {
   --overlay-text-color: var(--overlay-text-dark);
   --table-header-background: var(--table-header-bg-dark);
   --table-header-text-color: var(--table-header-text-dark);
+
+  /* Apply global styles */
+  background-color: var(--background-color);
+  color: var(--text-color);
 }
 
 /* ==========================================================================

@@ -4,6 +4,7 @@
   background-color: var(--container-background);
   border: 1px solid var(--container-background);
   border-radius: var(--border-radius-large);
+  box-shadow: var(--box-shadow);
   display: flex;
   justify-content: space-around;
   margin-bottom: 0.5rem;
@@ -48,12 +49,15 @@
 
 /* Service Styling */
 .service {
+  background-color: var(--container-background);
+  border-radius: var(--border-radius-small);
   display: flex;
   flex: 1;
   flex-direction: column;
   justify-content: flex-end;
   margin: 0.3rem;
   max-width: 300px;
+  padding: 0.5rem;
 }
 
 /* Skeleton Loader */
