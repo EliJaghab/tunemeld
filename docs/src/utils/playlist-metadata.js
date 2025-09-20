@@ -1,6 +1,34 @@
 import { graphqlClient } from "@/services/graphql-client.js";
 import { SERVICE_NAMES } from "@/config/constants.js";
 
+export function updatePlaylistMetadataSync(
+  playlists,
+  serviceOrder,
+  genre,
+  displayServiceCallback,
+) {
+  const tuneMeldPlaylist = playlists.find(
+    (p) => p.serviceName === SERVICE_NAMES.TUNEMELD,
+  );
+  updateTuneMeldDescription(tuneMeldPlaylist?.playlistCoverDescriptionText);
+
+  serviceOrder.forEach((serviceName) => {
+    const playlist = playlists.find((p) => p.serviceName === serviceName);
+    if (playlist) {
+      updateServiceHeaderArt(
+        serviceName,
+        playlist.playlistCoverUrl,
+        playlist.playlistUrl,
+        playlist.playlistName,
+        playlist.playlistCoverDescriptionText,
+        playlist.serviceName,
+        genre,
+        displayServiceCallback,
+      );
+    }
+  });
+}
+
 export async function displayPlaylistMetadata(genre, displayServiceCallback) {
   try {
     const { serviceOrder, playlists } =
@@ -151,19 +179,30 @@ function setupDescriptionModal(
 ) {
   descriptionElement.removeEventListener("click", toggleDescriptionExpand);
 
+  const MIN_CHAR_LIMIT = 30;
   const descriptionBoxWidth = descriptionElement.clientWidth;
 
   let estimatedMaxTextLength;
   if (isMobileView()) {
-    estimatedMaxTextLength = Math.floor((descriptionBoxWidth / 8) * 1.5) + 10;
+    // Be more conservative on mobile to ensure MORE button is visible
+    estimatedMaxTextLength = Math.max(
+      MIN_CHAR_LIMIT,
+      Math.min(50, Math.floor((descriptionBoxWidth / 8) * 1.2)),
+    );
   } else {
-    estimatedMaxTextLength = Math.floor((descriptionBoxWidth / 8) * 1.5) + 15;
+    estimatedMaxTextLength = Math.max(
+      MIN_CHAR_LIMIT,
+      Math.floor((descriptionBoxWidth / 8) * 1.5) + 15,
+    );
   }
 
   if (fullText.length > estimatedMaxTextLength) {
     let truncatedText = fullText.substring(0, estimatedMaxTextLength);
-    truncatedText =
-      truncatedText.substring(0, truncatedText.lastIndexOf(" ")) + "... ";
+    const lastSpaceIndex = truncatedText.lastIndexOf(" ");
+    if (lastSpaceIndex > MIN_CHAR_LIMIT) {
+      truncatedText = truncatedText.substring(0, lastSpaceIndex);
+    }
+    truncatedText += "... ";
 
     descriptionElement.innerHTML = `${truncatedText}<span class="more-button">MORE</span>`;
     createAndAttachModal(
@@ -191,24 +230,32 @@ function createAndAttachModal(
 ) {
   const modal = document.createElement("div");
   modal.className = "description-modal";
+  // Use textContent to avoid HTML injection and ensure full text displays
+  const modalContent = document.createElement("div");
+  modalContent.className = "description-modal-content";
+  modalContent.textContent = fullText;
+
   modal.innerHTML = `
     <button class="description-modal-close">&times;</button>
     <div class="description-modal-header">${title}</div>
     <div class="description-modal-subheader">${serviceName} - ${genre}</div>
-    <div class="description-modal-content">${fullText}</div>
   `;
+  modal.appendChild(modalContent);
   document.body.appendChild(modal);
 
   const overlay = document.createElement("div");
   overlay.className = "description-overlay";
   document.body.appendChild(overlay);
 
-  descriptionElement
-    .querySelector(".more-button")
-    .addEventListener("click", function () {
+  const moreButton = descriptionElement.querySelector(".more-button");
+  if (moreButton) {
+    moreButton.addEventListener("click", function (event) {
+      event.preventDefault();
+      event.stopPropagation();
       modal.classList.add("active");
       overlay.classList.add("active");
     });
+  }
 
   modal
     .querySelector(".description-modal-close")

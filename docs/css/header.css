@@ -120,20 +120,15 @@
   }
 }
 
-/* New Modal Box */
+/* Playlist Desciption Mode Modal */
 .description {
   color: var(--text-color);
   cursor: pointer;
-  display: -webkit-box;
-  height: 2.7rem;
   line-height: 1.35rem;
-  overflow: hidden;
-  text-overflow: ellipsis;
   transition: all 0.3s ease-in-out;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
   text-align: center;
   margin-top: 5px;
+  min-height: 2.7rem;
 }
 
 .description .more-button {
@@ -141,8 +136,25 @@
   font-weight: bold;
   cursor: pointer;
   margin-left: 5px;
-  display: inline; /* Ensure it is inline */
-  padding: 2px 5px; /* Add some padding */
+  display: inline-block;
+  padding: 2px 5px;
+  text-decoration: none;
+  border-radius: 3px;
+  transition: background-color 0.2s ease;
+  user-select: none;
+}
+
+.description .more-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Mobile-specific MORE button adjustments */
+@media screen and (max-width: 768px) {
+  .description .more-button {
+    margin-left: 3px;
+    padding: 1px 3px;
+    font-size: 0.7rem;
+  }
 }
 
 .description-modal {
@@ -207,4 +219,10 @@
   color: var(--text-color);
   font-size: 1rem;
   line-height: 1.5rem;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  max-height: 60vh;
+  overflow-y: auto;
+  padding: 10px 0;
 }
