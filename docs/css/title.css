@@ -11,8 +11,8 @@
 }
 
 img#tunemeld-logo {
-  width: 75px;
-  height: 75px;
+  width: var(--size-tunemeld-logo);
+  height: var(--size-tunemeld-logo);
   margin-right: 15px;
 }
 
@@ -25,8 +25,8 @@ h1.main-title {
 .theme-toggle-container {
   position: relative;
   margin-left: auto;
-  top: 4px;
-  right: 4px;
+  top: var(--space-xs);
+  right: var(--space-xs);
   z-index: 1000;
   padding: 0; /* Remove padding */
 }
@@ -125,7 +125,7 @@ h1.main-title {
   align-items: center;
   margin-left: auto;
   margin-top: 0;
-  padding: 3px 8px;
+  padding: var(--space-xs) var(--space-sm);
   text-decoration: none;
 }
 
@@ -134,9 +134,9 @@ h1.main-title {
 }
 
 #soundcloud-logo {
-  height: 20px;
+  height: var(--size-soundcloud-sm);
   margin-right: 5px;
-  width: 20px;
+  width: var(--size-soundcloud-sm);
 }
 
 .stack-container {
@@ -146,6 +146,50 @@ h1.main-title {
   margin-left: auto;
   padding: 0;
   text-align: right;
+}
+
+@media screen and (max-width: 768px) {
+  .logo-title {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 120px;
+    padding: var(--space-md);
+    border: 1px solid var(--container-background);
+    border-radius: var(--border-radius-large);
+  }
+
+  .brand-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+  }
+
+  .stack-container {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: var(--space-sm);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+
+  .theme-toggle-container {
+    margin: 0;
+    padding: 0;
+  }
+
+  #soundcloud-link {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    white-space: nowrap;
+    overflow: visible;
+  }
 }
 
 /* Desktop-Specific Styles */
@@ -167,7 +211,7 @@ h1.main-title {
   .last-updated {
     display: flex;
     justify-content: center;
-    font-size: 0.8rem;
+    font-size: var(--font-size-sm);
   }
 
   .theme-toggle-container {
@@ -180,14 +224,14 @@ h1.main-title {
   }
 
   #soundcloud-link {
-    margin-top: 20px;
+    margin-top: var(--space-md);
     margin-left: auto;
-    font-size: 25px;
+    font-size: var(--font-size-xxl);
   }
 
   #soundcloud-logo {
-    height: 30px;
-    width: 30px;
+    height: var(--size-soundcloud-md);
+    width: var(--size-soundcloud-md);
   }
 }
 
@@ -200,8 +244,8 @@ h1.main-title {
   }
 
   .main-title {
-    font-size: 2rem;
-    margin-top: 9px;
+    font-size: var(--font-size-xxxl);
+    margin-top: var(--space-sm);
   }
 
   .theme-toggle-container {
@@ -213,13 +257,13 @@ h1.main-title {
   }
 
   #soundcloud-link {
-    margin-top: 20px;
+    margin-top: var(--space-sm);
     margin-left: auto;
-    font-size: 10px;
+    font-size: var(--font-size-md);
   }
 
   #soundcloud-logo {
-    height: 15px;
-    width: 15px;
+    height: var(--size-soundcloud-xs);
+    width: var(--size-soundcloud-xs);
   }
 }

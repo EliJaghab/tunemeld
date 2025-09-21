@@ -5,20 +5,26 @@
 
 #service-player-placeholder {
   width: 100%;
-  border-radius: 5px;
+  border-radius: var(--border-radius-small);
 }
 
 #close-player-button {
   display: none;
-  margin-top: 12px;
+  margin-top: var(--space-md);
 }
 
 #player-container {
   display: none;
-  margin-bottom: var(--section-spacing, 24px);
+  margin-bottom: var(--space-xl);
 }
 
 .player_content iframe,
 #service-player-placeholder iframe {
-  border-radius: 10px;
+  border-radius: var(--border-radius-large);
+}
+
+@media screen and (max-width: 768px) {
+  #player-container {
+    margin-bottom: var(--space-md);
+  }
 }

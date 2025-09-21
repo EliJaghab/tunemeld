@@ -21,13 +21,13 @@
 
 #main-content .error-banner .error-banner-title {
   font-weight: 600 !important;
-  font-size: 16px !important;
+  font-size: var(--font-size-lg) !important;
   margin-bottom: 5px !important;
   color: white !important;
 }
 
 #main-content .error-banner .error-banner-description {
-  font-size: 14px !important;
+  font-size: var(--font-size-md) !important;
   opacity: 0.95 !important;
   color: white !important;
 }
@@ -48,7 +48,7 @@
   padding: 10px !important;
   border-radius: 4px !important;
   font-family: monospace !important;
-  font-size: 12px !important;
+  font-size: var(--font-size-sm) !important;
   margin-top: 5px !important;
   word-break: break-all !important;
   color: white !important;
@@ -61,7 +61,7 @@
   padding: 8px 16px !important;
   border-radius: 4px !important;
   cursor: pointer !important;
-  font-size: 12px !important;
+  font-size: var(--font-size-sm) !important;
   font-weight: 600 !important;
   margin-left: 20px !important;
   transition: background 0.2s !important;

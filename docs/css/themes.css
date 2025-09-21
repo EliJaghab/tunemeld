@@ -58,14 +58,79 @@
   --radius-large: 10px;
   --radius-small: 5px;
 
-  /* Spacing */
-  --section-spacing: 20px;
-  --gap-small: 8px;
-  --gap-medium: 10px;
-  --gap-large: 12px;
+  /* Spacing System - 4px base units */
+  --space-xs: 4px; /* Extra small */
+  --space-sm: 8px; /* Small */
+  --space-md: 12px; /* Medium */
+  --space-lg: 16px; /* Large */
+  --space-xl: 20px; /* Extra large */
+  --space-xxl: 24px; /* Extra extra large */
+
+  /* Size System - for components */
+  --size-icon-xs: var(--space-lg); /* 16px - very small view count icons */
+  --size-icon-sm: var(--space-xxl); /* 24px - source icons, buttons */
+  --size-icon-md: calc(var(--space-xl) * 2); /* 40px - medium shimmer squares */
+  --size-icon-lg: calc(var(--space-xl) * 3); /* 60px - playlist cover images */
+  --size-icon-xl: calc(
+    var(--space-xxl) * 5
+  ); /* 120px - mobile service images */
+  --size-icon-xxl: calc(
+    var(--space-xxl) * 8.33
+  ); /* 200px - desktop service images */
+
+  /* Row and component heights */
+  --size-row-sm: calc(var(--space-xl) * 2.5); /* 50px - mobile playlist rows */
+  --size-row-md: calc(var(--space-xl) * 3); /* 60px - desktop playlist rows */
+  --size-header-sm: calc(
+    var(--space-xl) * 2
+  ); /* 40px - mobile service headers */
+  --size-header-md: calc(
+    var(--space-xl) * 3
+  ); /* 60px - desktop service headers */
+
+  /* Special component sizes */
+  --size-soundcloud-xs: calc(var(--space-sm) * 1.875); /* 15px - 480px mobile */
+  --size-soundcloud-sm: calc(
+    var(--space-xl) * 1.25
+  ); /* 20px - default mobile */
+  --size-soundcloud-md: calc(var(--space-xl) * 1.5); /* 30px - tablet */
+  --size-tunemeld-logo: calc(var(--space-xl) * 3.75); /* 75px - main logo */
+  --size-select-height: calc(
+    var(--space-xl) * 1.875
+  ); /* 30px - dropdown selectors */
+
+  /* Text heights and line heights */
+  --size-text-height: calc(
+    var(--space-xl) * 1.35
+  ); /* 27px equivalent to 2.7rem */
+  --size-line-height-sm: calc(var(--space-xl) * 1.25); /* 20px line height */
+  --size-line-height-md: calc(var(--space-xl) * 2); /* 40px line height */
 
   /* Typography */
   --font-family-primary: "DM Sans", sans-serif;
+
+  /* Font Size System - Multiples of 3px */
+  --font-size-xs: 9px; /* Extra small text */
+  --font-size-sm: 12px; /* Small text, mobile buttons */
+  --font-size-md: 15px; /* Standard body text, buttons */
+  --font-size-lg: 18px; /* Base text, larger body */
+  --font-size-xl: 21px; /* Large text, track numbers */
+  --font-size-xxl: 24px; /* Heading text */
+  --font-size-xxxl: 30px; /* Large headings */
+
+  /* Mobile Font Sizes (smaller variants) */
+  --font-size-mobile-xs: 9px; /* Tiny mobile text */
+  --font-size-mobile-sm: 12px; /* Small mobile text */
+  --font-size-mobile-md: 12px; /* Standard mobile text */
+  --font-size-mobile-lg: 15px; /* Larger mobile text */
+
+  /* Text Truncation Utilities */
+  --mobile-line-clamp: 2;
+  --desktop-line-clamp: 3;
+
+  /* Shimmer/Loading System */
+  --shimmer-duration: 2s;
+  --shimmer-opacity: 0.2;
 
   /* Other theme-specific variables */
   --overlay-bg-light: rgba(255, 255, 255, 0.9);
@@ -125,7 +190,7 @@ body {
   /* Apply global styles */
   background-color: var(--background-color);
   color: var(--text-color);
-  font-size: 16px;
+  font-size: var(--font-size-lg);
 }
 
 /* ==========================================================================
@@ -178,5 +243,457 @@ body.dark-mode {
     --toggle-width: 45px;
     --toggle-height: 20px;
     --ball-position-margin: 5px;
+  }
+}
+
+/* ==========================================================================
+   SHIMMER/LOADING SYSTEM - Reusable Components
+   ========================================================================== */
+
+/* Base shimmer animation */
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  50% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+/* Core shimmer class - apply to any element */
+.shimmer {
+  border-radius: var(--border-radius-small);
+  overflow: hidden;
+  position: relative;
+  background-color: var(--skeleton-color);
+}
+
+.shimmer::before {
+  animation: shimmer var(--shimmer-duration) infinite;
+  background: linear-gradient(
+    90deg,
+    var(--skeleton-color) 0%,
+    rgba(255, 255, 255, var(--shimmer-opacity)) 50%,
+    var(--skeleton-color) 100%
+  );
+  content: "";
+  height: 100%;
+  left: -100%;
+  position: absolute;
+  top: 0;
+  width: 100%;
+}
+
+/* Shimmer component variants */
+.shimmer-text {
+  height: var(--space-xl);
+  margin-bottom: var(--space-sm);
+}
+
+.shimmer-text-sm {
+  height: var(--space-md);
+  margin-bottom: var(--space-xs);
+}
+
+.shimmer-text-lg {
+  height: var(--space-xxl);
+  margin-bottom: var(--space-md);
+}
+
+.shimmer-square {
+  width: var(--size-icon-md);
+  height: var(--size-icon-md);
+}
+
+.shimmer-square-lg {
+  width: var(--size-icon-xxl);
+  height: var(--size-icon-xxl);
+}
+
+.shimmer-circle {
+  border-radius: 50%;
+  width: var(--size-icon-sm);
+  height: var(--size-icon-sm);
+}
+
+/* Loading overlay utilities */
+.loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--container-background);
+  z-index: 10;
+  display: none;
+}
+
+.loading-overlay.active {
+  display: block;
+}
+
+.loading-overlay.flex {
+  display: flex;
+}
+
+.loading-overlay.flex.active {
+  display: flex;
+}
+
+/* Service-specific shimmer components */
+.loading-overlay-service {
+  flex-direction: column;
+  align-items: center;
+  padding: 0;
+}
+
+.shimmer-service-image {
+  width: 100%;
+  padding-bottom: 100%;
+  margin-bottom: 0;
+}
+
+.shimmer-service-text {
+  width: 100%;
+  margin-top: 5px;
+  text-align: left;
+  align-self: flex-start;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.shimmer-service-text::before,
+.shimmer-service-text::after {
+  content: "";
+  height: var(--space-lg);
+  background-color: var(--skeleton-color);
+  border-radius: var(--border-radius-small);
+  position: relative;
+  overflow: hidden;
+}
+
+.shimmer-service-text::before {
+  width: 100%;
+}
+
+.shimmer-service-text::after {
+  width: 75%;
+}
+
+.shimmer-service-text::before::after,
+.shimmer-service-text::after::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    var(--skeleton-color) 0%,
+    rgba(255, 255, 255, var(--shimmer-opacity)) 50%,
+    var(--skeleton-color) 100%
+  );
+  animation: shimmer var(--shimmer-duration) infinite;
+}
+
+/* Playlist-specific shimmer components */
+.loading-overlay-playlist {
+  padding: var(--space-xl);
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.loading-overlay-playlist.active {
+  display: flex;
+}
+
+/* Override playlist overflow when shimmer is active - keep within bounds */
+.playlist.main-playlist:has(.loading-overlay-playlist.active) {
+  overflow-y: hidden;
+  height: auto;
+  max-height: 80vh;
+}
+
+/* Table-only shimmer styling */
+.loading-overlay-table {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  min-height: 100vh;
+  flex-direction: column;
+  gap: var(--space-xs);
+  padding: var(--space-xs) 0;
+  background-color: var(--container-background);
+  border-radius: var(--border-radius-small);
+  z-index: 10;
+  display: none;
+}
+
+.loading-overlay-table.active {
+  display: flex;
+}
+
+/* Ensure table container can accommodate full shimmer */
+.playlist-table:has(.loading-overlay-table.active) {
+  min-height: 80vh;
+  overflow: visible;
+}
+
+/* Ensure table shimmer doesn't interfere with other elements */
+.playlist-table {
+  position: relative;
+}
+
+/* Shimmer table rows for genre switching - match real content exactly */
+.playlist-shimmer-row {
+  height: var(--size-row-md);
+  margin-bottom: var(--space-xs);
+}
+
+.playlist-shimmer-row td {
+  padding: var(--space-xs);
+  vertical-align: middle;
+  border-bottom: 1px solid var(--container-background);
+  text-align: left;
+}
+
+.playlist-shimmer-row td.rank {
+  text-align: center;
+  width: 1%;
+  padding: 0;
+}
+
+.playlist-shimmer-row td.cover {
+  text-align: center;
+  width: 0%;
+}
+
+.playlist-shimmer-row td.info {
+  width: 10%;
+}
+
+.playlist-shimmer-row td.spotify-view-count,
+.playlist-shimmer-row td.youtube-view-count {
+  width: 10%;
+  text-align: left;
+}
+
+.playlist-shimmer-row td.seen-on {
+  width: 5%;
+  text-align: center;
+}
+
+.playlist-shimmer-row td.external {
+  width: 0%;
+  text-align: center;
+}
+
+/* Playlist header shimmer */
+.playlist-header-shimmer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.playlist-title-shimmer {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.shimmer-playlist-logo {
+  width: var(--size-icon-sm);
+  height: var(--size-icon-sm);
+  border-radius: var(--border-radius-small);
+}
+
+.shimmer-playlist-title {
+  width: calc(var(--space-xl) * 4);
+  height: var(--space-lg);
+}
+
+.shimmer-playlist-desc {
+  width: calc(var(--space-xl) * 12);
+  height: var(--space-lg);
+}
+
+/* Controls shimmer */
+.playlist-controls-shimmer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.control-group-shimmer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.shimmer-control-label {
+  width: calc(var(--space-xl) * 3);
+  height: var(--space-lg);
+}
+
+.shimmer-buttons-row {
+  display: flex;
+  gap: var(--space-lg);
+}
+
+.shimmer-button {
+  width: calc(var(--space-xl) * 5);
+  height: calc(var(--space-xl) * 2.5);
+  border-radius: calc(var(--space-xl) + var(--space-xs));
+}
+
+/* Table shimmer */
+.playlist-table-shimmer {
+  width: 100%;
+  border-collapse: collapse;
+  margin: var(--space-lg) 0;
+  border: none;
+}
+
+.playlist-shimmer-row {
+  height: var(--size-row-md);
+}
+
+.playlist-shimmer-row:not(:last-child) {
+  margin-bottom: var(--space-xs);
+}
+
+.playlist-shimmer-row td {
+  padding: var(--space-xs);
+  vertical-align: middle;
+  border-bottom: 1px solid var(--container-background);
+}
+
+.playlist-shimmer-row td.rank {
+  text-align: center;
+  width: 1%;
+  padding: 0;
+}
+
+.playlist-shimmer-row td.cover {
+  text-align: center;
+  width: 0%;
+}
+
+.playlist-shimmer-row td.info {
+  width: 10%;
+}
+
+.playlist-shimmer-row td.spotify-view-count,
+.playlist-shimmer-row td.youtube-view-count {
+  width: 10%;
+  text-align: left;
+}
+
+.playlist-shimmer-row td.seen-on {
+  width: 5%;
+  text-align: center;
+}
+
+.playlist-shimmer-row td.external {
+  width: 0%;
+  text-align: center;
+}
+
+.shimmer-rank {
+  width: 20px;
+  height: var(--space-md);
+}
+
+.shimmer-album-cover {
+  width: var(--size-icon-lg);
+  height: var(--size-icon-lg);
+  border-radius: var(--border-radius-small);
+}
+
+.shimmer-track-info {
+  width: 100%;
+  height: var(--space-lg);
+  position: relative;
+}
+
+.shimmer-track-info::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 70%;
+  height: var(--space-md);
+  background-color: var(--skeleton-color);
+  border-radius: var(--border-radius-small);
+  animation: shimmer var(--shimmer-duration) infinite;
+}
+
+.shimmer-track-info::after {
+  content: "";
+  position: absolute;
+  top: calc(var(--space-md) + var(--space-xs));
+  left: 0;
+  width: 45%;
+  height: var(--space-sm);
+  background-color: var(--skeleton-color);
+  border-radius: var(--border-radius-small);
+  animation: shimmer var(--shimmer-duration) infinite;
+}
+
+.shimmer-view-count {
+  width: 60px;
+  height: var(--space-md);
+}
+
+.shimmer-date {
+  width: 40px;
+  height: var(--space-md);
+}
+
+.shimmer-external-links {
+  display: flex;
+  gap: var(--space-xs);
+  align-items: center;
+  width: 60px;
+  height: var(--space-lg);
+}
+
+.shimmer-external-links::before,
+.shimmer-external-links::after {
+  content: "";
+  width: var(--size-icon-xs);
+  height: var(--size-icon-xs);
+  background-color: var(--skeleton-color);
+  border-radius: 50%;
+  animation: shimmer var(--shimmer-duration) infinite;
+}
+
+/* Responsive adjustments */
+@media screen and (max-width: 768px) {
+  .loading-overlay-service {
+    padding: 0;
+  }
+
+  .loading-overlay-playlist {
+    padding: var(--space-md);
+  }
+
+  .playlist-shimmer-row {
+    height: var(--size-row-sm);
+  }
+
+  .shimmer-button {
+    width: calc(var(--space-xl) * 4);
+    height: calc(var(--space-xl) * 2);
+  }
+
+  .shimmer-playlist-desc {
+    width: calc(var(--space-xl) * 8);
   }
 }
