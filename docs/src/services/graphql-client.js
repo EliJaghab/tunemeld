@@ -181,6 +181,8 @@ class GraphQLClient {
             soundcloudUrl
             youtubeCurrentViewCount
             spotifyCurrentViewCount
+            youtubeCurrentViewCountAbbreviated
+            spotifyCurrentViewCountAbbreviated
             spotifySource {
               name
               displayName
