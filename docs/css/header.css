@@ -53,10 +53,26 @@
   display: flex;
   flex: 1;
   flex-direction: column;
-  justify-content: flex-end;
   margin: 0.3rem;
   max-width: 300px;
   padding: 0.5rem;
+}
+
+.service .header-title {
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.service .image-placeholder,
+.service .video-container {
+  flex-shrink: 0;
+}
+
+.service .description {
+  margin-top: auto;
+  padding-top: 0.5rem;
 }
 
 /* Skeleton Loader */
