@@ -187,12 +187,12 @@ function setupDescriptionModal(
     // Be more conservative on mobile to ensure MORE button is visible
     estimatedMaxTextLength = Math.max(
       MIN_CHAR_LIMIT,
-      Math.min(50, Math.floor((descriptionBoxWidth / 8) * 1.2)),
+      Math.min(35, Math.floor((descriptionBoxWidth / 8) * 1.0)),
     );
   } else {
     estimatedMaxTextLength = Math.max(
       MIN_CHAR_LIMIT,
-      Math.floor((descriptionBoxWidth / 8) * 1.5) + 15,
+      Math.floor((descriptionBoxWidth / 8) * 2.0) + 25,
     );
   }
 

@@ -12,7 +12,7 @@
 
 .header-title {
   font-weight: bold;
-  text-align: center;
+  text-align: left;
   font-size: 1.2rem;
   width: 100%;
   padding: 0.2rem;
@@ -61,8 +61,8 @@
 .service .header-title {
   height: 60px;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  align-items: flex-end;
+  justify-content: flex-start;
 }
 
 .service .image-placeholder,
@@ -71,8 +71,7 @@
 }
 
 .service .description {
-  margin-top: auto;
-  padding-top: 0.5rem;
+  margin-top: 2px;
 }
 
 /* Skeleton Loader */
@@ -119,20 +118,32 @@
   }
 }
 
-/* Desktop Styles */
+/* Mobile Styles */
 @media screen and (max-width: 768px) {
   .header-title {
     font-weight: bold;
-    text-align: center;
+    text-align: left;
     font-size: 0.7rem;
     width: 100%;
     padding: 0.2rem;
     color: var(--text-color);
   }
 
+  .service .header-title {
+    height: 40px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-start;
+  }
+
+  .service .description {
+    margin-top: 1px;
+  }
+
   .description {
     font-size: 0.7rem;
     color: var(--text-color);
+    text-align: left;
   }
 }
 
@@ -142,7 +153,7 @@
   cursor: pointer;
   line-height: 1.35rem;
   transition: all 0.3s ease-in-out;
-  text-align: center;
+  text-align: left;
   margin-top: 5px;
   min-height: 2.7rem;
 }
