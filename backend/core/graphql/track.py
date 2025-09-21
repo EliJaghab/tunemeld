@@ -5,7 +5,7 @@ from core.models.genre_service import Service
 from core.models.playlist import Playlist
 from core.models.track import Track
 from core.models.view_counts import HistoricalTrackViewCount
-from core.utils.utils import truncate_to_words
+from core.utils.utils import format_view_count, truncate_to_words
 from graphene_django import DjangoObjectType
 
 
@@ -40,8 +40,8 @@ class TrackType(DjangoObjectType):
     soundcloud_source = graphene.Field(ServiceType, description="SoundCloud service source with metadata")
     youtube_source = graphene.Field(ServiceType, description="YouTube service source with metadata")
 
-    youtube_current_view_count = graphene.BigInt(description="Current YouTube view count")
-    spotify_current_view_count = graphene.BigInt(description="Current Spotify view count")
+    youtube_current_view_count = graphene.String(description="Abbreviated YouTube view count (e.g., '1.56k', '234.5M')")
+    spotify_current_view_count = graphene.String(description="Abbreviated Spotify view count (e.g., '1.56k', '234.5M')")
     youtube_view_count_delta_percentage = graphene.Float(description="YouTube view count % change from yesterday")
     spotify_view_count_delta_percentage = graphene.Float(description="Spotify view count % change from yesterday")
 
@@ -129,7 +129,8 @@ class TrackType(DjangoObjectType):
     def resolve_youtube_current_view_count(self, info):
         # Always prefer pre-populated data from cache (including explicit None for Saturdays)
         if hasattr(self, "_youtube_current_view_count"):
-            return self._youtube_current_view_count
+            raw_count = self._youtube_current_view_count
+            return format_view_count(raw_count)
 
         # Fallback to database only when cache is completely empty
         # This handles edge cases where cache warming failed
@@ -140,13 +141,15 @@ class TrackType(DjangoObjectType):
                 .order_by("-recorded_date")
                 .first()
             )
-            return latest.current_view_count if latest else None
+            raw_count = latest.current_view_count if latest else None
+            return format_view_count(raw_count)
         except (Service.DoesNotExist, HistoricalTrackViewCount.DoesNotExist):
-            return None
+            return format_view_count(None)
 
     def resolve_spotify_current_view_count(self, info):
         if hasattr(self, "_spotify_current_view_count"):
-            return self._spotify_current_view_count
+            raw_count = self._spotify_current_view_count
+            return format_view_count(raw_count)
 
         try:
             spotify_service = Service.objects.get(name=ServiceName.SPOTIFY)
@@ -155,9 +158,10 @@ class TrackType(DjangoObjectType):
                 .order_by("-recorded_date")
                 .first()
             )
-            return latest.current_view_count if latest else None
+            raw_count = latest.current_view_count if latest else None
+            return format_view_count(raw_count)
         except (Service.DoesNotExist, HistoricalTrackViewCount.DoesNotExist):
-            return None
+            return format_view_count(None)
 
     def resolve_youtube_view_count_delta_percentage(self, info):
         if hasattr(self, "_youtube_view_count_delta_percentage"):

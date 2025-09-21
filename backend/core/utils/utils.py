@@ -167,3 +167,36 @@ def truncate_to_words(text: str, max_chars: int = 30) -> str:
         return truncated[:last_space] + "..."
 
     return truncated + "..."
+
+
+def format_view_count(count: int | None) -> str:
+    """
+    Format view count into abbreviated string with max 6 characters.
+
+    Examples:
+        1,560 -> "1.56k"
+        100,400 -> "100.4k"
+        234,500,000 -> "234.5M"
+        1,200,000,000 -> "1.2B"
+        50 -> "50"
+        None -> "0"
+    """
+    if count is None or count == 0:
+        return "0"
+
+    if count < 1000:
+        return str(count)
+
+    suffixes = [(1_000_000_000, "B"), (1_000_000, "M"), (1000, "k")]
+
+    for threshold, suffix in suffixes:
+        if count >= threshold:
+            value = count / threshold
+            if value >= 100:
+                return f"{value:.0f}{suffix}"
+            elif value >= 10:
+                return f"{value:.1f}{suffix}"
+            else:
+                return f"{value:.2f}{suffix}"
+
+    return str(count)
