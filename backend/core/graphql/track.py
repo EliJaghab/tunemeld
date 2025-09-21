@@ -40,8 +40,14 @@ class TrackType(DjangoObjectType):
     soundcloud_source = graphene.Field(ServiceType, description="SoundCloud service source with metadata")
     youtube_source = graphene.Field(ServiceType, description="YouTube service source with metadata")
 
-    youtube_current_view_count = graphene.String(description="Abbreviated YouTube view count (e.g., '1.56k', '234.5M')")
-    spotify_current_view_count = graphene.String(description="Abbreviated Spotify view count (e.g., '1.56k', '234.5M')")
+    youtube_current_view_count = graphene.BigInt(description="Raw YouTube view count for sorting")
+    spotify_current_view_count = graphene.BigInt(description="Raw Spotify view count for sorting")
+    youtube_current_view_count_abbreviated = graphene.String(
+        description="Abbreviated YouTube view count (e.g., '1.56k', '234.5M')"
+    )
+    spotify_current_view_count_abbreviated = graphene.String(
+        description="Abbreviated Spotify view count (e.g., '1.56k', '234.5M')"
+    )
     youtube_view_count_delta_percentage = graphene.Float(description="YouTube view count % change from yesterday")
     spotify_view_count_delta_percentage = graphene.Float(description="Spotify view count % change from yesterday")
 
@@ -129,11 +135,43 @@ class TrackType(DjangoObjectType):
     def resolve_youtube_current_view_count(self, info):
         # Always prefer pre-populated data from cache (including explicit None for Saturdays)
         if hasattr(self, "_youtube_current_view_count"):
+            return self._youtube_current_view_count
+
+        # Fallback to database only when cache is completely empty
+        # This handles edge cases where cache warming failed
+        try:
+            youtube_service = Service.objects.get(name=ServiceName.YOUTUBE)
+            latest = (
+                HistoricalTrackViewCount.objects.filter(isrc=self.isrc, service=youtube_service)
+                .order_by("-recorded_date")
+                .first()
+            )
+            return latest.current_view_count if latest else None
+        except (Service.DoesNotExist, HistoricalTrackViewCount.DoesNotExist):
+            return None
+
+    def resolve_spotify_current_view_count(self, info):
+        if hasattr(self, "_spotify_current_view_count"):
+            return self._spotify_current_view_count
+
+        try:
+            spotify_service = Service.objects.get(name=ServiceName.SPOTIFY)
+            latest = (
+                HistoricalTrackViewCount.objects.filter(isrc=self.isrc, service=spotify_service)
+                .order_by("-recorded_date")
+                .first()
+            )
+            return latest.current_view_count if latest else None
+        except (Service.DoesNotExist, HistoricalTrackViewCount.DoesNotExist):
+            return None
+
+    def resolve_youtube_current_view_count_abbreviated(self, info):
+        # Always prefer pre-populated data from cache (including explicit None for Saturdays)
+        if hasattr(self, "_youtube_current_view_count"):
             raw_count = self._youtube_current_view_count
             return format_view_count(raw_count)
 
         # Fallback to database only when cache is completely empty
-        # This handles edge cases where cache warming failed
         try:
             youtube_service = Service.objects.get(name=ServiceName.YOUTUBE)
             latest = (
@@ -146,7 +184,7 @@ class TrackType(DjangoObjectType):
         except (Service.DoesNotExist, HistoricalTrackViewCount.DoesNotExist):
             return format_view_count(None)
 
-    def resolve_spotify_current_view_count(self, info):
+    def resolve_spotify_current_view_count_abbreviated(self, info):
         if hasattr(self, "_spotify_current_view_count"):
             raw_count = self._spotify_current_view_count
             return format_view_count(raw_count)
