@@ -1,8 +1,8 @@
+import { updatePlaylistHeader } from "@/components/playlistHeader.js";
 import {
-  fetchAndDisplayHeaderArt,
-  hideSkeletonLoaders,
-  showSkeletonLoaders,
-} from "@/components/header.js";
+  hideShimmerLoaders,
+  showGenreSwitchShimmer,
+} from "@/components/shimmer.js";
 import {
   addToggleEventListeners,
   fetchAndDisplayPlaylists,
@@ -13,16 +13,13 @@ import {
   sortTable,
   updateMainPlaylist,
 } from "@/components/playlist.js";
-import { loadAndRenderRankButtons } from "@/components/ranks.js";
+import { loadAndRenderRankButtons } from "@/components/rankButton.js";
 import { setupBodyClickListener } from "@/components/servicePlayer.js";
 import { stateManager } from "@/state/StateManager.js";
 import { appRouter } from "@/routing/router.js";
 import { graphqlClient } from "@/services/graphql-client.js";
 import { SERVICE_NAMES } from "@/config/constants.js";
-import {
-  displayPlaylistMetadata,
-  updatePlaylistMetadataSync,
-} from "@/utils/playlist-metadata.js";
+import { updatePlaylistHeaderSync } from "@/components/playlistHeader.js";
 
 async function fetchAllGenreData(genre) {
   const metadataResult = await graphqlClient.getPlaylistMetadata(genre);
@@ -51,13 +48,13 @@ async function fetchAllGenreData(genre) {
 
 export async function updateGenreData(genre, updateAll = false) {
   try {
-    showSkeletonLoaders();
+    showGenreSwitchShimmer();
     if (updateAll) {
       // Fetch all data first, then update DOM synchronously
       const allData = await fetchAllGenreData(genre);
 
-      // Update playlist metadata synchronously
-      updatePlaylistMetadataSync(
+      // Update playlist header synchronously
+      updatePlaylistHeaderSync(
         allData.metadata.playlists,
         allData.metadata.serviceOrder,
         genre,
@@ -92,7 +89,7 @@ export async function updateGenreData(genre, updateAll = false) {
       await updateMainPlaylist(genre);
     }
     sortTable(stateManager.getCurrentColumn(), stateManager.getCurrentOrder());
-    hideSkeletonLoaders();
+    hideShimmerLoaders();
     resetCollapseStates();
     addToggleEventListeners();
     setupBodyClickListener(genre);

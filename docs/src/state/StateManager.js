@@ -30,6 +30,11 @@ class StateManager {
       theme: null,
       currentGenre: null,
       defaultRankField: null, // Store the default from backend
+      shimmer: {
+        services: false,
+        playlist: false,
+        isInitialLoad: false,
+      },
     };
     this.domElements = new Map();
   }
@@ -133,6 +138,54 @@ class StateManager {
 
   clearElementCache() {
     this.domElements.clear();
+  }
+
+  // Shimmer State Management
+  setShimmerState(type, isActive, isInitialLoad = false) {
+    if (type === "services") {
+      this.state.shimmer.services = isActive;
+    } else if (type === "playlist") {
+      this.state.shimmer.playlist = isActive;
+      this.state.shimmer.isInitialLoad = isInitialLoad;
+    }
+  }
+
+  getShimmerState(type) {
+    return this.state.shimmer[type] || false;
+  }
+
+  isInitialLoad() {
+    return this.state.shimmer.isInitialLoad;
+  }
+
+  showShimmer(type, isInitialLoad = false) {
+    this.setShimmerState(type, true, isInitialLoad);
+  }
+
+  hideShimmer(type) {
+    this.setShimmerState(type, false);
+  }
+
+  hideAllShimmers() {
+    this.state.shimmer.services = false;
+    this.state.shimmer.playlist = false;
+    this.state.shimmer.isInitialLoad = false;
+  }
+
+  isShimmering(type = null) {
+    if (type) {
+      return this.getShimmerState(type);
+    }
+    return this.state.shimmer.services || this.state.shimmer.playlist;
+  }
+
+  getShimmerDebugInfo() {
+    return {
+      services: this.state.shimmer.services,
+      playlist: this.state.shimmer.playlist,
+      isInitialLoad: this.state.shimmer.isInitialLoad,
+      anyActive: this.isShimmering(),
+    };
   }
 }
 

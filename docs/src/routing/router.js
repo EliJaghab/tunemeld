@@ -3,6 +3,7 @@ import { updateGenreData } from "@/utils/selectors.js";
 import { stateManager } from "@/state/StateManager.js";
 import { setupBodyClickListener } from "@/components/servicePlayer.js";
 import { errorHandler } from "@/utils/error-handler.js";
+import { showInitialShimmer } from "@/components/shimmer.js";
 import { graphqlClient } from "@/services/graphql-client.js";
 
 class AppRouter {
@@ -122,6 +123,12 @@ class AppRouter {
   }
 
   async loadGenreContent(genre, fullUpdate = true) {
+    // Show initial shimmer only on first app load
+    if (this.isInitialLoad) {
+      showInitialShimmer();
+      this.isInitialLoad = false;
+    }
+
     await updateGenreData(genre, fullUpdate);
     if (fullUpdate) {
       setupBodyClickListener(genre);

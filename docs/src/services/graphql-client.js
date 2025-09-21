@@ -150,6 +150,7 @@ class GraphQLClient {
           playlistUrl
           genreName
           serviceName
+          serviceIconUrl
         }
       }
     `;

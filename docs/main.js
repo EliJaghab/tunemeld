@@ -1,6 +1,6 @@
 import { loadTitleContent } from "@/components/title.js";
-import { loadAndRenderRankButtons } from "@/components/ranks.js";
-import { loadAndRenderGenreButtons } from "@/components/genres.js";
+import { loadAndRenderRankButtons } from "@/components/rankButton.js";
+import { loadAndRenderGenreButtons } from "@/components/genreButtons.js";
 import {
   setupBodyClickListener,
   setupClosePlayerButton,
