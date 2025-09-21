@@ -7,7 +7,9 @@ import {
   addToggleEventListeners,
   fetchAndDisplayPlaylists,
   fetchAndDisplayPlaylistsWithOrder,
+  renderPlaylistTracks,
   resetCollapseStates,
+  setPlaylistData,
   sortTable,
   updateMainPlaylist,
 } from "@/components/playlist.js";
@@ -16,20 +18,76 @@ import { setupBodyClickListener } from "@/components/servicePlayer.js";
 import { stateManager } from "@/state/StateManager.js";
 import { appRouter } from "@/routing/router.js";
 import { graphqlClient } from "@/services/graphql-client.js";
-import { displayPlaylistMetadata } from "@/utils/playlist-metadata.js";
+import { SERVICE_NAMES } from "@/config/constants.js";
+import {
+  displayPlaylistMetadata,
+  updatePlaylistMetadataSync,
+} from "@/utils/playlist-metadata.js";
+
+async function fetchAllGenreData(genre) {
+  const metadataResult = await graphqlClient.getPlaylistMetadata(genre);
+  const { serviceOrder, playlists } = metadataResult;
+
+  const [mainPlaylistResult, ranksResult, ...servicePlaylistResults] =
+    await Promise.all([
+      graphqlClient.getPlaylistTracks(genre, SERVICE_NAMES.TUNEMELD),
+      graphqlClient.fetchPlaylistRanks(),
+      ...serviceOrder.map((service) =>
+        graphqlClient.getPlaylistTracks(genre, service).catch((error) => {
+          console.error(`Error fetching ${service} playlist:`, error);
+          return null;
+        }),
+      ),
+    ]);
+
+  return {
+    metadata: { serviceOrder, playlists },
+    mainPlaylist: mainPlaylistResult,
+    ranks: ranksResult,
+    servicePlaylists: servicePlaylistResults,
+    serviceOrder,
+  };
+}
 
 export async function updateGenreData(genre, updateAll = false) {
   try {
     showSkeletonLoaders();
     if (updateAll) {
-      const { serviceOrder } = await graphqlClient.getPlaylistMetadata(genre);
+      // Fetch all data first, then update DOM synchronously
+      const allData = await fetchAllGenreData(genre);
 
-      await Promise.all([
-        displayPlaylistMetadata(genre),
-        fetchAndDisplayPlaylistsWithOrder(genre, serviceOrder),
-        updateMainPlaylist(genre),
-        loadAndRenderRankButtons(),
-      ]);
+      // Update playlist metadata synchronously
+      updatePlaylistMetadataSync(
+        allData.metadata.playlists,
+        allData.metadata.serviceOrder,
+        genre,
+        null,
+      );
+
+      // Render main playlist
+      const mainPlaylistData = [allData.mainPlaylist.playlist];
+      setPlaylistData(mainPlaylistData);
+      renderPlaylistTracks(
+        mainPlaylistData,
+        "main-playlist-data-placeholder",
+        SERVICE_NAMES.TUNEMELD,
+      );
+
+      // Render service playlists
+      allData.serviceOrder.forEach((service, index) => {
+        const servicePlaylistResult = allData.servicePlaylists[index];
+        if (servicePlaylistResult) {
+          const servicePlaylistData = [servicePlaylistResult.playlist];
+          renderPlaylistTracks(
+            servicePlaylistData,
+            `${service}-data-placeholder`,
+            service,
+          );
+        }
+      });
+
+      // Load rank buttons (this is synchronous DOM manipulation)
+      await loadAndRenderRankButtons();
     } else {
       await updateMainPlaylist(genre);
     }

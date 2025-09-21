@@ -67,7 +67,7 @@ async function fetchAndDisplayData(url, placeholderId, serviceName) {
   }
 }
 
-function renderPlaylistTracks(playlists, placeholderId, serviceName) {
+export function renderPlaylistTracks(playlists, placeholderId, serviceName) {
   const placeholder = document.getElementById(placeholderId);
   if (!placeholder) {
     console.error(`Placeholder with ID ${placeholderId} not found.`);
@@ -325,6 +325,10 @@ function createSourceLinkFromService(source) {
 }
 
 let playlistData = [];
+
+export function setPlaylistData(data) {
+  playlistData = data;
+}
 
 export function sortTable(column, order) {
   const ranks = appRouter.getAvailableRanks();
