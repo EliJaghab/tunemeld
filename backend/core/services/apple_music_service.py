@@ -73,7 +73,7 @@ def get_apple_music_playlist(genre: "GenreName") -> PlaylistData:
     doc = BeautifulSoup(response.text, "html.parser")
 
     title_tag = doc.select_one("a.click-action")
-    title = clean_unicode_text(title_tag.get_text(strip=True)) if title_tag else "Unknown"
+    clean_unicode_text(title_tag.get_text(strip=True)) if title_tag else "Unknown"
 
     subtitle_tag = doc.select_one("h1")
     subtitle = clean_unicode_text(subtitle_tag.get_text(strip=True)) if subtitle_tag else "Unknown"
@@ -97,7 +97,7 @@ def get_apple_music_playlist(genre: "GenreName") -> PlaylistData:
     metadata: PlaylistMetadata = {
         "service_name": "apple_music",
         "genre_name": genre,
-        "playlist_name": f"{subtitle} {title}",
+        "playlist_name": subtitle,
         "playlist_url": url,
         "playlist_cover_url": playlist_cover_url,
         "playlist_cover_description_text": playlist_cover_description_text,

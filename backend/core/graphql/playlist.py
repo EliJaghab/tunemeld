@@ -24,6 +24,7 @@ class PlaylistMetadataType(graphene.ObjectType):
     playlist_url = graphene.String(required=True)
     genre_name = graphene.String(required=True)
     service_name = graphene.String(required=True)
+    service_icon_url = graphene.String(required=True)
 
 
 class RankType(graphene.ObjectType):
@@ -185,6 +186,7 @@ class PlaylistQuery(graphene.ObjectType):
                     playlist_url=raw_playlist.playlist_url,
                     genre_name=genre,
                     service_name=raw_playlist.service.name,
+                    service_icon_url=raw_playlist.service.icon_url,
                 )
             )
 

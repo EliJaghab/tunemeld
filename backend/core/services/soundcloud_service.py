@@ -1,3 +1,4 @@
+import re
 from typing import TYPE_CHECKING
 from urllib.parse import urlparse
 
@@ -36,12 +37,38 @@ def get_soundcloud_playlist(genre: "GenreName") -> PlaylistData:
         else "Unknown"
     )
 
-    description_tag = doc.find("meta", {"name": "description"})
-    playlist_cover_description_text = (
-        clean_unicode_text(str(description_tag["content"]))
-        if description_tag and isinstance(description_tag, Tag) and description_tag.get("content")
-        else "No description available"
+    meta_description_tag = doc.find("meta", {"name": "description"})
+    meta_description = (
+        clean_unicode_text(str(meta_description_tag["content"]))
+        if meta_description_tag and isinstance(meta_description_tag, Tag) and meta_description_tag.get("content")
+        else None
     )
+
+    og_description_tag = doc.find("meta", {"property": "og:description"})
+    og_description_raw = (
+        str(og_description_tag["content"])
+        if og_description_tag and isinstance(og_description_tag, Tag) and og_description_tag.get("content")
+        else None
+    )
+
+    og_description = None
+    if og_description_raw:
+        url_match = re.search(r"https?://[^\s]+", og_description_raw)
+        if url_match:
+            artist_url = url_match.group()
+            artist_text = clean_unicode_text(og_description_raw.replace(artist_url, "").strip())
+            og_description = f'{artist_text} <a href="{artist_url}">{artist_url}</a>'
+        else:
+            og_description = clean_unicode_text(og_description_raw)
+
+    if meta_description and og_description and meta_description != og_description:
+        playlist_cover_description_text = f"{meta_description} | {og_description}"
+    elif og_description:
+        playlist_cover_description_text = og_description
+    elif meta_description:
+        playlist_cover_description_text = meta_description
+    else:
+        playlist_cover_description_text = "No description available"
 
     playlist_cover_url_tag = doc.find("meta", {"property": "og:image"})
     playlist_cover_url = (
