@@ -224,7 +224,7 @@ label {
 /* Desktop-Specific Styles */
 @media screen and (min-width: 768px) {
   #main-content {
-    max-width: 70rem;
+    max-width: 60rem;
   }
 
   .last-updated {
