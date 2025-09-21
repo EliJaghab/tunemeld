@@ -149,17 +149,13 @@ function createTuneMeldPlaylistTableRow(track) {
   const youtubeStatCell = document.createElement("td");
   youtubeStatCell.className = "youtube-view-count";
 
-  const youtubeViews = track.youtubeCurrentViewCount;
-  youtubeStatCell.textContent = youtubeViews
-    ? youtubeViews.toLocaleString()
-    : "";
+  const youtubeViews = track.youtubeCurrentViewCountAbbreviated;
+  youtubeStatCell.textContent = youtubeViews || "";
 
   const spotifyStatCell = document.createElement("td");
   spotifyStatCell.className = "spotify-view-count";
-  const spotifyViews = track.spotifyCurrentViewCount;
-  spotifyStatCell.textContent = spotifyViews
-    ? spotifyViews.toLocaleString()
-    : "";
+  const spotifyViews = track.spotifyCurrentViewCountAbbreviated;
+  spotifyStatCell.textContent = spotifyViews || "";
 
   const seenOnCell = document.createElement("td");
   seenOnCell.className = "seen-on";
@@ -188,7 +184,8 @@ function createViewCountElement(viewCount, source, url = null) {
   logo.className = "view-count-logo";
 
   const text = document.createElement("span");
-  text.textContent = viewCount.toLocaleString();
+  text.textContent =
+    typeof viewCount === "string" ? viewCount : viewCount.toLocaleString();
 
   container.appendChild(logo);
   container.appendChild(text);
@@ -213,21 +210,23 @@ function displayViewCounts(track, row) {
   const spotifyStatCell = document.createElement("td");
   spotifyStatCell.className = "spotify-view-count";
 
-  const youtubeCurrentViewCount = track.youtubeCurrentViewCount;
-  const spotifyCurrentViewCount = track.spotifyCurrentViewCount;
+  const youtubeCurrentViewCountAbbreviated =
+    track.youtubeCurrentViewCountAbbreviated;
+  const spotifyCurrentViewCountAbbreviated =
+    track.spotifyCurrentViewCountAbbreviated;
 
-  if (youtubeCurrentViewCount && track.youtubeSource) {
+  if (youtubeCurrentViewCountAbbreviated && track.youtubeSource) {
     const element = createViewCountElement(
-      youtubeCurrentViewCount,
+      youtubeCurrentViewCountAbbreviated,
       track.youtubeSource,
       track.youtubeUrl,
     );
     youtubeStatCell.appendChild(element);
   }
 
-  if (spotifyCurrentViewCount && track.spotifySource) {
+  if (spotifyCurrentViewCountAbbreviated && track.spotifySource) {
     const element = createViewCountElement(
-      spotifyCurrentViewCount,
+      spotifyCurrentViewCountAbbreviated,
       track.spotifySource,
       track.spotifyUrl,
     );
@@ -341,8 +340,13 @@ export function sortTable(column, order) {
 
   const sortedData = playlistData.map((playlist) => {
     playlist.tracks.sort((a, b) => {
-      const aValue = a[rankConfig.dataField];
-      const bValue = b[rankConfig.dataField];
+      let aValue = a[rankConfig.dataField];
+      let bValue = b[rankConfig.dataField];
+
+      // Handle null/undefined values
+      if (aValue == null) aValue = 0;
+      if (bValue == null) bValue = 0;
+
       return order === "asc" ? aValue - bValue : bValue - aValue;
     });
 
@@ -357,6 +361,9 @@ export function sortTable(column, order) {
 
     return playlist;
   });
+
+  // Update the module-level data so subsequent operations work correctly
+  playlistData = sortedData;
 
   renderPlaylistTracks(
     sortedData,
