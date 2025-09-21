@@ -95,6 +95,7 @@ class AppRouter {
 
     this.currentGenre = genre;
     this.updatePageTitle(genre);
+    this.updateFavicon(genre);
     this.syncGenreButtons(genre);
     this.syncRankState(rank);
     await this.loadGenreContent(genre, needsFullUpdate);
@@ -105,6 +106,26 @@ class AppRouter {
   updatePageTitle(genre) {
     const genreDisplay = this.getGenreDisplayName(genre);
     document.title = `tunemeld - ${genreDisplay}`;
+  }
+
+  updateFavicon(genre) {
+    const genreData = this.getAvailableGenres().find((g) => g.name === genre);
+    if (genreData && genreData.iconUrl) {
+      // Remove existing favicon
+      const existingFavicon =
+        document.querySelector('link[rel="icon"]') ||
+        document.querySelector('link[rel="shortcut icon"]');
+      if (existingFavicon) {
+        existingFavicon.remove();
+      }
+
+      // Add new favicon
+      const newFavicon = document.createElement("link");
+      newFavicon.rel = "icon";
+      newFavicon.type = "image/png";
+      newFavicon.href = genreData.iconUrl;
+      document.head.appendChild(newFavicon);
+    }
   }
 
   syncGenreButtons(genre) {
@@ -120,6 +141,12 @@ class AppRouter {
     // Use backend default if no rank specified
     const sortField = rank || this.getDefaultRank();
     stateManager.setCurrentColumn(sortField);
+
+    // Find the rank configuration to get the sort order
+    const rankConfig = this.ranks?.find((r) => r.sortField === sortField);
+    if (rankConfig) {
+      stateManager.setCurrentOrder(rankConfig.sortOrder);
+    }
   }
 
   async loadGenreContent(genre, fullUpdate = true) {
