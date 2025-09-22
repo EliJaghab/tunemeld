@@ -14,7 +14,7 @@ const TABLE_CELL_CONFIG = [
   { class: "external", shimmerClass: "shimmer shimmer-external-links" },
 ];
 
-const SHIMMER_ROW_COUNT = 5;
+const SHIMMER_ROW_COUNT = 20;
 
 // Helper functions
 function createElement(tag, className) {

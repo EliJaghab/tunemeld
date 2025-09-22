@@ -19,22 +19,51 @@ a {
   max-width: 100%;
 }
 
-/* Buttons */
+/* iOS 26 Glass Styling - Base Button */
 .btn {
   padding: var(--space-md) var(--space-xl);
   color: var(--btn-text-color);
-  border-radius: var(--border-radius-small);
+  border-radius: calc(var(--space-xl) + var(--space-xs));
   cursor: pointer;
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(40px) saturate(250%) brightness(1.05);
+  -webkit-backdrop-filter: blur(40px) saturate(250%) brightness(1.05);
+  border: 0.5px solid rgba(255, 255, 255, 0.08);
+  position: relative;
+  overflow: hidden;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    0 4px 16px rgba(0, 0, 0, 0.08);
 }
 
-/* Collapse Button */
+.btn:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.12);
+  transform: translateY(calc(-1 * var(--space-xs) / 2));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    0 12px 32px rgba(0, 0, 0, 0.15);
+}
+
+.btn:active {
+  transform: translateY(0);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Collapse Button - iOS 26 Glass */
 .collapse-button {
   --collapse-button-width: calc(
     1ch + 2 * var(--space-md) + 2px
   ); /* ▼ + padding + border */
-  background-color: var(--btn-background);
-  border: none;
-  border-radius: var(--border-radius-small);
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(40px) saturate(250%) brightness(1.05);
+  -webkit-backdrop-filter: blur(40px) saturate(250%) brightness(1.05);
+  border: 0.5px solid rgba(255, 255, 255, 0.08);
+  border-radius: calc(var(--space-xl) + var(--space-xs));
   color: var(--btn-text-color);
   cursor: pointer;
   display: inline-block;
@@ -42,6 +71,29 @@ a {
   margin-left: auto;
   padding: var(--space-xs) var(--space-md);
   width: var(--collapse-button-width);
+  position: relative;
+  overflow: hidden;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+.collapse-button:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.12);
+  transform: translateY(calc(-1 * var(--space-xs) / 2));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    0 12px 32px rgba(0, 0, 0, 0.15);
+}
+
+.collapse-button:active {
+  transform: translateY(0);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 /* Table Styles */
@@ -78,9 +130,11 @@ a {
   flex-wrap: wrap;
 }
 
-/* Overlay */
+/* iOS 26 Glass Overlay */
 .overlay {
-  background-color: var(--overlay-background);
+  background-color: rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(20px) saturate(120%);
+  -webkit-backdrop-filter: blur(20px) saturate(120%);
   bottom: 0;
   cursor: pointer;
   display: none;
@@ -94,9 +148,16 @@ a {
 }
 
 .overlay-content {
-  background-color: var(--container-background);
-  border-radius: var(--border-radius-small);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(60px) saturate(300%) brightness(1.1) contrast(1.05);
+  -webkit-backdrop-filter: blur(60px) saturate(300%) brightness(1.1)
+    contrast(1.05);
+  border-radius: calc(var(--space-xl) + var(--space-md));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.3),
+    0 16px 64px rgba(0, 0, 0, 0.12),
+    0 4px 16px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   color: var(--overlay-text-color);
   left: 50%;
   padding: var(--space-xl);
@@ -105,6 +166,39 @@ a {
   top: 50%;
   transform: translate(-50%, -50%);
   z-index: 101;
+  overflow: hidden;
+}
+
+.overlay-content::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.4),
+    transparent
+  );
+  z-index: 1;
+}
+
+.overlay-content::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(
+    circle at 50% 0%,
+    rgba(255, 255, 255, 0.08),
+    transparent 50%
+  );
+  pointer-events: none;
+  z-index: 1;
 }
 
 .overlay-content a {
@@ -199,8 +293,15 @@ a {
   margin: 0 var(--space-md);
   line-height: var(--size-line-height-sm);
   box-sizing: border-box;
-  box-shadow: var(--box-shadow);
-  border-radius: var(--border-radius-small);
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(40px) saturate(250%) brightness(1.05);
+  -webkit-backdrop-filter: blur(40px) saturate(250%) brightness(1.05);
+  border: 0.5px solid rgba(255, 255, 255, 0.08);
+  border-radius: calc(var(--space-xl) + var(--space-xs));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    0 4px 16px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
 }
 
 .selector-container {
