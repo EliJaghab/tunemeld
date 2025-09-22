@@ -484,6 +484,10 @@
     padding: var(--space-md);
   }
 
+  .playlist.collapsed {
+    padding: var(--space-md);
+  }
+
   .playlist-column {
     margin-bottom: 0;
   }

@@ -35,6 +35,9 @@ class StateManager {
         playlist: false,
         isInitialLoad: false,
       },
+      modals: {
+        activeDescriptionModals: new Set(),
+      },
     };
     this.domElements = new Map();
   }
@@ -186,6 +189,30 @@ class StateManager {
       isInitialLoad: this.state.shimmer.isInitialLoad,
       anyActive: this.isShimmering(),
     };
+  }
+
+  registerModal(modalId, modalElement, overlayElement) {
+    this.state.modals.activeDescriptionModals.add({
+      id: modalId,
+      modal: modalElement,
+      overlay: overlayElement,
+    });
+  }
+
+  clearAllModals() {
+    this.state.modals.activeDescriptionModals.forEach(({ modal, overlay }) => {
+      if (modal && modal.parentNode) {
+        modal.remove();
+      }
+      if (overlay && overlay.parentNode) {
+        overlay.remove();
+      }
+    });
+    this.state.modals.activeDescriptionModals.clear();
+  }
+
+  getActiveModalCount() {
+    return this.state.modals.activeDescriptionModals.size;
   }
 }
 

@@ -5,6 +5,7 @@
 
 import { graphqlClient } from "@/services/graphql-client.js";
 import { SERVICE_NAMES } from "@/config/constants.js";
+import { stateManager } from "@/state/StateManager.js";
 
 function isMobileView() {
   return window.innerWidth <= 480;
@@ -28,6 +29,8 @@ function displayAppleMusicVideo(url) {
   const videoContainer = document.getElementById("apple_music-video-container");
   if (!videoContainer) return;
 
+  cleanupExistingVideos();
+
   videoContainer.innerHTML = `
     <video id="apple_music-video" class="video-js vjs-default-skin" muted autoplay loop playsinline controlsList="nodownload nofullscreen noremoteplayback"></video>
   `;
@@ -35,17 +38,57 @@ function displayAppleMusicVideo(url) {
 
   if (typeof Hls !== "undefined" && Hls.isSupported()) {
     const hls = new Hls();
+    window.appleMusicHls = hls; // Store globally for cleanup
     hls.loadSource(url);
     hls.attachMedia(video);
     hls.on(Hls.Events.MANIFEST_PARSED, function () {
-      video.play();
+      // Add error handling for play() promise
+      const playPromise = video.play();
+      if (playPromise !== undefined) {
+        playPromise.catch((error) => {
+          // Ignore AbortError when video is removed during genre switches
+          if (error.name !== "AbortError") {
+            console.warn("Apple Music video play failed:", error);
+          }
+        });
+      }
     });
   } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
     video.src = url;
     video.addEventListener("canplay", function () {
-      video.play();
+      // Add error handling for play() promise
+      const playPromise = video.play();
+      if (playPromise !== undefined) {
+        playPromise.catch((error) => {
+          // Ignore AbortError when video is removed during genre switches
+          if (error.name !== "AbortError") {
+            console.warn("Apple Music video play failed:", error);
+          }
+        });
+      }
     });
   }
+}
+
+function cleanupExistingVideos() {
+  // Stop any existing Apple Music videos to prevent AbortError
+  const existingVideo = document.getElementById("apple_music-video");
+  if (existingVideo) {
+    existingVideo.pause();
+    existingVideo.removeAttribute("src");
+    existingVideo.load(); // Reset the video element
+  }
+
+  // Clean up any existing HLS instances stored globally
+  if (window.appleMusicHls) {
+    window.appleMusicHls.destroy();
+    window.appleMusicHls = null;
+  }
+}
+
+function cleanupExistingModals() {
+  // Use state manager to properly clean up modals
+  stateManager.clearAllModals();
 }
 
 function createAndAttachModal(
@@ -77,6 +120,10 @@ function createAndAttachModal(
   const overlay = document.createElement("div");
   overlay.className = "description-overlay";
   document.body.appendChild(overlay);
+
+  // Register modal with state manager
+  const modalId = `modal-${serviceName}-${genre}-${Date.now()}`;
+  stateManager.registerModal(modalId, modal, overlay);
 
   // Make entire description clickable to open modal
   descriptionElement.style.cursor = "pointer";
@@ -275,6 +322,9 @@ export async function updatePlaylistHeader(
   displayServiceCallback = null,
 ) {
   try {
+    // Clean up any existing modals and videos when genre changes
+    cleanupExistingModals();
+    cleanupExistingVideos();
     const { serviceOrder, playlists } =
       await graphqlClient.getPlaylistMetadata(genre);
 
@@ -317,6 +367,10 @@ export function updatePlaylistHeaderSync(
   genre,
   displayServiceCallback = null,
 ) {
+  // Clean up any existing modals and videos when genre changes
+  cleanupExistingModals();
+  cleanupExistingVideos();
+
   const tuneMeldPlaylist = playlists.find(
     (p) => p.serviceName === SERVICE_NAMES.TUNEMELD,
   );
