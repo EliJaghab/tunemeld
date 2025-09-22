@@ -54,6 +54,22 @@
   --shadow-light: 0 8px 24px rgba(0, 0, 0, 0.2);
   --shadow-dark: 0 8px 24px rgba(0, 0, 0, 0.2);
 
+  /* iOS 26 Liquid Glass System */
+  --glass-bg-light: rgba(255, 255, 255, 0.02);
+  --glass-bg-medium: rgba(255, 255, 255, 0.04);
+  --glass-bg-heavy: rgba(255, 255, 255, 0.08);
+  --glass-border-light: rgba(255, 255, 255, 0.06);
+  --glass-border-medium: rgba(255, 255, 255, 0.12);
+  --glass-border-heavy: rgba(255, 255, 255, 0.18);
+  --glass-highlight-subtle: rgba(255, 255, 255, 0.08);
+  --glass-highlight-medium: rgba(255, 255, 255, 0.15);
+  --glass-highlight-strong: rgba(255, 255, 255, 0.25);
+  --glass-overlay-light: rgba(0, 0, 0, 0.08);
+  --glass-overlay-medium: rgba(0, 0, 0, 0.15);
+  --glass-blur-light: blur(20px);
+  --glass-blur-medium: blur(40px);
+  --glass-blur-heavy: blur(60px);
+
   /* Border Radius */
   --radius-large: 10px;
   --radius-small: 5px;
@@ -153,6 +169,7 @@
     inset 0px -3px 7px rgba(255, 255, 255, 0.4);
   --toggle-ball-size: calc(var(--toggle-height) - 4px);
   --ball-position-offset: 2px;
+  --ball-position-margin: calc(var(--toggle-height) * 0.25);
   --sun-icon-size: calc(var(--toggle-height) / 2);
   --moon-icon-size: calc(var(--toggle-height) / 2);
   --gooey-effect-size: calc(var(--toggle-ball-size) + 10px);
@@ -234,15 +251,13 @@ body.dark-mode {
   :root {
     --toggle-width: 90px;
     --toggle-height: 40px;
-    --ball-position-margin: 9px;
   }
 }
 
 @media screen and (max-width: 480px) {
   :root {
-    --toggle-width: 45px;
-    --toggle-height: 20px;
-    --ball-position-margin: 5px;
+    --toggle-width: 80px;
+    --toggle-height: 36px;
   }
 }
 

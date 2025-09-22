@@ -282,12 +282,36 @@
   position: absolute;
   top: var(--space-lg);
   right: var(--space-lg);
-  background: none;
-  border: none;
-  font-size: var(--font-size-xxl);
+  width: 32px;
+  height: 32px;
+  background: var(--glass-bg-medium);
+  backdrop-filter: var(--glass-blur-light) saturate(200%) brightness(1.1);
+  -webkit-backdrop-filter: var(--glass-blur-light) saturate(200%)
+    brightness(1.1);
+  border: 0.5px solid var(--glass-border-medium);
+  border-radius: 50%;
+  font-size: var(--font-size-lg);
   color: var(--text-color);
   cursor: pointer;
   z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 0.8;
+  font-family: monospace;
+  box-shadow:
+    inset 0 1px 0 var(--glass-highlight-subtle),
+    0 4px 12px var(--glass-overlay-light);
+  transition: all 0.2s ease;
+}
+
+.description-modal-close:hover {
+  background: var(--glass-bg-heavy);
+  border-color: var(--glass-border-heavy);
+  transform: scale(1.05);
+  box-shadow:
+    inset 0 1px 0 var(--glass-highlight-medium),
+    0 6px 16px var(--glass-overlay-medium);
 }
 
 .description-modal-header {
