@@ -259,6 +259,20 @@
   flex-shrink: 0;
 }
 
+.view-count-percentage {
+  font-size: inherit;
+  font-weight: inherit;
+  opacity: 0.9;
+}
+
+.view-count-percentage.positive {
+  color: #22c55e;
+}
+
+.view-count-percentage.negative {
+  color: #ef4444;
+}
+
 .youtube-view-count a,
 .spotify-view-count a {
   text-decoration: none;
@@ -526,5 +540,16 @@
     word-wrap: break-word;
     overflow-wrap: break-word;
     display: inline;
+  }
+
+  /* Mobile: Stack percentage under view count */
+  .view-count-container {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-xs);
+  }
+
+  .view-count-percentage {
+    margin-left: 0;
   }
 }

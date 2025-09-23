@@ -5,7 +5,7 @@ from core.models.genre_service import Service
 from core.models.playlist import Playlist
 from core.models.track import Track
 from core.models.view_counts import HistoricalTrackViewCount
-from core.utils.utils import format_view_count, truncate_to_words
+from core.utils.utils import format_percentage_change, format_view_count, truncate_to_words
 from graphene_django import DjangoObjectType
 
 
@@ -50,6 +50,12 @@ class TrackType(DjangoObjectType):
     )
     youtube_view_count_delta_percentage = graphene.Float(description="YouTube view count % change from yesterday")
     spotify_view_count_delta_percentage = graphene.Float(description="Spotify view count % change from yesterday")
+    youtube_view_count_delta_percentage_formatted = graphene.String(
+        description="YouTube view count % change formatted as 4-char string (e.g., '+.23%')"
+    )
+    spotify_view_count_delta_percentage_formatted = graphene.String(
+        description="Spotify view count % change formatted as 4-char string (e.g., '+.23%')"
+    )
 
     def resolve_track_name(self, info):
         return truncate_to_words(self.track_name, 30) if self.track_name else None
@@ -230,6 +236,38 @@ class TrackType(DjangoObjectType):
             return latest.daily_change_percentage if latest else None
         except (Service.DoesNotExist, HistoricalTrackViewCount.DoesNotExist):
             return None
+
+    def resolve_youtube_view_count_delta_percentage_formatted(self, info):
+        if hasattr(self, "_youtube_view_count_delta_percentage"):
+            return format_percentage_change(self._youtube_view_count_delta_percentage)
+
+        try:
+            youtube_service = Service.objects.get(name=ServiceName.YOUTUBE)
+            latest = (
+                HistoricalTrackViewCount.objects.filter(isrc=self.isrc, service=youtube_service)
+                .order_by("-recorded_date")
+                .first()
+            )
+            percentage = latest.daily_change_percentage if latest else None
+            return format_percentage_change(percentage)
+        except (Service.DoesNotExist, HistoricalTrackViewCount.DoesNotExist):
+            return format_percentage_change(None)
+
+    def resolve_spotify_view_count_delta_percentage_formatted(self, info):
+        if hasattr(self, "_spotify_view_count_delta_percentage"):
+            return format_percentage_change(self._spotify_view_count_delta_percentage)
+
+        try:
+            spotify_service = Service.objects.get(name=ServiceName.SPOTIFY)
+            latest = (
+                HistoricalTrackViewCount.objects.filter(isrc=self.isrc, service=spotify_service)
+                .order_by("-recorded_date")
+                .first()
+            )
+            percentage = latest.daily_change_percentage if latest else None
+            return format_percentage_change(percentage)
+        except (Service.DoesNotExist, HistoricalTrackViewCount.DoesNotExist):
+            return format_percentage_change(None)
 
 
 class TrackQuery(graphene.ObjectType):

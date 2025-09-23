@@ -183,6 +183,8 @@ class GraphQLClient {
             spotifyCurrentViewCount
             youtubeCurrentViewCountAbbreviated
             spotifyCurrentViewCountAbbreviated
+            youtubeViewCountDeltaPercentageFormatted
+            spotifyViewCountDeltaPercentageFormatted
             spotifySource {
               name
               displayName

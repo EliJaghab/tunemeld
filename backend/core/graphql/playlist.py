@@ -92,9 +92,15 @@ class PlaylistQuery(graphene.ObjectType):
 
     def resolve_playlist(self, info, genre, service):
         """Get playlist data for any service (including Aggregate) and genre."""
+        from django.conf import settings
+
         cache_key_data = f"resolve_playlist:genre={genre}:service={service}"
 
-        cached_result = local_cache_get(CachePrefix.GQL_PLAYLIST, cache_key_data)
+        # Skip cache in development to always get fresh percentage data
+        cached_result = None
+        if settings.ENVIRONMENT != "dev":
+            cached_result = local_cache_get(CachePrefix.GQL_PLAYLIST, cache_key_data)
+
         if cached_result is not None:
             # Reconstruct Track objects from cached data for GraphQL compatibility
             cached_tracks = []
@@ -157,7 +163,9 @@ class PlaylistQuery(graphene.ObjectType):
             serialized_tracks.append(track_data)
 
         cache_data = {"genre_name": genre, "service_name": service, "tracks": serialized_tracks}
-        local_cache_set(CachePrefix.GQL_PLAYLIST, cache_key_data, cache_data)
+        # Skip caching in development to always get fresh percentage data
+        if settings.ENVIRONMENT != "dev":
+            local_cache_set(CachePrefix.GQL_PLAYLIST, cache_key_data, cache_data)
 
         return PlaylistType(genre_name=genre, service_name=service, tracks=tracks)
 

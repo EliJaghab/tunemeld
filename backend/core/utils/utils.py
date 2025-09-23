@@ -155,6 +155,33 @@ def clean_unicode_text(text: str) -> str:
     return text
 
 
+def format_percentage_change(percentage: float | None) -> str:
+    """
+    Format percentage change into concise string.
+
+    Examples:
+        0.23 -> "+.23"
+        -1.45 -> "-1.4"
+        23.456 -> "+23"
+        -156.78 -> "-157"
+        0.0 -> "0"
+        None -> "0"
+    """
+    if percentage is None or percentage == 0.0:
+        return "0"
+
+    if abs(percentage) >= 100:
+        return f"{percentage:.0f}"[:4]
+    elif abs(percentage) >= 10:
+        return f"{percentage:.0f}"
+    elif abs(percentage) >= 1:
+        return f"{percentage:.1f}"
+    else:
+        sign = "+" if percentage > 0 else "-"
+        decimal_part = f"{abs(percentage):.2f}"[2:4]
+        return f"{sign}.{decimal_part}"
+
+
 def truncate_to_words(text: str, max_chars: int = 30) -> str:
     if not text or len(text) <= max_chars:
         return text

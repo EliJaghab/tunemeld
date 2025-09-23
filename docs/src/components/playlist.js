@@ -146,17 +146,6 @@ function createTuneMeldPlaylistTableRow(track) {
 
   trackInfoCell.appendChild(trackInfoDiv);
 
-  const youtubeStatCell = document.createElement("td");
-  youtubeStatCell.className = "youtube-view-count";
-
-  const youtubeViews = track.youtubeCurrentViewCountAbbreviated;
-  youtubeStatCell.textContent = youtubeViews || "";
-
-  const spotifyStatCell = document.createElement("td");
-  spotifyStatCell.className = "spotify-view-count";
-  const spotifyViews = track.spotifyCurrentViewCountAbbreviated;
-  spotifyStatCell.textContent = spotifyViews || "";
-
   const seenOnCell = document.createElement("td");
   seenOnCell.className = "seen-on";
   displaySources(seenOnCell, track);
@@ -174,7 +163,12 @@ function createTuneMeldPlaylistTableRow(track) {
   return row;
 }
 
-function createViewCountElement(viewCount, source, url = null) {
+function createViewCountElement(
+  viewCount,
+  source,
+  url = null,
+  percentage = null,
+) {
   const container = document.createElement("div");
   container.className = "view-count-container";
 
@@ -189,6 +183,20 @@ function createViewCountElement(viewCount, source, url = null) {
 
   container.appendChild(logo);
   container.appendChild(text);
+
+  if (percentage && percentage !== "0") {
+    const percentageSpan = document.createElement("span");
+    percentageSpan.textContent = ` ${percentage}%`;
+    percentageSpan.className = "view-count-percentage";
+
+    if (percentage.startsWith("-")) {
+      percentageSpan.classList.add("negative");
+    } else if (percentage !== "0") {
+      percentageSpan.classList.add("positive");
+    }
+
+    container.appendChild(percentageSpan);
+  }
 
   if (url) {
     const link = document.createElement("a");
@@ -220,6 +228,7 @@ function displayViewCounts(track, row) {
       youtubeCurrentViewCountAbbreviated,
       track.youtubeSource,
       track.youtubeUrl,
+      track.youtubeViewCountDeltaPercentageFormatted,
     );
     youtubeStatCell.appendChild(element);
   }
@@ -229,6 +238,7 @@ function displayViewCounts(track, row) {
       spotifyCurrentViewCountAbbreviated,
       track.spotifySource,
       track.spotifyUrl,
+      track.spotifyViewCountDeltaPercentageFormatted,
     );
     spotifyStatCell.appendChild(element);
   }
