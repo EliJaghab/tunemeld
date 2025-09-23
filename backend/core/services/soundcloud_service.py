@@ -55,9 +55,7 @@ def get_soundcloud_playlist(genre: "GenreName") -> PlaylistData:
     if og_description_raw:
         url_match = re.search(r"https?://[^\s]+", og_description_raw)
         if url_match:
-            artist_url = url_match.group()
-            artist_text = clean_unicode_text(og_description_raw.replace(artist_url, "").strip())
-            og_description = f'{artist_text} <a href="{artist_url}">{artist_url}</a>'
+            og_description = clean_unicode_text(og_description_raw.replace(url_match.group(), "").strip())
         else:
             og_description = clean_unicode_text(og_description_raw)
 
