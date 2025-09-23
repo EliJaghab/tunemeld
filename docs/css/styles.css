@@ -380,8 +380,10 @@ label {
 
   .overlay-content {
     padding: var(--space-xl);
-    margin: var(--space-md);
+    margin: 0 var(--space-md);
     width: calc(100% - 2 * var(--space-md));
     max-width: calc(100% - 2 * var(--space-md));
+    left: 50%;
+    transform: translate(-50%, -50%);
   }
 }

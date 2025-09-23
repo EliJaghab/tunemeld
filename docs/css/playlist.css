@@ -549,6 +549,21 @@
     gap: var(--space-xs);
   }
 
+  /* Mobile: Reduce font size for playlist track info */
+  .playlist-table .track-title,
+  .playlist-table .artist-name,
+  .playlist-table .info {
+    font-size: var(--font-size-mobile-sm);
+  }
+
+  .playlist-table .track-number {
+    font-size: var(--font-size-lg);
+  }
+
+  .playlist-table td {
+    font-size: var(--font-size-mobile-sm);
+  }
+
   .view-count-percentage {
     margin-left: 0;
   }

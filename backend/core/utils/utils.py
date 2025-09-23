@@ -171,11 +171,11 @@ def format_percentage_change(percentage: float | None) -> str:
         return "0"
 
     if abs(percentage) >= 100:
-        return f"{percentage:.0f}"[:4]
+        return f"{percentage:+.0f}"[:4]
     elif abs(percentage) >= 10:
-        return f"{percentage:.0f}"
+        return f"{percentage:+.0f}"
     elif abs(percentage) >= 1:
-        return f"{percentage:.1f}"
+        return f"{percentage:+.1f}"
     else:
         sign = "+" if percentage > 0 else "-"
         decimal_part = f"{abs(percentage):.2f}"[2:4]
