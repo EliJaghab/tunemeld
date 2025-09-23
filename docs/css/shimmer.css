@@ -212,10 +212,7 @@
 }
 
 .playlist-table-shimmer {
-  width: 100%;
-  border-collapse: collapse;
   margin: var(--space-lg) 0;
-  border: none;
 }
 
 .playlist-shimmer-row {
@@ -265,7 +262,7 @@
 
 /* Individual shimmer elements */
 .shimmer-rank {
-  width: 20px;
+  width: var(--shimmer-rank-width);
   height: var(--space-md);
 }
 
@@ -304,12 +301,12 @@
 }
 
 .shimmer-view-count {
-  width: 60px;
+  width: var(--shimmer-view-count-width);
   height: var(--space-md);
 }
 
 .shimmer-date {
-  width: 40px;
+  width: var(--shimmer-date-width);
   height: var(--space-md);
 }
 
@@ -317,7 +314,7 @@
   display: flex;
   gap: var(--space-xs);
   align-items: center;
-  width: 60px;
+  width: var(--shimmer-external-links-width);
   height: var(--space-lg);
 }
 

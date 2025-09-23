@@ -3,13 +3,13 @@
  * Provides unified loading states for services and playlists
  */
 
-// Table cell configuration for playlist shimmer
+// Table cell configuration for playlist shimmer - matches exact TuneMeld table structure
 const TABLE_CELL_CONFIG = [
   { class: "rank", shimmerClass: "shimmer shimmer-rank" },
   { class: "cover", shimmerClass: "shimmer shimmer-album-cover" },
   { class: "info", shimmerClass: "shimmer shimmer-track-info" },
-  { class: "spotify-view-count", shimmerClass: "shimmer shimmer-view-count" },
   { class: "youtube-view-count", shimmerClass: "shimmer shimmer-view-count" },
+  { class: "spotify-view-count", shimmerClass: "shimmer shimmer-view-count" },
   { class: "seen-on", shimmerClass: "shimmer shimmer-date" },
   { class: "external", shimmerClass: "shimmer shimmer-external-links" },
 ];
@@ -28,8 +28,31 @@ function createShimmerTableRow() {
 
   TABLE_CELL_CONFIG.forEach((cellConfig) => {
     const cell = createElement("td", cellConfig.class);
-    const shimmer = createElement("div", cellConfig.shimmerClass);
-    cell.appendChild(shimmer);
+
+    // Match the exact structure of real cells
+    if (cellConfig.class === "info") {
+      const trackInfoDiv = createElement("div", "track-info-div");
+      const shimmer = createElement("div", cellConfig.shimmerClass);
+      trackInfoDiv.appendChild(shimmer);
+      cell.appendChild(trackInfoDiv);
+    } else if (
+      cellConfig.class === "youtube-view-count" ||
+      cellConfig.class === "spotify-view-count"
+    ) {
+      const viewCountContainer = createElement("div", "view-count-container");
+      const shimmer = createElement("div", cellConfig.shimmerClass);
+      viewCountContainer.appendChild(shimmer);
+      cell.appendChild(viewCountContainer);
+    } else if (cellConfig.class === "seen-on") {
+      const sourcesContainer = createElement("div", "track-sources");
+      const shimmer = createElement("div", cellConfig.shimmerClass);
+      sourcesContainer.appendChild(shimmer);
+      cell.appendChild(sourcesContainer);
+    } else {
+      const shimmer = createElement("div", cellConfig.shimmerClass);
+      cell.appendChild(shimmer);
+    }
+
     row.appendChild(cell);
   });
 
@@ -37,7 +60,7 @@ function createShimmerTableRow() {
 }
 
 function createShimmerTable() {
-  const table = createElement("table", "playlist-table-shimmer");
+  const table = createElement("table", "playlist-table playlist-table-shimmer");
   const tbody = createElement("tbody");
 
   for (let i = 0; i < SHIMMER_ROW_COUNT; i++) {

@@ -117,6 +117,12 @@
     var(--space-xl) * 1.875
   ); /* 30px - dropdown selectors */
 
+  /* Shimmer component sizes */
+  --shimmer-view-count-width: 80px; /* view count skeleton width */
+  --shimmer-date-width: 40px; /* date skeleton width */
+  --shimmer-rank-width: 30px; /* rank skeleton width */
+  --shimmer-external-links-width: 60px; /* external links skeleton width */
+
   /* Text heights and line heights */
   --size-text-height: calc(
     var(--space-xl) * 1.35
@@ -498,50 +504,6 @@ body.dark-mode {
   position: relative;
 }
 
-/* Shimmer table rows for genre switching - match real content exactly */
-.playlist-shimmer-row {
-  height: var(--size-row-md);
-  margin-bottom: var(--space-xs);
-}
-
-.playlist-shimmer-row td {
-  padding: var(--space-xs);
-  vertical-align: middle;
-  border-bottom: 1px solid var(--container-background);
-  text-align: left;
-}
-
-.playlist-shimmer-row td.rank {
-  text-align: center;
-  width: 1%;
-  padding: 0;
-}
-
-.playlist-shimmer-row td.cover {
-  text-align: center;
-  width: 0%;
-}
-
-.playlist-shimmer-row td.info {
-  width: 10%;
-}
-
-.playlist-shimmer-row td.spotify-view-count,
-.playlist-shimmer-row td.youtube-view-count {
-  width: 10%;
-  text-align: left;
-}
-
-.playlist-shimmer-row td.seen-on {
-  width: 5%;
-  text-align: center;
-}
-
-.playlist-shimmer-row td.external {
-  width: 0%;
-  text-align: center;
-}
-
 /* Playlist header shimmer */
 .playlist-header-shimmer {
   display: flex;
@@ -622,48 +584,6 @@ body.dark-mode {
   border-bottom: 1px solid var(--container-background);
 }
 
-.playlist-shimmer-row td.rank {
-  text-align: center;
-  width: 1%;
-  padding: 0;
-}
-
-.playlist-shimmer-row td.cover {
-  text-align: center;
-  width: 0%;
-}
-
-.playlist-shimmer-row td.info {
-  width: 10%;
-}
-
-.playlist-shimmer-row td.spotify-view-count,
-.playlist-shimmer-row td.youtube-view-count {
-  width: 10%;
-  text-align: left;
-}
-
-.playlist-shimmer-row td.seen-on {
-  width: 5%;
-  text-align: center;
-}
-
-.playlist-shimmer-row td.external {
-  width: 0%;
-  text-align: center;
-}
-
-.shimmer-rank {
-  width: 20px;
-  height: var(--space-md);
-}
-
-.shimmer-album-cover {
-  width: var(--size-icon-lg);
-  height: var(--size-icon-lg);
-  border-radius: var(--border-radius-small);
-}
-
 .shimmer-track-info {
   width: 100%;
   height: var(--space-lg);
@@ -692,16 +612,6 @@ body.dark-mode {
   background-color: var(--skeleton-color);
   border-radius: var(--border-radius-small);
   animation: shimmer var(--shimmer-duration) infinite;
-}
-
-.shimmer-view-count {
-  width: 60px;
-  height: var(--space-md);
-}
-
-.shimmer-date {
-  width: 40px;
-  height: var(--space-md);
 }
 
 .shimmer-external-links {
