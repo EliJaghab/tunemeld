@@ -1,4 +1,14 @@
+/* Critical root variables - always available */
 :root {
+  /* Size System - defined first for immediate availability */
+  --size-tunemeld-logo: 75px;
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 12px;
+  --space-lg: 16px;
+  --space-xl: 20px;
+  --space-xxl: 24px;
+
   /* ==========================================================================
      SEMANTIC COLOR PALETTE - Human-readable color names
      ========================================================================== */
@@ -74,14 +84,6 @@
   --radius-large: 10px;
   --radius-small: 5px;
 
-  /* Spacing System - 4px base units */
-  --space-xs: 4px; /* Extra small */
-  --space-sm: 8px; /* Small */
-  --space-md: 12px; /* Medium */
-  --space-lg: 16px; /* Large */
-  --space-xl: 20px; /* Extra large */
-  --space-xxl: 24px; /* Extra extra large */
-
   /* Size System - for components */
   --size-icon-xs: var(--space-lg); /* 16px - very small view count icons */
   --size-icon-sm: var(--space-xxl); /* 24px - source icons, buttons */
@@ -110,7 +112,7 @@
     var(--space-xl) * 1.25
   ); /* 20px - default mobile */
   --size-soundcloud-md: calc(var(--space-xl) * 1.5); /* 30px - tablet */
-  --size-tunemeld-logo: calc(var(--space-xl) * 3.75); /* 75px - main logo */
+  /* --size-tunemeld-logo defined at top for immediate availability */
   --size-select-height: calc(
     var(--space-xl) * 1.875
   ); /* 30px - dropdown selectors */
@@ -173,6 +175,37 @@
   --sun-icon-size: calc(var(--toggle-height) / 2);
   --moon-icon-size: calc(var(--toggle-height) / 2);
   --gooey-effect-size: calc(var(--toggle-ball-size) + 10px);
+}
+
+/* ==========================================================================
+   INITIAL LOADING THEME (Applied immediately via inline script)
+   ========================================================================== */
+
+html.dark-mode-loading {
+  background-color: var(--color-background-dark);
+}
+
+html.dark-mode-loading body {
+  /* Apply dark theme variables during loading */
+  --text-color: var(--color-text-dark);
+  --background-color: var(--color-background-dark);
+  --container-background: var(--color-container-dark);
+  --link-color: var(--color-link-dark);
+  --active-button-color: var(--color-active-button-dark);
+  --active-button-text-color: var(--color-active-button-text-dark);
+  --btn-background: var(--color-button-bg-dark);
+  --btn-text-color: var(--color-button-text-dark);
+  --soundcloud-link-background: var(--color-soundcloud-bg-dark);
+  --soundcloud-link-hover: var(--color-soundcloud-hover-dark);
+  --skeleton-color: var(--color-skeleton-dark);
+  --box-shadow: var(--shadow-dark);
+  --overlay-background: var(--overlay-bg-dark);
+  --overlay-text-color: var(--overlay-text-dark);
+  --table-header-background: var(--table-header-bg-dark);
+  --table-header-text-color: var(--table-header-text-dark);
+
+  background-color: var(--background-color);
+  color: var(--text-color);
 }
 
 /* ==========================================================================

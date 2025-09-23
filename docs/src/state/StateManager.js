@@ -46,7 +46,7 @@ class StateManager {
     // Sort column will be set from backend default
     this.state.sortOrder = "asc";
 
-    // Initialize theme from localStorage
+    // Initialize theme - it may already be applied by inline script
     const storedTheme = localStorage.getItem("theme");
     this.state.theme = storedTheme || this.getTimeBasedTheme();
   }
@@ -111,6 +111,9 @@ class StateManager {
 
   applyTheme(theme) {
     const isDarkMode = theme === "dark";
+
+    // Remove loading state and apply proper theme
+    document.documentElement.classList.remove("dark-mode-loading");
     document.body.classList.toggle("dark-mode", isDarkMode);
 
     const themeToggleButton = this.getElement("theme-toggle-button");

@@ -15,8 +15,10 @@ applyCacheBusting();
 document.addEventListener("DOMContentLoaded", initializeApp);
 
 async function initializeApp() {
+  // Load title content first
   await loadTitleContent();
 
+  // Initialize state and theme
   stateManager.initializeFromDOM();
   stateManager.applyTheme(stateManager.getTheme());
   setupThemeToggle();
@@ -30,6 +32,11 @@ async function initializeApp() {
   await loadAndRenderGenreButtons();
   setupClosePlayerButton();
   initializeTosPrivacyOverlay();
+
+  // Reveal content after everything is loaded with smooth transition
+  document.getElementById("main-content").style.visibility = "visible";
+  document.body.style.transition = "opacity 0.2s ease-in";
+  document.body.style.opacity = "1";
 }
 
 function setupThemeToggle() {

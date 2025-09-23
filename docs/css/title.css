@@ -10,8 +10,8 @@
 }
 
 img#tunemeld-logo {
-  width: var(--size-tunemeld-logo);
-  height: var(--size-tunemeld-logo);
+  width: var(--size-tunemeld-logo, 75px); /* Add fallback for immediate load */
+  height: var(--size-tunemeld-logo, 75px); /* Add fallback for immediate load */
   grid-column: 1;
   grid-row: 1 / 3;
   margin: 0;
