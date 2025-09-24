@@ -85,7 +85,7 @@
   --radius-small: 5px;
 
   /* Size System - for components */
-  --size-icon-xs: var(--space-lg); /* 16px - very small view count icons */
+  --size-icon-xs: var(--space-lg); /* 16px - very small play count icons */
   --size-icon-sm: var(--space-xxl); /* 24px - source icons, buttons */
   --size-icon-md: calc(var(--space-xl) * 2); /* 40px - medium shimmer squares */
   --size-icon-lg: calc(var(--space-xl) * 3); /* 60px - playlist cover images */
@@ -118,7 +118,7 @@
   ); /* 30px - dropdown selectors */
 
   /* Shimmer component sizes */
-  --shimmer-view-count-width: 80px; /* view count skeleton width */
+  --shimmer-play-count-width: 80px; /* play count skeleton width */
   --shimmer-date-width: 40px; /* date skeleton width */
   --shimmer-rank-width: 30px; /* rank skeleton width */
   --shimmer-external-links-width: 60px; /* external links skeleton width */

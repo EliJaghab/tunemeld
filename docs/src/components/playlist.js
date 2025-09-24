@@ -156,38 +156,32 @@ function createTuneMeldPlaylistTableRow(track) {
   row.appendChild(rankCell);
   row.appendChild(coverCell);
   row.appendChild(trackInfoCell);
-  displayViewCounts(track, row);
+  displayPlayCounts(track, row);
   row.appendChild(seenOnCell);
   row.appendChild(externalLinksCell);
 
   return row;
 }
 
-function createViewCountElement(
-  viewCount,
+function createPlayCountElement(
+  playCount,
   source,
   url = null,
   percentage = null,
 ) {
   const container = document.createElement("div");
-  container.className = "view-count-container";
-
-  const logo = document.createElement("img");
-  logo.src = source.iconUrl;
-  logo.alt = source.displayName;
-  logo.className = "view-count-logo";
+  container.className = "play-count-container";
 
   const text = document.createElement("span");
   text.textContent =
-    typeof viewCount === "string" ? viewCount : viewCount.toLocaleString();
+    typeof playCount === "string" ? playCount : playCount.toLocaleString();
 
-  container.appendChild(logo);
   container.appendChild(text);
 
   if (percentage && percentage !== "0") {
     const percentageSpan = document.createElement("span");
     percentageSpan.textContent = ` ${percentage}%`;
-    percentageSpan.className = "view-count-percentage";
+    percentageSpan.className = "play-count-percentage";
 
     if (percentage.startsWith("-")) {
       percentageSpan.classList.add("negative");
@@ -211,40 +205,66 @@ function createViewCountElement(
   return container;
 }
 
-function displayViewCounts(track, row) {
-  const youtubeStatCell = document.createElement("td");
-  youtubeStatCell.className = "youtube-view-count";
+function createTotalPlayCountElement(playCount, track) {
+  const container = document.createElement("div");
+  container.className = "total-play-count-container";
 
-  const spotifyStatCell = document.createElement("td");
-  spotifyStatCell.className = "spotify-view-count";
+  const text = document.createElement("span");
+  text.textContent =
+    typeof playCount === "string" ? playCount : playCount.toLocaleString();
+  text.className = "total-play-count-text";
 
-  const youtubeCurrentViewCountAbbreviated =
-    track.youtubeCurrentViewCountAbbreviated;
-  const spotifyCurrentViewCountAbbreviated =
-    track.spotifyCurrentViewCountAbbreviated;
+  container.appendChild(text);
+  return container;
+}
 
-  if (youtubeCurrentViewCountAbbreviated && track.youtubeSource) {
-    const element = createViewCountElement(
-      youtubeCurrentViewCountAbbreviated,
-      track.youtubeSource,
-      track.youtubeUrl,
-      track.youtubeViewCountDeltaPercentageFormatted,
-    );
-    youtubeStatCell.appendChild(element);
+function createTrendingElement(percentage) {
+  const container = document.createElement("div");
+  container.className = "trending-container";
+
+  const text = document.createElement("span");
+  text.textContent = percentage;
+  text.className = "trending-percentage";
+
+  if (percentage.startsWith("-")) {
+    text.classList.add("negative");
+  } else if (percentage !== "0%" && percentage !== "+0%") {
+    text.classList.add("positive");
   }
 
-  if (spotifyCurrentViewCountAbbreviated && track.spotifySource) {
-    const element = createViewCountElement(
-      spotifyCurrentViewCountAbbreviated,
-      track.spotifySource,
-      track.spotifyUrl,
-      track.spotifyViewCountDeltaPercentageFormatted,
+  container.appendChild(text);
+  return container;
+}
+
+function displayPlayCounts(track, row) {
+  const totalPlaysCell = document.createElement("td");
+  totalPlaysCell.className = "total-play-count";
+
+  const trendingCell = document.createElement("td");
+  trendingCell.className = "trending";
+
+  const totalCurrentPlayCount = track.totalCurrentPlayCount;
+  const totalCurrentPlayCountAbbreviated =
+    track.totalCurrentPlayCountAbbreviated;
+  const totalWeeklyChangePercentageFormatted =
+    track.totalWeeklyChangePercentageFormatted;
+
+  if (totalCurrentPlayCount && totalCurrentPlayCountAbbreviated) {
+    const element = createTotalPlayCountElement(
+      totalCurrentPlayCountAbbreviated,
+      track,
     );
-    spotifyStatCell.appendChild(element);
+    totalPlaysCell.appendChild(element);
   }
 
-  row.appendChild(youtubeStatCell);
-  row.appendChild(spotifyStatCell);
+  if (totalWeeklyChangePercentageFormatted) {
+    const formattedPercentage = totalWeeklyChangePercentageFormatted + "%";
+    const element = createTrendingElement(formattedPercentage);
+    trendingCell.appendChild(element);
+  }
+
+  row.appendChild(totalPlaysCell);
+  row.appendChild(trendingCell);
 }
 
 function createServicePlaylistTableRow(track, serviceName) {
@@ -324,10 +344,10 @@ function createSourceLinkFromService(source) {
 
   const sourceIcon = document.createElement("img");
   const linkElement = document.createElement("a");
-  linkElement.href = source.url;
+  linkElement.href = source.url || "#";
   linkElement.target = "_blank";
   sourceIcon.className = "source-icon";
-  sourceIcon.src = source.iconUrl;
+  sourceIcon.src = source.iconUrl || "";
   sourceIcon.alt = source.displayName;
   linkElement.appendChild(sourceIcon);
   return linkElement;
@@ -362,7 +382,7 @@ export function sortTable(column, order) {
 
     // Only reassign rank numbers if we're not sorting by tunemeld-rank
     // TuneMeld rank is special - it preserves the backend-computed positions
-    // For all other sorts (spotify views, youtube views, etc.), assign new positions based on sort
+    // For all other sorts (Total Plays, Trending, etc.), assign new positions based on sort
     if (column !== TUNEMELD_RANK_FIELD) {
       playlist.tracks.forEach((track, index) => {
         track.tunemeldRank = index + 1;
@@ -382,11 +402,19 @@ export function sortTable(column, order) {
   );
 }
 
-function getViewCount(track, platform) {
+function getPlayCount(track, platform) {
   if (platform === "Youtube" || platform === "YouTube") {
-    return track.youtubeCurrentViewCount;
+    return track.youtubeCurrentPlayCount;
   } else if (platform === "Spotify" || platform === "spotify") {
-    return track.spotifyCurrentViewCount;
+    return track.spotifyCurrentPlayCount;
+  } else if (
+    platform === "Total Plays" ||
+    platform === "total" ||
+    platform === "total-plays"
+  ) {
+    return track.totalCurrentPlayCount;
+  } else if (platform === "Trending" || platform === "trending") {
+    return track.totalWeeklyChangePercentage;
   }
   return null;
 }

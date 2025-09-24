@@ -146,7 +146,7 @@ h1.main-title {
   align-items: center;
   padding: var(--space-xs) var(--space-sm);
   text-decoration: none;
-  color: white;
+  color: var(--text-color);
   grid-column: 4;
   grid-row: 2;
   align-self: end;

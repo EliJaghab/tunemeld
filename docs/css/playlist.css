@@ -136,12 +136,12 @@
   width: 10%;
 }
 
-.playlist-table td.spotify-view-count {
+.playlist-table td.total-play-count {
   width: 10%;
   text-align: left;
 }
 
-.playlist-table td.youtube-view-count {
+.playlist-table td.trending {
   width: 10%;
   text-align: left;
 }
@@ -246,42 +246,42 @@
   width: var(--size-icon-sm);
 }
 
-.view-count-container {
+.play-count-container {
   display: flex;
   align-items: center;
   gap: var(--space-sm);
   justify-content: flex-start;
 }
 
-.view-count-logo {
+.play-count-logo {
   height: var(--size-icon-xs);
   width: var(--size-icon-xs);
   flex-shrink: 0;
 }
 
-.view-count-percentage {
+.play-count-percentage {
   font-size: inherit;
   font-weight: inherit;
   opacity: 0.9;
 }
 
-.view-count-percentage.positive {
+.play-count-percentage.positive {
   color: #22c55e;
 }
 
-.view-count-percentage.negative {
+.play-count-percentage.negative {
   color: #ef4444;
 }
 
-.youtube-view-count a,
-.spotify-view-count a {
+.total-play-count a,
+.trending a {
   text-decoration: none;
   color: inherit;
   cursor: pointer;
 }
 
-.youtube-view-count a:hover,
-.spotify-view-count a:hover {
+.total-play-count a:hover,
+.trending a:hover {
   opacity: 0.8;
 }
 
@@ -542,8 +542,8 @@
     display: inline;
   }
 
-  /* Mobile: Stack percentage under view count */
-  .view-count-container {
+  /* Mobile: Stack percentage under play count */
+  .play-count-container {
     flex-direction: column;
     align-items: flex-start;
     gap: var(--space-xs);
@@ -564,7 +564,7 @@
     font-size: var(--font-size-mobile-sm);
   }
 
-  .view-count-percentage {
+  .play-count-percentage {
     margin-left: 0;
   }
 }

@@ -179,12 +179,14 @@ class GraphQLClient {
             spotifyUrl
             appleMusicUrl
             soundcloudUrl
-            youtubeCurrentViewCount
-            spotifyCurrentViewCount
-            youtubeCurrentViewCountAbbreviated
-            spotifyCurrentViewCountAbbreviated
-            youtubeViewCountDeltaPercentageFormatted
-            spotifyViewCountDeltaPercentageFormatted
+            youtubeCurrentPlayCount
+            spotifyCurrentPlayCount
+            totalCurrentPlayCount
+            youtubeCurrentPlayCountAbbreviated
+            spotifyCurrentPlayCountAbbreviated
+            totalCurrentPlayCountAbbreviated
+            totalWeeklyChangePercentage
+            totalWeeklyChangePercentageFormatted
             spotifySource {
               name
               displayName
@@ -226,7 +228,6 @@ class GraphQLClient {
           sortOrder
           isDefault
           dataField
-          iconUrl
         }
       }
     `;

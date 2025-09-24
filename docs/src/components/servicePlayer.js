@@ -1,5 +1,3 @@
-import { fetchAndDisplayChartData, hideChart } from "@/components/chart.js";
-
 export function setupBodyClickListener(genre) {
   const body = document.body;
   if (!body) {
@@ -38,10 +36,6 @@ function handleLinkClick(event, link, genre, isrc) {
     event.preventDefault();
     openPlayer(url, serviceType);
     window.scrollTo({ top: 0, behavior: "smooth" });
-
-    if (isrc) {
-      fetchAndDisplayChartData(genre, isrc);
-    }
   }
 }
 
@@ -123,7 +117,6 @@ function closePlayer() {
   if (placeholder) placeholder.innerHTML = "";
   if (closeButton) closeButton.style.display = "none";
   if (playerContainer) playerContainer.style.display = "none";
-  hideChart();
 }
 
 function getServiceType(url) {
