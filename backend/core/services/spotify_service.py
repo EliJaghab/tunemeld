@@ -276,8 +276,9 @@ def get_spotify_playlist(genre: "GenreName") -> PlaylistData:
     return playlist_data
 
 
-@retry(wait=wait_exponential(multiplier=1, min=2, max=10), stop=stop_after_attempt(3), reraise=False)
-def get_spotify_track_view_count(track_url: str) -> int | None:
+@retry(wait=wait_exponential(multiplier=1, min=2, max=10), stop=stop_after_attempt(3), reraise=True)
+def get_spotify_track_view_count(track_url: str) -> int:
+    """Get Spotify track view count. Raises exception if failed."""
     webdriver = get_cached_webdriver()
 
     try:
@@ -307,29 +308,25 @@ def get_spotify_track_view_count(track_url: str) -> int | None:
                 continue
 
         if not view_count_element:
-            logger.error(f"View count element not found with any selector for {track_url}")
-            return None
+            raise ValueError("No playcount element found on Spotify page")
 
         view_count_text = view_count_element.text.strip()
-        logger.info(f"Found Spotify view count text: '{view_count_text}' for {track_url}")
+        logger.info(f"Found Spotify play count text: '{view_count_text}' for {track_url}")
 
         if not view_count_text:
-            logger.warning(f"Empty text in view count element for {track_url}")
-            return None
+            raise ValueError("Empty playcount text on Spotify page")
 
         # Remove commas and convert to int
         clean_text = view_count_text.replace(",", "")
         if not clean_text.isdigit():
-            logger.warning(f"Non-numeric view count text: '{view_count_text}' for {track_url}")
-            return None
+            raise ValueError(f"Invalid playcount format: {view_count_text}")
 
         view_count = int(clean_text)
-        logger.info(f"Successfully retrieved Spotify view count: {view_count}")
+        logger.info(f"Successfully retrieved Spotify play count: {view_count}")
         return view_count
 
     except Exception as e:
-        logger.error(f"WebDriver error getting Spotify view count: {e} for {track_url}")
         # Try to restart driver on critical failures
         with contextlib.suppress(builtins.BaseException):
             webdriver.close_driver()
-        return None
+        raise e

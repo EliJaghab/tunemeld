@@ -4,6 +4,7 @@ from urllib.parse import urlparse
 
 import requests
 from bs4 import BeautifulSoup, Tag
+from tenacity import retry, stop_after_attempt, wait_exponential
 
 if TYPE_CHECKING:
     from core.constants import GenreName
@@ -88,3 +89,31 @@ def get_soundcloud_playlist(genre: "GenreName") -> PlaylistData:
         "metadata": metadata,
         "tracks": tracks_data,
     }
+
+
+@retry(wait=wait_exponential(multiplier=1, min=2, max=10), stop=stop_after_attempt(3), reraise=True)
+def get_soundcloud_track_view_count(track_url: str) -> int:
+    """Get SoundCloud track view count. Raises exception if failed."""
+    logger.info(f"Accessing SoundCloud URL: {track_url}")
+    user_agent = (
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+        "AppleWebKit/537.36 (KHTML, like Gecko) "
+        "Chrome/91.0.4472.124 Safari/537.36"
+    )
+
+    response = requests.get(
+        track_url,
+        headers={"User-Agent": user_agent},
+    )
+    response.raise_for_status()
+
+    html_content = response.text
+
+    # Fallback: search for any numeric playback_count in the HTML
+    playback_matches = re.findall(r'"playback_count":\s*(\d+)', html_content)
+    if playback_matches:
+        view_count = int(playback_matches[0])
+        logger.info(f"Found SoundCloud play count: {view_count}")
+        return view_count
+
+    raise ValueError("No playback_count found in SoundCloud HTML")

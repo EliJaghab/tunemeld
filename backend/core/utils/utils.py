@@ -196,9 +196,9 @@ def truncate_to_words(text: str, max_chars: int = 30) -> str:
     return truncated + "..."
 
 
-def format_view_count(count: int | None) -> str:
+def format_play_count(count: int | None) -> str:
     """
-    Format view count into abbreviated string with max 6 characters.
+    Format play count into abbreviated string with max 6 characters.
 
     Examples:
         1,560 -> "1.56k"

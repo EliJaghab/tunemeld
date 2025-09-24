@@ -83,6 +83,7 @@ def get_youtube_url(
     reraise=True,
 )
 def get_youtube_track_view_count(youtube_url: str, api_key: str | None = None) -> int:
+    """Get YouTube track view count. Raises exception if failed."""
     api_key = api_key or os.getenv("GOOGLE_API_KEY")
     if not api_key:
         raise ValueError("YouTube API key not provided.")
@@ -91,40 +92,21 @@ def get_youtube_track_view_count(youtube_url: str, api_key: str | None = None) -
 
     cached_count = cloudflare_cache_get(CachePrefix.YOUTUBE_VIEW_COUNT, video_id)
     if cached_count:
-        logger.info(f"Video ID {video_id} view count from cache: {cached_count}")
+        logger.info(f"Video ID {video_id} play count from cache: {cached_count}")
         return int(cached_count)
 
     youtube_api_url = f"https://www.googleapis.com/youtube/v3/videos?part=statistics&id={video_id}&key={api_key}"
 
-    try:
-        response = requests.get(youtube_api_url)
-        response.raise_for_status()
+    response = requests.get(youtube_api_url)
+    response.raise_for_status()
 
-        data = response.json()
-        if data["items"]:
-            view_count = data["items"][0]["statistics"]["viewCount"]
-            logger.info(f"Video ID {video_id} has {view_count} views.")
+    data = response.json()
+    if data["items"]:
+        view_count = data["items"][0]["statistics"]["viewCount"]
+        logger.info(f"Video ID {video_id} has {view_count} views.")
 
-            cloudflare_cache_set(CachePrefix.YOUTUBE_VIEW_COUNT, video_id, view_count)
+        cloudflare_cache_set(CachePrefix.YOUTUBE_VIEW_COUNT, video_id, view_count)
 
-            return int(view_count)
-        else:
-            logger.error(f"No video found for ID {video_id}")
-            return 0
-
-    except requests.exceptions.HTTPError as e:
-        if e.response.status_code == 403 and "quotaExceeded" in str(e):
-            logger.warning(f"YouTube quota exceeded for video {video_id}")
-            raise ValueError(f"YouTube quota exceeded for {youtube_url}") from e
-        elif e.response.status_code == 429:
-            logger.warning(f"YouTube rate limit hit for video {video_id}")
-            raise ValueError(f"YouTube rate limit hit for {youtube_url}") from e
-        else:
-            error_msg = str(e).replace(api_key, "***")
-            logger.error(f"YouTube HTTP error: {error_msg}")
-            raise ValueError(f"YouTube HTTP error for {youtube_url}: {error_msg}") from e
-    except Exception as e:
-        # Hide API key from logs by not including full exception details
-        error_msg = str(e).replace(api_key, "***")
-        logger.error(f"YouTube unexpected error: {error_msg}")
-        raise ValueError(f"YouTube unexpected error for {youtube_url}: {error_msg}") from e
+        return int(view_count)
+    else:
+        raise ValueError("No video data found in YouTube API response")

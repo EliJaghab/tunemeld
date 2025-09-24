@@ -11,8 +11,8 @@
 	migrate \
 	migrate-dev \
 	migration-safety-check \
-	run-view-count-etl \
-	test-view-count-etl \
+	run-play-count-etl \
+	test-play-count-etl \
 	ci-db-safety-check \
 	ci-db-migrate \
 	ci-db-validate \
@@ -191,14 +191,14 @@ migration-safety-check:
 	@cd backend && $(VENV)/bin/python migration_safety_check.py
 	@echo " Database safety check passed"
 
-test-view-count-etl:
-	@echo " Running View Count ETL (limited for testing)..."
+test-play-count-etl:
+	@echo " Running Play Count ETL (limited for testing)..."
 ifeq ($(GITHUB_ACTIONS),)
-	@cd backend && $(VENV)/bin/python manage.py view_count --limit 10
+	@cd backend && $(VENV)/bin/python manage.py play_count --limit 10
 else
-	@cd backend && python manage.py view_count --limit 10
+	@cd backend && python manage.py play_count --limit 10
 endif
-	@echo " View Count ETL test completed"
+	@echo " Play Count ETL test completed"
 
 # CI/CD Database Operations
 ci-db-safety-check:
@@ -222,14 +222,14 @@ ci-db-validate:
 	@cd backend && python migration_safety_check.py
 	@echo " Post-ETL validation passed"
 
-run-view-count-etl:
-	@echo " Running View Count ETL Pipeline..."
+run-play-count-etl:
+	@echo " Running Play Count ETL Pipeline..."
 ifeq ($(GITHUB_ACTIONS),)
-	@cd backend && $(VENV)/bin/python manage.py view_count
+	@cd backend && $(VENV)/bin/python manage.py play_count
 else
-	@cd backend && python manage.py view_count
+	@cd backend && python manage.py play_count
 endif
-	@echo " View Count ETL Pipeline completed"
+	@echo " Play Count ETL Pipeline completed"
 
 run-playlist-etl:
 	@echo " Running Playlist ETL Pipeline..."

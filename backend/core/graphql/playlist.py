@@ -3,8 +3,8 @@ from core.constants import ServiceName
 from core.graphql.track import TrackType
 from core.models import Genre, Track
 from core.models.genre_service import Service
+from core.models.play_counts import HistoricalTrackPlayCount
 from core.models.playlist import Playlist, Rank, RawPlaylistData
-from core.models.view_counts import HistoricalTrackViewCount
 from core.utils.local_cache import CachePrefix, local_cache_get, local_cache_set
 
 
@@ -35,7 +35,6 @@ class RankType(graphene.ObjectType):
     sort_order = graphene.String(required=True)
     is_default = graphene.Boolean(required=True)
     data_field = graphene.String(required=True)
-    icon_url = graphene.String(required=True)
 
 
 class PlaylistQuery(graphene.ObjectType):
@@ -48,8 +47,8 @@ class PlaylistQuery(graphene.ObjectType):
     ranks = graphene.List(RankType, description="Get playlist ranking options")
 
     @staticmethod
-    def _enrich_tracks_with_view_counts(tracks):
-        """Pre-populate track objects with view count data to avoid individual cache calls."""
+    def _enrich_tracks_with_play_counts(tracks):
+        """Pre-populate track objects with play count data to avoid individual cache calls."""
         if not tracks:
             return tracks
 
@@ -58,19 +57,27 @@ class PlaylistQuery(graphene.ObjectType):
         try:
             youtube_service = Service.objects.get(name=ServiceName.YOUTUBE)
             spotify_service = Service.objects.get(name=ServiceName.SPOTIFY)
+            soundcloud_service = Service.objects.get(name=ServiceName.SOUNDCLOUD)
         except Service.DoesNotExist:
             return tracks
 
         youtube_counts = {
             vc.isrc: vc
-            for vc in HistoricalTrackViewCount.objects.filter(isrc__in=track_isrcs, service=youtube_service)
+            for vc in HistoricalTrackPlayCount.objects.filter(isrc__in=track_isrcs, service=youtube_service)
             .order_by("isrc", "-recorded_date")
             .distinct("isrc")
         }
 
         spotify_counts = {
             vc.isrc: vc
-            for vc in HistoricalTrackViewCount.objects.filter(isrc__in=track_isrcs, service=spotify_service)
+            for vc in HistoricalTrackPlayCount.objects.filter(isrc__in=track_isrcs, service=spotify_service)
+            .order_by("isrc", "-recorded_date")
+            .distinct("isrc")
+        }
+
+        soundcloud_counts = {
+            vc.isrc: vc
+            for vc in HistoricalTrackPlayCount.objects.filter(isrc__in=track_isrcs, service=soundcloud_service)
             .order_by("isrc", "-recorded_date")
             .distinct("isrc")
         }
@@ -78,11 +85,16 @@ class PlaylistQuery(graphene.ObjectType):
         for track in tracks:
             youtube_data = youtube_counts.get(track.isrc)
             spotify_data = spotify_counts.get(track.isrc)
+            soundcloud_data = soundcloud_counts.get(track.isrc)
 
-            track._youtube_current_view_count = youtube_data.current_view_count if youtube_data else None
-            track._spotify_current_view_count = spotify_data.current_view_count if spotify_data else None
-            track._youtube_view_count_delta_percentage = youtube_data.daily_change_percentage if youtube_data else None
-            track._spotify_view_count_delta_percentage = spotify_data.daily_change_percentage if spotify_data else None
+            track._youtube_current_play_count = youtube_data.current_play_count if youtube_data else None
+            track._spotify_current_play_count = spotify_data.current_play_count if spotify_data else None
+            track._soundcloud_current_play_count = soundcloud_data.current_play_count if soundcloud_data else None
+            track._youtube_play_count_delta_percentage = youtube_data.daily_change_percentage if youtube_data else None
+            track._spotify_play_count_delta_percentage = spotify_data.daily_change_percentage if spotify_data else None
+            track._soundcloud_play_count_delta_percentage = (
+                soundcloud_data.daily_change_percentage if soundcloud_data else None
+            )
 
         return tracks
 
@@ -109,7 +121,7 @@ class PlaylistQuery(graphene.ObjectType):
                 track._state.adding = False
                 track._state.db = "default"
 
-                # Set all the cached attributes
+                # Set all cached attributes (both model fields and enrichment data)
                 for key, value in track_data.items():
                     if key == "updated_at" and isinstance(value, str):
                         # Convert ISO string back to datetime
@@ -136,7 +148,7 @@ class PlaylistQuery(graphene.ObjectType):
                 except Track.DoesNotExist:
                     continue
 
-        tracks = PlaylistQuery._enrich_tracks_with_view_counts(tracks)
+        tracks = PlaylistQuery._enrich_tracks_with_play_counts(tracks)
 
         serialized_tracks = []
         for track in tracks:
@@ -154,11 +166,14 @@ class PlaylistQuery(graphene.ObjectType):
                 "aggregate_rank": track.aggregate_rank,
                 "aggregate_score": track.aggregate_score,
                 "updated_at": track.updated_at.isoformat() if track.updated_at else None,
-                # Only include view count enrichment data (no internal ETL fields)
-                "_youtube_current_view_count": getattr(track, "_youtube_current_view_count", None),
-                "_spotify_current_view_count": getattr(track, "_spotify_current_view_count", None),
-                "_youtube_view_count_delta_percentage": getattr(track, "_youtube_view_count_delta_percentage", None),
-                "_spotify_view_count_delta_percentage": getattr(track, "_spotify_view_count_delta_percentage", None),
+                "_youtube_current_play_count": getattr(track, "_youtube_current_play_count", None),
+                "_spotify_current_play_count": getattr(track, "_spotify_current_play_count", None),
+                "_soundcloud_current_play_count": getattr(track, "_soundcloud_current_play_count", None),
+                "_youtube_play_count_delta_percentage": getattr(track, "_youtube_play_count_delta_percentage", None),
+                "_spotify_play_count_delta_percentage": getattr(track, "_spotify_play_count_delta_percentage", None),
+                "_soundcloud_play_count_delta_percentage": getattr(
+                    track, "_soundcloud_play_count_delta_percentage", None
+                ),
             }
             serialized_tracks.append(track_data)
 
@@ -226,7 +241,6 @@ class PlaylistQuery(graphene.ObjectType):
                 sort_order=rank.sort_order,
                 is_default=rank.name == DEFAULT_RANK_TYPE.value,
                 data_field=rank.data_field,
-                icon_url=rank.icon_url,
             )
             for rank in ranks
         ]

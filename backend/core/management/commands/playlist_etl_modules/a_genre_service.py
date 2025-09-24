@@ -31,6 +31,5 @@ class Command(BaseCommand):
                     "sort_field": config["sort_field"],
                     "sort_order": config["sort_order"],
                     "data_field": config["data_field"],
-                    "icon_url": config["icon_url"],
                 },
             )

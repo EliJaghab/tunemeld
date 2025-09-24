@@ -1,4 +1,5 @@
 from core.models.genre_service import Genre, Service
+from core.models.play_counts import AggregatePlayCount, HistoricalTrackPlayCount
 from core.models.playlist import (
     Playlist as PlaylistModel,
 )
@@ -17,12 +18,12 @@ from core.models.track import (
     TrackRank,
     TrackSourceServiceName,
 )
-from core.models.view_counts import HistoricalTrackViewCount
 
 __all__ = [
+    "AggregatePlayCount",
     "ETLTrack",
     "Genre",
-    "HistoricalTrackViewCount",
+    "HistoricalTrackPlayCount",
     "NormalizedTrack",
     "PlaylistETL",
     "PlaylistModel",

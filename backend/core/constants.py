@@ -14,6 +14,7 @@ class ServiceName(str, Enum):
     SOUNDCLOUD = "soundcloud"
     YOUTUBE = "youtube"
     TUNEMELD = "tunemeld"
+    TOTAL = "total"
 
 
 GENRE_CONFIGS: dict[str, dict] = {
@@ -65,8 +66,8 @@ SERVICES: list[str] = [service.value for service in ServiceName]
 
 class RankType(str, Enum):
     TUNEMELD_RANK = "tunemeld_rank"
-    SPOTIFY_VIEWS_RANK = "spotify_views_rank"
-    YOUTUBE_VIEWS_RANK = "youtube_views_rank"
+    TOTAL_PLAYS_RANK = "total_plays_rank"
+    TRENDING_RANK = "trending_rank"
 
 
 DEFAULT_RANK_TYPE = RankType.TUNEMELD_RANK
@@ -80,19 +81,19 @@ RANK_CONFIGS: dict[str, dict] = {
         "data_field": "tunemeldRank",
         "icon_url": "/images/tunemeld.png",
     },
-    RankType.SPOTIFY_VIEWS_RANK.value: {
-        "display_name": "Spotify Views",
-        "sort_field": "spotify-views",
+    RankType.TOTAL_PLAYS_RANK.value: {
+        "display_name": "Total Plays",
+        "sort_field": "total-plays",
         "sort_order": "desc",
-        "data_field": "spotifyCurrentViewCount",
-        "icon_url": "/images/spotify_logo.png",
+        "data_field": "totalCurrentPlayCount",
+        "icon_url": "/images/total_plays_icon.png",
     },
-    RankType.YOUTUBE_VIEWS_RANK.value: {
-        "display_name": "YouTube Views",
-        "sort_field": "youtube-views",
+    RankType.TRENDING_RANK.value: {
+        "display_name": "Trending",
+        "sort_field": "trending",
         "sort_order": "desc",
-        "data_field": "youtubeCurrentViewCount",
-        "icon_url": "/images/youtube_logo.png",
+        "data_field": "totalWeeklyChangePercentage",
+        "icon_url": "/images/trending_icon.png",
     },
 }
 
@@ -124,6 +125,10 @@ SERVICE_CONFIGS: dict[str, dict] = {
     },
     ServiceName.TUNEMELD.value: {
         "display_name": "tunemeld",
+        "icon_url": "/images/tunemeld.png",
+    },
+    ServiceName.TOTAL.value: {
+        "display_name": "Total Plays",
         "icon_url": "/images/tunemeld.png",
     },
 }
