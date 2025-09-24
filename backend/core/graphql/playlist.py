@@ -3,7 +3,7 @@ from core.constants import ServiceName
 from core.graphql.track import TrackType
 from core.models import Genre, Track
 from core.models.genre_service import Service
-from core.models.play_counts import HistoricalTrackPlayCount
+from core.models.play_counts import AggregatePlayCount
 from core.models.playlist import Playlist, Rank, RawPlaylistData
 from core.utils.local_cache import CachePrefix, local_cache_get, local_cache_set
 
@@ -63,21 +63,21 @@ class PlaylistQuery(graphene.ObjectType):
 
         youtube_counts = {
             vc.isrc: vc
-            for vc in HistoricalTrackPlayCount.objects.filter(isrc__in=track_isrcs, service=youtube_service)
+            for vc in AggregatePlayCount.objects.filter(isrc__in=track_isrcs, service=youtube_service)
             .order_by("isrc", "-recorded_date")
             .distinct("isrc")
         }
 
         spotify_counts = {
             vc.isrc: vc
-            for vc in HistoricalTrackPlayCount.objects.filter(isrc__in=track_isrcs, service=spotify_service)
+            for vc in AggregatePlayCount.objects.filter(isrc__in=track_isrcs, service=spotify_service)
             .order_by("isrc", "-recorded_date")
             .distinct("isrc")
         }
 
         soundcloud_counts = {
             vc.isrc: vc
-            for vc in HistoricalTrackPlayCount.objects.filter(isrc__in=track_isrcs, service=soundcloud_service)
+            for vc in AggregatePlayCount.objects.filter(isrc__in=track_isrcs, service=soundcloud_service)
             .order_by("isrc", "-recorded_date")
             .distinct("isrc")
         }
@@ -90,10 +90,10 @@ class PlaylistQuery(graphene.ObjectType):
             track._youtube_current_play_count = youtube_data.current_play_count if youtube_data else None
             track._spotify_current_play_count = spotify_data.current_play_count if spotify_data else None
             track._soundcloud_current_play_count = soundcloud_data.current_play_count if soundcloud_data else None
-            track._youtube_play_count_delta_percentage = youtube_data.daily_change_percentage if youtube_data else None
-            track._spotify_play_count_delta_percentage = spotify_data.daily_change_percentage if spotify_data else None
+            track._youtube_play_count_delta_percentage = youtube_data.weekly_change_percentage if youtube_data else None
+            track._spotify_play_count_delta_percentage = spotify_data.weekly_change_percentage if spotify_data else None
             track._soundcloud_play_count_delta_percentage = (
-                soundcloud_data.daily_change_percentage if soundcloud_data else None
+                soundcloud_data.weekly_change_percentage if soundcloud_data else None
             )
 
         return tracks
