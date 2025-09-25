@@ -49,8 +49,8 @@ class Command(BaseCommand):
         self, service_name: ServiceName, genre: GenreName, etl_run_id: uuid.UUID
     ) -> RawPlaylistData | None:
         logger.info(f"Getting playlist data for {service_name.value}/{genre.value}")
-        service = Service.objects.get(name=service_name.value)
-        genre_obj = Genre.objects.get(name=genre.value)
+        service = Service.objects.filter(name=service_name.value).order_by("-id").first()
+        genre_obj = Genre.objects.filter(name=genre.value).order_by("-id").first()
 
         try:
             if service_name == ServiceName.APPLE_MUSIC:
