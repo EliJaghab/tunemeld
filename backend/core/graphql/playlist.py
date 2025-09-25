@@ -1,8 +1,8 @@
 import graphene
-from core.api.genre_service_api import get_genre, get_service
+from core.api.genre_service_api import get_genre
 from core.constants import ServiceName
 from core.graphql.track import TrackType
-from core.models import Track
+from core.models import Service, Track
 from core.models.play_counts import AggregatePlayCount
 from core.models.playlist import Playlist, Rank
 from core.utils.local_cache import CachePrefix, local_cache_get, local_cache_set
@@ -54,53 +54,32 @@ class PlaylistQuery(graphene.ObjectType):
 
         track_isrcs = [track.isrc for track in tracks]
 
-        youtube_service = get_service(ServiceName.YOUTUBE)
-        spotify_service = get_service(ServiceName.SPOTIFY)
-        soundcloud_service = get_service(ServiceName.SOUNDCLOUD)
+        services_with_counts = Service.objects.filter(aggregateplaycount__isrc__in=track_isrcs).distinct()
 
-        if not all([youtube_service, spotify_service, soundcloud_service]):
-            return tracks
-
-        youtube_counts = {
-            vc.isrc: vc
-            for vc in AggregatePlayCount.objects.filter(isrc__in=track_isrcs, service=youtube_service)
-            .order_by("isrc", "-recorded_date")
-            .distinct("isrc")
-        }
-
-        spotify_counts = {
-            vc.isrc: vc
-            for vc in AggregatePlayCount.objects.filter(isrc__in=track_isrcs, service=spotify_service)
-            .order_by("isrc", "-recorded_date")
-            .distinct("isrc")
-        }
-
-        soundcloud_counts = {
-            vc.isrc: vc
-            for vc in AggregatePlayCount.objects.filter(isrc__in=track_isrcs, service=soundcloud_service)
-            .order_by("isrc", "-recorded_date")
-            .distinct("isrc")
-        }
+        service_counts = {}
+        for service in services_with_counts:
+            service_counts[service.name] = {
+                vc.isrc: vc
+                for vc in AggregatePlayCount.objects.filter(isrc__in=track_isrcs, service=service)
+                .order_by("isrc", "-recorded_date")
+                .distinct("isrc")
+            }
 
         for track in tracks:
-            youtube_data = youtube_counts.get(track.isrc)
-            spotify_data = spotify_counts.get(track.isrc)
-            soundcloud_data = soundcloud_counts.get(track.isrc)
+            # Dynamically set play count attributes based on available services
+            for service_name, counts in service_counts.items():
+                service_data = counts.get(track.isrc)
+                current_count_attr = f"_{service_name}_current_play_count"
+                delta_percentage_attr = f"_{service_name}_play_count_delta_percentage"
 
-            track._youtube_current_play_count = youtube_data.current_play_count if youtube_data else None
-            track._spotify_current_play_count = spotify_data.current_play_count if spotify_data else None
-            track._soundcloud_current_play_count = soundcloud_data.current_play_count if soundcloud_data else None
-            track._youtube_play_count_delta_percentage = youtube_data.weekly_change_percentage if youtube_data else None
-            track._spotify_play_count_delta_percentage = spotify_data.weekly_change_percentage if spotify_data else None
-            track._soundcloud_play_count_delta_percentage = (
-                soundcloud_data.weekly_change_percentage if soundcloud_data else None
-            )
+                setattr(track, current_count_attr, service_data.current_play_count if service_data else None)
+                setattr(track, delta_percentage_attr, service_data.weekly_change_percentage if service_data else None)
 
         return tracks
 
     def resolve_service_order(self, info):
         """Used to order the header art."""
-        return [ServiceName.SOUNDCLOUD, ServiceName.APPLE_MUSIC, ServiceName.SPOTIFY]
+        return Service.objects.values_list("name", flat=True).order_by("id")
 
     def resolve_playlist(self, info, genre, service):
         """Get playlist data for any service (including Aggregate) and genre."""
@@ -193,7 +172,8 @@ class PlaylistQuery(graphene.ObjectType):
             return []
 
         raw_playlists = []
-        for service_name in ["apple_music", "soundcloud", "spotify", "tunemeld"]:
+        services = Service.objects.values_list("name", flat=True).distinct()
+        for service_name in services:
             raw_playlist = get_raw_playlist_data_by_genre_service(genre, service_name)
             if raw_playlist:
                 raw_playlists.append(raw_playlist)
