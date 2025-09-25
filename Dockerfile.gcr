@@ -1,0 +1,42 @@
+# Multi-stage build using Google Distroless Python 3.13
+# Build stage
+FROM python:3.13-slim-bookworm AS build
+
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+
+WORKDIR /app
+
+# Install build dependencies
+RUN apt-get update && apt-get install -y \
+    gcc \
+    g++ \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy and install Python dependencies
+COPY pyproject.toml /app/pyproject.toml
+RUN pip install --upgrade pip && pip install -e .
+
+# Copy application code
+COPY backend/ /app/
+COPY .github/ /app/.github/
+
+# Runtime stage - Distroless
+FROM gcr.io/distroless/python3-debian12
+
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+ENV DJANGO_SETTINGS_MODULE=core.settings
+ENV PYTHONPATH=/app
+
+# Copy from build stage
+COPY --from=build /usr/local/lib/python3.13/site-packages /usr/local/lib/python3.13/site-packages
+COPY --from=build /usr/local/bin /usr/local/bin
+COPY --from=build /app /app
+
+WORKDIR /app
+
+EXPOSE 8080
+
+# Use Python directly since distroless doesn't have shell
+CMD ["gunicorn", "--bind", "0.0.0.0:8080", "core.wsgi:application"]

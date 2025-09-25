@@ -1,0 +1,89 @@
+# Multi-stage build with Alpine Linux base (smaller, different registry path)
+# Build stage
+FROM alpine:3.19 AS python-builder
+
+# Install build dependencies
+RUN apk add --no-cache \
+    build-base \
+    libffi-dev \
+    openssl-dev \
+    bzip2-dev \
+    zlib-dev \
+    readline-dev \
+    sqlite-dev \
+    wget \
+    curl \
+    llvm-dev \
+    ncurses-dev \
+    xz-dev \
+    tk-dev
+
+# Build Python 3.13 from source
+WORKDIR /tmp
+RUN wget https://www.python.org/ftp/python/3.13.0/Python-3.13.0.tgz && \
+    tar xzf Python-3.13.0.tgz && \
+    cd Python-3.13.0 && \
+    ./configure \
+        --enable-optimizations \
+        --enable-shared \
+        --with-ensurepip=install \
+        --with-system-ffi \
+        --without-doc-strings && \
+    make -j$(nproc) && \
+    make install && \
+    cd /tmp && rm -rf Python-3.13.0*
+
+# Install pip and setup tools
+RUN python3.13 -m ensurepip --upgrade && \
+    pip3.13 install --upgrade pip setuptools wheel
+
+# Runtime stage
+FROM alpine:3.19 AS runtime
+
+# Install runtime dependencies
+RUN apk add --no-cache \
+    libffi \
+    openssl \
+    bzip2 \
+    readline \
+    sqlite \
+    libgcc \
+    libstdc++
+
+# Copy Python from builder stage
+COPY --from=python-builder /usr/local /usr/local
+
+# Create symlinks
+RUN ln -sf /usr/local/bin/python3.13 /usr/local/bin/python && \
+    ln -sf /usr/local/bin/python3.13 /usr/local/bin/python3 && \
+    ln -sf /usr/local/bin/pip3.13 /usr/local/bin/pip
+
+# Verify Python installation
+RUN python --version && pip --version
+
+# Application stage
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+ENV DJANGO_SETTINGS_MODULE=core.settings
+ENV PATH="/usr/local/bin:$PATH"
+
+WORKDIR /app
+
+# Copy pyproject.toml first for better Docker layer caching
+COPY pyproject.toml /app/pyproject.toml
+
+# Install Python dependencies
+RUN pip install --upgrade pip && pip install -e .
+
+# Copy Django backend files to container
+COPY backend/ /app/
+COPY .github/ /app/.github/
+
+# Set Python path for Django
+ENV PYTHONPATH=/app
+
+# Expose port 8080 (matches Railway configuration)
+EXPOSE 8080
+
+# Start Django server
+CMD ["gunicorn", "--bind", "0.0.0.0:8080", "core.wsgi:application"]

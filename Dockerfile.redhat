@@ -1,0 +1,51 @@
+# Build Python 3.13 on Red Hat UBI 9
+FROM registry.access.redhat.com/ubi9/ubi:latest
+
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+ENV DJANGO_SETTINGS_MODULE=core.settings
+
+# Install system dependencies and build Python 3.13 from source
+RUN yum update -y && \
+    yum groupinstall -y "Development Tools" && \
+    yum install -y \
+    openssl-devel \
+    bzip2-devel \
+    libffi-devel \
+    zlib-devel \
+    wget \
+    && yum clean all
+
+# Install Python 3.13 from source
+RUN cd /tmp && \
+    wget https://www.python.org/ftp/python/3.13.0/Python-3.13.0.tgz && \
+    tar xzf Python-3.13.0.tgz && \
+    cd Python-3.13.0 && \
+    ./configure --enable-optimizations --with-ensurepip=install && \
+    make -j $(nproc) && \
+    make altinstall && \
+    ln -sf /usr/local/bin/python3.13 /usr/local/bin/python && \
+    ln -sf /usr/local/bin/python3.13 /usr/local/bin/python3 && \
+    ln -sf /usr/local/bin/pip3.13 /usr/local/bin/pip && \
+    cd / && rm -rf /tmp/Python-3.13.0*
+
+WORKDIR /app
+
+# Copy pyproject.toml first for better Docker layer caching
+COPY pyproject.toml /app/pyproject.toml
+
+# Install Python dependencies
+RUN pip install --upgrade pip && pip install -e .
+
+# Copy Django backend files to container
+COPY backend/ /app/
+COPY .github/ /app/.github/
+
+# Set Python path for Django
+ENV PYTHONPATH=/app
+
+# Expose port 8080 (matches Railway configuration)
+EXPOSE 8080
+
+# Start Django server
+CMD ["gunicorn", "--bind", "0.0.0.0:8080", "core.wsgi:application"]
