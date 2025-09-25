@@ -1,7 +1,9 @@
 import time
+import uuid
 from typing import Any
 
 from core.management.commands.clear_and_warm_cache import Command as ClearAndWarmCacheCommand
+from core.management.commands.play_count_modules.a0_genre_service import Command as GenreServiceCommand
 from core.management.commands.play_count_modules.a_historical_play_count import Command as HistoricalPlayCountCommand
 from core.management.commands.play_count_modules.b_aggregate_play_count import Command as AggregatePlayCountCommand
 from core.management.commands.play_count_modules.c_clear_play_count_cache import Command as ClearPlayCountCacheCommand
@@ -23,23 +25,27 @@ class Command(BaseCommand):
     def handle(self, *args: Any, **options: Any) -> None:
         start_time = time.time()
         limit = options.get("limit")
+        etl_run_id = uuid.uuid4()
 
         try:
-            logger.info("Starting Play Count ETL Pipeline")
+            logger.info(f"Starting Play Count ETL Pipeline with run ID: {etl_run_id}")
 
-            logger.info("Step 1: Running Historical Play Count extraction")
+            logger.info("Step 1: Setting up genres and services...")
+            GenreServiceCommand().handle(etl_run_id=etl_run_id)
+
+            logger.info("Step 2: Running Historical Play Count extraction")
             historical_command = HistoricalPlayCountCommand()
             historical_command.handle(limit=limit)
 
-            logger.info("Step 2: Computing aggregate play counts with weekly changes")
+            logger.info("Step 3: Computing aggregate play counts with weekly changes")
             aggregate_command = AggregatePlayCountCommand()
             aggregate_command.handle()
 
-            logger.info("Step 3: Clearing play count GraphQL cache...")
+            logger.info("Step 4: Clearing play count GraphQL cache...")
             clear_cache_command = ClearPlayCountCacheCommand()
             clear_cache_command.handle()
 
-            logger.info("Step 4: Clearing and warming GraphQL cache...")
+            logger.info("Step 5: Clearing and warming GraphQL cache...")
             ClearAndWarmCacheCommand().handle()
 
             duration = time.time() - start_time

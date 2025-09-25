@@ -1,12 +1,12 @@
-name: Historical Track View Count ETL
+name: Historical Track Play Count ETL
 
 on:
   schedule:
     - cron: '0 2 * * *'
   workflow_dispatch:
     inputs:
-      clear_view_count_cache:
-        description: 'Clear view count cache before running ETL'
+      clear_play_count_cache:
+        description: 'Clear play count cache before running ETL'
         required: false
         default: false
         type: boolean
@@ -57,8 +57,8 @@ jobs:
           CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
         run: make ci-db-migrate
 
-      - name: Clear view count cache (conditional)
-        if: ${{ inputs.clear_view_count_cache == true }}
+      - name: Clear play count cache (conditional)
+        if: ${{ inputs.clear_play_count_cache == true }}
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
@@ -66,7 +66,7 @@ jobs:
           CF_NAMESPACE_ID: ${{ secrets.CF_NAMESPACE_ID }}
           CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
         run: |
-          echo "🗑️ Clearing view count cache..."
+          echo "🗑️ Clearing play count cache..."
           cd backend
           python manage.py shell -c "
           from core.utils.local_cache import local_cache_clear, CachePrefix
@@ -75,7 +75,7 @@ jobs:
           print(f'✅ Cleared {gql_playlist_cleared + gql_metadata_cleared} cache entries')
           "
 
-      - name: Run Historical Track View Count ETL
+      - name: Run Historical Track Play Count ETL
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
@@ -88,7 +88,7 @@ jobs:
           CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
         run: |
           cd backend
-          python manage.py view_count
+          python manage.py play_count
 
       - name: Verify ETL pipeline results
         env:
@@ -96,17 +96,17 @@ jobs:
           DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
         run: |
           cd backend
-          echo " Historical Track View Count ETL Results:"
+          echo " Historical Track Play Count ETL Results:"
           python manage.py shell -c "
-          from core.models.view_counts import HistoricalTrackViewCount
+          from core.models.play_counts import HistoricalTrackPlayCount
           from core.models.genre_service import Service
-          print(f'Historical track view count records: {HistoricalTrackViewCount.objects.count()}')
+          print(f'Historical track play count records: {HistoricalTrackPlayCount.objects.count()}')
           print()
           print(' Breakdown by service:')
           for service in Service.objects.all():
-              count = HistoricalTrackViewCount.objects.filter(service=service).count()
+              count = HistoricalTrackPlayCount.objects.filter(service=service).count()
               if count > 0:
-                  print(f'{service.name}: {count} historical view count records')
+                  print(f'{service.name}: {count} historical play count records')
           "
 
       - name: Post-ETL database validation
@@ -120,6 +120,6 @@ jobs:
 
       - name: Log ETL completion
         run: |
-          echo " Historical Track View Count ETL Pipeline completed successfully"
+          echo " Historical Track Play Count ETL Pipeline completed successfully"
           echo "  Data persisted to Railway PostgreSQL database"
           echo " Next ETL run scheduled for tomorrow at 2 AM UTC"
