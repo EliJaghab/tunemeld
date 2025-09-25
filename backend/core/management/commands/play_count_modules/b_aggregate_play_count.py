@@ -1,8 +1,8 @@
 import logging
 from datetime import timedelta
 
+from core.api.genre_service_api import get_service
 from core.constants import ServiceName
-from core.models.genre_service import Service
 from core.models.play_counts import AggregatePlayCount, HistoricalTrackPlayCount
 from django.core.management.base import BaseCommand
 from django.db.models import Q, Sum
@@ -20,14 +20,13 @@ class Command(BaseCommand):
 
         logger.info(f"Computing aggregate play counts for {today}")
 
-        try:
-            # Get services
-            youtube_service = Service.objects.filter(name=ServiceName.YOUTUBE).order_by("-id").first()
-            spotify_service = Service.objects.filter(name=ServiceName.SPOTIFY).order_by("-id").first()
-            soundcloud_service = Service.objects.filter(name=ServiceName.SOUNDCLOUD).order_by("-id").first()
-            all_service = Service.objects.filter(name=ServiceName.TOTAL).order_by("-id").first()
-        except Service.DoesNotExist as e:
-            logger.error(f"Required service not found: {e}")
+        youtube_service = get_service(ServiceName.YOUTUBE)
+        spotify_service = get_service(ServiceName.SPOTIFY)
+        soundcloud_service = get_service(ServiceName.SOUNDCLOUD)
+        all_service = get_service(ServiceName.TOTAL)
+
+        if not all([youtube_service, spotify_service, soundcloud_service, all_service]):
+            logger.error("Required services not found")
             return
 
         # Get all unique TuneMeld ISRCs from today's data (any service)

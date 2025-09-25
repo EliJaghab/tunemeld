@@ -1,7 +1,8 @@
 import uuid
 
+from core.api.genre_service_api import get_genre, get_service
 from core.constants import PLAYLIST_GENRES, SERVICE_CONFIGS, GenreName, ServiceName
-from core.models import Genre, RawPlaylistData, Service
+from core.models import RawPlaylistData
 from core.services.apple_music_service import get_apple_music_playlist
 from core.services.soundcloud_service import get_soundcloud_playlist
 from core.services.spotify_service import get_spotify_playlist
@@ -49,8 +50,8 @@ class Command(BaseCommand):
         self, service_name: ServiceName, genre: GenreName, etl_run_id: uuid.UUID
     ) -> RawPlaylistData | None:
         logger.info(f"Getting playlist data for {service_name.value}/{genre.value}")
-        service = Service.objects.filter(name=service_name.value).order_by("-id").first()
-        genre_obj = Genre.objects.filter(name=genre.value).order_by("-id").first()
+        service = get_service(service_name)
+        genre_obj = get_genre(genre.value)
 
         try:
             if service_name == ServiceName.APPLE_MUSIC:

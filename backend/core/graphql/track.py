@@ -1,4 +1,5 @@
 import graphene
+from core.api.genre_service_api import get_service
 from core.constants import ServiceName
 from core.graphql.service import ServiceType
 from core.models.genre_service import Service
@@ -105,7 +106,7 @@ class TrackType(DjangoObjectType):
         if not self.spotify_url:
             return None
         try:
-            service = Service.objects.get(name=ServiceName.SPOTIFY)
+            service = get_service(ServiceName.SPOTIFY)
             return ServiceType(
                 name=ServiceName.SPOTIFY,
                 display_name=service.display_name,
@@ -119,7 +120,7 @@ class TrackType(DjangoObjectType):
         if not self.apple_music_url:
             return None
         try:
-            service = Service.objects.get(name=ServiceName.APPLE_MUSIC)
+            service = get_service(ServiceName.APPLE_MUSIC)
             return ServiceType(
                 name=ServiceName.APPLE_MUSIC,
                 display_name=service.display_name,
@@ -133,7 +134,7 @@ class TrackType(DjangoObjectType):
         if not self.soundcloud_url:
             return None
         try:
-            service = Service.objects.get(name=ServiceName.SOUNDCLOUD)
+            service = get_service(ServiceName.SOUNDCLOUD)
             return ServiceType(
                 name=ServiceName.SOUNDCLOUD,
                 display_name=service.display_name,
@@ -147,7 +148,7 @@ class TrackType(DjangoObjectType):
         if not self.youtube_url:
             return None
         try:
-            service = Service.objects.get(name=ServiceName.YOUTUBE)
+            service = get_service(ServiceName.YOUTUBE)
             return ServiceType(
                 name=ServiceName.YOUTUBE,
                 display_name=service.display_name,
@@ -165,7 +166,7 @@ class TrackType(DjangoObjectType):
         # Fallback to database only when cache is completely empty
         # This handles edge cases where cache warming failed
         try:
-            youtube_service = Service.objects.get(name=ServiceName.YOUTUBE)
+            youtube_service = get_service(ServiceName.YOUTUBE)
             latest = (
                 HistoricalTrackPlayCount.objects.filter(isrc=self.isrc, service=youtube_service)
                 .order_by("-recorded_date")
@@ -180,7 +181,7 @@ class TrackType(DjangoObjectType):
             return self._spotify_current_play_count
 
         try:
-            spotify_service = Service.objects.get(name=ServiceName.SPOTIFY)
+            spotify_service = get_service(ServiceName.SPOTIFY)
             latest = (
                 HistoricalTrackPlayCount.objects.filter(isrc=self.isrc, service=spotify_service)
                 .order_by("-recorded_date")
@@ -198,7 +199,7 @@ class TrackType(DjangoObjectType):
 
         # Fallback to database only when cache is completely empty
         try:
-            youtube_service = Service.objects.get(name=ServiceName.YOUTUBE)
+            youtube_service = get_service(ServiceName.YOUTUBE)
             latest = (
                 HistoricalTrackPlayCount.objects.filter(isrc=self.isrc, service=youtube_service)
                 .order_by("-recorded_date")
@@ -215,7 +216,7 @@ class TrackType(DjangoObjectType):
             return format_play_count(raw_count)
 
         try:
-            spotify_service = Service.objects.get(name=ServiceName.SPOTIFY)
+            spotify_service = get_service(ServiceName.SPOTIFY)
             latest = (
                 HistoricalTrackPlayCount.objects.filter(isrc=self.isrc, service=spotify_service)
                 .order_by("-recorded_date")
@@ -231,7 +232,7 @@ class TrackType(DjangoObjectType):
             return self._youtube_play_count_delta_percentage
 
         try:
-            youtube_service = Service.objects.get(name=ServiceName.YOUTUBE)
+            youtube_service = get_service(ServiceName.YOUTUBE)
             latest = (
                 AggregatePlayCount.objects.filter(isrc=self.isrc, service=youtube_service)
                 .order_by("-recorded_date")
@@ -246,7 +247,7 @@ class TrackType(DjangoObjectType):
             return self._spotify_play_count_delta_percentage
 
         try:
-            spotify_service = Service.objects.get(name=ServiceName.SPOTIFY)
+            spotify_service = get_service(ServiceName.SPOTIFY)
             latest = (
                 AggregatePlayCount.objects.filter(isrc=self.isrc, service=spotify_service)
                 .order_by("-recorded_date")
@@ -261,7 +262,7 @@ class TrackType(DjangoObjectType):
             return self._soundcloud_current_play_count
 
         try:
-            soundcloud_service = Service.objects.get(name=ServiceName.SOUNDCLOUD)
+            soundcloud_service = get_service(ServiceName.SOUNDCLOUD)
             latest = (
                 HistoricalTrackPlayCount.objects.filter(isrc=self.isrc, service=soundcloud_service)
                 .order_by("-recorded_date")
@@ -277,7 +278,7 @@ class TrackType(DjangoObjectType):
             return format_play_count(raw_count)
 
         try:
-            soundcloud_service = Service.objects.get(name=ServiceName.SOUNDCLOUD)
+            soundcloud_service = get_service(ServiceName.SOUNDCLOUD)
             latest = (
                 HistoricalTrackPlayCount.objects.filter(isrc=self.isrc, service=soundcloud_service)
                 .order_by("-recorded_date")
@@ -293,7 +294,7 @@ class TrackType(DjangoObjectType):
             return self._soundcloud_play_count_delta_percentage
 
         try:
-            soundcloud_service = Service.objects.get(name=ServiceName.SOUNDCLOUD)
+            soundcloud_service = get_service(ServiceName.SOUNDCLOUD)
             latest = (
                 AggregatePlayCount.objects.filter(isrc=self.isrc, service=soundcloud_service)
                 .order_by("-recorded_date")
@@ -308,7 +309,7 @@ class TrackType(DjangoObjectType):
             return format_percentage_change(self._soundcloud_play_count_delta_percentage)
 
         try:
-            soundcloud_service = Service.objects.get(name=ServiceName.SOUNDCLOUD)
+            soundcloud_service = get_service(ServiceName.SOUNDCLOUD)
             latest = (
                 AggregatePlayCount.objects.filter(isrc=self.isrc, service=soundcloud_service)
                 .order_by("-recorded_date")
@@ -324,7 +325,7 @@ class TrackType(DjangoObjectType):
             return format_percentage_change(self._youtube_play_count_delta_percentage)
 
         try:
-            youtube_service = Service.objects.get(name=ServiceName.YOUTUBE)
+            youtube_service = get_service(ServiceName.YOUTUBE)
             latest = (
                 AggregatePlayCount.objects.filter(isrc=self.isrc, service=youtube_service)
                 .order_by("-recorded_date")
@@ -340,7 +341,7 @@ class TrackType(DjangoObjectType):
             return format_percentage_change(self._spotify_play_count_delta_percentage)
 
         try:
-            spotify_service = Service.objects.get(name=ServiceName.SPOTIFY)
+            spotify_service = get_service(ServiceName.SPOTIFY)
             latest = (
                 AggregatePlayCount.objects.filter(isrc=self.isrc, service=spotify_service)
                 .order_by("-recorded_date")
@@ -354,7 +355,7 @@ class TrackType(DjangoObjectType):
     def resolve_total_current_play_count(self, info):
         """Get combined YouTube, Spotify, and SoundCloud play counts from aggregate data."""
         try:
-            total_service = Service.objects.get(name=ServiceName.TOTAL)
+            total_service = get_service(ServiceName.TOTAL)
             latest = (
                 AggregatePlayCount.objects.filter(isrc=self.isrc, service=total_service)
                 .order_by("-recorded_date")
@@ -371,7 +372,7 @@ class TrackType(DjangoObjectType):
     def resolve_total_current_play_count_abbreviated(self, info):
         """Get formatted combined play count string."""
         try:
-            total_service = Service.objects.get(name=ServiceName.TOTAL)
+            total_service = get_service(ServiceName.TOTAL)
             latest = (
                 AggregatePlayCount.objects.filter(isrc=self.isrc, service=total_service)
                 .order_by("-recorded_date")
@@ -389,7 +390,7 @@ class TrackType(DjangoObjectType):
     def resolve_total_weekly_change_percentage(self, info):
         """Get total weekly change percentage from aggregate data."""
         try:
-            total_service = Service.objects.get(name=ServiceName.TOTAL)
+            total_service = get_service(ServiceName.TOTAL)
             latest = (
                 AggregatePlayCount.objects.filter(isrc=self.isrc, service=total_service)
                 .order_by("-recorded_date")
@@ -402,7 +403,7 @@ class TrackType(DjangoObjectType):
     def resolve_total_weekly_change_percentage_formatted(self, info):
         """Get formatted weekly change percentage string."""
         try:
-            total_service = Service.objects.get(name=ServiceName.TOTAL)
+            total_service = get_service(ServiceName.TOTAL)
             latest = (
                 AggregatePlayCount.objects.filter(isrc=self.isrc, service=total_service)
                 .order_by("-recorded_date")

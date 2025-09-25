@@ -34,6 +34,7 @@ class Genre(models.Model):
         help_text="Internal genre identifier (lowercase, underscores only)",
     )
     display_name = models.CharField(max_length=100, help_text="Human-readable genre name")
+    icon_class = models.CharField(max_length=50, help_text="CSS class for genre icon")
     icon_url = models.CharField(max_length=200)
     etl_run_id = models.UUIDField(default=uuid.uuid4, help_text="ETL run identifier for blue-green deployments")
 

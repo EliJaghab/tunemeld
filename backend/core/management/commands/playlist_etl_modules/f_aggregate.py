@@ -2,8 +2,9 @@ import uuid
 from collections import defaultdict
 from typing import Any
 
+from core.api.genre_service_api import get_genre_by_id, get_or_create_service
 from core.constants import GENRE_CONFIGS, SERVICE_CONFIGS, ServiceName
-from core.models import Genre, Service, ServiceTrack
+from core.models import Genre, ServiceTrack
 from core.models import PlaylistModel as Playlist
 from core.models.playlist import RawPlaylistData
 from core.utils.utils import get_logger
@@ -95,10 +96,13 @@ class Command(BaseCommand):
     def create_aggregate_playlists(self, cross_service_matches: dict[int, list[dict]], etl_run_id: uuid.UUID) -> None:
         """Create aggregate playlist entries for cross-service tracks."""
 
-        aggregate_service, _ = Service.objects.get_or_create(name=ServiceName.TUNEMELD)
+        aggregate_service, _ = get_or_create_service(ServiceName.TUNEMELD)
 
         for genre_id, matches in cross_service_matches.items():
-            genre = Genre.objects.filter(id=genre_id).order_by("-id").first()
+            genre = get_genre_by_id(genre_id)
+            if not genre:
+                logger.warning(f"Genre with id {genre_id} not found, skipping")
+                continue
 
             sorted_matches = sorted(matches, key=lambda x: x["aggregate_rank"])
 
@@ -123,7 +127,7 @@ class Command(BaseCommand):
     def create_tunemeld_raw_playlist_data(self, etl_run_id: uuid.UUID) -> None:
         """Create TuneMeld RawPlaylistData entries with complete descriptions including timestamps."""
 
-        aggregate_service, _ = Service.objects.get_or_create(name=ServiceName.TUNEMELD)
+        aggregate_service, _ = get_or_create_service(ServiceName.TUNEMELD)
         tunemeld_config = SERVICE_CONFIGS[ServiceName.TUNEMELD.value]
 
         genres_with_playlists = Genre.objects.filter(playlist__service=aggregate_service).distinct()

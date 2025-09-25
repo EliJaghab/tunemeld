@@ -1,8 +1,8 @@
 import graphene
+from core.api.genre_service_api import get_genre, get_service
 from core.constants import ServiceName
 from core.graphql.track import TrackType
-from core.models import Genre, Track
-from core.models.genre_service import Service
+from core.models import Track
 from core.models.play_counts import AggregatePlayCount
 from core.models.playlist import Playlist, Rank, RawPlaylistData
 from core.utils.local_cache import CachePrefix, local_cache_get, local_cache_set
@@ -54,12 +54,9 @@ class PlaylistQuery(graphene.ObjectType):
 
         track_isrcs = [track.isrc for track in tracks]
 
-        try:
-            youtube_service = Service.objects.filter(name=ServiceName.YOUTUBE).order_by("-id").first()
-            spotify_service = Service.objects.filter(name=ServiceName.SPOTIFY).order_by("-id").first()
-            soundcloud_service = Service.objects.filter(name=ServiceName.SOUNDCLOUD).order_by("-id").first()
-        except Service.DoesNotExist:
-            return tracks
+        youtube_service = get_service(ServiceName.YOUTUBE)
+        spotify_service = get_service(ServiceName.SPOTIFY)
+        soundcloud_service = get_service(ServiceName.SOUNDCLOUD)
 
         if not all([youtube_service, spotify_service, soundcloud_service]):
             return tracks
@@ -189,11 +186,7 @@ class PlaylistQuery(graphene.ObjectType):
 
     def resolve_playlists_by_genre(self, info, genre):
         """Get playlist metadata for all services for a given genre."""
-        try:
-            genre_obj = Genre.objects.filter(name=genre).order_by("-id").first()
-        except Genre.DoesNotExist:
-            return []
-
+        genre_obj = get_genre(genre)
         if not genre_obj:
             return []
 

@@ -215,6 +215,7 @@ class Rank(models.Model):
         default="rank",
         help_text="Exact field name in track data (e.g., 'rank', 'spotifyCurrentViewCount')",
     )
+    icon_class = models.CharField(max_length=50, help_text="CSS class for rank icon")
     etl_run_id = models.UUIDField(default=uuid.uuid4, help_text="ETL run identifier for blue-green deployments")
 
     class Meta:

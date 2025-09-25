@@ -3,9 +3,10 @@ import time
 from collections import Counter
 from collections.abc import Callable
 from concurrent.futures import ThreadPoolExecutor
+from typing import TYPE_CHECKING
 
+from core.api.genre_service_api import get_service
 from core.constants import ServiceName
-from core.models.genre_service import Service
 from core.models.play_counts import HistoricalTrackPlayCount
 from core.models.playlist import Playlist
 from core.models.track import Track
@@ -16,6 +17,9 @@ from core.utils.utils import get_logger
 from django.core.management.base import BaseCommand
 from django.db import models
 from django.utils import timezone
+
+if TYPE_CHECKING:
+    from core.models.genre_service import Service
 
 logger = get_logger(__name__)
 
@@ -56,9 +60,9 @@ class Command(BaseCommand):
         logger.info(f"Processing {len(tracks_list)} tracks with valid URLs using 3 workers...")
 
         services = {
-            ServiceName.SPOTIFY: Service.objects.filter(name=ServiceName.SPOTIFY).order_by("-id").first(),
-            ServiceName.YOUTUBE: Service.objects.filter(name=ServiceName.YOUTUBE).order_by("-id").first(),
-            ServiceName.SOUNDCLOUD: Service.objects.filter(name=ServiceName.SOUNDCLOUD).order_by("-id").first(),
+            ServiceName.SPOTIFY: get_service(ServiceName.SPOTIFY),
+            ServiceName.YOUTUBE: get_service(ServiceName.YOUTUBE),
+            ServiceName.SOUNDCLOUD: get_service(ServiceName.SOUNDCLOUD),
         }
 
         success_count = Counter()
