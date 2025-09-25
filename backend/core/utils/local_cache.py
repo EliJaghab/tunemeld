@@ -107,7 +107,7 @@ def local_cache_set(prefix: CachePrefix, key_data: str, value: Any, ttl: int | N
 
 
 def local_cache_clear(prefix: CachePrefix) -> int:
-    """Clear local memory cache."""
+    """Clear local memory cache for specific prefix."""
     try:
         local_cache = caches["local"]
         local_cache.clear()
