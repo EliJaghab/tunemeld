@@ -78,8 +78,14 @@ class PlaylistQuery(graphene.ObjectType):
         return tracks
 
     def resolve_service_order(self, info):
-        """Used to order the header art."""
-        return Service.objects.values_list("name", flat=True).order_by("id")
+        """Used to order the header art and individual playlist columns."""
+        return (
+            Service.objects.filter(
+                name__in=[ServiceName.APPLE_MUSIC.value, ServiceName.SOUNDCLOUD.value, ServiceName.SPOTIFY.value]
+            )
+            .values_list("name", flat=True)
+            .order_by("id")
+        )
 
     def resolve_playlist(self, info, genre, service):
         """Get playlist data for any service (including Aggregate) and genre."""
