@@ -4,7 +4,7 @@ from core.constants import ServiceName
 from core.graphql.track import TrackType
 from core.models import Track
 from core.models.play_counts import AggregatePlayCount
-from core.models.playlist import Playlist, Rank, RawPlaylistData
+from core.models.playlist import Playlist, Rank
 from core.utils.local_cache import CachePrefix, local_cache_get, local_cache_set
 
 
@@ -186,16 +186,17 @@ class PlaylistQuery(graphene.ObjectType):
 
     def resolve_playlists_by_genre(self, info, genre):
         """Get playlist metadata for all services for a given genre."""
+        from core.api.genre_service_api import get_raw_playlist_data_by_genre_service
+
         genre_obj = get_genre(genre)
         if not genre_obj:
             return []
 
-        raw_playlists = (
-            RawPlaylistData.objects.filter(genre=genre_obj)
-            .select_related("service", "genre")
-            .order_by("service_id", "-created_at")
-            .distinct("service_id")
-        )
+        raw_playlists = []
+        for service_name in ["apple_music", "soundcloud", "spotify", "tunemeld"]:
+            raw_playlist = get_raw_playlist_data_by_genre_service(genre, service_name)
+            if raw_playlist:
+                raw_playlists.append(raw_playlist)
 
         playlist_metadata = []
         for raw_playlist in raw_playlists:

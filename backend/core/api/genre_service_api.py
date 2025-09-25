@@ -1,6 +1,6 @@
 from core.constants import ServiceName
 from core.models import Genre, Service
-from core.models.playlist import Rank
+from core.models.playlist import Rank, RawPlaylistData
 from core.utils.utils import get_logger
 
 logger = get_logger(__name__)
@@ -56,3 +56,14 @@ def get_or_create_genre(name: str) -> tuple[Genre, bool]:
 
     genre = Genre.objects.create(name=name)
     return genre, True
+
+
+def get_raw_playlist_data_by_genre_service(genre_name: str, service_name: str) -> RawPlaylistData | None:
+    """Get the most recent RawPlaylistData by genre and service, handling duplicates."""
+    genre_obj = get_genre(genre_name)
+    service_obj = get_service(service_name)
+
+    if not genre_obj or not service_obj:
+        return None
+
+    return RawPlaylistData.objects.filter(genre=genre_obj, service=service_obj).order_by("-id").first()
