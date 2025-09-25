@@ -190,8 +190,11 @@ class PlaylistQuery(graphene.ObjectType):
     def resolve_playlists_by_genre(self, info, genre):
         """Get playlist metadata for all services for a given genre."""
         try:
-            genre_obj = Genre.objects.get(name=genre)
+            genre_obj = Genre.objects.filter(name=genre).order_by("-id").first()
         except Genre.DoesNotExist:
+            return []
+
+        if not genre_obj:
             return []
 
         raw_playlists = (

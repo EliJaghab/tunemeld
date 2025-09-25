@@ -98,7 +98,7 @@ class Command(BaseCommand):
         aggregate_service, _ = Service.objects.get_or_create(name=ServiceName.TUNEMELD)
 
         for genre_id, matches in cross_service_matches.items():
-            genre = Genre.objects.get(id=genre_id)
+            genre = Genre.objects.filter(id=genre_id).order_by("-id").first()
 
             sorted_matches = sorted(matches, key=lambda x: x["aggregate_rank"])
 
