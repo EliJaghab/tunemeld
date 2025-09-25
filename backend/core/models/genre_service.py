@@ -5,6 +5,7 @@ These are the foundation tables that must be initialized before
 any other ETL operations can begin.
 """
 
+import uuid
 from typing import ClassVar
 
 from django.core.validators import RegexValidator
@@ -29,15 +30,20 @@ class Genre(models.Model):
     id = models.BigAutoField(primary_key=True)
     name = models.CharField(
         max_length=50,
-        unique=True,
         validators=[RegexValidator(r"^[a-z_]+$", "Genre names must be lowercase with underscores")],
         help_text="Internal genre identifier (lowercase, underscores only)",
     )
     display_name = models.CharField(max_length=100, help_text="Human-readable genre name")
     icon_url = models.CharField(max_length=200)
+    etl_run_id = models.UUIDField(default=uuid.uuid4, help_text="ETL run identifier for blue-green deployments")
 
     class Meta:
         db_table = "genres"
+        unique_together: ClassVar = [("name", "etl_run_id")]
+        indexes: ClassVar = [
+            models.Index(fields=["name"]),
+            models.Index(fields=["etl_run_id"]),
+        ]
         ordering: ClassVar = ["name"]
 
     def __str__(self) -> str:
@@ -62,15 +68,20 @@ class Service(models.Model):
     id = models.BigAutoField(primary_key=True)
     name = models.CharField(
         max_length=100,
-        unique=True,
         validators=[RegexValidator(r"^[A-Za-z][A-Za-z0-9_]*$", "Service names must be alphanumeric")],
         help_text="Internal service identifier",
     )
     display_name = models.CharField(max_length=100, help_text="Human-readable service name")
     icon_url = models.CharField(max_length=200, help_text="URL to service icon image", default="")
+    etl_run_id = models.UUIDField(default=uuid.uuid4, help_text="ETL run identifier for blue-green deployments")
 
     class Meta:
         db_table = "services"
+        unique_together: ClassVar = [("name", "etl_run_id")]
+        indexes: ClassVar = [
+            models.Index(fields=["name"]),
+            models.Index(fields=["etl_run_id"]),
+        ]
         ordering: ClassVar = ["name"]
 
     def __str__(self) -> str:

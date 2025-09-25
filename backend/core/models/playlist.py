@@ -206,7 +206,7 @@ class Rank(models.Model):
     Backend-driven configuration for frontend sort buttons.
     """
 
-    name = models.CharField(max_length=50, unique=True)
+    name = models.CharField(max_length=50)
     display_name = models.CharField(max_length=100)
     sort_field = models.CharField(max_length=50)
     sort_order = models.CharField(max_length=4, choices=[("asc", "Ascending"), ("desc", "Descending")], default="asc")
@@ -215,9 +215,15 @@ class Rank(models.Model):
         default="rank",
         help_text="Exact field name in track data (e.g., 'rank', 'spotifyCurrentViewCount')",
     )
+    etl_run_id = models.UUIDField(default=uuid.uuid4, help_text="ETL run identifier for blue-green deployments")
 
     class Meta:
         db_table = "ranks"
+        unique_together: ClassVar = [("name", "etl_run_id")]
+        indexes: ClassVar = [
+            models.Index(fields=["name"]),
+            models.Index(fields=["etl_run_id"]),
+        ]
         ordering: ClassVar = ["id"]
 
     def __str__(self):

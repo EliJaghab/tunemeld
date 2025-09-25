@@ -3,11 +3,13 @@ import uuid
 from typing import Any
 
 from core.management.commands.clear_and_warm_cache import Command as ClearAndWarmCacheCommand
-from core.management.commands.play_count_modules.a0_genre_service import Command as GenreServiceCommand
+from core.management.commands.genre_service import Command as GenreServiceCommand
 from core.management.commands.play_count_modules.a_historical_play_count import Command as HistoricalPlayCountCommand
 from core.management.commands.play_count_modules.b_aggregate_play_count import Command as AggregatePlayCountCommand
 from core.management.commands.play_count_modules.c_clear_play_count_cache import Command as ClearPlayCountCacheCommand
+from core.models.genre_service import Genre, Service
 from core.models.play_counts import HistoricalTrackPlayCount
+from core.models.playlist import Rank
 from core.utils.utils import get_logger
 from django.core.management.base import BaseCommand
 from django.db import models
@@ -48,6 +50,9 @@ class Command(BaseCommand):
             logger.info("Step 5: Clearing and warming GraphQL cache...")
             ClearAndWarmCacheCommand().handle()
 
+            logger.info("Step 6: Removing previous ETL run data...")
+            self.remove_previous_etl_run(etl_run_id)
+
             duration = time.time() - start_time
             logger.info(f"Play Count ETL Pipeline completed in {duration:.1f} seconds")
 
@@ -58,6 +63,13 @@ class Command(BaseCommand):
             duration = time.time() - start_time
             logger.info(f"Pipeline failed after {duration:.1f} seconds")
             raise
+
+    def remove_previous_etl_run(self, current_etl_run_id: uuid.UUID) -> None:
+        """Blue Green deployment of data - only wipe genre/service/rank data after full pipeline has run."""
+        logger.info(f"Removing previous ETL run genre/service/rank data, keeping run ID: {current_etl_run_id}")
+        Genre.objects.exclude(etl_run_id=current_etl_run_id).delete()
+        Service.objects.exclude(etl_run_id=current_etl_run_id).delete()
+        Rank.objects.exclude(etl_run_id=current_etl_run_id).delete()
 
     def _print_final_summary(self):
         today = timezone.now().date()

@@ -3,7 +3,7 @@ import uuid
 from typing import Any
 
 from core.management.commands.clear_and_warm_cache import Command as ClearAndWarmCacheCommand
-from core.management.commands.playlist_etl_modules.a_genre_service import Command as GenreServiceCommand
+from core.management.commands.genre_service import Command as GenreServiceCommand
 from core.management.commands.playlist_etl_modules.b_clear_raw_playlist_cache import Command as ClearCacheCommand
 from core.management.commands.playlist_etl_modules.c_raw_playlist import Command as RawPlaylistCommand
 from core.management.commands.playlist_etl_modules.d_playlist_service_track import Command as ServiceTrackCommand
@@ -11,6 +11,8 @@ from core.management.commands.playlist_etl_modules.e_track import Command as Tra
 from core.management.commands.playlist_etl_modules.f_aggregate import Command as AggregateCommand
 from core.models import PlaylistModel as Playlist
 from core.models import RawPlaylistData, ServiceTrack, Track
+from core.models.genre_service import Genre, Service
+from core.models.playlist import Rank
 from core.utils.utils import get_logger
 from django.core.management.base import BaseCommand, CommandError
 
@@ -28,7 +30,7 @@ class Command(BaseCommand):
             logger.info(f"Starting ETL pipeline with run ID: {etl_run_id}")
 
             logger.info("Step 1: Setting up genres and services...")
-            GenreServiceCommand().handle()
+            GenreServiceCommand().handle(etl_run_id=etl_run_id)
 
             logger.info("Step 2: Clearing raw playlist cache if within scheduled window...")
             ClearCacheCommand().handle()
@@ -65,3 +67,6 @@ class Command(BaseCommand):
         ServiceTrack.objects.exclude(etl_run_id=current_etl_run_id).delete()
         Playlist.objects.exclude(etl_run_id=current_etl_run_id).delete()
         Track.objects.exclude(etl_run_id=current_etl_run_id).delete()
+        Genre.objects.exclude(etl_run_id=current_etl_run_id).delete()
+        Service.objects.exclude(etl_run_id=current_etl_run_id).delete()
+        Rank.objects.exclude(etl_run_id=current_etl_run_id).delete()
