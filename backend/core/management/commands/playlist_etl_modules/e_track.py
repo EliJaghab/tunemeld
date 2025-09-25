@@ -93,6 +93,10 @@ class Command(BaseCommand):
             "artist_name": primary_track.artist_name,
             "album_name": primary_track.album_name,
             "album_cover_url": primary_track.album_cover_url,
+            "spotify_url": None,
+            "apple_music_url": None,
+            "soundcloud_url": None,
+            "youtube_url": None,
             "etl_run_id": etl_run_id,
         }
 
