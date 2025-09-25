@@ -4,6 +4,7 @@ from collections import Counter
 from core.constants import ServiceName
 from core.models import ServiceTrack, Track
 from core.services.apple_music_service import get_apple_music_album_cover_url
+from core.services.soundcloud_service import get_soundcloud_url
 from core.services.youtube_service import YouTubeUrlResult, get_youtube_url
 from core.utils.utils import get_logger
 from django.core.management.base import BaseCommand, CommandError
@@ -115,6 +116,11 @@ class Command(BaseCommand):
         youtube_url, youtube_result = get_youtube_url(primary_track.track_name, primary_track.artist_name)
         if youtube_url and youtube_url != "https://youtube.com":
             track_data["youtube_url"] = youtube_url
+
+        if not track_data["soundcloud_url"]:
+            soundcloud_url, _soundcloud_result = get_soundcloud_url(primary_track.track_name, primary_track.artist_name)
+            if soundcloud_url:
+                track_data["soundcloud_url"] = soundcloud_url
 
         track = Track.objects.create(**track_data)
         service_tracks.update(track=track)

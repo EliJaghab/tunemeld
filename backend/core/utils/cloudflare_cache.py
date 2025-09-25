@@ -33,6 +33,7 @@ CLOUDFLARE_CACHE_TTL_MAP = {
     "youtube_view_count": TWENTY_FOUR_HOURS_TTL,
     "spotify_isrc": NO_EXPIRATION_TTL,
     "apple_cover": SEVEN_DAYS_TTL,
+    "soundcloud_url": NO_EXPIRATION_TTL,
 }
 
 
@@ -43,6 +44,7 @@ class CachePrefix(str, Enum):
     YOUTUBE_VIEW_COUNT = "youtube_view_count"
     SPOTIFY_ISRC = "spotify_isrc"
     APPLE_COVER = "apple_cover"
+    SOUNDCLOUD_URL = "soundcloud_url"
 
 
 def _load_centralized_schedule_config() -> dict:
