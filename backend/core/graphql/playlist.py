@@ -55,10 +55,13 @@ class PlaylistQuery(graphene.ObjectType):
         track_isrcs = [track.isrc for track in tracks]
 
         try:
-            youtube_service = Service.objects.get(name=ServiceName.YOUTUBE)
-            spotify_service = Service.objects.get(name=ServiceName.SPOTIFY)
-            soundcloud_service = Service.objects.get(name=ServiceName.SOUNDCLOUD)
+            youtube_service = Service.objects.filter(name=ServiceName.YOUTUBE).order_by("-id").first()
+            spotify_service = Service.objects.filter(name=ServiceName.SPOTIFY).order_by("-id").first()
+            soundcloud_service = Service.objects.filter(name=ServiceName.SOUNDCLOUD).order_by("-id").first()
         except Service.DoesNotExist:
+            return tracks
+
+        if not all([youtube_service, spotify_service, soundcloud_service]):
             return tracks
 
         youtube_counts = {

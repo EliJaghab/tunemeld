@@ -22,10 +22,10 @@ class Command(BaseCommand):
 
         try:
             # Get services
-            youtube_service = Service.objects.get(name=ServiceName.YOUTUBE)
-            spotify_service = Service.objects.get(name=ServiceName.SPOTIFY)
-            soundcloud_service = Service.objects.get(name=ServiceName.SOUNDCLOUD)
-            all_service = Service.objects.get(name=ServiceName.TOTAL)
+            youtube_service = Service.objects.filter(name=ServiceName.YOUTUBE).order_by("-id").first()
+            spotify_service = Service.objects.filter(name=ServiceName.SPOTIFY).order_by("-id").first()
+            soundcloud_service = Service.objects.filter(name=ServiceName.SOUNDCLOUD).order_by("-id").first()
+            all_service = Service.objects.filter(name=ServiceName.TOTAL).order_by("-id").first()
         except Service.DoesNotExist as e:
             logger.error(f"Required service not found: {e}")
             return

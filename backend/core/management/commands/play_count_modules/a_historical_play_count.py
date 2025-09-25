@@ -56,9 +56,9 @@ class Command(BaseCommand):
         logger.info(f"Processing {len(tracks_list)} tracks with valid URLs using 3 workers...")
 
         services = {
-            ServiceName.SPOTIFY: Service.objects.get(name=ServiceName.SPOTIFY),
-            ServiceName.YOUTUBE: Service.objects.get(name=ServiceName.YOUTUBE),
-            ServiceName.SOUNDCLOUD: Service.objects.get(name=ServiceName.SOUNDCLOUD),
+            ServiceName.SPOTIFY: Service.objects.filter(name=ServiceName.SPOTIFY).order_by("-id").first(),
+            ServiceName.YOUTUBE: Service.objects.filter(name=ServiceName.YOUTUBE).order_by("-id").first(),
+            ServiceName.SOUNDCLOUD: Service.objects.filter(name=ServiceName.SOUNDCLOUD).order_by("-id").first(),
         }
 
         success_count = Counter()
