@@ -179,14 +179,6 @@ class GraphQLClient {
             spotifyUrl
             appleMusicUrl
             soundcloudUrl
-            youtubeCurrentPlayCount
-            spotifyCurrentPlayCount
-            totalCurrentPlayCount
-            youtubeCurrentPlayCountAbbreviated
-            spotifyCurrentPlayCountAbbreviated
-            totalCurrentPlayCountAbbreviated
-            totalWeeklyChangePercentage
-            totalWeeklyChangePercentageFormatted
             spotifySource {
               name
               displayName
@@ -233,6 +225,26 @@ class GraphQLClient {
     `;
 
     return await this.query(query);
+  }
+
+  async getPlayCountsForTracks(isrcs) {
+    const query = `
+      query GetPlayCounts($isrcs: [String!]!) {
+        tracksPlayCounts(isrcs: $isrcs) {
+          isrc
+          youtubeCurrentPlayCount
+          spotifyCurrentPlayCount
+          totalCurrentPlayCount
+          youtubeCurrentPlayCountAbbreviated
+          spotifyCurrentPlayCountAbbreviated
+          totalCurrentPlayCountAbbreviated
+          totalWeeklyChangePercentage
+          totalWeeklyChangePercentageFormatted
+        }
+      }
+    `;
+
+    return await this.query(query, { isrcs });
   }
 }
 

@@ -7,6 +7,7 @@ import {
   addToggleEventListeners,
   fetchAndDisplayPlaylists,
   fetchAndDisplayPlaylistsWithOrder,
+  populatePlayCountMap,
   renderPlaylistTracks,
   resetCollapseStates,
   setPlaylistData,
@@ -61,9 +62,14 @@ export async function updateGenreData(genre, updateAll = false) {
         null,
       );
 
-      // Render main playlist
       const mainPlaylistData = [allData.mainPlaylist.playlist];
       setPlaylistData(mainPlaylistData);
+
+      const isrcs = mainPlaylistData.flatMap((playlist) =>
+        playlist.tracks.map((track) => track.isrc),
+      );
+      await populatePlayCountMap(isrcs);
+
       renderPlaylistTracks(
         mainPlaylistData,
         "main-playlist-data-placeholder",

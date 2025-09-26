@@ -2,7 +2,34 @@ import { DJANGO_API_BASE_URL } from "@/config/config.js";
 import { stateManager } from "@/state/StateManager.js";
 import { appRouter } from "@/routing/router.js";
 import { graphqlClient } from "@/services/graphql-client.js";
-import { SERVICE_NAMES, TUNEMELD_RANK_FIELD } from "@/config/constants.js";
+import {
+  SERVICE_NAMES,
+  TUNEMELD_RANK_FIELD,
+  PLAYLIST_PLACEHOLDERS,
+} from "@/config/constants.js";
+
+let playCountLookupMap = {};
+
+function getPlayCountForTrack(isrc) {
+  return playCountLookupMap[isrc] || {};
+}
+
+export async function populatePlayCountMap(isrcs) {
+  if (!isrcs || isrcs.length === 0) return;
+
+  try {
+    const response = await graphqlClient.getPlayCountsForTracks(isrcs);
+    const playCountData = response.tracksPlayCounts || [];
+
+    playCountLookupMap = {};
+    playCountData.forEach((data) => {
+      playCountLookupMap[data.isrc] = data;
+    });
+  } catch (error) {
+    console.error("Error fetching play count data:", error);
+    playCountLookupMap = {};
+  }
+}
 
 export async function updateMainPlaylist(genre) {
   try {
@@ -13,9 +40,15 @@ export async function updateMainPlaylist(genre) {
     const data = [response.playlist];
     playlistData = data;
 
+    // Extract ISRCs from TuneMeld playlist tracks and populate play count map
+    const isrcs = data.flatMap((playlist) =>
+      playlist.tracks.map((track) => track.isrc),
+    );
+    await populatePlayCountMap(isrcs);
+
     renderPlaylistTracks(
       data,
-      "main-playlist-data-placeholder",
+      PLAYLIST_PLACEHOLDERS.MAIN,
       SERVICE_NAMES.TUNEMELD,
     );
 
@@ -44,7 +77,12 @@ export async function fetchAndDisplayPlaylistsWithOrder(genre, serviceOrder) {
     try {
       const response = await graphqlClient.getPlaylistTracks(genre, service);
       const data = [response.playlist];
-      renderPlaylistTracks(data, `${service}-data-placeholder`, null, service);
+      renderPlaylistTracks(
+        data,
+        `${service}${PLAYLIST_PLACEHOLDERS.SERVICE_SUFFIX}`,
+        null,
+        service,
+      );
     } catch (error) {
       console.error(`Error fetching ${service} playlist:`, error);
     }
@@ -243,11 +281,12 @@ function displayPlayCounts(track, row) {
   const trendingCell = document.createElement("td");
   trendingCell.className = "trending";
 
-  const totalCurrentPlayCount = track.totalCurrentPlayCount;
+  const playCountData = getPlayCountForTrack(track.isrc);
+  const totalCurrentPlayCount = playCountData.totalCurrentPlayCount;
   const totalCurrentPlayCountAbbreviated =
-    track.totalCurrentPlayCountAbbreviated;
+    playCountData.totalCurrentPlayCountAbbreviated;
   const totalWeeklyChangePercentageFormatted =
-    track.totalWeeklyChangePercentageFormatted;
+    playCountData.totalWeeklyChangePercentageFormatted;
 
   if (totalCurrentPlayCount && totalCurrentPlayCountAbbreviated) {
     const element = createTotalPlayCountElement(
@@ -403,18 +442,21 @@ export function sortTable(column, order) {
 }
 
 function getPlayCount(track, platform) {
-  if (platform === "Youtube" || platform === "YouTube") {
-    return track.youtubeCurrentPlayCount;
-  } else if (platform === "Spotify" || platform === "spotify") {
-    return track.spotifyCurrentPlayCount;
+  // Get play count data from lookup map
+  const playCountData = getPlayCountForTrack(track.isrc);
+
+  if (platform === SERVICE_NAMES.YOUTUBE) {
+    return playCountData.youtubeCurrentPlayCount;
+  } else if (platform === SERVICE_NAMES.SPOTIFY) {
+    return playCountData.spotifyCurrentPlayCount;
   } else if (
     platform === "Total Plays" ||
-    platform === "total" ||
+    platform === SERVICE_NAMES.TOTAL ||
     platform === "total-plays"
   ) {
-    return track.totalCurrentPlayCount;
+    return playCountData.totalCurrentPlayCount;
   } else if (platform === "Trending" || platform === "trending") {
-    return track.totalWeeklyChangePercentage;
+    return playCountData.totalWeeklyChangePercentage;
   }
   return null;
 }

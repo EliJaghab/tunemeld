@@ -1,3 +1,5 @@
+import { SERVICE_NAMES } from "@/config/constants.js";
+
 export function setupBodyClickListener(genre) {
   const body = document.body;
   if (!body) {
@@ -52,7 +54,7 @@ function openPlayer(url, serviceType) {
   let showVolumeControl = false;
 
   switch (serviceType) {
-    case "soundcloud":
+    case SERVICE_NAMES.SOUNDCLOUD:
       iframe.src = `https://w.soundcloud.com/player/?url=${encodeURIComponent(
         url,
       )}&auto_play=true`;
@@ -60,19 +62,19 @@ function openPlayer(url, serviceType) {
       iframe.height = "166";
       showVolumeControl = true;
       break;
-    case "spotify":
+    case SERVICE_NAMES.SPOTIFY:
       const spotifyId = getSpotifyTrackId(url);
       iframe.src = `https://open.spotify.com/embed/${spotifyId}`;
       iframe.allow = "encrypted-media";
       iframe.height = "80";
       break;
-    case "apple_music":
+    case SERVICE_NAMES.APPLE_MUSIC:
       const appleMusicId = getAppleMusicId(url);
       iframe.src = `https://embed.music.apple.com/us/album/${appleMusicId}`;
       iframe.allow = "autoplay *; encrypted-media *;";
       iframe.height = "175";
       break;
-    case "youtube":
+    case SERVICE_NAMES.YOUTUBE:
       iframe.src = `https://www.youtube.com/embed/${getYouTubeVideoId(
         url,
       )}?autoplay=1`;
@@ -120,10 +122,10 @@ function closePlayer() {
 }
 
 function getServiceType(url) {
-  if (isSoundCloudLink(url)) return "soundcloud";
-  if (isSpotifyLink(url)) return "spotify";
-  if (isAppleMusicLink(url)) return "apple_music";
-  if (isYouTubeLink(url)) return "youtube";
+  if (isSoundCloudLink(url)) return SERVICE_NAMES.SOUNDCLOUD;
+  if (isSpotifyLink(url)) return SERVICE_NAMES.SPOTIFY;
+  if (isAppleMusicLink(url)) return SERVICE_NAMES.APPLE_MUSIC;
+  if (isYouTubeLink(url)) return SERVICE_NAMES.YOUTUBE;
   return "none";
 }
 

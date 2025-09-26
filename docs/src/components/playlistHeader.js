@@ -3,8 +3,8 @@
  * Handles all header-related functionality including service art, descriptions, and modals
  */
 
-import { graphqlClient } from "@/services/graphql-client.js";
 import { SERVICE_NAMES } from "@/config/constants.js";
+import { graphqlClient } from "@/services/graphql-client.js";
 import { stateManager } from "@/state/StateManager.js";
 
 function isMobileView() {
@@ -258,14 +258,7 @@ function updateServiceHeaderArt(
   serviceIconUrl,
   displayCallback,
 ) {
-  // Map service names to HTML element ID prefixes
-  const serviceIdMapping = {
-    apple_music: "apple_music",
-    soundcloud: "soundcloud",
-    spotify: "spotify",
-  };
-
-  const elementPrefix = serviceIdMapping[service] || service.toLowerCase();
+  const elementPrefix = service || service.toLowerCase();
 
   const imagePlaceholder = document.getElementById(
     `${elementPrefix}-image-placeholder`,
@@ -277,7 +270,7 @@ function updateServiceHeaderArt(
     `${elementPrefix}-cover-link`,
   );
 
-  if (coverUrl.endsWith(".m3u8") && service === "apple_music") {
+  if (coverUrl.endsWith(".m3u8") && service === SERVICE_NAMES.APPLE_MUSIC) {
     displayAppleMusicVideo(coverUrl);
   } else if (imagePlaceholder) {
     imagePlaceholder.style.backgroundImage = `url('${coverUrl}')`;
