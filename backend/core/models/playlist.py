@@ -5,7 +5,6 @@ This model stores unprocessed playlist data as received from external APIs.
 The data is then normalized in Phase 3 and hydrated in Phase 4.
 """
 
-import uuid
 from enum import Enum
 from typing import TYPE_CHECKING, Any, ClassVar, TypedDict
 
@@ -46,7 +45,6 @@ class RawPlaylistData(models.Model):
 
     data = models.JSONField(help_text="Raw JSON data from service API")
     created_at = models.DateTimeField(auto_now_add=True)
-    etl_run_id = models.UUIDField(default=uuid.uuid4, help_text="ETL run identifier for blue-green deployments")
 
     class Meta:
         db_table = "raw_playlist_data"
@@ -54,9 +52,10 @@ class RawPlaylistData(models.Model):
             models.Index(fields=["genre", "service"]),
             models.Index(fields=["created_at"]),
             models.Index(fields=["playlist_url"]),
-            models.Index(fields=["etl_run_id"]),
         ]
-        unique_together: ClassVar = [("service", "genre", "etl_run_id")]
+        constraints: ClassVar = [
+            models.UniqueConstraint(fields=["service", "genre"], name="unique_raw_playlist_service_genre")
+        ]
         ordering: ClassVar = ["-created_at"]
 
     def __str__(self) -> str:
@@ -97,17 +96,16 @@ class Playlist(models.Model):
         related_name="playlists",
     )
 
-    etl_run_id = models.UUIDField(default=uuid.uuid4, help_text="ETL run identifier for blue-green deployments")
-
     class Meta:
         db_table = "playlists"
         ordering: ClassVar = ["service", "genre", "position"]
         indexes: ClassVar = [
             models.Index(fields=["service", "genre"]),
             models.Index(fields=["isrc"]),
-            models.Index(fields=["etl_run_id"]),
         ]
-        unique_together: ClassVar = [("service", "genre", "position", "etl_run_id")]
+        constraints: ClassVar = [
+            models.UniqueConstraint(fields=["service", "genre", "position"], name="unique_playlist_position")
+        ]
 
     def __str__(self) -> str:
         return f"Position {self.position}: {self.isrc} ({self.service.name} {self.genre.name})"
@@ -148,17 +146,17 @@ class ServiceTrack(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    etl_run_id = models.UUIDField(default=uuid.uuid4, help_text="ETL run identifier for blue-green deployments")
 
     class Meta:
         db_table = "service_tracks"
-        unique_together: ClassVar = [("service", "genre", "position", "etl_run_id")]
+        constraints: ClassVar = [
+            models.UniqueConstraint(fields=["service", "genre", "position"], name="unique_service_track_position")
+        ]
         indexes: ClassVar = [
             models.Index(fields=["service", "genre"]),
             models.Index(fields=["isrc"]),
             models.Index(fields=["track_name", "artist_name"]),
             models.Index(fields=["service", "isrc"]),
-            models.Index(fields=["etl_run_id"]),
         ]
 
     def __str__(self) -> str:
@@ -216,14 +214,12 @@ class Rank(models.Model):
         help_text="Exact field name in track data (e.g., 'rank', 'spotifyCurrentViewCount')",
     )
     icon_class = models.CharField(max_length=50, help_text="CSS class for rank icon")
-    etl_run_id = models.UUIDField(default=uuid.uuid4, help_text="ETL run identifier for blue-green deployments")
 
     class Meta:
         db_table = "ranks"
-        unique_together: ClassVar = [("name", "etl_run_id")]
+        constraints: ClassVar = [models.UniqueConstraint(fields=["name"], name="unique_rank_name")]
         indexes: ClassVar = [
             models.Index(fields=["name"]),
-            models.Index(fields=["etl_run_id"]),
         ]
         ordering: ClassVar = ["id"]
 

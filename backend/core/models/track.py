@@ -1,26 +1,16 @@
-import uuid
-from enum import Enum
 from typing import ClassVar
 
+from core.constants import ServiceName
 from django.core.validators import RegexValidator
 from django.db import models
 from pydantic import BaseModel, Field
 
 
-class ServiceName(str, Enum):
-    SPOTIFY = "spotify"
-    APPLE_MUSIC = "apple_music"
-    SOUNDCLOUD = "soundcloud"
-    YOUTUBE = "youtube"
-    TUNEMELD = "tunemeld"
-
-
 class Track(models.Model):
     """
-    Represents a unique music track identified by ISRC and ETL run.
+    Represents a unique music track identified by ISRC.
 
     Contains all track metadata including service-specific information.
-    Uses composite unique constraint on (isrc, etl_run_id) for blue-green deployments.
 
     Example:
         track = Track(
@@ -53,15 +43,13 @@ class Track(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    etl_run_id = models.UUIDField(default=uuid.uuid4, help_text="ETL run identifier for blue-green deployments")
 
     class Meta:
         db_table = "tracks"
-        unique_together: ClassVar = [("isrc", "etl_run_id")]
+        constraints: ClassVar = [models.UniqueConstraint(fields=["isrc"], name="unique_track_isrc")]
         indexes: ClassVar = [
             models.Index(fields=["track_name", "artist_name"]),
             models.Index(fields=["artist_name"]),
-            models.Index(fields=["etl_run_id"]),
             models.Index(fields=["isrc"]),
         ]
 
