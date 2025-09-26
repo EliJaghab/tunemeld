@@ -1,6 +1,7 @@
 import logging
 
 from core.api.playlist import get_playlist_isrcs
+from core.constants import ServiceName
 from core.graphql.schema import schema
 from core.utils.local_cache import CachePrefix, local_cache_clear
 from django.core.management.base import BaseCommand
@@ -20,7 +21,7 @@ class Command(BaseCommand):
 
     def _warm_play_count_cache(self):
         """Execute GraphQL queries to warm play count cache."""
-        playlist_isrcs = get_playlist_isrcs()
+        playlist_isrcs = get_playlist_isrcs(ServiceName.TUNEMELD)
 
         if playlist_isrcs:
             logger.info(f"Warming play count cache for {len(playlist_isrcs)} playlist ISRCs")

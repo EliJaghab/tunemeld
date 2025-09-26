@@ -8,7 +8,9 @@ from core.models import PlaylistModel as Playlist
 from core.models.playlist import RawPlaylistData
 from core.utils.utils import get_logger
 from django.core.management.base import BaseCommand
+from django.db import transaction
 from django.db.models import Count
+from django.utils import timezone
 
 logger = get_logger(__name__)
 
@@ -31,8 +33,6 @@ class Command(BaseCommand):
         self.create_tunemeld_raw_playlist_data()
 
     def find_cross_service_isrcs(self) -> dict[int, list[dict]]:
-        """Find ISRCs that appear in multiple playlists (cross-service matches)."""
-
         duplicate_isrcs = (
             ServiceTrack.objects.all()
             .values("isrc", "genre")
@@ -68,7 +68,6 @@ class Command(BaseCommand):
         return cross_service_matches
 
     def get_aggregate_rank(self, service_positions: dict[str, int]) -> float:
-        """Get aggregate rank prioritizing tracks on all three services first."""
         # Check if track appears on all three main services
         has_all_three_services = all(
             service.value in service_positions
@@ -91,38 +90,38 @@ class Command(BaseCommand):
         raise ValueError(f"No valid service found in positions: {service_positions}")
 
     def create_aggregate_playlists(self, cross_service_matches: dict[int, list[dict]]) -> None:
-        """Create aggregate playlist entries for cross-service tracks."""
-
         aggregate_service = get_service(ServiceName.TUNEMELD)
 
-        for genre_id, matches in cross_service_matches.items():
-            genre = get_genre_by_id(genre_id)
-            if not genre:
-                logger.warning(f"Genre with id {genre_id} not found, skipping")
-                continue
+        with transaction.atomic():
+            logger.info("Clearing existing TuneMeld aggregate playlists")
+            Playlist.objects.filter(service=aggregate_service).delete()
 
-            sorted_matches = sorted(matches, key=lambda x: x["aggregate_rank"])
+            for genre_id, matches in cross_service_matches.items():
+                genre = get_genre_by_id(genre_id)
+                if not genre:
+                    logger.warning(f"Genre with id {genre_id} not found, skipping")
+                    continue
 
-            playlist_count = 0
-            for position, match in enumerate(sorted_matches, 1):
-                reference_service_track = match["service_tracks"].first()
+                sorted_matches = sorted(matches, key=lambda x: x["aggregate_rank"])
 
-                Playlist.objects.update_or_create(
-                    service=aggregate_service,
-                    genre=genre,
-                    position=position,
-                    defaults={
-                        "isrc": match["isrc"],
-                        "service_track": reference_service_track,
-                    },
-                )
-                playlist_count += 1
+                playlist_count = 0
+                for position, match in enumerate(sorted_matches, 1):
+                    reference_service_track = match["service_tracks"].first()
 
-            logger.info(f"Created aggregate playlist for {genre.name}: {playlist_count} tracks")
+                    Playlist.objects.update_or_create(
+                        service=aggregate_service,
+                        genre=genre,
+                        position=position,
+                        defaults={
+                            "isrc": match["isrc"],
+                            "service_track": reference_service_track,
+                        },
+                    )
+                    playlist_count += 1
+
+                logger.info(f"Created aggregate playlist for {genre.name}: {playlist_count} tracks")
 
     def create_tunemeld_raw_playlist_data(self) -> None:
-        """Create TuneMeld RawPlaylistData entries with complete descriptions including timestamps."""
-
         aggregate_service = get_service(ServiceName.TUNEMELD)
         tunemeld_config = SERVICE_CONFIGS[ServiceName.TUNEMELD.value]
 
@@ -137,17 +136,10 @@ class Command(BaseCommand):
                 .first()
             )
 
-            if not (
-                playlist_entry
-                and playlist_entry.service_track
-                and playlist_entry.service_track.track
-                and playlist_entry.service_track.track.updated_at
-            ):
-                raise ValueError(
-                    f"Missing required playlist data or updated_at timestamp for TuneMeld {genre.name} playlist"
-                )
+            if not playlist_entry or not playlist_entry.service_track:
+                raise ValueError(f"Missing required playlist data for TuneMeld {genre.name} playlist")
 
-            last_updated = playlist_entry.service_track.track.updated_at
+            last_updated = timezone.now()
             formatted_date = last_updated.strftime("%b %d")
             description = (
                 f"{genre_display_name} tracks seen on more than one curated playlist, last updated on {formatted_date}"
