@@ -8,14 +8,12 @@ and other operations that need to work with actual playlist tracks.
 from core.models.playlist import Playlist
 
 
-def get_playlist_isrcs() -> list[str]:
-    """
-    Get all unique ISRCs from tracks that exist in TuneMeld playlists.
-
-    Returns:
-        List of unique ISRC codes for tracks currently in playlists
-    """
-    return list(Playlist.objects.filter(isrc__isnull=False).values_list("isrc", flat=True).distinct())
+def get_playlist_isrcs(service_name: str) -> list[str]:
+    return list(
+        Playlist.objects.filter(isrc__isnull=False, service__name=service_name)
+        .values_list("isrc", flat=True)
+        .distinct()
+    )
 
 
 def get_playlist_isrcs_by_service(service_name: str) -> list[str]:

@@ -5,7 +5,9 @@ import uuid
 from enum import Enum
 from typing import Any
 
+from core.settings import DEV
 from core.utils.utils import get_logger
+from django.conf import settings
 from django.core.cache import caches
 
 logger = get_logger(__name__)
@@ -70,7 +72,11 @@ def _deserialize_from_local_cache(data):
 
 
 def local_cache_get(prefix: CachePrefix, key_data: str) -> Any:
-    """Get data from local memory cache."""
+    """Get data from local memory cache. Returns None in dev environment to avoid stale data."""
+
+    if settings.ENVIRONMENT == DEV:
+        return None
+
     start_time = time.time()
     cache_key = _generate_cache_key(prefix, key_data)
 
@@ -92,7 +98,10 @@ def local_cache_get(prefix: CachePrefix, key_data: str) -> Any:
 
 
 def local_cache_set(prefix: CachePrefix, key_data: str, value: Any, ttl: int | None = None) -> None:
-    """Set data in local memory cache."""
+    """Set data in local memory cache. Skips caching in dev environment."""
+    if settings.ENVIRONMENT == DEV:
+        return
+
     cache_key = _generate_cache_key(prefix, key_data)
 
     # Serialize complex objects for storage

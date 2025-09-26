@@ -1,3 +1,5 @@
+import builtins
+import contextlib
 import os
 import re
 import time
@@ -5,22 +7,26 @@ from functools import lru_cache
 from typing import TYPE_CHECKING
 
 import requests
-
-if TYPE_CHECKING:
-    from core.constants import GenreName
-import builtins
-import contextlib
-
 from bs4 import BeautifulSoup, Tag
-from core.models.playlist import PlaylistData, PlaylistMetadata
-from core.utils.cloudflare_cache import CachePrefix, cloudflare_cache_get, cloudflare_cache_set
-from core.utils.utils import clean_unicode_text, get_logger
-from core.utils.webdriver import get_cached_webdriver
 from selenium.webdriver.common.by import By
 from spotipy import Spotify
 from spotipy.exceptions import SpotifyException
 from spotipy.oauth2 import SpotifyClientCredentials
 from tenacity import retry, stop_after_attempt, wait_exponential
+
+if TYPE_CHECKING:
+    from core.constants import GenreName
+from core.constants import GENRE_CONFIGS, SERVICE_CONFIGS, ServiceName
+from core.models.playlist import PlaylistData, PlaylistMetadata
+from core.utils.cloudflare_cache import (
+    CachePrefix,
+    cloudflare_cache_get,
+    cloudflare_cache_set,
+    generate_spotify_cache_key_data,
+)
+from core.utils.spotdl_client import fetch_spotify_playlist_with_spotdl
+from core.utils.utils import clean_unicode_text, get_logger
+from core.utils.webdriver import get_cached_webdriver
 
 logger = get_logger(__name__)
 
@@ -216,7 +222,7 @@ def _extract_spotify_metadata_from_html(url: str, html_content: str) -> Playlist
         "playlist_url": url,
         "playlist_name": clean_unicode_text(_get_meta_content(doc, "og:title") or "Unknown"),
         "playlist_cover_url": _get_meta_content(doc, "og:image"),
-        "playlist_creator": "spotify",
+        "playlist_creator": ServiceName.SPOTIFY.value,
     }
 
     full_description_text = _extract_spotify_full_description(doc)
@@ -247,16 +253,12 @@ def _extract_spotify_metadata_from_html(url: str, html_content: str) -> Playlist
 
 def get_spotify_playlist(genre: "GenreName") -> PlaylistData:
     """Get Spotify playlist data and metadata for a given genre"""
-    from core.constants import GENRE_CONFIGS, SERVICE_CONFIGS, ServiceName
-    from core.utils.cloudflare_cache import generate_spotify_cache_key_data
-    from core.utils.spotdl_client import fetch_spotify_playlist_with_spotdl
-
     key_data = generate_spotify_cache_key_data(genre)
     cached_data = cloudflare_cache_get(CachePrefix.SPOTIFY_PLAYLIST, key_data)
     if cached_data:
         return cached_data
 
-    SERVICE_CONFIGS["spotify"]
+    SERVICE_CONFIGS[ServiceName.SPOTIFY.value]
     url = GENRE_CONFIGS[genre.value]["links"][ServiceName.SPOTIFY.value]
 
     tracks_data = fetch_spotify_playlist_with_spotdl(url)

@@ -1,15 +1,16 @@
+import time
 from typing import TYPE_CHECKING
 from urllib.parse import unquote
 
 import requests
+from bs4 import BeautifulSoup, Tag
 
 if TYPE_CHECKING:
     from core.constants import GenreName
-import time
-
-from bs4 import BeautifulSoup, Tag
+from core.constants import GENRE_CONFIGS, SERVICE_CONFIGS, ServiceName
 from core.models.playlist import PlaylistData, PlaylistMetadata
 from core.utils.cloudflare_cache import CachePrefix, cloudflare_cache_get, cloudflare_cache_set
+from core.utils.rapid_api_client import fetch_playlist_data
 from core.utils.utils import clean_unicode_text, get_logger
 
 logger = get_logger(__name__)
@@ -60,10 +61,7 @@ def _get_apple_music_cover_url_static(url: str, genre: "GenreName") -> str | Non
 
 def get_apple_music_playlist(genre: "GenreName") -> PlaylistData:
     """Get Apple Music playlist data and metadata for a given genre"""
-    from core.constants import GENRE_CONFIGS, SERVICE_CONFIGS, ServiceName
-    from core.utils.rapid_api_client import fetch_playlist_data
-
-    SERVICE_CONFIGS["apple_music"]
+    SERVICE_CONFIGS[ServiceName.APPLE_MUSIC.value]
     url = GENRE_CONFIGS[genre.value]["links"][ServiceName.APPLE_MUSIC.value]
 
     tracks_data = fetch_playlist_data(ServiceName.APPLE_MUSIC, genre)
@@ -95,7 +93,7 @@ def get_apple_music_playlist(genre: "GenreName") -> PlaylistData:
     time.sleep(APPLE_MUSIC_REQUEST_DELAY)
 
     metadata: PlaylistMetadata = {
-        "service_name": "apple_music",
+        "service_name": ServiceName.APPLE_MUSIC.value,
         "genre_name": genre,
         "playlist_name": subtitle,
         "playlist_url": url,

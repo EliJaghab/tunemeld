@@ -1,4 +1,6 @@
+import html
 import re
+import string
 from enum import Enum
 from typing import TYPE_CHECKING
 from urllib.parse import quote_plus, urlparse
@@ -6,11 +8,14 @@ from urllib.parse import quote_plus, urlparse
 import requests
 from bs4 import BeautifulSoup, Tag
 from tenacity import retry, stop_after_attempt, wait_exponential
+from unidecode import unidecode
 
 if TYPE_CHECKING:
     from core.constants import GenreName
+from core.constants import GENRE_CONFIGS, SERVICE_CONFIGS, ServiceName
 from core.models.playlist import PlaylistData, PlaylistMetadata
 from core.utils.cloudflare_cache import CachePrefix, cloudflare_cache_get, cloudflare_cache_set
+from core.utils.rapid_api_client import fetch_playlist_data
 from core.utils.utils import clean_unicode_text, get_logger
 
 logger = get_logger(__name__)
@@ -25,10 +30,7 @@ class SoundCloudUrlResult(Enum):
 
 def get_soundcloud_playlist(genre: "GenreName") -> PlaylistData:
     """Get SoundCloud playlist data and metadata for a given genre"""
-    from core.constants import GENRE_CONFIGS, SERVICE_CONFIGS, ServiceName
-    from core.utils.rapid_api_client import fetch_playlist_data
-
-    SERVICE_CONFIGS["soundcloud"]
+    SERVICE_CONFIGS[ServiceName.SOUNDCLOUD.value]
     url = GENRE_CONFIGS[genre.value]["links"][ServiceName.SOUNDCLOUD.value]
 
     tracks_data = fetch_playlist_data(ServiceName.SOUNDCLOUD, genre)
@@ -86,7 +88,7 @@ def get_soundcloud_playlist(genre: "GenreName") -> PlaylistData:
     )
 
     metadata: PlaylistMetadata = {
-        "service_name": "soundcloud",
+        "service_name": ServiceName.SOUNDCLOUD.value,
         "genre_name": genre.value,
         "playlist_name": playlist_name,
         "playlist_url": url,
@@ -196,11 +198,6 @@ def _verify_soundcloud_track_page(url: str, expected_track_name: str, expected_a
 
 def _normalize_text(text: str) -> str:
     """Normalize text for better matching by removing special chars and extra spaces."""
-    import html
-    import string
-
-    from unidecode import unidecode
-
     # First fix common HTML encoding issues
     text = text.replace("Ã³", "o").replace("Ã¡", "a").replace("Ã©", "e").replace("Ã­", "i").replace("Ã±", "n")
 
