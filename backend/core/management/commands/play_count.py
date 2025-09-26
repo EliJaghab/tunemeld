@@ -2,11 +2,12 @@ import time
 import uuid
 from typing import Any
 
-from core.management.commands.clear_and_warm_cache import Command as ClearAndWarmCacheCommand
 from core.management.commands.genre_service import Command as GenreServiceCommand
 from core.management.commands.play_count_modules.a_historical_play_count import Command as HistoricalPlayCountCommand
 from core.management.commands.play_count_modules.b_aggregate_play_count import Command as AggregatePlayCountCommand
-from core.management.commands.play_count_modules.c_clear_play_count_cache import Command as ClearPlayCountCacheCommand
+from core.management.commands.play_count_modules.c_clear_and_warm_play_count_cache import (
+    Command as WarmPlayCountCacheCommand,
+)
 from core.models.genre_service import Genre, Service
 from core.models.play_counts import HistoricalTrackPlayCount
 from core.models.playlist import Rank
@@ -43,14 +44,10 @@ class Command(BaseCommand):
             aggregate_command = AggregatePlayCountCommand()
             aggregate_command.handle()
 
-            logger.info("Step 4: Clearing play count GraphQL cache...")
-            clear_cache_command = ClearPlayCountCacheCommand()
-            clear_cache_command.handle()
+            logger.info("Step 4: Clearing and warming play count cache...")
+            WarmPlayCountCacheCommand().handle()
 
-            logger.info("Step 5: Clearing and warming GraphQL cache...")
-            ClearAndWarmCacheCommand().handle()
-
-            logger.info("Step 6: Removing previous ETL run data...")
+            logger.info("Step 5: Removing previous ETL run data...")
             self.remove_previous_etl_run(etl_run_id)
 
             duration = time.time() - start_time

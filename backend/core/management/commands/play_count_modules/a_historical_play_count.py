@@ -6,9 +6,9 @@ from concurrent.futures import ThreadPoolExecutor
 from typing import TYPE_CHECKING
 
 from core.api.genre_service_api import get_service
+from core.api.playlist import get_playlist_isrcs_by_service
 from core.constants import ServiceName
 from core.models.play_counts import HistoricalTrackPlayCount
-from core.models.playlist import Playlist
 from core.models.track import Track
 from core.services.soundcloud_service import get_soundcloud_track_view_count
 from core.services.spotify_service import get_spotify_track_view_count
@@ -34,9 +34,7 @@ class Command(BaseCommand):
         start_time = time.time()
         limit = options.get("limit")
 
-        tunemeld_isrcs = set(
-            Playlist.objects.filter(service__name=ServiceName.TUNEMELD).values_list("isrc", flat=True).distinct()
-        )
+        tunemeld_isrcs = get_playlist_isrcs_by_service(ServiceName.TUNEMELD.value)
 
         if not tunemeld_isrcs:
             logger.warning("No TuneMeld playlist tracks found. Ensure playlist aggregation has run.")

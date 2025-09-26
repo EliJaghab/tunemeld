@@ -16,12 +16,14 @@ NO_EXPIRATION_TTL = None
 LOCAL_CACHE_TTL_MAP = {
     "gql_playlist_metadata": SEVEN_DAYS_TTL,
     "gql_playlist": NO_EXPIRATION_TTL,
+    "gql_play_count": NO_EXPIRATION_TTL,
 }
 
 
 class CachePrefix(str, Enum):
     GQL_PLAYLIST_METADATA = "gql_playlist_metadata"
     GQL_PLAYLIST = "gql_playlist"
+    GQL_PLAY_COUNT = "gql_play_count"
 
 
 def _generate_cache_key(prefix: CachePrefix, key_data: str) -> str:
@@ -115,106 +117,4 @@ def local_cache_clear(prefix: CachePrefix) -> int:
         return 1
     except Exception as e:
         logger.warning(f"Failed to clear local cache: {e}")
-        return 0
-
-
-def _execute_cache_warming_queries():
-    """Execute GraphQL queries to warm the cache."""
-    # Import here to avoid circular imports
-    from core.constants import GenreName, ServiceName
-    from core.graphql.schema import schema
-
-    # Warm playlist metadata cache
-    for genre in GenreName:
-        schema.execute(f"""
-            query GetPlaylistMetadata {{
-                serviceOrder
-                playlistsByGenre(genre: "{genre.value}") {{
-                    playlistName
-                    playlistCoverUrl
-                    playlistCoverDescriptionText
-                    playlistUrl
-                    genreName
-                    serviceName
-                }}
-            }}
-        """)
-
-    # Warm playlist tracks cache
-    for genre in GenreName:
-        for service in [ServiceName.SPOTIFY, ServiceName.APPLE_MUSIC, ServiceName.SOUNDCLOUD, ServiceName.TUNEMELD]:
-            schema.execute(f"""
-                query GetPlaylistTracks {{
-                    playlist(genre: "{genre.value}", service: "{service.value}") {{
-                        genreName
-                        serviceName
-                        tracks {{
-                            rank(genre: "{genre.value}", service: "{service.value}")
-                            isrc
-                            trackName
-                            artistName
-                            albumName
-                            albumCoverUrl
-                            youtubeUrl
-                            spotifyUrl
-                            appleMusicUrl
-                            soundcloudUrl
-                            youtubeCurrentViewCount
-                            spotifyCurrentViewCount
-                            spotifySource {{
-                                name
-                                displayName
-                                url
-                                iconUrl
-                            }}
-                            appleMusicSource {{
-                                name
-                                displayName
-                                url
-                                iconUrl
-                            }}
-                            soundcloudSource {{
-                                name
-                                displayName
-                                url
-                                iconUrl
-                            }}
-                            youtubeSource {{
-                                name
-                                displayName
-                                url
-                                iconUrl
-                            }}
-                        }}
-                    }}
-                }}
-            """)
-
-
-def warm_local_cache_from_postgres() -> int:
-    """
-    Warm local cache by loading GraphQL data directly from Postgres on startup.
-
-    PURPOSE: Automatically called during Django app startup (apps.py) to pre-populate
-    the local cache with frequently accessed GraphQL data. This reduces response times
-    for the first requests after server restart.
-
-    USAGE:
-    - Automatic: Called on server startup via apps.py
-    - Manual: Available for debugging, but prefer management commands for manual use
-    """
-    start_time = time.time()
-
-    try:
-        logger.info("Warming local cache from Postgres...")
-        _execute_cache_warming_queries()
-
-        elapsed = time.time() - start_time
-        logger.info(f"Warmed local cache from Postgres in {elapsed:.3f}s")
-
-        return 1  # Success indicator
-
-    except Exception as e:
-        elapsed = time.time() - start_time
-        logger.warning(f"Failed to warm local cache from Postgres ({elapsed:.3f}s): {e}")
         return 0
