@@ -126,7 +126,4 @@ class TrackQuery(graphene.ObjectType):
     track_by_isrc = graphene.Field(TrackType, isrc=graphene.String(required=True))
 
     def resolve_track_by_isrc(self, info, isrc):
-        try:
-            return Track.objects.get(isrc=isrc)
-        except Track.DoesNotExist:
-            return None
+        return Track.objects.filter(isrc=isrc).order_by("-id").first()

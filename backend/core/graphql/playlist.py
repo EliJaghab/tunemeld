@@ -1,9 +1,10 @@
+from datetime import datetime
+
 import graphene
-from core.api.genre_service_api import get_genre
-from core.constants import ServiceName
+from core.api.genre_service_api import get_genre, get_raw_playlist_data_by_genre_service, get_service
+from core.constants import DEFAULT_RANK_TYPE, ServiceName
 from core.graphql.track import TrackType
 from core.models import Service, Track
-from core.models.play_counts import AggregatePlayCount
 from core.models.playlist import Playlist, Rank
 from core.utils.local_cache import CachePrefix, local_cache_get, local_cache_set
 
@@ -46,57 +47,20 @@ class PlaylistQuery(graphene.ObjectType):
     updated_at = graphene.DateTime(genre=graphene.String(required=True))
     ranks = graphene.List(RankType, description="Get playlist ranking options")
 
-    @staticmethod
-    def _enrich_tracks_with_play_counts(tracks):
-        """Pre-populate track objects with play count data to avoid individual cache calls."""
-        if not tracks:
-            return tracks
-
-        track_isrcs = [track.isrc for track in tracks]
-
-        services_with_counts = Service.objects.filter(aggregateplaycount__isrc__in=track_isrcs).distinct()
-
-        service_counts = {}
-        for service in services_with_counts:
-            service_counts[service.name] = {
-                vc.isrc: vc
-                for vc in AggregatePlayCount.objects.filter(isrc__in=track_isrcs, service=service)
-                .order_by("isrc", "-recorded_date")
-                .distinct("isrc")
-            }
-
-        for track in tracks:
-            # Dynamically set play count attributes based on available services
-            for service_name, counts in service_counts.items():
-                service_data = counts.get(track.isrc)
-                current_count_attr = f"_{service_name}_current_play_count"
-                delta_percentage_attr = f"_{service_name}_play_count_delta_percentage"
-
-                setattr(track, current_count_attr, service_data.current_play_count if service_data else None)
-                setattr(track, delta_percentage_attr, service_data.weekly_change_percentage if service_data else None)
-
-        return tracks
-
     def resolve_service_order(self, info):
         """Used to order the header art and individual playlist columns."""
-        return (
-            Service.objects.filter(
-                name__in=[ServiceName.APPLE_MUSIC.value, ServiceName.SOUNDCLOUD.value, ServiceName.SPOTIFY.value]
-            )
-            .values_list("name", flat=True)
-            .order_by("id")
-        )
+        service_names = [ServiceName.APPLE_MUSIC.value, ServiceName.SOUNDCLOUD.value, ServiceName.SPOTIFY.value]
+        services = []
+        for name in service_names:
+            service = get_service(name)
+            if service:
+                services.append(service.name)
+        return services
 
     def resolve_playlist(self, info, genre, service):
         """Get playlist data for any service (including Aggregate) and genre."""
-        from django.conf import settings
-
         cache_key_data = f"resolve_playlist:genre={genre}:service={service}"
-
-        # Skip cache in development to always get fresh percentage data
-        cached_result = None
-        if settings.ENVIRONMENT != "dev":
-            cached_result = local_cache_get(CachePrefix.GQL_PLAYLIST, cache_key_data)
+        cached_result = local_cache_get(CachePrefix.GQL_PLAYLIST, cache_key_data)
 
         if cached_result is not None:
             # Reconstruct Track objects from cached data for GraphQL compatibility
@@ -110,8 +74,6 @@ class PlaylistQuery(graphene.ObjectType):
                 for key, value in track_data.items():
                     if key == "updated_at" and isinstance(value, str):
                         # Convert ISO string back to datetime
-                        from datetime import datetime
-
                         setattr(track, key, datetime.fromisoformat(value))
                     else:
                         setattr(track, key, value)
@@ -127,13 +89,9 @@ class PlaylistQuery(graphene.ObjectType):
         tracks = []
         for playlist_entry in playlists:
             if playlist_entry.isrc:
-                try:
-                    track = Track.objects.get(isrc=playlist_entry.isrc)
+                track = Track.objects.filter(isrc=playlist_entry.isrc).order_by("-id").first()
+                if track:
                     tracks.append(track)
-                except Track.DoesNotExist:
-                    continue
-
-        tracks = PlaylistQuery._enrich_tracks_with_play_counts(tracks)
 
         serialized_tracks = []
         for track in tracks:
@@ -151,28 +109,16 @@ class PlaylistQuery(graphene.ObjectType):
                 "aggregate_rank": track.aggregate_rank,
                 "aggregate_score": track.aggregate_score,
                 "updated_at": track.updated_at.isoformat() if track.updated_at else None,
-                "_youtube_current_play_count": getattr(track, "_youtube_current_play_count", None),
-                "_spotify_current_play_count": getattr(track, "_spotify_current_play_count", None),
-                "_soundcloud_current_play_count": getattr(track, "_soundcloud_current_play_count", None),
-                "_youtube_play_count_delta_percentage": getattr(track, "_youtube_play_count_delta_percentage", None),
-                "_spotify_play_count_delta_percentage": getattr(track, "_spotify_play_count_delta_percentage", None),
-                "_soundcloud_play_count_delta_percentage": getattr(
-                    track, "_soundcloud_play_count_delta_percentage", None
-                ),
             }
             serialized_tracks.append(track_data)
 
         cache_data = {"genre_name": genre, "service_name": service, "tracks": serialized_tracks}
-        # Skip caching in development to always get fresh percentage data
-        if settings.ENVIRONMENT != "dev":
-            local_cache_set(CachePrefix.GQL_PLAYLIST, cache_key_data, cache_data)
+        local_cache_set(CachePrefix.GQL_PLAYLIST, cache_key_data, cache_data)
 
         return PlaylistType(genre_name=genre, service_name=service, tracks=tracks)
 
     def resolve_playlists_by_genre(self, info, genre):
         """Get playlist metadata for all services for a given genre."""
-        from core.api.genre_service_api import get_raw_playlist_data_by_genre_service
-
         genre_obj = get_genre(genre)
         if not genre_obj:
             return []
@@ -216,8 +162,6 @@ class PlaylistQuery(graphene.ObjectType):
 
     def resolve_ranks(self, info):
         """Get playlist ranking options."""
-        from core.constants import DEFAULT_RANK_TYPE
-
         ranks = Rank.objects.all().order_by("id")
 
         return [
