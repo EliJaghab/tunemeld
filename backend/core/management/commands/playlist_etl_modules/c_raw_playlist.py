@@ -1,12 +1,10 @@
-import uuid
-
 from core.api.genre_service_api import get_genre, get_service
 from core.constants import PLAYLIST_GENRES, SERVICE_CONFIGS, GenreName, ServiceName
 from core.models import RawPlaylistData
 from core.services.apple_music_service import get_apple_music_playlist
 from core.services.soundcloud_service import get_soundcloud_playlist
 from core.services.spotify_service import get_spotify_playlist
-from core.utils.utils import get_logger
+from core.utils.utils import get_logger, process_in_parallel
 from django.core.management.base import BaseCommand, CommandError
 
 logger = get_logger(__name__)
@@ -15,7 +13,7 @@ logger = get_logger(__name__)
 class Command(BaseCommand):
     help = "Extract raw playlist data from RapidAPI and save to PostgreSQL"
 
-    def handle(self, *args: object, etl_run_id: uuid.UUID, **options: object) -> None:
+    def handle(self, *args: object, **options: object) -> None:
         supported_services = [ServiceName.APPLE_MUSIC.value, ServiceName.SOUNDCLOUD.value, ServiceName.SPOTIFY.value]
 
         tasks = []
@@ -27,11 +25,9 @@ class Command(BaseCommand):
                 service = ServiceName(service_name)
                 tasks.append((service, genre))
 
-        from core.utils.utils import process_in_parallel
-
         results = process_in_parallel(
             items=tasks,
-            process_func=lambda task: self.get_and_save_playlist(task[0], task[1], etl_run_id),
+            process_func=lambda task: self.get_and_save_playlist(task[0], task[1]),
             max_workers=2,
             log_progress=False,
         )
@@ -46,9 +42,7 @@ class Command(BaseCommand):
             else:
                 logger.info(f"Completed {task_service.value}/{task_genre.value}")
 
-    def get_and_save_playlist(
-        self, service_name: ServiceName, genre: GenreName, etl_run_id: uuid.UUID
-    ) -> RawPlaylistData | None:
+    def get_and_save_playlist(self, service_name: ServiceName, genre: GenreName) -> RawPlaylistData | None:
         logger.info(f"Getting playlist data for {service_name.value}/{genre.value}")
         service = get_service(service_name)
         genre_obj = get_genre(genre.value)
@@ -69,7 +63,6 @@ class Command(BaseCommand):
             raw_data, _created = RawPlaylistData.objects.update_or_create(
                 service=service,
                 genre=genre_obj,
-                etl_run_id=etl_run_id,
                 defaults={
                     "playlist_url": metadata["playlist_url"],
                     "playlist_name": metadata["playlist_name"],

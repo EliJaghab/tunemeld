@@ -1,5 +1,7 @@
 import logging
 
+from core.constants import GenreName, ServiceName
+from core.graphql.schema import schema
 from core.utils.local_cache import CachePrefix, local_cache_clear
 from django.core.management.base import BaseCommand
 
@@ -23,9 +25,6 @@ class Command(BaseCommand):
 
     def _warm_track_caches(self):
         """Execute GraphQL queries to warm track/playlist cache."""
-        from core.constants import GenreName, ServiceName
-        from core.graphql.schema import schema
-
         # Warm playlist metadata cache
         for genre in GenreName:
             schema.execute(f"""

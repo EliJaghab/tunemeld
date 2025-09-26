@@ -1,8 +1,7 @@
-import uuid
 from collections import defaultdict
 from typing import Any
 
-from core.api.genre_service_api import get_genre_by_id, get_or_create_service
+from core.api.genre_service_api import get_genre_by_id, get_service
 from core.constants import GENRE_CONFIGS, SERVICE_CONFIGS, ServiceName
 from core.models import Genre, ServiceTrack
 from core.models import PlaylistModel as Playlist
@@ -24,18 +23,18 @@ SERVICE_RANK_PRIORITY = [
 class Command(BaseCommand):
     help = "Generate cross-service aggregate playlists"
 
-    def handle(self, *args: Any, etl_run_id: uuid.UUID, **options: Any) -> None:
+    def handle(self, *args: Any, **options: Any) -> None:
         logger.info("Starting aggregate playlist generation...")
 
-        cross_service_matches = self.find_cross_service_isrcs(etl_run_id)
-        self.create_aggregate_playlists(cross_service_matches, etl_run_id)
-        self.create_tunemeld_raw_playlist_data(etl_run_id)
+        cross_service_matches = self.find_cross_service_isrcs()
+        self.create_aggregate_playlists(cross_service_matches)
+        self.create_tunemeld_raw_playlist_data()
 
-    def find_cross_service_isrcs(self, etl_run_id: uuid.UUID) -> dict[int, list[dict]]:
+    def find_cross_service_isrcs(self) -> dict[int, list[dict]]:
         """Find ISRCs that appear in multiple playlists (cross-service matches)."""
 
         duplicate_isrcs = (
-            ServiceTrack.objects.filter(etl_run_id=etl_run_id)
+            ServiceTrack.objects.all()
             .values("isrc", "genre")
             .annotate(service_count=Count("service", distinct=True))
             .filter(service_count__gt=1)
@@ -47,9 +46,7 @@ class Command(BaseCommand):
             isrc = item["isrc"]
             genre_id = item["genre"]
 
-            service_tracks = ServiceTrack.objects.filter(
-                isrc=isrc, genre_id=genre_id, etl_run_id=etl_run_id
-            ).select_related("service")
+            service_tracks = ServiceTrack.objects.filter(isrc=isrc, genre_id=genre_id).select_related("service")
 
             # Collect service positions
             service_positions = {}
@@ -93,10 +90,10 @@ class Command(BaseCommand):
 
         raise ValueError(f"No valid service found in positions: {service_positions}")
 
-    def create_aggregate_playlists(self, cross_service_matches: dict[int, list[dict]], etl_run_id: uuid.UUID) -> None:
+    def create_aggregate_playlists(self, cross_service_matches: dict[int, list[dict]]) -> None:
         """Create aggregate playlist entries for cross-service tracks."""
 
-        aggregate_service, _ = get_or_create_service(ServiceName.TUNEMELD)
+        aggregate_service = get_service(ServiceName.TUNEMELD)
 
         for genre_id, matches in cross_service_matches.items():
             genre = get_genre_by_id(genre_id)
@@ -106,28 +103,27 @@ class Command(BaseCommand):
 
             sorted_matches = sorted(matches, key=lambda x: x["aggregate_rank"])
 
-            playlist_entries = []
+            playlist_count = 0
             for position, match in enumerate(sorted_matches, 1):
-                # Use the first ServiceTrack as the reference for the aggregate playlist
                 reference_service_track = match["service_tracks"].first()
 
-                playlist_entry = Playlist(
+                Playlist.objects.update_or_create(
                     service=aggregate_service,
                     genre=genre,
                     position=position,
-                    isrc=match["isrc"],
-                    service_track=reference_service_track,
-                    etl_run_id=etl_run_id,
+                    defaults={
+                        "isrc": match["isrc"],
+                        "service_track": reference_service_track,
+                    },
                 )
-                playlist_entries.append(playlist_entry)
+                playlist_count += 1
 
-            Playlist.objects.bulk_create(playlist_entries)
-            logger.info(f"Created aggregate playlist for {genre.name}: {len(playlist_entries)} tracks")
+            logger.info(f"Created aggregate playlist for {genre.name}: {playlist_count} tracks")
 
-    def create_tunemeld_raw_playlist_data(self, etl_run_id: uuid.UUID) -> None:
+    def create_tunemeld_raw_playlist_data(self) -> None:
         """Create TuneMeld RawPlaylistData entries with complete descriptions including timestamps."""
 
-        aggregate_service, _ = get_or_create_service(ServiceName.TUNEMELD)
+        aggregate_service = get_service(ServiceName.TUNEMELD)
         tunemeld_config = SERVICE_CONFIGS[ServiceName.TUNEMELD.value]
 
         genres_with_playlists = Genre.objects.filter(playlist__service=aggregate_service).distinct()
@@ -160,7 +156,6 @@ class Command(BaseCommand):
             _raw_data, created = RawPlaylistData.objects.update_or_create(
                 service=aggregate_service,
                 genre=genre,
-                etl_run_id=etl_run_id,
                 defaults={
                     "playlist_url": f"https://tunemeld.com/{genre.name}",
                     "playlist_name": f"TuneMeld {genre_display_name}",

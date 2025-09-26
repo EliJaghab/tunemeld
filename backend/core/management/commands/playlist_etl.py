@@ -1,5 +1,4 @@
 import time
-import uuid
 from typing import Any
 
 from core.management.commands.genre_service import Command as GenreServiceCommand
@@ -11,10 +10,6 @@ from core.management.commands.playlist_etl_modules.f_aggregate import Command as
 from core.management.commands.playlist_etl_modules.g_clear_and_warm_track_cache import (
     Command as ClearAndWarmTrackCacheCommand,
 )
-from core.models import PlaylistModel as Playlist
-from core.models import RawPlaylistData, ServiceTrack, Track
-from core.models.genre_service import Genre, Service
-from core.models.playlist import Rank
 from core.utils.utils import get_logger
 from django.core.management.base import BaseCommand, CommandError
 
@@ -26,33 +21,29 @@ class Command(BaseCommand):
 
     def handle(self, *args: Any, **options: Any) -> None:
         start_time = time.time()
-        etl_run_id = uuid.uuid4()
 
         try:
-            logger.info(f"Starting ETL pipeline with run ID: {etl_run_id}")
+            logger.info("Starting ETL pipeline...")
 
             logger.info("Step 1: Setting up genres and services...")
-            GenreServiceCommand().handle(etl_run_id=etl_run_id)
+            GenreServiceCommand().handle()
 
             logger.info("Step 2: Clearing raw playlist cache if within scheduled window...")
             ClearCacheCommand().handle()
 
             logger.info("Step 3: Extracting raw playlist data...")
-            RawPlaylistCommand().handle(etl_run_id=etl_run_id)
+            RawPlaylistCommand().handle()
 
             logger.info("Step 4: Creating service tracks...")
-            ServiceTrackCommand().handle(etl_run_id=etl_run_id)
+            ServiceTrackCommand().handle()
 
             logger.info("Step 5: Creating canonical tracks with YouTube URLs...")
-            TrackCommand().handle(etl_run_id=etl_run_id)
+            TrackCommand().handle()
 
             logger.info("Step 6: Aggregating tracks...")
-            AggregateCommand().handle(etl_run_id=etl_run_id)
+            AggregateCommand().handle()
 
-            logger.info("Step 7: Removing previous ETL run data...")
-            self.remove_previous_etl_run(etl_run_id)
-
-            logger.info("Step 8: Clearing and warming track cache...")
+            logger.info("Step 7: Clearing and warming track cache...")
             ClearAndWarmTrackCacheCommand().handle()
 
             elapsed_time = time.time() - start_time
@@ -61,14 +52,3 @@ class Command(BaseCommand):
         except Exception as e:
             logger.error(f"ETL pipeline failed: {e}")
             raise CommandError(f"ETL pipeline failed: {e}") from e
-
-    def remove_previous_etl_run(self, current_etl_run_id: uuid.UUID) -> None:
-        """Blue Green deployment of data - only wipe prod data after full pipeline has run."""
-        logger.info(f"Removing previous ETL run data, keeping run ID: {current_etl_run_id}")
-        RawPlaylistData.objects.exclude(etl_run_id=current_etl_run_id).delete()
-        ServiceTrack.objects.exclude(etl_run_id=current_etl_run_id).delete()
-        Playlist.objects.exclude(etl_run_id=current_etl_run_id).delete()
-        Track.objects.exclude(etl_run_id=current_etl_run_id).delete()
-        Genre.objects.exclude(etl_run_id=current_etl_run_id).delete()
-        Service.objects.exclude(etl_run_id=current_etl_run_id).delete()
-        Rank.objects.exclude(etl_run_id=current_etl_run_id).delete()

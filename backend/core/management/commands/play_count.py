@@ -13,7 +13,7 @@ from core.models.play_counts import HistoricalTrackPlayCount
 from core.models.playlist import Rank
 from core.utils.utils import get_logger
 from django.core.management.base import BaseCommand
-from django.db import models
+from django.db import models, transaction
 from django.utils import timezone
 
 logger = get_logger(__name__)
@@ -31,29 +31,30 @@ class Command(BaseCommand):
         etl_run_id = uuid.uuid4()
 
         try:
-            logger.info(f"Starting Play Count ETL Pipeline with run ID: {etl_run_id}")
+            with transaction.atomic():
+                logger.info(f"Starting Play Count ETL Pipeline with run ID: {etl_run_id}")
 
-            logger.info("Step 1: Setting up genres and services...")
-            GenreServiceCommand().handle(etl_run_id=etl_run_id)
+                logger.info("Step 1: Setting up genres and services...")
+                GenreServiceCommand().handle(etl_run_id=etl_run_id)
 
-            logger.info("Step 2: Running Historical Play Count extraction")
-            historical_command = HistoricalPlayCountCommand()
-            historical_command.handle(limit=limit)
+                logger.info("Step 2: Running Historical Play Count extraction")
+                historical_command = HistoricalPlayCountCommand()
+                historical_command.handle(limit=limit)
 
-            logger.info("Step 3: Computing aggregate play counts with weekly changes")
-            aggregate_command = AggregatePlayCountCommand()
-            aggregate_command.handle()
+                logger.info("Step 3: Computing aggregate play counts with weekly changes")
+                aggregate_command = AggregatePlayCountCommand()
+                aggregate_command.handle()
 
-            logger.info("Step 4: Clearing and warming play count cache...")
-            WarmPlayCountCacheCommand().handle()
+                logger.info("Step 4: Clearing and warming play count cache...")
+                WarmPlayCountCacheCommand().handle()
 
-            logger.info("Step 5: Removing previous ETL run data...")
-            self.remove_previous_etl_run(etl_run_id)
+                logger.info("Step 5: Removing previous ETL run data...")
+                self.remove_previous_etl_run(etl_run_id)
 
-            duration = time.time() - start_time
-            logger.info(f"Play Count ETL Pipeline completed in {duration:.1f} seconds")
+                duration = time.time() - start_time
+                logger.info(f"Play Count ETL Pipeline completed in {duration:.1f} seconds")
 
-            self._print_final_summary()
+                self._print_final_summary()
 
         except Exception as e:
             logger.error(f"Play Count ETL Pipeline failed: {e}")
