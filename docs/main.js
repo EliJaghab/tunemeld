@@ -9,6 +9,7 @@ import { initializeTosPrivacyOverlay } from "./tosPrivacy.js";
 import { stateManager } from "@/state/StateManager.js";
 import { appRouter } from "@/routing/router.js";
 import { applyCacheBusting } from "@/config/config.js";
+import { showInitialShimmer } from "@/components/shimmer.js";
 
 applyCacheBusting();
 
@@ -22,6 +23,10 @@ async function initializeApp() {
   stateManager.initializeFromDOM();
   stateManager.applyTheme(stateManager.getTheme());
   setupThemeToggle();
+
+  document.getElementById("main-content").style.visibility = "visible";
+  document.body.style.opacity = "1";
+  showInitialShimmer();
 
   try {
     await appRouter.initialize();
