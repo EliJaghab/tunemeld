@@ -91,6 +91,7 @@ class PlaylistQuery(graphene.ObjectType):
             if playlist_entry.isrc:
                 track = Track.objects.filter(isrc=playlist_entry.isrc).order_by("-id").first()
                 if track:
+                    track.tunemeld_rank = playlist_entry.position
                     tracks.append(track)
 
         serialized_tracks = []
@@ -109,6 +110,7 @@ class PlaylistQuery(graphene.ObjectType):
                 "aggregate_rank": track.aggregate_rank,
                 "aggregate_score": track.aggregate_score,
                 "updated_at": track.updated_at.isoformat() if track.updated_at else None,
+                "tunemeld_rank": track.tunemeld_rank,
             }
             serialized_tracks.append(track_data)
 

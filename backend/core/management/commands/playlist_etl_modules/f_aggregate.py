@@ -3,7 +3,7 @@ from typing import Any
 
 from core.api.genre_service_api import get_genre_by_id, get_service
 from core.constants import GENRE_CONFIGS, SERVICE_CONFIGS, ServiceName
-from core.models import Genre, ServiceTrack
+from core.models import Genre, ServiceTrack, Track
 from core.models import PlaylistModel as Playlist
 from core.models.playlist import RawPlaylistData
 from core.utils.utils import get_logger
@@ -117,6 +117,12 @@ class Command(BaseCommand):
                             "service_track": reference_service_track,
                         },
                     )
+
+                    if reference_service_track and reference_service_track.track:
+                        Track.objects.filter(id=reference_service_track.track.id).update(
+                            aggregate_rank=int(match["aggregate_rank"])
+                        )
+
                     playlist_count += 1
 
                 logger.info(f"Created aggregate playlist for {genre.name}: {playlist_count} tracks")
