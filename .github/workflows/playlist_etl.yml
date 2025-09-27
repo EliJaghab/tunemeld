@@ -62,6 +62,17 @@ jobs:
           CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
         run: make ci-db-safety-check
 
+      - name: Handle existing aggregate table migration
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
+          CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
+          CF_NAMESPACE_ID: ${{ secrets.CF_NAMESPACE_ID }}
+          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+        run: |
+          echo "⚡ Handling existing aggregate table if needed..."
+          cd backend && python manage.py fake_migration_0027
+
       - name: Apply database migrations to Railway PostgreSQL
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
