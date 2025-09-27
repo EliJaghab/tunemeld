@@ -1,9 +1,11 @@
 import logging
-from enum import Enum
 
 import requests
+from core.api.response_utils import ResponseStatus, create_response
 from core.utils.cloudflare_cache import CloudflareKVCache
-from django.http import JsonResponse
+from django.http import HttpRequest, JsonResponse
+
+logger = logging.getLogger(__name__)
 
 EDM_EVENTS_GITHUB_URL = "https://raw.githubusercontent.com/AidanJaghab/Beatmap/main/backend/data/latest_events.json"
 EDM_EVENTS_CACHE_KEY = "edm_events_data"
@@ -18,47 +20,7 @@ def get_cache():
     return cache
 
 
-logger = logging.getLogger(__name__)
-
-
-class ResponseStatus(Enum):
-    SUCCESS = "success"
-    ERROR = "error"
-
-
-def create_response(status: ResponseStatus, message: str, data: dict | list | None) -> JsonResponse:
-    """Create a standardized JSON response."""
-    return JsonResponse(
-        {
-            "status": status.value,
-            "message": message,
-            "data": data,
-        }
-    )
-
-
-def root(request):
-    """Root endpoint - returns basic API information."""
-    return create_response(
-        ResponseStatus.SUCCESS,
-        "TuneMeld API is running",
-        {
-            "version": "1.0.0",
-            "endpoints": [
-                "/health/",
-                "/edm-events/",
-                "/gql/",
-            ],
-        },
-    )
-
-
-def health(request):
-    """Health check endpoint."""
-    return create_response(ResponseStatus.SUCCESS, "Service is healthy", {"status": "ok"})
-
-
-def get_edm_events(request):
+def get_edm_events(request: HttpRequest) -> JsonResponse:
     """Get EDM events data from GitHub with caching."""
     cached_data = get_cache().get(EDM_EVENTS_CACHE_KEY)
     if cached_data:
@@ -70,7 +32,7 @@ def get_edm_events(request):
         response.raise_for_status()
         data = response.json()
 
-        get_cache().set(EDM_EVENTS_CACHE_KEY, data, timeout=3600)  # 1 hour TTL
+        get_cache().set(EDM_EVENTS_CACHE_KEY, data, timeout=3600)
         logger.info("EDM events data cached successfully")
 
         logger.info("EDM events data fetched successfully from GitHub")

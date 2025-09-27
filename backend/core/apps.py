@@ -16,7 +16,7 @@ class CoreConfig(AppConfig):
 
         if not os.getenv("GITHUB_ACTIONS"):
             try:
-                # Import commands here to avoid circular imports
+                # Circular import: commands import models, so must import inside ready()
                 from core.management.commands.play_count_modules.c_clear_and_warm_play_count_cache import (
                     Command as PlayCountCacheCommand,
                 )
@@ -24,11 +24,9 @@ class CoreConfig(AppConfig):
                     Command as TrackCacheCommand,
                 )
 
-                # Warm track/playlist cache
                 track_command = TrackCacheCommand()
                 track_command.handle()
 
-                # Warm play count cache
                 play_count_command = PlayCountCacheCommand()
                 play_count_command.handle()
             except Exception as e:
