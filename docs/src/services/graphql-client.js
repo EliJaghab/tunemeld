@@ -203,6 +203,9 @@ class GraphQLClient {
               url
               iconUrl
             }
+            seenOnSpotify
+            seenOnAppleMusic
+            seenOnSoundcloud
           }
         }
       }

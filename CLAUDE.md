@@ -88,6 +88,20 @@ make run-playlist-etl        # Full playlist extraction
 - Use `int | str` not `Union[int, str]`
 - No imports from `typing` for basic types (list, dict, tuple, set)
 
+## Constants vs Hardcoded Strings
+
+**ALWAYS use defined constants instead of hardcoded strings:**
+
+- Use `ServiceName.SPOTIFY` not `"spotify"`
+- Use `ServiceName.APPLE_MUSIC` not `"apple_music"`
+- Use defined enum/constant values for any string that represents a business concept
+- **NEVER** accept both string and constant types in function parameters - pick one and enforce it
+- **NEVER** add fallback logic to convert strings to constants - fail fast instead
+
+## Import Style
+
+**NEVER use inline imports within functions. ALL imports must be at the top of the file.**
+
 ## Response Format
 
 **When completing tasks, always end with a summary that includes:**

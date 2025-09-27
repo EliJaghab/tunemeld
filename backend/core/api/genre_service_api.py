@@ -1,5 +1,5 @@
 from core.constants import ServiceName
-from core.models import Genre, Service
+from core.models import Genre, Service, ServiceTrack
 from core.models.playlist import Rank, RawPlaylistData
 
 
@@ -47,3 +47,12 @@ def get_raw_playlist_data_by_genre_service(genre_name: str, service_name: str) -
     if not genre_obj or not service_obj:
         return None
     return RawPlaylistData.objects.filter(genre=genre_obj, service=service_obj).order_by("-id").first()
+
+
+def is_track_seen_on_service(isrc: str, genre_name: str, service_name: ServiceName) -> bool:
+    """Check if a track with given ISRC was seen on a specific service for a genre."""
+    genre_obj = get_genre(genre_name)
+    if not genre_obj:
+        raise ValueError(f"Genre '{genre_name}' not found")
+
+    return ServiceTrack.objects.filter(isrc=isrc, genre=genre_obj, service__name=service_name.value).exists()

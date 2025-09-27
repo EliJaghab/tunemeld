@@ -1,5 +1,5 @@
 import graphene
-from core.api.genre_service_api import get_service
+from core.api.genre_service_api import get_service, is_track_seen_on_service
 from core.constants import ServiceName
 from core.graphql.service import ServiceType
 from core.models.genre_service import Service
@@ -39,6 +39,16 @@ class TrackType(DjangoObjectType):
     apple_music_source = graphene.Field(ServiceType, description="Apple Music service source with metadata")
     soundcloud_source = graphene.Field(ServiceType, description="SoundCloud service source with metadata")
     youtube_source = graphene.Field(ServiceType, description="YouTube service source with metadata")
+
+    seen_on_spotify = graphene.Boolean(
+        description="Whether this track was seen on Spotify playlists for TuneMeld ranking"
+    )
+    seen_on_apple_music = graphene.Boolean(
+        description="Whether this track was seen on Apple Music playlists for TuneMeld ranking"
+    )
+    seen_on_soundcloud = graphene.Boolean(
+        description="Whether this track was seen on SoundCloud playlists for TuneMeld ranking"
+    )
 
     def resolve_track_name(self, info):
         return truncate_to_words(self.track_name, 30) if self.track_name else None
@@ -120,6 +130,21 @@ class TrackType(DjangoObjectType):
             )
         except Service.DoesNotExist:
             return None
+
+    def resolve_seen_on_spotify(self, info):
+        """Check if this track was seen on Spotify playlists for TuneMeld ranking."""
+        genre_name = info.variable_values["genre"]
+        return is_track_seen_on_service(self.isrc, genre_name, ServiceName.SPOTIFY)
+
+    def resolve_seen_on_apple_music(self, info):
+        """Check if this track was seen on Apple Music playlists for TuneMeld ranking."""
+        genre_name = info.variable_values["genre"]
+        return is_track_seen_on_service(self.isrc, genre_name, ServiceName.APPLE_MUSIC)
+
+    def resolve_seen_on_soundcloud(self, info):
+        """Check if this track was seen on SoundCloud playlists for TuneMeld ranking."""
+        genre_name = info.variable_values["genre"]
+        return is_track_seen_on_service(self.isrc, genre_name, ServiceName.SOUNDCLOUD)
 
 
 class TrackQuery(graphene.ObjectType):

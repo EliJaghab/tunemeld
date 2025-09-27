@@ -23,7 +23,9 @@ export async function populatePlayCountMap(isrcs) {
 
     playCountLookupMap = {};
     playCountData.forEach((data) => {
-      playCountLookupMap[data.isrc] = data;
+      if (data && data.isrc) {
+        playCountLookupMap[data.isrc] = data;
+      }
     });
   } catch (error) {
     console.error("Error fetching play count data:", error);
@@ -362,14 +364,16 @@ function displaySources(cell, track) {
   const sourcesContainer = document.createElement("div");
   sourcesContainer.className = "track-sources";
 
-  const serviceSources = [
-    track.spotifySource,
-    track.appleMusicSource,
-    track.soundcloudSource,
-  ].filter((source) => source !== null && source !== undefined);
+  const serviceSourcesData = [
+    { source: track.spotifySource, seenOn: track.seenOnSpotify },
+    { source: track.appleMusicSource, seenOn: track.seenOnAppleMusic },
+    { source: track.soundcloudSource, seenOn: track.seenOnSoundcloud },
+  ].filter(
+    (item) => item.source !== null && item.source !== undefined && item.seenOn,
+  );
 
-  serviceSources.forEach((source) => {
-    const linkElement = createSourceLinkFromService(source);
+  serviceSourcesData.forEach((item) => {
+    const linkElement = createSourceLinkFromService(item.source);
     sourcesContainer.appendChild(linkElement);
   });
 
