@@ -1,5 +1,4 @@
 import os
-import time
 from typing import Any, cast
 
 import requests
@@ -38,25 +37,30 @@ def fetch_playlist_data(service_name: ServiceName, genre: GenreName, force_refre
 
 
 def _make_rapidapi_request(url: str, host: str) -> JSON:
-    """Make a RapidAPI request with proper error handling"""
-    api_key = os.getenv("X_RAPIDAPI_KEY")
-    if not api_key:
-        raise ValueError("X_RAPIDAPI_KEY not found in environment")
+    """Make a RapidAPI request with automatic key rotation on rate limits"""
+    api_keys = [
+        os.getenv("X_RAPIDAPI_KEY_A"),
+        os.getenv("X_RAPIDAPI_KEY_B"),
+    ]
 
-    headers = {
-        "X-RapidAPI-Key": api_key,
-        "X-RapidAPI-Host": host,
-        "Content-Type": "application/json",
-    }
+    for api_key in api_keys:
+        headers = {
+            "X-RapidAPI-Key": api_key,
+            "X-RapidAPI-Host": host,
+            "Content-Type": "application/json",
+        }
 
-    logger.info(f"Making RapidAPI request to {host}")
-    time.sleep(10.0)
-    response = requests.get(url, headers=headers, timeout=30)
+        logger.info(f"Making RapidAPI request to {host}")
 
-    if response.status_code == 429:
-        logger.error(f"RapidAPI rate limit exceeded for {host}. Skipping this request.")
-        raise requests.exceptions.HTTPError(f"429 Rate limit exceeded for {host}")
+        response = requests.get(url, headers=headers, timeout=30)
 
-    response.raise_for_status()
-    logger.info(f"RapidAPI request successful - Status: {response.status_code}")
-    return cast("JSON", response.json())
+        if response.status_code == 429:
+            logger.warning(f"RapidAPI rate limit exceeded for {host}. Trying next key...")
+            continue
+
+        response.raise_for_status()
+        logger.info(f"RapidAPI request successful - Status: {response.status_code}")
+        return cast("JSON", response.json())
+
+    logger.error(f"All RapidAPI keys exhausted for {host}")
+    raise requests.exceptions.HTTPError(f"All RapidAPI keys failed for {host}")

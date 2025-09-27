@@ -103,7 +103,8 @@ jobs:
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
-          X_RAPIDAPI_KEY: ${{ secrets.X_RAPIDAPI_KEY }}
+          X_RAPIDAPI_KEY_A: ${{ secrets.X_RAPIDAPI_KEY_A }}
+          X_RAPIDAPI_KEY_B: ${{ secrets.X_RAPIDAPI_KEY_B }}
           MONGO_URI: ${{ secrets.MONGO_URI }}
           SPOTIFY_CLIENT_ID: ${{ secrets.SPOTIFY_CLIENT_ID }}
           SPOTIFY_CLIENT_SECRET: ${{ secrets.SPOTIFY_CLIENT_SECRET }}
