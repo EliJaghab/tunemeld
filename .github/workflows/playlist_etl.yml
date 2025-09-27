@@ -18,6 +18,11 @@ on:
         required: false
         default: false
         type: boolean
+      force_refresh:
+        description: 'Force refresh by skipping RapidAPI cache and pulling fresh data'
+        required: false
+        default: false
+        type: boolean
 
 jobs:
   run-etl:
@@ -95,7 +100,12 @@ jobs:
           CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
           CF_NAMESPACE_ID: ${{ secrets.CF_NAMESPACE_ID }}
           CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
-        run: make run-playlist-etl
+        run: |
+          if [ "${{ inputs.force_refresh }}" = "true" ]; then
+            make run-playlist-etl-force-refresh
+          else
+            make run-playlist-etl
+          fi
 
       - name: Verify ETL pipeline results
         env:

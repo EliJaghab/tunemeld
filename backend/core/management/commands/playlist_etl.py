@@ -19,7 +19,15 @@ logger = get_logger(__name__)
 class Command(BaseCommand):
     help = "Run the complete playlist ETL pipeline"
 
+    def add_arguments(self, parser):
+        parser.add_argument(
+            "--force-refresh",
+            action="store_true",
+            help="Force refresh by skipping RapidAPI cache and pulling fresh data",
+        )
+
     def handle(self, *args: Any, **options: Any) -> None:
+        force_refresh = options.get("force_refresh", False)
         start_time = time.time()
 
         try:
@@ -32,7 +40,7 @@ class Command(BaseCommand):
             ClearCacheCommand().handle()
 
             logger.info("Step 3: Extracting raw playlist data...")
-            RawPlaylistCommand().handle()
+            RawPlaylistCommand().handle(force_refresh=force_refresh)
 
             logger.info("Step 4: Creating service tracks...")
             ServiceTrackCommand().handle()

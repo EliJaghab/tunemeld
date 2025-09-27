@@ -59,12 +59,12 @@ def _get_apple_music_cover_url_static(url: str, genre: "GenreName") -> str | Non
         raise ValueError(f"Found src attribute, but it's not an m3u8 URL: {src_attribute}")
 
 
-def get_apple_music_playlist(genre: "GenreName") -> PlaylistData:
+def get_apple_music_playlist(genre: "GenreName", force_refresh: bool = False) -> PlaylistData:
     """Get Apple Music playlist data and metadata for a given genre"""
     SERVICE_CONFIGS[ServiceName.APPLE_MUSIC.value]
     url = GENRE_CONFIGS[genre.value]["links"][ServiceName.APPLE_MUSIC.value]
 
-    tracks_data = fetch_playlist_data(ServiceName.APPLE_MUSIC, genre)
+    tracks_data = fetch_playlist_data(ServiceName.APPLE_MUSIC, genre, force_refresh)
 
     response = requests.get(url, timeout=5)
     response.raise_for_status()

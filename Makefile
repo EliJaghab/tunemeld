@@ -239,3 +239,12 @@ else
 	@cd backend && python manage.py playlist_etl
 endif
 	@echo " Playlist ETL Pipeline completed"
+
+run-playlist-etl-force-refresh:
+	@echo " Running Playlist ETL Pipeline with Force Refresh (bypassing RapidAPI cache)..."
+ifeq ($(GITHUB_ACTIONS),)
+	@cd backend && $(VENV)/bin/python manage.py playlist_etl --force-refresh
+else
+	@cd backend && python manage.py playlist_etl --force-refresh
+endif
+	@echo " Playlist ETL Pipeline with Force Refresh completed"

@@ -12,12 +12,13 @@ logger = get_logger(__name__)
 JSON = dict[str, Any] | list[Any]
 
 
-def fetch_playlist_data(service_name: ServiceName, genre: GenreName) -> JSON:
+def fetch_playlist_data(service_name: ServiceName, genre: GenreName, force_refresh: bool = False) -> JSON:
     key_data = f"{service_name.value}_{genre.value}"
 
-    cached_data = cloudflare_cache_get(CachePrefix.RAPIDAPI, key_data)
-    if cached_data:
-        return cast("JSON", cached_data)
+    if not force_refresh:
+        cached_data = cloudflare_cache_get(CachePrefix.RAPIDAPI, key_data)
+        if cached_data:
+            return cast("JSON", cached_data)
 
     config = SERVICE_CONFIGS[service_name.value]
 

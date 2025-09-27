@@ -14,6 +14,7 @@ class Command(BaseCommand):
     help = "Extract raw playlist data from RapidAPI and save to PostgreSQL"
 
     def handle(self, *args: object, **options: object) -> None:
+        force_refresh = options.get("force_refresh", False)
         supported_services = [ServiceName.APPLE_MUSIC.value, ServiceName.SOUNDCLOUD.value, ServiceName.SPOTIFY.value]
 
         tasks = []
@@ -25,9 +26,12 @@ class Command(BaseCommand):
                 service = ServiceName(service_name)
                 tasks.append((service, genre))
 
+        def process_task(task):
+            return self.get_and_save_playlist(task[0], task[1], force_refresh)
+
         results = process_in_parallel(
             items=tasks,
-            process_func=lambda task: self.get_and_save_playlist(task[0], task[1]),
+            process_func=process_task,
             max_workers=2,
             log_progress=False,
         )
@@ -42,18 +46,20 @@ class Command(BaseCommand):
             else:
                 logger.info(f"Completed {task_service.value}/{task_genre.value}")
 
-    def get_and_save_playlist(self, service_name: ServiceName, genre: GenreName) -> RawPlaylistData | None:
+    def get_and_save_playlist(
+        self, service_name: ServiceName, genre: GenreName, force_refresh: bool = False
+    ) -> RawPlaylistData | None:
         logger.info(f"Getting playlist data for {service_name.value}/{genre.value}")
         service = get_service(service_name)
         genre_obj = get_genre(genre.value)
 
         try:
             if service_name == ServiceName.APPLE_MUSIC:
-                playlist_data = get_apple_music_playlist(genre)
+                playlist_data = get_apple_music_playlist(genre, force_refresh)
             elif service_name == ServiceName.SOUNDCLOUD:
-                playlist_data = get_soundcloud_playlist(genre)
+                playlist_data = get_soundcloud_playlist(genre, force_refresh)
             elif service_name == ServiceName.SPOTIFY:
-                playlist_data = get_spotify_playlist(genre)
+                playlist_data = get_spotify_playlist(genre, force_refresh)
             else:
                 raise ValueError(f"Unknown service: {service_name}")
 

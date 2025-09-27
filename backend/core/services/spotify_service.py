@@ -251,12 +251,13 @@ def _extract_spotify_metadata_from_html(url: str, html_content: str) -> Playlist
     return metadata
 
 
-def get_spotify_playlist(genre: "GenreName") -> PlaylistData:
+def get_spotify_playlist(genre: "GenreName", force_refresh: bool = False) -> PlaylistData:
     """Get Spotify playlist data and metadata for a given genre"""
     key_data = generate_spotify_cache_key_data(genre)
-    cached_data = cloudflare_cache_get(CachePrefix.SPOTIFY_PLAYLIST, key_data)
-    if cached_data:
-        return cached_data
+    if not force_refresh:
+        cached_data = cloudflare_cache_get(CachePrefix.SPOTIFY_PLAYLIST, key_data)
+        if cached_data:
+            return cached_data
 
     SERVICE_CONFIGS[ServiceName.SPOTIFY.value]
     url = GENRE_CONFIGS[genre.value]["links"][ServiceName.SPOTIFY.value]

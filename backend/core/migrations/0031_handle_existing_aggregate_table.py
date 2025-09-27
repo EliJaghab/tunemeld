@@ -22,12 +22,19 @@ def mark_migration_0027_as_applied(apps, schema_editor):
         table_exists = cursor.fetchone()[0]
 
         if table_exists:
-            # Mark migration 0027 as applied
+            # Check if migration 0027 is already recorded
             cursor.execute("""
-                INSERT INTO django_migrations (app, name, applied)
-                VALUES ('core', '0027_remove_etl_run_id_from_genre_service', NOW())
-                ON CONFLICT (app, name) DO NOTHING;
+                SELECT COUNT(*) FROM django_migrations
+                WHERE app = 'core' AND name = '0027_remove_etl_run_id_from_genre_service';
             """)
+            migration_exists = cursor.fetchone()[0] > 0
+
+            if not migration_exists:
+                # Mark migration 0027 as applied
+                cursor.execute("""
+                    INSERT INTO django_migrations (app, name, applied)
+                    VALUES ('core', '0027_remove_etl_run_id_from_genre_service', NOW());
+                """)
 
 
 def reverse_mark_migration(apps, schema_editor):

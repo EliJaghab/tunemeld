@@ -28,12 +28,12 @@ class SoundCloudUrlResult(Enum):
     SCRAPE_FAILURE_ERROR = "scrape_failure_error"
 
 
-def get_soundcloud_playlist(genre: "GenreName") -> PlaylistData:
+def get_soundcloud_playlist(genre: "GenreName", force_refresh: bool = False) -> PlaylistData:
     """Get SoundCloud playlist data and metadata for a given genre"""
     SERVICE_CONFIGS[ServiceName.SOUNDCLOUD.value]
     url = GENRE_CONFIGS[genre.value]["links"][ServiceName.SOUNDCLOUD.value]
 
-    tracks_data = fetch_playlist_data(ServiceName.SOUNDCLOUD, genre)
+    tracks_data = fetch_playlist_data(ServiceName.SOUNDCLOUD, genre, force_refresh)
 
     parsed_url = urlparse(url)
     clean_url = f"{parsed_url.netloc}{parsed_url.path}"
