@@ -163,7 +163,7 @@ class Command(BaseCommand):
             NormalizedTrack(
                 position=i + 1,
                 name=clean_unicode_text(item["title"]),
-                artist=clean_unicode_text(item["publisher"]["artist"]),
+                artist=clean_unicode_text(item["publisher"]["artist"]) or "Unknown Artist",
                 soundcloud_url=item["permalink"],
                 isrc=item["publisher"]["isrc"],
                 album_cover_url=item["artworkUrl"],
