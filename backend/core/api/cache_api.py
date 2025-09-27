@@ -15,7 +15,10 @@ def clear_local_cache(request: HttpRequest) -> JsonResponse:
 
     try:
         body = json.loads(request.body) if request.body else {}
-        cache_type = body.get("cache_type", "gql_playlist")
+        cache_type = body.get("cache_type")
+
+        if not cache_type:
+            return create_response(ResponseStatus.ERROR, "cache_type is required", None)
 
         cache_prefix = CachePrefix(cache_type)
         cleared = local_cache_clear(cache_prefix)
