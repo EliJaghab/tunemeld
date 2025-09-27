@@ -101,6 +101,7 @@ export async function updateGenreData(genre, updateAll = false) {
     setupBodyClickListener(genre);
   } catch (error) {
     console.error("Error updating genre data:", error);
+    hideShimmerLoaders();
   }
 }
 
