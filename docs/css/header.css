@@ -53,7 +53,7 @@
   display: flex;
   flex: 1;
   flex-direction: column;
-  margin: 0.3rem;
+  margin: var(--space-xl);
   max-width: 300px;
   padding: 0;
 }
@@ -78,7 +78,7 @@
   color: var(--text-color);
   line-height: 1.35rem;
   text-align: left;
-  margin-top: 5px;
+  margin-top: var(--space-md);
   min-height: 2.7rem;
   cursor: pointer;
   transition: all 0.3s ease-in-out;
@@ -129,6 +129,10 @@
 @media screen and (max-width: 768px) {
   .header-art-section {
     padding: var(--space-md);
+  }
+
+  .service {
+    margin: var(--space-lg);
   }
 
   .header-title {

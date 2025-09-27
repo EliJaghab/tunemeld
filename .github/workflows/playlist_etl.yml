@@ -53,6 +53,13 @@ jobs:
       - name: Set PYTHONPATH
         run: echo "PYTHONPATH=$PWD" >> $GITHUB_ENV
 
+      - name: Check runner specs
+        run: |
+          echo "🔍 Runner specifications:"
+          echo "CPU cores: $(nproc)"
+          echo "Memory: $(free -h | grep Mem | awk '{print $2}')"
+          echo "Disk: $(df -h / | tail -1 | awk '{print $4}' | sed 's/G/GB/')"
+
       - name: Pre-migration database safety check
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
