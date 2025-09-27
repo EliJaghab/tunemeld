@@ -14,13 +14,6 @@ from django.utils import timezone
 
 logger = get_logger(__name__)
 
-# Service ranking priority (highest to lowest)
-SERVICE_RANK_PRIORITY = [
-    ServiceName.APPLE_MUSIC,
-    ServiceName.SOUNDCLOUD,
-    ServiceName.SPOTIFY,
-]
-
 
 class Command(BaseCommand):
     help = "Generate cross-service aggregate playlists"
@@ -74,20 +67,20 @@ class Command(BaseCommand):
             for service in [ServiceName.SPOTIFY, ServiceName.APPLE_MUSIC, ServiceName.SOUNDCLOUD]
         )
 
-        # Tracks on all three services get priority (0-999 range)
+        # Sum all the ranks from services the track appears on
+        total_rank = sum(service_positions.values())
+
+        # Tracks on all three services get priority (lower range)
         if has_all_three_services:
-            # Use highest priority service position for tracks on all three services
-            for service_name in SERVICE_RANK_PRIORITY:
-                if service_name.value in service_positions:
-                    return float(service_positions[service_name.value])
+            # Best possible score is 3 (rank 1 on all 3 services)
+            # Worst in this tier would be ~150 (rank 50 on all 3 services)
+            return float(total_rank)
 
-        # Tracks on 2 services get secondary priority (1000+ range)
+        # Tracks on 2 services get secondary priority (higher range)
         else:
-            for service_name in SERVICE_RANK_PRIORITY:
-                if service_name.value in service_positions:
-                    return 1000.0 + float(service_positions[service_name.value])
-
-        raise ValueError(f"No valid service found in positions: {service_positions}")
+            # Add penalty to ensure 2-service tracks rank below 3-service tracks
+            # Even the best 2-service track (rank 1+1=2) becomes 1002
+            return 1000.0 + float(total_rank)
 
     def create_aggregate_playlists(self, cross_service_matches: dict[int, list[dict]]) -> None:
         aggregate_service = get_service(ServiceName.TUNEMELD)
