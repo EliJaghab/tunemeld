@@ -186,30 +186,6 @@
 }
 
 /* Playlist-specific shimmer variants */
-.shimmer-rank {
-  width: 30px;
-  height: var(--space-lg);
-  margin: 0 auto;
-}
-
-.shimmer-info {
-  width: 60%;
-}
-
-.shimmer-info-small {
-  width: 40%;
-  height: var(--space-sm);
-  margin-top: var(--space-xs);
-}
-
-.shimmer-count {
-  width: 80px;
-}
-
-.shimmer-date {
-  width: 60px;
-}
-
 @media screen and (max-width: 768px) {
   .playlist-loading {
     padding: var(--space-md);
@@ -217,14 +193,6 @@
 
   .playlist-loading-row {
     height: var(--size-row-sm);
-  }
-
-  .shimmer-info {
-    width: 50%;
-  }
-
-  .shimmer-count {
-    width: 60px;
   }
 }
 

@@ -29,29 +29,8 @@ function createShimmerTableRow() {
   TABLE_CELL_CONFIG.forEach((cellConfig) => {
     const cell = createElement("td", cellConfig.class);
 
-    // Match the exact structure of real cells
-    if (cellConfig.class === "info") {
-      const trackInfoDiv = createElement("div", "track-info-div");
-      const shimmer = createElement("div", cellConfig.shimmerClass);
-      trackInfoDiv.appendChild(shimmer);
-      cell.appendChild(trackInfoDiv);
-    } else if (
-      cellConfig.class === "youtube-view-count" ||
-      cellConfig.class === "spotify-view-count"
-    ) {
-      const viewCountContainer = createElement("div", "view-count-container");
-      const shimmer = createElement("div", cellConfig.shimmerClass);
-      viewCountContainer.appendChild(shimmer);
-      cell.appendChild(viewCountContainer);
-    } else if (cellConfig.class === "seen-on") {
-      const sourcesContainer = createElement("div", "track-sources");
-      const shimmer = createElement("div", cellConfig.shimmerClass);
-      sourcesContainer.appendChild(shimmer);
-      cell.appendChild(sourcesContainer);
-    } else {
-      const shimmer = createElement("div", cellConfig.shimmerClass);
-      cell.appendChild(shimmer);
-    }
+    const shimmer = createElement("div", cellConfig.shimmerClass);
+    cell.appendChild(shimmer);
 
     row.appendChild(cell);
   });

@@ -85,24 +85,6 @@
   gap: var(--space-xs);
 }
 
-.shimmer-service-text::before,
-.shimmer-service-text::after {
-  content: "";
-  height: var(--space-lg);
-  background-color: var(--skeleton-color);
-  border-radius: var(--border-radius-small);
-  position: relative;
-  overflow: hidden;
-}
-
-.shimmer-service-text::before {
-  width: 100%;
-}
-
-.shimmer-service-text::after {
-  width: 75%;
-}
-
 /* Playlist-specific shimmer components */
 .loading-overlay-playlist {
   padding: var(--space-xl);
@@ -258,73 +240,6 @@
 .playlist-shimmer-row td.external {
   width: 0%;
   text-align: center;
-}
-
-/* Individual shimmer elements */
-.shimmer-rank {
-  width: var(--shimmer-rank-width);
-  height: var(--space-md);
-}
-
-.shimmer-album-cover {
-  width: var(--size-icon-lg);
-  height: var(--size-icon-lg);
-  border-radius: var(--border-radius-small);
-}
-
-.shimmer-track-info {
-  width: 100%;
-  height: var(--space-lg);
-  position: relative;
-}
-
-.shimmer-track-info::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 70%;
-  height: var(--space-md);
-  background-color: var(--skeleton-color);
-  border-radius: var(--border-radius-small);
-}
-
-.shimmer-track-info::after {
-  content: "";
-  position: absolute;
-  top: calc(var(--space-md) + var(--space-xs));
-  left: 0;
-  width: 45%;
-  height: var(--space-sm);
-  background-color: var(--skeleton-color);
-  border-radius: var(--border-radius-small);
-}
-
-.shimmer-view-count {
-  width: var(--shimmer-view-count-width);
-  height: var(--space-md);
-}
-
-.shimmer-date {
-  width: var(--shimmer-date-width);
-  height: var(--space-md);
-}
-
-.shimmer-external-links {
-  display: flex;
-  gap: var(--space-xs);
-  align-items: center;
-  width: var(--shimmer-external-links-width);
-  height: var(--space-lg);
-}
-
-.shimmer-external-links::before,
-.shimmer-external-links::after {
-  content: "";
-  width: var(--size-icon-xs);
-  height: var(--size-icon-xs);
-  background-color: var(--skeleton-color);
-  border-radius: 50%;
 }
 
 /* Responsive adjustments */

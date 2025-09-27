@@ -119,9 +119,41 @@
 
   /* Shimmer component sizes */
   --shimmer-play-count-width: 80px; /* play count skeleton width */
+  --shimmer-view-count-width: 80px; /* view count skeleton width */
   --shimmer-date-width: 40px; /* date skeleton width */
   --shimmer-rank-width: 30px; /* rank skeleton width */
   --shimmer-external-links-width: 60px; /* external links skeleton width */
+
+  /* Shimmer component definitions - all use consistent height */
+  .shimmer-rank {
+    width: var(--shimmer-rank-width);
+    height: var(--space-lg);
+  }
+  .shimmer-album-cover {
+    width: var(--size-icon-lg);
+    height: var(--size-icon-lg);
+    border-radius: var(--border-radius-small);
+  }
+  .shimmer-track-info {
+    width: 100%;
+    height: var(--space-lg);
+  }
+  .shimmer-view-count {
+    width: var(--shimmer-view-count-width);
+    height: var(--space-lg);
+  }
+  .shimmer-date {
+    width: var(--shimmer-date-width);
+    height: var(--space-lg);
+  }
+  .shimmer-external-links {
+    width: var(--shimmer-external-links-width);
+    height: var(--space-lg);
+  }
+  .shimmer-service-text {
+    width: 100%;
+    height: calc(var(--space-lg) * 2);
+  }
 
   /* Text heights and line heights */
   --size-text-height: calc(
@@ -420,41 +452,6 @@ body.dark-mode {
   gap: var(--space-xs);
 }
 
-.shimmer-service-text::before,
-.shimmer-service-text::after {
-  content: "";
-  height: var(--space-lg);
-  background-color: var(--skeleton-color);
-  border-radius: var(--border-radius-small);
-  position: relative;
-  overflow: hidden;
-}
-
-.shimmer-service-text::before {
-  width: 100%;
-}
-
-.shimmer-service-text::after {
-  width: 75%;
-}
-
-.shimmer-service-text::before::after,
-.shimmer-service-text::after::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(
-    90deg,
-    var(--skeleton-color) 0%,
-    rgba(255, 255, 255, var(--shimmer-opacity)) 50%,
-    var(--skeleton-color) 100%
-  );
-  animation: shimmer var(--shimmer-duration) infinite;
-}
-
 /* Playlist-specific shimmer components */
 .loading-overlay-playlist {
   padding: var(--space-xl);
@@ -528,11 +525,6 @@ body.dark-mode {
   height: var(--space-lg);
 }
 
-.shimmer-playlist-desc {
-  width: calc(var(--space-xl) * 12);
-  height: var(--space-lg);
-}
-
 /* Controls shimmer */
 .playlist-controls-shimmer {
   display: flex;
@@ -587,31 +579,6 @@ body.dark-mode {
 .shimmer-track-info {
   width: 100%;
   height: var(--space-lg);
-  position: relative;
-}
-
-.shimmer-track-info::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 70%;
-  height: var(--space-md);
-  background-color: var(--skeleton-color);
-  border-radius: var(--border-radius-small);
-  animation: shimmer var(--shimmer-duration) infinite;
-}
-
-.shimmer-track-info::after {
-  content: "";
-  position: absolute;
-  top: calc(var(--space-md) + var(--space-xs));
-  left: 0;
-  width: 45%;
-  height: var(--space-sm);
-  background-color: var(--skeleton-color);
-  border-radius: var(--border-radius-small);
-  animation: shimmer var(--shimmer-duration) infinite;
 }
 
 .shimmer-external-links {
@@ -620,16 +587,6 @@ body.dark-mode {
   align-items: center;
   width: 60px;
   height: var(--space-lg);
-}
-
-.shimmer-external-links::before,
-.shimmer-external-links::after {
-  content: "";
-  width: var(--size-icon-xs);
-  height: var(--size-icon-xs);
-  background-color: var(--skeleton-color);
-  border-radius: 50%;
-  animation: shimmer var(--shimmer-duration) infinite;
 }
 
 /* Responsive adjustments */
