@@ -9,7 +9,7 @@ import django.utils.timezone
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("core", "0026_add_icon_class_fields"),
+        ("core", "0031_handle_existing_aggregate_table"),
     ]
 
     operations = [

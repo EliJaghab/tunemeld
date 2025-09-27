@@ -50,7 +50,7 @@ def reverse_mark_migration(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("core", "0030_remove_playlist_playlists_etl_run_a70eb6_idx_and_more"),
+        ("core", "0026_add_icon_class_fields"),
     ]
 
     operations = [
