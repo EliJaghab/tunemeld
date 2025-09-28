@@ -691,9 +691,6 @@ async function updateCollapseButtonLabels(button, targetId, isCollapsed) {
 
     // Get button labels for this playlist type and state
     const context = `${playlistType}_${isCollapsed ? "collapsed" : "expanded"}`;
-    console.log(
-      `DEBUG: Getting collapse button labels for context: "${context}"`,
-    );
     const buttonLabels = await graphqlClient.getMiscButtonLabels(
       "collapse_button",
       context,

@@ -132,9 +132,6 @@ export function createShimmerRowFromStructure(shimmerType) {
     row.appendChild(cell);
   });
 
-  console.log(
-    `Created ${shimmerType} shimmer row with ${structure.columns.length} columns: ${structure.description}`,
-  );
   return row;
 }
 

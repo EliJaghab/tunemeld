@@ -191,7 +191,6 @@ class StateManager {
     } else {
       this.state.shimmer.currentType = type;
     }
-    console.log(`Shimmer type set to: ${this.state.shimmer.currentType}`);
   }
 
   getShimmerType() {

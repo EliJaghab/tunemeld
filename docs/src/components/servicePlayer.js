@@ -131,7 +131,6 @@ async function openPlayer(url, serviceType, trackData = null) {
   const iframe = await createIframeForService(url, serviceType);
 
   iframe.onload = function () {
-    console.log("Iframe onload fired");
     const playerContainer = document.getElementById("player-container");
     if (playerContainer) playerContainer.style.display = "block";
     closeButton.style.display = "block";
