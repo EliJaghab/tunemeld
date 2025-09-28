@@ -152,6 +152,76 @@ function getServiceUrl(track, serviceName) {
   }
 }
 
+function getActualServiceForUrl(track, serviceName) {
+  // Determine which service the URL actually points to
+  const youtubeUrl = track.youtubeUrl;
+
+  switch (serviceName) {
+    case SERVICE_NAMES.SPOTIFY:
+      return youtubeUrl ? SERVICE_NAMES.YOUTUBE : SERVICE_NAMES.SPOTIFY;
+    case SERVICE_NAMES.APPLE_MUSIC:
+      return youtubeUrl ? SERVICE_NAMES.YOUTUBE : SERVICE_NAMES.APPLE_MUSIC;
+    case SERVICE_NAMES.SOUNDCLOUD:
+      return youtubeUrl ? SERVICE_NAMES.YOUTUBE : SERVICE_NAMES.SOUNDCLOUD;
+    case SERVICE_NAMES.YOUTUBE:
+      return SERVICE_NAMES.YOUTUBE;
+    case SERVICE_NAMES.TUNEMELD:
+      if (youtubeUrl) return SERVICE_NAMES.YOUTUBE;
+      if (track.spotifyUrl) return SERVICE_NAMES.SPOTIFY;
+      if (track.appleMusicUrl) return SERVICE_NAMES.APPLE_MUSIC;
+      if (track.soundcloudUrl) return SERVICE_NAMES.SOUNDCLOUD;
+      return SERVICE_NAMES.YOUTUBE; // fallback
+    default:
+      return SERVICE_NAMES.YOUTUBE;
+  }
+}
+
+async function setTrackInfoLabels(
+  trackTitle,
+  artistElement,
+  track,
+  serviceName,
+) {
+  try {
+    const actualService = getActualServiceForUrl(track, serviceName);
+    const fullTrackName =
+      track.fullTrackName || track.trackName || "Unknown Track";
+    const fullArtistName =
+      track.fullArtistName || track.artistName || "Unknown Artist";
+
+    // Get backend-driven button labels for track title
+    const trackButtonLabels = await graphqlClient.getMiscButtonLabels(
+      "track_title",
+      actualService,
+    );
+
+    if (trackButtonLabels && trackButtonLabels.length > 0) {
+      const trackLabel = trackButtonLabels[0];
+      if (trackLabel.title) {
+        // Replace placeholders with actual track info
+        trackTitle.title = trackLabel.title
+          .replace("{trackName}", fullTrackName)
+          .replace("{artistName}", fullArtistName);
+      }
+      if (trackLabel.ariaLabel) {
+        trackTitle.setAttribute(
+          "aria-label",
+          trackLabel.ariaLabel
+            .replace("{trackName}", fullTrackName)
+            .replace("{artistName}", fullArtistName),
+        );
+      }
+    }
+
+    // Set artist tooltip
+    artistElement.title = fullArtistName;
+    artistElement.setAttribute("aria-label", `Artist: ${fullArtistName}`);
+  } catch (error) {
+    console.warn("Failed to load track info labels:", error);
+    // Continue without labels if fetch fails
+  }
+}
+
 function createTuneMeldPlaylistTableRow(track) {
   const row = document.createElement("tr");
 
@@ -183,6 +253,14 @@ function createTuneMeldPlaylistTableRow(track) {
   const artistNameElement = document.createElement("span");
   artistNameElement.className = "artist-name";
   artistNameElement.textContent = track.artistName || "Unknown Artist";
+
+  // Set backend-driven labels asynchronously
+  setTrackInfoLabels(
+    trackTitle,
+    artistNameElement,
+    track,
+    SERVICE_NAMES.TUNEMELD,
+  );
 
   trackInfoDiv.appendChild(trackTitle);
   trackInfoDiv.appendChild(document.createElement("br"));
@@ -354,6 +432,9 @@ function createServicePlaylistTableRow(track, serviceName) {
   artistNameElement.className = "artist-name";
   artistNameElement.textContent = track.artistName || "Unknown Artist";
 
+  // Set backend-driven labels asynchronously
+  setTrackInfoLabels(trackTitle, artistNameElement, track, serviceName);
+
   trackInfoDiv.appendChild(trackTitle);
   trackInfoDiv.appendChild(document.createElement("br"));
   trackInfoDiv.appendChild(artistNameElement);
@@ -363,7 +444,11 @@ function createServicePlaylistTableRow(track, serviceName) {
   const externalLinksCell = document.createElement("td");
   externalLinksCell.className = "external";
   if (track.youtubeSource) {
-    const youtubeLink = createSourceLinkFromService(track.youtubeSource);
+    const youtubeLink = createSourceLinkFromService(
+      track.youtubeSource,
+      null,
+      track,
+    );
     externalLinksCell.appendChild(youtubeLink);
   }
 
@@ -401,14 +486,18 @@ function displaySources(cell, track) {
   );
 
   serviceData.forEach((item) => {
-    const linkElement = createSourceLinkFromService(item.source, item.rank);
+    const linkElement = createSourceLinkFromService(
+      item.source,
+      item.rank,
+      track,
+    );
     sourcesContainer.appendChild(linkElement);
   });
 
   cell.appendChild(sourcesContainer);
 }
 
-function createSourceLinkFromService(source, rank = null) {
+function createSourceLinkFromService(source, rank = null, trackData = null) {
   if (!source.url) {
     return document.createTextNode("");
   }
@@ -423,6 +512,35 @@ function createSourceLinkFromService(source, rank = null) {
   sourceIcon.className = "source-icon";
   sourceIcon.src = source.iconUrl || "";
   sourceIcon.alt = source.displayName;
+
+  // Add full track name and service context to tooltip
+  if (trackData && trackData.buttonLabels) {
+    // Look for source icon button label that matches this service
+    const sourceLabel = trackData.buttonLabels.find(
+      (label) =>
+        label.buttonType === "source_icon" && label.context === source.name,
+    );
+    if (sourceLabel) {
+      if (sourceLabel.title) {
+        linkElement.title = sourceLabel.title;
+      }
+      if (sourceLabel.ariaLabel) {
+        linkElement.setAttribute("aria-label", sourceLabel.ariaLabel);
+      }
+    }
+  } else if (trackData) {
+    // Fallback: create basic tooltip with full track name
+    const fullTrackName =
+      trackData.fullTrackName || trackData.trackName || "Unknown Track";
+    const fullArtistName =
+      trackData.fullArtistName || trackData.artistName || "Unknown Artist";
+    const rankText = rank ? ` (Rank #${rank})` : "";
+    linkElement.title = `Play '${fullTrackName}' by ${fullArtistName} on ${source.displayName}${rankText}`;
+    linkElement.setAttribute(
+      "aria-label",
+      `Play ${fullTrackName} by ${fullArtistName} on ${source.displayName}`,
+    );
+  }
 
   linkElement.appendChild(sourceIcon);
   container.appendChild(linkElement);
@@ -521,7 +639,7 @@ export function resetCollapseStates() {
   });
 }
 
-export function addToggleEventListeners() {
+export async function addToggleEventListeners() {
   document.querySelectorAll(".collapse-button").forEach((button) => {
     button.removeEventListener("click", toggleCollapse);
   });
@@ -529,14 +647,69 @@ export function addToggleEventListeners() {
   document.querySelectorAll(".collapse-button").forEach((button) => {
     button.addEventListener("click", toggleCollapse);
   });
+
+  // Add initial labels to all collapse buttons
+  await Promise.all(
+    Array.from(document.querySelectorAll(".collapse-button")).map(
+      async (button) => {
+        const targetId = button.getAttribute("data-target");
+        const content = document.querySelector(`${targetId} .playlist-content`);
+        const isCollapsed = content?.classList.contains("collapsed") || false;
+        await updateCollapseButtonLabels(button, targetId, isCollapsed);
+      },
+    ),
+  );
 }
 
-function toggleCollapse(event) {
+async function toggleCollapse(event) {
   const button = event.currentTarget;
   const targetId = button.getAttribute("data-target");
   const content = document.querySelector(`${targetId} .playlist-content`);
   const playlist = document.querySelector(targetId);
+
   content.classList.toggle("collapsed");
   playlist.classList.toggle("collapsed");
-  button.textContent = content.classList.contains("collapsed") ? "▲" : "▼";
+
+  const isCollapsed = content.classList.contains("collapsed");
+  button.textContent = isCollapsed ? "▲" : "▼";
+
+  // Update button labels based on new state
+  await updateCollapseButtonLabels(button, targetId, isCollapsed);
+}
+
+async function updateCollapseButtonLabels(button, targetId, isCollapsed) {
+  try {
+    // Determine playlist type from targetId using constants
+    let playlistType = "main";
+    if (targetId.includes(SERVICE_NAMES.SPOTIFY)) {
+      playlistType = SERVICE_NAMES.SPOTIFY;
+    } else if (targetId.includes(SERVICE_NAMES.APPLE_MUSIC)) {
+      playlistType = SERVICE_NAMES.APPLE_MUSIC;
+    } else if (targetId.includes(SERVICE_NAMES.SOUNDCLOUD)) {
+      playlistType = SERVICE_NAMES.SOUNDCLOUD;
+    }
+
+    // Get button labels for this playlist type and state
+    const context = `${playlistType}_${isCollapsed ? "collapsed" : "expanded"}`;
+    console.log(
+      `DEBUG: Getting collapse button labels for context: "${context}"`,
+    );
+    const buttonLabels = await graphqlClient.getMiscButtonLabels(
+      "collapse_button",
+      context,
+    );
+
+    if (buttonLabels && buttonLabels.length > 0) {
+      const collapseLabel = buttonLabels[0];
+      if (collapseLabel.title) {
+        button.title = collapseLabel.title;
+      }
+      if (collapseLabel.ariaLabel) {
+        button.setAttribute("aria-label", collapseLabel.ariaLabel);
+      }
+    }
+  } catch (error) {
+    console.warn("Failed to update collapse button labels:", error);
+    // Continue without labels if fetch fails
+  }
 }
