@@ -180,15 +180,28 @@ class Command(BaseCommand):
         if isinstance(raw_data, str):
             raw_data = json.loads(raw_data)
 
-        return [
-            NormalizedTrack(
-                position=i + 1,
-                name=clean_unicode_text(item["title"]),
-                artist=clean_unicode_text(item["publisher"]["artist"]) or "Unknown Artist",
-                soundcloud_url=item["permalink"],
-                isrc=item["publisher"]["isrc"],
-                album_cover_url=item["artworkUrl"],
-            )
-            for i, item in enumerate(raw_data["tracks"]["items"])
-            if item["publisher"].get("isrc")
-        ]
+        tracks = []
+        for i, item in enumerate(raw_data["tracks"]["items"]):
+            track_name = clean_unicode_text(item["title"])
+            artist_name = clean_unicode_text(item["publisher"]["artist"]) or "Unknown Artist"
+            isrc = item["publisher"].get("isrc")
+
+            if not isrc:
+                logger.info(f"No ISRC for SoundCloud track, trying Spotify lookup: {track_name} by {artist_name}")
+                isrc = get_spotify_isrc(track_name, artist_name)
+
+            if isrc:
+                tracks.append(
+                    NormalizedTrack(
+                        position=i + 1,
+                        name=track_name,
+                        artist=artist_name,
+                        soundcloud_url=item["permalink"],
+                        isrc=isrc,
+                        album_cover_url=item["artworkUrl"],
+                    )
+                )
+            else:
+                logger.warning(f"Skipping SoundCloud track with no ISRC: {track_name} by {artist_name}")
+
+        return tracks
