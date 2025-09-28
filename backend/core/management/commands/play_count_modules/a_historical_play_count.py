@@ -1,8 +1,6 @@
-import concurrent.futures
 import time
 from collections import Counter
 from collections.abc import Callable
-from concurrent.futures import ThreadPoolExecutor
 from typing import TYPE_CHECKING
 
 from core.api.genre_service_api import get_service
@@ -13,7 +11,7 @@ from core.models.track import Track
 from core.services.soundcloud_service import get_soundcloud_track_view_count
 from core.services.spotify_service import get_spotify_track_view_count
 from core.services.youtube_service import get_youtube_track_view_count
-from core.utils.utils import get_logger
+from core.utils.utils import get_logger, process_in_parallel
 from django.core.management.base import BaseCommand
 from django.db import models
 from django.utils import timezone
@@ -55,7 +53,7 @@ class Command(BaseCommand):
 
         tracks_list = list(tracks)
         logger.info(f"Found {len(tunemeld_isrcs)} unique TuneMeld playlist tracks")
-        logger.info(f"Processing {len(tracks_list)} tracks with valid URLs using 3 workers...")
+        logger.info(f"Processing {len(tracks_list)} tracks with valid URLs using parallel processing...")
 
         services = {
             ServiceName.SPOTIFY: get_service(ServiceName.SPOTIFY),
@@ -67,33 +65,23 @@ class Command(BaseCommand):
         error_count = Counter()
         errors = []
 
-        with ThreadPoolExecutor(max_workers=3) as executor:
-            futures = []
-            for track in tracks_list:
-                future = executor.submit(self.process_track, track, services)
-                futures.append(future)
+        results = process_in_parallel(
+            items=tracks_list,
+            process_func=lambda track: self.process_track(track, services),
+            log_progress=True,
+            progress_interval=10,
+        )
 
-            for completed, future in enumerate(concurrent.futures.as_completed(futures), start=1):
-                try:
-                    results = future.result()
-                    for service, count in results:
-                        if count is not None:
-                            success_count[service] += 1
-                        else:
-                            error_count[service] += 1
-
-                    # Progress update every 10 tracks
-                    if completed % 10 == 0:
-                        total_success = sum(success_count.values())
-                        total_attempts = total_success + sum(error_count.values())
-                        success_rate = (total_success / total_attempts * 100) if total_attempts else 0
-                        logger.info(
-                            f"Completed {completed}/{len(tracks_list)} tracks... Success rate: {success_rate:.1f}%"
-                        )
-
-                except Exception as e:
-                    logger.error(f"Error processing track: {e}")
-                    errors.append(str(e))
+        for track, track_results, exc in results:
+            if exc:
+                logger.error(f"Error processing track {track.isrc}: {exc}")
+                errors.append(str(exc))
+            elif track_results:
+                for service, count in track_results:
+                    if count is not None:
+                        success_count[service] += 1
+                    else:
+                        error_count[service] += 1
 
         duration = time.time() - start_time
         self._print_summary(success_count, error_count, errors, duration, len(tracks_list))

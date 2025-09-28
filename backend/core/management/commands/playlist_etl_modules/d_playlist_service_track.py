@@ -122,7 +122,6 @@ class Command(BaseCommand):
         results = process_in_parallel(
             items=track_items,
             process_func=lambda item: self.process_apple_music_track(item[0], item[1]),
-            max_workers=8,
             log_progress=False,
         )
 

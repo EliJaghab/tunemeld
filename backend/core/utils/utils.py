@@ -8,6 +8,7 @@ from collections.abc import Callable
 from datetime import UTC, datetime
 from typing import Any
 
+from core.settings import MAX_WORKERS
 from dotenv import load_dotenv
 
 
@@ -70,7 +71,6 @@ def set_secrets() -> None:
 def process_in_parallel(
     items: list[Any],
     process_func: Callable[[Any], Any],
-    max_workers: int | None = None,
     log_progress: bool = True,
     progress_interval: int = 50,
 ) -> list[tuple[Any, Any | None, Exception | None]]:
@@ -80,7 +80,6 @@ def process_in_parallel(
     Args:
         items: List of items to process
         process_func: Function to process each item
-        max_workers: Maximum number of worker threads (default: min(len(items), 10))
         log_progress: Whether to log progress
         progress_interval: Log progress every N items
 
@@ -90,8 +89,7 @@ def process_in_parallel(
     if not items:
         return []
 
-    if max_workers is None:
-        max_workers = min(len(items), 10)
+    max_workers = min(len(items), MAX_WORKERS)
 
     results: list[tuple[Any, Any | None, Exception | None]] = []
     with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:

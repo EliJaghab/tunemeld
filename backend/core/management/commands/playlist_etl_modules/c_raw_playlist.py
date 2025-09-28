@@ -32,7 +32,6 @@ class Command(BaseCommand):
         results = process_in_parallel(
             items=tasks,
             process_func=process_task,
-            max_workers=2,
             log_progress=False,
         )
 

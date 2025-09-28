@@ -26,7 +26,6 @@ class Command(BaseCommand):
         results = process_in_parallel(
             items=unique_isrcs,
             process_func=lambda isrc: self.process_isrc(isrc),
-            max_workers=10,
             log_progress=True,
             progress_interval=50,
         )

@@ -53,13 +53,6 @@ jobs:
       - name: Set PYTHONPATH
         run: echo "PYTHONPATH=$PWD" >> $GITHUB_ENV
 
-      - name: Check runner specs
-        run: |
-          echo "🔍 Runner specifications:"
-          echo "CPU cores: $(nproc)"
-          echo "Memory: $(free -h | grep Mem | awk '{print $2}')"
-          echo "Disk: $(df -h / | tail -1 | awk '{print $4}' | sed 's/G/GB/')"
-
       - name: Pre-migration database safety check
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
@@ -69,16 +62,6 @@ jobs:
           CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
         run: make ci-db-safety-check
 
-      - name: Handle existing aggregate table migration
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
-          DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
-          CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
-          CF_NAMESPACE_ID: ${{ secrets.CF_NAMESPACE_ID }}
-          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
-        run: |
-          echo "⚡ Handling existing aggregate table if needed..."
-          cd backend && python manage.py fake_migration_0027
 
       - name: Apply database migrations to Railway PostgreSQL
         env:

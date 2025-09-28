@@ -39,6 +39,8 @@ CF_ACCOUNT_ID = os.getenv("CF_ACCOUNT_ID", "")
 CF_NAMESPACE_ID = os.getenv("CF_NAMESPACE_ID", "")
 CF_API_TOKEN = os.getenv("CF_API_TOKEN", "")
 
+MAX_WORKERS: Final = 4
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 PROD_API_BASE_URL = "https://api.tunemeld.com"
