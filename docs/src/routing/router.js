@@ -113,9 +113,17 @@ class AppRouter {
     this.isInitialLoad = false;
   }
 
-  updatePageTitle(genre) {
-    const genreDisplay = this.getGenreDisplayName(genre);
-    document.title = `tunemeld - ${genreDisplay}`;
+  updatePageTitle(genre, trackInfo = null) {
+    if (trackInfo && trackInfo.trackName && trackInfo.artistName) {
+      document.title = `${trackInfo.trackName} - ${trackInfo.artistName}`;
+    } else {
+      const genreDisplay = this.getGenreDisplayName(genre);
+      document.title = `tunemeld - ${genreDisplay}`;
+    }
+  }
+
+  updateTitleWithTrackInfo(trackName, artistName) {
+    document.title = `${trackName} - ${artistName}`;
   }
 
   updateFavicon(genre) {

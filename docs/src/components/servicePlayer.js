@@ -201,6 +201,13 @@ async function openPlayer(url, serviceType, trackData = null) {
     if (playerContainer) playerContainer.style.display = "block";
     closeButton.style.display = "block";
 
+    if (trackData && trackData.trackName && trackData.artistName) {
+      appRouter.updateTitleWithTrackInfo(
+        trackData.trackName,
+        trackData.artistName,
+      );
+    }
+
     // Dynamically inject vertical spacing before and after player controls
     const playerContent = document.getElementById("player-content");
     const playerControls = document.getElementById("player-controls");
@@ -267,6 +274,12 @@ function closePlayer() {
   currentService = null;
   if (playerContainer) playerContainer.style.display = "none";
   if (serviceButtonsContainer) serviceButtonsContainer.style.display = "none";
+
+  // Reset page title to current genre
+  const currentGenre = appRouter.getCurrentGenre();
+  if (currentGenre) {
+    appRouter.updatePageTitle(currentGenre);
+  }
 
   // Remove all dynamically injected vertical spacing
   if (playerContent) {
