@@ -23,7 +23,75 @@ class Command(BaseCommand):
         logger.info("Track/playlist cache warmed")
 
     def _warm_track_caches(self):
-        """Execute GraphQL queries to warm track/playlist cache."""
+        """Execute GraphQL queries to warm track/playlist cache with ALL frontend queries."""
+
+        # 1. Warm getAvailableGenres() query
+        schema.execute("""
+            query GetAvailableGenres {
+                genres {
+                    id
+                    name
+                    displayName
+                    iconUrl
+                    buttonLabels {
+                        buttonType
+                        context
+                        title
+                        ariaLabel
+                    }
+                }
+                defaultGenre
+            }
+        """)
+
+        # 2. Warm fetchPlaylistRanks() query
+        schema.execute("""
+            query GetPlaylistRanks {
+                ranks {
+                    name
+                    displayName
+                    sortField
+                    sortOrder
+                    isDefault
+                    dataField
+                }
+            }
+        """)
+
+        # 3. Warm getServiceConfigs() query
+        schema.execute("""
+            query GetServiceConfigs {
+                serviceConfigs {
+                    name
+                    displayName
+                    iconUrl
+                    urlField
+                    sourceField
+                    buttonLabels {
+                        buttonType
+                        context
+                        title
+                        ariaLabel
+                    }
+                }
+            }
+        """)
+
+        # 4. Warm getIframeConfigs() query
+        schema.execute("""
+            query GetIframeConfigs {
+                iframeConfigs {
+                    serviceName
+                    embedBaseUrl
+                    embedParams
+                    allow
+                    height
+                    referrerPolicy
+                }
+            }
+        """)
+
+        # 5. Warm getPlaylistMetadata() query for each genre
         for genre in GenreName:
             schema.execute(f"""
                 query GetPlaylistMetadata {{
@@ -35,10 +103,12 @@ class Command(BaseCommand):
                         playlistUrl
                         genreName
                         serviceName
+                        serviceIconUrl
                     }}
                 }}
             """)
 
+        # 6. Warm getPlaylistTracks() query for each genre/service combination with FULL field set
         for genre in GenreName:
             for service in [ServiceName.SPOTIFY, ServiceName.APPLE_MUSIC, ServiceName.SOUNDCLOUD, ServiceName.TUNEMELD]:
                 schema.execute(f"""
@@ -47,18 +117,121 @@ class Command(BaseCommand):
                             genreName
                             serviceName
                             tracks {{
+                                tunemeldRank(genre: "{genre.value}", service: "{service.value}")
+                                spotifyRank
+                                appleMusicRank
+                                soundcloudRank
+                                isrc
                                 trackName
                                 artistName
+                                fullTrackName
+                                fullArtistName
                                 albumName
-                                isrc
+                                albumCoverUrl
+                                youtubeUrl
                                 spotifyUrl
                                 appleMusicUrl
-                                youtubeUrl
                                 soundcloudUrl
-                                albumCoverUrl
-                                aggregateRank
-                                aggregateScore
+                                buttonLabels {{
+                                    buttonType
+                                    context
+                                    title
+                                    ariaLabel
+                                }}
+                                spotifySource {{
+                                    name
+                                    displayName
+                                    url
+                                    iconUrl
+                                }}
+                                appleMusicSource {{
+                                    name
+                                    displayName
+                                    url
+                                    iconUrl
+                                }}
+                                soundcloudSource {{
+                                    name
+                                    displayName
+                                    url
+                                    iconUrl
+                                }}
+                                youtubeSource {{
+                                    name
+                                    displayName
+                                    url
+                                    iconUrl
+                                }}
+                                seenOnSpotify
+                                seenOnAppleMusic
+                                seenOnSoundcloud
+                                trackDetailUrlSpotify: trackDetailUrl(
+                                    genre: "{genre.value}",
+                                    rank: "tunemeld-rank",
+                                    player: "spotify"
+                                )
+                                trackDetailUrlAppleMusic: trackDetailUrl(
+                                    genre: "{genre.value}",
+                                    rank: "tunemeld-rank",
+                                    player: "apple_music"
+                                )
+                                trackDetailUrlSoundcloud: trackDetailUrl(
+                                    genre: "{genre.value}",
+                                    rank: "tunemeld-rank",
+                                    player: "soundcloud"
+                                )
+                                trackDetailUrlYoutube: trackDetailUrl(
+                                    genre: "{genre.value}",
+                                    rank: "tunemeld-rank",
+                                    player: "youtube"
+                                )
                             }}
+                        }}
+                    }}
+                """)
+
+        # 7. Warm getRankButtonLabels() for each rank type
+        rank_types = ["tunemeld-rank", "spotify-rank", "apple-music-rank", "soundcloud-rank"]
+        for rank_type in rank_types:
+            schema.execute(f"""
+                query GetRankButtonLabels {{
+                    rankButtonLabels(rankType: "{rank_type}") {{
+                        buttonType
+                        context
+                        title
+                        ariaLabel
+                    }}
+                }}
+            """)
+
+        # 8. Warm getMiscButtonLabels() for common button types
+        misc_button_types = [
+            ("close_player", None),
+            ("service_player_button", "spotify"),
+            ("service_player_button", "apple_music"),
+            ("service_player_button", "soundcloud"),
+            ("service_player_button", "youtube"),
+        ]
+        for button_type, context in misc_button_types:
+            if context:
+                schema.execute(f"""
+                    query GetMiscButtonLabels {{
+                        miscButtonLabels(buttonType: "{button_type}", context: "{context}") {{
+                            buttonType
+                            context
+                            title
+                            ariaLabel
+                        }}
+                    }}
+                """)
+            else:
+                schema.execute(f"""
+                    query GetMiscButtonLabels {{
+                        miscButtonLabels(buttonType: "{button_type}") {{
+                            buttonType
+                            context
+                            title
+                            ariaLabel
                         }}
                     }}
                 """)
