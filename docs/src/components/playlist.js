@@ -739,13 +739,11 @@ async function toggleCollapse(event) {
   const isCollapsed = content.classList.contains("collapsed");
   button.textContent = isCollapsed ? "▲" : "▼";
 
-  // Update button labels based on new state
   await updateCollapseButtonLabels(button, targetId, isCollapsed);
 }
 
 async function updateCollapseButtonLabels(button, targetId, isCollapsed) {
   try {
-    // Determine playlist type from targetId using constants
     let playlistType = "main";
     if (targetId.includes(SERVICE_NAMES.SPOTIFY)) {
       playlistType = SERVICE_NAMES.SPOTIFY;
@@ -755,7 +753,6 @@ async function updateCollapseButtonLabels(button, targetId, isCollapsed) {
       playlistType = SERVICE_NAMES.SOUNDCLOUD;
     }
 
-    // Get button labels for this playlist type and state
     const context = `${playlistType}_${isCollapsed ? "collapsed" : "expanded"}`;
     const buttonLabels = await graphqlClient.getMiscButtonLabels(
       "collapse_button",
