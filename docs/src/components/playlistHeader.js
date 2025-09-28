@@ -11,6 +11,27 @@ function isMobileView() {
   return window.innerWidth <= 480;
 }
 
+async function addMoreButtonLabels(moreButton, serviceName) {
+  try {
+    const buttonLabels = await graphqlClient.getMiscButtonLabels(
+      "more_button",
+      serviceName,
+    );
+    if (buttonLabels && buttonLabels.length > 0) {
+      const moreLabel = buttonLabels[0];
+      if (moreLabel.title) {
+        moreButton.title = moreLabel.title;
+      }
+      if (moreLabel.ariaLabel) {
+        moreButton.setAttribute("aria-label", moreLabel.ariaLabel);
+      }
+    }
+  } catch (error) {
+    console.warn("Failed to load more button labels:", error);
+    // Continue without labels if fetch fails
+  }
+}
+
 function updateTuneMeldDescription(description) {
   const descriptionElement = document.getElementById("playlist-description");
   if (descriptionElement && description) {
@@ -137,6 +158,9 @@ function createAndAttachModal(
   // If there's a more button, make it also open the modal
   const moreButton = descriptionElement.querySelector(".more-button");
   if (moreButton) {
+    // Add button labels from backend
+    addMoreButtonLabels(moreButton, serviceName);
+
     moreButton.addEventListener("click", function (event) {
       event.preventDefault();
       event.stopPropagation();
@@ -145,12 +169,13 @@ function createAndAttachModal(
     });
   }
 
-  modal
-    .querySelector(".description-modal-close")
-    .addEventListener("click", function () {
-      modal.classList.remove("active");
-      overlay.classList.remove("active");
-    });
+  const closeButton = modal.querySelector(".description-modal-close");
+  closeButton.title = "Close description";
+  closeButton.setAttribute("aria-label", "Close description");
+  closeButton.addEventListener("click", function () {
+    modal.classList.remove("active");
+    overlay.classList.remove("active");
+  });
 
   overlay.addEventListener("click", function () {
     modal.classList.remove("active");

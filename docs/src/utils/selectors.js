@@ -97,7 +97,7 @@ export async function updateGenreData(genre, updateAll = false) {
     sortTable(stateManager.getCurrentColumn(), stateManager.getCurrentOrder());
     hideShimmerLoaders();
     resetCollapseStates();
-    addToggleEventListeners();
+    await addToggleEventListeners();
     setupBodyClickListener(genre);
   } catch (error) {
     console.error("Error updating genre data:", error);

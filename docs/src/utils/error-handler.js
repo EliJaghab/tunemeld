@@ -37,6 +37,10 @@ class ErrorHandler {
 
       const retryBtn = errorBanner.querySelector("#error-retry-btn");
       if (retryBtn && this.retryCallback) {
+        // Add accessibility labels
+        retryBtn.title = "Retry loading the page";
+        retryBtn.setAttribute("aria-label", "Retry loading the page");
+
         retryBtn.onclick = () => {
           errorBanner.remove();
           this.retryCallback();

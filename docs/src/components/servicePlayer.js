@@ -73,10 +73,28 @@ export function setupBodyClickListener(genre) {
   bodyClickListenerSetup = true;
 }
 
-export function setupClosePlayerButton() {
+export async function setupClosePlayerButton() {
   const closeButton = document.getElementById("close-player-button");
   if (closeButton) {
     closeButton.addEventListener("click", closePlayer);
+
+    // Add button labels from backend
+    try {
+      const buttonLabels =
+        await graphqlClient.getMiscButtonLabels("close_player");
+      if (buttonLabels && buttonLabels.length > 0) {
+        const closeLabel = buttonLabels[0];
+        if (closeLabel.title) {
+          closeButton.title = closeLabel.title;
+        }
+        if (closeLabel.ariaLabel) {
+          closeButton.setAttribute("aria-label", closeLabel.ariaLabel);
+        }
+      }
+    } catch (error) {
+      console.warn("Failed to load close button labels:", error);
+      // Continue without labels if fetch fails
+    }
   } else {
     console.error("Close player button not found.");
   }
@@ -251,7 +269,7 @@ async function createServiceButtons(trackData) {
 
   const addedUrls = new Set();
 
-  configs.forEach((config) => {
+  for (const config of configs) {
     if (config.urlField && config.sourceField) {
       const url = trackData[config.urlField];
       const source = trackData[config.sourceField];
@@ -261,7 +279,30 @@ async function createServiceButtons(trackData) {
 
         const button = document.createElement("button");
         button.className = "service-link-button";
-        button.title = `Play on ${source.displayName}`;
+
+        // Use backend button labels if available, otherwise fallback
+        try {
+          const buttonLabels = await graphqlClient.getMiscButtonLabels(
+            "service_player_button",
+            source.name,
+          );
+          if (buttonLabels && buttonLabels.length > 0) {
+            const serviceLabel = buttonLabels[0];
+            if (serviceLabel.title) {
+              button.title = serviceLabel.title;
+            }
+            if (serviceLabel.ariaLabel) {
+              button.setAttribute("aria-label", serviceLabel.ariaLabel);
+            }
+          } else {
+            // Fallback to basic label
+            button.title = `Play on ${source.displayName}`;
+          }
+        } catch (error) {
+          console.warn("Failed to load service button labels:", error);
+          button.title = `Play on ${source.displayName}`;
+        }
+
         button.addEventListener("click", async () => {
           const serviceType = getServiceType(url);
           if (serviceType !== "none") {
@@ -280,7 +321,7 @@ async function createServiceButtons(trackData) {
         serviceButtonsContainer.appendChild(button);
       }
     }
-  });
+  }
 
   serviceButtonsContainer.style.display = "flex";
 }

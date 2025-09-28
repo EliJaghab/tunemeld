@@ -28,8 +28,28 @@ function handleTosPrivacyOverlay() {
   }
 }
 
-export function initializeTosPrivacyOverlay() {
+export async function initializeTosPrivacyOverlay() {
   const acceptButton = document.getElementById("acceptButton");
   acceptButton.onclick = acceptTosPrivacy;
+
+  // Add button labels from backend
+  try {
+    const { graphqlClient } = await import("./src/services/graphql-client.js");
+    const buttonLabels =
+      await graphqlClient.getMiscButtonLabels("accept_terms");
+    if (buttonLabels && buttonLabels.length > 0) {
+      const acceptLabel = buttonLabels[0];
+      if (acceptLabel.title) {
+        acceptButton.title = acceptLabel.title;
+      }
+      if (acceptLabel.ariaLabel) {
+        acceptButton.setAttribute("aria-label", acceptLabel.ariaLabel);
+      }
+    }
+  } catch (error) {
+    console.warn("Failed to load accept button labels:", error);
+    // Continue without labels if fetch fails
+  }
+
   handleTosPrivacyOverlay();
 }
