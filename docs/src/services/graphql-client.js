@@ -170,6 +170,9 @@ class GraphQLClient {
           serviceName
           tracks {
             tunemeldRank(genre: $genre, service: $service)
+            spotifyRank
+            appleMusicRank
+            soundcloudRank
             isrc
             trackName
             artistName

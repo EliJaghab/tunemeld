@@ -364,36 +364,65 @@ function displaySources(cell, track) {
   const sourcesContainer = document.createElement("div");
   sourcesContainer.className = "track-sources";
 
-  const serviceSourcesData = [
-    { source: track.spotifySource, seenOn: track.seenOnSpotify },
-    { source: track.appleMusicSource, seenOn: track.seenOnAppleMusic },
-    { source: track.soundcloudSource, seenOn: track.seenOnSoundcloud },
+  // Use new rank-based approach for showing service icons with badges
+  const serviceData = [
+    {
+      source: track.spotifySource,
+      rank: track.spotifyRank,
+      seenOn: track.seenOnSpotify,
+    },
+    {
+      source: track.appleMusicSource,
+      rank: track.appleMusicRank,
+      seenOn: track.seenOnAppleMusic,
+    },
+    {
+      source: track.soundcloudSource,
+      rank: track.soundcloudRank,
+      seenOn: track.seenOnSoundcloud,
+    },
   ].filter(
     (item) => item.source !== null && item.source !== undefined && item.seenOn,
   );
 
-  serviceSourcesData.forEach((item) => {
-    const linkElement = createSourceLinkFromService(item.source);
+  serviceData.forEach((item) => {
+    const linkElement = createSourceLinkFromService(item.source, item.rank);
     sourcesContainer.appendChild(linkElement);
   });
 
   cell.appendChild(sourcesContainer);
 }
 
-function createSourceLinkFromService(source) {
+function createSourceLinkFromService(source, rank = null) {
   if (!source.url) {
     return document.createTextNode("");
   }
 
   const sourceIcon = document.createElement("img");
   const linkElement = document.createElement("a");
+  const container = document.createElement("div");
+
+  container.className = "source-icon-container";
   linkElement.href = source.url || "#";
   linkElement.target = "_blank";
   sourceIcon.className = "source-icon";
   sourceIcon.src = source.iconUrl || "";
   sourceIcon.alt = source.displayName;
+
   linkElement.appendChild(sourceIcon);
-  return linkElement;
+  container.appendChild(linkElement);
+
+  // Add rank badge if rank exists
+  if (rank !== null && rank !== undefined) {
+    const badge = document.createElement("span");
+    badge.className = `rank-badge ${
+      rank >= 10 ? "double-digit" : "single-digit"
+    }`;
+    badge.textContent = rank.toString();
+    container.appendChild(badge);
+  }
+
+  return container;
 }
 
 let playlistData = [];
