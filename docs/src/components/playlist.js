@@ -162,55 +162,6 @@ export function renderPlaylistTracks(playlists, placeholderId, serviceName) {
   });
 }
 
-function getServiceUrl(track, serviceName) {
-  // Always prioritize YouTube first, then fallback to original service
-  const youtubeUrl = track.youtubeUrl;
-
-  switch (serviceName) {
-    case SERVICE_NAMES.SPOTIFY:
-      return youtubeUrl || track.spotifyUrl;
-    case SERVICE_NAMES.APPLE_MUSIC:
-      return youtubeUrl || track.appleMusicUrl;
-    case SERVICE_NAMES.SOUNDCLOUD:
-      return youtubeUrl || track.soundcloudUrl;
-    case SERVICE_NAMES.YOUTUBE:
-      return track.youtubeUrl;
-    case SERVICE_NAMES.TUNEMELD:
-      return (
-        youtubeUrl ||
-        track.spotifyUrl ||
-        track.appleMusicUrl ||
-        track.soundcloudUrl
-      );
-    default:
-      return youtubeUrl;
-  }
-}
-
-function getActualServiceForUrl(track, serviceName) {
-  // Determine which service the URL actually points to
-  const youtubeUrl = track.youtubeUrl;
-
-  switch (serviceName) {
-    case SERVICE_NAMES.SPOTIFY:
-      return youtubeUrl ? SERVICE_NAMES.YOUTUBE : SERVICE_NAMES.SPOTIFY;
-    case SERVICE_NAMES.APPLE_MUSIC:
-      return youtubeUrl ? SERVICE_NAMES.YOUTUBE : SERVICE_NAMES.APPLE_MUSIC;
-    case SERVICE_NAMES.SOUNDCLOUD:
-      return youtubeUrl ? SERVICE_NAMES.YOUTUBE : SERVICE_NAMES.SOUNDCLOUD;
-    case SERVICE_NAMES.YOUTUBE:
-      return SERVICE_NAMES.YOUTUBE;
-    case SERVICE_NAMES.TUNEMELD:
-      if (youtubeUrl) return SERVICE_NAMES.YOUTUBE;
-      if (track.spotifyUrl) return SERVICE_NAMES.SPOTIFY;
-      if (track.appleMusicUrl) return SERVICE_NAMES.APPLE_MUSIC;
-      if (track.soundcloudUrl) return SERVICE_NAMES.SOUNDCLOUD;
-      return SERVICE_NAMES.YOUTUBE; // fallback
-    default:
-      return SERVICE_NAMES.YOUTUBE;
-  }
-}
-
 async function setTrackInfoLabels(
   trackTitle,
   artistElement,
@@ -218,7 +169,6 @@ async function setTrackInfoLabels(
   serviceName,
 ) {
   try {
-    const actualService = getActualServiceForUrl(track, serviceName);
     const fullTrackName =
       track.fullTrackName || track.trackName || "Unknown Track";
     const fullArtistName =
@@ -227,7 +177,7 @@ async function setTrackInfoLabels(
     // Get backend-driven button labels for track title
     const trackButtonLabels = await graphqlClient.getMiscButtonLabels(
       "track_title",
-      actualService,
+      serviceName,
     );
 
     if (trackButtonLabels && trackButtonLabels.length > 0) {
@@ -282,7 +232,14 @@ function createTuneMeldPlaylistTableRow(track) {
 
   const trackTitle = document.createElement("a");
   trackTitle.className = "track-title";
-  trackTitle.href = getServiceUrl(track, SERVICE_NAMES.TUNEMELD) || "#";
+  // For TuneMeld Playlist, use the first available internal track URL (YouTube priority)
+  const trackUrl =
+    track.trackDetailUrlYoutube ||
+    track.trackDetailUrlSpotify ||
+    track.trackDetailUrlAppleMusic ||
+    track.trackDetailUrlSoundcloud ||
+    "#";
+  trackTitle.href = trackUrl;
   trackTitle.textContent = track.trackName || "Unknown Track";
 
   const artistNameElement = document.createElement("span");
@@ -460,7 +417,26 @@ function createServicePlaylistTableRow(track, serviceName) {
 
   const trackTitle = document.createElement("a");
   trackTitle.className = "track-title";
-  trackTitle.href = getServiceUrl(track, serviceName) || "#";
+  // For service playlists, use the specific service's internal track URL
+  let trackUrl = "#";
+  if (serviceName === SERVICE_NAMES.SPOTIFY) {
+    trackUrl = track.trackDetailUrlSpotify || "#";
+  } else if (serviceName === SERVICE_NAMES.APPLE_MUSIC) {
+    trackUrl = track.trackDetailUrlAppleMusic || "#";
+  } else if (serviceName === SERVICE_NAMES.SOUNDCLOUD) {
+    trackUrl = track.trackDetailUrlSoundcloud || "#";
+  } else if (serviceName === SERVICE_NAMES.YOUTUBE) {
+    trackUrl = track.trackDetailUrlYoutube || "#";
+  } else if (serviceName === SERVICE_NAMES.TOTAL) {
+    // For total views, use first available internal URL
+    trackUrl =
+      track.trackDetailUrlYoutube ||
+      track.trackDetailUrlSpotify ||
+      track.trackDetailUrlAppleMusic ||
+      track.trackDetailUrlSoundcloud ||
+      "#";
+  }
+  trackTitle.href = trackUrl;
   trackTitle.textContent = track.trackName || "Unknown Track";
 
   const artistNameElement = document.createElement("span");

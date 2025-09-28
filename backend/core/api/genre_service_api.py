@@ -1,6 +1,7 @@
 from core.constants import ServiceName
 from core.models import Genre, Service, ServiceTrack
 from core.models.playlist import Playlist, Rank, RawPlaylistData
+from core.models.track import Track
 
 
 def get_service(name: str | ServiceName) -> Service | None:
@@ -24,6 +25,11 @@ def get_genre_by_id(genre_id: int) -> Genre | None:
         return Genre.objects.get(id=genre_id)
     except Genre.DoesNotExist:
         return None
+
+
+def get_track_by_isrc(isrc: str) -> Track | None:
+    """Get track by ISRC, returning the most recent one if multiple exist."""
+    return Track.objects.filter(isrc=isrc).order_by("-id").first()
 
 
 def get_rank(name: str) -> Rank | None:

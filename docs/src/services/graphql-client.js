@@ -1,4 +1,5 @@
 import { getDjangoApiBaseUrl } from "@/config/config.js";
+import { SERVICE_NAMES } from "@/config/constants.js";
 
 class GraphQLClient {
   constructor() {
@@ -225,6 +226,10 @@ class GraphQLClient {
             seenOnSpotify
             seenOnAppleMusic
             seenOnSoundcloud
+            trackDetailUrlSpotify: trackDetailUrl(genre: $genre, rank: "tunemeld-rank", player: "${SERVICE_NAMES.SPOTIFY}")
+            trackDetailUrlAppleMusic: trackDetailUrl(genre: $genre, rank: "tunemeld-rank", player: "${SERVICE_NAMES.APPLE_MUSIC}")
+            trackDetailUrlSoundcloud: trackDetailUrl(genre: $genre, rank: "tunemeld-rank", player: "${SERVICE_NAMES.SOUNDCLOUD}")
+            trackDetailUrlYoutube: trackDetailUrl(genre: $genre, rank: "tunemeld-rank", player: "${SERVICE_NAMES.YOUTUBE}")
           }
         }
       }

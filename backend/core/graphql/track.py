@@ -4,6 +4,7 @@ from core.api.genre_service_api import (
     get_track_rank_by_track_object,
     is_track_seen_on_service,
 )
+from core.api.track_metadata_api import build_track_query_url
 from core.constants import ServiceName
 from core.graphql.button_labels import ButtonLabelType, generate_track_button_labels
 from core.graphql.service import ServiceType
@@ -36,6 +37,12 @@ class TrackType(DjangoObjectType):
     full_track_name = graphene.String(description="Complete track name without truncation")
     full_artist_name = graphene.String(description="Complete artist name without truncation")
     button_labels = graphene.List(ButtonLabelType, description="Contextual button labels for this track")
+    track_detail_url = graphene.String(
+        description="Internal URL for this track with genre/rank/player context",
+        genre=graphene.String(required=True),
+        rank=graphene.String(required=True),
+        player=graphene.String(required=True),
+    )
 
     tunemeld_rank = graphene.Int(
         description="Position in the playlist",
@@ -76,6 +83,10 @@ class TrackType(DjangoObjectType):
         genre = info.variable_values.get("genre")
         service = info.variable_values.get("service")
         return generate_track_button_labels(self, genre=genre, service=service)
+
+    def resolve_track_detail_url(self, info, genre, rank, player):
+        """Generate internal track URL for sharing and navigation."""
+        return build_track_query_url(genre, rank, self.isrc, player)
 
     def resolve_tunemeld_rank(self, info, genre, service):
         """

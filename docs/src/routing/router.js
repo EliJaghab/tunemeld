@@ -1,7 +1,10 @@
 import Navigo from "https://cdn.jsdelivr.net/npm/navigo@8.11.1/+esm";
 import { updateGenreData } from "@/utils/selectors.js";
 import { stateManager } from "@/state/StateManager.js";
-import { setupBodyClickListener } from "@/components/servicePlayer.js";
+import {
+  setupBodyClickListener,
+  openTrackFromUrl,
+} from "@/components/servicePlayer.js";
 import { errorHandler } from "@/utils/error-handler.js";
 import { showInitialShimmer } from "@/components/shimmer.js";
 import { graphqlClient } from "@/services/graphql-client.js";
@@ -45,11 +48,13 @@ class AppRouter {
       const urlParams = new URLSearchParams(window.location.search);
       const genre = urlParams.get("genre");
       const rank = urlParams.get("rank");
+      const player = urlParams.get("player");
+      const isrc = urlParams.get("isrc");
 
       if (genre && this.isValidGenre(genre)) {
         // Use default rank if none specified, but don't redirect
         const rankToUse = rank || this.getDefaultRank();
-        await this.handleGenreRoute(genre, rankToUse);
+        await this.handleGenreRoute(genre, rankToUse, player, isrc);
       } else {
         const defaultGenre = this.getDefaultGenre();
         const defaultRank = this.getDefaultRank();
@@ -68,7 +73,7 @@ class AppRouter {
     });
   }
 
-  async handleGenreRoute(genre, rank) {
+  async handleGenreRoute(genre, rank, player = null, isrc = null) {
     if (!this.hasValidData()) {
       return;
     }
@@ -78,7 +83,7 @@ class AppRouter {
       return;
     }
 
-    await this.activateGenre(genre, rank);
+    await this.activateGenre(genre, rank, player, isrc);
   }
 
   redirectToDefault() {
@@ -89,7 +94,7 @@ class AppRouter {
     }
   }
 
-  async activateGenre(genre, rank) {
+  async activateGenre(genre, rank, player = null, isrc = null) {
     const genreChanged = this.currentGenre !== genre;
     const needsFullUpdate = genreChanged || this.isInitialLoad;
 
@@ -98,7 +103,12 @@ class AppRouter {
     this.updateFavicon(genre);
     this.syncGenreButtons(genre);
     this.syncRankState(rank);
+    this.syncTrackState(player, isrc);
     await this.loadGenreContent(genre, needsFullUpdate);
+
+    if (player && isrc) {
+      await this.openTrackPlayer(genre, player, isrc);
+    }
 
     this.isInitialLoad = false;
   }
@@ -149,6 +159,14 @@ class AppRouter {
     }
   }
 
+  syncTrackState(player, isrc) {
+    if (player && isrc) {
+      stateManager.setCurrentTrack(isrc, player);
+    } else {
+      stateManager.clearCurrentTrack();
+    }
+  }
+
   async loadGenreContent(genre, fullUpdate = true) {
     // Show initial shimmer only on first app load
     if (this.isInitialLoad) {
@@ -180,6 +198,31 @@ class AppRouter {
     if (currentGenre) {
       this.navigateToGenre(currentGenre, sortField);
     }
+  }
+
+  navigateToTrack(genre, rank, player, isrc) {
+    if (!this.router.routes || this.router.routes.length === 0) {
+      this.setupRoutes();
+    }
+
+    let url = `/?genre=${encodeURIComponent(genre)}`;
+    if (rank) {
+      url += `&rank=${encodeURIComponent(rank)}`;
+    }
+    if (player) {
+      url += `&player=${encodeURIComponent(player)}`;
+    }
+    if (isrc) {
+      url += `&isrc=${encodeURIComponent(isrc)}`;
+    }
+    window.history.pushState({}, "", url);
+    this.router.resolve();
+  }
+
+  async openTrackPlayer(genre, player, isrc) {
+    // Wait a bit for the playlist to be loaded
+    await new Promise((resolve) => setTimeout(resolve, 100));
+    return await openTrackFromUrl(genre, player, isrc);
   }
 
   getCurrentGenre() {

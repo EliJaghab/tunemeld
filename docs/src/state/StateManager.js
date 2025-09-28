@@ -31,6 +31,8 @@ class StateManager {
       sortOrder: "asc",
       theme: null,
       currentGenre: null,
+      currentIsrc: null,
+      currentPlayer: null,
       defaultRankField: null, // Store the default from backend
       shimmer: {
         services: false,
@@ -132,6 +134,33 @@ class StateManager {
 
   setCurrentGenre(genre) {
     this.state.currentGenre = genre;
+  }
+
+  // Track and Player Management
+  getCurrentIsrc() {
+    return this.state.currentIsrc;
+  }
+
+  setCurrentIsrc(isrc) {
+    this.state.currentIsrc = isrc;
+  }
+
+  getCurrentPlayer() {
+    return this.state.currentPlayer;
+  }
+
+  setCurrentPlayer(player) {
+    this.state.currentPlayer = player;
+  }
+
+  setCurrentTrack(isrc, player) {
+    this.state.currentIsrc = isrc;
+    this.state.currentPlayer = player;
+  }
+
+  clearCurrentTrack() {
+    this.state.currentIsrc = null;
+    this.state.currentPlayer = null;
   }
 
   // DOM Element Caching

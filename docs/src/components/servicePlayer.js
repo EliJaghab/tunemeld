@@ -1,10 +1,13 @@
 import { SERVICE_NAMES } from "@/config/constants.js";
 import { graphqlClient } from "@/services/graphql-client.js";
+import { appRouter } from "@/routing/router.js";
 
 let serviceConfigs = null;
 let iframeConfigs = null;
 let serviceButtonsCreated = false;
 let bodyClickListenerSetup = false;
+let currentIframe = null;
+let currentService = null;
 
 async function loadIframeConfigs() {
   if (!iframeConfigs) {
@@ -73,6 +76,38 @@ export function setupBodyClickListener(genre) {
   bodyClickListenerSetup = true;
 }
 
+export async function openTrackFromUrl(genre, player, isrc) {
+  try {
+    const tracks = document.querySelectorAll("tr[data-isrc]");
+    for (const row of tracks) {
+      if (row.getAttribute("data-isrc") === isrc) {
+        const trackData = JSON.parse(row.getAttribute("data-track") || "{}");
+
+        const configs = await loadServiceConfigs();
+        const serviceConfig = configs.find((config) => config.name === player);
+
+        if (!serviceConfig || !serviceConfig.urlField) {
+          console.warn(`Unknown service or missing urlField: ${player}`);
+          continue;
+        }
+
+        const url = trackData[serviceConfig.urlField];
+        if (url) {
+          await openPlayer(url, player, trackData);
+          window.scrollTo({ top: 0, behavior: "smooth" });
+          return true;
+        }
+      }
+    }
+
+    console.warn(`Track with ISRC ${isrc} not found in current playlist`);
+    return false;
+  } catch (error) {
+    console.error("Error opening track player:", error);
+    return false;
+  }
+}
+
 export async function setupClosePlayerButton() {
   const closeButton = document.getElementById("close-player-button");
   if (closeButton) {
@@ -110,6 +145,11 @@ async function handleLinkClick(event, link, genre, isrc) {
     const trackData = row
       ? JSON.parse(row.getAttribute("data-track") || "{}")
       : null;
+
+    // Use centralized navigation to update URL and show player
+    appRouter.navigateToTrack(genre, "tunemeld-rank", serviceType, isrc);
+
+    // Still show the player immediately for better UX
     await openPlayer(url, serviceType, trackData);
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
@@ -122,13 +162,39 @@ async function openPlayer(url, serviceType, trackData = null) {
     "service-buttons-container",
   );
 
-  placeholder.innerHTML = "";
+  // Clear service buttons but preserve iframe state
   if (serviceButtonsContainer) {
     serviceButtonsContainer.innerHTML = "";
     serviceButtonsContainer.style.display = "none";
   }
 
-  const iframe = await createIframeForService(url, serviceType);
+  // Use centralized iframe management
+  let iframe;
+  if (currentIframe && currentService === serviceType) {
+    // Reuse existing iframe for same service
+    try {
+      const iframeSrc = await graphqlClient.generateIframeUrl(serviceType, url);
+      if (iframeSrc) {
+        currentIframe.src = iframeSrc;
+        iframe = currentIframe;
+      } else {
+        throw new Error("Failed to generate iframe URL");
+      }
+    } catch (error) {
+      console.error("Error updating iframe src:", error);
+      // Create new iframe
+      placeholder.innerHTML = "";
+      iframe = await createIframeForService(url, serviceType);
+      currentIframe = iframe;
+      currentService = serviceType;
+    }
+  } else {
+    // Create new iframe
+    placeholder.innerHTML = "";
+    iframe = await createIframeForService(url, serviceType);
+    currentIframe = iframe;
+    currentService = serviceType;
+  }
 
   iframe.onload = function () {
     const playerContainer = document.getElementById("player-container");
@@ -163,25 +229,9 @@ async function openPlayer(url, serviceType, trackData = null) {
 }
 
 async function switchPlayer(url, serviceType) {
-  const placeholder = document.getElementById("service-player-placeholder");
-  if (!placeholder) return;
-
-  // Find existing iframe and update its src instead of creating new one
-  const existingIframe = placeholder.querySelector("iframe");
-  if (existingIframe) {
-    try {
-      const iframeSrc = await graphqlClient.generateIframeUrl(serviceType, url);
-      if (iframeSrc) {
-        existingIframe.src = iframeSrc;
-      }
-    } catch (error) {
-      console.error("Error updating iframe src:", error);
-    }
-  } else {
-    // Fallback: create new iframe if none exists
-    const iframe = await createIframeForService(url, serviceType);
-    placeholder.appendChild(iframe);
-  }
+  // Use centralized iframe management via openPlayer
+  // This eliminates duplicate iframe creation logic
+  await openPlayer(url, serviceType);
 }
 
 function shouldInterceptLink(link) {
@@ -211,6 +261,10 @@ function closePlayer() {
 
   if (placeholder) placeholder.innerHTML = "";
   if (closeButton) closeButton.style.display = "none";
+
+  // Reset centralized iframe state
+  currentIframe = null;
+  currentService = null;
   if (playerContainer) playerContainer.style.display = "none";
   if (serviceButtonsContainer) serviceButtonsContainer.style.display = "none";
 
@@ -305,6 +359,15 @@ async function createServiceButtons(trackData) {
         button.addEventListener("click", async () => {
           const serviceType = getServiceType(url);
           if (serviceType !== "none") {
+            // Use centralized navigation to update URL
+            const currentGenre = appRouter.getCurrentGenre();
+            appRouter.navigateToTrack(
+              currentGenre,
+              "tunemeld-rank",
+              serviceType,
+              trackData.isrc,
+            );
+
             // Just switch the player content, don't recreate buttons
             await switchPlayer(url, serviceType);
             window.scrollTo({ top: 0, behavior: "smooth" });
