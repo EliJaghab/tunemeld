@@ -56,8 +56,38 @@ class Command(BaseCommand):
         return self.create_canonical_track(isrc, service_tracks)
 
     def get_unique_isrcs(self) -> list[str]:
-        """Get all unique ISRCs that have ServiceTrack records."""
-        return ServiceTrack.objects.all().values_list("isrc", flat=True).distinct().order_by("isrc")
+        """Get ISRCs that are on current playlists but need URL enrichment (YouTube, Spotify, or SoundCloud)."""
+        playlist_isrcs = set(ServiceTrack.objects.values_list("isrc", flat=True).distinct())
+
+        # Get tracks that have ALL valid URLs (skip these)
+        tracks_fully_enriched = set(
+            Track.objects.filter(
+                isrc__in=playlist_isrcs,
+                # YouTube URL exists and is not empty (youtube.com is placeholder, needs scraping)
+                youtube_url__isnull=False,
+                # SoundCloud URL exists and is not empty
+                soundcloud_url__isnull=False,
+                # Spotify URL exists and is not empty
+                spotify_url__isnull=False,
+            )
+            .exclude(youtube_url="")
+            .exclude(soundcloud_url="")
+            .exclude(spotify_url="")
+            .values_list("isrc", flat=True)
+        )
+
+        # Process ISRCs that are on playlists but need URL enrichment
+        isrcs_needing_enrichment = playlist_isrcs - tracks_fully_enriched
+
+        existing_tracks_count = Track.objects.filter(isrc__in=playlist_isrcs).count()
+        new_tracks_count = len(playlist_isrcs) - existing_tracks_count
+
+        logger.info(
+            f"Found {len(isrcs_needing_enrichment)} playlist ISRCs needing URL enrichment "
+            f"({new_tracks_count} new tracks, {len(isrcs_needing_enrichment) - new_tracks_count} existing missing URLs)"
+        )
+
+        return sorted(isrcs_needing_enrichment)
 
     def choose_primary_service_track(self, service_tracks) -> ServiceTrack | None:
         """Choose the primary ServiceTrack based on service priority."""

@@ -141,16 +141,9 @@ async function handleLinkClick(event, link, genre, isrc) {
 
   if (serviceType !== "none") {
     event.preventDefault();
-    const row = link.closest("tr");
-    const trackData = row
-      ? JSON.parse(row.getAttribute("data-track") || "{}")
-      : null;
 
     // Use centralized navigation to update URL and show player
     appRouter.navigateToTrack(genre, "tunemeld-rank", serviceType, isrc);
-
-    // Still show the player immediately for better UX
-    await openPlayer(url, serviceType, trackData);
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 }
@@ -380,9 +373,6 @@ async function createServiceButtons(trackData) {
               serviceType,
               trackData.isrc,
             );
-
-            // Just switch the player content, don't recreate buttons
-            await switchPlayer(url, serviceType);
             window.scrollTo({ top: 0, behavior: "smooth" });
           }
         });
