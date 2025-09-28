@@ -72,6 +72,14 @@ class RankType(str, Enum):
 
 DEFAULT_RANK_TYPE = RankType.TUNEMELD_RANK
 
+# Service rank field names
+SERVICE_RANK_FIELDS: dict[str, str | None] = {
+    ServiceName.SPOTIFY.value: "spotifyRank",
+    ServiceName.APPLE_MUSIC.value: "appleMusicRank",
+    ServiceName.SOUNDCLOUD.value: "soundcloudRank",
+    ServiceName.YOUTUBE.value: None,  # YouTube doesn't have rank
+}
+
 
 RANK_CONFIGS: dict[str, dict] = {
     RankType.TUNEMELD_RANK.value: {
