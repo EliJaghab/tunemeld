@@ -149,12 +149,12 @@
 }
 
 .shimmer-playlist-title {
-  width: calc(var(--space-xl) * 4);
+  width: var(--shimmer-playlist-title-width);
   height: var(--space-lg);
 }
 
 .shimmer-playlist-desc {
-  width: calc(var(--space-xl) * 12);
+  width: var(--shimmer-playlist-desc-width);
   height: var(--space-lg);
 }
 
@@ -172,7 +172,7 @@
 }
 
 .shimmer-control-label {
-  width: calc(var(--space-xl) * 3);
+  width: var(--shimmer-control-label-width);
   height: var(--space-lg);
 }
 
@@ -182,8 +182,8 @@
 }
 
 .shimmer-button {
-  width: calc(var(--space-xl) * 5);
-  height: calc(var(--space-xl) * 2.5);
+  width: var(--shimmer-button-width);
+  height: var(--shimmer-button-height);
   border-radius: calc(var(--space-xl) + var(--space-xs));
 }
 
@@ -223,23 +223,30 @@
 }
 
 .playlist-shimmer-row td.info {
-  width: 10%;
+  width: 1%;
+  white-space: nowrap;
 }
 
-.playlist-shimmer-row td.spotify-view-count,
-.playlist-shimmer-row td.youtube-view-count {
+.playlist-shimmer-row td.spacer {
+  width: 100%;
+}
+
+.playlist-shimmer-row td.total-play-count,
+.playlist-shimmer-row td.trending {
   width: 10%;
   text-align: left;
 }
 
 .playlist-shimmer-row td.seen-on {
-  width: 5%;
-  text-align: center;
+  width: 1%;
+  text-align: right;
+  white-space: nowrap;
 }
 
 .playlist-shimmer-row td.external {
-  width: 0%;
+  width: 1%;
   text-align: center;
+  white-space: nowrap;
 }
 
 /* Responsive adjustments */
@@ -257,11 +264,11 @@
   }
 
   .shimmer-button {
-    width: calc(var(--space-xl) * 4);
-    height: calc(var(--space-xl) * 2);
+    width: var(--shimmer-button-width-mobile);
+    height: var(--shimmer-button-height-mobile);
   }
 
   .shimmer-playlist-desc {
-    width: calc(var(--space-xl) * 8);
+    width: var(--shimmer-playlist-desc-width-mobile);
   }
 }

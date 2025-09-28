@@ -6,6 +6,7 @@ from core.constants import DEFAULT_RANK_TYPE, ServiceName
 from core.graphql.track import TrackType
 from core.models import Service, Track
 from core.models.playlist import Playlist, Rank
+from core.settings import DISABLE_CACHE
 from core.utils.local_cache import CachePrefix, local_cache_get, local_cache_set
 
 
@@ -60,7 +61,8 @@ class PlaylistQuery(graphene.ObjectType):
     def resolve_playlist(self, info, genre, service):
         """Get playlist data for any service (including Aggregate) and genre."""
         cache_key_data = f"resolve_playlist:genre={genre}:service={service}"
-        cached_result = local_cache_get(CachePrefix.GQL_PLAYLIST, cache_key_data)
+
+        cached_result = None if DISABLE_CACHE else local_cache_get(CachePrefix.GQL_PLAYLIST, cache_key_data)
 
         if cached_result is not None:
             # Reconstruct Track objects from cached data for GraphQL compatibility

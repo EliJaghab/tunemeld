@@ -121,8 +121,39 @@
   --shimmer-play-count-width: 80px; /* play count skeleton width */
   --shimmer-view-count-width: 80px; /* view count skeleton width */
   --shimmer-date-width: 40px; /* date skeleton width */
-  --shimmer-rank-width: 30px; /* rank skeleton width */
+  --shimmer-rank-width: var(
+    --track-number-width
+  ); /* rank skeleton width - uses shared track number width */
+  --shimmer-track-info-width: 200px; /* track info skeleton width */
+  --track-info-width-mobile: 120px; /* shared mobile track info width for both actual and shimmer */
+  --track-column-width: 150px; /* shared track column width */
+  --track-number-width: 30px; /* shared track number width */
   --shimmer-external-links-width: 60px; /* external links skeleton width */
+  --shimmer-playlist-title-width: calc(
+    var(--space-xl) * 4
+  ); /* playlist title skeleton width */
+  --shimmer-playlist-desc-width: calc(
+    var(--space-xl) * 12
+  ); /* playlist description skeleton width */
+  --shimmer-playlist-desc-width-mobile: calc(
+    var(--space-xl) * 8
+  ); /* mobile playlist description skeleton width */
+  --shimmer-control-label-width: calc(
+    var(--space-xl) * 3
+  ); /* control label skeleton width */
+  --shimmer-button-width: calc(var(--space-xl) * 5); /* button skeleton width */
+  --shimmer-button-width-mobile: calc(
+    var(--space-xl) * 4
+  ); /* mobile button skeleton width */
+  --shimmer-button-height: calc(
+    var(--space-xl) * 2.5
+  ); /* button skeleton height */
+  --shimmer-button-height-mobile: calc(
+    var(--space-xl) * 2
+  ); /* mobile button skeleton height */
+  --shimmer-service-text-height: calc(
+    var(--space-lg) * 2
+  ); /* service text skeleton height */
 
   /* Shimmer component definitions - all use consistent height */
   .shimmer-rank {
@@ -136,6 +167,7 @@
   }
   .shimmer-track-info {
     width: 100%;
+    min-width: var(--shimmer-track-info-width);
     height: var(--space-lg);
   }
   .shimmer-view-count {
@@ -150,9 +182,20 @@
     width: var(--shimmer-external-links-width);
     height: var(--space-lg);
   }
+  .shimmer-source-icons {
+    display: flex;
+    gap: var(--space-sm);
+    justify-content: flex-end;
+    align-items: center;
+  }
+  .shimmer-source-icon {
+    width: var(--size-soundcloud-md);
+    height: var(--size-soundcloud-md);
+    border-radius: 50%;
+  }
   .shimmer-service-text {
     width: 100%;
-    height: calc(var(--space-lg) * 2);
+    height: var(--shimmer-service-text-height);
   }
 
   /* Text heights and line heights */
@@ -327,7 +370,7 @@ body.dark-mode {
 
 @media screen and (max-width: 480px) {
   :root {
-    --toggle-width: 80px;
+    --toggle-width: 90px;
     --toggle-height: 36px;
   }
 }
@@ -521,7 +564,7 @@ body.dark-mode {
 }
 
 .shimmer-playlist-title {
-  width: calc(var(--space-xl) * 4);
+  width: var(--shimmer-playlist-title-width);
   height: var(--space-lg);
 }
 
@@ -539,7 +582,7 @@ body.dark-mode {
 }
 
 .shimmer-control-label {
-  width: calc(var(--space-xl) * 3);
+  width: var(--shimmer-control-label-width);
   height: var(--space-lg);
 }
 
@@ -549,8 +592,8 @@ body.dark-mode {
 }
 
 .shimmer-button {
-  width: calc(var(--space-xl) * 5);
-  height: calc(var(--space-xl) * 2.5);
+  width: var(--shimmer-button-width);
+  height: var(--shimmer-button-height);
   border-radius: calc(var(--space-xl) + var(--space-xs));
 }
 
@@ -578,6 +621,7 @@ body.dark-mode {
 
 .shimmer-track-info {
   width: 100%;
+  min-width: var(--shimmer-track-info-width);
   height: var(--space-lg);
 }
 
@@ -585,7 +629,7 @@ body.dark-mode {
   display: flex;
   gap: var(--space-xs);
   align-items: center;
-  width: 60px;
+  width: var(--shimmer-external-links-width);
   height: var(--space-lg);
 }
 
@@ -604,11 +648,24 @@ body.dark-mode {
   }
 
   .shimmer-button {
-    width: calc(var(--space-xl) * 4);
-    height: calc(var(--space-xl) * 2);
+    width: var(--shimmer-button-width-mobile);
+    height: var(--shimmer-button-height-mobile);
   }
 
   .shimmer-playlist-desc {
-    width: calc(var(--space-xl) * 8);
+    width: var(--shimmer-playlist-desc-width-mobile);
+  }
+
+  .shimmer-track-info {
+    width: var(--track-info-width-mobile) !important;
+    min-width: var(--track-info-width-mobile) !important;
+    max-width: var(--track-info-width-mobile) !important;
+  }
+
+  .playlist-table td.info,
+  .playlist-shimmer-row td.info {
+    white-space: normal;
+    width: var(--track-info-width-mobile);
+    max-width: var(--track-info-width-mobile);
   }
 }

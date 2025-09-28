@@ -128,24 +128,27 @@ export function renderPlaylistTracks(playlists, placeholderId, serviceName) {
 }
 
 function getServiceUrl(track, serviceName) {
+  // Always prioritize YouTube first, then fallback to original service
+  const youtubeUrl = track.youtubeUrl;
+
   switch (serviceName) {
     case SERVICE_NAMES.SPOTIFY:
-      return track.spotifyUrl;
+      return youtubeUrl || track.spotifyUrl;
     case SERVICE_NAMES.APPLE_MUSIC:
-      return track.appleMusicUrl;
+      return youtubeUrl || track.appleMusicUrl;
     case SERVICE_NAMES.SOUNDCLOUD:
-      return track.soundcloudUrl;
+      return youtubeUrl || track.soundcloudUrl;
     case SERVICE_NAMES.YOUTUBE:
       return track.youtubeUrl;
     case SERVICE_NAMES.TUNEMELD:
       return (
+        youtubeUrl ||
         track.spotifyUrl ||
         track.appleMusicUrl ||
-        track.soundcloudUrl ||
-        track.youtubeUrl
+        track.soundcloudUrl
       );
     default:
-      return track.youtubeUrl;
+      return youtubeUrl;
   }
 }
 
@@ -153,6 +156,7 @@ function createTuneMeldPlaylistTableRow(track) {
   const row = document.createElement("tr");
 
   row.setAttribute("data-isrc", track.isrc);
+  row.setAttribute("data-track", JSON.stringify(track));
 
   const rankCell = document.createElement("td");
   rankCell.className = "rank";
@@ -186,6 +190,9 @@ function createTuneMeldPlaylistTableRow(track) {
 
   trackInfoCell.appendChild(trackInfoDiv);
 
+  const spacerCell = document.createElement("td");
+  spacerCell.className = "spacer";
+
   const seenOnCell = document.createElement("td");
   seenOnCell.className = "seen-on";
   displaySources(seenOnCell, track);
@@ -196,7 +203,14 @@ function createTuneMeldPlaylistTableRow(track) {
   row.appendChild(rankCell);
   row.appendChild(coverCell);
   row.appendChild(trackInfoCell);
-  displayPlayCounts(track, row);
+  row.appendChild(spacerCell);
+
+  // Only show play counts if we're not in TuneMeld rank mode
+  const currentColumn = stateManager.getCurrentColumn();
+  if (currentColumn !== TUNEMELD_RANK_FIELD) {
+    displayPlayCounts(track, row);
+  }
+
   row.appendChild(seenOnCell);
   row.appendChild(externalLinksCell);
 
@@ -312,6 +326,7 @@ function createServicePlaylistTableRow(track, serviceName) {
   const row = document.createElement("tr");
 
   row.setAttribute("data-isrc", track.isrc);
+  row.setAttribute("data-track", JSON.stringify(track));
 
   const rankCell = document.createElement("td");
   rankCell.className = "rank";

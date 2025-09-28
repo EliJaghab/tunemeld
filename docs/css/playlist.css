@@ -133,7 +133,12 @@
 }
 
 .playlist-table td.info {
-  width: 10%;
+  width: 1%;
+  white-space: nowrap;
+}
+
+.playlist-table td.spacer {
+  width: 100%;
 }
 
 .playlist-table td.total-play-count {
@@ -147,13 +152,15 @@
 }
 
 .playlist-table td.seen-on {
-  width: 5%;
+  width: 1%;
   text-align: center;
+  white-space: nowrap;
 }
 
 .playlist-table td.external {
-  width: 0%;
+  width: 1%;
   text-align: center;
+  white-space: nowrap;
 }
 
 /* Playlist Loading States */
@@ -212,6 +219,7 @@
 .source-icon {
   height: var(--size-icon-sm);
   width: var(--size-icon-sm);
+  border-radius: 50%;
 }
 
 .play-count-container {
@@ -280,7 +288,7 @@
   flex: 1;
   flex-direction: column;
   justify-content: center;
-  width: 150px;
+  width: var(--track-column-width);
 }
 
 .track-item-content {
@@ -304,12 +312,15 @@
   line-height: var(--size-line-height-md);
   margin-right: var(--space-sm);
   text-align: left;
-  width: 30px;
+  width: var(--track-number-width);
   color: var(--text-color);
 }
 
 .track-sources {
-  display: inline-block;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--space-sm);
 }
 
 .username {

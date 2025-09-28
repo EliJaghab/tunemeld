@@ -1,5 +1,6 @@
 import graphene
 from core.api.play_count import get_track_play_count
+from core.settings import DISABLE_CACHE
 from core.utils.local_cache import CachePrefix, local_cache_get, local_cache_set
 from core.utils.utils import format_percentage_change, format_play_count
 
@@ -55,19 +56,20 @@ class PlayCountQuery(graphene.ObjectType):
     @staticmethod
     def resolve_track_play_count(root, info, isrc):
         """Get play count data for a single track."""
-        return PlayCountQuery._get_track_play_count(isrc)
+        return PlayCountQuery._get_track_play_count(isrc, info)
 
     @staticmethod
     def resolve_tracks_play_counts(root, info, isrcs):
         """Get play count data for multiple tracks."""
-        return [PlayCountQuery._get_track_play_count(isrc) for isrc in isrcs]
+        return [PlayCountQuery._get_track_play_count(isrc, info) for isrc in isrcs]
 
     @staticmethod
-    def _get_track_play_count(isrc):
+    def _get_track_play_count(isrc, info=None):
         """Internal method to get play count data for a track."""
         cache_key = f"track_play_count:{isrc}"
 
-        cached_data = local_cache_get(CachePrefix.GQL_PLAY_COUNT, cache_key)
+        cached_data = None if DISABLE_CACHE else local_cache_get(CachePrefix.GQL_PLAY_COUNT, cache_key)
+
         if cached_data:
             return cached_data
 

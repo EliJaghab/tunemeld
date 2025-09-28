@@ -17,6 +17,12 @@ export const GENRE_NAMES = {
 // The rank that preserves backend-computed positions
 export const TUNEMELD_RANK_FIELD = "tunemeld-rank";
 
+// Shimmer layout types
+export const SHIMMER_TYPES = {
+  TUNEMELD: "tunemeld",
+  PLAYCOUNT: "playcount",
+};
+
 // Playlist placeholder IDs
 export const PLAYLIST_PLACEHOLDERS = {
   MAIN: "main-playlist-data-placeholder",

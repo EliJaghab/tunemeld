@@ -22,6 +22,8 @@
  * Phase 2: Add reactive state updates and event emission
  * Phase 3: Extend to manage genre, theme, and playlist data
  */
+
+import { SHIMMER_TYPES, TUNEMELD_RANK_FIELD } from "@/config/constants.js";
 class StateManager {
   constructor() {
     this.state = {
@@ -34,6 +36,7 @@ class StateManager {
         services: false,
         playlist: false,
         isInitialLoad: false,
+        currentType: SHIMMER_TYPES.TUNEMELD,
       },
       modals: {
         activeDescriptionModals: new Set(),
@@ -176,6 +179,32 @@ class StateManager {
     this.state.shimmer.services = false;
     this.state.shimmer.playlist = false;
     this.state.shimmer.isInitialLoad = false;
+  }
+
+  // Shimmer Type Management - explicit tracking of which shimmer layout to use
+  setShimmerType(type) {
+    if (type !== SHIMMER_TYPES.TUNEMELD && type !== SHIMMER_TYPES.PLAYCOUNT) {
+      console.warn(
+        `Invalid shimmer type: ${type}. Using '${SHIMMER_TYPES.TUNEMELD}' as default.`,
+      );
+      this.state.shimmer.currentType = SHIMMER_TYPES.TUNEMELD;
+    } else {
+      this.state.shimmer.currentType = type;
+    }
+    console.log(`Shimmer type set to: ${this.state.shimmer.currentType}`);
+  }
+
+  getShimmerType() {
+    return this.state.shimmer.currentType || SHIMMER_TYPES.TUNEMELD;
+  }
+
+  setShimmerTypeFromColumn(column) {
+    // Convert column name to shimmer type
+    if (column === TUNEMELD_RANK_FIELD || column === null) {
+      this.setShimmerType(SHIMMER_TYPES.TUNEMELD);
+    } else {
+      this.setShimmerType(SHIMMER_TYPES.PLAYCOUNT);
+    }
   }
 
   isShimmering(type = null) {

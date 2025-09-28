@@ -167,6 +167,9 @@ LOGGING = {
 # Cache timeout - only cleared manually or by playlist ETL
 CACHE_TIMEOUT = 86400 * 7  # 7 days
 
+# Cache control - set to True to disable all local caching (for development/debugging)
+DISABLE_CACHE = False
+
 CACHES = {
     "default": {  # Cloudflare KV for persistent storage of raw API data
         "BACKEND": "core.utils.cloudflare_cache.CloudflareKVCache",

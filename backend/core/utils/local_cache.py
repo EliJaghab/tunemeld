@@ -5,7 +5,6 @@ import uuid
 from enum import Enum
 from typing import Any
 
-from core.settings import DEV
 from core.utils.utils import get_logger
 from django.conf import settings
 from django.core.cache import caches
@@ -72,9 +71,9 @@ def _deserialize_from_local_cache(data):
 
 
 def local_cache_get(prefix: CachePrefix, key_data: str) -> Any:
-    """Get data from local memory cache. Returns None in dev environment to avoid stale data."""
+    """Get data from local memory cache. Respects DISABLE_CACHE setting."""
 
-    if settings.ENVIRONMENT == DEV:
+    if settings.DISABLE_CACHE:
         return None
 
     start_time = time.time()
@@ -98,8 +97,9 @@ def local_cache_get(prefix: CachePrefix, key_data: str) -> Any:
 
 
 def local_cache_set(prefix: CachePrefix, key_data: str, value: Any, ttl: int | None = None) -> None:
-    """Set data in local memory cache. Skips caching in dev environment."""
-    if settings.ENVIRONMENT == DEV:
+    """Set data in local memory cache. Respects DISABLE_CACHE setting."""
+
+    if settings.DISABLE_CACHE:
         return
 
     cache_key = _generate_cache_key(prefix, key_data)
@@ -112,7 +112,7 @@ def local_cache_set(prefix: CachePrefix, key_data: str, value: Any, ttl: int | N
         if ttl is None:
             ttl = LOCAL_CACHE_TTL_MAP.get(prefix.value, SEVEN_DAYS_TTL)
         local_cache.set(cache_key, serialized_value, ttl)
-        logger.info(f"Cached (local): {prefix.value}:{key_data}")
+        logger.info(f"Cached (local): {prefix.value}:{key_data} (TTL: {ttl}s)")
     except Exception as e:
         logger.warning(f"Failed to cache locally: {prefix.value}:{key_data}: {e}")
 
