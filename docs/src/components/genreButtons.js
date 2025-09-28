@@ -21,6 +21,20 @@ export async function loadAndRenderGenreButtons() {
         : "sort-button";
       button.setAttribute("data-genre", genre.name);
 
+      if (genre.buttonLabels && genre.buttonLabels.length > 0) {
+        const genreLabel = genre.buttonLabels.find(
+          (label) => label.buttonType === "genre_button",
+        );
+        if (genreLabel) {
+          if (genreLabel.title) {
+            button.title = genreLabel.title;
+          }
+          if (genreLabel.ariaLabel) {
+            button.setAttribute("aria-label", genreLabel.ariaLabel);
+          }
+        }
+      }
+
       const icon = document.createElement("img");
       icon.src = genre.iconUrl;
       icon.alt = genre.displayName;

@@ -15,7 +15,8 @@ export async function loadAndRenderRankButtons() {
 
     sortControlsElement.innerHTML = "";
 
-    ranks.forEach((rank, index) => {
+    // Create an array of promises to fetch button labels for each rank
+    const buttonPromises = ranks.map(async (rank, index) => {
       const button = document.createElement("button");
       const isCurrentlyActive = stateManager.isRankActive(rank.sortField);
       button.className = isCurrentlyActive
@@ -23,6 +24,31 @@ export async function loadAndRenderRankButtons() {
         : "sort-button";
       button.setAttribute("data-sort", rank.sortField);
       button.setAttribute("data-order", rank.sortOrder);
+
+      // Fetch button labels for this rank type
+      try {
+        const buttonLabels = await graphqlClient.getRankButtonLabels(rank.name);
+        if (buttonLabels && buttonLabels.length > 0) {
+          const rankLabel = buttonLabels.find(
+            (label) => label.buttonType === "rank_button",
+          );
+          if (rankLabel) {
+            if (rankLabel.title) {
+              button.title = rankLabel.title;
+            }
+            if (rankLabel.ariaLabel) {
+              button.setAttribute("aria-label", rankLabel.ariaLabel);
+            }
+          }
+        }
+      } catch (error) {
+        console.warn(
+          "Failed to load button labels for rank:",
+          rank.name,
+          error,
+        );
+        // Continue without labels if fetch fails
+      }
 
       const text = document.createTextNode(rank.displayName);
       button.appendChild(text);
@@ -44,6 +70,12 @@ export async function loadAndRenderRankButtons() {
         appRouter.navigateToRank(rank.sortField);
       });
 
+      return button;
+    });
+
+    // Wait for all buttons to be created and then append them
+    const buttons = await Promise.all(buttonPromises);
+    buttons.forEach((button) => {
       sortControlsElement.appendChild(button);
     });
   } catch (error) {

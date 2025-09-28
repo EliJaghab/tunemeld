@@ -44,11 +44,48 @@ async function initializeApp() {
   document.body.style.opacity = "1";
 }
 
-function setupThemeToggle() {
+async function setupThemeToggle() {
   const themeToggleButton = stateManager.getElement("theme-toggle-button");
   if (themeToggleButton) {
-    themeToggleButton.addEventListener("change", () => {
+    themeToggleButton.addEventListener("change", async () => {
       stateManager.toggleTheme();
+      await updateThemeToggleLabels();
     });
+
+    // Initial button labels setup
+    await updateThemeToggleLabels();
+  }
+}
+
+async function updateThemeToggleLabels() {
+  const themeToggleButton = stateManager.getElement("theme-toggle-button");
+  if (!themeToggleButton) return;
+
+  try {
+    const currentTheme = stateManager.getTheme();
+    const { graphqlClient } = await import("./src/services/graphql-client.js");
+    const buttonLabels = await graphqlClient.getMiscButtonLabels(
+      "theme_toggle",
+      currentTheme,
+    );
+
+    if (buttonLabels && buttonLabels.length > 0) {
+      const themeLabel = buttonLabels[0];
+      if (themeLabel.title) {
+        // For checkbox inputs, we add the title to the label element
+        const label = document.querySelector(
+          'label[for="theme-toggle-button"]',
+        );
+        if (label) {
+          label.title = themeLabel.title;
+        }
+      }
+      if (themeLabel.ariaLabel) {
+        themeToggleButton.setAttribute("aria-label", themeLabel.ariaLabel);
+      }
+    }
+  } catch (error) {
+    console.warn("Failed to load theme toggle labels:", error);
+    // Continue without labels if fetch fails
   }
 }
