@@ -40,8 +40,7 @@ class Command(BaseCommand):
 
     def create_playlists(self, raw_data: RawPlaylistData) -> int:
         with transaction.atomic():
-            logger.info(f"Clearing existing data for {raw_data.service.name}/{raw_data.genre.name}")
-            ServiceTrack.objects.filter(service=raw_data.service, genre=raw_data.genre).delete()
+            logger.info(f"Processing tracks for {raw_data.service.name}/{raw_data.genre.name}")
             PlaylistModel.objects.filter(service=raw_data.service, genre=raw_data.genre).delete()
 
             if raw_data.service.name == ServiceName.SPOTIFY:
@@ -57,7 +56,7 @@ class Command(BaseCommand):
 
             for track in tracks_data:
                 if track.isrc:
-                    ServiceTrack.objects.update_or_create(
+                    service_track, created = ServiceTrack.objects.update_or_create(
                         service=raw_data.service,
                         genre=raw_data.genre,
                         position=position,
@@ -70,6 +69,10 @@ class Command(BaseCommand):
                             "album_cover_url": track.album_cover_url,
                         },
                     )
+                    if created:
+                        logger.debug(f"Created new track: {track.name} by {track.artist}")
+                    else:
+                        logger.debug(f"Updated existing track: {track.name} by {track.artist}")
                     position += 1
 
             created_tracks = ServiceTrack.objects.filter(service=raw_data.service, genre=raw_data.genre).order_by(
@@ -138,11 +141,29 @@ class Command(BaseCommand):
     def process_apple_music_track(self, key: str, track_data: dict) -> NormalizedTrack | None:
         track_name = clean_unicode_text(track_data["name"])
         artist_name = clean_unicode_text(track_data["artist"])
-
+        apple_music_url = track_data["link"]
         isrc = get_spotify_isrc(track_name, artist_name)
 
         if isrc:
-            apple_music_url = track_data["link"]
+            existing_track = (
+                ServiceTrack.objects.filter(isrc=isrc)
+                .exclude(album_cover_url__isnull=True)
+                .exclude(album_cover_url="")
+                .first()
+            )
+
+            if existing_track:
+                logger.debug(f"Using cached album cover for ISRC {isrc}: {track_name} by {artist_name}")
+                return NormalizedTrack(
+                    position=int(key) + 1,
+                    name=track_name,
+                    artist=artist_name,
+                    apple_music_url=apple_music_url,
+                    album_cover_url=existing_track.album_cover_url,
+                    isrc=isrc,
+                )
+
+            logger.debug(f"Fetching new album cover for ISRC {isrc}: {track_name} by {artist_name}")
             album_cover_url = get_apple_music_album_cover_url(apple_music_url)
 
             return NormalizedTrack(
