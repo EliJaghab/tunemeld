@@ -97,6 +97,32 @@ RANK_CONFIGS: dict[str, dict] = {
     },
 }
 
+IFRAME_CONFIGS: dict[str, dict] = {
+    ServiceName.SOUNDCLOUD.value: {
+        "embed_base_url": "https://w.soundcloud.com/player/",
+        "embed_params": "auto_play=true",
+        "allow": "autoplay",
+        "height": "166",
+    },
+    ServiceName.SPOTIFY.value: {
+        "embed_base_url": "https://open.spotify.com/embed/",
+        "allow": "encrypted-media",
+        "height": "80",
+    },
+    ServiceName.APPLE_MUSIC.value: {
+        "embed_base_url": "https://embed.music.apple.com/us/album/",
+        "allow": "autoplay *; encrypted-media *;",
+        "height": "175",
+    },
+    ServiceName.YOUTUBE.value: {
+        "embed_base_url": "https://www.youtube.com/embed/",
+        "embed_params": "autoplay=1",
+        "allow": "autoplay; encrypted-media",
+        "referrer_policy": "no-referrer-when-downgrade",
+        "height": "315",
+    },
+}
+
 SERVICE_CONFIGS: dict[str, dict] = {
     ServiceName.APPLE_MUSIC.value: {
         "base_url": "https://apple-music24.p.rapidapi.com/playlist1/",
@@ -105,6 +131,8 @@ SERVICE_CONFIGS: dict[str, dict] = {
         "playlist_base_url": "https://music.apple.com/us/playlist/",
         "display_name": "Apple Music",
         "icon_url": "/images/apple_music_logo.png",
+        "url_field": "appleMusicUrl",
+        "source_field": "appleMusicSource",
     },
     ServiceName.SOUNDCLOUD.value: {
         "base_url": "https://soundcloud-scraper.p.rapidapi.com/v1/playlist/tracks",
@@ -113,22 +141,32 @@ SERVICE_CONFIGS: dict[str, dict] = {
         "playlist_base_url": "https://soundcloud.com/",
         "display_name": "SoundCloud",
         "icon_url": "/images/soundcloud_logo.png",
+        "url_field": "soundcloudUrl",
+        "source_field": "soundcloudSource",
     },
     ServiceName.SPOTIFY.value: {
         "playlist_base_url": "https://open.spotify.com/playlist/",
         "display_name": "Spotify",
         "icon_url": "/images/spotify_logo.png",
+        "url_field": "spotifyUrl",
+        "source_field": "spotifySource",
     },
     ServiceName.YOUTUBE.value: {
         "display_name": "YouTube",
         "icon_url": "/images/youtube_logo.png",
+        "url_field": "youtubeUrl",
+        "source_field": "youtubeSource",
     },
     ServiceName.TUNEMELD.value: {
         "display_name": "tunemeld",
         "icon_url": "/images/tunemeld.png",
+        "url_field": "youtubeUrl",
+        "source_field": "youtubeSource",
     },
     ServiceName.TOTAL.value: {
         "display_name": "Total Plays",
         "icon_url": "/images/tunemeld.png",
+        "url_field": None,
+        "source_field": None,
     },
 }
