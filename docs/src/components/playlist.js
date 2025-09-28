@@ -33,6 +33,22 @@ export async function populatePlayCountMap(isrcs) {
   }
 }
 
+function enrichTracksWithPlayCountData(tracks) {
+  tracks.forEach((track) => {
+    const playCountData = playCountLookupMap[track.isrc];
+    if (playCountData) {
+      // Add play count fields directly to track object for sorting
+      track.totalCurrentPlayCount = playCountData.totalCurrentPlayCount || 0;
+      track.totalWeeklyChangePercentage =
+        playCountData.totalWeeklyChangePercentage || 0;
+      track.spotifyCurrentPlayCount =
+        playCountData.spotifyCurrentPlayCount || 0;
+      track.youtubeCurrentPlayCount =
+        playCountData.youtubeCurrentPlayCount || 0;
+    }
+  });
+}
+
 export async function updateMainPlaylist(genre) {
   try {
     const response = await graphqlClient.getPlaylistTracks(
@@ -47,6 +63,11 @@ export async function updateMainPlaylist(genre) {
       playlist.tracks.map((track) => track.isrc),
     );
     await populatePlayCountMap(isrcs);
+
+    // Enrich track objects with play count data for sorting
+    data.forEach((playlist) => {
+      enrichTracksWithPlayCountData(playlist.tracks);
+    });
 
     renderPlaylistTracks(
       data,
@@ -79,6 +100,20 @@ export async function fetchAndDisplayPlaylistsWithOrder(genre, serviceOrder) {
     try {
       const response = await graphqlClient.getPlaylistTracks(genre, service);
       const data = [response.playlist];
+
+      // Populate play count data for total views and other services that need it
+      if (service === SERVICE_NAMES.TOTAL || data[0]?.tracks?.length > 0) {
+        const isrcs = data.flatMap((playlist) =>
+          playlist.tracks.map((track) => track.isrc),
+        );
+        await populatePlayCountMap(isrcs);
+
+        // Enrich track objects with play count data for sorting
+        data.forEach((playlist) => {
+          enrichTracksWithPlayCountData(playlist.tracks);
+        });
+      }
+
       renderPlaylistTracks(
         data,
         `${service}${PLAYLIST_PLACEHOLDERS.SERVICE_SUFFIX}`,
@@ -441,21 +476,52 @@ function createServicePlaylistTableRow(track, serviceName) {
 
   trackInfoCell.appendChild(trackInfoDiv);
 
-  const externalLinksCell = document.createElement("td");
-  externalLinksCell.className = "external";
-  if (track.youtubeSource) {
-    const youtubeLink = createSourceLinkFromService(
-      track.youtubeSource,
-      null,
-      track,
-    );
-    externalLinksCell.appendChild(youtubeLink);
-  }
-
   row.appendChild(rankCell);
   row.appendChild(coverCell);
   row.appendChild(trackInfoCell);
-  row.appendChild(externalLinksCell);
+
+  // Check if this is the total views page - if so, show play counts instead of just external links
+  if (serviceName === SERVICE_NAMES.TOTAL) {
+    // Add spacer column to match PLAYCOUNT table structure
+    const spacerCell = document.createElement("td");
+    spacerCell.className = "spacer";
+    row.appendChild(spacerCell);
+
+    // Add play count columns
+    displayPlayCounts(track, row);
+
+    // Add seen-on column (service icons)
+    const seenOnCell = document.createElement("td");
+    seenOnCell.className = "seen-on";
+    displaySources(seenOnCell, track);
+    row.appendChild(seenOnCell);
+
+    // Add external links column
+    const externalLinksCell = document.createElement("td");
+    externalLinksCell.className = "external";
+    if (track.youtubeSource) {
+      const youtubeLink = createSourceLinkFromService(
+        track.youtubeSource,
+        null,
+        track,
+      );
+      externalLinksCell.appendChild(youtubeLink);
+    }
+    row.appendChild(externalLinksCell);
+  } else {
+    // Regular service playlist - just show external links
+    const externalLinksCell = document.createElement("td");
+    externalLinksCell.className = "external";
+    if (track.youtubeSource) {
+      const youtubeLink = createSourceLinkFromService(
+        track.youtubeSource,
+        null,
+        track,
+      );
+      externalLinksCell.appendChild(youtubeLink);
+    }
+    row.appendChild(externalLinksCell);
+  }
 
   return row;
 }
