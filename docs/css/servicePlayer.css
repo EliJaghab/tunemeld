@@ -23,9 +23,12 @@
 .player_content iframe,
 #service-player-placeholder iframe {
   border-radius: var(--border-radius-large);
-  margin: 0;
-  padding: 0;
+  margin: 0 !important;
+  padding: 0 !important;
+  margin-bottom: 0 !important;
+  padding-bottom: 0 !important;
   display: block;
+  vertical-align: top;
 }
 
 #player-controls {
