@@ -129,6 +129,12 @@ class GraphQLClient {
           name
           displayName
           iconUrl
+          buttonLabels {
+            buttonType
+            context
+            title
+            ariaLabel
+          }
         }
         defaultGenre
       }
@@ -178,12 +184,20 @@ class GraphQLClient {
             isrc
             trackName
             artistName
+            fullTrackName
+            fullArtistName
             albumName
             albumCoverUrl
             youtubeUrl
             spotifyUrl
             appleMusicUrl
             soundcloudUrl
+            buttonLabels {
+              buttonType
+              context
+              title
+              ariaLabel
+            }
             spotifySource {
               name
               displayName
@@ -223,6 +237,7 @@ class GraphQLClient {
     const query = `
       query GetPlaylistRanks {
         ranks {
+          name
           displayName
           sortField
           sortOrder
@@ -264,6 +279,12 @@ class GraphQLClient {
           iconUrl
           urlField
           sourceField
+          buttonLabels {
+            buttonType
+            context
+            title
+            ariaLabel
+          }
         }
       }
     `;
@@ -299,6 +320,38 @@ class GraphQLClient {
 
     const data = await this.query(query, { serviceName, trackUrl });
     return data.generateIframeUrl;
+  }
+
+  async getRankButtonLabels(rankType) {
+    const query = `
+      query GetRankButtonLabels($rankType: String!) {
+        rankButtonLabels(rankType: $rankType) {
+          buttonType
+          context
+          title
+          ariaLabel
+        }
+      }
+    `;
+
+    const data = await this.query(query, { rankType });
+    return data.rankButtonLabels;
+  }
+
+  async getMiscButtonLabels(buttonType, context = null) {
+    const query = `
+      query GetMiscButtonLabels($buttonType: String!, $context: String) {
+        miscButtonLabels(buttonType: $buttonType, context: $context) {
+          buttonType
+          context
+          title
+          ariaLabel
+        }
+      }
+    `;
+
+    const data = await this.query(query, { buttonType, context });
+    return data.miscButtonLabels;
   }
 }
 
