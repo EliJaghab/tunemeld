@@ -1,6 +1,6 @@
 from core.constants import ServiceName
 from core.models import Genre, Service, ServiceTrack
-from core.models.playlist import Rank, RawPlaylistData
+from core.models.playlist import Playlist, Rank, RawPlaylistData
 
 
 def get_service(name: str | ServiceName) -> Service | None:
@@ -56,3 +56,17 @@ def is_track_seen_on_service(isrc: str, genre_name: str, service_name: ServiceNa
         raise ValueError(f"Genre '{genre_name}' not found")
 
     return ServiceTrack.objects.filter(isrc=isrc, genre=genre_obj, service__name=service_name.value).exists()
+
+
+def get_track_rank_by_track_object(track, genre_name: str, service_name: str) -> int | None:
+    """Get track position using Track model object for any service playlist."""
+    try:
+        playlist_entry = (
+            Playlist.objects.select_related("service_track")
+            .filter(service_track__track=track, genre__name=genre_name, service__name=service_name)
+            .order_by("position")
+            .first()
+        )
+        return playlist_entry.position if playlist_entry else None
+    except Exception:
+        return None

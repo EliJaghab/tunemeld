@@ -1,9 +1,12 @@
 import graphene
-from core.api.genre_service_api import get_service, is_track_seen_on_service
+from core.api.genre_service_api import (
+    get_service,
+    get_track_rank_by_track_object,
+    is_track_seen_on_service,
+)
 from core.constants import ServiceName
 from core.graphql.service import ServiceType
 from core.models.genre_service import Service
-from core.models.playlist import Playlist
 from core.models.track import Track
 from core.utils.utils import truncate_to_words
 from graphene_django import DjangoObjectType
@@ -35,6 +38,9 @@ class TrackType(DjangoObjectType):
         genre=graphene.String(required=True),
         service=graphene.String(required=True),
     )
+    soundcloud_rank = graphene.Int(description="Position on SoundCloud playlist for current genre")
+    spotify_rank = graphene.Int(description="Position on Spotify playlist for current genre")
+    apple_music_rank = graphene.Int(description="Position on Apple Music playlist for current genre")
     spotify_source = graphene.Field(ServiceType, description="Spotify service source with metadata")
     apple_music_source = graphene.Field(ServiceType, description="Apple Music service source with metadata")
     soundcloud_source = graphene.Field(ServiceType, description="SoundCloud service source with metadata")
@@ -61,16 +67,7 @@ class TrackType(DjangoObjectType):
         Returns: 1, 2, 3... or None if track not in playlist
         Example: tunemeld_rank(genre="pop", service="spotify") -> 5
         """
-        try:
-            playlist_entry = (
-                Playlist.objects.select_related("service_track")
-                .filter(service_track__track=self, genre__name=genre, service__name=service)
-                .order_by("position")
-                .first()
-            )
-            return playlist_entry.position if playlist_entry else None
-        except Playlist.DoesNotExist:
-            return None
+        return get_track_rank_by_track_object(self, genre, service)
 
     def resolve_spotify_source(self, info):
         """
@@ -145,6 +142,27 @@ class TrackType(DjangoObjectType):
         """Check if this track was seen on SoundCloud playlists for TuneMeld ranking."""
         genre_name = info.variable_values["genre"]
         return is_track_seen_on_service(self.isrc, genre_name, ServiceName.SOUNDCLOUD)
+
+    def resolve_soundcloud_rank(self, info):
+        """Get track position on SoundCloud playlist for current genre"""
+        genre_name = info.variable_values.get("genre")
+        if not genre_name:
+            return None
+        return get_track_rank_by_track_object(self, genre_name, ServiceName.SOUNDCLOUD.value)
+
+    def resolve_spotify_rank(self, info):
+        """Get track position on Spotify playlist for current genre"""
+        genre_name = info.variable_values.get("genre")
+        if not genre_name:
+            return None
+        return get_track_rank_by_track_object(self, genre_name, ServiceName.SPOTIFY.value)
+
+    def resolve_apple_music_rank(self, info):
+        """Get track position on Apple Music playlist for current genre"""
+        genre_name = info.variable_values.get("genre")
+        if not genre_name:
+            return None
+        return get_track_rank_by_track_object(self, genre_name, ServiceName.APPLE_MUSIC.value)
 
 
 class TrackQuery(graphene.ObjectType):
