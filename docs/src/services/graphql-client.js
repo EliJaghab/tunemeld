@@ -9,11 +9,13 @@ class GraphQLClient {
     const startTime = Date.now();
 
     try {
+      const headers = {
+        "Content-Type": "application/json",
+      };
+
       const response = await fetch(this.endpoint, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers,
         body: JSON.stringify({
           query,
           variables,
@@ -251,6 +253,52 @@ class GraphQLClient {
     `;
 
     return await this.query(query, { isrcs });
+  }
+
+  async getServiceConfigs() {
+    const query = `
+      query GetServiceConfigs {
+        serviceConfigs {
+          name
+          displayName
+          iconUrl
+          urlField
+          sourceField
+        }
+      }
+    `;
+
+    const data = await this.query(query);
+    return data.serviceConfigs;
+  }
+
+  async getIframeConfigs() {
+    const query = `
+      query GetIframeConfigs {
+        iframeConfigs {
+          serviceName
+          embedBaseUrl
+          embedParams
+          allow
+          height
+          referrerPolicy
+        }
+      }
+    `;
+
+    const data = await this.query(query);
+    return data.iframeConfigs;
+  }
+
+  async generateIframeUrl(serviceName, trackUrl) {
+    const query = `
+      query GenerateIframeUrl($serviceName: String!, $trackUrl: String!) {
+        generateIframeUrl(serviceName: $serviceName, trackUrl: $trackUrl)
+      }
+    `;
+
+    const data = await this.query(query, { serviceName, trackUrl });
+    return data.generateIframeUrl;
   }
 }
 
