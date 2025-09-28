@@ -3,16 +3,19 @@
  * Provides unified loading states for services and playlists
  */
 
-// Table cell configuration for playlist shimmer - matches exact TuneMeld table structure
-const TABLE_CELL_CONFIG = [
-  { class: "rank", shimmerClass: "shimmer shimmer-rank" },
-  { class: "cover", shimmerClass: "shimmer shimmer-album-cover" },
-  { class: "info", shimmerClass: "shimmer shimmer-track-info" },
-  { class: "youtube-view-count", shimmerClass: "shimmer shimmer-view-count" },
-  { class: "spotify-view-count", shimmerClass: "shimmer shimmer-view-count" },
-  { class: "seen-on", shimmerClass: "shimmer shimmer-date" },
-  { class: "external", shimmerClass: "shimmer shimmer-external-links" },
-];
+import { stateManager } from "@/state/StateManager.js";
+import { TUNEMELD_RANK_FIELD, SHIMMER_TYPES } from "@/config/constants.js";
+import {
+  createShimmerRowFromStructure,
+  getTableStructure,
+} from "@/config/tableStructures.js";
+
+/**
+ * SHIMMER COLUMN CONFIGURATIONS
+ *
+ * Now using shared table structure configurations from tableStructures.js
+ * This ensures actual table and shimmer stay in perfect lockstep.
+ */
 
 const SHIMMER_ROW_COUNT = 20;
 
@@ -23,27 +26,19 @@ function createElement(tag, className) {
   return element;
 }
 
-function createShimmerTableRow() {
-  const row = createElement("tr", "playlist-shimmer-row");
-
-  TABLE_CELL_CONFIG.forEach((cellConfig) => {
-    const cell = createElement("td", cellConfig.class);
-
-    const shimmer = createElement("div", cellConfig.shimmerClass);
-    cell.appendChild(shimmer);
-
-    row.appendChild(cell);
-  });
-
-  return row;
+/**
+ * Creates a shimmer row based on shimmer type using shared structure configuration
+ */
+function createShimmerTableRow(shimmerType) {
+  return createShimmerRowFromStructure(shimmerType);
 }
 
-function createShimmerTable() {
+function createShimmerTable(shimmerType) {
   const table = createElement("table", "playlist-table playlist-table-shimmer");
   const tbody = createElement("tbody");
 
   for (let i = 0; i < SHIMMER_ROW_COUNT; i++) {
-    tbody.appendChild(createShimmerTableRow());
+    tbody.appendChild(createShimmerTableRow(shimmerType));
   }
 
   table.appendChild(tbody);
@@ -64,7 +59,10 @@ function createServiceShimmer() {
   return overlay;
 }
 
-function createPlaylistShimmer(includeControls = true) {
+function createPlaylistShimmer(
+  includeControls = true,
+  shimmerType = SHIMMER_TYPES.TUNEMELD,
+) {
   const overlay = createElement(
     "div",
     "loading-overlay loading-overlay-playlist",
@@ -121,15 +119,20 @@ function createPlaylistShimmer(includeControls = true) {
     overlay.appendChild(controlsContainer);
   }
 
-  // Use the unified table shimmer
+  // Use the appropriate table shimmer based on ranking type
   const tableContainer = createElement("div", "shimmer-table-container");
-  tableContainer.appendChild(createShimmerTable());
+  tableContainer.appendChild(createShimmerTable(shimmerType));
   overlay.appendChild(tableContainer);
 
   return overlay;
 }
 
 export function showShimmerLoaders(isInitialLoad = false) {
+  // Use StateManager to explicitly track shimmer type
+  stateManager.setShimmerTypeFromColumn(stateManager.getCurrentColumn());
+  const shimmerType = stateManager.getShimmerType();
+  const structure = getTableStructure(shimmerType);
+
   // Inject and show service shimmer overlays
   document.querySelectorAll(".service").forEach((service) => {
     let overlay = service.querySelector(".loading-overlay");
@@ -146,7 +149,7 @@ export function showShimmerLoaders(isInitialLoad = false) {
     if (mainPlaylist) {
       let overlay = mainPlaylist.querySelector(".loading-overlay");
       if (!overlay) {
-        overlay = createPlaylistShimmer(true);
+        overlay = createPlaylistShimmer(true, shimmerType);
         mainPlaylist.appendChild(overlay);
       }
       overlay.classList.add("active");
@@ -159,8 +162,8 @@ export function showShimmerLoaders(isInitialLoad = false) {
     if (playlistTable) {
       let overlay = playlistTable.querySelector(".loading-overlay");
       if (!overlay) {
-        // Create table-only shimmer (just the track rows) using the same high-quality table structure
-        overlay = createPlaylistShimmer(false);
+        // Create table-only shimmer (just the track rows) using the appropriate configuration
+        overlay = createPlaylistShimmer(false, shimmerType);
         playlistTable.appendChild(overlay);
       }
       overlay.classList.add("active");
