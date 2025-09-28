@@ -5,6 +5,7 @@ from core.api.genre_service_api import (
     is_track_seen_on_service,
 )
 from core.constants import ServiceName
+from core.graphql.button_labels import ButtonLabelType, generate_track_button_labels
 from core.graphql.service import ServiceType
 from core.models.genre_service import Service
 from core.models.track import Track
@@ -32,6 +33,9 @@ class TrackType(DjangoObjectType):
 
     track_name = graphene.String(description="Track name truncated to 30 characters at word boundaries")
     artist_name = graphene.String(description="Artist name truncated to 30 characters at word boundaries")
+    full_track_name = graphene.String(description="Complete track name without truncation")
+    full_artist_name = graphene.String(description="Complete artist name without truncation")
+    button_labels = graphene.List(ButtonLabelType, description="Contextual button labels for this track")
 
     tunemeld_rank = graphene.Int(
         description="Position in the playlist",
@@ -61,6 +65,17 @@ class TrackType(DjangoObjectType):
 
     def resolve_artist_name(self, info):
         return truncate_to_words(self.artist_name, 30) if self.artist_name else None
+
+    def resolve_full_track_name(self, info):
+        return self.track_name
+
+    def resolve_full_artist_name(self, info):
+        return self.artist_name
+
+    def resolve_button_labels(self, info):
+        genre = info.variable_values.get("genre")
+        service = info.variable_values.get("service")
+        return generate_track_button_labels(self, genre=genre, service=service)
 
     def resolve_tunemeld_rank(self, info, genre, service):
         """

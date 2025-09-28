@@ -32,6 +32,7 @@ class PlaylistMetadataType(graphene.ObjectType):
 class RankType(graphene.ObjectType):
     """GraphQL type for ranking/sorting options."""
 
+    name = graphene.String(required=True)
     display_name = graphene.String(required=True)
     sort_field = graphene.String(required=True)
     sort_order = graphene.String(required=True)
@@ -170,6 +171,7 @@ class PlaylistQuery(graphene.ObjectType):
 
         return [
             RankType(
+                name=rank.name,
                 display_name=rank.display_name,
                 sort_field=rank.sort_field,
                 sort_order=rank.sort_order,
