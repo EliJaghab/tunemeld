@@ -12,8 +12,8 @@ TuneMeld is a data pipeline and web application that aggregates music playlist d
 
 **Tech Stack:**
 
-- **Backend**: Django + PostgreSQL on Railway
-- **Frontend**: Static HTML/JS served via GitHub Pages
+- **Backend**: Django + PostgreSQL
+- **Frontend**: Static HTML/JS served via Vercel
 - **API**: GraphQL for efficient data fetching
 - **CDN**: Cloudflare for global distribution
 - **Data Sources**: Spotify (SpotDL), Apple Music & SoundCloud (RapidAPI)
@@ -72,7 +72,7 @@ RawPlaylistData → ServiceTrack → Track → Aggregated Rankings
 
 Each ETL run is tracked with a UUID for versioning and rollback capability.
 
-**Why PostgreSQL?** Relational data structure, ACID compliance, excellent Railway support, complex query capabilities for ranking algorithms.
+**Why PostgreSQL?** Relational data structure, ACID compliance, complex query capabilities for ranking algorithms.
 
 ### 4. API Layer
 
@@ -90,8 +90,8 @@ GraphQL schema provides efficient data access:
 
 ```
 ┌─────────────┐     ┌──────────────┐     ┌─────────────┐
-│   GitHub    │────▶│   Railway    │────▶│ PostgreSQL  │
-│   Actions   │     │   (Django)   │     │  (Railway)  │
+│   GitHub    │────▶│   Django     │────▶│ PostgreSQL  │
+│   Actions   │     │   (Backend)  │     │ (Database)  │
 │   (ETL)     │     │  (Backend)   │     │ (Database)  │
 └─────────────┘     └──────────────┘     └─────────────┘
                             │
@@ -111,14 +111,14 @@ GraphQL schema provides efficient data access:
 - GitHub Actions runs ETL scripts daily (playlist ETL, view count ETL)
 - ETL checks Django cache first to avoid redundant API calls
 - Only fetches from external APIs (RapidAPI, Spotify, YouTube) if data not cached
-- Scripts connect to Railway's Django app to access the database
-- Data gets processed and stored in Railway's PostgreSQL
+- Scripts connect to Django backend to access the database
+- Data gets processed and stored in PostgreSQL
 
 #### Web Application Architecture
 
 ```
 ┌──────────────┐    ┌──────────────┐     ┌─────────────┐
-│ GitHub Pages │    │   Railway    │────▶│ PostgreSQL  │
+│   Vercel     │    │   Django     │────▶│ PostgreSQL  │
 │  (Frontend)  │───▶│   (Django)   │     │ (Database)  │
 │  Static HTML │    │   GraphQL    │     │             │
 └──────────────┘    └──────────────┘     └─────────────┘
@@ -132,16 +132,16 @@ GraphQL schema provides efficient data access:
 
 **User-Facing Flow:**
 
-- Static frontend (GitHub Pages) makes GraphQL requests to Railway Django
-- Railway Django serves the GraphQL API and queries PostgreSQL
+- Static frontend (Vercel) makes GraphQL requests to Django backend
+- Django backend serves the GraphQL API and queries PostgreSQL
 - Cloudflare CDN caches responses globally
 
-**Backend**: Django on Railway - managed infrastructure, automatic scaling, integrated PostgreSQL
-**Frontend**: `/docs` folder served via GitHub Pages at tunemeld.com
+**Backend**: Django - serves GraphQL API, handles data processing
+**Frontend**: `/frontend` folder served via Vercel at tunemeld.com
 
 **Why split architecture?**
 
-- Cost efficiency (GitHub Pages is free)
+- Cost efficiency (Vercel is free)
 - Independent scaling of frontend/backend
 - CDN benefits for static assets
 - Simplified deployment pipeline
@@ -187,15 +187,15 @@ make format
 
 ## Deployment
 
-### Backend (Railway)
+### Backend
 
 - Automatic deploys from main branch
-- Environment variables in Railway dashboard
+- Environment variables in local .env files
 - PostgreSQL provisioned automatically
 
-### Frontend (GitHub Pages)
+### Frontend (Vercel)
 
-- Automatic deployment when `/docs` changes
+- Automatic deployment when `/frontend` changes
 - Custom domain via CNAME file
 - Cloudflare CDN for performance
 
@@ -203,17 +203,16 @@ make format
 
 1. **Data Quality Over Quantity**: Focus on editorial playlists that represent human curation
 2. **Performance First**: Multi-layer caching, static frontend, CDN distribution
-3. **Cost Efficiency**: Leverage free tiers (GitHub Pages, Railway starter, Cloudflare)
+3. **Cost Efficiency**: Leverage free tiers (Vercel, Cloudflare)
 4. **Maintainability**: Clear separation of concerns, comprehensive logging, blue-green deployments
 5. **User Experience**: Show consensus across services, fast loading, mobile-friendly
 
 ## Tech Stack Rationale
 
 - **Django**: Mature, batteries-included, excellent ORM for complex queries
-- **PostgreSQL**: Best open-source relational database, Railway integration
+- **PostgreSQL**: Best open-source relational database
 - **GraphQL**: Efficient data fetching, single endpoint, future-proof API
-- **Railway**: Zero-config deployments, integrated PostgreSQL, great DX
-- **GitHub Pages**: Free, reliable, perfect for static content
+- **Vercel**: Free, reliable, perfect for static content
 - **Cloudflare**: Free CDN, DDoS protection, analytics
 
 ## License

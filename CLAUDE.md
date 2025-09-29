@@ -26,17 +26,9 @@ make kill-backend      # Stops backend server
 
 **The Makefile handles all environment setup, virtual environment activation, and proper server configuration.**
 
-## Railway & Playwright
-
-**Railway MCP:** Monitor deployments, check service health, debug failures. Credentials in `.env.dev`.
+## Playwright
 
 **Playwright MCP:** Browser automation and web testing.
-
-**Project Info:**
-
-- Project: `b6a14488-05cf-43ad-85be-995c7bae75d1`
-- Service: `e791f98d-3033-4990-b159-b551f0e61f83`
-- Environment: `8910d930-6bd7-4742-90a7-3c59b1b42217`
 
 ## Cache Architecture
 
