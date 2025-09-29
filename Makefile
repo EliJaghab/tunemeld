@@ -23,6 +23,7 @@
 	ruff-fix \
 	ruff-format \
 	django-check \
+	typescript-check \
 	clean-cache \
 	check \
 	format-quick
@@ -82,6 +83,11 @@ django-check: setup_env
 	@echo "Running Django deployment checks..."
 	cd backend && source ../.venv/bin/activate && PYTHONPATH=.. python manage.py check --deploy
 
+typescript-check:
+	@echo "Running TypeScript type checking..."
+	cd frontend && npx tsc --noEmit
+	@echo "TypeScript check passed!"
+
 django-import-check: setup_env
 	@echo "Testing Django management command imports..."
 	@cd backend && source ../.venv/bin/activate && PYTHONPATH=.. DJANGO_SETTINGS_MODULE=core.settings python -c 'import django; django.setup(); from core.management.commands import playlist_etl; print("All management commands import successfully")'
@@ -97,7 +103,7 @@ clean-cache:
 	@rm -rf .mypy_cache 2>/dev/null || true
 	@echo "Cache cleaned"
 
-check: lint ruff-check django-check
+check: lint ruff-check django-check typescript-check
 	@echo "All checks passed!"
 
 format-quick: ruff-fix ruff-format clean-cache
@@ -176,7 +182,7 @@ makemigrations:
 	@echo " Migrations created successfully"
 
 migrate:
-	@echo " Applying migrations to Railway PostgreSQL..."
+	@echo " Applying migrations to production PostgreSQL..."
 	@cd backend && $(VENV)/bin/python manage.py migrate --noinput
 	@echo " Migrations applied successfully"
 
@@ -207,15 +213,15 @@ ci-db-safety-check:
 	@echo " Database safety check passed"
 
 ci-db-migrate:
-	@echo " Checking migration status on Railway PostgreSQL..."
+	@echo " Checking migration status on production PostgreSQL..."
 	@cd backend && python manage.py showmigrations
 	@echo ""
-	@echo " Applying migrations to Railway PostgreSQL..."
+	@echo " Applying migrations to production PostgreSQL..."
 	@cd backend && python manage.py migrate --noinput
 	@echo ""
 	@echo " Verifying migration consistency..."
 	@cd backend && python manage.py showmigrations | grep -E "\\[ \\]" && echo "❌ Unapplied migrations detected!" && exit 1 || echo " All migrations applied successfully"
-	@echo " Railway database migrations completed successfully"
+	@echo " Production database migrations completed successfully"
 
 ci-db-validate:
 	@echo " Running post-ETL database validation..."
