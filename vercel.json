@@ -1,7 +1,7 @@
 {
   "name": "tunemeld",
   "version": 2,
-  "outputDirectory": "docs",
+  "outputDirectory": "frontend",
   "headers": [
     {
       "source": "/(.*)",

@@ -129,7 +129,7 @@ serve-frontend:
 		echo " Website will be available at: http://localhost:8080"; \
 		echo " Cache disabled for development"; \
 		echo " Press Ctrl+C to stop the server"; \
-		cd docs && python -m http.server 8080; \
+		cd frontend && python -m http.server 8080; \
 	fi
 
 
