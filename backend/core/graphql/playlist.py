@@ -2,6 +2,7 @@ from datetime import datetime
 
 import graphene
 from core.api.genre_service_api import get_genre, get_raw_playlist_data_by_genre_service, get_service
+from core.api.track_enrichment_api import TrackEnrichmentService
 from core.constants import DEFAULT_RANK_TYPE, ServiceName
 from core.graphql.track import TrackType
 from core.models import Service, Track
@@ -97,25 +98,7 @@ class PlaylistQuery(graphene.ObjectType):
                     track.tunemeld_rank = playlist_entry.position
                     tracks.append(track)
 
-        serialized_tracks = []
-        for track in tracks:
-            track_data = {
-                "id": track.id,
-                "isrc": track.isrc,
-                "track_name": track.track_name,
-                "artist_name": track.artist_name,
-                "album_name": track.album_name,
-                "spotify_url": track.spotify_url,
-                "apple_music_url": track.apple_music_url,
-                "youtube_url": track.youtube_url,
-                "soundcloud_url": track.soundcloud_url,
-                "album_cover_url": track.album_cover_url,
-                "aggregate_rank": track.aggregate_rank,
-                "aggregate_score": track.aggregate_score,
-                "updated_at": track.updated_at.isoformat() if track.updated_at else None,
-                "tunemeld_rank": track.tunemeld_rank,
-            }
-            serialized_tracks.append(track_data)
+        serialized_tracks = TrackEnrichmentService.enrich_tracks_bulk(tracks, genre, service)
 
         cache_data = {"genre_name": genre, "service_name": service, "tracks": serialized_tracks}
         local_cache_set(CachePrefix.GQL_PLAYLIST, cache_key_data, cache_data)
