@@ -53,6 +53,8 @@ CSRF_TRUSTED_ORIGINS = [
     "https://www.tunemeld.com",
     "https://api.tunemeld.com",
     "https://tunemeld.com",
+    "https://tunemeld.vercel.app",
+    "https://tunemeld-kx0bo9451-elis-projects-3efca02e.vercel.app",
 ]
 
 
@@ -232,6 +234,8 @@ CORS_ALLOWED_ORIGINS = [
     "https://tunemeld.com",
     "https://www.tunemeld.com",
     "https://api.tunemeld.com",
+    "https://tunemeld.vercel.app",
+    "https://tunemeld-kx0bo9451-elis-projects-3efca02e.vercel.app",
 ]
 ROOT_URLCONF = "core.urls"
 

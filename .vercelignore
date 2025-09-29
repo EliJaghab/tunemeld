@@ -1,0 +1,34 @@
+# Backend files
+backend/
+kv_worker/
+
+# Python files
+*.py
+*.pyc
+__pycache__/
+.venv/
+venv/
+*.egg-info/
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+
+# Development files
+.env*
+.git/
+.github/
+.gitignore
+Makefile
+requirements*.txt
+pyproject.toml
+setup.py
+
+# Documentation
+README.md
+CLAUDE.md
+*.md
+
+# Other
+.DS_Store
+node_modules/
+*.log
