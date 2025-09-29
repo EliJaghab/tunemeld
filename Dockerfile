@@ -22,7 +22,7 @@ COPY .github/ /app/.github/
 # Set Python path for Django
 ENV PYTHONPATH=/app
 
-# Expose port 8080 (matches Railway configuration)
+# Expose port 8080
 EXPOSE 8080
 
 # Start Django server
