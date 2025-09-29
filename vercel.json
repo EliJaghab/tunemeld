@@ -1,7 +1,9 @@
 {
   "name": "tunemeld",
   "version": 2,
+  "buildCommand": "cd frontend && npm run build",
   "outputDirectory": "frontend",
+  "installCommand": "cd frontend && npm install",
   "headers": [
     {
       "source": "/(.*)",
