@@ -1,5 +1,6 @@
 import logging
 import os
+import sys
 import zoneinfo
 from datetime import UTC, datetime
 from pathlib import Path
@@ -170,24 +171,54 @@ CACHE_TIMEOUT = 86400 * 7  # 7 days
 # Cache control - set to True to disable all local caching (for development/debugging)
 DISABLE_CACHE = False
 
-CACHES = {
-    "default": {  # Cloudflare KV for persistent storage of raw API data
-        "BACKEND": "core.utils.cloudflare_cache.CloudflareKVCache",
-        "LOCATION": f"tunemeld-cache-{ENVIRONMENT}",
-        "TIMEOUT": CACHE_TIMEOUT,
-        "OPTIONS": {
-            "MAX_ENTRIES": 1000,
+# Cache Architecture:
+# - default: CloudflareKV for Django/ETL operations (raw API data, management commands)
+# - local: Local memory cache for GraphQL ONLY
+
+is_runserver = len(sys.argv) > 1 and sys.argv[1] == "runserver"
+is_railway = bool(os.getenv("RAILWAY_ENVIRONMENT"))
+is_dev_mgmt_command = ENVIRONMENT == DEV and not is_runserver and not is_railway
+
+if is_dev_mgmt_command:
+    # Development management commands: use local cache for default to avoid CloudflareKV delays
+    CACHES = {
+        "default": {
+            "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+            "LOCATION": "tunemeld-mgmt-cache",
+            "TIMEOUT": CACHE_TIMEOUT,
+            "OPTIONS": {
+                "MAX_ENTRIES": 1000,
+            },
         },
-    },
-    "local": {  # Local memory cache for GraphQL and L1 caching
-        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
-        "LOCATION": "tunemeld-local-cache",
-        "TIMEOUT": 86400 * 7,  # 7 days for GraphQL caches
-        "OPTIONS": {
-            "MAX_ENTRIES": 10000,  # Increased for GraphQL data
+        "local": {  # Local memory cache for GraphQL query results only
+            "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+            "LOCATION": "tunemeld-local-cache",
+            "TIMEOUT": 86400 * 7,  # 7 days for GraphQL caches
+            "OPTIONS": {
+                "MAX_ENTRIES": 10000,
+            },
         },
-    },
-}
+    }
+else:
+    # Production (Railway) or local runserver: use CloudflareKV for persistent API data cache
+    CACHES = {
+        "default": {  # CloudflareKV for raw API data (Spotify, YouTube, RapidAPI, SoundCloud)
+            "BACKEND": "core.utils.cloudflare_cache.CloudflareKVCache",
+            "LOCATION": f"tunemeld-cache-{ENVIRONMENT}",
+            "TIMEOUT": CACHE_TIMEOUT,
+            "OPTIONS": {
+                "MAX_ENTRIES": 1000,
+            },
+        },
+        "local": {  # Local memory cache for GraphQL query results only
+            "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+            "LOCATION": "tunemeld-local-cache",
+            "TIMEOUT": 86400 * 7,  # 7 days for GraphQL caches
+            "OPTIONS": {
+                "MAX_ENTRIES": 10000,
+            },
+        },
+    }
 
 # Cache middleware settings
 CACHE_MIDDLEWARE_ALIAS = "default"

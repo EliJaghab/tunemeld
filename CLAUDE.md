@@ -38,6 +38,27 @@ make kill-backend      # Stops backend server
 - Service: `e791f98d-3033-4990-b159-b551f0e61f83`
 - Environment: `8910d930-6bd7-4742-90a7-3c59b1b42217`
 
+## Cache Architecture
+
+**TuneMeld uses a two-tier cache system:**
+
+### Default Cache (`cache` / `caches["default"]`)
+
+- **Purpose**: CloudflareKV for Django operations (ETL, raw API data)
+- **Data**: Spotify playlists, YouTube URLs, RapidAPI responses, SoundCloud data, Apple Music covers
+- **Usage**: All Django management commands, ETL pipelines, and operational data
+- **Why CloudflareKV**:
+  1. **API Rate Limits**: RapidAPI and YouTube API have strict limits - caching prevents hitting quotas
+  2. **Performance**: Much faster to pull from CloudflareKV than rescraping/refetching from external APIs
+
+### Local Cache (`caches["local"]`)
+
+- **Purpose**: Local memory cache for GraphQL ONLY
+- **Data**: GQL_PLAYLIST, GQL_PLAY_COUNT, GQL_PLAYLIST_METADATA
+- **Usage**: GraphQL query results for fast frontend responses
+
+**Simple rule: CloudflareKV for Django/ETL operations, local cache for GraphQL.**
+
 ## Development Workflow
 
 1. `make serve-frontend` and `make serve-backend`
