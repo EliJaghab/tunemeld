@@ -63,7 +63,7 @@ jobs:
         run: make ci-db-safety-check
 
 
-      - name: Apply database migrations to Railway PostgreSQL
+      - name: Apply database migrations to production PostgreSQL
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
@@ -144,5 +144,5 @@ jobs:
       - name: Log ETL completion
         run: |
           echo " PostgreSQL ETL Pipeline completed successfully"
-          echo "  Data persisted to Railway PostgreSQL database"
+          echo "  Data persisted to production PostgreSQL database"
           echo " Next ETL run scheduled for tomorrow at 2:30 AM UTC"
