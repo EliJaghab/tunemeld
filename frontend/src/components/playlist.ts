@@ -1,20 +1,27 @@
-import { DJANGO_API_BASE_URL } from "@/config/config.js";
-import { stateManager } from "@/state/StateManager.js";
-import { appRouter } from "@/routing/router.js";
-import { graphqlClient } from "@/services/graphql-client.js";
+import { DJANGO_API_BASE_URL } from "@/config/config";
+import { stateManager } from "@/state/StateManager";
+import { appRouter } from "@/routing/router";
+import { graphqlClient } from "@/services/graphql-client";
 import {
   SERVICE_NAMES,
   TUNEMELD_RANK_FIELD,
   PLAYLIST_PLACEHOLDERS,
-} from "@/config/constants.js";
+} from "@/config/constants";
+import type {
+  Track,
+  Playlist,
+  PlayCount,
+  ServiceSource,
+  ButtonLabel,
+} from "@/types";
 
-let playCountLookupMap = {};
+let playCountLookupMap: Record<string, PlayCount> = {};
 
-function getPlayCountForTrack(isrc) {
+function getPlayCountForTrack(isrc: string): PlayCount {
   return playCountLookupMap[isrc] || {};
 }
 
-export async function populatePlayCountMap(isrcs) {
+export async function populatePlayCountMap(isrcs: string[]): Promise<void> {
   if (!isrcs || isrcs.length === 0) return;
 
   try {
@@ -22,7 +29,7 @@ export async function populatePlayCountMap(isrcs) {
     const playCountData = response.tracksPlayCounts || [];
 
     playCountLookupMap = {};
-    playCountData.forEach((data) => {
+    playCountData.forEach((data: PlayCount) => {
       if (data && data.isrc) {
         playCountLookupMap[data.isrc] = data;
       }
@@ -33,8 +40,8 @@ export async function populatePlayCountMap(isrcs) {
   }
 }
 
-function enrichTracksWithPlayCountData(tracks) {
-  tracks.forEach((track) => {
+function enrichTracksWithPlayCountData(tracks: Track[]): void {
+  tracks.forEach((track: Track) => {
     const playCountData = playCountLookupMap[track.isrc];
     if (playCountData) {
       // Add play count fields directly to track object for sorting
@@ -49,7 +56,7 @@ function enrichTracksWithPlayCountData(tracks) {
   });
 }
 
-export async function updateMainPlaylist(genre) {
+export async function updateMainPlaylist(genre: string): Promise<void> {
   try {
     const response = await graphqlClient.getPlaylistTracks(
       genre,
@@ -59,8 +66,8 @@ export async function updateMainPlaylist(genre) {
     playlistData = data;
 
     // Extract ISRCs from TuneMeld playlist tracks and populate play count map
-    const isrcs = data.flatMap((playlist) =>
-      playlist.tracks.map((track) => track.isrc),
+    const isrcs = data.flatMap((playlist: Playlist) =>
+      playlist.tracks.map((track: Track) => track.isrc),
     );
     await populatePlayCountMap(isrcs);
 
@@ -89,27 +96,34 @@ export async function updateMainPlaylist(genre) {
   }
 }
 
-export async function fetchAndDisplayPlaylists(genre) {
+export async function fetchAndDisplayPlaylists(
+  genre: string,
+): Promise<Playlist[]> {
   const { serviceOrder } = await graphqlClient.getPlaylistMetadata(genre);
 
   return fetchAndDisplayPlaylistsWithOrder(genre, serviceOrder);
 }
 
-export async function fetchAndDisplayPlaylistsWithOrder(genre, serviceOrder) {
-  const promises = serviceOrder.map(async (service) => {
+export async function fetchAndDisplayPlaylistsWithOrder(
+  genre: string,
+  serviceOrder: string[],
+): Promise<Playlist[]> {
+  const playlists: Playlist[] = [];
+  const promises = serviceOrder.map(async (service: string) => {
     try {
       const response = await graphqlClient.getPlaylistTracks(genre, service);
       const data = [response.playlist];
+      playlists.push(response.playlist);
 
       // Populate play count data for total views and other services that need it
       if (service === SERVICE_NAMES.TOTAL || data[0]?.tracks?.length > 0) {
-        const isrcs = data.flatMap((playlist) =>
-          playlist.tracks.map((track) => track.isrc),
+        const isrcs = data.flatMap((playlist: Playlist) =>
+          playlist.tracks.map((track: Track) => track.isrc),
         );
         await populatePlayCountMap(isrcs);
 
         // Enrich track objects with play count data for sorting
-        data.forEach((playlist) => {
+        data.forEach((playlist: Playlist) => {
           enrichTracksWithPlayCountData(playlist.tracks);
         });
       }
@@ -117,7 +131,6 @@ export async function fetchAndDisplayPlaylistsWithOrder(genre, serviceOrder) {
       renderPlaylistTracks(
         data,
         `${service}${PLAYLIST_PLACEHOLDERS.SERVICE_SUFFIX}`,
-        null,
         service,
       );
     } catch (error) {
@@ -125,9 +138,14 @@ export async function fetchAndDisplayPlaylistsWithOrder(genre, serviceOrder) {
     }
   });
   await Promise.all(promises);
+  return playlists;
 }
 
-async function fetchAndDisplayData(url, placeholderId, serviceName) {
+async function fetchAndDisplayData(
+  url: string,
+  placeholderId: string,
+  serviceName: string | null,
+): Promise<void> {
   try {
     const response = await fetch(url);
     if (!response.ok) {
@@ -142,7 +160,12 @@ async function fetchAndDisplayData(url, placeholderId, serviceName) {
   }
 }
 
-export function renderPlaylistTracks(playlists, placeholderId, serviceName) {
+export function renderPlaylistTracks(
+  playlists: Playlist[],
+  placeholderId: string,
+  serviceName: string | null,
+  serviceDisplayName?: string | null,
+): void {
   const placeholder = document.getElementById(placeholderId);
   if (!placeholder) {
     console.error(`Placeholder with ID ${placeholderId} not found.`);
@@ -152,22 +175,22 @@ export function renderPlaylistTracks(playlists, placeholderId, serviceName) {
   placeholder.innerHTML = "";
   const isTuneMeldPlaylist = serviceName === SERVICE_NAMES.TUNEMELD;
 
-  playlists.forEach((playlist) => {
-    playlist.tracks.forEach((track) => {
+  playlists.forEach((playlist: Playlist) => {
+    playlist.tracks.forEach((track: Track) => {
       const row = isTuneMeldPlaylist
         ? createTuneMeldPlaylistTableRow(track)
-        : createServicePlaylistTableRow(track, serviceName);
+        : createServicePlaylistTableRow(track, serviceName || "");
       placeholder.appendChild(row);
     });
   });
 }
 
 async function setTrackInfoLabels(
-  trackTitle,
-  artistElement,
-  track,
-  serviceName,
-) {
+  trackTitle: HTMLAnchorElement,
+  artistElement: HTMLSpanElement,
+  track: Track,
+  serviceName: string,
+): Promise<void> {
   try {
     const fullTrackName =
       track.fullTrackName || track.trackName || "Unknown Track";
@@ -177,7 +200,7 @@ async function setTrackInfoLabels(
     // Get backend-driven button labels for track title
     const trackButtonLabels = await graphqlClient.getMiscButtonLabels(
       "track_title",
-      serviceName,
+      null,
     );
 
     if (trackButtonLabels && trackButtonLabels.length > 0) {
@@ -207,7 +230,7 @@ async function setTrackInfoLabels(
   }
 }
 
-function createTuneMeldPlaylistTableRow(track) {
+function createTuneMeldPlaylistTableRow(track: Track): HTMLTableRowElement {
   const row = document.createElement("tr");
 
   row.setAttribute("data-isrc", track.isrc);
@@ -215,7 +238,7 @@ function createTuneMeldPlaylistTableRow(track) {
 
   const rankCell = document.createElement("td");
   rankCell.className = "rank";
-  rankCell.textContent = track.tunemeldRank;
+  rankCell.textContent = track.tunemeldRank.toString();
 
   const coverCell = document.createElement("td");
   coverCell.className = "cover";
@@ -288,11 +311,11 @@ function createTuneMeldPlaylistTableRow(track) {
 }
 
 function createPlayCountElement(
-  playCount,
-  source,
-  url = null,
-  percentage = null,
-) {
+  playCount: number | string,
+  source: string,
+  url: string | null = null,
+  percentage: string | null = null,
+): HTMLElement {
   const container = document.createElement("div");
   container.className = "play-count-container";
 
@@ -307,7 +330,7 @@ function createPlayCountElement(
     percentageSpan.textContent = ` ${percentage}%`;
     percentageSpan.className = "play-count-percentage";
 
-    if (percentage.startsWith("-")) {
+    if (percentage && percentage.startsWith("-")) {
       percentageSpan.classList.add("negative");
     } else if (percentage !== "0") {
       percentageSpan.classList.add("positive");
@@ -329,7 +352,10 @@ function createPlayCountElement(
   return container;
 }
 
-function createTotalPlayCountElement(playCount, track) {
+function createTotalPlayCountElement(
+  playCount: number | string,
+  track: Track,
+): HTMLElement {
   const container = document.createElement("div");
   container.className = "total-play-count-container";
 
@@ -342,7 +368,7 @@ function createTotalPlayCountElement(playCount, track) {
   return container;
 }
 
-function createTrendingElement(percentage) {
+function createTrendingElement(percentage: string): HTMLElement {
   const container = document.createElement("div");
   container.className = "trending-container";
 
@@ -360,7 +386,7 @@ function createTrendingElement(percentage) {
   return container;
 }
 
-function displayPlayCounts(track, row) {
+function displayPlayCounts(track: Track, row: HTMLTableRowElement): void {
   const totalPlaysCell = document.createElement("td");
   totalPlaysCell.className = "total-play-count";
 
@@ -392,7 +418,10 @@ function displayPlayCounts(track, row) {
   row.appendChild(trendingCell);
 }
 
-function createServicePlaylistTableRow(track, serviceName) {
+function createServicePlaylistTableRow(
+  track: Track,
+  serviceName: string,
+): HTMLTableRowElement {
   const row = document.createElement("tr");
 
   row.setAttribute("data-isrc", track.isrc);
@@ -400,7 +429,9 @@ function createServicePlaylistTableRow(track, serviceName) {
 
   const rankCell = document.createElement("td");
   rankCell.className = "rank";
-  rankCell.textContent = track.tunemeldRank || "";
+  rankCell.textContent = track.tunemeldRank
+    ? track.tunemeldRank.toString()
+    : "";
 
   const coverCell = document.createElement("td");
   coverCell.className = "cover";
@@ -502,7 +533,7 @@ function createServicePlaylistTableRow(track, serviceName) {
   return row;
 }
 
-function displaySources(cell, track) {
+function displaySources(cell: HTMLTableCellElement, track: Track): void {
   const sourcesContainer = document.createElement("div");
   sourcesContainer.className = "track-sources";
 
@@ -528,20 +559,29 @@ function displaySources(cell, track) {
   );
 
   serviceData.forEach((item) => {
-    const linkElement = createSourceLinkFromService(
-      item.source,
-      item.rank,
-      track,
-    );
-    sourcesContainer.appendChild(linkElement);
+    if (item.source) {
+      const linkElement = createSourceLinkFromService(
+        item.source,
+        item.rank,
+        track,
+      );
+      sourcesContainer.appendChild(linkElement);
+    }
   });
 
   cell.appendChild(sourcesContainer);
 }
 
-function createSourceLinkFromService(source, rank = null, trackData = null) {
+function createSourceLinkFromService(
+  source: ServiceSource,
+  rank: number | null = null,
+  trackData: Track | null = null,
+): HTMLElement {
   if (!source.url) {
-    return document.createTextNode("");
+    const textNode = document.createTextNode("");
+    const span = document.createElement("span");
+    span.appendChild(textNode);
+    return span;
   }
 
   const sourceIcon = document.createElement("img");
@@ -559,7 +599,7 @@ function createSourceLinkFromService(source, rank = null, trackData = null) {
   if (trackData && trackData.buttonLabels) {
     // Look for source icon button label that matches this service
     const sourceLabel = trackData.buttonLabels.find(
-      (label) =>
+      (label: ButtonLabel) =>
         label.buttonType === "source_icon" && label.context === source.name,
     );
     if (sourceLabel) {
@@ -600,13 +640,13 @@ function createSourceLinkFromService(source, rank = null, trackData = null) {
   return container;
 }
 
-let playlistData = [];
+let playlistData: Playlist[] = [];
 
-export function setPlaylistData(data) {
+export function setPlaylistData(data: Playlist[]): void {
   playlistData = data;
 }
 
-export function sortTable(column, order) {
+export function sortTable(column: string, order: string): void {
   const ranks = appRouter.getAvailableRanks();
   const rankConfig = ranks.find((rank) => rank.sortField === column);
 
@@ -615,10 +655,10 @@ export function sortTable(column, order) {
     return;
   }
 
-  const sortedData = playlistData.map((playlist) => {
+  const sortedData = playlistData.map((playlist: Playlist) => {
     playlist.tracks.sort((a, b) => {
-      let aValue = a[rankConfig.dataField];
-      let bValue = b[rankConfig.dataField];
+      let aValue = (a as any)[rankConfig.dataField] as number;
+      let bValue = (b as any)[rankConfig.dataField] as number;
 
       // Handle null/undefined values
       if (aValue == null) aValue = 0;
@@ -649,22 +689,22 @@ export function sortTable(column, order) {
   );
 }
 
-function getPlayCount(track, platform) {
+function getPlayCount(track: Track, platform: string): number | null {
   // Get play count data from lookup map
   const playCountData = getPlayCountForTrack(track.isrc);
 
   if (platform === SERVICE_NAMES.YOUTUBE) {
-    return playCountData.youtubeCurrentPlayCount;
+    return playCountData.youtubeCurrentPlayCount ?? null;
   } else if (platform === SERVICE_NAMES.SPOTIFY) {
-    return playCountData.spotifyCurrentPlayCount;
+    return playCountData.spotifyCurrentPlayCount ?? null;
   } else if (
     platform === "Total Plays" ||
     platform === SERVICE_NAMES.TOTAL ||
     platform === "total-plays"
   ) {
-    return playCountData.totalCurrentPlayCount;
+    return playCountData.totalCurrentPlayCount ?? null;
   } else if (platform === "Trending" || platform === "trending") {
-    return playCountData.totalWeeklyChangePercentage;
+    return playCountData.totalWeeklyChangePercentage ?? null;
   }
   return null;
 }
@@ -693,32 +733,54 @@ export async function addToggleEventListeners() {
   // Add initial labels to all collapse buttons
   await Promise.all(
     Array.from(document.querySelectorAll(".collapse-button")).map(
-      async (button) => {
+      async (button: Element) => {
         const targetId = button.getAttribute("data-target");
-        const content = document.querySelector(`${targetId} .playlist-content`);
+        const content = targetId
+          ? document.querySelector(`${targetId} .playlist-content`)
+          : null;
         const isCollapsed = content?.classList.contains("collapsed") || false;
-        await updateCollapseButtonLabels(button, targetId, isCollapsed);
+        if (targetId) {
+          await updateCollapseButtonLabels(
+            button as HTMLElement,
+            targetId,
+            isCollapsed,
+          );
+        }
       },
     ),
   );
 }
 
-async function toggleCollapse(event) {
-  const button = event.currentTarget;
-  const targetId = button.getAttribute("data-target");
-  const content = document.querySelector(`${targetId} .playlist-content`);
-  const playlist = document.querySelector(targetId);
+async function toggleCollapse(event: Event): Promise<void> {
+  const button = event.currentTarget as HTMLElement;
+  const targetId = button?.getAttribute("data-target");
+  const content = targetId
+    ? document.querySelector(`${targetId} .playlist-content`)
+    : null;
+  const playlist = targetId ? document.querySelector(targetId) : null;
 
-  content.classList.toggle("collapsed");
-  playlist.classList.toggle("collapsed");
+  if (content) {
+    content.classList.toggle("collapsed");
+  }
+  if (playlist) {
+    playlist.classList.toggle("collapsed");
+  }
 
-  const isCollapsed = content.classList.contains("collapsed");
-  button.textContent = isCollapsed ? "▲" : "▼";
+  const isCollapsed = content?.classList.contains("collapsed") || false;
+  if (button) {
+    button.textContent = isCollapsed ? "▲" : "▼";
+  }
 
-  await updateCollapseButtonLabels(button, targetId, isCollapsed);
+  if (button && targetId) {
+    await updateCollapseButtonLabels(button, targetId, isCollapsed);
+  }
 }
 
-async function updateCollapseButtonLabels(button, targetId, isCollapsed) {
+async function updateCollapseButtonLabels(
+  button: HTMLElement,
+  targetId: string,
+  isCollapsed: boolean,
+): Promise<void> {
   try {
     let playlistType = "main";
     if (targetId.includes(SERVICE_NAMES.SPOTIFY)) {
@@ -732,7 +794,7 @@ async function updateCollapseButtonLabels(button, targetId, isCollapsed) {
     const context = `${playlistType}_${isCollapsed ? "collapsed" : "expanded"}`;
     const buttonLabels = await graphqlClient.getMiscButtonLabels(
       "collapse_button",
-      context,
+      null,
     );
 
     if (buttonLabels && buttonLabels.length > 0) {

@@ -1,4 +1,4 @@
-export function formatPlayCount(count) {
+export function formatPlayCount(count: number | null | undefined): string {
   if (count === null || count === undefined || count === 0) {
     return "0";
   }
@@ -7,7 +7,7 @@ export function formatPlayCount(count) {
     return String(count);
   }
 
-  const suffixes = [
+  const suffixes: [number, string][] = [
     [1_000_000_000, "B"],
     [1_000_000, "M"],
     [1000, "k"],
@@ -29,7 +29,9 @@ export function formatPlayCount(count) {
   return String(count);
 }
 
-export function formatPercentageChange(percentage) {
+export function formatPercentageChange(
+  percentage: number | null | undefined,
+): string {
   if (percentage === null || percentage === undefined || percentage === 0.0) {
     return "0";
   }

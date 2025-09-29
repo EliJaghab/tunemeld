@@ -1,22 +1,31 @@
-import { SERVICE_NAMES } from "@/config/constants.js";
-import { graphqlClient } from "@/services/graphql-client.js";
-import { appRouter } from "@/routing/router.js";
+import { SERVICE_NAMES } from "@/config/constants";
+import { graphqlClient } from "@/services/graphql-client";
+import { appRouter } from "@/routing/router";
+import type {
+  ServiceConfig,
+  IframeConfig,
+  Track,
+  ServiceSource,
+} from "@/types/index";
 
-let serviceConfigs = null;
-let iframeConfigs = null;
+let serviceConfigs: ServiceConfig[] | null = null;
+let iframeConfigs: IframeConfig[] | null = null;
 let serviceButtonsCreated = false;
 let bodyClickListenerSetup = false;
-let currentIframe = null;
-let currentService = null;
+let currentIframe: HTMLIFrameElement | null = null;
+let currentService: string | null = null;
 
-async function loadIframeConfigs() {
+async function loadIframeConfigs(): Promise<IframeConfig[]> {
   if (!iframeConfigs) {
     iframeConfigs = await graphqlClient.getIframeConfigs();
   }
   return iframeConfigs;
 }
 
-async function createIframeForService(url, serviceType) {
+async function createIframeForService(
+  url: string,
+  serviceType: string,
+): Promise<HTMLIFrameElement> {
   const iframe = document.createElement("iframe");
   iframe.width = "100%";
   iframe.style.border = "none";
@@ -35,9 +44,9 @@ async function createIframeForService(url, serviceType) {
     if (config) {
       iframe.src = iframeSrc;
       iframe.allow = config.allow;
-      iframe.height = config.height;
+      iframe.height = config.height.toString();
       if (config.referrerPolicy) {
-        iframe.referrerPolicy = config.referrerPolicy;
+        iframe.referrerPolicy = config.referrerPolicy as ReferrerPolicy;
       }
     } else {
       console.error("No iframe config found for service:", serviceType);
@@ -49,7 +58,7 @@ async function createIframeForService(url, serviceType) {
   return iframe;
 }
 
-export function setupBodyClickListener(genre) {
+export function setupBodyClickListener(genre: string): void {
   if (bodyClickListenerSetup) {
     return;
   }
@@ -60,8 +69,8 @@ export function setupBodyClickListener(genre) {
     return;
   }
 
-  body.addEventListener("click", (event) => {
-    const link = event.target.closest("a");
+  body.addEventListener("click", (event: Event) => {
+    const link = (event.target as Element)?.closest("a");
     if (link) {
       const shouldIntercept = shouldInterceptLink(link);
       if (!shouldIntercept) {
@@ -76,10 +85,14 @@ export function setupBodyClickListener(genre) {
   bodyClickListenerSetup = true;
 }
 
-export async function openTrackFromUrl(genre, player, isrc) {
+export async function openTrackFromUrl(
+  genre: string,
+  player: string,
+  isrc: string,
+): Promise<boolean> {
   try {
     const tracks = document.querySelectorAll("tr[data-isrc]");
-    for (const row of tracks) {
+    for (const row of Array.from(tracks)) {
       if (row.getAttribute("data-isrc") === isrc) {
         const trackData = JSON.parse(row.getAttribute("data-track") || "{}");
 
@@ -108,7 +121,7 @@ export async function openTrackFromUrl(genre, player, isrc) {
   }
 }
 
-export async function setupClosePlayerButton() {
+export async function setupClosePlayerButton(): Promise<void> {
   const closeButton = document.getElementById("close-player-button");
   if (closeButton) {
     closeButton.addEventListener("click", closePlayer);
@@ -135,7 +148,12 @@ export async function setupClosePlayerButton() {
   }
 }
 
-async function handleLinkClick(event, link, genre, isrc) {
+async function handleLinkClick(
+  event: Event,
+  link: HTMLAnchorElement,
+  genre: string,
+  isrc: string | null,
+): Promise<void> {
   const url = link.href;
   const serviceType = getServiceType(url);
 
@@ -148,7 +166,11 @@ async function handleLinkClick(event, link, genre, isrc) {
   }
 }
 
-async function openPlayer(url, serviceType, trackData = null) {
+async function openPlayer(
+  url: string,
+  serviceType: string,
+  trackData: Track | null = null,
+): Promise<void> {
   const placeholder = document.getElementById("service-player-placeholder");
   const closeButton = document.getElementById("close-player-button");
   const serviceButtonsContainer = document.getElementById(
@@ -176,23 +198,23 @@ async function openPlayer(url, serviceType, trackData = null) {
     } catch (error) {
       console.error("Error updating iframe src:", error);
       // Create new iframe
-      placeholder.innerHTML = "";
+      if (placeholder) placeholder.innerHTML = "";
       iframe = await createIframeForService(url, serviceType);
       currentIframe = iframe;
       currentService = serviceType;
     }
   } else {
     // Create new iframe
-    placeholder.innerHTML = "";
+    if (placeholder) placeholder.innerHTML = "";
     iframe = await createIframeForService(url, serviceType);
     currentIframe = iframe;
     currentService = serviceType;
   }
 
-  iframe.onload = function () {
+  iframe.onload = function (): void {
     const playerContainer = document.getElementById("player-container");
     if (playerContainer) playerContainer.style.display = "block";
-    closeButton.style.display = "block";
+    if (closeButton) closeButton.style.display = "block";
 
     if (trackData && trackData.trackName && trackData.artistName) {
       appRouter.updateTitleWithTrackInfo(
@@ -225,16 +247,16 @@ async function openPlayer(url, serviceType, trackData = null) {
     createServiceButtons(trackData);
   };
 
-  placeholder.appendChild(iframe);
+  if (placeholder) placeholder.appendChild(iframe);
 }
 
-async function switchPlayer(url, serviceType) {
+async function switchPlayer(url: string, serviceType: string): Promise<void> {
   // Use centralized iframe management via openPlayer
   // This eliminates duplicate iframe creation logic
   await openPlayer(url, serviceType);
 }
 
-function shouldInterceptLink(link) {
+function shouldInterceptLink(link: HTMLAnchorElement): boolean {
   /// does not intercept service playlists links from the header art - only track links open on tunemeld
   const isHeaderLink =
     link.classList.contains("header-title") ||
@@ -250,7 +272,7 @@ function shouldInterceptLink(link) {
   return isInTableRow;
 }
 
-function closePlayer() {
+function closePlayer(): void {
   const placeholder = document.getElementById("service-player-placeholder");
   const closeButton = document.getElementById("close-player-button");
   const playerContainer = document.getElementById("player-container");
@@ -281,7 +303,7 @@ function closePlayer() {
   }
 }
 
-function getServiceType(url) {
+function getServiceType(url: string): string {
   if (isSoundCloudLink(url)) return SERVICE_NAMES.SOUNDCLOUD;
   if (isSpotifyLink(url)) return SERVICE_NAMES.SPOTIFY;
   if (isAppleMusicLink(url)) return SERVICE_NAMES.APPLE_MUSIC;
@@ -289,32 +311,32 @@ function getServiceType(url) {
   return "none";
 }
 
-function isSoundCloudLink(url) {
+function isSoundCloudLink(url: string): boolean {
   return /^https:\/\/soundcloud\.com\/[a-zA-Z0-9-_]+\/[a-zA-Z0-9-_]+/.test(url);
 }
 
-function isSpotifyLink(url) {
+function isSpotifyLink(url: string): boolean {
   return /^https:\/\/open\.spotify\.com\/(track|album|playlist)\/[a-zA-Z0-9]+/.test(
     url,
   );
 }
 
-function isAppleMusicLink(url) {
+function isAppleMusicLink(url: string): boolean {
   return /^https:\/\/music\.apple\.com\//.test(url);
 }
 
-function isYouTubeLink(url) {
+function isYouTubeLink(url: string): boolean {
   return /^https:\/\/(www\.)?youtube\.com\/watch\?v=[a-zA-Z0-9_-]+/.test(url);
 }
 
-async function loadServiceConfigs() {
+async function loadServiceConfigs(): Promise<ServiceConfig[]> {
   if (!serviceConfigs) {
     serviceConfigs = await graphqlClient.getServiceConfigs();
   }
   return serviceConfigs;
 }
 
-async function createServiceButtons(trackData) {
+async function createServiceButtons(trackData: Track | null): Promise<void> {
   const serviceButtonsContainer = document.getElementById(
     "service-buttons-container",
   );
@@ -330,8 +352,8 @@ async function createServiceButtons(trackData) {
 
   for (const config of configs) {
     if (config.urlField && config.sourceField) {
-      const url = trackData[config.urlField];
-      const source = trackData[config.sourceField];
+      const url = (trackData as any)[config.urlField];
+      const source = (trackData as any)[config.sourceField];
 
       if (url && source && !addedUrls.has(url)) {
         addedUrls.add(url);
@@ -367,12 +389,14 @@ async function createServiceButtons(trackData) {
           if (serviceType !== "none") {
             // Use centralized navigation to update URL
             const currentGenre = appRouter.getCurrentGenre();
-            appRouter.navigateToTrack(
-              currentGenre,
-              "tunemeld-rank",
-              serviceType,
-              trackData.isrc,
-            );
+            if (currentGenre) {
+              appRouter.navigateToTrack(
+                currentGenre,
+                "tunemeld-rank",
+                serviceType,
+                trackData.isrc,
+              );
+            }
             window.scrollTo({ top: 0, behavior: "smooth" });
           }
         });

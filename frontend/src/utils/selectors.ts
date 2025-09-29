@@ -1,8 +1,8 @@
-import { updatePlaylistHeader } from "@/components/playlistHeader.js";
+import { updatePlaylistHeader } from "@/components/playlistHeader";
 import {
   hideShimmerLoaders,
   showGenreSwitchShimmer,
-} from "@/components/shimmer.js";
+} from "@/components/shimmer";
 import {
   addToggleEventListeners,
   fetchAndDisplayPlaylists,
@@ -13,16 +13,25 @@ import {
   setPlaylistData,
   sortTable,
   updateMainPlaylist,
-} from "@/components/playlist.js";
-import { loadAndRenderRankButtons } from "@/components/rankButton.js";
-import { setupBodyClickListener } from "@/components/servicePlayer.js";
-import { stateManager } from "@/state/StateManager.js";
-import { appRouter } from "@/routing/router.js";
-import { graphqlClient } from "@/services/graphql-client.js";
-import { SERVICE_NAMES } from "@/config/constants.js";
-import { updatePlaylistHeaderSync } from "@/components/playlistHeader.js";
+} from "@/components/playlist";
+import { loadAndRenderRankButtons } from "@/components/rankButton";
+import { setupBodyClickListener } from "@/components/servicePlayer";
+import { stateManager } from "@/state/StateManager";
+import { appRouter } from "@/routing/router";
+import { graphqlClient } from "@/services/graphql-client";
+import { SERVICE_NAMES } from "@/config/constants";
+import { updatePlaylistHeaderSync } from "@/components/playlistHeader";
+import type { Playlist, Rank } from "@/types/index";
 
-async function fetchAllGenreData(genre) {
+interface AllGenreData {
+  metadata: { serviceOrder: string[]; playlists: Playlist[] };
+  mainPlaylist: { playlist: Playlist };
+  ranks: { ranks: Rank[] };
+  servicePlaylists: ({ playlist: Playlist } | null)[];
+  serviceOrder: string[];
+}
+
+async function fetchAllGenreData(genre: string): Promise<AllGenreData> {
   const metadataResult = await graphqlClient.getPlaylistMetadata(genre);
   const { serviceOrder, playlists } = metadataResult;
 
@@ -30,11 +39,13 @@ async function fetchAllGenreData(genre) {
     await Promise.all([
       graphqlClient.getPlaylistTracks(genre, SERVICE_NAMES.TUNEMELD),
       graphqlClient.fetchPlaylistRanks(),
-      ...serviceOrder.map((service) =>
-        graphqlClient.getPlaylistTracks(genre, service).catch((error) => {
-          console.error(`Error fetching ${service} playlist:`, error);
-          return null;
-        }),
+      ...serviceOrder.map((service: string) =>
+        graphqlClient
+          .getPlaylistTracks(genre, service)
+          .catch((error: Error) => {
+            console.error(`Error fetching ${service} playlist:`, error);
+            return null;
+          }),
       ),
     ]);
 
@@ -47,14 +58,15 @@ async function fetchAllGenreData(genre) {
   };
 }
 
-export async function updateGenreData(genre, updateAll = false) {
+export async function updateGenreData(
+  genre: string,
+  updateAll: boolean = false,
+): Promise<void> {
   try {
     showGenreSwitchShimmer();
     if (updateAll) {
-      // Fetch all data first, then update DOM synchronously
       const allData = await fetchAllGenreData(genre);
 
-      // Update playlist header synchronously
       updatePlaylistHeaderSync(
         allData.metadata.playlists,
         allData.metadata.serviceOrder,
@@ -65,7 +77,7 @@ export async function updateGenreData(genre, updateAll = false) {
       const mainPlaylistData = [allData.mainPlaylist.playlist];
       setPlaylistData(mainPlaylistData);
 
-      const isrcs = mainPlaylistData.flatMap((playlist) =>
+      const isrcs = mainPlaylistData.flatMap((playlist: Playlist) =>
         playlist.tracks.map((track) => track.isrc),
       );
       await populatePlayCountMap(isrcs);
@@ -76,8 +88,7 @@ export async function updateGenreData(genre, updateAll = false) {
         SERVICE_NAMES.TUNEMELD,
       );
 
-      // Render service playlists
-      allData.serviceOrder.forEach((service, index) => {
+      allData.serviceOrder.forEach((service: string, index: number) => {
         const servicePlaylistResult = allData.servicePlaylists[index];
         if (servicePlaylistResult) {
           const servicePlaylistData = [servicePlaylistResult.playlist];
@@ -89,24 +100,26 @@ export async function updateGenreData(genre, updateAll = false) {
         }
       });
 
-      // Load rank buttons (this is synchronous DOM manipulation)
       await loadAndRenderRankButtons();
     } else {
       await updateMainPlaylist(genre);
     }
-    sortTable(stateManager.getCurrentColumn(), stateManager.getCurrentOrder());
+    const currentColumn = stateManager.getCurrentColumn();
+    if (currentColumn) {
+      sortTable(currentColumn, stateManager.getCurrentOrder());
+    }
     hideShimmerLoaders();
     resetCollapseStates();
     await addToggleEventListeners();
     setupBodyClickListener(genre);
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Error updating genre data:", error);
     hideShimmerLoaders();
   }
 }
 
-export function setupGenreSelector(genreSelector) {
-  genreSelector.addEventListener("change", async function () {
+export function setupGenreSelector(genreSelector: HTMLSelectElement): void {
+  genreSelector.addEventListener("change", async function (): Promise<void> {
     const currentGenre = genreSelector.value;
     appRouter.navigateToGenre(currentGenre);
   });

@@ -1,4 +1,4 @@
-export function isLocalDevelopment() {
+export function isLocalDevelopment(): boolean {
   return (
     window.location.hostname === "localhost" ||
     window.location.hostname === "127.0.0.1" ||
@@ -6,7 +6,7 @@ export function isLocalDevelopment() {
   );
 }
 
-export function applyCacheBusting() {
+export function applyCacheBusting(): void {
   if (isLocalDevelopment()) {
     const timestamp = Date.now();
 
@@ -30,17 +30,20 @@ export function applyCacheBusting() {
   }
 }
 
-export function getDjangoApiBaseUrl() {
+export function getDjangoApiBaseUrl(): string {
   return isLocalDevelopment()
     ? "http://localhost:8000"
     : "https://api.tunemeld.com";
 }
 
-export function getAggregatePlaylistEndpoint(genre) {
+export function getAggregatePlaylistEndpoint(genre: string): string {
   return `${getDjangoApiBaseUrl()}/aggregate-playlist/${genre}`;
 }
 
-export function getServicePlaylistEndpoint(genre, service) {
+export function getServicePlaylistEndpoint(
+  genre: string,
+  service: string,
+): string {
   return isLocalDevelopment()
     ? `${getDjangoApiBaseUrl()}/playlist/${genre}/${service}`
     : `${getDjangoApiBaseUrl()}/service-playlist/${genre}/${service}`;

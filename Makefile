@@ -127,16 +127,17 @@ install-pre-commit: install-dev
 
 
 serve-frontend:
-	@echo " Starting TuneMeld frontend server..."
+	@echo " Starting TuneMeld frontend with auto-compilation..."
 	@if lsof -ti tcp:8080 > /dev/null 2>&1; then \
 		echo " Frontend server already running at: http://localhost:8080"; \
 		echo " Use 'make kill-frontend' to stop existing server"; \
-	else \
-		echo " Website will be available at: http://localhost:8080"; \
-		echo " Cache disabled for development"; \
-		echo " Press Ctrl+C to stop the server"; \
-		cd frontend && python -m http.server 8080; \
+		exit 1; \
 	fi
+	@echo " TypeScript will auto-compile on file changes"
+	@echo " Website will be available at: http://localhost:8080"
+	@echo " Press Ctrl+C to stop both processes"
+	@echo ""
+	@cd frontend && npm run dev & python -m http.server 8080 & wait
 
 
 serve-backend:
@@ -169,7 +170,7 @@ kill-backend:
 
 serve:
 	@echo " Starting both frontend and backend servers..."
-	@echo " Frontend: http://localhost:8080"
+	@echo " Frontend: http://localhost:8080 (with TypeScript auto-compilation)"
 	@echo " Backend API: http://localhost:8000"
 	@echo " Press Ctrl+C to stop both servers"
 	@echo ""

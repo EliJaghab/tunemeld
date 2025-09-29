@@ -1,10 +1,12 @@
-function acceptTosPrivacy() {
+function acceptTosPrivacy(): void {
   const overlay = document.getElementById("tosPrivacyOverlay");
-  overlay.style.display = "none";
+  if (overlay) {
+    overlay.style.display = "none";
+  }
   document.cookie = "tosPrivacyAccepted=true; path=/";
 }
 
-function checkTosPrivacyCookie() {
+function checkTosPrivacyCookie(): string {
   const name = "tosPrivacyAccepted=";
   const decodedCookie = decodeURIComponent(document.cookie);
   const ca = decodedCookie.split(";");
@@ -18,8 +20,10 @@ function checkTosPrivacyCookie() {
   return "";
 }
 
-function handleTosPrivacyOverlay() {
+function handleTosPrivacyOverlay(): void {
   const overlay = document.getElementById("tosPrivacyOverlay");
+
+  if (!overlay) return;
 
   if (checkTosPrivacyCookie() !== "true") {
     overlay.style.display = "block";
@@ -28,13 +32,16 @@ function handleTosPrivacyOverlay() {
   }
 }
 
-export async function initializeTosPrivacyOverlay() {
-  const acceptButton = document.getElementById("acceptButton");
+export async function initializeTosPrivacyOverlay(): Promise<void> {
+  const acceptButton = document.getElementById(
+    "acceptButton",
+  ) as HTMLButtonElement | null;
+  if (!acceptButton) return;
+
   acceptButton.onclick = acceptTosPrivacy;
 
-  // Add button labels from backend
   try {
-    const { graphqlClient } = await import("./src/services/graphql-client.js");
+    const { graphqlClient } = await import("@/services/graphql-client");
     const buttonLabels =
       await graphqlClient.getMiscButtonLabels("accept_terms");
     if (buttonLabels && buttonLabels.length > 0) {
@@ -48,7 +55,6 @@ export async function initializeTosPrivacyOverlay() {
     }
   } catch (error) {
     console.warn("Failed to load accept button labels:", error);
-    // Continue without labels if fetch fails
   }
 
   handleTosPrivacyOverlay();

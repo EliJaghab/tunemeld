@@ -23,8 +23,43 @@
  * Phase 3: Extend to manage genre, theme, and playlist data
  */
 
-import { SHIMMER_TYPES, TUNEMELD_RANK_FIELD } from "@/config/constants.js";
+import {
+  SHIMMER_TYPES,
+  TUNEMELD_RANK_FIELD,
+  type ShimmerType,
+} from "../config/constants.js";
+
+interface ShimmerState {
+  services: boolean;
+  playlist: boolean;
+  isInitialLoad: boolean;
+  currentType: ShimmerType;
+  [key: string]: boolean | string; // Index signature for dynamic access
+}
+
+interface ModalInfo {
+  id: string;
+  modal: HTMLElement;
+  overlay: HTMLElement;
+}
+
+interface AppState {
+  sortColumn: string | null;
+  sortOrder: string;
+  theme: string | null;
+  currentGenre: string | null;
+  currentIsrc: string | null;
+  currentPlayer: string | null;
+  defaultRankField: string | null;
+  shimmer: ShimmerState;
+  modals: {
+    activeDescriptionModals: Set<ModalInfo>;
+  };
+}
+
 class StateManager {
+  private state: AppState;
+  private domElements: Map<string, HTMLElement>;
   constructor() {
     this.state = {
       sortColumn: null, // Will be set from backend default
@@ -47,7 +82,7 @@ class StateManager {
     this.domElements = new Map();
   }
 
-  initializeFromDOM() {
+  initializeFromDOM(): void {
     // Sort column will be set from backend default
     this.state.sortOrder = "asc";
 
@@ -56,32 +91,32 @@ class StateManager {
     this.state.theme = storedTheme || this.getTimeBasedTheme();
   }
 
-  getTimeBasedTheme() {
+  getTimeBasedTheme(): string {
     const hour = new Date().getHours();
     return hour >= 19 || hour < 7 ? "dark" : "light";
   }
 
-  getCurrentColumn() {
+  getCurrentColumn(): string | null {
     return this.state.sortColumn;
   }
 
-  setCurrentColumn(column) {
+  setCurrentColumn(column: string): void {
     this.state.sortColumn = column;
   }
 
-  getCurrentOrder() {
+  getCurrentOrder(): string {
     return this.state.sortOrder;
   }
 
-  isRankActive(rankSortField) {
+  isRankActive(rankSortField: string): boolean {
     return rankSortField === this.getCurrentColumn();
   }
 
-  setCurrentOrder(order) {
+  setCurrentOrder(order: string): void {
     this.state.sortOrder = order;
   }
 
-  setDefaultRankField(field) {
+  setDefaultRankField(field: string): void {
     this.state.defaultRankField = field;
     // If no sort column set yet, use the default
     if (!this.state.sortColumn) {
@@ -89,82 +124,84 @@ class StateManager {
     }
   }
 
-  getDefaultRankField() {
+  getDefaultRankField(): string | null {
     return this.state.defaultRankField;
   }
 
-  isSortingByDefaultRank() {
+  isSortingByDefaultRank(): boolean {
     return this.state.sortColumn === this.state.defaultRankField;
   }
 
   // Theme Management
-  getTheme() {
+  getTheme(): string | null {
     return this.state.theme;
   }
 
-  setTheme(theme) {
+  setTheme(theme: string): void {
     this.state.theme = theme;
     localStorage.setItem("theme", theme);
     this.applyTheme(theme);
   }
 
-  toggleTheme() {
+  toggleTheme(): string {
     const newTheme = this.state.theme === "dark" ? "light" : "dark";
     this.setTheme(newTheme);
     return newTheme;
   }
 
-  applyTheme(theme) {
+  applyTheme(theme: string): void {
     const isDarkMode = theme === "dark";
 
     // Remove loading state and apply proper theme
     document.documentElement.classList.remove("dark-mode-loading");
     document.body.classList.toggle("dark-mode", isDarkMode);
 
-    const themeToggleButton = this.getElement("theme-toggle-button");
+    const themeToggleButton = this.getElement("theme-toggle-button") as
+      | HTMLInputElement
+      | undefined;
     if (themeToggleButton) {
       themeToggleButton.checked = isDarkMode;
     }
   }
 
   // Genre Management
-  getCurrentGenre() {
+  getCurrentGenre(): string | null {
     return this.state.currentGenre;
   }
 
-  setCurrentGenre(genre) {
+  setCurrentGenre(genre: string): void {
     this.state.currentGenre = genre;
   }
 
   // Track and Player Management
-  getCurrentIsrc() {
+  getCurrentIsrc(): string | null {
     return this.state.currentIsrc;
   }
 
-  setCurrentIsrc(isrc) {
+  setCurrentIsrc(isrc: string): void {
     this.state.currentIsrc = isrc;
   }
 
-  getCurrentPlayer() {
+  getCurrentPlayer(): string | null {
     return this.state.currentPlayer;
   }
 
-  setCurrentPlayer(player) {
+  setCurrentPlayer(player: string): void {
     this.state.currentPlayer = player;
   }
 
-  setCurrentTrack(isrc, player) {
+  setCurrentTrack(isrc: string, player: string): void {
     this.state.currentIsrc = isrc;
     this.state.currentPlayer = player;
   }
 
-  clearCurrentTrack() {
+  clearCurrentTrack(): void {
     this.state.currentIsrc = null;
     this.state.currentPlayer = null;
   }
 
   // DOM Element Caching
-  getElement(id) {
+  getElement(id: string): HTMLElement | undefined {
     if (!this.domElements.has(id)) {
       const element = document.getElementById(id);
       if (element) {
@@ -174,12 +211,16 @@ class StateManager {
     return this.domElements.get(id);
   }
 
-  clearElementCache() {
+  clearElementCache(): void {
     this.domElements.clear();
   }
 
   // Shimmer State Management
-  setShimmerState(type, isActive, isInitialLoad = false) {
+  setShimmerState(
+    type: string,
+    isActive: boolean,
+    isInitialLoad = false,
+  ): void {
     if (type === "services") {
       this.state.shimmer.services = isActive;
     } else if (type === "playlist") {
@@ -188,45 +229,39 @@ class StateManager {
     }
   }
 
-  getShimmerState(type) {
-    return this.state.shimmer[type] || false;
+  getShimmerState(type: string): boolean {
+    const shimmerValue = this.state.shimmer[type as keyof ShimmerState];
+    return typeof shimmerValue === "boolean" ? shimmerValue : false;
   }
 
-  isInitialLoad() {
+  isInitialLoad(): boolean {
     return this.state.shimmer.isInitialLoad;
   }
 
-  showShimmer(type, isInitialLoad = false) {
+  showShimmer(type: string, isInitialLoad: boolean = false): void {
     this.setShimmerState(type, true, isInitialLoad);
   }
 
-  hideShimmer(type) {
+  hideShimmer(type: string): void {
     this.setShimmerState(type, false);
   }
 
-  hideAllShimmers() {
+  hideAllShimmers(): void {
     this.state.shimmer.services = false;
     this.state.shimmer.playlist = false;
     this.state.shimmer.isInitialLoad = false;
   }
 
   // Shimmer Type Management - explicit tracking of which shimmer layout to use
-  setShimmerType(type) {
-    if (type !== SHIMMER_TYPES.TUNEMELD && type !== SHIMMER_TYPES.PLAYCOUNT) {
-      console.warn(
-        `Invalid shimmer type: ${type}. Using '${SHIMMER_TYPES.TUNEMELD}' as default.`,
-      );
-      this.state.shimmer.currentType = SHIMMER_TYPES.TUNEMELD;
-    } else {
-      this.state.shimmer.currentType = type;
-    }
+  setShimmerType(type: ShimmerType): void {
+    this.state.shimmer.currentType = type;
   }
 
-  getShimmerType() {
+  getShimmerType(): ShimmerType {
     return this.state.shimmer.currentType || SHIMMER_TYPES.TUNEMELD;
   }
 
-  setShimmerTypeFromColumn(column) {
+  setShimmerTypeFromColumn(column: string | null): void {
     // Convert column name to shimmer type
     if (column === TUNEMELD_RANK_FIELD || column === null) {
       this.setShimmerType(SHIMMER_TYPES.TUNEMELD);
@@ -235,14 +270,19 @@ class StateManager {
     }
   }
 
-  isShimmering(type = null) {
+  isShimmering(type?: string | null): boolean {
     if (type) {
       return this.getShimmerState(type);
     }
     return this.state.shimmer.services || this.state.shimmer.playlist;
   }
 
-  getShimmerDebugInfo() {
+  getShimmerDebugInfo(): {
+    services: boolean;
+    playlist: boolean;
+    isInitialLoad: boolean;
+    anyActive: boolean;
+  } {
     return {
       services: this.state.shimmer.services,
       playlist: this.state.shimmer.playlist,
@@ -251,7 +291,11 @@ class StateManager {
     };
   }
 
-  registerModal(modalId, modalElement, overlayElement) {
+  registerModal(
+    modalId: string,
+    modalElement: HTMLElement,
+    overlayElement: HTMLElement,
+  ): void {
     this.state.modals.activeDescriptionModals.add({
       id: modalId,
       modal: modalElement,
@@ -259,7 +303,7 @@ class StateManager {
     });
   }
 
-  clearAllModals() {
+  clearAllModals(): void {
     this.state.modals.activeDescriptionModals.forEach(({ modal, overlay }) => {
       if (modal && modal.parentNode) {
         modal.remove();
@@ -271,7 +315,7 @@ class StateManager {
     this.state.modals.activeDescriptionModals.clear();
   }
 
-  getActiveModalCount() {
+  getActiveModalCount(): number {
     return this.state.modals.activeDescriptionModals.size;
   }
 }

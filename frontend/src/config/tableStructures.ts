@@ -5,9 +5,26 @@
  * Any changes to table structure must be made here to update both simultaneously.
  */
 
-import { SHIMMER_TYPES } from "@/config/constants.js";
+import { SHIMMER_TYPES, type ShimmerType } from "./constants.js";
 
-export const TABLE_STRUCTURES = {
+interface ColumnConfig {
+  name: string;
+  className: string;
+  hasShimmer: boolean;
+  shimmerClass?: string;
+  shimmerCount?: number;
+}
+
+interface TableStructure {
+  columns: ColumnConfig[];
+  description: string;
+}
+
+type TableStructures = {
+  [K in ShimmerType]: TableStructure;
+};
+
+export const TABLE_STRUCTURES: TableStructures = {
   [SHIMMER_TYPES.TUNEMELD]: {
     columns: [
       {
@@ -96,7 +113,9 @@ export const TABLE_STRUCTURES = {
 /**
  * Creates a shimmer row based on the table structure configuration
  */
-export function createShimmerRowFromStructure(shimmerType) {
+export function createShimmerRowFromStructure(
+  shimmerType: ShimmerType,
+): HTMLTableRowElement | null {
   const structure = TABLE_STRUCTURES[shimmerType];
   if (!structure) {
     console.error(`Unknown shimmer type: ${shimmerType}`);
@@ -111,7 +130,7 @@ export function createShimmerRowFromStructure(shimmerType) {
     cell.className = column.className;
 
     if (column.hasShimmer) {
-      if (column.shimmerCount) {
+      if (column.shimmerCount && column.shimmerClass) {
         // Special case for seen-on with multiple icon shimmers
         const container = document.createElement("div");
         container.className = column.shimmerClass;
@@ -121,10 +140,10 @@ export function createShimmerRowFromStructure(shimmerType) {
           container.appendChild(shimmer);
         }
         cell.appendChild(container);
-      } else {
+      } else if (column.shimmerClass) {
         // Single shimmer element
         const shimmer = document.createElement("div");
-        shimmer.className = `shimmer ${column.shimmerClass}`;
+        shimmer.className = `shimmer ${column.shimmerClass || ""}`;
         cell.appendChild(shimmer);
       }
     }
@@ -138,6 +157,8 @@ export function createShimmerRowFromStructure(shimmerType) {
 /**
  * Gets the column structure for a given shimmer type
  */
-export function getTableStructure(shimmerType) {
+export function getTableStructure(
+  shimmerType: ShimmerType,
+): TableStructure | undefined {
   return TABLE_STRUCTURES[shimmerType];
 }

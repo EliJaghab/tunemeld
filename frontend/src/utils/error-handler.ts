@@ -1,5 +1,7 @@
 class ErrorHandler {
-  showError(message, technicalDetails = null) {
+  private retryCallback?: () => void;
+
+  showError(message: string, technicalDetails: string | null = null): void {
     console.error("App Error:", message, technicalDetails);
 
     const existingBanner = document.getElementById("error-banner");
@@ -35,21 +37,22 @@ class ErrorHandler {
 
       mainContent.insertBefore(errorBanner, mainContent.firstChild);
 
-      const retryBtn = errorBanner.querySelector("#error-retry-btn");
+      const retryBtn = errorBanner.querySelector(
+        "#error-retry-btn",
+      ) as HTMLButtonElement;
       if (retryBtn && this.retryCallback) {
-        // Add accessibility labels
         retryBtn.title = "Retry loading the page";
         retryBtn.setAttribute("aria-label", "Retry loading the page");
 
-        retryBtn.onclick = () => {
+        retryBtn.onclick = (): void => {
           errorBanner.remove();
-          this.retryCallback();
+          this.retryCallback!();
         };
       }
     }
   }
 
-  setRetryCallback(callback) {
+  setRetryCallback(callback: () => void): void {
     this.retryCallback = callback;
   }
 }

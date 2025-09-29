@@ -3,15 +3,29 @@
  * Handles all header-related functionality including service art, descriptions, and modals
  */
 
-import { SERVICE_NAMES } from "@/config/constants.js";
-import { graphqlClient } from "@/services/graphql-client.js";
-import { stateManager } from "@/state/StateManager.js";
+import { SERVICE_NAMES } from "@/config/constants";
+import { graphqlClient } from "@/services/graphql-client";
+import { stateManager } from "@/state/StateManager";
+import type { Playlist } from "@/types/index";
 
-function isMobileView() {
+// Extend Window interface for HLS
+declare global {
+  interface Window {
+    appleMusicHls?: any;
+  }
+}
+
+// Declare HLS global
+declare const Hls: any;
+
+function isMobileView(): boolean {
   return window.innerWidth <= 480;
 }
 
-async function addMoreButtonLabels(moreButton, serviceName) {
+async function addMoreButtonLabels(
+  moreButton: HTMLElement,
+  serviceName: string,
+): Promise<void> {
   try {
     const buttonLabels = await graphqlClient.getMiscButtonLabels(
       "more_button",
@@ -32,7 +46,7 @@ async function addMoreButtonLabels(moreButton, serviceName) {
   }
 }
 
-function updateTuneMeldDescription(description) {
+function updateTuneMeldDescription(description: string | undefined): void {
   const descriptionElement = document.getElementById("playlist-description");
   if (descriptionElement && description) {
     descriptionElement.textContent = description;
@@ -46,7 +60,7 @@ function updateTuneMeldDescription(description) {
   }
 }
 
-function displayAppleMusicVideo(url) {
+function displayAppleMusicVideo(url: string): void {
   const videoContainer = document.getElementById("apple_music-video-container");
   if (!videoContainer) return;
 
@@ -55,9 +69,11 @@ function displayAppleMusicVideo(url) {
   videoContainer.innerHTML = `
     <video id="apple_music-video" class="video-js vjs-default-skin" muted autoplay loop playsinline controlsList="nodownload nofullscreen noremoteplayback"></video>
   `;
-  const video = document.getElementById("apple_music-video");
+  const video = document.getElementById(
+    "apple_music-video",
+  ) as HTMLVideoElement | null;
 
-  if (typeof Hls !== "undefined" && Hls.isSupported()) {
+  if (video && typeof Hls !== "undefined" && Hls.isSupported()) {
     const hls = new Hls();
     window.appleMusicHls = hls; // Store globally for cleanup
     hls.loadSource(url);
@@ -66,7 +82,7 @@ function displayAppleMusicVideo(url) {
       // Add error handling for play() promise
       const playPromise = video.play();
       if (playPromise !== undefined) {
-        playPromise.catch((error) => {
+        playPromise.catch((error: Error) => {
           // Ignore AbortError when video is removed during genre switches
           if (error.name !== "AbortError") {
             console.warn("Apple Music video play failed:", error);
@@ -74,13 +90,13 @@ function displayAppleMusicVideo(url) {
         });
       }
     });
-  } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
+  } else if (video && video.canPlayType("application/vnd.apple.mpegurl")) {
     video.src = url;
     video.addEventListener("canplay", function () {
       // Add error handling for play() promise
       const playPromise = video.play();
       if (playPromise !== undefined) {
-        playPromise.catch((error) => {
+        playPromise.catch((error: Error) => {
           // Ignore AbortError when video is removed during genre switches
           if (error.name !== "AbortError") {
             console.warn("Apple Music video play failed:", error);
@@ -91,9 +107,11 @@ function displayAppleMusicVideo(url) {
   }
 }
 
-function cleanupExistingVideos() {
+function cleanupExistingVideos(): void {
   // Stop any existing Apple Music videos to prevent AbortError
-  const existingVideo = document.getElementById("apple_music-video");
+  const existingVideo = document.getElementById(
+    "apple_music-video",
+  ) as HTMLVideoElement | null;
   if (existingVideo) {
     existingVideo.pause();
     existingVideo.removeAttribute("src");
@@ -107,20 +125,20 @@ function cleanupExistingVideos() {
   }
 }
 
-function cleanupExistingModals() {
+function cleanupExistingModals(): void {
   // Use state manager to properly clean up modals
   stateManager.clearAllModals();
 }
 
 function createAndAttachModal(
-  descriptionElement,
-  fullText,
-  title,
-  serviceName,
-  genre,
-  serviceIconUrl,
-  playlistUrl,
-) {
+  descriptionElement: HTMLElement,
+  fullText: string,
+  title: string,
+  serviceName: string,
+  genre: string,
+  serviceIconUrl: string,
+  playlistUrl: string,
+): void {
   const modal = document.createElement("div");
   modal.className = "description-modal";
 
@@ -148,7 +166,7 @@ function createAndAttachModal(
 
   // Make entire description clickable to open modal
   descriptionElement.style.cursor = "pointer";
-  descriptionElement.addEventListener("click", function (event) {
+  descriptionElement.addEventListener("click", function (event: Event) {
     event.preventDefault();
     event.stopPropagation();
     modal.classList.add("active");
@@ -156,12 +174,14 @@ function createAndAttachModal(
   });
 
   // If there's a more button, make it also open the modal
-  const moreButton = descriptionElement.querySelector(".more-button");
+  const moreButton = descriptionElement.querySelector(
+    ".more-button",
+  ) as HTMLElement | null;
   if (moreButton) {
     // Add button labels from backend
-    addMoreButtonLabels(moreButton, serviceName);
+    addMoreButtonLabels(moreButton as HTMLElement, serviceName);
 
-    moreButton.addEventListener("click", function (event) {
+    moreButton.addEventListener("click", function (event: Event) {
       event.preventDefault();
       event.stopPropagation();
       modal.classList.add("active");
@@ -169,13 +189,17 @@ function createAndAttachModal(
     });
   }
 
-  const closeButton = modal.querySelector(".description-modal-close");
-  closeButton.title = "Close description";
-  closeButton.setAttribute("aria-label", "Close description");
-  closeButton.addEventListener("click", function () {
-    modal.classList.remove("active");
-    overlay.classList.remove("active");
-  });
+  const closeButton = modal.querySelector(
+    ".description-modal-close",
+  ) as HTMLElement | null;
+  if (closeButton) {
+    closeButton.title = "Close description";
+    closeButton.setAttribute("aria-label", "Close description");
+    closeButton.addEventListener("click", function () {
+      modal.classList.remove("active");
+      overlay.classList.remove("active");
+    });
+  }
 
   overlay.addEventListener("click", function () {
     modal.classList.remove("active");
@@ -184,14 +208,14 @@ function createAndAttachModal(
 }
 
 function setupDescriptionModal(
-  descriptionElement,
-  fullText,
-  title,
-  serviceName,
-  genre,
-  serviceIconUrl,
-  playlistUrl,
-) {
+  descriptionElement: HTMLElement,
+  fullText: string,
+  title: string,
+  serviceName: string,
+  genre: string,
+  serviceIconUrl: string,
+  playlistUrl: string,
+): void {
   descriptionElement.removeEventListener("click", toggleDescriptionExpand);
 
   const MIN_CHAR_LIMIT = 30;
@@ -262,27 +286,27 @@ function setupDescriptionModal(
   );
 }
 
-function toggleDescriptionExpand(event) {
+function toggleDescriptionExpand(event: Event): void {
   event.preventDefault();
-  const descriptionElement = event.currentTarget;
-  if (descriptionElement.classList.contains("expanded")) {
+  const descriptionElement = event.currentTarget as HTMLElement | null;
+  if (descriptionElement && descriptionElement.classList.contains("expanded")) {
     descriptionElement.classList.remove("expanded");
-  } else {
+  } else if (descriptionElement) {
     descriptionElement.classList.add("expanded");
   }
 }
 
 function updateServiceHeaderArt(
-  service,
-  coverUrl,
-  playlistUrl,
-  playlistName,
-  playlistDescription,
-  serviceName,
-  genre,
-  serviceIconUrl,
-  displayCallback,
-) {
+  service: string,
+  coverUrl: string,
+  playlistUrl: string,
+  playlistName: string,
+  playlistDescription: string,
+  serviceName: string,
+  genre: string,
+  serviceIconUrl: string,
+  displayCallback?: ((data: any) => void) | null,
+): void {
   const elementPrefix = service || service.toLowerCase();
 
   const imagePlaceholder = document.getElementById(
@@ -302,7 +326,7 @@ function updateServiceHeaderArt(
   }
 
   if (coverLinkElement) {
-    coverLinkElement.href = playlistUrl;
+    (coverLinkElement as HTMLAnchorElement).href = playlistUrl;
   }
 
   if (titleDescriptionElement) {
@@ -336,9 +360,9 @@ function updateServiceHeaderArt(
  * This is the single entry point for header updates to prevent duplicates
  */
 export async function updatePlaylistHeader(
-  genre,
-  displayServiceCallback = null,
-) {
+  genre: string,
+  displayServiceCallback: ((data: any) => void) | null = null,
+): Promise<void> {
   try {
     // Clean up any existing modals and videos when genre changes
     cleanupExistingModals();
@@ -356,13 +380,13 @@ export async function updatePlaylistHeader(
       if (playlist) {
         updateServiceHeaderArt(
           serviceName,
-          playlist.playlistCoverUrl,
-          playlist.playlistUrl,
-          playlist.playlistName,
-          playlist.playlistCoverDescriptionText,
+          playlist.playlistCoverUrl || "",
+          playlist.playlistUrl || "",
+          playlist.playlistName || "",
+          playlist.playlistCoverDescriptionText || "",
           playlist.serviceName,
           genre,
-          playlist.serviceIconUrl,
+          playlist.serviceIconUrl || "",
           displayServiceCallback,
         );
       } else {
@@ -380,11 +404,11 @@ export async function updatePlaylistHeader(
  * Used when data is already fetched and we just need to update the DOM
  */
 export function updatePlaylistHeaderSync(
-  playlists,
-  serviceOrder,
-  genre,
-  displayServiceCallback = null,
-) {
+  playlists: Playlist[],
+  serviceOrder: string[],
+  genre: string,
+  displayServiceCallback: ((data: any) => void) | null = null,
+): void {
   // Clean up any existing modals and videos when genre changes
   cleanupExistingModals();
   cleanupExistingVideos();
@@ -399,13 +423,13 @@ export function updatePlaylistHeaderSync(
     if (playlist) {
       updateServiceHeaderArt(
         serviceName,
-        playlist.playlistCoverUrl,
-        playlist.playlistUrl,
-        playlist.playlistName,
-        playlist.playlistCoverDescriptionText,
+        playlist.playlistCoverUrl || "",
+        playlist.playlistUrl || "",
+        playlist.playlistName || "",
+        playlist.playlistCoverDescriptionText || "",
         playlist.serviceName,
         genre,
-        playlist.serviceIconUrl,
+        playlist.serviceIconUrl || "",
         displayServiceCallback,
       );
     }

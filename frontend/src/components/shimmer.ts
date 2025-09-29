@@ -3,12 +3,16 @@
  * Provides unified loading states for services and playlists
  */
 
-import { stateManager } from "@/state/StateManager.js";
-import { TUNEMELD_RANK_FIELD, SHIMMER_TYPES } from "@/config/constants.js";
+import { stateManager } from "@/state/StateManager";
+import {
+  TUNEMELD_RANK_FIELD,
+  SHIMMER_TYPES,
+  type ShimmerType,
+} from "@/config/constants";
 import {
   createShimmerRowFromStructure,
   getTableStructure,
-} from "@/config/tableStructures.js";
+} from "@/config/tableStructures";
 
 /**
  * SHIMMER COLUMN CONFIGURATIONS
@@ -20,7 +24,7 @@ import {
 const SHIMMER_ROW_COUNT = 20;
 
 // Helper functions
-function createElement(tag, className) {
+function createElement(tag: string, className?: string): HTMLElement {
   const element = document.createElement(tag);
   if (className) element.className = className;
   return element;
@@ -29,27 +33,35 @@ function createElement(tag, className) {
 /**
  * Creates a shimmer row based on shimmer type using shared structure configuration
  */
-function createShimmerTableRow(shimmerType) {
+function createShimmerTableRow(
+  shimmerType: ShimmerType,
+): HTMLTableRowElement | null {
   return createShimmerRowFromStructure(shimmerType);
 }
 
-function createShimmerTable(shimmerType) {
-  const table = createElement("table", "playlist-table playlist-table-shimmer");
-  const tbody = createElement("tbody");
+function createShimmerTable(shimmerType: ShimmerType): HTMLTableElement {
+  const table = createElement(
+    "table",
+    "playlist-table playlist-table-shimmer",
+  ) as HTMLTableElement;
+  const tbody = createElement("tbody") as HTMLTableSectionElement;
 
   for (let i = 0; i < SHIMMER_ROW_COUNT; i++) {
-    tbody.appendChild(createShimmerTableRow(shimmerType));
+    const row = createShimmerTableRow(shimmerType);
+    if (row) {
+      tbody.appendChild(row);
+    }
   }
 
   table.appendChild(tbody);
   return table;
 }
 
-function createServiceShimmer() {
+function createServiceShimmer(): HTMLDivElement {
   const overlay = createElement(
     "div",
     "loading-overlay loading-overlay-service",
-  );
+  ) as HTMLDivElement;
   const imageShimmer = createElement("div", "shimmer shimmer-service-image");
   const textShimmer = createElement("div", "shimmer shimmer-service-text");
 
@@ -60,13 +72,13 @@ function createServiceShimmer() {
 }
 
 function createPlaylistShimmer(
-  includeControls = true,
-  shimmerType = SHIMMER_TYPES.TUNEMELD,
-) {
+  includeControls: boolean = true,
+  shimmerType: ShimmerType = SHIMMER_TYPES.TUNEMELD,
+): HTMLDivElement {
   const overlay = createElement(
     "div",
     "loading-overlay loading-overlay-playlist",
-  );
+  ) as HTMLDivElement;
 
   // Only include header shimmer on initial load
   if (includeControls) {
@@ -127,10 +139,10 @@ function createPlaylistShimmer(
   return overlay;
 }
 
-export function showShimmerLoaders(isInitialLoad = false) {
+export function showShimmerLoaders(isInitialLoad: boolean = false): void {
   // Use StateManager to explicitly track shimmer type
   stateManager.setShimmerTypeFromColumn(stateManager.getCurrentColumn());
-  const shimmerType = stateManager.getShimmerType();
+  const shimmerType = stateManager.getShimmerType() as ShimmerType;
   const structure = getTableStructure(shimmerType);
 
   // Inject and show service shimmer overlays
@@ -171,15 +183,15 @@ export function showShimmerLoaders(isInitialLoad = false) {
   }
 }
 
-export function showInitialShimmer() {
+export function showInitialShimmer(): void {
   showShimmerLoaders(true);
 }
 
-export function showGenreSwitchShimmer() {
+export function showGenreSwitchShimmer(): void {
   showShimmerLoaders(false);
 }
 
-export function hideShimmerLoaders() {
+export function hideShimmerLoaders(): void {
   // Hide all loading overlays
   document.querySelectorAll(".loading-overlay").forEach((overlay) => {
     overlay.classList.remove("active");

@@ -1,5 +1,6 @@
-import { stateManager } from "@/state/StateManager.js";
-import { appRouter } from "@/routing/router.js";
+import { stateManager } from "@/state/StateManager";
+import { appRouter } from "@/routing/router";
+import type { Genre, ButtonLabel } from "@/types";
 
 export async function loadAndRenderGenreButtons() {
   try {
@@ -13,7 +14,7 @@ export async function loadAndRenderGenreButtons() {
 
     genreControlsElement.innerHTML = "";
 
-    genres.forEach((genre) => {
+    genres.forEach((genre: Genre) => {
       const button = document.createElement("button");
       const isCurrentlyActive = appRouter.getCurrentGenre() === genre.name;
       button.className = isCurrentlyActive
@@ -23,7 +24,7 @@ export async function loadAndRenderGenreButtons() {
 
       if (genre.buttonLabels && genre.buttonLabels.length > 0) {
         const genreLabel = genre.buttonLabels.find(
-          (label) => label.buttonType === "genre_button",
+          (label: ButtonLabel) => label.buttonType === "genre_button",
         );
         if (genreLabel) {
           if (genreLabel.title) {
@@ -54,7 +55,7 @@ export async function loadAndRenderGenreButtons() {
 
         // Preserve current rank when changing genre
         const currentRank = stateManager.getCurrentColumn();
-        appRouter.navigateToGenre(genre.name, currentRank);
+        appRouter.navigateToGenre(genre.name, currentRank || null);
       });
 
       genreControlsElement.appendChild(button);
