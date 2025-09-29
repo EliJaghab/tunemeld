@@ -25,6 +25,12 @@ repos:
         language: system
         pass_filenames: false
         types: [python]
+      - id: typescript-check
+        name: typescript-check
+        entry: make typescript-check
+        language: system
+        pass_filenames: false
+        types: [ts, tsx]
 
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.4.0

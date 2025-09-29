@@ -23,7 +23,7 @@ PROD: Final = "prod"
 
 
 def get_environment() -> str:
-    if os.getenv("RAILWAY_ENVIRONMENT") or os.getenv("GITHUB_ACTIONS"):
+    if os.getenv("GITHUB_ACTIONS") or os.getenv("VERCEL"):
         return PROD
     return DEV
 
@@ -75,7 +75,7 @@ ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "localhost,127.0.0.1,api.tunemeld.com
 
 logger = logging.getLogger(__name__)
 if ENVIRONMENT == PROD:
-    logger.info("Railway Production Environment")
+    logger.info("Production Environment")
 else:
     logger.info("Development Environment")
 
@@ -178,8 +178,10 @@ DISABLE_CACHE = False
 # - local: Local memory cache for GraphQL ONLY
 
 is_runserver = len(sys.argv) > 1 and sys.argv[1] == "runserver"
-is_railway = bool(os.getenv("RAILWAY_ENVIRONMENT"))
-is_dev_mgmt_command = ENVIRONMENT == DEV and not is_runserver and not is_railway
+is_dev_mgmt_command = ENVIRONMENT == DEV and not is_runserver
+
+# Cache warming control - only run for runserver, not management commands or CI
+ENABLE_CACHE_WARMING = is_runserver
 
 if is_dev_mgmt_command:
     # Development management commands: use local cache for default to avoid CloudflareKV delays
@@ -202,7 +204,7 @@ if is_dev_mgmt_command:
         },
     }
 else:
-    # Production (Railway) or local runserver: use CloudflareKV for persistent API data cache
+    # Production or local runserver: use CloudflareKV for persistent API data cache
     CACHES = {
         "default": {  # CloudflareKV for raw API data (Spotify, YouTube, RapidAPI, SoundCloud)
             "BACKEND": "core.utils.cloudflare_cache.CloudflareKVCache",
