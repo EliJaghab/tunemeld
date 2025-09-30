@@ -53,6 +53,7 @@ def check_migration_safety(logger):
                 ("playlists", PlaylistModel),
             ]
 
+            tables_missing = 0
             for table_name, model in critical_models:
                 try:
                     # Try a simple query to verify table exists and is accessible
@@ -60,6 +61,13 @@ def check_migration_safety(logger):
                     logger.info(f"   Table '{table_name}' exists and is accessible")
                 except Exception as e:
                     logger.warning(f"   Critical table '{table_name}' issue: {e}")
+                    tables_missing += 1
+
+            # If all tables are missing, this is likely a fresh database
+            if tables_missing == len(critical_models):
+                logger.info("   All tables missing - assuming fresh database setup")
+            elif tables_missing > 0:
+                logger.warning(f"   {tables_missing} out of {len(critical_models)} tables missing")
 
         except Exception as e:
             logger.error(f"   Failed to verify critical tables: {e}")
@@ -67,15 +75,22 @@ def check_migration_safety(logger):
 
         # Check 4: Verify no orphaned migration records
         logger.info("4. Checking migration history consistency...")
-        with connection.cursor() as cursor:
-            cursor.execute("""
-                SELECT app, name FROM django_migrations
-                WHERE app = 'core'
-                ORDER BY applied DESC
-                LIMIT 5
-            """)
-            migrations = cursor.fetchall()
-            logger.info(f"   Found {len(migrations)} recent core migrations")
+        try:
+            with connection.cursor() as cursor:
+                cursor.execute("""
+                    SELECT app, name FROM django_migrations
+                    WHERE app = 'core'
+                    ORDER BY applied DESC
+                    LIMIT 5
+                """)
+                migrations = cursor.fetchall()
+                logger.info(f"   Found {len(migrations)} recent core migrations")
+        except Exception as e:
+            if "does not exist" in str(e):
+                logger.info("   django_migrations table does not exist - fresh database setup")
+            else:
+                logger.error(f"   Migration history check failed: {e}")
+                return False
 
         logger.info("All migration safety checks passed!")
         return True
@@ -93,36 +108,43 @@ def check_data_integrity(logger):
         from core.models import GenreModel, PlaylistModel, ServiceModel, TrackModel
 
         # Check 1: Required lookup data exists
-        genre_count = GenreModel.objects.count()
-        service_count = ServiceModel.objects.count()
+        try:
+            genre_count = GenreModel.objects.count()
+            service_count = ServiceModel.objects.count()
 
-        logger.info("1. Lookup data check:")
-        logger.info(f"   Genres: {genre_count}")
-        logger.info(f"   Services: {service_count}")
+            logger.info("1. Lookup data check:")
+            logger.info(f"   Genres: {genre_count}")
+            logger.info(f"   Services: {service_count}")
 
-        if genre_count == 0:
-            logger.warning("   No genres found - this may indicate data loss")
-        if service_count == 0:
-            logger.warning("   No services found - this may indicate data loss")
+            if genre_count == 0:
+                logger.info("   No genres found - fresh database setup")
+            if service_count == 0:
+                logger.info("   No services found - fresh database setup")
 
-        # Check 2: Foreign key consistency
-        logger.info("2. Foreign key consistency check...")
-        from core.models import ServiceTrackModel
+            # Check 2: Foreign key consistency
+            logger.info("2. Foreign key consistency check...")
+            from core.models import ServiceTrackModel
 
-        # Check for tracks with missing ISRC
-        tracks_without_isrc = TrackModel.objects.filter(isrc__isnull=True).count()
-        playlists_without_service = PlaylistModel.objects.filter(service__isnull=True).count()
-        service_tracks_without_track = ServiceTrackModel.objects.filter(track__isnull=True).count()
-        service_tracks_without_service = ServiceTrackModel.objects.filter(service__isnull=True).count()
+            # Check for tracks with missing ISRC
+            tracks_without_isrc = TrackModel.objects.filter(isrc__isnull=True).count()
+            playlists_without_service = PlaylistModel.objects.filter(service__isnull=True).count()
+            service_tracks_without_track = ServiceTrackModel.objects.filter(track__isnull=True).count()
+            service_tracks_without_service = ServiceTrackModel.objects.filter(service__isnull=True).count()
 
-        if tracks_without_isrc > 0:
-            logger.warning(f"   {tracks_without_isrc} tracks without ISRC")
-        if playlists_without_service > 0:
-            logger.warning(f"   {playlists_without_service} playlists without service")
-        if service_tracks_without_track > 0:
-            logger.warning(f"   {service_tracks_without_track} service tracks without track")
-        if service_tracks_without_service > 0:
-            logger.warning(f"   {service_tracks_without_service} service tracks without service")
+            if tracks_without_isrc > 0:
+                logger.warning(f"   {tracks_without_isrc} tracks without ISRC")
+            if playlists_without_service > 0:
+                logger.warning(f"   {playlists_without_service} playlists without service")
+            if service_tracks_without_track > 0:
+                logger.warning(f"   {service_tracks_without_track} service tracks without track")
+            if service_tracks_without_service > 0:
+                logger.warning(f"   {service_tracks_without_service} service tracks without service")
+
+        except Exception as e:
+            if "does not exist" in str(e):
+                logger.info("   Tables do not exist yet - fresh database setup")
+            else:
+                raise e
 
         logger.info("   Data integrity checks completed")
         return True
