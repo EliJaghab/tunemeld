@@ -7,6 +7,7 @@ from core.api.genre_service_api import (
     get_raw_playlist_data_by_genre_service,
     get_service,
     get_track_by_isrc,
+    get_track_model_by_isrc,
     get_tunemeld_playlist_updated_at,
 )
 from core.constants import ServiceName
@@ -74,34 +75,42 @@ class PlaylistQuery(graphene.ObjectType):
         if cached_result is not None:
             # Reconstruct domain Playlist object from cached data
             cached_playlist = Playlist.from_dict(cached_result)
+
+            cached_django_tracks = [track.to_django_model() for track in cached_playlist.tracks]
+
             return PlaylistType(
                 genre_name=cached_playlist.genre_name,
                 service_name=cached_playlist.service_name,
-                tracks=list(cached_playlist.tracks),  # Domain Track objects work directly with GraphQL
+                tracks=cached_django_tracks,
             )
 
         # Get track positions from API layer
         track_positions = get_playlist_tracks_by_genre_service(genre, service)
 
-        # Get domain Track objects from API layer
-        domain_tracks = []
+        django_tracks = []
         for isrc, position in track_positions:
-            domain_track = get_track_by_isrc(isrc)
+            django_track = get_track_model_by_isrc(isrc)
+            if django_track:
+                # Set the tunemeld_rank as attribute for GraphQL access
+                django_track.tunemeld_rank = position
+                django_tracks.append(django_track)
+
+        # Create domain Playlist object for caching (convert Django models to domain objects)
+        domain_tracks_for_cache = []
+        for django_track in django_tracks:
+            domain_track = get_track_by_isrc(django_track.isrc)
             if domain_track:
-                # Set the tunemeld_rank for enrichment
-                domain_track.tunemeld_rank = position
-                domain_tracks.append(domain_track)
+                domain_track.tunemeld_rank = django_track.tunemeld_rank
+                domain_tracks_for_cache.append(domain_track)
 
-        # Create domain Playlist object
-        domain_playlist = Playlist(genre_name=genre, service_name=service, tracks=domain_tracks)
+        domain_playlist = Playlist(genre_name=genre, service_name=service, tracks=domain_tracks_for_cache)
 
-        # Cache the domain object as JSON dict
         redis_cache_set(CachePrefix.GQL_PLAYLIST, cache_key_data, domain_playlist.to_dict())
 
         return PlaylistType(
-            genre_name=domain_playlist.genre_name,
-            service_name=domain_playlist.service_name,
-            tracks=domain_playlist.tracks,
+            genre_name=genre,
+            service_name=service,
+            tracks=django_tracks,  # Return Django models for GraphQL compatibility
         )
 
     def resolve_playlists_by_genre(self, info, genre):

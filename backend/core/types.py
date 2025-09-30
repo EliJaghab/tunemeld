@@ -6,10 +6,9 @@ clean serialization/deserialization for GraphQL and cache layers.
 """
 
 from datetime import datetime
-from typing import Any
+from typing import Any, Self
 
 from core.constants import ServiceName
-from core.models.track import TrackModel
 from pydantic import BaseModel, Field
 
 
@@ -48,7 +47,7 @@ class ButtonLabel(BaseModel):
         }
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> "ButtonLabel":
+    def from_dict(cls, data: dict[str, Any]) -> Self:
         return cls(
             button_type=data["buttonType"],
             context=data.get("context"),
@@ -72,7 +71,7 @@ class ServiceSource(BaseModel):
         }
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> "ServiceSource":
+    def from_dict(cls, data: dict[str, Any]) -> Self:
         return cls(
             name=data["name"],
             display_name=data["displayName"],
@@ -136,6 +135,41 @@ class Track(BaseModel):
     created_at: datetime | None = None
     updated_at: datetime | None = None
 
+    def to_django_model(self):
+        """Convert domain Track to Django TrackModel for GraphQL compatibility."""
+        # Import inside method to avoid circular dependency
+        from core.models.track import TrackModel
+
+        if self.id:
+            try:
+                django_track = TrackModel.objects.get(id=self.id)
+                django_track.track_name = self.track_name
+                django_track.artist_name = self.artist_name
+                django_track.album_name = self.album_name
+                django_track.album_cover_url = self.album_cover_url
+                django_track.spotify_url = self.spotify_url
+                django_track.apple_music_url = self.apple_music_url
+                django_track.soundcloud_url = self.soundcloud_url
+                django_track.youtube_url = self.youtube_url
+                return django_track
+            except TrackModel.DoesNotExist:
+                pass
+
+        return TrackModel(
+            id=self.id,
+            isrc=self.isrc,
+            track_name=self.track_name,
+            artist_name=self.artist_name,
+            album_name=self.album_name,
+            album_cover_url=self.album_cover_url,
+            spotify_url=self.spotify_url,
+            apple_music_url=self.apple_music_url,
+            soundcloud_url=self.soundcloud_url,
+            youtube_url=self.youtube_url,
+            created_at=self.created_at,
+            updated_at=self.updated_at,
+        )
+
     def to_dict(self) -> dict[str, Any]:
         """Convert to frontend-compatible dict with camelCase keys."""
         return {
@@ -177,7 +211,7 @@ class Track(BaseModel):
         }
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> "Track":
+    def from_dict(cls, data: dict[str, Any]) -> Self:
         """Convert from frontend-compatible dict with camelCase keys."""
         return cls(
             tunemeld_rank=data["tunemeldRank"],
@@ -222,12 +256,9 @@ class Track(BaseModel):
         )
 
     @classmethod
-    def from_django_model(
-        cls, django_track: TrackModel, genre: str | None = None, service: str | None = None
-    ) -> "Track":
+    def from_django_model(cls, django_track, genre: str | None = None, service: str | None = None) -> Self:
         """Convert from Django TrackModel with full enrichment."""
-        if not isinstance(django_track, TrackModel):
-            raise TypeError("Expected Django TrackModel")
+        # Import inside method to avoid circular dependency
 
         # Base track data from Django model
         track_data = {
@@ -256,7 +287,7 @@ class Track(BaseModel):
         return cls.from_dict(track_data)
 
     @classmethod
-    def _enrich_track_data(cls, track: TrackModel, genre: str, service: str) -> dict[str, Any]:
+    def _enrich_track_data(cls, track, genre: str, service: str) -> dict[str, Any]:
         """Enrich track with computed fields."""
         from core.constants import ServiceName
 
@@ -296,7 +327,7 @@ class Track(BaseModel):
         return enrichment
 
     @staticmethod
-    def _build_service_source(track: TrackModel, service_name: ServiceName) -> ServiceSource | None:
+    def _build_service_source(track, service_name: ServiceName) -> ServiceSource | None:
         """Build service source object."""
         from core.api.genre_service_api import get_service
 
@@ -320,7 +351,7 @@ class Track(BaseModel):
             return None
 
     @staticmethod
-    def _get_service_rank(track: TrackModel, genre: str, service_name: ServiceName) -> int | None:
+    def _get_service_rank(track, genre: str, service_name: ServiceName) -> int | None:
         """Get track rank for service/genre."""
         from core.api.genre_service_api import get_track_rank_by_track_object
 
@@ -330,7 +361,7 @@ class Track(BaseModel):
             return None
 
     @staticmethod
-    def _is_seen_on_service(track: TrackModel, genre: str, service_name: ServiceName) -> bool:
+    def _is_seen_on_service(track, genre: str, service_name: ServiceName) -> bool:
         """Check if track was seen on service for genre."""
         from core.api.genre_service_api import is_track_seen_on_service
 
@@ -340,7 +371,7 @@ class Track(BaseModel):
             return False
 
     @staticmethod
-    def _build_track_detail_url(track: TrackModel, genre: str, player: str) -> str:
+    def _build_track_detail_url(track, genre: str, player: str) -> str:
         """Build track detail URL for player."""
         from core.api.track_metadata_api import build_track_query_url
 
@@ -351,7 +382,7 @@ class Track(BaseModel):
             return f"/?genre={genre}&rank=tunemeld-rank&player={player}&isrc={track.isrc}"
 
     @staticmethod
-    def _get_button_labels(track: TrackModel, genre: str, service: str) -> list[ButtonLabel]:
+    def _get_button_labels(track, genre: str, service: str) -> list[ButtonLabel]:
         """Get button labels for track."""
         try:
             from core.graphql.button_labels import generate_track_button_labels
@@ -395,7 +426,7 @@ class Playlist(BaseModel):
         }
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> "Playlist":
+    def from_dict(cls, data: dict[str, Any]) -> Self:
         """Convert from frontend-compatible dict with camelCase keys."""
         return cls(
             genre_name=data["genreName"],
@@ -437,7 +468,7 @@ class PlayCount(BaseModel):
         }
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> "PlayCount":
+    def from_dict(cls, data: dict[str, Any]) -> Self:
         return cls(
             isrc=data["isrc"],
             youtube_current_play_count=data.get("youtubeCurrentPlayCount"),
@@ -472,7 +503,7 @@ class Rank(BaseModel):
         }
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> "Rank":
+    def from_dict(cls, data: dict[str, Any]) -> Self:
         return cls(
             name=data["name"],
             display_name=data["displayName"],
@@ -483,13 +514,11 @@ class Rank(BaseModel):
         )
 
     @classmethod
-    def from_django_model(cls, django_rank) -> "Rank":
+    def from_django_model(cls, django_rank) -> Self:
         """Convert from Django RankModel."""
         from core.constants import DEFAULT_RANK_TYPE
-        from core.models.playlist import RankModel
 
-        if not isinstance(django_rank, RankModel):
-            raise TypeError("Expected Django RankModel")
+        # Import inside method to avoid circular dependency
 
         return cls(
             name=django_rank.name,
@@ -518,7 +547,7 @@ class Service(BaseModel):
         }
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> "Service":
+    def from_dict(cls, data: dict[str, Any]) -> Self:
         return cls(
             id=data["id"],
             name=data["name"],
@@ -527,12 +556,9 @@ class Service(BaseModel):
         )
 
     @classmethod
-    def from_django_model(cls, django_service) -> "Service":
+    def from_django_model(cls, django_service) -> Self:
         """Convert from Django ServiceModel."""
-        from core.models.genre_service import ServiceModel
-
-        if not isinstance(django_service, ServiceModel):
-            raise TypeError("Expected Django ServiceModel")
+        # Import inside method to avoid circular dependency
 
         return cls(
             id=django_service.id,
@@ -561,7 +587,7 @@ class Genre(BaseModel):
         }
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> "Genre":
+    def from_dict(cls, data: dict[str, Any]) -> Self:
         return cls(
             id=data["id"],
             name=data["name"],
@@ -571,12 +597,9 @@ class Genre(BaseModel):
         )
 
     @classmethod
-    def from_django_model(cls, django_genre) -> "Genre":
+    def from_django_model(cls, django_genre) -> Self:
         """Convert from Django GenreModel."""
-        from core.models.genre_service import GenreModel
-
-        if not isinstance(django_genre, GenreModel):
-            raise TypeError("Expected Django GenreModel")
+        # Import inside method to avoid circular dependency
 
         return cls(
             id=django_genre.id,
@@ -597,7 +620,7 @@ class RawPlaylistData(BaseModel):
     playlist_name: str | None = None
     playlist_cover_url: str | None = None
     playlist_cover_description_text: str | None = None
-    data: dict[str, Any]
+    data: list[dict[str, Any]] | dict[str, Any]
     created_at: datetime
 
     def to_dict(self) -> dict[str, Any]:
@@ -614,7 +637,7 @@ class RawPlaylistData(BaseModel):
         }
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> "RawPlaylistData":
+    def from_dict(cls, data: dict[str, Any]) -> Self:
         return cls(
             id=data["id"],
             genre_id=data["genreId"],
@@ -628,28 +651,8 @@ class RawPlaylistData(BaseModel):
         )
 
     @classmethod
-    def from_django_model(cls, django_raw_playlist) -> "RawPlaylistData":
+    def from_django_model(cls, django_raw_playlist) -> Self:
         """Convert from Django RawPlaylistDataModel."""
-        from core.models.playlist import RawPlaylistDataModel
-
-        if not isinstance(django_raw_playlist, RawPlaylistDataModel):
-            raise TypeError("Expected Django RawPlaylistDataModel")
-
-        # Handle legacy data format: if data is a list (old format), convert to new format
-        data = django_raw_playlist.data
-        if isinstance(data, list):
-            # Legacy format: data was just the tracks list
-            # Convert to new format with metadata and tracks structure
-            data = {
-                "metadata": {
-                    "playlist_url": django_raw_playlist.playlist_url,
-                    "playlist_name": django_raw_playlist.playlist_name,
-                    "playlist_cover_url": django_raw_playlist.playlist_cover_url,
-                    "playlist_cover_description_text": django_raw_playlist.playlist_cover_description_text,
-                },
-                "tracks": data,
-            }
-
         return cls(
             id=django_raw_playlist.id,
             genre_id=django_raw_playlist.genre.id,
@@ -658,6 +661,6 @@ class RawPlaylistData(BaseModel):
             playlist_name=django_raw_playlist.playlist_name,
             playlist_cover_url=django_raw_playlist.playlist_cover_url,
             playlist_cover_description_text=django_raw_playlist.playlist_cover_description_text,
-            data=data,
+            data=django_raw_playlist.data,
             created_at=django_raw_playlist.created_at,
         )
