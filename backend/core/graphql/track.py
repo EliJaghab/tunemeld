@@ -11,6 +11,8 @@ from core.constants import ServiceName
 from core.graphql.button_labels import ButtonLabelType, generate_track_button_labels
 from core.graphql.service import ServiceType
 from core.models.track import TrackModel
+from core.settings import DISABLE_CACHE
+from core.utils.redis_cache import CachePrefix, redis_cache_get, redis_cache_set
 from core.utils.utils import truncate_to_words
 from graphene_django import DjangoObjectType
 
@@ -245,8 +247,41 @@ class TrackQuery(graphene.ObjectType):
     track_by_isrc = graphene.Field(TrackType, isrc=graphene.String(required=True))
 
     def resolve_track_by_isrc(self, info, isrc):
+        cache_key_data = f"track_by_isrc:{isrc}"
+
+        cached_result = None if DISABLE_CACHE else redis_cache_get(CachePrefix.GQL_TRACK, cache_key_data)
+
+        if cached_result is not None:
+            # Reconstruct Django track model from cached data
+            if cached_result:
+                return TrackModel(**cached_result)
+            return None
+
         domain_track = get_track_by_isrc(isrc)
-        # Need to return Django model for DjangoObjectType compatibility
         if domain_track:
-            return get_track_model_by_isrc(isrc)
+            django_track = get_track_model_by_isrc(isrc)
+            if django_track:
+                # Cache the Django model data
+                cache_data = {
+                    "id": django_track.id,
+                    "isrc": django_track.isrc,
+                    "track_name": django_track.track_name,
+                    "artist_name": django_track.artist_name,
+                    "album_name": django_track.album_name,
+                    "spotify_url": django_track.spotify_url,
+                    "apple_music_url": django_track.apple_music_url,
+                    "youtube_url": django_track.youtube_url,
+                    "soundcloud_url": django_track.soundcloud_url,
+                    "album_cover_url": django_track.album_cover_url,
+                    "aggregate_rank": django_track.aggregate_rank,
+                    "aggregate_score": django_track.aggregate_score,
+                    "updated_at": str(django_track.updated_at) if django_track.updated_at else None,
+                }
+                redis_cache_set(CachePrefix.GQL_TRACK, cache_key_data, cache_data)
+                return django_track
+            else:
+                redis_cache_set(CachePrefix.GQL_TRACK, cache_key_data, None)
+        else:
+            redis_cache_set(CachePrefix.GQL_TRACK, cache_key_data, None)
+
         return None

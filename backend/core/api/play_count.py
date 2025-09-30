@@ -1,10 +1,10 @@
 from core.constants import ServiceName
-from core.models.play_counts import AggregatePlayCount
+from core.models.play_counts import AggregatePlayCountModel
 from domain_types.types import PlayCount
 
 
 def get_track_play_count(isrc: str) -> PlayCount | None:
-    play_counts = AggregatePlayCount.objects.filter(isrc=isrc).select_related("service").order_by("-recorded_date")
+    play_counts = AggregatePlayCountModel.objects.filter(isrc=isrc).select_related("service").order_by("-recorded_date")
 
     latest_date = play_counts.first().recorded_date if play_counts.exists() else None
     if not latest_date:

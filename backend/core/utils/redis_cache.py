@@ -21,6 +21,12 @@ class CachePrefix(str, Enum):
     GQL_PLAYLIST_METADATA = "gql_playlist_metadata"
     GQL_PLAYLIST = "gql_playlist"
     GQL_PLAY_COUNT = "gql_play_count"
+    GQL_GENRES = "gql_genres"
+    GQL_SERVICE_CONFIGS = "gql_service_configs"
+    GQL_IFRAME_CONFIGS = "gql_iframe_configs"
+    GQL_IFRAME_URL = "gql_iframe_url"
+    GQL_BUTTON_LABELS = "gql_button_labels"
+    GQL_TRACK = "gql_track"
 
 
 def _generate_cache_key(prefix: CachePrefix, key_data: str) -> str:

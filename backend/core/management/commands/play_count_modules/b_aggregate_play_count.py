@@ -3,7 +3,7 @@ from datetime import timedelta
 
 from core.api.genre_service_api import get_service
 from core.constants import ServiceName
-from core.models.play_counts import AggregatePlayCount, HistoricalTrackPlayCount
+from core.models.play_counts import AggregatePlayCountModel, HistoricalTrackPlayCountModel
 from django.core.management.base import BaseCommand
 from django.db.models import Q, Sum
 from django.utils import timezone
@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 
 
 class Command(BaseCommand):
-    help = "Calculate and store aggregate play counts using the new AggregatePlayCount model"
+    help = "Calculate and store aggregate play counts using the new AggregatePlayCountModel"
 
     def handle(self, *args, **options):
         today = timezone.now().date()
@@ -30,14 +30,16 @@ class Command(BaseCommand):
             return
 
         # Get all unique TuneMeld ISRCs from today's data (any service)
-        todays_isrcs = set(HistoricalTrackPlayCount.objects.filter(recorded_date=today).values_list("isrc", flat=True))
+        todays_isrcs = set(
+            HistoricalTrackPlayCountModel.objects.filter(recorded_date=today).values_list("isrc", flat=True)
+        )
 
         created_count = 0
         updated_count = 0
 
         for isrc in todays_isrcs:
             # Get today's counts for all available services for this ISRC
-            todays_counts = HistoricalTrackPlayCount.objects.filter(isrc=isrc, recorded_date=today).aggregate(
+            todays_counts = HistoricalTrackPlayCountModel.objects.filter(isrc=isrc, recorded_date=today).aggregate(
                 youtube_count=Sum("current_play_count", filter=Q(service=youtube_service)),
                 spotify_count=Sum("current_play_count", filter=Q(service=spotify_service)),
                 soundcloud_count=Sum("current_play_count", filter=Q(service=soundcloud_service)),
@@ -54,7 +56,7 @@ class Command(BaseCommand):
 
             # Get earliest available date for this ISRC (use min between earliest date and week ago)
             earliest_date = (
-                HistoricalTrackPlayCount.objects.filter(isrc=isrc)
+                HistoricalTrackPlayCountModel.objects.filter(isrc=isrc)
                 .values_list("recorded_date", flat=True)
                 .order_by("recorded_date")
                 .first()
@@ -62,7 +64,7 @@ class Command(BaseCommand):
             comparison_date = min(earliest_date, week_ago) if earliest_date else week_ago
 
             # Get comparison counts from the determined date
-            comparison_counts = HistoricalTrackPlayCount.objects.filter(
+            comparison_counts = HistoricalTrackPlayCountModel.objects.filter(
                 isrc=isrc, recorded_date=comparison_date
             ).aggregate(
                 youtube_count=Sum("current_play_count", filter=Q(service=youtube_service)),
@@ -116,7 +118,7 @@ class Command(BaseCommand):
                     weekly_change_percentage = (weekly_change / comparison_count) * 100
 
                 # Create or update service-specific record
-                _service_record, created = AggregatePlayCount.objects.update_or_create(
+                _service_record, created = AggregatePlayCountModel.objects.update_or_create(
                     isrc=isrc,
                     service=service,
                     recorded_date=today,

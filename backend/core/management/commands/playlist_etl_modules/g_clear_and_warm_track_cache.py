@@ -14,10 +14,17 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         total_cleared = 0
 
+        # Clear all GraphQL cache prefixes
         total_cleared += redis_cache_clear(CachePrefix.GQL_PLAYLIST)
         total_cleared += redis_cache_clear(CachePrefix.GQL_PLAYLIST_METADATA)
+        total_cleared += redis_cache_clear(CachePrefix.GQL_GENRES)
+        total_cleared += redis_cache_clear(CachePrefix.GQL_SERVICE_CONFIGS)
+        total_cleared += redis_cache_clear(CachePrefix.GQL_IFRAME_CONFIGS)
+        total_cleared += redis_cache_clear(CachePrefix.GQL_IFRAME_URL)
+        total_cleared += redis_cache_clear(CachePrefix.GQL_BUTTON_LABELS)
+        total_cleared += redis_cache_clear(CachePrefix.GQL_TRACK)
 
-        logger.info(f"Cleared {total_cleared} track/playlist cache entries")
+        logger.info(f"Cleared {total_cleared} GraphQL cache entries")
 
         self._warm_track_caches()
         logger.info("Track/playlist cache warmed")

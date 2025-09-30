@@ -58,12 +58,22 @@ class PlaylistQuery(graphene.ObjectType):
 
     def resolve_service_order(self, info):
         """Used to order the header art and individual playlist columns."""
+        cache_key_data = "service_order"
+
+        cached_result = None if DISABLE_CACHE else redis_cache_get(CachePrefix.GQL_PLAYLIST_METADATA, cache_key_data)
+
+        if cached_result is not None:
+            return cached_result
+
         service_names = [ServiceName.APPLE_MUSIC.value, ServiceName.SOUNDCLOUD.value, ServiceName.SPOTIFY.value]
         services = []
         for name in service_names:
             service = get_service(name)
             if service:
                 services.append(service.name)
+
+        redis_cache_set(CachePrefix.GQL_PLAYLIST_METADATA, cache_key_data, services)
+
         return services
 
     def resolve_playlist(self, info, genre, service):
@@ -115,6 +125,13 @@ class PlaylistQuery(graphene.ObjectType):
 
     def resolve_playlists_by_genre(self, info, genre):
         """Get playlist metadata for all services for a given genre."""
+        cache_key_data = f"playlists_by_genre:genre={genre}"
+
+        cached_result = None if DISABLE_CACHE else redis_cache_get(CachePrefix.GQL_PLAYLIST_METADATA, cache_key_data)
+
+        if cached_result is not None:
+            return [PlaylistMetadataType(**metadata) for metadata in cached_result]
+
         genre_obj = get_genre(genre)
         if not genre_obj:
             return []
@@ -127,22 +144,25 @@ class PlaylistQuery(graphene.ObjectType):
                 raw_playlists.append(raw_playlist)
 
         playlist_metadata = []
+        cache_data = []
         for raw_playlist in raw_playlists:
             # Find the service for this raw_playlist
             service = next((s for s in services if s.id == raw_playlist.service_id), None)
             if service:
-                playlist_metadata.append(
-                    PlaylistMetadataType(
-                        playlist_name=raw_playlist.playlist_name or f"{service.display_name} {genre} Playlist",
-                        playlist_cover_url=raw_playlist.playlist_cover_url or "",
-                        playlist_cover_description_text=raw_playlist.playlist_cover_description_text
-                        or f"Curated {genre} tracks from {service.display_name}",
-                        playlist_url=raw_playlist.playlist_url,
-                        genre_name=genre,
-                        service_name=service.name,
-                        service_icon_url=service.icon_url,
-                    )
-                )
+                metadata = {
+                    "playlist_name": raw_playlist.playlist_name or f"{service.display_name} {genre} Playlist",
+                    "playlist_cover_url": raw_playlist.playlist_cover_url or "",
+                    "playlist_cover_description_text": raw_playlist.playlist_cover_description_text
+                    or f"Curated {genre} tracks from {service.display_name}",
+                    "playlist_url": raw_playlist.playlist_url,
+                    "genre_name": genre,
+                    "service_name": service.name,
+                    "service_icon_url": service.icon_url,
+                }
+                cache_data.append(metadata)
+                playlist_metadata.append(PlaylistMetadataType(**metadata))
+
+        redis_cache_set(CachePrefix.GQL_PLAYLIST_METADATA, cache_key_data, cache_data)
 
         return playlist_metadata
 
@@ -152,17 +172,30 @@ class PlaylistQuery(graphene.ObjectType):
 
     def resolve_ranks(self, info):
         """Get playlist ranking options."""
+        cache_key_data = "all_ranks"
+
+        cached_result = None if DISABLE_CACHE else redis_cache_get(CachePrefix.GQL_PLAYLIST_METADATA, cache_key_data)
+
+        if cached_result is not None:
+            return [RankType(**rank) for rank in cached_result]
+
         domain_ranks = get_all_ranks()
 
-        # Return as GraphQL RankType
-        return [
-            RankType(
-                name=rank.name,
-                display_name=rank.display_name,
-                sort_field=rank.sort_field,
-                sort_order=rank.sort_order,
-                is_default=rank.is_default,
-                data_field=rank.data_field,
-            )
-            for rank in domain_ranks
-        ]
+        # Prepare data for caching
+        cache_data = []
+        rank_types = []
+        for rank in domain_ranks:
+            rank_dict = {
+                "name": rank.name,
+                "display_name": rank.display_name,
+                "sort_field": rank.sort_field,
+                "sort_order": rank.sort_order,
+                "is_default": rank.is_default,
+                "data_field": rank.data_field,
+            }
+            cache_data.append(rank_dict)
+            rank_types.append(RankType(**rank_dict))
+
+        redis_cache_set(CachePrefix.GQL_PLAYLIST_METADATA, cache_key_data, cache_data)
+
+        return rank_types

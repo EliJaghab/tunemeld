@@ -9,7 +9,7 @@ from core.management.commands.play_count_modules.c_clear_and_warm_play_count_cac
     Command as WarmPlayCountCacheCommand,
 )
 from core.models.genre_service import GenreModel, ServiceModel
-from core.models.play_counts import HistoricalTrackPlayCount
+from core.models.play_counts import HistoricalTrackPlayCountModel
 from core.models.playlist import RankModel
 from core.utils.utils import get_logger
 from django.core.management.base import BaseCommand
@@ -71,7 +71,7 @@ class Command(BaseCommand):
 
     def _print_final_summary(self):
         today = timezone.now().date()
-        records = HistoricalTrackPlayCount.objects.filter(recorded_date=today)
+        records = HistoricalTrackPlayCountModel.objects.filter(recorded_date=today)
         total_records = records.count()
 
         if total_records == 0:

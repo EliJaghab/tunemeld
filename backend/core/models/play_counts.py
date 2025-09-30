@@ -14,7 +14,7 @@ from django.db import models
 from django.utils import timezone
 
 
-class HistoricalTrackPlayCount(models.Model):
+class HistoricalTrackPlayCountModel(models.Model):
     """
     Historical play count changelog for individual services.
 
@@ -54,7 +54,7 @@ class HistoricalTrackPlayCount(models.Model):
         return f"{self.isrc} - {self.current_play_count:,} plays on {self.recorded_date}"
 
 
-class AggregatePlayCount(models.Model):
+class AggregatePlayCountModel(models.Model):
     """
     Service-specific and aggregated play count data with time-based analytics.
 

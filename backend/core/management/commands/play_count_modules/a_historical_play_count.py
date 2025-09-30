@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING
 from core.api.genre_service_api import get_service
 from core.api.playlist import get_playlist_isrcs_by_service
 from core.constants import ServiceName
-from core.models.play_counts import HistoricalTrackPlayCount
+from core.models.play_counts import HistoricalTrackPlayCountModel
 from core.models.track import TrackModel
 from core.services.soundcloud_service import get_soundcloud_track_view_count
 from core.services.spotify_service import get_spotify_track_view_count
@@ -97,7 +97,7 @@ class Command(BaseCommand):
         """Process a single service for a track."""
         try:
             count = get_count_func(url)
-            HistoricalTrackPlayCount.objects.update_or_create(
+            HistoricalTrackPlayCountModel.objects.update_or_create(
                 isrc=track.isrc,
                 service=service_obj,
                 recorded_date=timezone.now().date(),

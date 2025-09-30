@@ -8,6 +8,8 @@ from core.graphql.button_labels import (
 )
 from core.models.genre_service import ServiceModel
 from core.services.iframe_service import generate_iframe_src
+from core.settings import DISABLE_CACHE
+from core.utils.redis_cache import CachePrefix, redis_cache_get, redis_cache_set
 from graphene_django import DjangoObjectType
 
 
@@ -52,39 +54,124 @@ class ServiceQuery(graphene.ObjectType):
         return ServiceModel.objects.all()
 
     def resolve_service_configs(self, info):
-        return [
-            ServiceType(
-                name=service_name,
-                display_name=config["display_name"],
-                icon_url=config["icon_url"],
-                url_field=config.get("url_field"),
-                source_field=config.get("source_field"),
-                button_labels=generate_service_button_labels(service_name),
-            )
-            for service_name, config in SERVICE_CONFIGS.items()
-        ]
+        cache_key_data = "all_service_configs"
+
+        cached_result = None if DISABLE_CACHE else redis_cache_get(CachePrefix.GQL_SERVICE_CONFIGS, cache_key_data)
+
+        if cached_result is not None:
+            return [ServiceType(**config) for config in cached_result]
+
+        service_configs = []
+        cache_data = []
+        for service_name, config in SERVICE_CONFIGS.items():
+            button_labels = generate_service_button_labels(service_name)
+            service_config = {
+                "name": service_name,
+                "display_name": config["display_name"],
+                "icon_url": config["icon_url"],
+                "url_field": config.get("url_field"),
+                "source_field": config.get("source_field"),
+                "button_labels": [
+                    {
+                        "buttonType": bl.buttonType,
+                        "context": bl.context,
+                        "title": bl.title,
+                        "ariaLabel": bl.ariaLabel,
+                    }
+                    for bl in button_labels
+                ],
+            }
+            cache_data.append(service_config)
+            service_configs.append(ServiceType(**service_config))
+
+        redis_cache_set(CachePrefix.GQL_SERVICE_CONFIGS, cache_key_data, cache_data)
+
+        return service_configs
 
     def resolve_iframe_configs(self, info):
-        return [
-            IframeConfigType(
-                service_name=service_name,
-                embed_base_url=config["embed_base_url"],
-                embed_params=config.get("embed_params"),
-                allow=config["allow"],
-                height=config["height"],
-                referrer_policy=config.get("referrer_policy"),
-            )
-            for service_name, config in IFRAME_CONFIGS.items()
-        ]
+        cache_key_data = "all_iframe_configs"
+
+        cached_result = None if DISABLE_CACHE else redis_cache_get(CachePrefix.GQL_IFRAME_CONFIGS, cache_key_data)
+
+        if cached_result is not None:
+            return [IframeConfigType(**config) for config in cached_result]
+
+        iframe_configs = []
+        cache_data = []
+        for service_name, config in IFRAME_CONFIGS.items():
+            iframe_config = {
+                "service_name": service_name,
+                "embed_base_url": config["embed_base_url"],
+                "embed_params": config.get("embed_params"),
+                "allow": config["allow"],
+                "height": config["height"],
+                "referrer_policy": config.get("referrer_policy"),
+            }
+            cache_data.append(iframe_config)
+            iframe_configs.append(IframeConfigType(**iframe_config))
+
+        redis_cache_set(CachePrefix.GQL_IFRAME_CONFIGS, cache_key_data, cache_data)
+
+        return iframe_configs
 
     def resolve_generate_iframe_url(self, info, service_name, track_url):
+        cache_key_data = f"iframe_url:service={service_name}:url={track_url}"
+
+        cached_result = None if DISABLE_CACHE else redis_cache_get(CachePrefix.GQL_IFRAME_URL, cache_key_data)
+
+        if cached_result is not None:
+            return cached_result
+
         try:
-            return generate_iframe_src(service_name, track_url)
+            iframe_url = generate_iframe_src(service_name, track_url)
+            redis_cache_set(CachePrefix.GQL_IFRAME_URL, cache_key_data, iframe_url)
+            return iframe_url
         except ValueError:
+            redis_cache_set(CachePrefix.GQL_IFRAME_URL, cache_key_data, None)
             return None
 
     def resolve_rank_button_labels(self, info, rank_type):
-        return generate_rank_button_labels(rank_type)
+        cache_key_data = f"rank_button_labels:type={rank_type}"
+
+        cached_result = None if DISABLE_CACHE else redis_cache_get(CachePrefix.GQL_BUTTON_LABELS, cache_key_data)
+
+        if cached_result is not None:
+            return [ButtonLabelType(**label) for label in cached_result]
+
+        button_labels = generate_rank_button_labels(rank_type)
+        cache_data = [
+            {
+                "buttonType": bl.buttonType,
+                "context": bl.context,
+                "title": bl.title,
+                "ariaLabel": bl.ariaLabel,
+            }
+            for bl in button_labels
+        ]
+
+        redis_cache_set(CachePrefix.GQL_BUTTON_LABELS, cache_key_data, cache_data)
+
+        return button_labels
 
     def resolve_misc_button_labels(self, info, button_type, context=None):
-        return generate_misc_button_labels(button_type, context)
+        cache_key_data = f"misc_button_labels:type={button_type}:context={context}"
+
+        cached_result = None if DISABLE_CACHE else redis_cache_get(CachePrefix.GQL_BUTTON_LABELS, cache_key_data)
+
+        if cached_result is not None:
+            return [ButtonLabelType(**label) for label in cached_result]
+
+        button_labels = generate_misc_button_labels(button_type, context)
+        cache_data = [
+            {
+                "buttonType": bl.buttonType,
+                "context": bl.context,
+                "title": bl.title,
+                "ariaLabel": bl.ariaLabel,
+            }
+            for bl in button_labels
+        ]
+
+        redis_cache_set(CachePrefix.GQL_BUTTON_LABELS, cache_key_data, cache_data)
+
+        return button_labels
