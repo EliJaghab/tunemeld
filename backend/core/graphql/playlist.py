@@ -13,8 +13,8 @@ from core.api.genre_service_api import (
 from core.constants import ServiceName
 from core.graphql.track import TrackType
 from core.settings import DISABLE_CACHE
-from core.types import Playlist
 from core.utils.redis_cache import CachePrefix, redis_cache_get, redis_cache_set
+from domain_types.types import Playlist
 
 
 class PlaylistType(graphene.ObjectType):

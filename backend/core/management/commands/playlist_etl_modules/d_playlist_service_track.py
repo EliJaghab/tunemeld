@@ -4,10 +4,10 @@ from core.constants import ServiceName
 from core.models.playlist import PlaylistModel, RawPlaylistDataModel, ServiceTrackModel
 from core.services.apple_music_service import get_apple_music_album_cover_url
 from core.services.spotify_service import get_spotify_isrc
-from core.types import NormalizedTrack
 from core.utils.utils import clean_unicode_text, get_logger, process_in_parallel
 from django.core.management.base import BaseCommand
 from django.db import transaction
+from domain_types.types import NormalizedTrack
 
 logger = get_logger(__name__)
 

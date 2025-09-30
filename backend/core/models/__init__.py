@@ -7,24 +7,14 @@ from core.models.playlist import (
     ServiceTrackModel,
 )
 from core.models.track import TrackModel
-from core.types import (
-    Genre,
-    NormalizedTrack,
-    RawPlaylistData,
-    Service,
-)
 
 __all__ = [
     "AggregatePlayCount",
-    "Genre",
     "GenreModel",
     "HistoricalTrackPlayCount",
-    "NormalizedTrack",
     "PlaylistModel",
     "RankModel",
-    "RawPlaylistData",
     "RawPlaylistDataModel",
-    "Service",
     "ServiceModel",
     "ServiceTrackModel",
     "TrackModel",

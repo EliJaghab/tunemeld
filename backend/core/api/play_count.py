@@ -1,6 +1,6 @@
 from core.constants import ServiceName
 from core.models.play_counts import AggregatePlayCount
-from core.types import PlayCount
+from domain_types.types import PlayCount
 
 
 def get_track_play_count(isrc: str) -> PlayCount | None:

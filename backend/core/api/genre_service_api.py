@@ -4,7 +4,7 @@ from core.constants import ServiceName
 from core.models import GenreModel, ServiceModel, ServiceTrackModel
 from core.models.playlist import PlaylistModel, RankModel, RawPlaylistDataModel
 from core.models.track import TrackModel
-from core.types import Genre, Rank, RawPlaylistData, Service, Track
+from domain_types.types import Genre, Rank, RawPlaylistData, Service, Track
 
 
 def get_service(name: str | ServiceName) -> Service | None:
