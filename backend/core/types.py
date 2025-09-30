@@ -244,8 +244,8 @@ class Track(BaseModel):
             "soundcloudUrl": django_track.soundcloud_url,
             "youtubeUrl": django_track.youtube_url,
             "tunemeldRank": getattr(django_track, "tunemeld_rank", 0),
-            "created_at": django_track.created_at,
-            "updated_at": django_track.updated_at,
+            "created_at": django_track.created_at.isoformat() if django_track.created_at else None,
+            "updated_at": django_track.updated_at.isoformat() if django_track.updated_at else None,
         }
 
         # Add enrichment if genre/service provided
