@@ -52,6 +52,11 @@ class Command(BaseCommand):
         service = get_service(service_name)
         genre_obj = get_genre(genre.value)
 
+        if not service:
+            raise ValueError(f"Service {service_name.value} not found in database")
+        if not genre_obj:
+            raise ValueError(f"Genre {genre.value} not found in database")
+
         try:
             if service_name == ServiceName.APPLE_MUSIC:
                 playlist_data = get_apple_music_playlist(genre, force_refresh)
@@ -65,8 +70,8 @@ class Command(BaseCommand):
             metadata = playlist_data["metadata"]
 
             raw_data, _created = RawPlaylistDataModel.objects.update_or_create(
-                service=service,
-                genre=genre_obj,
+                service_id=service.id,
+                genre_id=genre_obj.id,
                 defaults={
                     "playlist_url": metadata["playlist_url"],
                     "playlist_name": metadata["playlist_name"],
