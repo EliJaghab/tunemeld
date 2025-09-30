@@ -84,10 +84,12 @@ class Command(BaseCommand):
 
     def create_aggregate_playlists(self, cross_service_matches: dict[int, list[dict]]) -> None:
         aggregate_service = get_service(ServiceName.TUNEMELD)
+        if not aggregate_service:
+            raise ValueError("TuneMeld service not found in database")
 
         with transaction.atomic():
             logger.info("Clearing existing TuneMeld aggregate playlists")
-            PlaylistModel.objects.filter(service=aggregate_service).delete()
+            PlaylistModel.objects.filter(service_id=aggregate_service.id).delete()
 
             for genre_id, matches in cross_service_matches.items():
                 genre = get_genre_by_id(genre_id)
@@ -102,8 +104,8 @@ class Command(BaseCommand):
                     reference_service_track = match["service_tracks"].first()
 
                     PlaylistModel.objects.update_or_create(
-                        service=aggregate_service,
-                        genre=genre,
+                        service_id=aggregate_service.id,
+                        genre_id=genre.id,
                         position=position,
                         defaults={
                             "isrc": match["isrc"],
@@ -122,15 +124,17 @@ class Command(BaseCommand):
 
     def create_tunemeld_raw_playlist_data(self) -> None:
         aggregate_service = get_service(ServiceName.TUNEMELD)
+        if not aggregate_service:
+            raise ValueError("TuneMeld service not found in database")
         tunemeld_config = SERVICE_CONFIGS[ServiceName.TUNEMELD.value]
 
-        genres_with_playlists = GenreModel.objects.filter(playlist__service=aggregate_service).distinct()
+        genres_with_playlists = GenreModel.objects.filter(playlist__service_id=aggregate_service.id).distinct()
 
         for genre in genres_with_playlists:
             genre_display_name = GENRE_CONFIGS.get(genre.name, {}).get("display_name", genre.name.title())
 
             playlist_entry = (
-                PlaylistModel.objects.filter(genre=genre, service=aggregate_service)
+                PlaylistModel.objects.filter(genre_id=genre.id, service_id=aggregate_service.id)
                 .select_related("service_track__track")
                 .first()
             )
@@ -145,8 +149,8 @@ class Command(BaseCommand):
             )
 
             _raw_data, created = RawPlaylistDataModel.objects.update_or_create(
-                service=aggregate_service,
-                genre=genre,
+                service_id=aggregate_service.id,
+                genre_id=genre.id,
                 defaults={
                     "playlist_url": f"https://tunemeld.com/{genre.name}",
                     "playlist_name": f"TuneMeld {genre_display_name}",
