@@ -1,74 +1,107 @@
+from datetime import datetime
+
 from core.constants import ServiceName
-from core.models import Genre, Service, ServiceTrack
-from core.models.playlist import Playlist, Rank, RawPlaylistData
-from core.models.track import Track
+from core.models import GenreModel, ServiceModel, ServiceTrackModel
+from core.models.playlist import PlaylistModel, RankModel, RawPlaylistDataModel
+from core.models.track import TrackModel
+from core.types import Genre, Rank, RawPlaylistData, Service, Track
 
 
 def get_service(name: str | ServiceName) -> Service | None:
+    """Get service domain object by name."""
     if isinstance(name, ServiceName):
         name = name.value
     try:
-        return Service.objects.get(name=name)
-    except Service.DoesNotExist:
+        django_service = ServiceModel.objects.get(name=name)
+        return Service.from_django_model(django_service)
+    except ServiceModel.DoesNotExist:
         return None
 
 
 def get_genre(name: str) -> Genre | None:
+    """Get genre domain object by name."""
     try:
-        return Genre.objects.get(name=name)
-    except Genre.DoesNotExist:
+        django_genre = GenreModel.objects.get(name=name)
+        return Genre.from_django_model(django_genre)
+    except GenreModel.DoesNotExist:
         return None
 
 
 def get_genre_by_id(genre_id: int) -> Genre | None:
+    """Get genre domain object by ID."""
     try:
-        return Genre.objects.get(id=genre_id)
-    except Genre.DoesNotExist:
+        django_genre = GenreModel.objects.get(id=genre_id)
+        return Genre.from_django_model(django_genre)
+    except GenreModel.DoesNotExist:
         return None
 
 
 def get_track_by_isrc(isrc: str) -> Track | None:
-    """Get track by ISRC, returning the most recent one if multiple exist."""
-    return Track.objects.filter(isrc=isrc).order_by("-id").first()
+    """Get track domain object by ISRC, returning the most recent one if multiple exist."""
+    django_track = TrackModel.objects.filter(isrc=isrc).order_by("-id").first()
+    if django_track:
+        return Track.from_django_model(django_track)
+    return None
 
 
 def get_rank(name: str) -> Rank | None:
+    """Get rank domain object by name."""
     try:
-        return Rank.objects.get(name=name)
-    except Rank.DoesNotExist:
+        django_rank = RankModel.objects.get(name=name)
+        return Rank.from_django_model(django_rank)
+    except RankModel.DoesNotExist:
         return None
 
 
 def get_all_genres() -> list[Genre]:
-    return list(Genre.objects.all())
+    """Get all genre domain objects."""
+    django_genres = GenreModel.objects.all()
+    return [Genre.from_django_model(genre) for genre in django_genres]
 
 
 def get_all_services() -> list[Service]:
-    return list(Service.objects.all())
+    """Get all service domain objects."""
+    django_services = ServiceModel.objects.all()
+    return [Service.from_django_model(service) for service in django_services]
+
+
+def get_all_ranks() -> list[Rank]:
+    """Get all rank domain objects."""
+    django_ranks = RankModel.objects.all().order_by("id")
+    return [Rank.from_django_model(rank_model) for rank_model in django_ranks]
 
 
 def get_raw_playlist_data_by_genre_service(genre_name: str, service_name: str) -> RawPlaylistData | None:
-    genre_obj = get_genre(genre_name)
-    service_obj = get_service(service_name)
-    if not genre_obj or not service_obj:
+    """Get raw playlist data domain object by genre and service."""
+    try:
+        django_genre = GenreModel.objects.get(name=genre_name)
+        django_service = ServiceModel.objects.get(name=service_name)
+    except (GenreModel.DoesNotExist, ServiceModel.DoesNotExist):
         return None
-    return RawPlaylistData.objects.filter(genre=genre_obj, service=service_obj).order_by("-id").first()
+
+    django_raw_playlist = (
+        RawPlaylistDataModel.objects.filter(genre=django_genre, service=django_service).order_by("-id").first()
+    )
+    if django_raw_playlist:
+        return RawPlaylistData.from_django_model(django_raw_playlist)
+    return None
 
 
 def is_track_seen_on_service(isrc: str, genre_name: str, service_name: ServiceName) -> bool:
     """Check if a track with given ISRC was seen on a specific service for a genre."""
-    genre_obj = get_genre(genre_name)
-    if not genre_obj:
-        raise ValueError(f"Genre '{genre_name}' not found")
+    try:
+        django_genre = GenreModel.objects.get(name=genre_name)
+    except GenreModel.DoesNotExist as err:
+        raise ValueError(f"Genre '{genre_name}' not found") from err
 
-    return ServiceTrack.objects.filter(isrc=isrc, genre=genre_obj, service__name=service_name.value).exists()
+    return ServiceTrackModel.objects.filter(isrc=isrc, genre=django_genre, service__name=service_name.value).exists()
 
 
 def get_track_rank_by_track_object(track, genre_name: str, service_name: str) -> int | None:
     """Get track position using Track model object for any service playlist."""
     try:
         playlist_entry = (
-            Playlist.objects.select_related("service_track")
+            PlaylistModel.objects.select_related("service_track")
             .filter(service_track__track=track, genre__name=genre_name, service__name=service_name)
             .order_by("position")
             .first()
@@ -76,3 +109,30 @@ def get_track_rank_by_track_object(track, genre_name: str, service_name: str) ->
         return playlist_entry.position if playlist_entry else None
     except Exception:
         return None
+
+
+def get_playlist_tracks_by_genre_service(genre_name: str, service_name: str) -> list[tuple[str, int]]:
+    """Get list of (isrc, position) tuples for a genre/service playlist."""
+    playlist_models = PlaylistModel.objects.filter(genre__name=genre_name, service__name=service_name).order_by(
+        "position"
+    )
+    return [(p.isrc, p.position) for p in playlist_models if p.isrc]
+
+
+def get_tunemeld_playlist_updated_at(genre_name: str) -> datetime | None:
+    """Get the update timestamp of the TuneMeld playlist for a genre."""
+    playlist_entry = (
+        PlaylistModel.objects.filter(genre__name=genre_name, service__name=ServiceName.TUNEMELD)
+        .select_related("service_track__track")
+        .first()
+    )
+
+    if playlist_entry and playlist_entry.service_track and playlist_entry.service_track.track:
+        return playlist_entry.service_track.track.updated_at
+
+    return None
+
+
+def get_track_model_by_isrc(isrc: str) -> TrackModel | None:
+    """Get Django TrackModel by ISRC for GraphQL DjangoObjectType compatibility."""
+    return TrackModel.objects.filter(isrc=isrc).order_by("-id").first()

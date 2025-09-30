@@ -99,11 +99,11 @@ export async function updateGenreData(
           );
         }
       });
-
-      await loadAndRenderRankButtons();
     } else {
       await updateMainPlaylist(genre);
     }
+
+    await loadAndRenderRankButtons();
     const currentColumn = stateManager.getCurrentColumn();
     if (currentColumn) {
       sortTable(currentColumn, stateManager.getCurrentOrder());

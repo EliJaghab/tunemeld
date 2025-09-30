@@ -13,7 +13,14 @@ export async function loadAndRenderRankButtons(): Promise<void> {
       return;
     }
 
-    sortControlsElement.innerHTML = "";
+    // Only clear if we don't already have the correct buttons
+    const existingButtons =
+      sortControlsElement.querySelectorAll(".sort-button");
+    if (existingButtons.length !== ranks.length) {
+      sortControlsElement.innerHTML = "";
+    } else {
+      return; // Don't rebuild if we already have the right buttons
+    }
 
     // Create an array of promises to fetch button labels for each rank
     const buttonPromises = ranks.map(

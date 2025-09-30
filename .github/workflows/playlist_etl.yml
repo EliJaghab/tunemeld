@@ -72,22 +72,6 @@ jobs:
           CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
         run: make ci-db-migrate
 
-      - name: Clear GraphQL cache (conditional)
-        if: ${{ inputs.clear_gql_cache == true }}
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
-          DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
-          CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
-          CF_NAMESPACE_ID: ${{ secrets.CF_NAMESPACE_ID }}
-          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
-        run: |
-          echo "🗑️ Clearing GraphQL playlist cache only..."
-          cd backend
-          python manage.py shell -c "
-          from core.utils.local_cache import local_cache_clear, CachePrefix
-          playlist_cleared = local_cache_clear(CachePrefix.GQL_PLAYLIST)
-          print(f'✅ Cleared {playlist_cleared} playlist cache entries')
-          "
 
       - name: Run Playlist ETL Pipeline
         env:

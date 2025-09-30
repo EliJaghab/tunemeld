@@ -1,43 +1,38 @@
 {
   "version": 2,
-  "buildCommand": "cd frontend && npm run build",
-  "outputDirectory": "frontend",
-  "installCommand": "cd frontend && npm install",
-  "rewrites": [
+  "builds": [
     {
-      "source": "/gql/(.*)",
-      "destination": "https://api.tunemeld.com/gql/$1"
+      "src": "package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "frontend/dist"
+      }
     },
     {
-      "source": "/api/(.*)",
-      "destination": "https://api.tunemeld.com/api/$1"
-    },
-    {
-      "source": "/admin/(.*)",
-      "destination": "https://api.tunemeld.com/admin/$1"
+      "src": "api/django_app.py",
+      "use": "@vercel/python"
     }
   ],
-  "headers": [
+  "routes": [
     {
-      "source": "/(.*)",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "public, max-age=3600, s-maxage=86400"
-        },
-        {
-          "key": "X-Content-Type-Options",
-          "value": "nosniff"
-        },
-        {
-          "key": "X-Frame-Options",
-          "value": "DENY"
-        },
-        {
-          "key": "X-XSS-Protection",
-          "value": "1; mode=block"
-        }
-      ]
+      "src": "/gql/(.*)",
+      "dest": "/api/django_app.py"
+    },
+    {
+      "src": "/api/(.*)",
+      "dest": "/api/django_app.py"
+    },
+    {
+      "src": "/admin/(.*)",
+      "dest": "/api/django_app.py"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/frontend/$1"
     }
-  ]
+  ],
+  "env": {
+    "DJANGO_SETTINGS_MODULE": "backend.core.settings",
+    "PYTHONPATH": "/var/task"
+  }
 }

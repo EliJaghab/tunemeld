@@ -11,7 +11,7 @@ from django.core.validators import RegexValidator
 from django.db import models
 
 
-class Genre(models.Model):
+class GenreModel(models.Model):
     """
     Music genres supported by the system.
 
@@ -48,7 +48,7 @@ class Genre(models.Model):
         return self.display_name
 
 
-class Service(models.Model):
+class ServiceModel(models.Model):
     """
     Music streaming services that provide playlist data.
 

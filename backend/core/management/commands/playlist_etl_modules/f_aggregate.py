@@ -3,9 +3,9 @@ from typing import Any
 
 from core.api.genre_service_api import get_genre_by_id, get_service
 from core.constants import GENRE_CONFIGS, SERVICE_CONFIGS, ServiceName
-from core.models import Genre, ServiceTrack, Track
-from core.models import PlaylistModel as Playlist
-from core.models.playlist import RawPlaylistData
+from core.models.genre_service import GenreModel
+from core.models.playlist import PlaylistModel, RawPlaylistDataModel, ServiceTrackModel
+from core.models.track import TrackModel
 from core.utils.utils import get_logger
 from django.core.management.base import BaseCommand
 from django.db import transaction
@@ -27,7 +27,7 @@ class Command(BaseCommand):
 
     def find_cross_service_isrcs(self) -> dict[int, list[dict]]:
         duplicate_isrcs = (
-            ServiceTrack.objects.all()
+            ServiceTrackModel.objects.all()
             .values("isrc", "genre")
             .annotate(service_count=Count("service", distinct=True))
             .filter(service_count__gt=1)
@@ -39,7 +39,7 @@ class Command(BaseCommand):
             isrc = item["isrc"]
             genre_id = item["genre"]
 
-            service_tracks = ServiceTrack.objects.filter(isrc=isrc, genre_id=genre_id).select_related("service")
+            service_tracks = ServiceTrackModel.objects.filter(isrc=isrc, genre_id=genre_id).select_related("service")
 
             # Collect service positions
             service_positions = {}
@@ -87,7 +87,7 @@ class Command(BaseCommand):
 
         with transaction.atomic():
             logger.info("Clearing existing TuneMeld aggregate playlists")
-            Playlist.objects.filter(service=aggregate_service).delete()
+            PlaylistModel.objects.filter(service=aggregate_service).delete()
 
             for genre_id, matches in cross_service_matches.items():
                 genre = get_genre_by_id(genre_id)
@@ -101,7 +101,7 @@ class Command(BaseCommand):
                 for position, match in enumerate(sorted_matches, 1):
                     reference_service_track = match["service_tracks"].first()
 
-                    Playlist.objects.update_or_create(
+                    PlaylistModel.objects.update_or_create(
                         service=aggregate_service,
                         genre=genre,
                         position=position,
@@ -112,7 +112,7 @@ class Command(BaseCommand):
                     )
 
                     if reference_service_track and reference_service_track.track:
-                        Track.objects.filter(id=reference_service_track.track.id).update(
+                        TrackModel.objects.filter(id=reference_service_track.track.id).update(
                             aggregate_rank=int(match["aggregate_rank"])
                         )
 
@@ -124,13 +124,13 @@ class Command(BaseCommand):
         aggregate_service = get_service(ServiceName.TUNEMELD)
         tunemeld_config = SERVICE_CONFIGS[ServiceName.TUNEMELD.value]
 
-        genres_with_playlists = Genre.objects.filter(playlist__service=aggregate_service).distinct()
+        genres_with_playlists = GenreModel.objects.filter(playlist__service=aggregate_service).distinct()
 
         for genre in genres_with_playlists:
             genre_display_name = GENRE_CONFIGS.get(genre.name, {}).get("display_name", genre.name.title())
 
             playlist_entry = (
-                Playlist.objects.filter(genre=genre, service=aggregate_service)
+                PlaylistModel.objects.filter(genre=genre, service=aggregate_service)
                 .select_related("service_track__track")
                 .first()
             )
@@ -144,7 +144,7 @@ class Command(BaseCommand):
                 f"{genre_display_name} tracks seen on more than one curated playlist, last updated on {formatted_date}"
             )
 
-            _raw_data, created = RawPlaylistData.objects.update_or_create(
+            _raw_data, created = RawPlaylistDataModel.objects.update_or_create(
                 service=aggregate_service,
                 genre=genre,
                 defaults={

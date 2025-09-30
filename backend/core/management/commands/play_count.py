@@ -8,9 +8,9 @@ from core.management.commands.play_count_modules.b_aggregate_play_count import C
 from core.management.commands.play_count_modules.c_clear_and_warm_play_count_cache import (
     Command as WarmPlayCountCacheCommand,
 )
-from core.models.genre_service import Genre, Service
+from core.models.genre_service import GenreModel, ServiceModel
 from core.models.play_counts import HistoricalTrackPlayCount
-from core.models.playlist import Rank
+from core.models.playlist import RankModel
 from core.utils.utils import get_logger
 from django.core.management.base import BaseCommand
 from django.db import models, transaction
@@ -65,9 +65,9 @@ class Command(BaseCommand):
     def remove_previous_etl_run(self, current_etl_run_id: uuid.UUID) -> None:
         """Blue Green deployment of data - only wipe genre/service/rank data after full pipeline has run."""
         logger.info(f"Removing previous ETL run genre/service/rank data, keeping run ID: {current_etl_run_id}")
-        Genre.objects.exclude(etl_run_id=current_etl_run_id).delete()
-        Service.objects.exclude(etl_run_id=current_etl_run_id).delete()
-        Rank.objects.exclude(etl_run_id=current_etl_run_id).delete()
+        GenreModel.objects.exclude(etl_run_id=current_etl_run_id).delete()
+        ServiceModel.objects.exclude(etl_run_id=current_etl_run_id).delete()
+        RankModel.objects.exclude(etl_run_id=current_etl_run_id).delete()
 
     def _print_final_summary(self):
         today = timezone.now().date()

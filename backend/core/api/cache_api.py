@@ -2,14 +2,14 @@ import json
 import logging
 
 from core.api.response_utils import ResponseStatus, create_response
-from core.utils.local_cache import CachePrefix, local_cache_clear
+from core.utils.redis_cache import CachePrefix, redis_cache_clear
 from django.http import HttpRequest, JsonResponse
 
 logger = logging.getLogger(__name__)
 
 
-def clear_local_cache(request: HttpRequest) -> JsonResponse:
-    """Clear local cache endpoint for ETL pipeline."""
+def clear_redis_cache(request: HttpRequest) -> JsonResponse:
+    """Clear Redis cache endpoint for ETL pipeline."""
     if request.method != "POST":
         return create_response(ResponseStatus.ERROR, "Method not allowed", None)
 
@@ -21,7 +21,7 @@ def clear_local_cache(request: HttpRequest) -> JsonResponse:
             return create_response(ResponseStatus.ERROR, "cache_type is required", None)
 
         cache_prefix = CachePrefix(cache_type)
-        cleared = local_cache_clear(cache_prefix)
+        cleared = redis_cache_clear(cache_prefix)
         logger.info(f"Cache cleared: {cleared} entries removed for {cache_type}")
 
         return create_response(

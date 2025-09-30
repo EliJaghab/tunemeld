@@ -6,14 +6,14 @@ from core.graphql.button_labels import (
     generate_rank_button_labels,
     generate_service_button_labels,
 )
-from core.models.genre_service import Service
+from core.models.genre_service import ServiceModel
 from core.services.iframe_service import generate_iframe_src
 from graphene_django import DjangoObjectType
 
 
 class ServiceModelType(DjangoObjectType):
     class Meta:
-        model = Service
+        model = ServiceModel
         fields = ("name", "display_name", "icon_url")
 
 
@@ -49,7 +49,7 @@ class ServiceQuery(graphene.ObjectType):
     )
 
     def resolve_services(self, info):
-        return Service.objects.all()
+        return ServiceModel.objects.all()
 
     def resolve_service_configs(self, info):
         return [

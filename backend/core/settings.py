@@ -175,13 +175,16 @@ DISABLE_CACHE = False
 
 # Cache Architecture:
 # - default: CloudflareKV for Django/ETL operations (raw API data, management commands)
-# - local: Local memory cache for GraphQL ONLY
+# - redis: Vercel Redis for GraphQL query results (replaces local memory cache)
 
 is_runserver = len(sys.argv) > 1 and sys.argv[1] == "runserver"
 is_dev_mgmt_command = ENVIRONMENT == DEV and not is_runserver
 
 # Cache warming control - only run for runserver, not management commands or CI
 ENABLE_CACHE_WARMING = is_runserver
+
+# Redis configuration for Vercel Redis
+REDIS_URL = os.getenv("REDIS_URL", "redis://localhost:6379/1")
 
 if is_dev_mgmt_command:
     # Development management commands: use local cache for default to avoid CloudflareKV delays
@@ -194,12 +197,12 @@ if is_dev_mgmt_command:
                 "MAX_ENTRIES": 1000,
             },
         },
-        "local": {  # Local memory cache for GraphQL query results only
-            "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
-            "LOCATION": "tunemeld-local-cache",
+        "redis": {  # Redis cache for GraphQL query results
+            "BACKEND": "django_redis.cache.RedisCache",
+            "LOCATION": REDIS_URL,
             "TIMEOUT": 86400 * 7,  # 7 days for GraphQL caches
             "OPTIONS": {
-                "MAX_ENTRIES": 10000,
+                "CLIENT_CLASS": "django_redis.client.DefaultClient",
             },
         },
     }
@@ -214,12 +217,12 @@ else:
                 "MAX_ENTRIES": 1000,
             },
         },
-        "local": {  # Local memory cache for GraphQL query results only
-            "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
-            "LOCATION": "tunemeld-local-cache",
+        "redis": {  # Redis cache for GraphQL query results (replaces local memory cache)
+            "BACKEND": "django_redis.cache.RedisCache",
+            "LOCATION": REDIS_URL,
             "TIMEOUT": 86400 * 7,  # 7 days for GraphQL caches
             "OPTIONS": {
-                "MAX_ENTRIES": 10000,
+                "CLIENT_CLASS": "django_redis.client.DefaultClient",
             },
         },
     }

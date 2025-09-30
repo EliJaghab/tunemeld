@@ -4,8 +4,9 @@
   "description": "TuneMeld Frontend TypeScript Application",
   "main": "dist/main.js",
   "scripts": {
-    "build": "tsc",
-    "dev": "tsc --watch",
+    "build": "node build.js",
+    "build:watch": "node build.js && tsc --watch",
+    "dev": "node build.js && tsc --watch",
     "clean": "rm -rf dist"
   },
   "devDependencies": {

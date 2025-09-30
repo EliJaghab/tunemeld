@@ -44,12 +44,12 @@ def check_migration_safety(logger):
         # Check 3: Verify critical tables exist using Django's ORM
         logger.info("3. Verifying critical tables exist...")
         try:
-            from core.models import Genre, PlaylistModel, Service, Track
+            from core.models import GenreModel, PlaylistModel, ServiceModel, TrackModel
 
             critical_models = [
-                ("genres", Genre),
-                ("services", Service),
-                ("tracks", Track),
+                ("genres", GenreModel),
+                ("services", ServiceModel),
+                ("tracks", TrackModel),
                 ("playlists", PlaylistModel),
             ]
 
@@ -90,11 +90,11 @@ def check_data_integrity(logger):
     logger.info("Running data integrity checks...")
 
     try:
-        from core.models import Genre, PlaylistModel, Service, Track
+        from core.models import GenreModel, PlaylistModel, ServiceModel, TrackModel
 
         # Check 1: Required lookup data exists
-        genre_count = Genre.objects.count()
-        service_count = Service.objects.count()
+        genre_count = GenreModel.objects.count()
+        service_count = ServiceModel.objects.count()
 
         logger.info("1. Lookup data check:")
         logger.info(f"   Genres: {genre_count}")
@@ -107,13 +107,13 @@ def check_data_integrity(logger):
 
         # Check 2: Foreign key consistency
         logger.info("2. Foreign key consistency check...")
-        from core.models import ServiceTrack
+        from core.models import ServiceTrackModel
 
         # Check for tracks with missing ISRC
-        tracks_without_isrc = Track.objects.filter(isrc__isnull=True).count()
+        tracks_without_isrc = TrackModel.objects.filter(isrc__isnull=True).count()
         playlists_without_service = PlaylistModel.objects.filter(service__isnull=True).count()
-        service_tracks_without_track = ServiceTrack.objects.filter(track__isnull=True).count()
-        service_tracks_without_service = ServiceTrack.objects.filter(service__isnull=True).count()
+        service_tracks_without_track = ServiceTrackModel.objects.filter(track__isnull=True).count()
+        service_tracks_without_service = ServiceTrackModel.objects.filter(service__isnull=True).count()
 
         if tracks_without_isrc > 0:
             logger.warning(f"   {tracks_without_isrc} tracks without ISRC")

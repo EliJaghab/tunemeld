@@ -18,9 +18,9 @@ urlpatterns = [
         name="get_edm_events",
     ),
     path(
-        "clear-local-cache/",
-        csrf_exempt(cache_api.clear_local_cache),
-        name="clear_local_cache",
+        "clear-redis-cache/",
+        csrf_exempt(cache_api.clear_redis_cache),
+        name="clear_redis_cache",
     ),
     path(
         "gql/",

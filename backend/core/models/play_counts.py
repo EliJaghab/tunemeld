@@ -8,7 +8,7 @@ Used by: Analytics and reporting
 
 from typing import ClassVar
 
-from core.models.genre_service import Service
+from core.models.genre_service import ServiceModel
 from django.core.validators import RegexValidator
 from django.db import models
 from django.utils import timezone
@@ -37,7 +37,7 @@ class HistoricalTrackPlayCount(models.Model):
         help_text="International Standard Recording Code (12 characters)",
         db_index=True,
     )
-    service = models.ForeignKey(Service, on_delete=models.CASCADE)
+    service = models.ForeignKey(ServiceModel, on_delete=models.CASCADE)
     current_play_count = models.BigIntegerField(help_text="Raw play count at this point in time")
     recorded_date = models.DateField(help_text="Date this count was recorded", default=timezone.now)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -98,7 +98,7 @@ class AggregatePlayCount(models.Model):
     )
 
     service = models.ForeignKey(
-        Service,
+        ServiceModel,
         on_delete=models.CASCADE,
         help_text="Service for this play count record (individual service or 'all' for aggregated)",
     )

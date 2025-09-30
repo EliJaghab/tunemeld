@@ -1,6 +1,8 @@
 import graphene
 from core.api.genre_service_api import (
     get_service,
+    get_track_by_isrc,
+    get_track_model_by_isrc,
     get_track_rank_by_track_object,
     is_track_seen_on_service,
 )
@@ -8,15 +10,14 @@ from core.api.track_metadata_api import build_track_query_url
 from core.constants import ServiceName
 from core.graphql.button_labels import ButtonLabelType, generate_track_button_labels
 from core.graphql.service import ServiceType
-from core.models.genre_service import Service
-from core.models.track import Track
+from core.models.track import TrackModel
 from core.utils.utils import truncate_to_words
 from graphene_django import DjangoObjectType
 
 
 class TrackType(DjangoObjectType):
     class Meta:
-        model = Track
+        model = TrackModel
         fields = (
             "id",
             "isrc",
@@ -118,16 +119,15 @@ class TrackType(DjangoObjectType):
 
         if not self.spotify_url:
             return None
-        try:
-            service = get_service(ServiceName.SPOTIFY)
+        service = get_service(ServiceName.SPOTIFY)
+        if service:
             return ServiceType(
                 name=ServiceName.SPOTIFY,
                 display_name=service.display_name,
                 url=self.spotify_url,
                 icon_url=service.icon_url,
             )
-        except Service.DoesNotExist:
-            return None
+        return None
 
     def resolve_apple_music_source(self, info):
         if hasattr(self, "apple_music_source") and self.apple_music_source:
@@ -140,16 +140,15 @@ class TrackType(DjangoObjectType):
 
         if not self.apple_music_url:
             return None
-        try:
-            service = get_service(ServiceName.APPLE_MUSIC)
+        service = get_service(ServiceName.APPLE_MUSIC)
+        if service:
             return ServiceType(
                 name=ServiceName.APPLE_MUSIC,
                 display_name=service.display_name,
                 url=self.apple_music_url,
                 icon_url=service.icon_url,
             )
-        except Service.DoesNotExist:
-            return None
+        return None
 
     def resolve_soundcloud_source(self, info):
         if hasattr(self, "soundcloud_source") and self.soundcloud_source:
@@ -162,16 +161,15 @@ class TrackType(DjangoObjectType):
 
         if not self.soundcloud_url:
             return None
-        try:
-            service = get_service(ServiceName.SOUNDCLOUD)
+        service = get_service(ServiceName.SOUNDCLOUD)
+        if service:
             return ServiceType(
                 name=ServiceName.SOUNDCLOUD,
                 display_name=service.display_name,
                 url=self.soundcloud_url,
                 icon_url=service.icon_url,
             )
-        except Service.DoesNotExist:
-            return None
+        return None
 
     def resolve_youtube_source(self, info):
         if hasattr(self, "youtube_source") and self.youtube_source:
@@ -184,16 +182,15 @@ class TrackType(DjangoObjectType):
 
         if not self.youtube_url:
             return None
-        try:
-            service = get_service(ServiceName.YOUTUBE)
+        service = get_service(ServiceName.YOUTUBE)
+        if service:
             return ServiceType(
                 name=ServiceName.YOUTUBE,
                 display_name=service.display_name,
                 url=self.youtube_url,
                 icon_url=service.icon_url,
             )
-        except Service.DoesNotExist:
-            return None
+        return None
 
     def resolve_seen_on_spotify(self, info):
         if hasattr(self, "seen_on_spotify"):
@@ -248,4 +245,8 @@ class TrackQuery(graphene.ObjectType):
     track_by_isrc = graphene.Field(TrackType, isrc=graphene.String(required=True))
 
     def resolve_track_by_isrc(self, info, isrc):
-        return Track.objects.filter(isrc=isrc).order_by("-id").first()
+        domain_track = get_track_by_isrc(isrc)
+        # Need to return Django model for DjangoObjectType compatibility
+        if domain_track:
+            return get_track_model_by_isrc(isrc)
+        return None

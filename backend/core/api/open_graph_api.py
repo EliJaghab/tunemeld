@@ -1,4 +1,4 @@
-from core.models.genre_service import Genre
+from core.models.genre_service import GenreModel
 
 
 def get_default_og_metadata() -> dict[str, str]:
@@ -12,14 +12,14 @@ def get_default_og_metadata() -> dict[str, str]:
 def get_genre_og_metadata(genre_name: str) -> dict[str, str]:
     """Get Open Graph metadata for a specific genre."""
     try:
-        genre_obj = Genre.objects.get(name=genre_name)
+        genre_obj = GenreModel.objects.get(name=genre_name)
         genre_display = genre_obj.display_name or genre_name.title()
 
         return {
             "og_title": f"tunemeld - {genre_display}",
             "og_description": f"Discover trending {genre_display} music across Spotify, Apple Music, and SoundCloud",
         }
-    except Genre.DoesNotExist:
+    except GenreModel.DoesNotExist:
         return get_default_og_metadata()
 
 

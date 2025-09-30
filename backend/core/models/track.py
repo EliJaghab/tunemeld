@@ -1,19 +1,17 @@
 from typing import ClassVar
 
-from core.constants import ServiceName
 from django.core.validators import RegexValidator
 from django.db import models
-from pydantic import BaseModel, Field
 
 
-class Track(models.Model):
+class TrackModel(models.Model):
     """
     Represents a unique music track identified by ISRC.
 
     Contains all track metadata including service-specific information.
 
     Example:
-        track = Track(
+        track = TrackModel(
             isrc="USSM12201546",
             track_name="Flowers",
             artist_name="Miley Cyrus",
@@ -55,51 +53,3 @@ class Track(models.Model):
 
     def __str__(self):
         return f"{self.track_name} by {self.artist_name} ({self.isrc})"
-
-
-TrackSourceServiceName = ServiceName
-
-
-class TrackData(BaseModel):
-    service_name: TrackSourceServiceName
-    track_name: str | None = None
-    artist_name: str | None = None
-    track_url: str | None = None
-    album_cover_url: str | None = None
-
-
-class ETLTrack(BaseModel):
-    """ETL Track model - distinct from Django Track model."""
-
-    isrc: str
-    apple_music_track_data: TrackData = Field(default_factory=lambda: TrackData(service_name=ServiceName.APPLE_MUSIC))
-    spotify_track_data: TrackData = Field(default_factory=lambda: TrackData(service_name=ServiceName.SPOTIFY))
-    soundcloud_track_data: TrackData = Field(default_factory=lambda: TrackData(service_name=ServiceName.SOUNDCLOUD))
-    youtube_url: str | None = None
-
-
-class TrackRank(BaseModel):
-    isrc: str
-    rank: int
-    sources: dict[TrackSourceServiceName, int]
-    raw_aggregate_rank: int | None = None
-    aggregate_service_name: TrackSourceServiceName | None = None
-
-
-class NormalizedTrack(BaseModel):
-    """Normalized track data for Phase C - maps to Track model fields."""
-
-    position: int
-    isrc: str | None = None
-    name: str
-    artist: str
-    album: str | None = None
-    spotify_url: str | None = None
-    apple_music_url: str | None = None
-    soundcloud_url: str | None = None
-    album_cover_url: str | None = None
-
-    @property
-    def service_url(self) -> str:
-        """Get the service-specific URL for this track."""
-        return self.spotify_url or self.apple_music_url or self.soundcloud_url or ""

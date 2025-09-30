@@ -3,7 +3,7 @@ import logging
 from core.api.playlist import get_playlist_isrcs
 from core.constants import ServiceName
 from core.graphql.schema import schema
-from core.utils.local_cache import CachePrefix, local_cache_clear
+from core.utils.redis_cache import CachePrefix, redis_cache_clear
 from django.core.management.base import BaseCommand
 
 logger = logging.getLogger(__name__)
@@ -13,7 +13,7 @@ class Command(BaseCommand):
     help = "Clear and warm play count GraphQL cache"
 
     def handle(self, *args, **options):
-        play_count_cleared = local_cache_clear(CachePrefix.GQL_PLAY_COUNT)
+        play_count_cleared = redis_cache_clear(CachePrefix.GQL_PLAY_COUNT)
         logger.info(f"Cleared {play_count_cleared} play count cache entries")
 
         self._warm_play_count_cache()

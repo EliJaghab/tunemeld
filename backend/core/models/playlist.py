@@ -5,20 +5,14 @@ This model stores unprocessed playlist data as received from external APIs.
 The data is then normalized in Phase 3 and hydrated in Phase 4.
 """
 
-from enum import Enum
-from typing import TYPE_CHECKING, Any, ClassVar, TypedDict
+from typing import Any, ClassVar, TypedDict
 
-from core.constants import GenreName, ServiceName
-from core.models.genre_service import Genre, Service
+from core.models.genre_service import GenreModel, ServiceModel
 from django.core.validators import RegexValidator
 from django.db import models
-from pydantic import BaseModel
-
-if TYPE_CHECKING:
-    from core.models.track import TrackRank
 
 
-class RawPlaylistData(models.Model):
+class RawPlaylistDataModel(models.Model):
     """
     Raw playlist data storage for ETL pipeline.
 
@@ -35,8 +29,8 @@ class RawPlaylistData(models.Model):
     """
 
     id = models.BigAutoField(primary_key=True)
-    genre = models.ForeignKey(Genre, on_delete=models.CASCADE, help_text="Genre of this playlist data")
-    service = models.ForeignKey(Service, on_delete=models.CASCADE, help_text="Service this data came from")
+    genre = models.ForeignKey(GenreModel, on_delete=models.CASCADE, help_text="Genre of this playlist data")
+    service = models.ForeignKey(ServiceModel, on_delete=models.CASCADE, help_text="Service this data came from")
 
     playlist_url = models.URLField(help_text="Original playlist URL")
     playlist_name = models.CharField(max_length=255, blank=True, help_text="Playlist display name")
@@ -62,7 +56,7 @@ class RawPlaylistData(models.Model):
         return f"Raw {self.service.name} {self.genre.name} data"
 
 
-class Playlist(models.Model):
+class PlaylistModel(models.Model):
     """
     Playlist positioning data linking to ServiceTrack records.
 
@@ -74,8 +68,8 @@ class Playlist(models.Model):
     """
 
     id = models.BigAutoField(primary_key=True)
-    service = models.ForeignKey(Service, on_delete=models.CASCADE)
-    genre = models.ForeignKey(Genre, on_delete=models.CASCADE)
+    service = models.ForeignKey(ServiceModel, on_delete=models.CASCADE)
+    genre = models.ForeignKey(GenreModel, on_delete=models.CASCADE)
     position = models.PositiveIntegerField()
 
     # ISRC (populated after Phase D resolution)
@@ -90,7 +84,7 @@ class Playlist(models.Model):
 
     # Link to the detailed service track record
     service_track = models.ForeignKey(
-        "ServiceTrack",
+        "ServiceTrackModel",
         on_delete=models.CASCADE,
         help_text="Reference to the normalized service track record",
         related_name="playlists",
@@ -111,12 +105,12 @@ class Playlist(models.Model):
         return f"Position {self.position}: {self.isrc} ({self.service.name} {self.genre.name})"
 
 
-class ServiceTrack(models.Model):
+class ServiceTrackModel(models.Model):
     """Normalized track data from all services before consolidation."""
 
     id = models.BigAutoField(primary_key=True)
-    service = models.ForeignKey(Service, on_delete=models.CASCADE)
-    genre = models.ForeignKey(Genre, on_delete=models.CASCADE)
+    service = models.ForeignKey(ServiceModel, on_delete=models.CASCADE)
+    genre = models.ForeignKey(GenreModel, on_delete=models.CASCADE)
     position = models.PositiveIntegerField(help_text="Position in playlist")
 
     # Track metadata
@@ -136,11 +130,11 @@ class ServiceTrack(models.Model):
     album_cover_url = models.URLField(null=True, blank=True, help_text="Album cover image URL")
 
     track = models.ForeignKey(
-        "Track",
+        "TrackModel",
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
-        help_text="Reference to consolidated Track record",
+        help_text="Reference to consolidated TrackModel record",
         related_name="service_tracks",
     )
 
@@ -163,21 +157,6 @@ class ServiceTrack(models.Model):
         return f"{self.track_name} by {self.artist_name} ({self.service.name})"
 
 
-class PlaylistType(str, Enum):
-    SPOTIFY = ServiceName.SPOTIFY.value
-    SOUNDCLOUD = ServiceName.SOUNDCLOUD.value
-    APPLE_MUSIC = ServiceName.APPLE_MUSIC.value
-    TUNEMELD = ServiceName.TUNEMELD.value
-
-
-class PlaylistETL(BaseModel):
-    """Pydantic playlist model for aggregation and ranking."""
-
-    service_name: PlaylistType
-    genre_name: GenreName
-    tracks: list["TrackRank"]
-
-
 class PlaylistMetadata(TypedDict, total=False):
     service_name: str
     genre_name: str
@@ -198,7 +177,7 @@ class PlaylistData(TypedDict):
     tracks: Any
 
 
-class Rank(models.Model):
+class RankModel(models.Model):
     """
     Represents different ranking/sorting options for playlists.
     Backend-driven configuration for frontend sort buttons.

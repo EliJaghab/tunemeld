@@ -1,7 +1,8 @@
 from typing import Any
 
 from core.constants import GENRE_CONFIGS, RANK_CONFIGS, SERVICE_CONFIGS
-from core.models import Genre, Rank, Service
+from core.models.genre_service import GenreModel, ServiceModel
+from core.models.playlist import RankModel
 from django.core.management.base import BaseCommand
 
 
@@ -10,7 +11,7 @@ class Command(BaseCommand):
 
     def handle(self, *args: Any, **options: Any) -> None:
         for genre_name, config in GENRE_CONFIGS.items():
-            Genre.objects.update_or_create(
+            GenreModel.objects.update_or_create(
                 name=genre_name,
                 defaults={
                     "display_name": config["display_name"],
@@ -19,7 +20,7 @@ class Command(BaseCommand):
             )
 
         for service_name, config in SERVICE_CONFIGS.items():
-            Service.objects.update_or_create(
+            ServiceModel.objects.update_or_create(
                 name=service_name,
                 defaults={
                     "display_name": config["display_name"],
@@ -28,7 +29,7 @@ class Command(BaseCommand):
             )
 
         for rank_name, config in RANK_CONFIGS.items():
-            Rank.objects.update_or_create(
+            RankModel.objects.update_or_create(
                 name=rank_name,
                 defaults={
                     "display_name": config["display_name"],

@@ -15,6 +15,7 @@ TuneMeld is a data pipeline and web application that aggregates music playlist d
 - **Backend**: Django + PostgreSQL
 - **Frontend**: Static HTML/JS served via Vercel
 - **API**: GraphQL for efficient data fetching
+- **Cache**: Redis (Vercel KV) for GraphQL results, CloudflareKV for API data
 - **CDN**: Cloudflare for global distribution
 - **Data Sources**: Spotify (SpotDL), Apple Music & SoundCloud (RapidAPI)
 

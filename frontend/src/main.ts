@@ -40,6 +40,7 @@ async function initializeApp(): Promise<void> {
   }
 
   await loadAndRenderGenreButtons();
+  await loadAndRenderRankButtons();
   setupClosePlayerButton();
   initializeTosPrivacyOverlay();
 

@@ -11,11 +11,13 @@
 ```bash
 # Start servers (use these commands ONLY)
 make serve-frontend    # Starts frontend at http://localhost:8080
-make serve-backend     # Starts backend at http://localhost:8000
+make serve-backend     # Starts backend at http://localhost:8000 (ensures Redis is running)
+make serve-redis       # Manually start Redis cache if needed (normally run by make serve-backend)
 
 # Stop servers (use these commands ONLY)
 make kill-frontend     # Stops frontend server
 make kill-backend      # Stops backend server
+make kill-redis        # Stops local Redis instance started by make serve-redis
 ```
 
 **DO NOT use manual commands like:**
@@ -43,13 +45,14 @@ make kill-backend      # Stops backend server
   1. **API Rate Limits**: RapidAPI and YouTube API have strict limits - caching prevents hitting quotas
   2. **Performance**: Much faster to pull from CloudflareKV than rescraping/refetching from external APIs
 
-### Local Cache (`caches["local"]`)
+### Redis Cache (`caches["redis"]`)
 
-- **Purpose**: Local memory cache for GraphQL ONLY
+- **Purpose**: Vercel Redis for GraphQL query results ONLY
 - **Data**: GQL_PLAYLIST, GQL_PLAY_COUNT, GQL_PLAYLIST_METADATA
-- **Usage**: GraphQL query results for fast frontend responses
+- **Usage**: GraphQL query responses served to the frontend
+- **Notes**: Cached entries are keyed by `CachePrefix` enums and stored via `core.utils.redis_cache`
 
-**Simple rule: CloudflareKV for Django/ETL operations, local cache for GraphQL.**
+**Simple rule: CloudflareKV for Django/ETL operations, Redis for GraphQL.**
 
 ## Development Workflow
 

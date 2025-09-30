@@ -1,7 +1,7 @@
 import graphene
 from core.api.play_count import get_track_play_count
 from core.settings import DISABLE_CACHE
-from core.utils.local_cache import CachePrefix, local_cache_get, local_cache_set
+from core.utils.redis_cache import CachePrefix, redis_cache_get, redis_cache_set
 from core.utils.utils import format_percentage_change, format_play_count
 
 
@@ -68,55 +68,57 @@ class PlayCountQuery(graphene.ObjectType):
         """Internal method to get play count data for a track."""
         cache_key = f"track_play_count:{isrc}"
 
-        cached_data = None if DISABLE_CACHE else local_cache_get(CachePrefix.GQL_PLAY_COUNT, cache_key)
+        cached_data = None if DISABLE_CACHE else redis_cache_get(CachePrefix.GQL_PLAY_COUNT, cache_key)
 
         if cached_data:
-            return cached_data
+            return TrackPlayCountType(**cached_data)
 
         play_count_data = get_track_play_count(isrc)
         if not play_count_data:
             return None
 
-        result = TrackPlayCountType(
-            isrc=play_count_data.isrc,
-            spotify_current_play_count=play_count_data.spotify.current_play_count,
-            spotify_weekly_change_percentage=play_count_data.spotify.weekly_change_percentage,
-            spotify_updated_at=play_count_data.spotify.updated_at,
-            spotify_current_play_count_abbreviated=format_play_count(play_count_data.spotify.current_play_count),
-            spotify_weekly_change_percentage_formatted=format_percentage_change(
+        result_data = {
+            "isrc": play_count_data.isrc,
+            "spotify_current_play_count": play_count_data.spotify.current_play_count,
+            "spotify_weekly_change_percentage": play_count_data.spotify.weekly_change_percentage,
+            "spotify_updated_at": play_count_data.spotify.updated_at,
+            "spotify_current_play_count_abbreviated": format_play_count(play_count_data.spotify.current_play_count),
+            "spotify_weekly_change_percentage_formatted": format_percentage_change(
                 play_count_data.spotify.weekly_change_percentage
             ),
-            apple_music_current_play_count=play_count_data.apple_music.current_play_count,
-            apple_music_weekly_change_percentage=play_count_data.apple_music.weekly_change_percentage,
-            apple_music_updated_at=play_count_data.apple_music.updated_at,
-            apple_music_current_play_count_abbreviated=format_play_count(
+            "apple_music_current_play_count": play_count_data.apple_music.current_play_count,
+            "apple_music_weekly_change_percentage": play_count_data.apple_music.weekly_change_percentage,
+            "apple_music_updated_at": play_count_data.apple_music.updated_at,
+            "apple_music_current_play_count_abbreviated": format_play_count(
                 play_count_data.apple_music.current_play_count
             ),
-            apple_music_weekly_change_percentage_formatted=format_percentage_change(
+            "apple_music_weekly_change_percentage_formatted": format_percentage_change(
                 play_count_data.apple_music.weekly_change_percentage
             ),
-            youtube_current_play_count=play_count_data.youtube.current_play_count,
-            youtube_weekly_change_percentage=play_count_data.youtube.weekly_change_percentage,
-            youtube_updated_at=play_count_data.youtube.updated_at,
-            youtube_current_play_count_abbreviated=format_play_count(play_count_data.youtube.current_play_count),
-            youtube_weekly_change_percentage_formatted=format_percentage_change(
+            "youtube_current_play_count": play_count_data.youtube.current_play_count,
+            "youtube_weekly_change_percentage": play_count_data.youtube.weekly_change_percentage,
+            "youtube_updated_at": play_count_data.youtube.updated_at,
+            "youtube_current_play_count_abbreviated": format_play_count(play_count_data.youtube.current_play_count),
+            "youtube_weekly_change_percentage_formatted": format_percentage_change(
                 play_count_data.youtube.weekly_change_percentage
             ),
-            soundcloud_current_play_count=play_count_data.soundcloud.current_play_count,
-            soundcloud_weekly_change_percentage=play_count_data.soundcloud.weekly_change_percentage,
-            soundcloud_updated_at=play_count_data.soundcloud.updated_at,
-            soundcloud_current_play_count_abbreviated=format_play_count(play_count_data.soundcloud.current_play_count),
-            soundcloud_weekly_change_percentage_formatted=format_percentage_change(
+            "soundcloud_current_play_count": play_count_data.soundcloud.current_play_count,
+            "soundcloud_weekly_change_percentage": play_count_data.soundcloud.weekly_change_percentage,
+            "soundcloud_updated_at": play_count_data.soundcloud.updated_at,
+            "soundcloud_current_play_count_abbreviated": format_play_count(
+                play_count_data.soundcloud.current_play_count
+            ),
+            "soundcloud_weekly_change_percentage_formatted": format_percentage_change(
                 play_count_data.soundcloud.weekly_change_percentage
             ),
-            total_current_play_count=play_count_data.total_current_play_count,
-            total_weekly_change_percentage=play_count_data.total_weekly_change_percentage,
-            total_current_play_count_abbreviated=format_play_count(play_count_data.total_current_play_count),
-            total_weekly_change_percentage_formatted=format_percentage_change(
+            "total_current_play_count": play_count_data.total_current_play_count,
+            "total_weekly_change_percentage": play_count_data.total_weekly_change_percentage,
+            "total_current_play_count_abbreviated": format_play_count(play_count_data.total_current_play_count),
+            "total_weekly_change_percentage_formatted": format_percentage_change(
                 play_count_data.total_weekly_change_percentage
             ),
-        )
+        }
 
-        local_cache_set(CachePrefix.GQL_PLAY_COUNT, cache_key, result)
+        redis_cache_set(CachePrefix.GQL_PLAY_COUNT, cache_key, result_data)
 
-        return result
+        return TrackPlayCountType(**result_data)

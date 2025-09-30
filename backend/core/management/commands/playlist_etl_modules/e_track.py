@@ -1,7 +1,7 @@
 from collections import Counter
 
 from core.constants import ServiceName
-from core.models import ServiceTrack, Track
+from core.models import ServiceTrackModel, TrackModel
 from core.services.apple_music_service import get_apple_music_album_cover_url
 from core.services.soundcloud_service import get_soundcloud_url
 from core.services.youtube_service import YouTubeUrlResult, get_youtube_url
@@ -52,16 +52,16 @@ class Command(BaseCommand):
 
     def process_isrc(self, isrc: str) -> YouTubeUrlResult | None:
         """Process a single ISRC and create canonical track."""
-        service_tracks = ServiceTrack.objects.filter(isrc=isrc)
+        service_tracks = ServiceTrackModel.objects.filter(isrc=isrc)
         return self.create_canonical_track(isrc, service_tracks)
 
     def get_unique_isrcs(self) -> list[str]:
         """Get ISRCs that are on current playlists but need URL enrichment (YouTube, Spotify, or SoundCloud)."""
-        playlist_isrcs = set(ServiceTrack.objects.values_list("isrc", flat=True).distinct())
+        playlist_isrcs = set(ServiceTrackModel.objects.values_list("isrc", flat=True).distinct())
 
         # Get tracks that have ALL valid URLs (skip these)
         tracks_fully_enriched = set(
-            Track.objects.filter(
+            TrackModel.objects.filter(
                 isrc__in=playlist_isrcs,
                 # YouTube URL exists and is not empty (youtube.com is placeholder, needs scraping)
                 youtube_url__isnull=False,
@@ -79,7 +79,7 @@ class Command(BaseCommand):
         # Process ISRCs that are on playlists but need URL enrichment
         isrcs_needing_enrichment = playlist_isrcs - tracks_fully_enriched
 
-        existing_tracks_count = Track.objects.filter(isrc__in=playlist_isrcs).count()
+        existing_tracks_count = TrackModel.objects.filter(isrc__in=playlist_isrcs).count()
         new_tracks_count = len(playlist_isrcs) - existing_tracks_count
 
         logger.info(
@@ -89,7 +89,7 @@ class Command(BaseCommand):
 
         return sorted(isrcs_needing_enrichment)
 
-    def choose_primary_service_track(self, service_tracks) -> ServiceTrack | None:
+    def choose_primary_service_track(self, service_tracks) -> ServiceTrackModel | None:
         """Choose the primary ServiceTrack based on service priority."""
         # Priority: Spotify > Apple Music > SoundCloud
 
@@ -146,7 +146,7 @@ class Command(BaseCommand):
             if soundcloud_url:
                 track_data["soundcloud_url"] = soundcloud_url
 
-        track, _created = Track.objects.update_or_create(isrc=isrc, defaults=track_data)
+        track, _created = TrackModel.objects.update_or_create(isrc=isrc, defaults=track_data)
         service_tracks.update(track=track)
 
         return youtube_result

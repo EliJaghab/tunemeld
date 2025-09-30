@@ -167,7 +167,7 @@ export function showShimmerLoaders(isInitialLoad: boolean = false): void {
       overlay.classList.add("active");
     }
   } else {
-    // Genre switching: only shimmer the table area, keep buttons visible
+    // Genre switching: only shimmer the table area, keep controls visible
     const playlistTable = document.querySelector(
       ".main-playlist .playlist-table",
     );

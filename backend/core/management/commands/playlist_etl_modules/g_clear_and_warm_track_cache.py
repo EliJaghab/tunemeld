@@ -2,7 +2,7 @@ import logging
 
 from core.constants import GenreName, ServiceName
 from core.graphql.schema import schema
-from core.utils.local_cache import CachePrefix, local_cache_clear
+from core.utils.redis_cache import CachePrefix, redis_cache_clear
 from django.core.management.base import BaseCommand
 
 logger = logging.getLogger(__name__)
@@ -14,8 +14,8 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         total_cleared = 0
 
-        total_cleared += local_cache_clear(CachePrefix.GQL_PLAYLIST)
-        total_cleared += local_cache_clear(CachePrefix.GQL_PLAYLIST_METADATA)
+        total_cleared += redis_cache_clear(CachePrefix.GQL_PLAYLIST)
+        total_cleared += redis_cache_clear(CachePrefix.GQL_PLAYLIST_METADATA)
 
         logger.info(f"Cleared {total_cleared} track/playlist cache entries")
 

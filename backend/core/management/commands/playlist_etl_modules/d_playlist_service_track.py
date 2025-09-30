@@ -1,10 +1,10 @@
 import json
 
 from core.constants import ServiceName
-from core.models import PlaylistModel, RawPlaylistData, ServiceTrack
-from core.models.track import NormalizedTrack
+from core.models.playlist import PlaylistModel, RawPlaylistDataModel, ServiceTrackModel
 from core.services.apple_music_service import get_apple_music_album_cover_url
 from core.services.spotify_service import get_spotify_isrc
+from core.types import NormalizedTrack
 from core.utils.utils import clean_unicode_text, get_logger, process_in_parallel
 from django.core.management.base import BaseCommand
 from django.db import transaction
@@ -16,7 +16,7 @@ class Command(BaseCommand):
     help = "Normalize raw playlist JSON data into Playlist and ServiceTrack tables"
 
     def handle(self, *args: object, **options: object) -> None:
-        raw_data_queryset = RawPlaylistData.objects.select_related("genre", "service").all()
+        raw_data_queryset = RawPlaylistDataModel.objects.select_related("genre", "service").all()
         total_raw = raw_data_queryset.count()
 
         if total_raw == 0:
@@ -38,17 +38,17 @@ class Command(BaseCommand):
 
         logger.info(f"Transformation complete: {total_tracks} playlist positions created")
 
-    def create_playlists(self, raw_data: RawPlaylistData) -> int:
+    def create_playlists(self, raw_data: RawPlaylistDataModel) -> int:
         with transaction.atomic():
             logger.info(f"Processing tracks for {raw_data.service.name}/{raw_data.genre.name}")
             PlaylistModel.objects.filter(service=raw_data.service, genre=raw_data.genre).delete()
 
             if raw_data.service.name == ServiceName.SPOTIFY:
-                tracks_data = self.parse_spotify_tracks(raw_data.data)
+                tracks_data = self.parse_spotify_tracks(raw_data.data.get("tracks", []))
             elif raw_data.service.name == ServiceName.APPLE_MUSIC:
-                tracks_data = self.parse_apple_music_tracks(raw_data.data)
+                tracks_data = self.parse_apple_music_tracks(raw_data.data.get("tracks", {}))
             elif raw_data.service.name == ServiceName.SOUNDCLOUD:
-                tracks_data = self.parse_soundcloud_tracks(raw_data.data)
+                tracks_data = self.parse_soundcloud_tracks(raw_data.data.get("tracks", {}))
             else:
                 raise ValueError(f"Unknown service: {raw_data.service.name}")
 
@@ -56,7 +56,7 @@ class Command(BaseCommand):
 
             for track in tracks_data:
                 if track.isrc:
-                    service_track, created = ServiceTrack.objects.update_or_create(
+                    service_track, created = ServiceTrackModel.objects.update_or_create(
                         service=raw_data.service,
                         genre=raw_data.genre,
                         position=position,
@@ -75,7 +75,7 @@ class Command(BaseCommand):
                         logger.debug(f"Updated existing track: {track.name} by {track.artist}")
                     position += 1
 
-            created_tracks = ServiceTrack.objects.filter(service=raw_data.service, genre=raw_data.genre).order_by(
+            created_tracks = ServiceTrackModel.objects.filter(service=raw_data.service, genre=raw_data.genre).order_by(
                 "position"
             )
 
@@ -145,7 +145,7 @@ class Command(BaseCommand):
 
         if isrc:
             existing_track = (
-                ServiceTrack.objects.filter(isrc=isrc)
+                ServiceTrackModel.objects.filter(isrc=isrc)
                 .exclude(album_cover_url__isnull=True)
                 .exclude(album_cover_url="")
                 .first()

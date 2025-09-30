@@ -7,7 +7,7 @@ from core.api.genre_service_api import get_service
 from core.api.playlist import get_playlist_isrcs_by_service
 from core.constants import ServiceName
 from core.models.play_counts import HistoricalTrackPlayCount
-from core.models.track import Track
+from core.models.track import TrackModel
 from core.services.soundcloud_service import get_soundcloud_track_view_count
 from core.services.spotify_service import get_spotify_track_view_count
 from core.services.youtube_service import get_youtube_track_view_count
@@ -17,7 +17,7 @@ from django.db import models
 from django.utils import timezone
 
 if TYPE_CHECKING:
-    from core.models.genre_service import Service
+    from core.models.genre_service import ServiceModel
 
 logger = get_logger(__name__)
 
@@ -39,7 +39,7 @@ class Command(BaseCommand):
             return
 
         tracks = (
-            Track.objects.filter(isrc__in=tunemeld_isrcs)
+            TrackModel.objects.filter(isrc__in=tunemeld_isrcs)
             .filter(
                 models.Q(spotify_url__isnull=False)
                 | models.Q(youtube_url__isnull=False)
@@ -88,11 +88,11 @@ class Command(BaseCommand):
 
     def _process_service(
         self,
-        track: "Track",
+        track: "TrackModel",
         service_name: str,
         url: str,
         get_count_func: Callable[[str], int],
-        service_obj: "Service",
+        service_obj: "ServiceModel",
     ) -> tuple[str, int | None]:
         """Process a single service for a track."""
         try:
@@ -109,7 +109,9 @@ class Command(BaseCommand):
             logger.warning(f"{track.isrc} {service_name}: {e}")
             return (service_name, None)
 
-    def process_track(self, track: "Track", services: dict[ServiceName, "Service"]) -> list[tuple[str, int | None]]:
+    def process_track(
+        self, track: "TrackModel", services: dict[ServiceName, "ServiceModel"]
+    ) -> list[tuple[str, int | None]]:
         """Process a track and return results for all services."""
         results: list[tuple[str, int | None]] = []
 

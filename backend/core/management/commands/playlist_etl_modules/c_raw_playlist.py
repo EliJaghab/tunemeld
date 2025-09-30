@@ -1,6 +1,6 @@
 from core.api.genre_service_api import get_genre, get_service
 from core.constants import PLAYLIST_GENRES, SERVICE_CONFIGS, GenreName, ServiceName
-from core.models import RawPlaylistData
+from core.models.playlist import RawPlaylistDataModel
 from core.services.apple_music_service import get_apple_music_playlist
 from core.services.soundcloud_service import get_soundcloud_playlist
 from core.services.spotify_service import get_spotify_playlist
@@ -47,7 +47,7 @@ class Command(BaseCommand):
 
     def get_and_save_playlist(
         self, service_name: ServiceName, genre: GenreName, force_refresh: bool = False
-    ) -> RawPlaylistData | None:
+    ) -> RawPlaylistDataModel | None:
         logger.info(f"Getting playlist data for {service_name.value}/{genre.value}")
         service = get_service(service_name)
         genre_obj = get_genre(genre.value)
@@ -63,9 +63,8 @@ class Command(BaseCommand):
                 raise ValueError(f"Unknown service: {service_name}")
 
             metadata = playlist_data["metadata"]
-            tracks = playlist_data["tracks"]
 
-            raw_data, _created = RawPlaylistData.objects.update_or_create(
+            raw_data, _created = RawPlaylistDataModel.objects.update_or_create(
                 service=service,
                 genre=genre_obj,
                 defaults={
@@ -73,7 +72,7 @@ class Command(BaseCommand):
                     "playlist_name": metadata["playlist_name"],
                     "playlist_cover_url": metadata["playlist_cover_url"],
                     "playlist_cover_description_text": metadata["playlist_cover_description_text"],
-                    "data": tracks,
+                    "data": playlist_data,
                 },
             )
             return raw_data

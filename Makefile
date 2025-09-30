@@ -4,6 +4,8 @@
 	setup_env \
 	serve-frontend \
 	serve-backend \
+	serve-redis \
+	kill-redis \
 	serve \
 	kill-frontend \
 	kill-backend \
@@ -137,10 +139,22 @@ serve-frontend:
 	@echo " Website will be available at: http://localhost:8080"
 	@echo " Press Ctrl+C to stop both processes"
 	@echo ""
-	@cd frontend && npm run dev & python -m http.server 8080 & wait
+	@cd frontend && npm run dev & cd frontend/dist && python -m http.server 8080 & wait
+serve-redis:
+	@if [ -n "$$REDIS_URL" ]; then \
+		echo " Using REDIS_URL from environment"; \
+	elif lsof -ti tcp:6379 > /dev/null 2>&1; then \
+		echo " Redis already running on port 6379"; \
+	elif command -v redis-server >/dev/null 2>&1; then \
+		redis-server --save "" --appendonly no --daemonize yes; \
+		echo " Redis started on port 6379"; \
+	else \
+		echo "Error: Redis not found. Install with: brew install redis"; \
+		exit 1; \
+	fi
 
 
-serve-backend:
+serve-backend: serve-redis
 	@echo " Starting Django backend server..."
 	@if lsof -ti tcp:8000 > /dev/null 2>&1; then \
 		echo " Backend server already running at: http://localhost:8000"; \
@@ -168,10 +182,19 @@ kill-backend:
 		echo "  No backend server running on port 8000"; \
 	fi
 
+kill-redis:
+	@echo " Stopping Redis server on port 6379..."
+	@if lsof -ti tcp:6379 > /dev/null 2>&1; then \
+		lsof -ti tcp:6379 | xargs kill -9 && echo " Redis server stopped"; \
+	else \
+		echo "  No Redis server running on port 6379"; \
+	fi
+
 serve:
 	@echo " Starting both frontend and backend servers..."
 	@echo " Frontend: http://localhost:8080 (with TypeScript auto-compilation)"
 	@echo " Backend API: http://localhost:8000"
+	@echo " Redis cache: redis://localhost:6379"
 	@echo " Press Ctrl+C to stop both servers"
 	@echo ""
 	@$(MAKE) serve-frontend & $(MAKE) serve-backend & wait

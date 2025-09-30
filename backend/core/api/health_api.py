@@ -17,7 +17,7 @@ def root(request: HttpRequest) -> JsonResponse:
             "endpoints": [
                 "/health/",
                 "/edm-events/",
-                "/clear-local-cache/",
+                "/clear-redis-cache/",
                 "/gql/",
             ],
         },
