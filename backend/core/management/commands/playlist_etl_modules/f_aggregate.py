@@ -128,7 +128,7 @@ class Command(BaseCommand):
             raise ValueError("TuneMeld service not found in database")
         tunemeld_config = SERVICE_CONFIGS[ServiceName.TUNEMELD.value]
 
-        genres_with_playlists = GenreModel.objects.filter(playlist__service_id=aggregate_service.id).distinct()
+        genres_with_playlists = GenreModel.objects.filter(playlistmodel__service_id=aggregate_service.id).distinct()
 
         for genre in genres_with_playlists:
             genre_display_name = GENRE_CONFIGS.get(genre.name, {}).get("display_name", genre.name.title())
