@@ -1,17 +1,30 @@
 {
-  "outputDirectory": "frontend/dist",
-  "routes": [
+  "builds": [
     {
-      "src": "/static/(.*)",
-      "dest": "/frontend/dist/$1"
+      "src": "backend/core/wsgi.py",
+      "use": "@vercel/python",
+      "config": { "maxLambdaSize": "15mb" }
     },
     {
-      "src": "/(.*\\.(css|js|png|jpg|jpeg|gif|ico|svg))",
-      "dest": "/frontend/dist/$1"
+      "src": "frontend/package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "dist"
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(health|gql)/.*",
+      "dest": "backend/core/wsgi.py"
+    },
+    {
+      "src": "/static/(.*)",
+      "dest": "/frontend/dist/static/$1"
     },
     {
       "src": "/(.*)",
-      "dest": "/frontend/dist/index.html"
+      "dest": "frontend/dist/index.html"
     }
   ]
 }
