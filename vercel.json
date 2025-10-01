@@ -1,11 +1,4 @@
 {
-  "cleanUrls": true,
-  "trailingSlash": false,
-  "public": "frontend/dist",
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "/frontend/dist/index.html"
-    }
-  ]
+  "buildCommand": "echo 'No build needed - serving static files'",
+  "outputDirectory": "frontend/dist"
 }
