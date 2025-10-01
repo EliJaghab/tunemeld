@@ -25,7 +25,7 @@ class handler(BaseHTTPRequestHandler):  # noqa: N801
 
             django.setup()
 
-            from core.schema import schema
+            from core.graphql.schema import schema
 
             return schema
         except Exception as e:
