@@ -238,7 +238,7 @@ function createTuneMeldPlaylistTableRow(track: Track): HTMLTableRowElement {
 
   const rankCell = document.createElement("td");
   rankCell.className = "rank";
-  rankCell.textContent = track.tunemeldRank.toString();
+  rankCell.textContent = track.tunemeldRank?.toString() || "-";
 
   const coverCell = document.createElement("td");
   coverCell.className = "cover";
