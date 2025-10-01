@@ -3,6 +3,10 @@
   "outputDirectory": "frontend/dist",
   "rewrites": [
     {
+      "source": "/fastapi-gql/(.*)",
+      "destination": "/api/fastapi_gql"
+    },
+    {
       "source": "/gql/(.*)",
       "destination": "/api/index"
     },
