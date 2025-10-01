@@ -1,3 +1,4 @@
+import asyncio
 import logging
 
 from core.api.playlist import get_playlist_isrcs
@@ -14,13 +15,16 @@ class Command(BaseCommand):
     help = "Clear and warm play count GraphQL cache"
 
     def handle(self, *args, **options):
+        asyncio.run(self.async_handle(*args, **options))
+
+    async def async_handle(self, *args, **options):
         play_count_cleared = redis_cache_clear(CachePrefix.GQL_PLAY_COUNT)
         logger.info(f"Cleared {play_count_cleared} play count cache entries")
 
-        self._warm_play_count_cache()
+        await self._warm_play_count_cache()
         logger.info("Play count cache warmed")
 
-    def _warm_play_count_cache(self):
+    async def _warm_play_count_cache(self):
         """Execute GraphQL queries to warm play count cache."""
         playlist_isrcs = get_playlist_isrcs(ServiceName.TUNEMELD)
 
@@ -28,7 +32,7 @@ class Command(BaseCommand):
             logger.info(f"Warming play count cache for {len(playlist_isrcs)} playlist ISRCs")
 
             for isrc in playlist_isrcs:
-                schema.execute(f"""
+                await schema.execute(f"""
                     query GetTrackPlayCount {{
                         trackPlayCount(isrc: "{isrc}") {{
                             isrc

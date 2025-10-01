@@ -1,3 +1,4 @@
+import asyncio
 import logging
 
 from core.constants import GenreName, ServiceName
@@ -13,6 +14,9 @@ class Command(BaseCommand):
     help = "Clear and warm track/playlist GraphQL cache"
 
     def handle(self, *args, **options):
+        asyncio.run(self.async_handle(*args, **options))
+
+    async def async_handle(self, *args, **options):
         total_cleared = 0
 
         # Clear all GraphQL cache prefixes
@@ -27,14 +31,14 @@ class Command(BaseCommand):
 
         logger.info(f"Cleared {total_cleared} GraphQL cache entries")
 
-        self._warm_track_caches()
+        await self._warm_track_caches()
         logger.info("Track/playlist cache warmed")
 
-    def _warm_track_caches(self):
+    async def _warm_track_caches(self):
         """Execute GraphQL queries to warm track/playlist cache with ALL frontend queries."""
 
         # 1. Warm getAvailableGenres() query
-        schema.execute("""
+        await schema.execute("""
             query GetAvailableGenres {
                 genres {
                     id
@@ -53,7 +57,7 @@ class Command(BaseCommand):
         """)
 
         # 2. Warm fetchPlaylistRanks() query
-        schema.execute("""
+        await schema.execute("""
             query GetPlaylistRanks {
                 ranks {
                     name
@@ -67,7 +71,7 @@ class Command(BaseCommand):
         """)
 
         # 3. Warm getServiceConfigs() query
-        schema.execute("""
+        await schema.execute("""
             query GetServiceConfigs {
                 serviceConfigs {
                     name
@@ -86,7 +90,7 @@ class Command(BaseCommand):
         """)
 
         # 4. Warm getIframeConfigs() query
-        schema.execute("""
+        await schema.execute("""
             query GetIframeConfigs {
                 iframeConfigs {
                     serviceName
@@ -101,7 +105,7 @@ class Command(BaseCommand):
 
         # 5. Warm getPlaylistMetadata() query for each genre
         for genre in GenreName:
-            schema.execute(f"""
+            await schema.execute(f"""
                 query GetPlaylistMetadata {{
                     serviceOrder
                     playlistsByGenre(genre: "{genre.value}") {{
@@ -119,7 +123,7 @@ class Command(BaseCommand):
         # 6. Warm getPlaylistTracks() query for each genre/service combination with FULL field set
         for genre in GenreName:
             for service in [ServiceName.SPOTIFY, ServiceName.APPLE_MUSIC, ServiceName.SOUNDCLOUD, ServiceName.TUNEMELD]:
-                schema.execute(f"""
+                await schema.execute(f"""
                     query GetPlaylistTracks {{
                         playlist(genre: "{genre.value}", service: "{service.value}") {{
                             genreName
@@ -201,7 +205,7 @@ class Command(BaseCommand):
         # 7. Warm getRankButtonLabels() for each rank type
         rank_types = ["tunemeld-rank", "spotify-rank", "apple-music-rank", "soundcloud-rank"]
         for rank_type in rank_types:
-            schema.execute(f"""
+            await schema.execute(f"""
                 query GetRankButtonLabels {{
                     rankButtonLabels(rankType: "{rank_type}") {{
                         buttonType
@@ -222,7 +226,7 @@ class Command(BaseCommand):
         ]
         for button_type, context in misc_button_types:
             if context:
-                schema.execute(f"""
+                await schema.execute(f"""
                     query GetMiscButtonLabels {{
                         miscButtonLabels(buttonType: "{button_type}", context: "{context}") {{
                             buttonType
@@ -233,7 +237,7 @@ class Command(BaseCommand):
                     }}
                 """)
             else:
-                schema.execute(f"""
+                await schema.execute(f"""
                     query GetMiscButtonLabels {{
                         miscButtonLabels(buttonType: "{button_type}") {{
                             buttonType
