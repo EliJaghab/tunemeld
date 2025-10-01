@@ -7,36 +7,29 @@ from http.server import BaseHTTPRequestHandler
 from pathlib import Path
 from urllib.parse import parse_qs, urlparse
 
+# Initialize Django at module level
+backend_dir = Path(__file__).parent.parent / "backend"
+if str(backend_dir) not in sys.path:
+    sys.path.insert(0, str(backend_dir))
+
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "core.settings")
+
+import django
+from django.conf import settings
+
+# Setup Django only if not configured
+if not settings.configured:
+    django.setup()
+
+from core.graphql.schema import schema
+
 
 class handler(BaseHTTPRequestHandler):  # noqa: N801
     """Handler for Django GraphQL requests."""
 
-    _django_initialized = False
-    _schema = None
-
     def _setup_django(self):
-        """Initialize Django setup (only once)."""
-        try:
-            # Add backend directory to Python path
-            backend_dir = Path(__file__).parent.parent / "backend"
-            if str(backend_dir) not in sys.path:
-                sys.path.insert(0, str(backend_dir))
-
-            # Set Django settings
-            os.environ.setdefault("DJANGO_SETTINGS_MODULE", "core.settings")
-
-            import django
-            from django.conf import settings
-
-            # Only setup Django if not already configured
-            if not settings.configured:
-                django.setup()
-
-            from core.graphql.schema import schema
-
-            return schema
-        except Exception as e:
-            raise Exception(f"Django setup failed: {e}") from e
+        """Get the pre-initialized Django schema."""
+        return schema
 
     def _handle_graphql(self, query, variables=None):
         """Handle GraphQL query execution."""
