@@ -20,7 +20,6 @@ venv/
 .github/
 .gitignore
 Makefile
-requirements*.txt
 pyproject.toml
 setup.py
 
