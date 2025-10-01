@@ -12,9 +12,8 @@ from core.api.genre_service_api import (
 )
 from core.constants import ServiceName
 from core.graphql.track import TrackType
-from core.settings import DISABLE_CACHE
 from core.utils.redis_cache import CachePrefix, redis_cache_get, redis_cache_set
-from domain_types.types import Playlist
+from domain_types.types import Playlist, PlaylistMetadata, RankData
 
 
 class PlaylistType(graphene.ObjectType):
@@ -60,7 +59,7 @@ class PlaylistQuery(graphene.ObjectType):
         """Used to order the header art and individual playlist columns."""
         cache_key_data = "service_order"
 
-        cached_result = None if DISABLE_CACHE else redis_cache_get(CachePrefix.GQL_PLAYLIST_METADATA, cache_key_data)
+        cached_result = redis_cache_get(CachePrefix.GQL_PLAYLIST_METADATA, cache_key_data)
 
         if cached_result is not None:
             return cached_result
@@ -80,7 +79,7 @@ class PlaylistQuery(graphene.ObjectType):
         """Get playlist data for any service (including Aggregate) and genre."""
         cache_key_data = f"resolve_playlist:genre={genre}:service={service}"
 
-        cached_result = None if DISABLE_CACHE else redis_cache_get(CachePrefix.GQL_PLAYLIST, cache_key_data)
+        cached_result = redis_cache_get(CachePrefix.GQL_PLAYLIST, cache_key_data)
 
         if cached_result is not None:
             # Reconstruct domain Playlist object from cached data
@@ -127,7 +126,7 @@ class PlaylistQuery(graphene.ObjectType):
         """Get playlist metadata for all services for a given genre."""
         cache_key_data = f"playlists_by_genre:genre={genre}"
 
-        cached_result = None if DISABLE_CACHE else redis_cache_get(CachePrefix.GQL_PLAYLIST_METADATA, cache_key_data)
+        cached_result = redis_cache_get(CachePrefix.GQL_PLAYLIST_METADATA, cache_key_data)
 
         if cached_result is not None:
             return [PlaylistMetadataType(**metadata) for metadata in cached_result]
@@ -149,18 +148,10 @@ class PlaylistQuery(graphene.ObjectType):
             # Find the service for this raw_playlist
             service = next((s for s in services if s.id == raw_playlist.service_id), None)
             if service:
-                metadata = {
-                    "playlist_name": raw_playlist.playlist_name or f"{service.display_name} {genre} Playlist",
-                    "playlist_cover_url": raw_playlist.playlist_cover_url or "",
-                    "playlist_cover_description_text": raw_playlist.playlist_cover_description_text
-                    or f"Curated {genre} tracks from {service.display_name}",
-                    "playlist_url": raw_playlist.playlist_url,
-                    "genre_name": genre,
-                    "service_name": service.name,
-                    "service_icon_url": service.icon_url,
-                }
-                cache_data.append(metadata)
-                playlist_metadata.append(PlaylistMetadataType(**metadata))
+                domain_metadata = PlaylistMetadata.from_raw_playlist_and_service(raw_playlist, service, genre)
+                metadata_dict = domain_metadata.to_dict()
+                cache_data.append(metadata_dict)
+                playlist_metadata.append(PlaylistMetadataType(**metadata_dict))
 
         redis_cache_set(CachePrefix.GQL_PLAYLIST_METADATA, cache_key_data, cache_data)
 
@@ -174,25 +165,18 @@ class PlaylistQuery(graphene.ObjectType):
         """Get playlist ranking options."""
         cache_key_data = "all_ranks"
 
-        cached_result = None if DISABLE_CACHE else redis_cache_get(CachePrefix.GQL_PLAYLIST_METADATA, cache_key_data)
+        cached_result = redis_cache_get(CachePrefix.GQL_PLAYLIST_METADATA, cache_key_data)
 
         if cached_result is not None:
             return [RankType(**rank) for rank in cached_result]
 
         domain_ranks = get_all_ranks()
 
-        # Prepare data for caching
         cache_data = []
         rank_types = []
         for rank in domain_ranks:
-            rank_dict = {
-                "name": rank.name,
-                "display_name": rank.display_name,
-                "sort_field": rank.sort_field,
-                "sort_order": rank.sort_order,
-                "is_default": rank.is_default,
-                "data_field": rank.data_field,
-            }
+            domain_rank = RankData.from_rank(rank)
+            rank_dict = domain_rank.to_dict()
             cache_data.append(rank_dict)
             rank_types.append(RankType(**rank_dict))
 

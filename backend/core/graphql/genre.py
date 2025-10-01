@@ -2,8 +2,8 @@ import graphene
 from core.constants import GENRE_CONFIGS, GenreName
 from core.graphql.button_labels import ButtonLabelType, generate_genre_button_labels
 from core.models.genre_service import GenreModel
-from core.settings import DISABLE_CACHE
 from core.utils.redis_cache import CachePrefix, redis_cache_get, redis_cache_set
+from domain_types.types import Genre
 from graphene_django import DjangoObjectType
 
 
@@ -25,7 +25,7 @@ class GenreQuery(graphene.ObjectType):
     def resolve_genres(self, info):
         cache_key_data = "all_genres"
 
-        cached_result = None if DISABLE_CACHE else redis_cache_get(CachePrefix.GQL_GENRES, cache_key_data)
+        cached_result = redis_cache_get(CachePrefix.GQL_GENRES, cache_key_data)
 
         if cached_result is not None:
             # Convert cached data back to genre objects with button labels
@@ -39,24 +39,11 @@ class GenreQuery(graphene.ObjectType):
         genres = GenreModel.objects.all()
         sorted_genres = sorted(genres, key=lambda g: (GENRE_CONFIGS.get(g.name, {}).get("order", 999), g.name))
 
-        # Prepare data for caching with button labels included
         cache_data = []
         for genre in sorted_genres:
-            genre_dict = {
-                "id": genre.id,
-                "name": genre.name,
-                "display_name": genre.display_name,
-                "icon_url": genre.icon_url,
-                "button_labels": [
-                    {
-                        "buttonType": bl.buttonType,
-                        "context": bl.context,
-                        "title": bl.title,
-                        "ariaLabel": bl.ariaLabel,
-                    }
-                    for bl in generate_genre_button_labels(genre.name)
-                ],
-            }
+            domain_genre = Genre.from_django_model(genre)
+            button_labels = generate_genre_button_labels(genre.name)
+            genre_dict = domain_genre.to_dict_with_button_labels(button_labels)
             cache_data.append(genre_dict)
 
         redis_cache_set(CachePrefix.GQL_GENRES, cache_key_data, cache_data)
@@ -66,7 +53,7 @@ class GenreQuery(graphene.ObjectType):
     def resolve_default_genre(self, info):
         cache_key_data = "default_genre"
 
-        cached_result = None if DISABLE_CACHE else redis_cache_get(CachePrefix.GQL_GENRES, cache_key_data)
+        cached_result = redis_cache_get(CachePrefix.GQL_GENRES, cache_key_data)
 
         if cached_result is not None:
             return cached_result

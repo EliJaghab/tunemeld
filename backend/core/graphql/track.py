@@ -11,7 +11,6 @@ from core.constants import ServiceName
 from core.graphql.button_labels import ButtonLabelType, generate_track_button_labels
 from core.graphql.service import ServiceType
 from core.models.track import TrackModel
-from core.settings import DISABLE_CACHE
 from core.utils.redis_cache import CachePrefix, redis_cache_get, redis_cache_set
 from core.utils.utils import truncate_to_words
 from graphene_django import DjangoObjectType
@@ -249,7 +248,7 @@ class TrackQuery(graphene.ObjectType):
     def resolve_track_by_isrc(self, info, isrc):
         cache_key_data = f"track_by_isrc:{isrc}"
 
-        cached_result = None if DISABLE_CACHE else redis_cache_get(CachePrefix.GQL_TRACK, cache_key_data)
+        cached_result = redis_cache_get(CachePrefix.GQL_TRACK, cache_key_data)
 
         if cached_result is not None:
             # Reconstruct Django track model from cached data

@@ -5,10 +5,12 @@ These models mirror the frontend TypeScript types exactly and provide
 clean serialization/deserialization for GraphQL and cache layers.
 """
 
+from dataclasses import dataclass
 from datetime import datetime
 from typing import Any, Self
 
 from core.constants import ServiceName
+from core.utils.utils import format_percentage_change, format_play_count
 from pydantic import BaseModel, Field
 
 
@@ -40,10 +42,10 @@ class ButtonLabel(BaseModel):
 
     def to_dict(self) -> dict[str, Any]:
         return {
-            "buttonType": self.button_type,
+            "button_type": self.button_type,
             "context": self.context,
             "title": self.title,
-            "ariaLabel": self.aria_label,
+            "aria_label": self.aria_label,
         }
 
     @classmethod
@@ -518,8 +520,6 @@ class Rank(BaseModel):
         """Convert from Django RankModel."""
         from core.constants import DEFAULT_RANK_TYPE
 
-        # Import inside method to avoid circular dependency
-
         return cls(
             name=django_rank.name,
             display_name=django_rank.display_name,
@@ -558,8 +558,6 @@ class Service(BaseModel):
     @classmethod
     def from_django_model(cls, django_service) -> Self:
         """Convert from Django ServiceModel."""
-        # Import inside method to avoid circular dependency
-
         return cls(
             id=django_service.id,
             name=django_service.name,
@@ -584,6 +582,16 @@ class Genre(BaseModel):
             "displayName": self.display_name,
             "iconClass": self.icon_class,
             "iconUrl": self.icon_url,
+        }
+
+    def to_dict_with_button_labels(self, button_labels: list[ButtonLabel]) -> dict[str, Any]:
+        """Convert to dict with button labels included."""
+        return {
+            "id": self.id,
+            "name": self.name,
+            "display_name": self.display_name,
+            "icon_url": self.icon_url,
+            "button_labels": [bl.to_dict() for bl in button_labels],
         }
 
     @classmethod
@@ -664,3 +672,215 @@ class RawPlaylistData(BaseModel):
             data=django_raw_playlist.data,
             created_at=django_raw_playlist.created_at,
         )
+
+
+@dataclass
+class ServiceConfig:
+    name: str
+    display_name: str
+    service_url: str
+    description: str
+    example_track_search: str
+    example_playlist_search: str
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "name": self.name,
+            "displayName": self.display_name,
+            "serviceUrl": self.service_url,
+            "description": self.description,
+            "exampleTrackSearch": self.example_track_search,
+            "examplePlaylistSearch": self.example_playlist_search,
+        }
+
+
+@dataclass
+class IframeConfig:
+    service_name: str
+    embed_base_url: str
+    embed_params: str | None
+    allow: str
+    height: int
+    referrer_policy: str | None
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "service_name": self.service_name,
+            "embed_base_url": self.embed_base_url,
+            "embed_params": self.embed_params,
+            "allow": self.allow,
+            "height": self.height,
+            "referrer_policy": self.referrer_policy,
+        }
+
+
+@dataclass
+class ServicePlayCount:
+    current_play_count: int | None
+    weekly_change_percentage: float | None
+    updated_at: datetime | None
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "current_play_count": self.current_play_count,
+            "weekly_change_percentage": self.weekly_change_percentage,
+            "updated_at": self.updated_at,
+            "current_play_count_abbreviated": format_play_count(self.current_play_count)
+            if self.current_play_count
+            else None,
+            "weekly_change_percentage_formatted": format_percentage_change(self.weekly_change_percentage)
+            if self.weekly_change_percentage
+            else None,
+        }
+
+
+@dataclass
+class TrackPlayCountData:
+    isrc: str
+    spotify: ServicePlayCount
+    apple_music: ServicePlayCount
+    youtube: ServicePlayCount
+    soundcloud: ServicePlayCount
+    total_current_play_count: int | None
+    total_weekly_change_percentage: float | None
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "isrc": self.isrc,
+            "spotify_current_play_count": self.spotify.current_play_count,
+            "spotify_weekly_change_percentage": self.spotify.weekly_change_percentage,
+            "spotify_updated_at": self.spotify.updated_at,
+            "spotify_current_play_count_abbreviated": self.spotify.to_dict()["current_play_count_abbreviated"],
+            "spotify_weekly_change_percentage_formatted": self.spotify.to_dict()["weekly_change_percentage_formatted"],
+            "apple_music_current_play_count": self.apple_music.current_play_count,
+            "apple_music_weekly_change_percentage": self.apple_music.weekly_change_percentage,
+            "apple_music_updated_at": self.apple_music.updated_at,
+            "apple_music_current_play_count_abbreviated": self.apple_music.to_dict()["current_play_count_abbreviated"],
+            "apple_music_weekly_change_percentage_formatted": self.apple_music.to_dict()[
+                "weekly_change_percentage_formatted"
+            ],
+            "youtube_current_play_count": self.youtube.current_play_count,
+            "youtube_weekly_change_percentage": self.youtube.weekly_change_percentage,
+            "youtube_updated_at": self.youtube.updated_at,
+            "youtube_current_play_count_abbreviated": self.youtube.to_dict()["current_play_count_abbreviated"],
+            "youtube_weekly_change_percentage_formatted": self.youtube.to_dict()["weekly_change_percentage_formatted"],
+            "soundcloud_current_play_count": self.soundcloud.current_play_count,
+            "soundcloud_weekly_change_percentage": self.soundcloud.weekly_change_percentage,
+            "soundcloud_updated_at": self.soundcloud.updated_at,
+            "soundcloud_current_play_count_abbreviated": self.soundcloud.to_dict()["current_play_count_abbreviated"],
+            "soundcloud_weekly_change_percentage_formatted": self.soundcloud.to_dict()[
+                "weekly_change_percentage_formatted"
+            ],
+            "total_current_play_count": self.total_current_play_count,
+            "total_weekly_change_percentage": self.total_weekly_change_percentage,
+            "total_current_play_count_abbreviated": format_play_count(self.total_current_play_count)
+            if self.total_current_play_count
+            else None,
+            "total_weekly_change_percentage_formatted": format_percentage_change(self.total_weekly_change_percentage)
+            if self.total_weekly_change_percentage
+            else None,
+        }
+
+
+@dataclass
+class PlaylistMetadata:
+    playlist_name: str
+    playlist_cover_url: str
+    playlist_cover_description_text: str
+    playlist_url: str
+    genre_name: str
+    service_name: str
+    service_icon_url: str
+
+    @classmethod
+    def from_raw_playlist_and_service(cls, raw_playlist, service, genre: str) -> "PlaylistMetadata":
+        """Create PlaylistMetadata from raw playlist data and service info."""
+        return cls(
+            playlist_name=raw_playlist.playlist_name or f"{service.display_name} {genre} Playlist",
+            playlist_cover_url=raw_playlist.playlist_cover_url or "",
+            playlist_cover_description_text=raw_playlist.playlist_cover_description_text
+            or f"Curated {genre} tracks from {service.display_name}",
+            playlist_url=raw_playlist.playlist_url,
+            genre_name=genre,
+            service_name=service.name,
+            service_icon_url=service.icon_url,
+        )
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "playlist_name": self.playlist_name,
+            "playlist_cover_url": self.playlist_cover_url,
+            "playlist_cover_description_text": self.playlist_cover_description_text,
+            "playlist_url": self.playlist_url,
+            "genre_name": self.genre_name,
+            "service_name": self.service_name,
+            "service_icon_url": self.service_icon_url,
+        }
+
+
+@dataclass
+class RankData:
+    name: str
+    display_name: str
+    sort_field: str
+    sort_order: str
+    is_default: bool
+    data_field: str
+
+    @classmethod
+    def from_rank(cls, rank) -> "RankData":
+        """Create RankData from rank object."""
+        return cls(
+            name=rank.name,
+            display_name=rank.display_name,
+            sort_field=rank.sort_field,
+            sort_order=rank.sort_order,
+            is_default=rank.is_default,
+            data_field=rank.data_field,
+        )
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "name": self.name,
+            "display_name": self.display_name,
+            "sort_field": self.sort_field,
+            "sort_order": self.sort_order,
+            "is_default": self.is_default,
+            "data_field": self.data_field,
+        }
+
+
+@dataclass
+class ServiceConfigWithLabels:
+    name: str
+    display_name: str
+    icon_url: str
+    url_field: str | None
+    source_field: str | None
+    button_labels: list[dict[str, Any]]
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "name": self.name,
+            "display_name": self.display_name,
+            "icon_url": self.icon_url,
+            "url_field": self.url_field,
+            "source_field": self.source_field,
+            "button_labels": self.button_labels,
+        }
+
+
+@dataclass
+class ButtonLabelData:
+    button_type: str
+    context: str
+    title: str
+    aria_label: str
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "buttonType": self.button_type,
+            "context": self.context,
+            "title": self.title,
+            "ariaLabel": self.aria_label,
+        }

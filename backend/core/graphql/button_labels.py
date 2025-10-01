@@ -1,5 +1,6 @@
 import graphene
 from core.constants import GENRE_CONFIGS, RANK_CONFIGS, SERVICE_CONFIGS, SERVICE_RANK_FIELDS, RankType, ServiceName
+from domain_types.types import ButtonLabel
 
 
 class ButtonLabelType(graphene.ObjectType):
@@ -41,7 +42,7 @@ def generate_track_button_labels(track, genre=None, service=None):
                     rank_text = f" (Rank #{rank})"
 
             labels.append(
-                ButtonLabelType(
+                ButtonLabel(
                     button_type="source_icon",
                     context=service_name,
                     title=f"Play {full_track_display} on {display_name}{rank_text}",
@@ -75,7 +76,7 @@ def generate_genre_button_labels(genre_name):
         title = f"View {display_name} tracks"
         aria_label = f"Filter to show {display_name} genre"
 
-    return [ButtonLabelType(button_type="genre_button", context=genre_name, title=title, aria_label=aria_label)]
+    return [ButtonLabel(button_type="genre_button", context=genre_name, title=title, aria_label=aria_label)]
 
 
 def generate_rank_button_labels(rank_type):
@@ -100,7 +101,7 @@ def generate_rank_button_labels(rank_type):
         title = f"Sort by {display_name}"
         aria_label = f"Sort tracks by {display_name}"
 
-    return [ButtonLabelType(button_type="rank_button", context=rank_type, title=title, aria_label=aria_label)]
+    return [ButtonLabel(button_type="rank_button", context=rank_type, title=title, aria_label=aria_label)]
 
 
 def generate_service_button_labels(service_name, track_name=None):
@@ -118,9 +119,7 @@ def generate_service_button_labels(service_name, track_name=None):
         title = f"Play on {display_name}"
         aria_label = f"Switch to {display_name} player"
 
-    return [
-        ButtonLabelType(button_type="service_player_button", context=service_name, title=title, aria_label=aria_label)
-    ]
+    return [ButtonLabel(button_type="service_player_button", context=service_name, title=title, aria_label=aria_label)]
 
 
 def generate_playlist_button_labels(playlist_type, is_collapsed=False, track_count=None):
@@ -153,7 +152,7 @@ def generate_misc_button_labels(button_type, context=None):
 
     if button_type == "more_button":
         labels.append(
-            ButtonLabelType(
+            ButtonLabel(
                 button_type="more_button",
                 context=context or "description",
                 title="See more about this playlist",
@@ -162,7 +161,7 @@ def generate_misc_button_labels(button_type, context=None):
         )
     elif button_type == "close_player":
         labels.append(
-            ButtonLabelType(
+            ButtonLabel(
                 button_type="close_player",
                 context="player",
                 title="Close music player",
@@ -173,7 +172,7 @@ def generate_misc_button_labels(button_type, context=None):
         current_theme = context or "light"
         new_theme = "dark" if current_theme == "light" else "light"
         labels.append(
-            ButtonLabelType(
+            ButtonLabel(
                 button_type="theme_toggle",
                 context=current_theme,
                 title=f"Switch to {new_theme} theme",
@@ -182,7 +181,7 @@ def generate_misc_button_labels(button_type, context=None):
         )
     elif button_type == "accept_terms":
         labels.append(
-            ButtonLabelType(
+            ButtonLabel(
                 button_type="accept_terms",
                 context="terms",
                 title="Accept terms and privacy policy to continue",
