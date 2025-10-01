@@ -1,16 +1,24 @@
 {
-  "outputDirectory": "frontend/dist",
+  "functions": {
+    "api/main.py": {
+      "maxDuration": 30
+    }
+  },
   "routes": [
     {
       "src": "/api/(.*)",
       "dest": "/api/main.py"
     },
     {
-      "src": "/gql/(.*)?",
+      "src": "/gql",
       "dest": "/api/main.py"
     },
     {
-      "src": "/graphql/(.*)?",
+      "src": "/graphql",
+      "dest": "/api/main.py"
+    },
+    {
+      "src": "/health",
       "dest": "/api/main.py"
     },
     {
