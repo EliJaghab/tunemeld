@@ -3,7 +3,7 @@
   "buildCommand": "npm run build",
   "outputDirectory": "frontend/dist",
   "functions": {
-    "api/django_app.py": {
+    "api/*.py": {
       "runtime": "@vercel/python@4.3.0"
     }
   },
