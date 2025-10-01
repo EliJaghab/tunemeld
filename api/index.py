@@ -16,9 +16,6 @@ class handler(BaseHTTPRequestHandler):  # noqa: N801
 
     def _setup_django(self):
         """Initialize Django setup (only once)."""
-        if handler._django_initialized and handler._schema is not None:
-            return handler._schema
-
         try:
             # Add backend directory to Python path
             backend_dir = Path(__file__).parent.parent / "backend"
@@ -29,15 +26,14 @@ class handler(BaseHTTPRequestHandler):  # noqa: N801
             os.environ.setdefault("DJANGO_SETTINGS_MODULE", "core.settings")
 
             import django
+            from django.conf import settings
 
-            # Only setup if not already configured
-            if not handler._django_initialized:
+            # Only setup Django if not already configured
+            if not settings.configured:
                 django.setup()
-                handler._django_initialized = True
 
             from core.graphql.schema import schema
 
-            handler._schema = schema
             return schema
         except Exception as e:
             raise Exception(f"Django setup failed: {e}") from e
