@@ -1,14 +1,12 @@
 {
+  "cleanUrls": true,
+  "trailingSlash": false,
   "functions": {
     "api/main.py": {
       "maxDuration": 30
     }
   },
   "routes": [
-    {
-      "src": "/api/(.*)",
-      "dest": "/api/main.py"
-    },
     {
       "src": "/gql",
       "dest": "/api/main.py"
@@ -22,16 +20,22 @@
       "dest": "/api/main.py"
     },
     {
-      "src": "/static/(.*)",
-      "dest": "/frontend/dist/$1"
-    },
-    {
-      "src": "/(.*\\.(css|js|png|jpg|jpeg|gif|ico|svg))",
-      "dest": "/frontend/dist/$1"
+      "src": "/api/(.*)",
+      "dest": "/api/main.py"
     },
     {
       "src": "/(.*)",
       "dest": "/frontend/dist/index.html"
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/gql",
+      "destination": "/api/main.py"
+    },
+    {
+      "source": "/graphql",
+      "destination": "/api/main.py"
     }
   ]
 }
