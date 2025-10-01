@@ -3,7 +3,7 @@
   "outputDirectory": "frontend/dist",
   "builds": [
     {
-      "src": "backend/core/wsgi.py",
+      "src": "main.py",
       "use": "@vercel/python",
       "config": {
         "maxLambdaSize": "50mb"
@@ -24,7 +24,7 @@
     },
     {
       "src": "/(.*)",
-      "dest": "backend/core/wsgi.py"
+      "dest": "main.py"
     }
   ]
 }
