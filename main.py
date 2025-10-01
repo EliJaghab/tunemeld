@@ -300,6 +300,7 @@ graphql_app = GraphQLRouter(schema)
 
 app = FastAPI(title="TuneMeld GraphQL API")
 app.include_router(graphql_app, prefix="/graphql")
+app.include_router(graphql_app, prefix="/gql")
 
 
 @app.get("/")
