@@ -1,5 +1,23 @@
 {
-  "outputDirectory": "frontend/dist",
   "buildCommand": "npm run build",
-  "rewrites": [{ "source": "/(.*)", "destination": "/api/hello" }]
+  "outputDirectory": "frontend/dist",
+  "functions": {
+    "api/*.py": {
+      "runtime": "@vercel/python@4.3.0"
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/gql/(.*)",
+      "destination": "/api/index"
+    },
+    {
+      "source": "/api/(.*)",
+      "destination": "/api/index"
+    },
+    {
+      "source": "/admin/(.*)",
+      "destination": "/api/index"
+    }
+  ]
 }

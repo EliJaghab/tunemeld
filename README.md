@@ -219,5 +219,3 @@ make format
 ## License
 
 MIT
-
-# Test automatic deployment
