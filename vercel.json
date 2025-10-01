@@ -1,41 +1,11 @@
 {
   "cleanUrls": true,
   "trailingSlash": false,
-  "functions": {
-    "api/main.py": {
-      "maxDuration": 30
-    }
-  },
+  "public": "frontend/dist",
   "routes": [
-    {
-      "src": "/gql",
-      "dest": "/api/main.py"
-    },
-    {
-      "src": "/graphql",
-      "dest": "/api/main.py"
-    },
-    {
-      "src": "/health",
-      "dest": "/api/main.py"
-    },
-    {
-      "src": "/api/(.*)",
-      "dest": "/api/main.py"
-    },
     {
       "src": "/(.*)",
       "dest": "/frontend/dist/index.html"
-    }
-  ],
-  "rewrites": [
-    {
-      "source": "/gql",
-      "destination": "/api/main.py"
-    },
-    {
-      "source": "/graphql",
-      "destination": "/api/main.py"
     }
   ]
 }
