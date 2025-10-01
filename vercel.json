@@ -1,20 +1,6 @@
 {
   "buildCommand": "npm run build",
   "outputDirectory": "frontend/dist",
-  "functions": {
-    "api/index.py": {
-      "runtime": "python3.12"
-    },
-    "api/test.py": {
-      "runtime": "python3.12"
-    },
-    "api/debug.py": {
-      "runtime": "python3.12"
-    },
-    "api/simple_test.py": {
-      "runtime": "python3.12"
-    }
-  },
   "rewrites": [
     {
       "source": "/gql/(.*)",
