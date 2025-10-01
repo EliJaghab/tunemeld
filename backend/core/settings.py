@@ -4,7 +4,7 @@ import sys
 import zoneinfo
 from datetime import UTC, datetime
 from pathlib import Path
-from typing import Final, cast
+from typing import Final
 
 import dj_database_url
 from dotenv import load_dotenv
@@ -288,7 +288,7 @@ USE_TZ = True
 database_url = os.getenv("DATABASE_URL")
 if not database_url:
     raise ValueError("DATABASE_URL environment variable is required")
-DATABASES = {"default": cast("dict[str, object]", dj_database_url.parse(database_url))}
+DATABASES = {"default": dj_database_url.parse(database_url)}
 
 USE_POSTGRES_API = ENVIRONMENT == DEV
 
