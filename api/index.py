@@ -17,9 +17,16 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "core.settings")
 import django
 from django.conf import settings
 
-# Setup Django only if not configured
-if not settings.configured:
-    django.setup()
+# Setup Django, handling reentrant setup gracefully
+try:
+    if not settings.configured:
+        django.setup()
+except RuntimeError as e:
+    if "populate() isn't reentrant" in str(e):
+        # Django is already configured, continue
+        pass
+    else:
+        raise
 
 from core.graphql.schema import schema
 
