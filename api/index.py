@@ -11,22 +11,33 @@ from urllib.parse import parse_qs, urlparse
 class handler(BaseHTTPRequestHandler):  # noqa: N801
     """Handler for Django GraphQL requests."""
 
+    _django_initialized = False
+    _schema = None
+
     def _setup_django(self):
-        """Initialize Django setup."""
+        """Initialize Django setup (only once)."""
+        if handler._django_initialized and handler._schema is not None:
+            return handler._schema
+
         try:
             # Add backend directory to Python path
             backend_dir = Path(__file__).parent.parent / "backend"
-            sys.path.insert(0, str(backend_dir))
+            if str(backend_dir) not in sys.path:
+                sys.path.insert(0, str(backend_dir))
 
             # Set Django settings
             os.environ.setdefault("DJANGO_SETTINGS_MODULE", "core.settings")
 
             import django
 
-            django.setup()
+            # Only setup if not already configured
+            if not handler._django_initialized:
+                django.setup()
+                handler._django_initialized = True
 
             from core.graphql.schema import schema
 
+            handler._schema = schema
             return schema
         except Exception as e:
             raise Exception(f"Django setup failed: {e}") from e
