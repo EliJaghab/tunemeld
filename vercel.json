@@ -1,21 +1,21 @@
 {
   "functions": {
-    "main.py": {
+    "api/main.py": {
       "runtime": "@vercel/python@3.12.0"
     }
   },
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "/main.py"
+      "dest": "/api/main.py"
     },
     {
       "src": "/gql/(.*)?",
-      "dest": "/main.py"
+      "dest": "/api/main.py"
     },
     {
       "src": "/graphql/(.*)?",
-      "dest": "/main.py"
+      "dest": "/api/main.py"
     },
     {
       "src": "/static/(.*)",
