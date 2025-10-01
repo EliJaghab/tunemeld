@@ -1,18 +1,30 @@
 {
   "buildCommand": "npm run build",
   "outputDirectory": "frontend/dist",
-  "rewrites": [
+  "builds": [
     {
-      "source": "/simple-gql/(.*)",
-      "destination": "/api/simple_gql"
+      "src": "backend/core/wsgi.py",
+      "use": "@vercel/python",
+      "config": {
+        "maxLambdaSize": "50mb"
+      }
     },
     {
-      "source": "/gql/(.*)",
-      "destination": "/api/index"
+      "src": "build_files.sh",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "frontend/dist"
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/static/(.*)",
+      "dest": "/static/$1"
     },
     {
-      "source": "/admin/(.*)",
-      "destination": "/api/index"
+      "src": "/(.*)",
+      "dest": "backend/core/wsgi.py"
     }
   ]
 }
