@@ -69,9 +69,9 @@ SECRET_KEY = os.getenv(
 # Set DEBUG based on environment
 DEBUG = ENVIRONMENT == DEV
 
-ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "localhost,127.0.0.1,api.tunemeld.com,tunemeld.com,www.tunemeld.com").split(
-    ","
-)
+ALLOWED_HOSTS = os.getenv(
+    "ALLOWED_HOSTS", "localhost,127.0.0.1,api.tunemeld.com,tunemeld.com,www.tunemeld.com,.vercel.app"
+).split(",")
 
 logger = logging.getLogger(__name__)
 if ENVIRONMENT == PROD:
