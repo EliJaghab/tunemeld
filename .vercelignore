@@ -2,8 +2,9 @@
 backend/
 kv_worker/
 
-# Python files
-*.py
+# Python files (exclude backend but allow api/*.py)
+backend/**/*.py
+kv_worker/**/*.py
 *.pyc
 __pycache__/
 .venv/

@@ -28,9 +28,16 @@ make kill-redis        # Stops local Redis instance started by make serve-redis
 
 **The Makefile handles all environment setup, virtual environment activation, and proper server configuration.**
 
-## Playwright
+## MCP Servers
 
 **Playwright MCP:** Browser automation and web testing.
+
+**Vercel MCP:** Deployment management and debugging. Use `mcp__vercel__*` tools for:
+
+- Viewing deployment logs and build errors
+- Managing Vercel projects and deployments
+- Analyzing deployment status and performance
+- Project-specific access configured for tunemeld project
 
 ## Cache Architecture
 
