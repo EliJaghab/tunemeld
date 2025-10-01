@@ -12,11 +12,11 @@ TuneMeld is a data pipeline and web application that aggregates music playlist d
 
 **Tech Stack:**
 
-- **Backend**: Django + PostgreSQL
-- **Frontend**: Static HTML/JS served via Vercel
+- **Backend**: Django serverless functions on Vercel + PostgreSQL
+- **Frontend**: Static HTML/JS served via Vercel CDN
 - **API**: GraphQL for efficient data fetching
-- **Cache**: Redis (Vercel KV) for GraphQL results, CloudflareKV for API data
-- **CDN**: Cloudflare for global distribution
+- **Cache**: Redis (Vercel KV) for GraphQL results, CloudflareKV for ETL data
+- **CDN**: Vercel Edge Network for global distribution
 - **Data Sources**: Spotify (SpotDL), Apple Music & SoundCloud (RapidAPI)
 
 ## How It Works
@@ -188,17 +188,19 @@ make format
 
 ## Deployment
 
-### Backend
+### Backend (Vercel Serverless)
 
-- Automatic deploys from main branch
-- Environment variables in local .env files
-- PostgreSQL provisioned automatically
+- Django serverless functions in `/api` directory
+- Automatic deploys from main branch via Git integration
+- Environment variables configured in Vercel dashboard
+- PostgreSQL database connection via Vercel environment variables
 
 ### Frontend (Vercel)
 
-- Automatic deployment when `/frontend` changes
-- Custom domain via CNAME file
-- Cloudflare CDN for performance
+- Static files served via Vercel Edge Network
+- Automatic deployment when any frontend changes are pushed
+- Custom domain configuration via Vercel dashboard
+- Vercel CDN for global performance
 
 ## Key Design Principles
 
