@@ -94,8 +94,11 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "django_distill",
 ]
+
+# Add django_distill only in development (for static site generation)
+if ENVIRONMENT == DEV:
+    INSTALLED_APPS.append("django_distill")
 
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
