@@ -34,14 +34,10 @@ from core.graphql.schema import schema
 class handler(BaseHTTPRequestHandler):  # noqa: N801
     """Handler for Django GraphQL requests."""
 
-    def _setup_django(self):
-        """Get the pre-initialized Django schema."""
-        return schema
-
     def _handle_graphql(self, query, variables=None):
         """Handle GraphQL query execution."""
         try:
-            schema = self._setup_django()
+            # Use the pre-initialized schema directly
             result = schema.execute(query, variables=variables)
 
             response_data = {"data": result.data}
