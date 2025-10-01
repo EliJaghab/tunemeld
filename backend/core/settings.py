@@ -320,5 +320,3 @@ DATABASES = {"default": dj_database_url.parse(database_url)}
 USE_POSTGRES_API = ENVIRONMENT == DEV
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-
-GRAPHENE = {"SCHEMA": "core.graphql.schema.schema"}

@@ -178,3 +178,47 @@ SERVICE_CONFIGS: dict[str, dict] = {
         "source_field": None,
     },
 }
+
+
+class GraphQLCacheKey(str, Enum):
+    """Cache key constants for GraphQL resolvers."""
+
+    # Playlist-related keys
+    SERVICE_ORDER = "service_order"
+    ALL_RANKS = "all_ranks"
+
+    # Genre-related keys
+    ALL_GENRES = "all_genres"
+
+    # Service-related keys
+    ALL_SERVICE_CONFIGS = "all_service_configs"
+    ALL_IFRAME_CONFIGS = "all_iframe_configs"
+
+    # Template methods for dynamic keys (return functions)
+    @staticmethod
+    def resolve_playlist(genre: str, service: str) -> str:
+        return f"resolve_playlist:genre={genre}:service={service}"
+
+    @staticmethod
+    def playlists_by_genre(genre: str) -> str:
+        return f"playlists_by_genre:genre={genre}"
+
+    @staticmethod
+    def track_by_isrc(isrc: str) -> str:
+        return f"track_by_isrc:{isrc}"
+
+    @staticmethod
+    def iframe_url(service_name: str, track_url: str) -> str:
+        return f"iframe_url:service={service_name}:url={track_url}"
+
+    @staticmethod
+    def rank_button_labels(rank_type: str) -> str:
+        return f"rank_button_labels:type={rank_type}"
+
+    @staticmethod
+    def misc_button_labels(button_type: str, context: str | None = None) -> str:
+        return f"misc_button_labels:type={button_type}:context={context}"
+
+    @staticmethod
+    def track_play_count(isrc: str) -> str:
+        return f"track_play_count:{isrc}"

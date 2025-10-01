@@ -387,7 +387,7 @@ class Track(BaseModel):
     def _get_button_labels(track, genre: str, service: str) -> list[ButtonLabel]:
         """Get button labels for track."""
         try:
-            from core.graphql.button_labels import generate_track_button_labels
+            from gql.button_labels import generate_track_button_labels
 
             button_labels = generate_track_button_labels(track, genre=genre, service=service)
             if button_labels:
