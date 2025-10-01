@@ -7,15 +7,13 @@
       "config": {
         "distDir": "frontend/dist"
       }
-    },
-    {
-      "src": "api/django_app.py",
-      "use": "@vercel/python",
-      "config": {
-        "runtime": "python3.12"
-      }
     }
   ],
+  "functions": {
+    "api/django_app.py": {
+      "runtime": "[email protected]"
+    }
+  },
   "routes": [
     {
       "src": "/gql/(.*)",
