@@ -7,19 +7,21 @@
       "runtime": "@vercel/python@4.3.0"
     }
   },
+  "rewrites": [
+    {
+      "source": "/gql/(.*)",
+      "destination": "/api/index"
+    },
+    {
+      "source": "/api/(.*)",
+      "destination": "/api/index"
+    },
+    {
+      "source": "/admin/(.*)",
+      "destination": "/api/index"
+    }
+  ],
   "routes": [
-    {
-      "src": "/gql/(.*)",
-      "dest": "/api/django_app.py"
-    },
-    {
-      "src": "/api/(.*)",
-      "dest": "/api/django_app.py"
-    },
-    {
-      "src": "/admin/(.*)",
-      "dest": "/api/django_app.py"
-    },
     {
       "src": "/(.*)",
       "dest": "/frontend/$1"
