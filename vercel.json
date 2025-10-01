@@ -1,4 +1,6 @@
 {
+  "outputDirectory": "frontend/dist",
+  "buildCommand": "npm run build",
   "rewrites": [
     { "source": "/gql/(.*)", "destination": "/api/index" },
     { "source": "/api/(.*)", "destination": "/api/index" },
