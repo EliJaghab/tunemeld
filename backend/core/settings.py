@@ -246,6 +246,29 @@ CORS_ALLOWED_ORIGINS = [
     "https://tunemeld.vercel.app",
     "https://tunemeld-kx0bo9451-elis-projects-3efca02e.vercel.app",
 ]
+
+# Additional CORS settings for local development
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_METHODS = [
+    "DELETE",
+    "GET",
+    "OPTIONS",
+    "PATCH",
+    "POST",
+    "PUT",
+]
+CORS_ALLOW_HEADERS = [
+    "accept",
+    "accept-encoding",
+    "authorization",
+    "content-type",
+    "dnt",
+    "origin",
+    "user-agent",
+    "x-csrftoken",
+    "x-requested-with",
+]
+
 ROOT_URLCONF = "core.urls"
 
 TEMPLATES = [
