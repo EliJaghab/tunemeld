@@ -3,13 +3,16 @@
   "outputDirectory": "frontend/dist",
   "functions": {
     "api/index.py": {
-      "runtime": "@vercel/python@4.3.0"
+      "runtime": "@vercel/python@3.12"
     },
     "api/test.py": {
-      "runtime": "@vercel/python@4.3.0"
+      "runtime": "@vercel/python@3.12"
     },
     "api/debug.py": {
-      "runtime": "@vercel/python@4.3.0"
+      "runtime": "@vercel/python@3.12"
+    },
+    "api/simple_test.py": {
+      "runtime": "@vercel/python@3.12"
     }
   },
   "rewrites": [
