@@ -1,11 +1,15 @@
-"""Vercel serverless entry point that configures Django WSGI without modifying sys.path."""
+"""Vercel serverless entry point that configures Django WSGI."""
 
 import os
+import sys
 from pathlib import Path
 
+# Add backend directory to Python path
 backend_dir = Path(__file__).parent.parent / "backend"
+sys.path.insert(0, str(backend_dir))
+
+# Set Django settings
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "core.settings")
-os.environ.setdefault("PYTHONPATH", str(backend_dir))
 
 import django  # noqa: E402
 
