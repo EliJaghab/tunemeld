@@ -3,8 +3,8 @@
   "outputDirectory": "frontend/dist",
   "rewrites": [
     {
-      "source": "/hybrid-gql/(.*)",
-      "destination": "/api/hybrid_gql"
+      "source": "/simple-gql/(.*)",
+      "destination": "/api/simple_gql"
     },
     {
       "source": "/gql/(.*)",
