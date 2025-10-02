@@ -15,36 +15,8 @@
   ],
   "routes": [
     {
-      "src": "/(health|gql|edm-events|clear-redis-cache|favicon\\.ico)/?.*",
+      "src": "/(health|gql|edm-events|clear-redis-cache)/?.*",
       "dest": "api/index.py"
-    },
-    {
-      "src": "/css/(.*)",
-      "dest": "/frontend/dist/css/$1"
-    },
-    {
-      "src": "/images/(.*)",
-      "dest": "/frontend/dist/images/$1"
-    },
-    {
-      "src": "/html/(.*)",
-      "dest": "/frontend/dist/html/$1"
-    },
-    {
-      "src": "/(main|themeInit|tosPrivacy)\\.js$",
-      "dest": "/frontend/dist/$1.js"
-    },
-    {
-      "src": "/components/(.*)",
-      "dest": "/frontend/dist/components/$1"
-    },
-    {
-      "src": "/static/(.*)",
-      "dest": "/frontend/dist/$1"
-    },
-    {
-      "src": "/favicon.ico",
-      "dest": "/frontend/dist/images/favicon.ico"
     },
     {
       "src": "^/$",
