@@ -36,7 +36,6 @@ jobs:
           BUILD_OUTPUT_DIR=$(jq -r '.build_output_directory' cloudflare-pages.json)
           ROOT_DIR=$(jq -r '.root_directory' cloudflare-pages.json)
 
-          echo "Account ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}"
           echo "Build command: $BUILD_COMMAND"
           echo "Output dir: $BUILD_OUTPUT_DIR"
           echo "Root dir: $ROOT_DIR"
@@ -55,14 +54,12 @@ jobs:
               }
             }')
 
-          echo "API Response: $response"
-
           # Check if the response indicates success
           if echo "$response" | jq -e '.success == true' > /dev/null; then
             echo "Successfully updated Cloudflare Pages configuration"
           else
             echo "Failed to update Cloudflare Pages configuration"
-            echo "$response" | jq .
+            echo "$response" | jq -r '.errors[]?.message // "Unknown error"'
             exit 1
           fi
         env:
