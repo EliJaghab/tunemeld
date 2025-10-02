@@ -17,14 +17,6 @@
     {
       "src": "/(health|gql|edm-events|clear-redis-cache)/?.*",
       "dest": "api/index.py"
-    },
-    {
-      "src": "^/$",
-      "dest": "api/index.py"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "api/index.py"
     }
   ]
 }
