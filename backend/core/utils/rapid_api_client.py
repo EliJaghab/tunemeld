@@ -14,8 +14,16 @@ JSON = dict[str, Any] | list[Any]
 def fetch_playlist_data(service_name: ServiceName, genre: GenreName, force_refresh: bool = False) -> JSON:
     key_data = f"{service_name.value}_{genre.value}"
 
+    # Determine cache prefix based on service
+    if service_name == ServiceName.APPLE_MUSIC:
+        cache_prefix = CachePrefix.RAPIDAPI_APPLE_MUSIC
+    elif service_name == ServiceName.SOUNDCLOUD:
+        cache_prefix = CachePrefix.RAPIDAPI_SOUNDCLOUD
+    else:
+        raise ValueError(f"Unknown service: {service_name}")
+
     if not force_refresh:
-        cached_data = cloudflare_cache_get(CachePrefix.RAPIDAPI, key_data)
+        cached_data = cloudflare_cache_get(cache_prefix, key_data)
         if cached_data:
             return cast("JSON", cached_data)
 
@@ -28,11 +36,9 @@ def fetch_playlist_data(service_name: ServiceName, genre: GenreName, force_refre
     elif service_name == ServiceName.SOUNDCLOUD:
         playlist_url = GENRE_CONFIGS[genre.value]["links"][service_name.value]
         url = f"{config['base_url']}?playlist={playlist_url}"
-    else:
-        raise ValueError(f"Unknown service: {service_name}")
 
     data = _make_rapidapi_request(url, config["host"])
-    cloudflare_cache_set(CachePrefix.RAPIDAPI, key_data, data)
+    cloudflare_cache_set(cache_prefix, key_data, data)
     return data
 
 

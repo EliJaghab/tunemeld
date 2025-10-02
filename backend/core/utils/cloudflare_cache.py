@@ -3,19 +3,14 @@ import json
 import os
 import re
 import time
-from datetime import datetime, timedelta
 from enum import Enum
-from pathlib import Path
-from typing import Any, NamedTuple
+from typing import Any
 
-import pytz
 import requests
-import yaml
 from core import settings
 from core.constants import GenreName, ServiceName
 from core.settings import DEV
 from core.utils.utils import get_logger
-from croniter import croniter
 from django.core.cache import cache
 from django.core.cache.backends.base import BaseCache
 
@@ -27,7 +22,8 @@ TWENTY_FOUR_HOURS_TTL = 24 * 60 * 60
 NO_EXPIRATION_TTL = None
 
 CLOUDFLARE_CACHE_TTL_MAP = {
-    "rapidapi": SEVEN_DAYS_TTL,
+    "rapidapi_apple_music": SEVEN_DAYS_TTL,
+    "rapidapi_soundcloud": SEVEN_DAYS_TTL,
     "spotify_playlist": SEVEN_DAYS_TTL,
     "youtube_url": NO_EXPIRATION_TTL,
     "youtube_view_count": TWENTY_FOUR_HOURS_TTL,
@@ -38,49 +34,14 @@ CLOUDFLARE_CACHE_TTL_MAP = {
 
 
 class CachePrefix(str, Enum):
-    RAPIDAPI = "rapidapi"
+    RAPIDAPI_APPLE_MUSIC = "rapidapi_apple_music"
+    RAPIDAPI_SOUNDCLOUD = "rapidapi_soundcloud"
     SPOTIFY_PLAYLIST = "spotify_playlist"
     YOUTUBE_URL = "youtube_url"
     YOUTUBE_VIEW_COUNT = "youtube_view_count"
     SPOTIFY_ISRC = "spotify_isrc"
     APPLE_COVER = "apple_cover"
     SOUNDCLOUD_URL = "soundcloud_url"
-
-
-def _load_centralized_schedule_config() -> dict:
-    """Load schedule configuration from playlist_etl.yml workflow"""
-    # Start from current file and walk up to find .github directory
-    current_path = Path(__file__).parent
-    while current_path != current_path.parent:  # Stop at filesystem root
-        github_path = current_path / ".github" / "workflows" / "playlist_etl.yml"
-        if github_path.exists():
-            workflow_file = github_path
-            break
-        current_path = current_path.parent
-    else:
-        raise FileNotFoundError("Could not find .github/workflows/playlist_etl.yml in parent directories")
-
-    with open(workflow_file) as f:
-        config = yaml.safe_load(f)
-        # PyYAML parses 'on:' key as boolean True
-        on_section = config.get("on") or config.get(True)
-        if not on_section:
-            raise ValueError("No 'on' section found in workflow YAML")
-        cron_expr = on_section["schedule"][0]["cron"]
-        return {"cron_expression": cron_expr, "timezone": "UTC", "cache_clear_window_minutes": 20}
-
-
-_CENTRALIZED_CONFIG = _load_centralized_schedule_config()
-
-
-class ScheduleConfig(NamedTuple):
-    cron_expression: str = _CENTRALIZED_CONFIG["cron_expression"]
-    timezone: str = _CENTRALIZED_CONFIG["timezone"]
-    cache_clear_window_minutes: int = _CENTRALIZED_CONFIG["cache_clear_window_minutes"]
-
-
-class SaturdayCacheClearScheduleConfig(ScheduleConfig):
-    cron_expression: str = "0 17 * * 6"  # Saturdays at 5 PM UTC
 
 
 class CloudflareKVCache(BaseCache):
@@ -244,20 +205,34 @@ def cloudflare_cache_delete(prefix: CachePrefix, key_data: str) -> bool:
         return False
 
 
-def is_within_scheduled_time_window(schedule_config: ScheduleConfig) -> bool:
-    """Check if current time is within scheduled ETL window for cache clearing."""
-    current_time = datetime.now(pytz.UTC)
-    schedule_tz = pytz.timezone(schedule_config.timezone)
-    current_time = current_time.astimezone(schedule_tz)
+def clear_rapidapi_cache() -> int:
+    """Clear RapidAPI cache keys only if triggered by scheduled GitHub Actions cron."""
+    if os.getenv("GITHUB_EVENT_NAME") != "schedule":
+        logger.info("Not a scheduled run - preserving RapidAPI cache to avoid rate limits")
+        return 0
 
-    cron = croniter(schedule_config.cron_expression, current_time)
-    prev_run = cron.get_prev(datetime)
-    prev_run = schedule_tz.localize(prev_run) if prev_run.tzinfo is None else prev_run
+    logger.info("Scheduled run detected - clearing RapidAPI cache for fresh playlist data")
 
-    window_duration = timedelta(minutes=schedule_config.cache_clear_window_minutes)
-    prev_window_end = prev_run + window_duration
+    cleared_count = 0
 
-    return prev_run <= current_time <= prev_window_end
+    # Clear Apple Music cache
+    for genre in GenreName:
+        key_data = f"{ServiceName.APPLE_MUSIC.value}_{genre.value}"
+        if cloudflare_cache_get(CachePrefix.RAPIDAPI_APPLE_MUSIC, key_data):
+            cloudflare_cache_delete(CachePrefix.RAPIDAPI_APPLE_MUSIC, key_data)
+            cleared_count += 1
+            logger.info(f"Cleared Apple Music cache: {key_data}")
+
+    # Clear SoundCloud cache
+    for genre in GenreName:
+        key_data = f"{ServiceName.SOUNDCLOUD.value}_{genre.value}"
+        if cloudflare_cache_get(CachePrefix.RAPIDAPI_SOUNDCLOUD, key_data):
+            cloudflare_cache_delete(CachePrefix.RAPIDAPI_SOUNDCLOUD, key_data)
+            cleared_count += 1
+            logger.info(f"Cleared SoundCloud cache: {key_data}")
+
+    logger.info(f"RapidAPI cache clearing completed - {cleared_count} keys cleared")
+    return cleared_count
 
 
 def generate_spotify_cache_key_data(genre: GenreName) -> str:
@@ -266,21 +241,3 @@ def generate_spotify_cache_key_data(genre: GenreName) -> str:
 
     url = GENRE_CONFIGS[genre.value]["links"][ServiceName.SPOTIFY.value]
     return f"spotify:{genre.value}:{url}"
-
-
-def get_all_raw_playlist_cache_keys() -> list[tuple[CachePrefix, str]]:
-    """Get all raw playlist cache keys with their prefixes"""
-    cache_keys = []
-
-    for service_name in [ServiceName.APPLE_MUSIC, ServiceName.SOUNDCLOUD]:
-        for genre in GenreName:
-            key_data = f"{service_name.value}_{genre.value}"
-            cache_keys.append((CachePrefix.RAPIDAPI, key_data))
-
-    for service_name in ServiceName:
-        if service_name == ServiceName.SPOTIFY:
-            for genre in GenreName:
-                key_data = f"{service_name.value}_{genre.value}"
-                cache_keys.append((CachePrefix.SPOTIFY_PLAYLIST, key_data))
-
-    return cache_keys

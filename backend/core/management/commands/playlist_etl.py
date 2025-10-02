@@ -2,12 +2,11 @@ import time
 from typing import Any
 
 from core.management.commands.genre_service import Command as GenreServiceCommand
-from core.management.commands.playlist_etl_modules.b_clear_raw_playlist_cache import Command as ClearCacheCommand
-from core.management.commands.playlist_etl_modules.c_raw_playlist import Command as RawPlaylistCommand
-from core.management.commands.playlist_etl_modules.d_playlist_service_track import Command as ServiceTrackCommand
-from core.management.commands.playlist_etl_modules.e_track import Command as TrackCommand
-from core.management.commands.playlist_etl_modules.f_aggregate import Command as AggregateCommand
-from core.management.commands.playlist_etl_modules.g_clear_and_warm_track_cache import (
+from core.management.commands.playlist_etl_modules.a_raw_playlist import Command as RawPlaylistCommand
+from core.management.commands.playlist_etl_modules.b_playlist_service_track import Command as ServiceTrackCommand
+from core.management.commands.playlist_etl_modules.c_track import Command as TrackCommand
+from core.management.commands.playlist_etl_modules.d_aggregate import Command as AggregateCommand
+from core.management.commands.playlist_etl_modules.e_clear_and_warm_track_cache import (
     Command as ClearAndWarmTrackCacheCommand,
 )
 from core.utils.utils import get_logger
@@ -36,22 +35,19 @@ class Command(BaseCommand):
             logger.info("Step 1: Setting up genres and services...")
             GenreServiceCommand().handle()
 
-            logger.info("Step 2: Clearing raw playlist cache if within scheduled window...")
-            ClearCacheCommand().handle()
-
-            logger.info("Step 3: Extracting raw playlist data...")
+            logger.info("Step 2: Extracting raw playlist data...")
             RawPlaylistCommand().handle(force_refresh=force_refresh)
 
-            logger.info("Step 4: Creating service tracks...")
+            logger.info("Step 3: Creating service tracks...")
             ServiceTrackCommand().handle()
 
-            logger.info("Step 5: Creating canonical tracks with YouTube URLs...")
+            logger.info("Step 4: Creating canonical tracks with YouTube URLs...")
             TrackCommand().handle()
 
-            logger.info("Step 6: Aggregating tracks...")
+            logger.info("Step 5: Aggregating tracks...")
             AggregateCommand().handle()
 
-            logger.info("Step 7: Clearing and warming track cache...")
+            logger.info("Step 6: Clearing and warming track cache...")
             ClearAndWarmTrackCacheCommand().handle()
 
             elapsed_time = time.time() - start_time
