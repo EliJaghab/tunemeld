@@ -51,12 +51,12 @@ function updateTuneMeldDescription(description: string | undefined): void {
   if (descriptionElement && description) {
     descriptionElement.textContent = description;
   } else if (descriptionElement) {
-    // Set fallback text instead of leaving "Loading..."
+    // Throw error instead of using fallback - this indicates missing curated description data
     const genre =
       window.location.search.match(/genre=([^&]+)/)?.[1] || "playlist";
-    descriptionElement.textContent = `TuneMeld ${
-      genre.charAt(0).toUpperCase() + genre.slice(1)
-    } Playlist`;
+    throw new Error(
+      `Missing TuneMeld playlist description for genre: ${genre}. Expected curated description but received: ${description}`,
+    );
   }
 }
 

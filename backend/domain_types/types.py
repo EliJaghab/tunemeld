@@ -795,6 +795,14 @@ class PlaylistMetadata:
     @classmethod
     def from_raw_playlist_and_service(cls, raw_playlist, service, genre: str) -> "PlaylistMetadata":
         """Create PlaylistMetadata from raw playlist data and service info."""
+        # For TuneMeld service, require proper curated descriptions - no fallbacks
+        if service.name == "tunemeld" and not raw_playlist.playlist_cover_description_text:
+            raise ValueError(
+                f"Missing curated description for TuneMeld {genre} playlist. "
+                f"Raw playlist data: {raw_playlist.playlist_cover_description_text}. "
+                f"This indicates the ETL pipeline has not run or failed to generate proper descriptions."
+            )
+
         return cls(
             playlist_name=raw_playlist.playlist_name or f"{service.display_name} {genre} Playlist",
             playlist_cover_url=raw_playlist.playlist_cover_url or "",
