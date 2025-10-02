@@ -39,7 +39,7 @@ class GraphQLClient {
   private endpoint: string;
 
   constructor() {
-    this.endpoint = `${getDjangoApiBaseUrl()}/gql/`;
+    this.endpoint = `${getDjangoApiBaseUrl()}/api/gql/`;
   }
 
   async query(
