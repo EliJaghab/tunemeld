@@ -16,24 +16,11 @@ sys.path.insert(0, str(backend_path))
 # Set Django settings module
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "core.settings")
 
-try:
-    # Initialize Django
-    django.setup()
+# Initialize Django
+django.setup()
 
-    # Get WSGI application
-    app = get_wsgi_application()
-except Exception as django_error:
-    # Store error message
-    error_message = f"Django setup failed: {django_error!s}"
-
-    # Create a simple error response app
-    def error_app(environ, start_response):
-        status = "500 Internal Server Error"
-        headers = [("Content-type", "text/plain; charset=utf-8")]
-        start_response(status, headers)
-        return [error_message.encode("utf-8")]
-
-    app = error_app
+# Get WSGI application
+app = get_wsgi_application()
 
 
 class Handler(BaseHTTPRequestHandler):
