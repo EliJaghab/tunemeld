@@ -1,5 +1,7 @@
 from core.api import cache_api, events_api, health_api
 from core.views import track_views
+from django.conf import settings
+from django.conf.urls.static import static
 from django.urls import path
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import RedirectView
@@ -27,3 +29,7 @@ urlpatterns = [
         name="graphql",
     ),
 ]
+
+# Serve static files directly
+if True:  # Always serve static files in production for Vercel
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATICFILES_DIRS[0])
