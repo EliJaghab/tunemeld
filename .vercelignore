@@ -1,3 +1,5 @@
+backend/plugins/
+backend/staging.db
 # Backend development files
 backend/.venv/
 backend/venv/

@@ -185,51 +185,22 @@ is_runserver = len(sys.argv) > 1 and sys.argv[1] == "runserver"
 is_dev_mgmt_command = ENVIRONMENT == DEV and not is_runserver
 
 # Cache warming control - only run for runserver, not management commands or CI
-ENABLE_CACHE_WARMING = is_runserver
+ENABLE_CACHE_WARMING = False  # Disable cache warming for now to fix deployment
 
 # Redis configuration for Vercel Redis
 REDIS_URL = os.getenv("REDIS_URL", "redis://localhost:6379/1")
 
-if is_dev_mgmt_command:
-    # Development management commands: use local cache for default to avoid CloudflareKV delays
-    CACHES = {
-        "default": {
-            "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
-            "LOCATION": "tunemeld-mgmt-cache",
-            "TIMEOUT": CACHE_TIMEOUT,
-            "OPTIONS": {
-                "MAX_ENTRIES": 1000,
-            },
+# Simple cache configuration for Vercel deployment
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+        "LOCATION": "tunemeld-cache",
+        "TIMEOUT": CACHE_TIMEOUT,
+        "OPTIONS": {
+            "MAX_ENTRIES": 1000,
         },
-        "redis": {  # Redis cache for GraphQL query results
-            "BACKEND": "django_redis.cache.RedisCache",
-            "LOCATION": REDIS_URL,
-            "TIMEOUT": 86400 * 7,  # 7 days for GraphQL caches
-            "OPTIONS": {
-                "CLIENT_CLASS": "django_redis.client.DefaultClient",
-            },
-        },
-    }
-else:
-    # Production or local runserver: use CloudflareKV for persistent API data cache
-    CACHES = {
-        "default": {  # CloudflareKV for raw API data (Spotify, YouTube, RapidAPI, SoundCloud)
-            "BACKEND": "core.utils.cloudflare_cache.CloudflareKVCache",
-            "LOCATION": f"tunemeld-cache-{ENVIRONMENT}",
-            "TIMEOUT": CACHE_TIMEOUT,
-            "OPTIONS": {
-                "MAX_ENTRIES": 1000,
-            },
-        },
-        "redis": {  # Redis cache for GraphQL query results (replaces local memory cache)
-            "BACKEND": "django_redis.cache.RedisCache",
-            "LOCATION": REDIS_URL,
-            "TIMEOUT": 86400 * 7,  # 7 days for GraphQL caches
-            "OPTIONS": {
-                "CLIENT_CLASS": "django_redis.client.DefaultClient",
-            },
-        },
-    }
+    },
+}
 
 # Cache middleware settings
 CACHE_MIDDLEWARE_ALIAS = "default"
@@ -274,7 +245,7 @@ ROOT_URLCONF = "core.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [BASE_DIR / "core" / "templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [

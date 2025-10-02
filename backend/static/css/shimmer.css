@@ -1,0 +1,274 @@
+/**
+ * Shimmer/Loading System CSS
+ * Unified loading states for services and playlists
+ */
+
+/* Core shimmer animation */
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Core shimmer class - apply to any element */
+.shimmer {
+  border-radius: var(--border-radius-small);
+  overflow: hidden;
+  position: relative;
+  background-color: var(--skeleton-color);
+}
+
+.shimmer::before {
+  animation: shimmer var(--shimmer-duration) infinite;
+  background: linear-gradient(
+    90deg,
+    var(--skeleton-color) 0%,
+    rgba(255, 255, 255, var(--shimmer-opacity)) 50%,
+    var(--skeleton-color) 100%
+  );
+  content: "";
+  height: 100%;
+  left: -100%;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: 1;
+}
+
+/* Loading overlay utilities */
+.loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--container-background);
+  z-index: 10;
+  display: none;
+}
+
+.loading-overlay.active {
+  display: block;
+}
+
+.loading-overlay.flex {
+  display: flex;
+}
+
+.loading-overlay.flex.active {
+  display: flex;
+}
+
+/* Service-specific shimmer components */
+.loading-overlay-service {
+  flex-direction: column;
+  align-items: center;
+  padding: 0;
+}
+
+.shimmer-service-image {
+  width: 100%;
+  padding-bottom: 100%;
+  margin-bottom: 0;
+}
+
+.shimmer-service-text {
+  width: 100%;
+  margin-top: var(--space-md);
+  text-align: left;
+  align-self: flex-start;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+/* Playlist-specific shimmer components */
+.loading-overlay-playlist {
+  padding: var(--space-xl);
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.loading-overlay-playlist.active {
+  display: flex;
+}
+
+/* Override playlist overflow when shimmer is active */
+.playlist.main-playlist:has(.loading-overlay-playlist.active) {
+  overflow-y: hidden;
+  height: auto;
+  min-height: 90vh;
+  max-height: 95vh;
+}
+
+/* Table-only shimmer styling */
+.loading-overlay-table {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  min-height: 100vh;
+  background-color: var(--container-background);
+  z-index: 5;
+  display: none;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: 0;
+}
+
+.loading-overlay-table.active {
+  display: flex;
+}
+
+/* Ensure table container can accommodate full shimmer */
+.playlist-table:has(.loading-overlay-table.active) {
+  min-height: 80vh;
+  overflow: visible;
+}
+
+/* Playlist header shimmer */
+.playlist-header-shimmer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.playlist-title-shimmer {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.shimmer-playlist-logo {
+  width: var(--size-icon-sm);
+  height: var(--size-icon-sm);
+  border-radius: var(--border-radius-small);
+}
+
+.shimmer-playlist-title {
+  width: var(--shimmer-playlist-title-width);
+  height: var(--space-lg);
+}
+
+.shimmer-playlist-desc {
+  width: var(--shimmer-playlist-desc-width);
+  height: var(--space-lg);
+}
+
+/* Controls shimmer */
+.playlist-controls-shimmer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.control-group-shimmer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.shimmer-control-label {
+  width: var(--shimmer-control-label-width);
+  height: var(--space-lg);
+}
+
+.shimmer-buttons-row {
+  display: flex;
+  gap: var(--space-lg);
+}
+
+.shimmer-button {
+  width: var(--shimmer-button-width);
+  height: var(--shimmer-button-height);
+  border-radius: calc(var(--space-xl) + var(--space-xs));
+}
+
+/* Table shimmer */
+.shimmer-table-container {
+  flex: 1;
+  overflow: hidden;
+}
+
+.playlist-table-shimmer {
+  margin: var(--space-lg) 0;
+}
+
+.playlist-shimmer-row {
+  height: var(--size-row-md);
+}
+
+.playlist-shimmer-row:not(:last-child) {
+  margin-bottom: var(--space-xs);
+}
+
+.playlist-shimmer-row td {
+  padding: var(--space-xs);
+  vertical-align: middle;
+  border-bottom: 1px solid var(--container-background);
+}
+
+.playlist-shimmer-row td.rank {
+  text-align: center;
+  width: 1%;
+  padding: 0;
+}
+
+.playlist-shimmer-row td.cover {
+  text-align: center;
+  width: 0%;
+}
+
+.playlist-shimmer-row td.info {
+  width: 1%;
+  white-space: nowrap;
+}
+
+.playlist-shimmer-row td.spacer {
+  width: 100%;
+}
+
+.playlist-shimmer-row td.total-play-count,
+.playlist-shimmer-row td.trending {
+  width: 10%;
+  text-align: left;
+}
+
+.playlist-shimmer-row td.seen-on {
+  width: 1%;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.playlist-shimmer-row td.external {
+  width: 1%;
+  text-align: center;
+  white-space: nowrap;
+}
+
+/* Responsive adjustments */
+@media screen and (max-width: 768px) {
+  .loading-overlay-service {
+    padding: 0;
+  }
+
+  .loading-overlay-playlist {
+    padding: var(--space-md);
+  }
+
+  .playlist-shimmer-row {
+    height: var(--size-row-sm);
+  }
+
+  .shimmer-button {
+    width: var(--shimmer-button-width-mobile);
+    height: var(--shimmer-button-height-mobile);
+  }
+
+  .shimmer-playlist-desc {
+    width: var(--shimmer-playlist-desc-width-mobile);
+  }
+}
