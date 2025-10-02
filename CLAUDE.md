@@ -2,7 +2,7 @@
 
 ## Requirements
 
-**Python 3.13+** - Project requires Python 3.13 or newer. Python 3.10-3.12 are obsolete for this project.
+**Python 3.12+** - Project requires Python 3.12 or newer for Vercel compatibility. Python 3.13+ is preferred for local development but Vercel's @vercel/python runtime currently only supports up to Python 3.12.
 
 ## Server Management - ALWAYS USE MAKEFILE COMMANDS
 

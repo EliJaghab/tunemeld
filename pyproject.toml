@@ -12,7 +12,7 @@ version = "0.1.0"
 description = "Cross-platform music analytics and playlist aggregation"
 authors = [{name = "TuneMeld Team"}]
 readme = "README.md"
-requires-python = ">=3.13"
+requires-python = ">=3.12"
 dependencies = [
     # Core Django framework and web dependencies
     "Django>=4.2,<5.0",
@@ -61,7 +61,7 @@ etl = [
 line-length = 120
 indent-width = 4
 
-target-version = "py313"
+target-version = "py312"
 
 exclude = [
     "*.ipynb",
@@ -149,7 +149,7 @@ filterwarnings = [
 ]
 
 [tool.mypy]
-python_version = "3.13"
+python_version = "3.12"
 warn_return_any = true
 warn_unused_configs = true
 disallow_untyped_defs = true

@@ -1,7 +1,7 @@
 {
   "builds": [
     {
-      "src": "api/core/wsgi.py",
+      "src": "api/index.py",
       "use": "@vercel/python",
       "config": { "maxLambdaSize": "50mb" }
     },
@@ -16,7 +16,7 @@
   "routes": [
     {
       "src": "/(health|gql)/.*",
-      "dest": "api/core/wsgi.py"
+      "dest": "api/index.py"
     },
     {
       "src": "/css/(.*)",
@@ -40,7 +40,7 @@
     },
     {
       "src": "/static/(.*)",
-      "dest": "api/core/wsgi.py"
+      "dest": "api/index.py"
     },
     {
       "src": "/favicon.ico",
@@ -52,7 +52,7 @@
     },
     {
       "src": "/(.*)",
-      "dest": "api/core/wsgi.py"
+      "dest": "api/index.py"
     }
   ]
 }
