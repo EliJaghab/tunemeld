@@ -4,7 +4,7 @@ const fs = require("fs");
 const path = require("path");
 const { execSync } = require("child_process");
 
-const DIST_DIR = path.join(__dirname, "..", "backend", "static");
+const DIST_DIR = path.join(__dirname, "dist");
 const SRC_DIR = path.join(__dirname, "src");
 const STATIC_FILES = ["index.html", "css", "images", "html"];
 

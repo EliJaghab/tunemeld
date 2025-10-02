@@ -15,7 +15,7 @@
     "noUnusedParameters": false,
     "exactOptionalPropertyTypes": true,
     "declaration": false,
-    "outDir": "../backend/static",
+    "outDir": "./dist",
     "rootDir": "./src",
     "lib": ["DOM", "ES2020"],
     "types": ["node"],
@@ -32,5 +32,5 @@
     }
   },
   "include": ["src/**/*.ts"],
-  "exclude": ["node_modules", "../backend/static"]
+  "exclude": ["node_modules", "dist"]
 }
