@@ -12,3 +12,4 @@ django-redis>=5.4.0
 python-dotenv>=1.0.0
 croniter>=2.0.7
 PyYAML>=6.0.2
+whitenoise>=6.0.0
