@@ -179,7 +179,6 @@ ENABLE_CACHE_WARMING = False  # Disable cache warming for now to fix deployment
 # Redis configuration for Vercel Redis
 REDIS_URL = os.getenv("REDIS_URL", "redis://localhost:6379/1")
 
-# Simple cache configuration for Vercel deployment
 CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
@@ -188,6 +187,16 @@ CACHES = {
         "OPTIONS": {
             "MAX_ENTRIES": 1000,
         },
+    },
+    "redis": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": REDIS_URL,
+        "TIMEOUT": CACHE_TIMEOUT,
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        },
+        "KEY_PREFIX": f"tunemeld-{ENVIRONMENT}",
+        "VERSION": 1,
     },
 }
 

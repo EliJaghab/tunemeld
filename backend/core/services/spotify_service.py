@@ -176,7 +176,12 @@ def _extract_saves_and_track_count(doc: BeautifulSoup) -> tuple[str | None, int 
     saves_count = None
     track_count = None
 
-    saves_elements = doc.find_all("span", string=re.compile(r"\d+[,\d]*\s*saves?"))
+    # Find spans that contain saves count text
+    saves_elements = []
+    for span in doc.find_all("span"):
+        text = span.get_text(strip=True)
+        if text and re.search(r"\d+[,\d]*\s*saves?", text):
+            saves_elements.append(span)
     if saves_elements:
         saves_text = saves_elements[0].get_text(strip=True)
         saves_match = re.search(r"(\d+[,\d]*)\s*saves?", saves_text)
