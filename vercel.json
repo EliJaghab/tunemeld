@@ -1,7 +1,7 @@
 {
   "builds": [
     {
-      "src": "backend/core/wsgi.py",
+      "src": "api/core/wsgi.py",
       "use": "@vercel/python",
       "config": { "maxLambdaSize": "50mb" }
     },
@@ -16,15 +16,43 @@
   "routes": [
     {
       "src": "/(health|gql)/.*",
-      "dest": "backend/core/wsgi.py"
+      "dest": "api/core/wsgi.py"
+    },
+    {
+      "src": "/css/(.*)",
+      "dest": "/frontend/dist/css/$1"
+    },
+    {
+      "src": "/images/(.*)",
+      "dest": "/frontend/dist/images/$1"
+    },
+    {
+      "src": "/html/(.*)",
+      "dest": "/frontend/dist/html/$1"
+    },
+    {
+      "src": "/(main|themeInit|tosPrivacy)\\.js$",
+      "dest": "/frontend/dist/$1.js"
+    },
+    {
+      "src": "/components/(.*)",
+      "dest": "/frontend/dist/components/$1"
     },
     {
       "src": "/static/(.*)",
-      "dest": "/frontend/dist/$1"
+      "dest": "api/core/wsgi.py"
+    },
+    {
+      "src": "/favicon.ico",
+      "dest": "/frontend/dist/images/favicon.ico"
+    },
+    {
+      "src": "^/$",
+      "dest": "/frontend/dist/index.html"
     },
     {
       "src": "/(.*)",
-      "dest": "backend/core/wsgi.py"
+      "dest": "api/core/wsgi.py"
     }
   ]
 }
