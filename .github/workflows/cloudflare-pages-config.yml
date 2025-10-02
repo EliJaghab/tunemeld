@@ -20,13 +20,29 @@ jobs:
 
       - name: Update Cloudflare Pages Project Settings
         run: |
+          # Check if required secrets are available
+          if [ -z "${{ secrets.CLOUDFLARE_ACCOUNT_ID }}" ]; then
+            echo "Error: CLOUDFLARE_ACCOUNT_ID secret is not set"
+            exit 1
+          fi
+
+          if [ -z "${{ secrets.CLOUDFLARE_API_TOKEN }}" ]; then
+            echo "Error: CLOUDFLARE_API_TOKEN secret is not set"
+            exit 1
+          fi
+
           # Read configuration from JSON file
           BUILD_COMMAND=$(jq -r '.build_command' cloudflare-pages.json)
           BUILD_OUTPUT_DIR=$(jq -r '.build_output_directory' cloudflare-pages.json)
           ROOT_DIR=$(jq -r '.root_directory' cloudflare-pages.json)
 
+          echo "Account ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}"
+          echo "Build command: $BUILD_COMMAND"
+          echo "Output dir: $BUILD_OUTPUT_DIR"
+          echo "Root dir: $ROOT_DIR"
+
           # Update Cloudflare Pages project settings via API
-          curl -X PATCH "https://api.cloudflare.com/client/v4/accounts/${{ secrets.CLOUDFLARE_ACCOUNT_ID }}/pages/projects/tunemeld" \
+          response=$(curl -s -X PATCH "https://api.cloudflare.com/client/v4/accounts/${{ secrets.CLOUDFLARE_ACCOUNT_ID }}/pages/projects/tunemeld" \
             -H "Authorization: Bearer ${{ secrets.CLOUDFLARE_API_TOKEN }}" \
             -H "Content-Type: application/json" \
             --data '{
@@ -37,7 +53,18 @@ jobs:
                 "web_analytics_tag": null,
                 "web_analytics_token": null
               }
-            }'
+            }')
+
+          echo "API Response: $response"
+
+          # Check if the response indicates success
+          if echo "$response" | jq -e '.success == true' > /dev/null; then
+            echo "Successfully updated Cloudflare Pages configuration"
+          else
+            echo "Failed to update Cloudflare Pages configuration"
+            echo "$response" | jq .
+            exit 1
+          fi
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
