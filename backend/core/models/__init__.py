@@ -1,3 +1,4 @@
+# Django models exports - only models with Model suffix
 from core.models.genre_service import GenreModel, ServiceModel
 from core.models.play_counts import AggregatePlayCountModel, HistoricalTrackPlayCountModel
 from core.models.playlist import (
