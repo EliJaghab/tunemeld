@@ -1,0 +1,389 @@
+/* Global Styles */
+
+a {
+  color: var(--link-color);
+}
+
+.container {
+  margin: 0 auto;
+  max-width: 60rem;
+  padding: 0 var(--space-md);
+  box-sizing: border-box;
+}
+
+/* Main Content */
+#main-content {
+  box-sizing: border-box;
+  opacity: 1;
+  transition: opacity 2s ease-in-out;
+  max-width: 100%;
+}
+
+/* iOS 26 Glass Styling - Base Button */
+.btn {
+  padding: var(--space-md) var(--space-xl);
+  color: var(--btn-text-color);
+  border-radius: calc(var(--space-xl) + var(--space-xs));
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(40px) saturate(250%) brightness(1.05);
+  -webkit-backdrop-filter: blur(40px) saturate(250%) brightness(1.05);
+  border: 0.5px solid rgba(255, 255, 255, 0.08);
+  position: relative;
+  overflow: hidden;
+  font-family: var(--font-family-primary);
+  font-weight: 500;
+  transition: all 0.3s ease;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+.btn:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.12);
+  transform: translateY(calc(-1 * var(--space-xs) / 2));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    0 12px 32px rgba(0, 0, 0, 0.15);
+}
+
+.btn:active {
+  transform: translateY(0);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Collapse Button - iOS 26 Glass */
+.collapse-button {
+  --collapse-button-width: calc(1ch + 2 * var(--space-md) + 2px);
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(40px) saturate(250%) brightness(1.05);
+  -webkit-backdrop-filter: blur(40px) saturate(250%) brightness(1.05);
+  border: 0.5px solid rgba(255, 255, 255, 0.08);
+  border-radius: calc(var(--space-xl) + var(--space-xs));
+  color: var(--btn-text-color);
+  cursor: pointer;
+  display: inline-block;
+  font-size: var(--font-size-lg);
+  margin-left: auto;
+  padding: var(--space-xs) var(--space-md);
+  width: var(--collapse-button-width);
+  position: relative;
+  overflow: hidden;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+.collapse-button:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.12);
+  transform: translateY(calc(-1 * var(--space-xs) / 2));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    0 12px 32px rgba(0, 0, 0, 0.15);
+}
+
+.collapse-button:active {
+  transform: translateY(0);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Table Styles */
+.column-header {
+  font-weight: bold;
+  text-align: center;
+}
+
+/* Links */
+.external-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+  justify-content: center;
+}
+
+.footer-link {
+  color: var(--text-color);
+  font-size: var(--font-size-sm);
+  margin-bottom: var(--space-xs);
+}
+
+.footer-link:hover {
+  text-decoration: underline;
+}
+
+.vertical-spacing {
+  height: var(--space-xl);
+}
+
+.flex-row {
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+}
+
+/* iOS 26 Glass Overlay */
+.overlay {
+  background-color: rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(20px) saturate(120%);
+  -webkit-backdrop-filter: blur(20px) saturate(120%);
+  bottom: 0;
+  cursor: pointer;
+  display: none;
+  height: 100%;
+  left: 0;
+  position: fixed;
+  right: 0;
+  top: 0;
+  width: 100%;
+  z-index: 100;
+}
+
+.overlay-content {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(60px) saturate(300%) brightness(1.1) contrast(1.05);
+  -webkit-backdrop-filter: blur(60px) saturate(300%) brightness(1.1)
+    contrast(1.05);
+  border-radius: calc(var(--space-xl) + var(--space-md));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.3),
+    0 16px 64px rgba(0, 0, 0, 0.12),
+    0 4px 16px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: var(--overlay-text-color);
+  left: 50%;
+  padding: var(--space-xl);
+  position: absolute;
+  text-align: center;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 101;
+  overflow: hidden;
+}
+
+.overlay-content::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.4),
+    transparent
+  );
+  z-index: 1;
+}
+
+.overlay-content::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(
+    circle at 50% 0%,
+    rgba(255, 255, 255, 0.08),
+    transparent 50%
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+.overlay-content a {
+  color: var(--link-color);
+}
+
+/* Text Truncation Utilities */
+.truncate-single {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.truncate-multiline {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  -webkit-line-clamp: var(--desktop-line-clamp);
+  line-clamp: var(--desktop-line-clamp);
+}
+
+.truncate-responsive {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  -webkit-line-clamp: var(--desktop-line-clamp);
+  line-clamp: var(--desktop-line-clamp);
+}
+
+/* Mobile truncation - more aggressive */
+@media screen and (max-width: 768px) {
+  .truncate-responsive {
+    -webkit-line-clamp: var(--mobile-line-clamp);
+    line-clamp: var(--mobile-line-clamp);
+  }
+
+  .truncate-mobile-single {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .truncate-desktop-only {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    -webkit-line-clamp: 1;
+    line-clamp: 1;
+  }
+}
+
+/* Desktop truncation - more lenient */
+@media screen and (min-width: 769px) {
+  .truncate-mobile-single {
+    overflow: visible;
+    text-overflow: unset;
+    white-space: normal;
+  }
+}
+
+/* Utility Classes */
+.d-flex {
+  display: flex;
+}
+
+.align-items-center {
+  align-items: center;
+}
+
+.justify-content-center {
+  justify-content: center;
+}
+
+.mr-2 {
+  margin-right: var(--space-sm);
+}
+
+.mr-4 {
+  margin-right: var(--space-lg);
+}
+
+/* Selectors */
+.custom-select,
+.selector {
+  height: var(--size-select-height);
+  width: 100%;
+  max-width: 180px;
+  min-width: 120px;
+  font-size: var(--font-size-md);
+  padding: 0 var(--space-md);
+  text-align: center;
+  margin: 0 var(--space-md);
+  line-height: var(--size-line-height-sm);
+  box-sizing: border-box;
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(40px) saturate(250%) brightness(1.05);
+  -webkit-backdrop-filter: blur(40px) saturate(250%) brightness(1.05);
+  border: 0.5px solid rgba(255, 255, 255, 0.08);
+  border-radius: calc(var(--space-xl) + var(--space-xs));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    0 4px 16px rgba(0, 0, 0, 0.08);
+  transition: none;
+  outline: none;
+}
+
+.selector-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-xs);
+}
+
+label {
+  position: relative;
+  top: var(--space-xs);
+}
+
+.stack-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-top: var(--space-md);
+}
+
+/* Desktop-Specific Styles */
+@media screen and (min-width: 768px) {
+  #main-content {
+    max-width: 60rem;
+  }
+
+  .last-updated {
+    display: flex;
+    justify-content: center;
+    font-size: var(--font-size-mobile-sm);
+  }
+}
+
+/* Mobile Styles */
+@media screen and (max-width: 768px) {
+  .container {
+    max-width: 100%;
+    padding: 0 var(--space-sm);
+  }
+}
+
+@media screen and (max-width: 480px) {
+  body {
+    font-size: var(--font-size-mobile-xs);
+    margin-top: calc(var(--space-sm) + 1px);
+  }
+
+  .container {
+    padding: 0 var(--space-sm);
+  }
+
+  .last-updated {
+    display: flex;
+    font-size: var(--font-size-mobile-xs);
+    justify-content: center;
+  }
+
+  .mr-4 {
+    margin-right: 0;
+    margin-bottom: var(--space-md);
+  }
+
+  .collapse-button {
+    font-size: var(--font-size-mobile-lg);
+    padding: calc(var(--space-xs) - 1px) var(--space-sm);
+  }
+
+  .footer-link {
+    font-size: var(--font-size-mobile-sm);
+  }
+
+  .btn {
+    font-size: var(--font-size-md);
+  }
+
+  .overlay-content {
+    padding: var(--space-xl);
+    margin: 0 var(--space-md);
+    width: calc(100% - 2 * var(--space-md));
+    max-width: calc(100% - 2 * var(--space-md));
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+}

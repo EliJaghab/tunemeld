@@ -6,6 +6,7 @@ from pathlib import Path
 from urllib.parse import unquote
 
 import django
+from django.core.management import execute_from_command_line
 from django.core.wsgi import get_wsgi_application
 
 # Add the backend directory to Python path
@@ -18,6 +19,9 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "core.settings")
 
 # Initialize Django
 django.setup()
+
+# Run collectstatic for deployment
+execute_from_command_line(["manage.py", "collectstatic", "--noinput"])
 
 # Get WSGI application
 app = get_wsgi_application()
