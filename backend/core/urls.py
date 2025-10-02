@@ -32,4 +32,8 @@ urlpatterns = [
 
 # Serve static files directly
 if True:  # Always serve static files in production for Vercel
-    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATICFILES_DIRS[0])
+    import os
+
+    static_dir = os.path.join(settings.BASE_DIR, "static")
+    if os.path.exists(static_dir):
+        urlpatterns += static(settings.STATIC_URL, document_root=static_dir)
