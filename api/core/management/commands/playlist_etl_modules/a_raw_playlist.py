@@ -4,6 +4,7 @@ from core.models.playlist import RawPlaylistDataModel
 from core.services.apple_music_service import get_apple_music_playlist
 from core.services.soundcloud_service import get_soundcloud_playlist
 from core.services.spotify_service import get_spotify_playlist
+from core.utils.cloudflare_cache import clear_rapidapi_cache
 from core.utils.utils import get_logger, process_in_parallel
 from django.core.management.base import BaseCommand, CommandError
 
@@ -14,6 +15,9 @@ class Command(BaseCommand):
     help = "Extract raw playlist data from RapidAPI and save to PostgreSQL"
 
     def handle(self, *args: object, **options: object) -> None:
+        # Clear RapidAPI cache if this is a scheduled GitHub Actions run
+        clear_rapidapi_cache()
+
         force_refresh = options.get("force_refresh", False)
         supported_services = [ServiceName.APPLE_MUSIC.value, ServiceName.SOUNDCLOUD.value, ServiceName.SPOTIFY.value]
 
