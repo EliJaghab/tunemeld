@@ -1,0 +1,43 @@
+name: Update Cloudflare Pages Configuration
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - '.github/workflows/cloudflare-pages-config.yml'
+      - 'cloudflare-pages.json'
+  workflow_dispatch:
+
+jobs:
+  update-config:
+    runs-on: ubuntu-latest
+    name: Update Cloudflare Pages Configuration
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Update Cloudflare Pages Project Settings
+        run: |
+          # Read configuration from JSON file
+          BUILD_COMMAND=$(jq -r '.build_command' cloudflare-pages.json)
+          BUILD_OUTPUT_DIR=$(jq -r '.build_output_directory' cloudflare-pages.json)
+          ROOT_DIR=$(jq -r '.root_directory' cloudflare-pages.json)
+
+          # Update Cloudflare Pages project settings via API
+          curl -X PATCH "https://api.cloudflare.com/client/v4/accounts/${{ secrets.CLOUDFLARE_ACCOUNT_ID }}/pages/projects/tunemeld" \
+            -H "Authorization: Bearer ${{ secrets.CLOUDFLARE_API_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            --data '{
+              "build_config": {
+                "build_command": "'$BUILD_COMMAND'",
+                "destination_dir": "'$BUILD_OUTPUT_DIR'",
+                "root_dir": "'$ROOT_DIR'",
+                "web_analytics_tag": null,
+                "web_analytics_token": null
+              }
+            }'
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
