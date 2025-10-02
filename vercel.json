@@ -40,7 +40,7 @@
     },
     {
       "src": "/static/(.*)",
-      "dest": "api/index.py"
+      "dest": "/frontend/dist/$1"
     },
     {
       "src": "/favicon.ico",
