@@ -74,3 +74,4 @@ django_backend/staging.db
 *.egg
 *.egg-info/
 .vercel
+commit.sh

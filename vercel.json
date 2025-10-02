@@ -15,7 +15,7 @@
   ],
   "routes": [
     {
-      "src": "/(health|gql)/.*",
+      "src": "/(health|gql|edm-events|clear-redis-cache|favicon\\.ico)/?.*",
       "dest": "api/index.py"
     },
     {
@@ -48,7 +48,7 @@
     },
     {
       "src": "^/$",
-      "dest": "/frontend/dist/index.html"
+      "dest": "api/index.py"
     },
     {
       "src": "/(.*)",
