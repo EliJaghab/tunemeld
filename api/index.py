@@ -10,7 +10,7 @@ from django.core.wsgi import get_wsgi_application
 
 # Add the backend directory to Python path
 current_path = Path(__file__).parent
-backend_path = current_path / "backend"
+backend_path = current_path.parent / "backend"
 sys.path.insert(0, str(backend_path))
 
 # Set Django settings module
