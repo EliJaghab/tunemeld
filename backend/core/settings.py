@@ -80,18 +80,15 @@ else:
     logger.info("Development Environment")
 
 
-STATIC_URL = "/static/"
-STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
-STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
-
-# Simplified static files for serverless
-# STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
+# Static files now served by Cloudflare Pages
+# STATIC_URL = "/static/"
+# STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+# STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
 
 
 INSTALLED_APPS = [
     "core.apps.CoreConfig",
     "corsheaders",
-    "django.contrib.staticfiles",
 ]
 
 # Add django_distill only in development (for static site generation)
