@@ -541,17 +541,17 @@ function displaySources(cell: HTMLTableCellElement, track: Track): void {
   const serviceData = [
     {
       source: track.spotifySource,
-      rank: track.spotifyRank || Math.floor(Math.random() * 20) + 1, // Temporary: Add test rank if missing
+      rank: track.spotifyRank,
       seenOn: track.seenOnSpotify,
     },
     {
       source: track.appleMusicSource,
-      rank: track.appleMusicRank || Math.floor(Math.random() * 20) + 1, // Temporary: Add test rank if missing
+      rank: track.appleMusicRank,
       seenOn: track.seenOnAppleMusic,
     },
     {
       source: track.soundcloudSource,
-      rank: track.soundcloudRank || Math.floor(Math.random() * 20) + 1, // Temporary: Add test rank if missing
+      rank: track.soundcloudRank,
       seenOn: track.seenOnSoundcloud,
     },
   ].filter(
