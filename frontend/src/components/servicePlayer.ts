@@ -41,15 +41,26 @@ async function createIframeForService(
     const configs = await loadIframeConfigs();
     const config = configs.find((c) => c.serviceName === serviceType);
 
-    if (config) {
-      iframe.src = iframeSrc;
-      iframe.allow = config.allow;
-      iframe.height = config.height.toString();
-      if (config.referrerPolicy) {
-        iframe.referrerPolicy = config.referrerPolicy as ReferrerPolicy;
-      }
-    } else {
+    if (!config) {
       console.error("No iframe config found for service:", serviceType);
+      throw new Error(`Missing iframe configuration for service: ${serviceType}`);
+    }
+
+    if (!config.allow) {
+      console.error("Missing allow property in iframe config for service:", serviceType);
+      throw new Error(`Missing allow property in iframe config for service: ${serviceType}`);
+    }
+
+    if (!config.height) {
+      console.error("Missing height property in iframe config for service:", serviceType);
+      throw new Error(`Missing height property in iframe config for service: ${serviceType}`);
+    }
+
+    iframe.src = iframeSrc;
+    iframe.allow = config.allow;
+    iframe.height = config.height.toString();
+    if (config.referrerPolicy) {
+      iframe.referrerPolicy = config.referrerPolicy as ReferrerPolicy;
     }
   } catch (error) {
     console.error("Error creating iframe for service:", serviceType, error);
@@ -126,22 +137,18 @@ export async function setupClosePlayerButton(): Promise<void> {
   if (closeButton) {
     closeButton.addEventListener("click", closePlayer);
 
-    // Add button labels from backend
-    try {
-      const buttonLabels =
-        await graphqlClient.getMiscButtonLabels("close_player");
-      if (buttonLabels && buttonLabels.length > 0) {
-        const closeLabel = buttonLabels[0];
-        if (closeLabel.title) {
-          closeButton.title = closeLabel.title;
-        }
-        if (closeLabel.ariaLabel) {
-          closeButton.setAttribute("aria-label", closeLabel.ariaLabel);
-        }
+    // Get button labels from global data
+    const { getGlobalPageData } = await import("@/utils/selectors");
+    const globalData = getGlobalPageData();
+
+    if (globalData && globalData.buttonLabels.closePlayer.length > 0) {
+      const closeLabel = globalData.buttonLabels.closePlayer[0];
+      if (closeLabel.title) {
+        closeButton.title = closeLabel.title;
       }
-    } catch (error) {
-      console.warn("Failed to load close button labels:", error);
-      // Continue without labels if fetch fails
+      if (closeLabel.ariaLabel) {
+        closeButton.setAttribute("aria-label", closeLabel.ariaLabel);
+      }
     }
   } else {
     console.error("Close player button not found.");

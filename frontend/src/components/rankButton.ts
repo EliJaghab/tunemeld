@@ -1,11 +1,13 @@
-import { graphqlClient } from "@/services/graphql-client";
 import { stateManager } from "@/state/StateManager";
 import { appRouter } from "@/routing/router";
-import type { Rank, ButtonLabel } from "@/types/index";
+import type { Rank } from "@/types/index";
 
 export async function loadAndRenderRankButtons(): Promise<void> {
   try {
-    const ranks = appRouter.getAvailableRanks();
+    // Get ranks from global data instead of router
+    const { getGlobalPageData } = await import("@/utils/selectors");
+    const globalData = getGlobalPageData();
+    const ranks = globalData?.ranks?.ranks || [];
     const sortControlsElement = document.getElementById("sort-controls");
 
     if (!ranks || ranks.length === 0 || !sortControlsElement) {
@@ -22,7 +24,7 @@ export async function loadAndRenderRankButtons(): Promise<void> {
       return; // Don't rebuild if we already have the right buttons
     }
 
-    // Create an array of promises to fetch button labels for each rank
+    // Create buttons synchronously - no more individual GraphQL requests!
     const buttonPromises = ranks.map(
       async (rank: Rank, index: number): Promise<HTMLButtonElement> => {
         const button = document.createElement("button");
@@ -33,32 +35,13 @@ export async function loadAndRenderRankButtons(): Promise<void> {
         button.setAttribute("data-sort", rank.sortField);
         button.setAttribute("data-order", rank.sortOrder);
 
-        // Fetch button labels for this rank type
-        try {
-          const buttonLabels = await graphqlClient.getRankButtonLabels(
-            rank.name,
-          );
-          if (buttonLabels && buttonLabels.length > 0) {
-            const rankLabel = buttonLabels.find(
-              (label: ButtonLabel) => label.buttonType === "rank_button",
-            );
-            if (rankLabel) {
-              if (rankLabel.title) {
-                button.title = rankLabel.title;
-              }
-              if (rankLabel.ariaLabel) {
-                button.setAttribute("aria-label", rankLabel.ariaLabel);
-              }
-            }
-          }
-        } catch (error) {
-          console.warn(
-            "Failed to load button labels for rank:",
-            rank.name,
-            error,
-          );
-          // Continue without labels if fetch fails
+        if (!rank.displayName) {
+          console.error("Missing displayName for rank:", rank);
+          throw new Error(`Rank missing required displayName: ${rank.sortField}`);
         }
+
+        button.title = `Sort by ${rank.displayName}`;
+        button.setAttribute("aria-label", `Sort tracks by ${rank.displayName}`);
 
         const text = document.createTextNode(rank.displayName);
         button.appendChild(text);

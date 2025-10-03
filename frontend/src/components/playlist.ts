@@ -66,14 +66,17 @@ export async function updateMainPlaylist(genre: string): Promise<void> {
     playlistData = data;
 
     // Extract ISRCs from TuneMeld playlist tracks and populate play count map
-    const isrcs = data.flatMap((playlist: Playlist) =>
-      playlist.tracks.map((track: Track) => track.isrc),
+    const isrcs = data.flatMap(
+      (playlist: Playlist) =>
+        playlist.tracks?.map((track: Track) => track.isrc) || [],
     );
     await populatePlayCountMap(isrcs);
 
     // Enrich track objects with play count data for sorting
     data.forEach((playlist) => {
-      enrichTracksWithPlayCountData(playlist.tracks);
+      if (playlist.tracks) {
+        enrichTracksWithPlayCountData(playlist.tracks);
+      }
     });
 
     renderPlaylistTracks(
@@ -113,18 +116,26 @@ export async function fetchAndDisplayPlaylistsWithOrder(
     try {
       const response = await graphqlClient.getPlaylistTracks(genre, service);
       const data = [response.playlist];
-      playlists.push(response.playlist);
+      if (response.playlist) {
+        playlists.push(response.playlist);
+      }
 
       // Populate play count data for total views and other services that need it
-      if (service === SERVICE_NAMES.TOTAL || data[0]?.tracks?.length > 0) {
-        const isrcs = data.flatMap((playlist: Playlist) =>
-          playlist.tracks.map((track: Track) => track.isrc),
+      if (
+        service === SERVICE_NAMES.TOTAL ||
+        (data[0] && data[0].tracks && data[0].tracks.length > 0)
+      ) {
+        const isrcs = data.flatMap(
+          (playlist: Playlist) =>
+            playlist.tracks?.map((track: Track) => track.isrc) || [],
         );
         await populatePlayCountMap(isrcs);
 
         // Enrich track objects with play count data for sorting
         data.forEach((playlist: Playlist) => {
-          enrichTracksWithPlayCountData(playlist.tracks);
+          if (playlist.tracks) {
+            enrichTracksWithPlayCountData(playlist.tracks);
+          }
         });
       }
 
@@ -173,13 +184,20 @@ export function renderPlaylistTracks(
   }
 
   placeholder.innerHTML = "";
+
   const isTuneMeldPlaylist = serviceName === SERVICE_NAMES.TUNEMELD;
 
   playlists.forEach((playlist: Playlist) => {
-    playlist.tracks.forEach((track: Track) => {
+    playlist.tracks?.forEach((track: Track, index: number) => {
+      // Only pass displayRank for non-TuneMeld sorting or service playlists
+      const currentSortColumn = stateManager.getCurrentColumn();
+      const isShowingTuneMeldRanks = currentSortColumn === TUNEMELD_RANK_FIELD;
+      const displayRank =
+        !isTuneMeldPlaylist || !isShowingTuneMeldRanks ? index + 1 : undefined;
+
       const row = isTuneMeldPlaylist
-        ? createTuneMeldPlaylistTableRow(track)
-        : createServicePlaylistTableRow(track, serviceName || "");
+        ? createTuneMeldPlaylistTableRow(track, displayRank)
+        : createServicePlaylistTableRow(track, serviceName || "", index + 1);
       placeholder.appendChild(row);
     });
   });
@@ -225,7 +243,10 @@ function setTrackInfoLabels(
   artistElement.setAttribute("aria-label", `Artist: ${fullArtistName}`);
 }
 
-function createTuneMeldPlaylistTableRow(track: Track): HTMLTableRowElement {
+function createTuneMeldPlaylistTableRow(
+  track: Track,
+  displayRank?: number,
+): HTMLTableRowElement {
   const row = document.createElement("tr");
 
   row.setAttribute("data-isrc", track.isrc);
@@ -233,7 +254,13 @@ function createTuneMeldPlaylistTableRow(track: Track): HTMLTableRowElement {
 
   const rankCell = document.createElement("td");
   rankCell.className = "rank";
-  rankCell.textContent = track.tunemeldRank?.toString() || "-";
+  // Show current position if displayRank provided, otherwise show original tunemeldRank
+  const currentSortColumn = stateManager.getCurrentColumn();
+  const showDisplayRank =
+    displayRank !== undefined && currentSortColumn !== TUNEMELD_RANK_FIELD;
+  rankCell.textContent = showDisplayRank
+    ? displayRank.toString()
+    : track.tunemeldRank?.toString() || "-";
 
   const coverCell = document.createElement("td");
   coverCell.className = "cover";
@@ -294,8 +321,8 @@ function createTuneMeldPlaylistTableRow(track: Track): HTMLTableRowElement {
   row.appendChild(spacerCell);
 
   // Only show play counts if we're not in TuneMeld rank mode
-  const currentColumn = stateManager.getCurrentColumn();
-  if (currentColumn !== TUNEMELD_RANK_FIELD) {
+  const currentRankColumn = stateManager.getCurrentColumn();
+  if (currentRankColumn !== TUNEMELD_RANK_FIELD) {
     displayPlayCounts(track, row);
   }
 
@@ -416,6 +443,7 @@ function displayPlayCounts(track: Track, row: HTMLTableRowElement): void {
 function createServicePlaylistTableRow(
   track: Track,
   serviceName: string,
+  displayRank?: number,
 ): HTMLTableRowElement {
   const row = document.createElement("tr");
 
@@ -424,9 +452,13 @@ function createServicePlaylistTableRow(
 
   const rankCell = document.createElement("td");
   rankCell.className = "rank";
-  rankCell.textContent = track.tunemeldRank
-    ? track.tunemeldRank.toString()
-    : "";
+  // Show current position if displayRank provided, otherwise show original tunemeldRank
+  const currentSortColumn = stateManager.getCurrentColumn();
+  const showDisplayRank =
+    displayRank !== undefined && currentSortColumn !== TUNEMELD_RANK_FIELD;
+  rankCell.textContent = showDisplayRank
+    ? displayRank.toString()
+    : track.tunemeldRank?.toString() || "";
 
   const coverCell = document.createElement("td");
   coverCell.className = "cover";
@@ -650,25 +682,18 @@ export function sortTable(column: string, order: string): void {
   }
 
   const sortedData = playlistData.map((playlist: Playlist) => {
-    playlist.tracks.sort((a, b) => {
+    playlist.tracks?.sort((a, b) => {
       let aValue = (a as any)[rankConfig.dataField] as number;
       let bValue = (b as any)[rankConfig.dataField] as number;
 
-      // Handle null/undefined values
       if (aValue == null) aValue = 0;
       if (bValue == null) bValue = 0;
 
       return order === "asc" ? aValue - bValue : bValue - aValue;
     });
 
-    // Only reassign rank numbers if we're not sorting by tunemeld-rank
-    // TuneMeld rank is special - it preserves the backend-computed positions
-    // For all other sorts (Total Plays, Trending, etc.), assign new positions based on sort
-    if (column !== TUNEMELD_RANK_FIELD) {
-      playlist.tracks.forEach((track, index) => {
-        track.tunemeldRank = index + 1;
-      });
-    }
+    // Note: tunemeldRank should NEVER be modified as it preserves backend-computed positions
+    // Rank display numbers are handled in renderPlaylistTracks based on current sort order
 
     return playlist;
   });
@@ -786,10 +811,8 @@ async function updateCollapseButtonLabels(
     }
 
     const context = `${playlistType}_${isCollapsed ? "collapsed" : "expanded"}`;
-    const buttonLabels = await graphqlClient.getMiscButtonLabels(
-      "collapse_button",
-      null,
-    );
+    // Skip individual button label requests for performance
+    const buttonLabels: ButtonLabel[] = [];
 
     if (buttonLabels && buttonLabels.length > 0) {
       const collapseLabel = buttonLabels[0];
