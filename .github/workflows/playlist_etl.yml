@@ -101,9 +101,9 @@ jobs:
           cd backend
           echo " ETL Pipeline Results:"
           python manage.py shell -c "
-          from core.models import RawPlaylistData, Track, ServiceTrack, PlaylistModel, Genre, Service
-          print(f'Raw playlist records: {RawPlaylistData.objects.count()}')
-          print(f'Unique tracks: {Track.objects.count()}')
+          from core.models import RawPlaylistDataModel, TrackModel, ServiceTrack, PlaylistModel, Genre, Service
+          print(f'Raw playlist records: {RawPlaylistDataModel.objects.count()}')
+          print(f'Unique tracks: {TrackModel.objects.count()}')
           print(f'Service track entries: {ServiceTrack.objects.count()}')
           print(f'Service playlists: {PlaylistModel.objects.count()}')
           print(f'Genres: {Genre.objects.count()}')
