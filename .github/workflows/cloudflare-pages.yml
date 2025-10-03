@@ -5,8 +5,8 @@ on:
     branches:
       - master
     paths:
-      - 'frontend/**'
-      - '.github/workflows/cloudflare-pages.yml'
+      - "frontend/**"
+      - ".github/workflows/cloudflare-pages.yml"
   workflow_dispatch:
 
 jobs:
@@ -21,8 +21,8 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
-          cache: 'npm'
+          node-version: "18"
+          cache: "npm"
           cache-dependency-path: frontend/package-lock.json
 
       - name: Install dependencies

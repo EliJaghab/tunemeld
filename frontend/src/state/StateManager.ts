@@ -225,7 +225,10 @@ class StateManager {
       this.state.shimmer.services = isActive;
     } else if (type === "playlist") {
       this.state.shimmer.playlist = isActive;
-      this.state.shimmer.isInitialLoad = isInitialLoad;
+      // Only set isInitialLoad to true if explicitly passed, don't override it back to false
+      if (isInitialLoad) {
+        this.state.shimmer.isInitialLoad = isInitialLoad;
+      }
     }
   }
 

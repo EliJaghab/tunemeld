@@ -10,7 +10,6 @@ import { stateManager } from "@/state/StateManager";
 import { appRouter } from "@/routing/router";
 import { applyCacheBusting } from "@/config/config";
 import { showInitialShimmer } from "@/components/shimmer";
-import type { ButtonLabel } from "@/types/index";
 
 applyCacheBusting();
 
@@ -24,7 +23,6 @@ async function initializeApp(): Promise<void> {
   if (currentTheme) {
     stateManager.applyTheme(currentTheme);
   }
-  setupThemeToggle();
 
   const mainContent = document.getElementById("main-content");
   if (mainContent) {
@@ -34,15 +32,18 @@ async function initializeApp(): Promise<void> {
   showInitialShimmer();
 
   try {
+    // Initialize router first - this does the focused GraphQL query
     await appRouter.initialize();
+
+    // Only after router is initialized, set up UI components that depend on global data
+    await setupThemeToggle();
+    await loadAndRenderGenreButtons();
+    await loadAndRenderRankButtons();
+    await setupClosePlayerButton();
+    await initializeTosPrivacyOverlay();
   } catch (error: unknown) {
     console.error("App initialization failed:", error);
   }
-
-  await loadAndRenderGenreButtons();
-  await loadAndRenderRankButtons();
-  setupClosePlayerButton();
-  initializeTosPrivacyOverlay();
 
   if (mainContent) {
     mainContent.style.visibility = "visible";
@@ -71,16 +72,18 @@ async function updateThemeToggleLabels(): Promise<void> {
   ) as HTMLInputElement | null;
   if (!themeToggleButton) return;
 
-  try {
-    const currentTheme = stateManager.getTheme();
-    const { graphqlClient } = await import("@/services/graphql-client");
-    const buttonLabels: ButtonLabel[] = await graphqlClient.getMiscButtonLabels(
-      "theme_toggle",
-      currentTheme,
-    );
+  const currentTheme = stateManager.getTheme();
+  const { getGlobalPageData } = await import("@/utils/selectors");
+  const globalData = getGlobalPageData();
+
+  if (globalData) {
+    const buttonLabels =
+      currentTheme === "dark"
+        ? globalData.buttonLabels.themeToggleDark
+        : globalData.buttonLabels.themeToggleLight;
 
     if (buttonLabels && buttonLabels.length > 0) {
-      const themeLabel: ButtonLabel = buttonLabels[0];
+      const themeLabel = buttonLabels[0];
       if (themeLabel.title) {
         const label = document.querySelector(
           'label[for="theme-toggle-button"]',
@@ -93,7 +96,5 @@ async function updateThemeToggleLabels(): Promise<void> {
         themeToggleButton.setAttribute("aria-label", themeLabel.ariaLabel);
       }
     }
-  } catch (error: unknown) {
-    console.warn("Failed to load theme toggle labels:", error);
   }
 }

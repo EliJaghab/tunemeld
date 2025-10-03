@@ -5,7 +5,6 @@ from enum import Enum
 from typing import Any
 
 from core.utils.utils import get_logger
-from django.conf import settings
 from django.core.cache import caches
 
 logger = get_logger(__name__)
@@ -39,9 +38,6 @@ def _generate_cache_key(prefix: CachePrefix, key_data: str) -> str:
 def redis_cache_get(prefix: CachePrefix, key_data: str) -> dict[str, Any] | None:
     """Get JSON data from Redis cache. Returns parsed dict or None if not found."""
 
-    if settings.DISABLE_CACHE:
-        return None
-
     start_time = time.time()
     cache_key = _generate_cache_key(prefix, key_data)
 
@@ -64,9 +60,6 @@ def redis_cache_get(prefix: CachePrefix, key_data: str) -> dict[str, Any] | None
 
 def redis_cache_set(prefix: CachePrefix, key_data: str, value: dict[str, Any], ttl: int | None = None) -> None:
     """Store JSON-serializable dict in Redis cache."""
-
-    if settings.DISABLE_CACHE:
-        return
 
     cache_key = _generate_cache_key(prefix, key_data)
 

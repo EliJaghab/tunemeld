@@ -43,17 +43,29 @@ async function createIframeForService(
 
     if (!config) {
       console.error("No iframe config found for service:", serviceType);
-      throw new Error(`Missing iframe configuration for service: ${serviceType}`);
+      throw new Error(
+        `Missing iframe configuration for service: ${serviceType}`,
+      );
     }
 
     if (!config.allow) {
-      console.error("Missing allow property in iframe config for service:", serviceType);
-      throw new Error(`Missing allow property in iframe config for service: ${serviceType}`);
+      console.error(
+        "Missing allow property in iframe config for service:",
+        serviceType,
+      );
+      throw new Error(
+        `Missing allow property in iframe config for service: ${serviceType}`,
+      );
     }
 
     if (!config.height) {
-      console.error("Missing height property in iframe config for service:", serviceType);
-      throw new Error(`Missing height property in iframe config for service: ${serviceType}`);
+      console.error(
+        "Missing height property in iframe config for service:",
+        serviceType,
+      );
+      throw new Error(
+        `Missing height property in iframe config for service: ${serviceType}`,
+      );
     }
 
     iframe.src = iframeSrc;

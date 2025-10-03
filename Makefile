@@ -9,6 +9,7 @@
 	serve \
 	kill-frontend \
 	kill-backend \
+	clear-cache \
 	makemigrations \
 	migrate \
 	migrate-dev \
@@ -139,7 +140,7 @@ serve-frontend:
 	@echo " Website will be available at: http://localhost:8080"
 	@echo " Press Ctrl+C to stop both processes"
 	@echo ""
-	@cd frontend && npm run dev & cd backend/static && python -m http.server 8080 & wait
+	@cd frontend && npm run dev & cd frontend/dist && python -m http.server 8080 & wait
 serve-redis:
 	@if [ -n "$$REDIS_URL" ]; then \
 		echo " Using REDIS_URL from environment"; \
@@ -154,7 +155,7 @@ serve-redis:
 	fi
 
 
-serve-backend: serve-redis
+serve-backend: serve-redis clear-cache
 	@echo " Starting Django backend server..."
 	@if lsof -ti tcp:8000 > /dev/null 2>&1; then \
 		echo " Backend server already running at: http://localhost:8000"; \
@@ -164,6 +165,11 @@ serve-backend: serve-redis
 		echo " Press Ctrl+C to stop"; \
 		cd backend && python manage.py runserver; \
 	fi
+
+clear-cache:
+	@echo " Clearing Redis cache..."
+	@redis-cli FLUSHDB > /dev/null 2>&1 || echo " Redis not running, skipping cache clear"
+	@echo " Cache cleared! Frontend requests will automatically populate cache."
 
 
 kill-frontend:

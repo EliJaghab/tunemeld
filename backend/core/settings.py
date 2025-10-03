@@ -49,6 +49,12 @@ DEV_API_BASE_URL = "http://localhost:8000"
 
 INTERNAL_API_BASE_URL = DEV_API_BASE_URL if ENVIRONMENT == DEV else PROD_API_BASE_URL
 
+# CloudFlare Worker URLs
+PROD_WORKER_BASE_URL = "https://tunemeld-worker.eli.workers.dev"
+DEV_WORKER_BASE_URL = "https://tunemeld-worker-dev.eli.workers.dev"
+
+WORKER_BASE_URL = DEV_WORKER_BASE_URL if ENVIRONMENT == DEV else PROD_WORKER_BASE_URL
+
 CSRF_TRUSTED_ORIGINS = [
     "https://www.tunemeld.com",
     "https://api.tunemeld.com",
@@ -162,9 +168,6 @@ LOGGING = {
 
 # Cache timeout - only cleared manually or by playlist ETL
 CACHE_TIMEOUT = 86400 * 7  # 7 days
-
-# Cache control - set to True to disable all local caching (for development/debugging)
-DISABLE_CACHE = False
 
 # Cache Architecture:
 # - default: CloudflareKV for Django/ETL operations (raw API data, management commands)

@@ -3,28 +3,28 @@ name: Deploy to Cloudflare
 on:
   push:
     paths:
-      - 'kv_worker/**'
-      - '.github/workflows/deploy_kv_worker.yml'
+      - "kv_worker/**"
+      - ".github/workflows/deploy_kv_worker.yml"
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-    - name: Install Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '20'
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
 
-    - name: Install Wrangler
-      run: npm install -g wrangler
+      - name: Install Wrangler
+        run: npm install -g wrangler
 
-    - name: Deploy Worker
-      env:
-        CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-      run: |
-        cd kv_worker
-        wrangler deploy
+      - name: Deploy Worker
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: |
+          cd kv_worker
+          wrangler deploy

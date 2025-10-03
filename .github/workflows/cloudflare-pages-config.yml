@@ -5,7 +5,7 @@ on:
     branches:
       - master
     paths:
-      - '.github/workflows/cloudflare-pages-config.yml'
+      - ".github/workflows/cloudflare-pages-config.yml"
   workflow_dispatch:
 
 jobs:

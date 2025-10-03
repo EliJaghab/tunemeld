@@ -100,11 +100,9 @@ class PlaylistQuery:
         track_positions = get_playlist_tracks_by_genre_service(genre, service)
 
         django_tracks = []
-        for isrc, position in track_positions:
+        for isrc, _position in track_positions:
             django_track = get_track_model_by_isrc(isrc)
             if django_track:
-                # Set the tunemeld_rank as attribute for GraphQL access
-                django_track.tunemeld_rank = position
                 django_tracks.append(django_track)
 
         # Create domain Playlist object for caching (convert Django models to domain objects)
@@ -112,7 +110,6 @@ class PlaylistQuery:
         for django_track in django_tracks:
             domain_track = get_track_by_isrc(django_track.isrc)
             if domain_track:
-                domain_track.tunemeld_rank = django_track.tunemeld_rank
                 domain_tracks_for_cache.append(domain_track)
 
         domain_playlist = Playlist(genre_name=genre, service_name=service, tracks=domain_tracks_for_cache)

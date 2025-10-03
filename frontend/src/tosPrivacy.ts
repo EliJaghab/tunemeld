@@ -40,21 +40,18 @@ export async function initializeTosPrivacyOverlay(): Promise<void> {
 
   acceptButton.onclick = acceptTosPrivacy;
 
-  try {
-    const { graphqlClient } = await import("@/services/graphql-client");
-    const buttonLabels =
-      await graphqlClient.getMiscButtonLabels("accept_terms");
-    if (buttonLabels && buttonLabels.length > 0) {
-      const acceptLabel = buttonLabels[0];
-      if (acceptLabel.title) {
-        acceptButton.title = acceptLabel.title;
-      }
-      if (acceptLabel.ariaLabel) {
-        acceptButton.setAttribute("aria-label", acceptLabel.ariaLabel);
-      }
+  // Get button labels from global data
+  const { getGlobalPageData } = await import("@/utils/selectors");
+  const globalData = getGlobalPageData();
+
+  if (globalData && globalData.buttonLabels.acceptTerms.length > 0) {
+    const acceptLabel = globalData.buttonLabels.acceptTerms[0];
+    if (acceptLabel.title) {
+      acceptButton.title = acceptLabel.title;
     }
-  } catch (error) {
-    console.warn("Failed to load accept button labels:", error);
+    if (acceptLabel.ariaLabel) {
+      acceptButton.setAttribute("aria-label", acceptLabel.ariaLabel);
+    }
   }
 
   handleTosPrivacyOverlay();

@@ -140,6 +140,10 @@ function createPlaylistShimmer(
 }
 
 export function showShimmerLoaders(isInitialLoad: boolean = false): void {
+  // Update StateManager shimmer state
+  stateManager.showShimmer("services");
+  stateManager.showShimmer("playlist", isInitialLoad);
+
   // Use StateManager to explicitly track shimmer type
   stateManager.setShimmerTypeFromColumn(stateManager.getCurrentColumn());
   const shimmerType = stateManager.getShimmerType() as ShimmerType;
@@ -192,8 +196,12 @@ export function showGenreSwitchShimmer(): void {
 }
 
 export function hideShimmerLoaders(): void {
+  // Update StateManager shimmer state
+  stateManager.hideAllShimmers();
+
   // Hide all loading overlays
-  document.querySelectorAll(".loading-overlay").forEach((overlay) => {
+  const overlays = document.querySelectorAll(".loading-overlay");
+  overlays.forEach((overlay) => {
     overlay.classList.remove("active");
   });
 }

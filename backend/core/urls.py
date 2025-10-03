@@ -39,4 +39,65 @@ urlpatterns = [
         csrf_exempt(GraphQLView.as_view(schema=schema, graphiql=True)),
         name="graphql_legacy",
     ),
+    # Custom GraphQL endpoint names for better Network tab debugging
+    path(
+        "api/GetInitialPageData/",
+        csrf_exempt(GraphQLView.as_view(schema=schema, graphiql=False)),
+        name="graphql_initial_page_data",
+    ),
+    path(
+        "api/GetServicePlaylists/",
+        csrf_exempt(GraphQLView.as_view(schema=schema, graphiql=False)),
+        name="graphql_service_playlists",
+    ),
+    path(
+        "api/GetAvailableGenres/",
+        csrf_exempt(GraphQLView.as_view(schema=schema, graphiql=False)),
+        name="graphql_available_genres",
+    ),
+    path(
+        "api/GetPlaylistMetadata/",
+        csrf_exempt(GraphQLView.as_view(schema=schema, graphiql=False)),
+        name="graphql_playlist_metadata",
+    ),
+    path(
+        "api/GetPlaylistTracks/",
+        csrf_exempt(GraphQLView.as_view(schema=schema, graphiql=False)),
+        name="graphql_playlist_tracks",
+    ),
+    path(
+        "api/GetPlaylistRanks/",
+        csrf_exempt(GraphQLView.as_view(schema=schema, graphiql=False)),
+        name="graphql_playlist_ranks",
+    ),
+    path(
+        "api/GetPlayCounts/",
+        csrf_exempt(GraphQLView.as_view(schema=schema, graphiql=False)),
+        name="graphql_play_counts",
+    ),
+    path(
+        "api/GetServiceConfigs/",
+        csrf_exempt(GraphQLView.as_view(schema=schema, graphiql=False)),
+        name="graphql_service_configs",
+    ),
+    path(
+        "api/GetIframeConfigs/",
+        csrf_exempt(GraphQLView.as_view(schema=schema, graphiql=False)),
+        name="graphql_iframe_configs",
+    ),
+    path(
+        "api/GenerateIframeUrl/",
+        csrf_exempt(GraphQLView.as_view(schema=schema, graphiql=False)),
+        name="graphql_generate_iframe_url",
+    ),
+    path(
+        "api/GetRankButtonLabels/",
+        csrf_exempt(GraphQLView.as_view(schema=schema, graphiql=False)),
+        name="graphql_rank_button_labels",
+    ),
+    path(
+        "api/GetMiscButtonLabels/",
+        csrf_exempt(GraphQLView.as_view(schema=schema, graphiql=False)),
+        name="graphql_misc_button_labels",
+    ),
 ]

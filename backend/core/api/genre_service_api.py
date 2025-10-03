@@ -99,13 +99,8 @@ def is_track_seen_on_service(isrc: str, genre_name: str, service_name: ServiceNa
 
 def get_track_rank_by_track_object(track: Track, genre_name: str, service_name: str) -> int | None:
     """Get track position using Track domain object for any service playlist."""
-    django_track = get_track_model_by_isrc(track.isrc)
-    if not django_track:
-        return None
-
     playlist_entry = (
-        PlaylistModel.objects.select_related("service_track")
-        .filter(service_track__track=django_track, genre__name=genre_name, service__name=service_name)
+        PlaylistModel.objects.filter(isrc=track.isrc, genre__name=genre_name, service__name=service_name)
         .order_by("position")
         .first()
     )

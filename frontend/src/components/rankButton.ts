@@ -37,7 +37,9 @@ export async function loadAndRenderRankButtons(): Promise<void> {
 
         if (!rank.displayName) {
           console.error("Missing displayName for rank:", rank);
-          throw new Error(`Rank missing required displayName: ${rank.sortField}`);
+          throw new Error(
+            `Rank missing required displayName: ${rank.sortField}`,
+          );
         }
 
         button.title = `Sort by ${rank.displayName}`;

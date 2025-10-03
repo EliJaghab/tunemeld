@@ -1,4 +1,5 @@
 import strawberry
+from strawberry.schema.config import StrawberryConfig
 
 from gql.genre import GenreQuery
 from gql.play_count import PlayCountQuery
@@ -12,4 +13,4 @@ class Query(TrackQuery, PlaylistQuery, ServiceQuery, GenreQuery, PlayCountQuery)
     pass
 
 
-schema = strawberry.Schema(query=Query)
+schema = strawberry.Schema(query=Query, config=StrawberryConfig(auto_camel_case=True))

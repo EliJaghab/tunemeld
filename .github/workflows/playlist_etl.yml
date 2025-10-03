@@ -2,24 +2,24 @@ name: Playlist ETL
 
 on:
   schedule:
-    - cron: '30 2 * * *'
+    - cron: "30 2 * * *"
   push:
     paths:
-      - 'backend/core/management/commands/playlist_etl_modules/**'
-      - 'backend/core/management/commands/playlist_etl.py'
+      - "backend/core/management/commands/playlist_etl_modules/**"
+      - "backend/core/management/commands/playlist_etl.py"
   pull_request:
     paths:
-      - 'backend/core/management/commands/playlist_etl_modules/**'
-      - 'backend/core/management/commands/playlist_etl.py'
+      - "backend/core/management/commands/playlist_etl_modules/**"
+      - "backend/core/management/commands/playlist_etl.py"
   workflow_dispatch:
     inputs:
       clear_gql_cache:
-        description: 'Clear GraphQL playlist cache only'
+        description: "Clear GraphQL playlist cache only"
         required: false
         default: false
         type: boolean
       force_refresh:
-        description: 'Force refresh by skipping RapidAPI cache and pulling fresh data'
+        description: "Force refresh by skipping RapidAPI cache and pulling fresh data"
         required: false
         default: false
         type: boolean
@@ -37,7 +37,6 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-
 
       - name: Install dependencies
         run: |
@@ -62,7 +61,6 @@ jobs:
           CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
         run: make ci-db-safety-check
 
-
       - name: Apply database migrations to production PostgreSQL
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
@@ -71,7 +69,6 @@ jobs:
           CF_NAMESPACE_ID: ${{ secrets.CF_NAMESPACE_ID }}
           CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
         run: make ci-db-migrate
-
 
       - name: Run Playlist ETL Pipeline
         env:

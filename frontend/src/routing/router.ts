@@ -44,13 +44,24 @@ class AppRouter {
     errorHandler.setRetryCallback(() => this.initialize());
 
     try {
-      const [genreData, rankData] = await Promise.all([
-        graphqlClient.getAvailableGenres(),
-        graphqlClient.fetchPlaylistRanks(),
-      ]);
+      // Wait for the massive query data to be available
+      const { getGlobalPageData } = await import("@/utils/selectors");
+      let globalData = getGlobalPageData();
 
-      this.genres = genreData;
-      this.ranks = rankData.ranks;
+      // If no global data yet, trigger the initial load
+      if (!globalData) {
+        this.isInitialLoad = false; // Mark as no longer initial to prevent duplicate loading
+        const { updateGenreData } = await import("@/utils/selectors");
+        await updateGenreData("pop", true);
+        globalData = getGlobalPageData();
+        this.currentGenre = "pop"; // Track that we loaded pop data
+      }
+
+      if (globalData) {
+        // Get genres from the focused query instead of making separate call
+        this.genres = globalData.genres;
+        this.ranks = globalData.ranks.ranks;
+      }
 
       // Set the default rank field in StateManager
       const defaultRank = this.ranks?.find((rank) => rank.isDefault);
@@ -216,12 +227,13 @@ class AppRouter {
     fullUpdate: boolean = true,
   ): Promise<void> {
     // Show initial shimmer only on first app load
+    const wasInitialLoad = this.isInitialLoad;
     if (this.isInitialLoad) {
       showInitialShimmer();
       this.isInitialLoad = false;
     }
 
-    await updateGenreData(genre, fullUpdate);
+    await updateGenreData(genre, fullUpdate, wasInitialLoad);
     if (fullUpdate) {
       setupBodyClickListener(genre);
     }

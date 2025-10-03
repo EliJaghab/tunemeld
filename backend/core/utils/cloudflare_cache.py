@@ -30,6 +30,7 @@ CLOUDFLARE_CACHE_TTL_MAP = {
     "spotify_isrc": NO_EXPIRATION_TTL,
     "apple_cover": SEVEN_DAYS_TTL,
     "soundcloud_url": NO_EXPIRATION_TTL,
+    "album_cover_image": SEVEN_DAYS_TTL,
 }
 
 
@@ -42,6 +43,7 @@ class CachePrefix(str, Enum):
     SPOTIFY_ISRC = "spotify_isrc"
     APPLE_COVER = "apple_cover"
     SOUNDCLOUD_URL = "soundcloud_url"
+    ALBUM_COVER_IMAGE = "album_cover_image"
 
 
 class CloudflareKVCache(BaseCache):
