@@ -213,13 +213,25 @@ class Command(BaseCommand):
                 }}
             """)
 
-        # 8. Warm getMiscButtonLabels() for common button types
+        # 8. Warm getMiscButtonLabels() for ALL button types used by frontend
         misc_button_types = [
             ("close_player", None),
             ("service_player_button", "spotify"),
             ("service_player_button", "apple_music"),
             ("service_player_button", "soundcloud"),
             ("service_player_button", "youtube"),
+            ("more_button", "spotify"),
+            ("more_button", "apple_music"),
+            ("more_button", "soundcloud"),
+            ("more_button", "tunemeld"),
+            ("collapse_button", "spotify_collapsed"),
+            ("collapse_button", "spotify_expanded"),
+            ("collapse_button", "apple_music_collapsed"),
+            ("collapse_button", "apple_music_expanded"),
+            ("collapse_button", "soundcloud_collapsed"),
+            ("collapse_button", "soundcloud_expanded"),
+            ("collapse_button", "main_collapsed"),
+            ("collapse_button", "main_expanded"),
         ]
         for button_type, context in misc_button_types:
             if context:
