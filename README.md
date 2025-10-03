@@ -1,223 +1,216 @@
-# TuneMeld 🎵
+# TuneMeld
+
+_Discover top tracks by streaming service consensus_
+
+## Table of Contents
+
+- [Why TuneMeld?](#why-tunemeld)
+- [Architecture Overview](#architecture-overview)
+- [Tech Stack](#tech-stack)
+- [Data Pipeline](#data-pipeline)
+- [Data Sources](#data-sources)
+- [Cache Strategy](#cache-strategy)
+- [Deployment](#deployment)
+- [Development](#development)
+- [Performance](#performance)
+- [API Documentation](#api-documentation)
 
 ## Why TuneMeld?
 
-I built TuneMeld because I found myself constantly checking different streaming services to see what they thought were the top tracks each week. This manual process was time-consuming and inefficient.
+TuneMeld aggregates playlist data from major streaming services to show where they agree on top tracks - saving you time by finding the tracks that matter across all platforms.
 
-**TuneMeld solves this by aggregating playlist data from major streaming services to show where they agree on top tracks** - essentially saving time by finding the tracks that matter across all platforms.
+Instead of manually checking Spotify, Apple Music, and SoundCloud each week, TuneMeld shows you the consensus picks automatically.
 
 ## Architecture Overview
 
-TuneMeld is a data pipeline and web application that aggregates music playlist data from multiple streaming services.
+```
+┌─────────────┐    ┌─────────────┐    ┌─────────────┐
+│  Frontend   │───▶│   Backend   │───▶│ PostgreSQL  │
+│ Static HTML │    │   Django    │    │  Database   │
+│ Cloudflare  │    │   Vercel    │    │   Railway   │
+│   Pages     │    │ Serverless  │    │             │
+└─────────────┘    └─────────────┘    └─────────────┘
+       │                    │
+       ▼                    ▼
+┌─────────────┐    ┌─────────────┐
+│  Browser    │    │ Vercel Redis│
+│   Client    │    │ + Cloudflare│
+│             │    │     KV      │
+└─────────────┘    └─────────────┘
+```
 
-**Tech Stack:**
+## Tech Stack
 
-- **Backend**: Django serverless functions on Vercel + PostgreSQL
-- **Frontend**: Static HTML/JS served via Vercel CDN
-- **API**: GraphQL for efficient data fetching
-- **Cache**: Redis (Vercel KV) for GraphQL results, CloudflareKV for ETL data
-- **CDN**: Vercel Edge Network for global distribution
-- **Data Sources**: Spotify (SpotDL), Apple Music & SoundCloud (RapidAPI)
+### Frontend
 
-## How It Works
+- **TypeScript** - Type-safe static site generation
+- **Cloudflare Pages** - Global CDN distribution
+- **GraphQL Client** - Efficient data fetching
 
-### 1. Data Sources & Configuration
+### Backend
 
-Playlists are defined in `django_backend/core/utils/constants.py`:
+- **Django** - Serverless functions on Vercel
+- **GraphQL API** - Single endpoint for all data
+- **PostgreSQL** - Neon hosted database
 
-- **Services**: Spotify, Apple Music, SoundCloud
-- **Genres**: Dance/Electronic, Hip-Hop/Rap, Country, Pop
-- **Playlists**: Editorial/curated playlists from each service
+### Caching
 
-**Why these choices?** These are the most popular platforms with human-curated editorial playlists that reflect current music trends.
+- **Vercel Redis** - Managed Redis instance for GraphQL query results
+- **CloudflareKV** - ETL/API data (RapidAPI, Spotify, YouTube responses)
 
-### 2. Data Pipeline
+### Data Sources
 
-#### Playlist ETL Pipeline
+- **Spotify** - Via SpotDL (ISRC + metadata)
+- **Apple Music** - Via RapidAPI
+- **SoundCloud** - Via RapidAPI
+- **YouTube** - View count scraping
 
-**Schedule**: Daily at 2:30 AM UTC (`30 2 * * *`) via GitHub Actions
+## Data Pipeline
 
-**9-Step Process:**
+### Playlist ETL Pipeline
 
-1. **Setup** - Initialize genres and services in database
-2. **Cache Check** - Clear stale RapidAPI/Spotify caches during scheduled window
-3. **Extract** - Fetch playlist data (cache-first to avoid redundant API calls):
-   - Apple Music & SoundCloud via RapidAPI
-   - Spotify via SpotDL
+**Schedule**: Daily at 2:30 AM UTC via GitHub Actions
+
+**Why This Schedule**: Music industry releases new tracks on Thursday nights (00:00 Friday local time). Streaming services update their curated editorial playlists on Friday/Saturday. Running ETL on Saturday afternoon Eastern time (2:30 AM UTC Sunday) captures all fresh playlist updates after the weekly music release cycle.
+
+**9-Step Process**:
+
+1. **Setup** - Initialize database with genres/services
+2. **Cache Check** - Clear stale external API caches
+3. **Extract** - Fetch playlist data (cache-first to minimize API costs)
 4. **Transform** - Create service-specific track records
-5. **Canonicalize** - Generate unified tracks via ISRC normalization + YouTube URL lookup
-6. **Aggregate** - Rank tracks by cross-service agreement
-7. **Cache Clear** - Reset GraphQL cache for fresh data
-8. **Cache Warm** - Pre-populate GraphQL cache with common queries
-9. **Deploy** - Blue-green deployment (remove previous ETL data)
+5. **Canonicalize** - Unify tracks via ISRC normalization + YouTube lookup
+6. **Aggregate** - Rank tracks by cross-service consensus
+7. **Cache Clear** - Reset GraphQL cache
+8. **Cache Warm** - Pre-populate Redis with common GraphQL queries (serverless optimization)
+9. **Deploy** - Blue-green deployment
 
-**ISRC Normalization**: Groups tracks by ISRC code to solve "same song, different metadata" problem. Spotify/SoundCloud provide ISRC directly; Apple Music tracks require Spotify API lookup (`get_spotify_isrc`). Priority: Spotify > Apple Music > SoundCloud.
+### View Count ETL Pipeline
 
-**Cache Strategy**: ETL checks Django cache first (RapidAPI: 7 days, Spotify: 7 days, YouTube: permanent, ISRC: permanent) to minimize API costs by 95%.
+**Schedule**: Daily at 2:00 AM UTC via GitHub Actions
 
-#### View Count ETL Pipeline
+Updates Spotify and YouTube view counts for engagement tracking.
 
-**Schedule**: Daily at 2:00 AM UTC (`0 2 * * *`) via GitHub Actions
+## Data Sources
 
-**Process**: Updates Spotify and YouTube view counts for existing tracks using web scraping with retry logic and comprehensive failure tracking.
+**Services**: Spotify, Apple Music, SoundCloud
+**Genres**: Pop, Dance/Electronic, Hip-Hop/Rap, Country
+**Playlists**: Editorial/curated playlists from each service
 
-**Why Daily**: Playlists update weekly, but view counts change daily for engagement tracking.
+**Configuration**: `backend/core/constants.py`
 
-### 3. Data Storage
+### ISRC Normalization
 
-PostgreSQL models track the data lifecycle:
+Groups tracks by International Standard Recording Code to solve "same song, different metadata" problem. Priority: Spotify > Apple Music > SoundCloud.
 
-```
-RawPlaylistData → ServiceTrack → Track → Aggregated Rankings
-```
+## Cache Strategy
 
-Each ETL run is tracked with a UUID for versioning and rollback capability.
+### Two-Tier Architecture
 
-**Why PostgreSQL?** Relational data structure, ACID compliance, complex query capabilities for ranking algorithms.
+**Why Two-Tier Caching?**
 
-### 4. API Layer
+**Fast User Cache** (Vercel Redis): Stores final GraphQL results that users request. Fast access, frequently accessed data.
 
-GraphQL schema provides efficient data access:
+**Cost-Effective ETL Cache** (CloudflareKV): Stores expensive external API responses (RapidAPI, Spotify). Prevents hitting API rate limits and reduces costs by 95%.
 
-- Query types: Genre, Playlist, Track, Service
-- Single endpoint for all data needs
-- Automatic query optimization
+**Design Decision**: Separate caches optimize for different access patterns - user-facing speed vs ETL cost efficiency.
 
-**Why GraphQL?** Frontend can request exactly what it needs, reducing bandwidth and improving performance. Single endpoint simplifies CORS and caching.
-
-### 5. Deployment Architecture
-
-#### ETL Pipeline Architecture
-
-```
-┌─────────────┐     ┌──────────────┐     ┌─────────────┐
-│   GitHub    │────▶│   Django     │────▶│ PostgreSQL  │
-│   Actions   │     │   (Backend)  │     │ (Database)  │
-│   (ETL)     │     │  (Backend)   │     │ (Database)  │
-└─────────────┘     └──────────────┘     └─────────────┘
-                            │
-                            ▼
-                    ┌──────────────┐
-                    │ Django Cache │
-                    │   (Redis)    │
-                    │ • RapidAPI   │
-                    │ • Spotify    │
-                    │ • YouTube    │
-                    │ • ISRC       │
-                    └──────────────┘
-```
-
-**Data Processing Flow:**
-
-- GitHub Actions runs ETL scripts daily (playlist ETL, view count ETL)
-- ETL checks Django cache first to avoid redundant API calls
-- Only fetches from external APIs (RapidAPI, Spotify, YouTube) if data not cached
-- Scripts connect to Django backend to access the database
-- Data gets processed and stored in PostgreSQL
-
-#### Web Application Architecture
-
-```
-┌──────────────┐    ┌──────────────┐     ┌─────────────┐
-│   Vercel     │    │   Django     │────▶│ PostgreSQL  │
-│  (Frontend)  │───▶│   (Django)   │     │ (Database)  │
-│  Static HTML │    │   GraphQL    │     │             │
-└──────────────┘    └──────────────┘     └─────────────┘
-        │                    │
-        ▼                    ▼
-┌──────────────┐    ┌──────────────┐
-│   Browser    │    │ Cloudflare   │
-│              │◀───│     CDN      │
-└──────────────┘    └──────────────┘
-```
-
-**User-Facing Flow:**
-
-- Static frontend (Vercel) makes GraphQL requests to Django backend
-- Django backend serves the GraphQL API and queries PostgreSQL
-- Cloudflare CDN caches responses globally
-
-**Backend**: Django - serves GraphQL API, handles data processing
-**Frontend**: `/frontend` folder served via Vercel at tunemeld.com
-
-**Why split architecture?**
-
-- Cost efficiency (Vercel is free)
-- Independent scaling of frontend/backend
-- CDN benefits for static assets
-- Simplified deployment pipeline
-
-### 6. Frontend
-
-Static HTML/CSS/JavaScript in `/docs` directory:
-
-- No framework overhead for fast loading
-- GraphQL client for data fetching
-- Service-specific playlist views with logos
-
-**Why static?** The app is read-heavy with weekly updates. Static sites are incredibly fast, SEO-friendly, and cost-effective to serve globally.
-
-## Running Locally
-
-### Prerequisites
-
-- Python 3.13+
-- PostgreSQL
-- Make
-
-### Setup
-
-1. Clone the repository
-2. Copy `.env.example` to `.env` and configure
-3. Install dependencies: `make install`
-4. Run migrations: `make migrate`
-
-### Development
-
-```bash
-# Start servers
-make serve-frontend  # http://localhost:8080
-make serve-backend   # http://localhost:8000
-
-# Run ETL pipeline
-python manage.py a_playlist_etl
-
-# Format code (required before committing)
-make format
-```
+**Serverless Optimization**: Redis cache is populated by ETL pipeline only (not on serverless startup) to avoid function cold-start delays while maintaining persistent cache across invocations.
 
 ## Deployment
 
-### Backend (Vercel Serverless)
+### Frontend: Cloudflare Pages
 
-- Django serverless functions in `/api` directory
-- Automatic deploys from main branch via Git integration
-- Environment variables configured in Vercel dashboard
-- PostgreSQL database connection via Vercel environment variables
+- Static files served globally
+- Auto-deployment from `frontend/` directory changes
+- Build: `cd frontend && npm ci && npm run build`
+- Output: `frontend/dist/`
 
-### Frontend (Vercel)
+### Backend: Vercel Serverless
 
-- Static files served via Vercel Edge Network
-- Automatic deployment when any frontend changes are pushed
-- Custom domain configuration via Vercel dashboard
-- Vercel CDN for global performance
+- Django functions auto-deployed from Git
+- Environment variables in Vercel dashboard
+- PostgreSQL connection via Neon
 
-## Key Design Principles
+### Database: Neon PostgreSQL
 
-1. **Data Quality Over Quantity**: Focus on editorial playlists that represent human curation
-2. **Performance First**: Multi-layer caching, static frontend, CDN distribution
-3. **Cost Efficiency**: Leverage free tiers (Vercel, Cloudflare)
-4. **Maintainability**: Clear separation of concerns, comprehensive logging, blue-green deployments
-5. **User Experience**: Show consensus across services, fast loading, mobile-friendly
+- Serverless PostgreSQL database
+- Automatic scaling and branching
 
-## Tech Stack Rationale
+## Development
 
-- **Django**: Mature, batteries-included, excellent ORM for complex queries
-- **PostgreSQL**: Best open-source relational database
-- **GraphQL**: Efficient data fetching, single endpoint, future-proof API
-- **Vercel**: Free, reliable, perfect for static content
-- **Cloudflare**: Free CDN, DDoS protection, analytics
+### Prerequisites
 
-## License
+- Python 3.12+ (Vercel serverless compatibility)
+- Node.js + TypeScript (frontend build)
+- Redis (local development cache)
 
-MIT
+### Setup
+
+```bash
+# Start servers (use Makefile only)
+make serve-frontend    # http://localhost:8080
+make serve-backend     # http://localhost:8000
+
+# Run ETL pipeline
+make run-playlist-etl  # Full ETL
+make test-playlist-etl # Limited test run
+
+# Format code (required before commits)
+make format
+```
+
+### Local Architecture
+
+- **Frontend**: TypeScript compiled to static files, served by Django in dev
+- **Backend**: Django development server with GraphQL
+- **Images**: Symlinks from `backend/static/images/` → `frontend/images/`
+- **Cache**: Local Redis instance for development
+- **Database**: Connects to Neon PostgreSQL (shared dev/prod)
+
+## Performance
+
+### Frontend Latency Issues
+
+**Root Cause**: Cold cache in Vercel serverless environment
+
+**When cache is cold**:
+
+- First request triggers 100+ database queries (2 per track)
+- Playlist with 50 tracks = 100 database round-trips
+- Response time: 5-10 seconds
+
+**When cache is warm**:
+
+- Single Redis query
+- Response time: <100ms
+
+### Performance Analysis
+
+**Current Performance**: API responses consistently achieve 107-193ms response times, well below the <200ms target.
+
+**Architecture Decision**: Startup cache warming is disabled in serverless environment. Instead, Redis cache is populated by the daily ETL pipeline (Step 6: cache warming). Since Redis is persistent across serverless function invocations, this eliminates the overhead of warming cache on every function startup while maintaining fast response times.
+
+**Why This Works**: Vercel Redis is persistent and survives across serverless invocations, so cache populated by ETL pipeline remains available for all subsequent API requests until the next ETL run refreshes it.
+
+## API Documentation
+
+### GraphQL Endpoint
+
+- **URL**: `https://api.tunemeld.com/graphql/`
+- **Queries**: Playlist, Track, Genre, Service
+- **Cache**: Vercel Redis (7 day TTL)
+
+### GraphQL Schema
+
+- **Queries**: `playlist`, `track`, `genres`, `services`
+- **Types**: `PlaylistType`, `TrackType`, `GenreType`, `ServiceType`
+- **Arguments**: `genre`, `service`, `isrc`
+
+### Cache Keys
+
+All GraphQL responses cached with structured keys for efficient invalidation and warming.
+
+---
+
+**Built with performance and data quality in mind** 🎵

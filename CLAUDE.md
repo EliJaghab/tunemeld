@@ -30,7 +30,13 @@ make kill-redis        # Stops local Redis instance started by make serve-redis
 
 ## MCP Servers
 
-**Playwright MCP:** Browser automation and web testing.
+**Chrome DevTools MCP:** Browser debugging and performance analysis. Use `mcp__chrome-devtools__*` tools for:
+
+- Real-time website debugging and performance audits
+- DOM inspection, console logs, and network request analysis
+- Automated user simulations and testing
+- Performance monitoring and latency debugging
+- **Replaces Playwright** - Use Chrome DevTools MCP instead of Playwright for all browser testing
 
 **Vercel MCP:** Deployment management and debugging. Use `mcp__vercel__*` tools for:
 
@@ -60,6 +66,14 @@ make kill-redis        # Stops local Redis instance started by make serve-redis
 - **Notes**: Cached entries are keyed by `CachePrefix` enums and stored via `core.utils.redis_cache`
 
 **Simple rule: CloudflareKV for Django/ETL operations, Redis for GraphQL.**
+
+### Serverless Cache Architecture
+
+**Cache Population**: Redis cache is populated ONLY by the daily ETL pipeline (Step 6: cache warming), not on serverless function startup.
+
+**Why**: Vercel Redis is persistent across serverless invocations, so ETL-populated cache remains available. Startup cache warming would cause unnecessary delays on every new function instance.
+
+**Performance**: API responses consistently achieve 107-193ms with this architecture.
 
 ## Development Workflow
 
