@@ -185,26 +185,24 @@ export function renderPlaylistTracks(
   });
 }
 
-async function setTrackInfoLabels(
+function setTrackInfoLabels(
   trackTitle: HTMLAnchorElement,
   artistElement: HTMLSpanElement,
   track: Track,
   serviceName: string,
-): Promise<void> {
-  try {
-    const fullTrackName =
-      track.fullTrackName || track.trackName || "Unknown Track";
-    const fullArtistName =
-      track.fullArtistName || track.artistName || "Unknown Artist";
+): void {
+  const fullTrackName =
+    track.fullTrackName || track.trackName || "Unknown Track";
+  const fullArtistName =
+    track.fullArtistName || track.artistName || "Unknown Artist";
 
-    // Get backend-driven button labels for track title
-    const trackButtonLabels = await graphqlClient.getMiscButtonLabels(
-      "track_title",
-      null,
+  // Use button labels already included in track data
+  if (track.buttonLabels && track.buttonLabels.length > 0) {
+    const trackLabel = track.buttonLabels.find(
+      (label: ButtonLabel) => label.buttonType === "track_title",
     );
 
-    if (trackButtonLabels && trackButtonLabels.length > 0) {
-      const trackLabel = trackButtonLabels[0];
+    if (trackLabel) {
       if (trackLabel.title) {
         // Replace placeholders with actual track info
         trackTitle.title = trackLabel.title
@@ -220,14 +218,11 @@ async function setTrackInfoLabels(
         );
       }
     }
-
-    // Set artist tooltip
-    artistElement.title = fullArtistName;
-    artistElement.setAttribute("aria-label", `Artist: ${fullArtistName}`);
-  } catch (error) {
-    console.warn("Failed to load track info labels:", error);
-    // Continue without labels if fetch fails
   }
+
+  // Set artist tooltip
+  artistElement.title = fullArtistName;
+  artistElement.setAttribute("aria-label", `Artist: ${fullArtistName}`);
 }
 
 function createTuneMeldPlaylistTableRow(track: Track): HTMLTableRowElement {
@@ -269,7 +264,7 @@ function createTuneMeldPlaylistTableRow(track: Track): HTMLTableRowElement {
   artistNameElement.className = "artist-name";
   artistNameElement.textContent = track.artistName || "Unknown Artist";
 
-  // Set backend-driven labels asynchronously
+  // Set backend-driven labels
   setTrackInfoLabels(
     trackTitle,
     artistNameElement,
@@ -474,7 +469,7 @@ function createServicePlaylistTableRow(
   artistNameElement.className = "artist-name";
   artistNameElement.textContent = track.artistName || "Unknown Artist";
 
-  // Set backend-driven labels asynchronously
+  // Set backend-driven labels
   setTrackInfoLabels(trackTitle, artistNameElement, track, serviceName);
 
   trackInfoDiv.appendChild(trackTitle);

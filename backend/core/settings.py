@@ -173,8 +173,7 @@ DISABLE_CACHE = False
 is_runserver = len(sys.argv) > 1 and sys.argv[1] == "runserver"
 is_dev_mgmt_command = ENVIRONMENT == DEV and not is_runserver
 
-# Cache warming control - disabled for serverless as ETL pipeline handles Redis population
-ENABLE_CACHE_WARMING = False  # Serverless optimization: ETL pipeline populates Redis, no startup warming needed
+# Redis configuration for Vercel Redis
 
 # Redis configuration for Vercel Redis
 REDIS_URL = os.getenv("REDIS_URL", "redis://localhost:6379/1")
