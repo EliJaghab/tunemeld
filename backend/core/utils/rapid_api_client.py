@@ -58,7 +58,7 @@ def _make_rapidapi_request(url: str, host: str) -> JSON:
 
         logger.info(f"Making RapidAPI request to {host}")
 
-        response = requests.get(url, headers=headers, timeout=30)
+        response = requests.get(url, headers=headers, timeout=60)
 
         if response.status_code == 429:
             logger.warning(f"RapidAPI rate limit exceeded for {host}. Trying next key...")
