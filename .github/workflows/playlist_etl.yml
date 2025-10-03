@@ -101,18 +101,18 @@ jobs:
           cd backend
           echo " ETL Pipeline Results:"
           python manage.py shell -c "
-          from core.models import RawPlaylistDataModel, TrackModel, ServiceTrack, PlaylistModel, Genre, Service
+          from core.models import RawPlaylistDataModel, TrackModel, ServiceTrackModel, PlaylistModel, GenreModel, ServiceModel
           print(f'Raw playlist records: {RawPlaylistDataModel.objects.count()}')
           print(f'Unique tracks: {TrackModel.objects.count()}')
-          print(f'Service track entries: {ServiceTrack.objects.count()}')
+          print(f'Service track entries: {ServiceTrackModel.objects.count()}')
           print(f'Service playlists: {PlaylistModel.objects.count()}')
-          print(f'Genres: {Genre.objects.count()}')
-          print(f'Services: {Service.objects.count()}')
+          print(f'Genres: {GenreModel.objects.count()}')
+          print(f'Services: {ServiceModel.objects.count()}')
           print()
           print(' Breakdown by service:')
-          for service in Service.objects.all():
+          for service in ServiceModel.objects.all():
               playlist_count = PlaylistModel.objects.filter(service=service).count()
-              track_count = ServiceTrack.objects.filter(service=service).count()
+              track_count = ServiceTrackModel.objects.filter(service=service).count()
               print(f'{service.name}: {playlist_count} playlists, {track_count} tracks')
           "
 
