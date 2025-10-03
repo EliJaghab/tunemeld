@@ -1,0 +1,71 @@
+name: Deployment Cache Warming
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+    inputs:
+      force_refresh:
+        description: 'Force refresh Redis cache (clear before warming)'
+        required: false
+        default: 'false'
+        type: boolean
+
+jobs:
+  warm-cache:
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          cd backend && pip install -r requirements.txt
+
+      - name: Set up environment variables
+        run: |
+          echo "GITHUB_ACTIONS=true" >> $GITHUB_ENV
+
+      - name: Database Migration Safety Check
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
+        run: make ci-db-safety-check
+
+      - name: Run Database Migrations
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
+          CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
+          CF_NAMESPACE_ID: ${{ secrets.CF_NAMESPACE_ID }}
+          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+        run: make ci-db-migrate
+
+      - name: Run Playlist ETL with Cache Warming
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
+          REDIS_URL: ${{ secrets.REDIS_URL }}
+          X_RAPIDAPI_KEY_A: ${{ secrets.X_RAPIDAPI_KEY_A }}
+          X_RAPIDAPI_KEY_B: ${{ secrets.X_RAPIDAPI_KEY_B }}
+          MONGO_URI: ${{ secrets.MONGO_URI }}
+          SPOTIFY_CLIENT_ID: ${{ secrets.SPOTIFY_CLIENT_ID }}
+          SPOTIFY_CLIENT_SECRET: ${{ secrets.SPOTIFY_CLIENT_SECRET }}
+          GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+          CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
+          CF_NAMESPACE_ID: ${{ secrets.CF_NAMESPACE_ID }}
+          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+        run: |
+          if [ "${{ inputs.force_refresh }}" = "true" ]; then
+            make run-playlist-etl-force-refresh
+          else
+            make run-playlist-etl
+          fi
