@@ -537,26 +537,57 @@ function displaySources(cell: HTMLTableCellElement, track: Track): void {
   const sourcesContainer = document.createElement("div");
   sourcesContainer.className = "track-sources";
 
-  // Use new rank-based approach for showing service icons with badges
+  // Show service icons when tracks have ranks for those services
   const serviceData = [
     {
       source: track.spotifySource,
       rank: track.spotifyRank,
-      seenOn: track.seenOnSpotify,
     },
     {
       source: track.appleMusicSource,
       rank: track.appleMusicRank,
-      seenOn: track.seenOnAppleMusic,
     },
     {
       source: track.soundcloudSource,
       rank: track.soundcloudRank,
-      seenOn: track.seenOnSoundcloud,
     },
-  ].filter(
-    (item) => item.source !== null && item.source !== undefined && item.seenOn,
-  );
+  ].filter((item) => {
+    // Show service icons whenever we have a source (URL)
+    // Rank badges will be added separately if available
+    return item.source !== null && item.source !== undefined;
+  });
+
+  // Debug logging
+  console.log("DEBUG: Track data for service icons:", {
+    trackName: track.trackName,
+    spotifySource: track.spotifySource,
+    spotifyRank: track.spotifyRank,
+    appleMusicSource: track.appleMusicSource,
+    appleMusicRank: track.appleMusicRank,
+    soundcloudSource: track.soundcloudSource,
+    soundcloudRank: track.soundcloudRank,
+    serviceDataLength: serviceData.length,
+    serviceData: serviceData,
+    rawServiceChecks: [
+      {
+        service: "spotify",
+        hasSource: !!track.spotifySource,
+        hasRank: track.spotifyRank !== null && track.spotifyRank !== undefined,
+      },
+      {
+        service: "appleMusic",
+        hasSource: !!track.appleMusicSource,
+        hasRank:
+          track.appleMusicRank !== null && track.appleMusicRank !== undefined,
+      },
+      {
+        service: "soundcloud",
+        hasSource: !!track.soundcloudSource,
+        hasRank:
+          track.soundcloudRank !== null && track.soundcloudRank !== undefined,
+      },
+    ],
+  });
 
   serviceData.forEach((item) => {
     if (item.source) {

@@ -70,4 +70,17 @@ if (missingDirs.length > 0) {
   process.exit(1);
 }
 
+// Copy build output to backend/static for serving
+const BACKEND_STATIC_DIR = path.join(__dirname, "..", "backend", "static");
+console.log("Copying build output to backend/static...");
+
+if (fs.existsSync(BACKEND_STATIC_DIR)) {
+  fs.rmSync(BACKEND_STATIC_DIR, { recursive: true });
+}
+fs.mkdirSync(BACKEND_STATIC_DIR, { recursive: true });
+
+// Copy all files from dist to backend/static
+fs.cpSync(DIST_DIR, BACKEND_STATIC_DIR, { recursive: true });
+console.log("Frontend files copied to backend/static/");
+
 console.log("Build complete! All files compiled successfully.");

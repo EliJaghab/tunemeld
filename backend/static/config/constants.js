@@ -6,21 +6,13 @@ export const SERVICE_NAMES = {
   TUNEMELD: "tunemeld",
   TOTAL: "total",
 };
-export const GENRE_NAMES = {
-  DANCE: "dance",
-  RAP: "rap",
-  COUNTRY: "country",
-  POP: "pop",
-};
-// The rank that preserves backend-computed positions
-export const TUNEMELD_RANK_FIELD = "tunemeld-rank";
-// Shimmer layout types
-export const SHIMMER_TYPES = {
-  TUNEMELD: "tunemeld",
-  PLAYCOUNT: "playcount",
-};
-// Playlist placeholder IDs
+export const TUNEMELD_RANK_FIELD = "tunemeldRank";
 export const PLAYLIST_PLACEHOLDERS = {
-  MAIN: "main-playlist-data-placeholder",
-  SERVICE_SUFFIX: "-data-placeholder",
+  DEFAULT: "Loading playlist...",
+  MAIN: "Loading main playlist...",
+  SERVICE_SUFFIX: "Loading service...",
+};
+export const SHIMMER_TYPES = {
+  TUNEMELD: "TUNEMELD",
+  PLAYCOUNT: "PLAYCOUNT",
 };

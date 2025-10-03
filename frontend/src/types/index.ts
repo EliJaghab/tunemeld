@@ -1,110 +1,104 @@
-export interface Genre {
-  id: string;
-  name: string;
-  displayName: string;
-  iconUrl: string;
-  buttonLabels?: ButtonLabel[];
-}
+// AUTO-GENERATED FILE - DO NOT EDIT
+// Generated from backend/domain_types/types.py
+// Run 'npm run generate-types' to regenerate
 
 export interface ButtonLabel {
-  buttonType: string;
-  context?: string;
-  title?: string;
-  ariaLabel?: string;
-}
-
-export interface Track {
-  tunemeldRank: number;
-  spotifyRank?: number;
-  appleMusicRank?: number;
-  soundcloudRank?: number;
-  isrc: string;
-  trackName: string;
-  artistName: string;
-  fullTrackName: string;
-  fullArtistName: string;
-  albumName: string;
-  albumCoverUrl: string;
-  youtubeUrl?: string;
-  spotifyUrl?: string;
-  appleMusicUrl?: string;
-  soundcloudUrl?: string;
-  buttonLabels?: ButtonLabel[];
-  spotifySource?: ServiceSource;
-  appleMusicSource?: ServiceSource;
-  soundcloudSource?: ServiceSource;
-  youtubeSource?: ServiceSource;
-  seenOnSpotify: boolean;
-  seenOnAppleMusic: boolean;
-  seenOnSoundcloud: boolean;
-  trackDetailUrlSpotify?: string;
-  trackDetailUrlAppleMusic?: string;
-  trackDetailUrlSoundcloud?: string;
-  trackDetailUrlYoutube?: string;
-  // Play count data (added dynamically)
-  totalCurrentPlayCount?: number;
-  totalWeeklyChangePercentage?: number;
-  spotifyCurrentPlayCount?: number;
-  youtubeCurrentPlayCount?: number;
+  button_type: string;
+  context?: string | null;
+  title?: string | null;
+  aria_label?: string | null;
 }
 
 export interface ServiceSource {
   name: string;
-  displayName: string;
+  display_name: string;
   url: string;
-  iconUrl: string;
+  icon_url: string;
+}
+
+export interface Track {
+  isrc: string;
+  track_name: string;
+  artist_name: string;
+  full_track_name: string;
+  full_artist_name: string;
+  album_name?: string | null;
+  album_cover_url?: string | null;
+  spotify_url?: string | null;
+  apple_music_url?: string | null;
+  soundcloud_url?: string | null;
+  youtube_url?: string | null;
+  tunemeld_rank: number;
+  spotify_rank?: number | null;
+  apple_music_rank?: number | null;
+  soundcloud_rank?: number | null;
+  spotify_source?: ServiceSource | null;
+  apple_music_source?: ServiceSource | null;
+  soundcloud_source?: ServiceSource | null;
+  youtube_source?: ServiceSource | null;
+  track_detail_url_spotify?: string | null;
+  track_detail_url_apple_music?: string | null;
+  track_detail_url_soundcloud?: string | null;
+  track_detail_url_youtube?: string | null;
+  total_current_play_count?: number | null;
+  total_weekly_change_percentage?: number | null;
+  spotify_current_play_count?: number | null;
+  youtube_current_play_count?: number | null;
+  button_labels?: ButtonLabel[];
+  id?: number | null;
+  created_at?: string | null;
+  updated_at?: string | null;
 }
 
 export interface Playlist {
-  genreName: string;
-  serviceName: string;
-  tracks: Track[];
-  playlistName?: string;
-  playlistCoverUrl?: string;
-  playlistCoverDescriptionText?: string;
-  playlistUrl?: string;
-  serviceIconUrl?: string;
+  genre_name: string;
+  service_name: string;
+  tracks?: Track[];
+  playlist_name?: string | null;
+  playlist_cover_url?: string | null;
+  playlist_cover_description_text?: string | null;
+  playlist_url?: string | null;
+  service_icon_url?: string | null;
+  updated_at?: string | null;
 }
 
 export interface PlayCount {
   isrc: string;
-  youtubeCurrentPlayCount?: number;
-  spotifyCurrentPlayCount?: number;
-  totalCurrentPlayCount?: number;
-  youtubeCurrentPlayCountAbbreviated?: string;
-  spotifyCurrentPlayCountAbbreviated?: string;
-  totalCurrentPlayCountAbbreviated?: string;
-  totalWeeklyChangePercentage?: number;
-  totalWeeklyChangePercentageFormatted?: string;
-}
-
-export interface ServiceConfig {
-  name: string;
-  displayName: string;
-  iconUrl: string;
-  urlField: string;
-  sourceField: string;
-  buttonLabels?: ButtonLabel[];
-}
-
-export interface IframeConfig {
-  serviceName: string;
-  embedBaseUrl: string;
-  embedParams: Record<string, string>;
-  allow: string;
-  height: number;
-  referrerPolicy: string;
+  youtube_current_play_count?: number | null;
+  spotify_current_play_count?: number | null;
+  total_current_play_count?: number | null;
+  youtube_current_play_count_abbreviated?: string | null;
+  spotify_current_play_count_abbreviated?: string | null;
+  total_current_play_count_abbreviated?: string | null;
+  total_weekly_change_percentage?: number | null;
+  total_weekly_change_percentage_formatted?: string | null;
 }
 
 export interface Rank {
   name: string;
-  displayName: string;
-  sortField: string;
-  sortOrder: string;
-  isDefault: boolean;
-  dataField: string;
+  display_name: string;
+  sort_field: string;
+  sort_order: string;
+  is_default: boolean;
+  data_field: string;
 }
 
+export interface ServiceConfig {
+  id: number;
+  name: string;
+  display_name: string;
+  icon_url: string;
+}
+
+export interface Genre {
+  id: number;
+  name: string;
+  display_name: string;
+  icon_class: string;
+  icon_url: string;
+}
+
+// Frontend-specific types
 export interface State {
   currentColumn: string;
   currentOrder: string;

@@ -6,7 +6,6 @@ from core.api.genre_service_api import (
     get_track_by_isrc,
     get_track_model_by_isrc,
     get_track_rank_by_track_object,
-    is_track_seen_on_service,
 )
 from core.api.track_metadata_api import build_track_query_url
 from core.constants import GraphQLCacheKey, ServiceName
@@ -69,6 +68,7 @@ class TrackType:
         )
         track._track_name = django_track.track_name
         track._artist_name = django_track.artist_name
+
         return track
 
     @classmethod
@@ -131,42 +131,46 @@ class TrackType:
 
         return build_track_query_url(genre, rank, self.isrc, player)
 
-    @strawberry.field(description="Position in the playlist")
-    def tunemeld_rank(self, genre: str, service: str) -> int | None:
-        if hasattr(self, "_tunemeld_rank"):
-            return self._tunemeld_rank
-
-        return get_track_rank_by_track_object(self, genre, service)
+    @strawberry.field(description="Position in the TuneMeld playlist for current genre")
+    def tunemeld_rank(self, info) -> int | None:
+        genre_name = info.variable_values["genre"]
+        track_domain = get_track_by_isrc(self.isrc)
+        if not track_domain:
+            return None
+        return get_track_rank_by_track_object(track_domain, genre_name, ServiceName.TUNEMELD.value)
 
     @strawberry.field(description="Position on SoundCloud playlist for current genre")
     def soundcloud_rank(self, info) -> int | None:
         if hasattr(self, "_soundcloud_rank"):
             return self._soundcloud_rank
 
-        genre_name = info.variable_values.get("genre")
-        if not genre_name:
+        genre_name = info.variable_values["genre"]
+        track_domain = get_track_by_isrc(self.isrc)
+        if not track_domain:
             return None
-        return get_track_rank_by_track_object(self, genre_name, ServiceName.SOUNDCLOUD.value)
+        return get_track_rank_by_track_object(track_domain, genre_name, ServiceName.SOUNDCLOUD.value)
 
     @strawberry.field(description="Position on Spotify playlist for current genre")
     def spotify_rank(self, info) -> int | None:
         if hasattr(self, "_spotify_rank"):
             return self._spotify_rank
 
-        genre_name = info.variable_values.get("genre")
-        if not genre_name:
+        genre_name = info.variable_values["genre"]
+        track_domain = get_track_by_isrc(self.isrc)
+        if not track_domain:
             return None
-        return get_track_rank_by_track_object(self, genre_name, ServiceName.SPOTIFY.value)
+        return get_track_rank_by_track_object(track_domain, genre_name, ServiceName.SPOTIFY.value)
 
     @strawberry.field(description="Position on Apple Music playlist for current genre")
     def apple_music_rank(self, info) -> int | None:
         if hasattr(self, "_apple_music_rank"):
             return self._apple_music_rank
 
-        genre_name = info.variable_values.get("genre")
-        if not genre_name:
+        genre_name = info.variable_values["genre"]
+        track_domain = get_track_by_isrc(self.isrc)
+        if not track_domain:
             return None
-        return get_track_rank_by_track_object(self, genre_name, ServiceName.APPLE_MUSIC.value)
+        return get_track_rank_by_track_object(track_domain, genre_name, ServiceName.APPLE_MUSIC.value)
 
     @strawberry.field(description="Spotify service source with metadata")
     def spotify_source(self) -> ServiceType | None:
@@ -255,30 +259,6 @@ class TrackType:
                 icon_url=service.icon_url,
             )
         return None
-
-    @strawberry.field(description="Whether this track was seen on Spotify playlists for TuneMeld ranking")
-    def seen_on_spotify(self, info) -> bool:
-        if hasattr(self, "_seen_on_spotify"):
-            return self._seen_on_spotify
-
-        genre_name = info.variable_values["genre"]
-        return is_track_seen_on_service(self.isrc, genre_name, ServiceName.SPOTIFY)
-
-    @strawberry.field(description="Whether this track was seen on Apple Music playlists for TuneMeld ranking")
-    def seen_on_apple_music(self, info) -> bool:
-        if hasattr(self, "_seen_on_apple_music"):
-            return self._seen_on_apple_music
-
-        genre_name = info.variable_values["genre"]
-        return is_track_seen_on_service(self.isrc, genre_name, ServiceName.APPLE_MUSIC)
-
-    @strawberry.field(description="Whether this track was seen on SoundCloud playlists for TuneMeld ranking")
-    def seen_on_soundcloud(self, info) -> bool:
-        if hasattr(self, "_seen_on_soundcloud"):
-            return self._seen_on_soundcloud
-
-        genre_name = info.variable_values["genre"]
-        return is_track_seen_on_service(self.isrc, genre_name, ServiceName.SOUNDCLOUD)
 
 
 @strawberry.type

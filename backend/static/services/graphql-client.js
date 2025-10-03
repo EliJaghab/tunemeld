@@ -2,7 +2,7 @@ import { getDjangoApiBaseUrl } from "@/config/config";
 import { SERVICE_NAMES } from "@/config/constants";
 class GraphQLClient {
   constructor() {
-    this.endpoint = `${getDjangoApiBaseUrl()}/gql/`;
+    this.endpoint = `${getDjangoApiBaseUrl()}/api/gql/`;
   }
   async query(query, variables = {}) {
     const startTime = Date.now();
@@ -166,7 +166,7 @@ class GraphQLClient {
           genreName
           serviceName
           tracks {
-            tunemeldRank(genre: $genre, service: $service)
+            tunemeldRank
             spotifyRank
             appleMusicRank
             soundcloudRank
@@ -211,9 +211,6 @@ class GraphQLClient {
               url
               iconUrl
             }
-            seenOnSpotify
-            seenOnAppleMusic
-            seenOnSoundcloud
             trackDetailUrlSpotify: trackDetailUrl(genre: $genre, rank: "tunemeld-rank", player: "${SERVICE_NAMES.SPOTIFY}")
             trackDetailUrlAppleMusic: trackDetailUrl(genre: $genre, rank: "tunemeld-rank", player: "${SERVICE_NAMES.APPLE_MUSIC}")
             trackDetailUrlSoundcloud: trackDetailUrl(genre: $genre, rank: "tunemeld-rank", player: "${SERVICE_NAMES.SOUNDCLOUD}")

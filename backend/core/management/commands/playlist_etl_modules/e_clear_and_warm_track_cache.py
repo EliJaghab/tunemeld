@@ -129,7 +129,7 @@ class Command(BaseCommand):
                             genreName
                             serviceName
                             tracks {{
-                                tunemeldRank(genre: "{genre.value}", service: "{service.value}")
+                                tunemeldRank
                                 spotifyRank
                                 appleMusicRank
                                 soundcloudRank
@@ -174,9 +174,6 @@ class Command(BaseCommand):
                                     url
                                     iconUrl
                                 }}
-                                seenOnSpotify
-                                seenOnAppleMusic
-                                seenOnSoundcloud
                                 trackDetailUrlSpotify: trackDetailUrl(
                                     genre: "{genre.value}",
                                     rank: "tunemeld-rank",

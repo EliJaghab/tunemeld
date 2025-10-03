@@ -112,11 +112,6 @@ class Track(BaseModel):
     soundcloud_source: ServiceSource | None = None
     youtube_source: ServiceSource | None = None
 
-    # Service presence flags
-    seen_on_spotify: bool = False
-    seen_on_apple_music: bool = False
-    seen_on_soundcloud: bool = False
-
     # Detail URLs
     track_detail_url_spotify: str | None = None
     track_detail_url_apple_music: str | None = None
@@ -195,9 +190,6 @@ class Track(BaseModel):
             "appleMusicSource": self.apple_music_source.to_dict() if self.apple_music_source else None,
             "soundcloudSource": self.soundcloud_source.to_dict() if self.soundcloud_source else None,
             "youtubeSource": self.youtube_source.to_dict() if self.youtube_source else None,
-            "seenOnSpotify": self.seen_on_spotify,
-            "seenOnAppleMusic": self.seen_on_apple_music,
-            "seenOnSoundcloud": self.seen_on_soundcloud,
             "trackDetailUrlSpotify": self.track_detail_url_spotify,
             "trackDetailUrlAppleMusic": self.track_detail_url_apple_music,
             "trackDetailUrlSoundcloud": self.track_detail_url_soundcloud,
@@ -240,9 +232,6 @@ class Track(BaseModel):
             if data.get("soundcloudSource")
             else None,
             youtube_source=ServiceSource.from_dict(data["youtubeSource"]) if data.get("youtubeSource") else None,
-            seen_on_spotify=data.get("seenOnSpotify", False),
-            seen_on_apple_music=data.get("seenOnAppleMusic", False),
-            seen_on_soundcloud=data.get("seenOnSoundcloud", False),
             track_detail_url_spotify=data.get("trackDetailUrlSpotify"),
             track_detail_url_apple_music=data.get("trackDetailUrlAppleMusic"),
             track_detail_url_soundcloud=data.get("trackDetailUrlSoundcloud"),
@@ -309,15 +298,6 @@ class Track(BaseModel):
             }
         )
 
-        # Seen on service flags
-        enrichment.update(
-            {
-                "seenOnSpotify": cls._is_seen_on_service(track, genre, ServiceName.SPOTIFY),
-                "seenOnAppleMusic": cls._is_seen_on_service(track, genre, ServiceName.APPLE_MUSIC),
-                "seenOnSoundcloud": cls._is_seen_on_service(track, genre, ServiceName.SOUNDCLOUD),
-            }
-        )
-
         # Track detail URLs
         for player in ["spotify", "apple_music", "soundcloud", "youtube"]:
             url_key = f"trackDetailUrl{player.replace('_', '').title()}"
@@ -361,16 +341,6 @@ class Track(BaseModel):
             return get_track_rank_by_track_object(track, genre, service_name.value)
         except Exception:
             return None
-
-    @staticmethod
-    def _is_seen_on_service(track, genre: str, service_name: ServiceName) -> bool:
-        """Check if track was seen on service for genre."""
-        from core.api.genre_service_api import is_track_seen_on_service
-
-        try:
-            return is_track_seen_on_service(track.isrc, genre, service_name)
-        except Exception:
-            return False
 
     @staticmethod
     def _build_track_detail_url(track, genre: str, player: str) -> str:

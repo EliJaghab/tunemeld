@@ -29,7 +29,7 @@ export function applyCacheBusting() {
 export function getDjangoApiBaseUrl() {
   return isLocalDevelopment()
     ? "http://localhost:8000"
-    : "https://tunemeld.com";
+    : "https://api.tunemeld.com";
 }
 export function getAggregatePlaylistEndpoint(genre) {
   return `${getDjangoApiBaseUrl()}/aggregate-playlist/${genre}`;

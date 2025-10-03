@@ -433,26 +433,30 @@ function createServicePlaylistTableRow(track, serviceName) {
 function displaySources(cell, track) {
   const sourcesContainer = document.createElement("div");
   sourcesContainer.className = "track-sources";
-  // Use new rank-based approach for showing service icons with badges
+  // Show service icons when tracks have ranks for those services
   const serviceData = [
     {
       source: track.spotifySource,
       rank: track.spotifyRank,
-      seenOn: track.seenOnSpotify,
     },
     {
       source: track.appleMusicSource,
       rank: track.appleMusicRank,
-      seenOn: track.seenOnAppleMusic,
     },
     {
       source: track.soundcloudSource,
       rank: track.soundcloudRank,
-      seenOn: track.seenOnSoundcloud,
     },
-  ].filter(
-    (item) => item.source !== null && item.source !== undefined && item.seenOn,
-  );
+  ].filter((item) => item.source !== null && item.source !== undefined);
+  // Debug logging
+  console.log("DEBUG: Track data for service icons:", {
+    trackName: track.trackName,
+    spotifySource: track.spotifySource,
+    appleMusicSource: track.appleMusicSource,
+    soundcloudSource: track.soundcloudSource,
+    serviceDataLength: serviceData.length,
+    serviceData: serviceData,
+  });
   serviceData.forEach((item) => {
     if (item.source) {
       const linkElement = createSourceLinkFromService(

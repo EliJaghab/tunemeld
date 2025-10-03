@@ -97,18 +97,19 @@ def is_track_seen_on_service(isrc: str, genre_name: str, service_name: ServiceNa
     return ServiceTrackModel.objects.filter(isrc=isrc, genre=django_genre, service__name=service_name.value).exists()
 
 
-def get_track_rank_by_track_object(track, genre_name: str, service_name: str) -> int | None:
-    """Get track position using Track model object for any service playlist."""
-    try:
-        playlist_entry = (
-            PlaylistModel.objects.select_related("service_track")
-            .filter(service_track__track=track, genre__name=genre_name, service__name=service_name)
-            .order_by("position")
-            .first()
-        )
-        return playlist_entry.position if playlist_entry else None
-    except Exception:
+def get_track_rank_by_track_object(track: Track, genre_name: str, service_name: str) -> int | None:
+    """Get track position using Track domain object for any service playlist."""
+    django_track = get_track_model_by_isrc(track.isrc)
+    if not django_track:
         return None
+
+    playlist_entry = (
+        PlaylistModel.objects.select_related("service_track")
+        .filter(service_track__track=django_track, genre__name=genre_name, service__name=service_name)
+        .order_by("position")
+        .first()
+    )
+    return playlist_entry.position if playlist_entry else None
 
 
 def get_playlist_tracks_by_genre_service(genre_name: str, service_name: str) -> list[tuple[str, int]]:
