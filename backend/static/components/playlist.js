@@ -448,15 +448,6 @@ function displaySources(cell, track) {
       rank: track.soundcloudRank,
     },
   ].filter((item) => item.source !== null && item.source !== undefined);
-  // Debug logging
-  console.log("DEBUG: Track data for service icons:", {
-    trackName: track.trackName,
-    spotifySource: track.spotifySource,
-    appleMusicSource: track.appleMusicSource,
-    soundcloudSource: track.soundcloudSource,
-    serviceDataLength: serviceData.length,
-    serviceData: serviceData,
-  });
   serviceData.forEach((item) => {
     if (item.source) {
       const linkElement = createSourceLinkFromService(

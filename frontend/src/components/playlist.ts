@@ -557,38 +557,6 @@ function displaySources(cell: HTMLTableCellElement, track: Track): void {
     return item.source !== null && item.source !== undefined;
   });
 
-  // Debug logging
-  console.log("DEBUG: Track data for service icons:", {
-    trackName: track.trackName,
-    spotifySource: track.spotifySource,
-    spotifyRank: track.spotifyRank,
-    appleMusicSource: track.appleMusicSource,
-    appleMusicRank: track.appleMusicRank,
-    soundcloudSource: track.soundcloudSource,
-    soundcloudRank: track.soundcloudRank,
-    serviceDataLength: serviceData.length,
-    serviceData: serviceData,
-    rawServiceChecks: [
-      {
-        service: "spotify",
-        hasSource: !!track.spotifySource,
-        hasRank: track.spotifyRank !== null && track.spotifyRank !== undefined,
-      },
-      {
-        service: "appleMusic",
-        hasSource: !!track.appleMusicSource,
-        hasRank:
-          track.appleMusicRank !== null && track.appleMusicRank !== undefined,
-      },
-      {
-        service: "soundcloud",
-        hasSource: !!track.soundcloudSource,
-        hasRank:
-          track.soundcloudRank !== null && track.soundcloudRank !== undefined,
-      },
-    ],
-  });
-
   serviceData.forEach((item) => {
     if (item.source) {
       const linkElement = createSourceLinkFromService(
