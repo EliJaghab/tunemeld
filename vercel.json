@@ -1,31 +1,15 @@
 {
   "builds": [
     {
-      "src": "api/index.py",
+      "src": "backend/core/wsgi.py",
       "use": "@vercel/python",
       "config": { "maxLambdaSize": "50mb" }
     }
   ],
   "routes": [
     {
-      "src": "/api/(.*)",
-      "dest": "api/index.py"
-    },
-    {
-      "src": "/health",
-      "dest": "api/index.py"
-    },
-    {
-      "src": "/gql",
-      "dest": "api/index.py"
-    },
-    {
-      "src": "/clear-redis-cache",
-      "dest": "api/index.py"
-    },
-    {
-      "src": "/edm-events",
-      "dest": "api/index.py"
+      "src": "/(.*)",
+      "dest": "backend/core/wsgi.py"
     }
   ]
 }
