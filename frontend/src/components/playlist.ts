@@ -187,8 +187,27 @@ export function renderPlaylistTracks(
 
   const isTuneMeldPlaylist = serviceName === SERVICE_NAMES.TUNEMELD;
 
+  // CRITICAL PERFORMANCE FIX: Render tracks in async batches to prevent main thread blocking
+  const allTracks: Array<{ track: Track; index: number }> = [];
   playlists.forEach((playlist: Playlist) => {
     playlist.tracks?.forEach((track: Track, index: number) => {
+      allTracks.push({ track, index });
+    });
+  });
+
+  // Render in batches of 25 tracks to prevent blocking
+  const BATCH_SIZE = 25;
+  let currentBatch = 0;
+
+  function renderBatch() {
+    const startTime = performance.now();
+    const fragment = document.createDocumentFragment();
+    const startIndex = currentBatch * BATCH_SIZE;
+    const endIndex = Math.min(startIndex + BATCH_SIZE, allTracks.length);
+
+    for (let i = startIndex; i < endIndex; i++) {
+      const { track, index } = allTracks[i];
+
       // Only pass displayRank for non-TuneMeld sorting or service playlists
       const currentSortColumn = stateManager.getCurrentColumn();
       const isShowingTuneMeldRanks = currentSortColumn === TUNEMELD_RANK_FIELD;
@@ -198,9 +217,28 @@ export function renderPlaylistTracks(
       const row = isTuneMeldPlaylist
         ? createTuneMeldPlaylistTableRow(track, displayRank)
         : createServicePlaylistTableRow(track, serviceName || "", index + 1);
-      placeholder.appendChild(row);
-    });
-  });
+      fragment.appendChild(row);
+    }
+
+    // Single DOM append for this batch
+    placeholder.appendChild(fragment);
+
+    currentBatch++;
+    const batchTime = performance.now() - startTime;
+
+    // Continue with next batch if more tracks remain
+    if (currentBatch * BATCH_SIZE < allTracks.length) {
+      // Use requestIdleCallback with timeout fallback to prevent blocking
+      if (window.requestIdleCallback) {
+        requestIdleCallback(renderBatch, { timeout: 16 }); // 16ms = one frame
+      } else {
+        setTimeout(renderBatch, 0);
+      }
+    }
+  }
+
+  // Start rendering
+  renderBatch();
 }
 
 function setTrackInfoLabels(

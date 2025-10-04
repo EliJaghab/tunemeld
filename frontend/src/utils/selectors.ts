@@ -422,43 +422,113 @@ async function fetchServicePlaylists(genre: string): Promise<void> {
 
   const data = await graphqlClient.query(query, { genre });
 
+  // CRITICAL PERFORMANCE FIX: Render playlists asynchronously with timing
+  const renderTasks = [];
+  const renderTimings: Array<{ service: string; time: number }> = [];
+
   // Render TuneMeld playlist first (it's the main one)
   if (data.tuneMeldPlaylist) {
-    renderPlaylistTracks(
-      [data.tuneMeldPlaylist],
-      "main-playlist-data-placeholder",
-      SERVICE_NAMES.TUNEMELD,
-    );
+    renderTasks.push(() => {
+      const startTime = performance.now();
+      renderPlaylistTracks(
+        [data.tuneMeldPlaylist],
+        "main-playlist-data-placeholder",
+        SERVICE_NAMES.TUNEMELD,
+      );
+      const renderTime = performance.now() - startTime;
+      renderTimings.push({ service: "TuneMeld", time: renderTime });
+      console.log(
+        `🎵 TuneMeld playlist rendered in ${renderTime.toFixed(2)}ms`,
+      );
+    });
   }
 
-  // Render each service playlist immediately as it loads
+  // Render each service playlist
   if (data.spotifyPlaylist) {
-    renderPlaylistTracks(
-      [data.spotifyPlaylist],
-      `${SERVICE_NAMES.SPOTIFY}-data-placeholder`,
-      SERVICE_NAMES.SPOTIFY,
-    );
+    renderTasks.push(() => {
+      const startTime = performance.now();
+      renderPlaylistTracks(
+        [data.spotifyPlaylist],
+        `${SERVICE_NAMES.SPOTIFY}-data-placeholder`,
+        SERVICE_NAMES.SPOTIFY,
+      );
+      const renderTime = performance.now() - startTime;
+      renderTimings.push({ service: "Spotify", time: renderTime });
+      console.log(`🎵 Spotify playlist rendered in ${renderTime.toFixed(2)}ms`);
+    });
   }
   if (data.appleMusicPlaylist) {
-    renderPlaylistTracks(
-      [data.appleMusicPlaylist],
-      `${SERVICE_NAMES.APPLE_MUSIC}-data-placeholder`,
-      SERVICE_NAMES.APPLE_MUSIC,
-    );
+    renderTasks.push(() => {
+      const startTime = performance.now();
+      renderPlaylistTracks(
+        [data.appleMusicPlaylist],
+        `${SERVICE_NAMES.APPLE_MUSIC}-data-placeholder`,
+        SERVICE_NAMES.APPLE_MUSIC,
+      );
+      const renderTime = performance.now() - startTime;
+      renderTimings.push({ service: "Apple Music", time: renderTime });
+      console.log(
+        `🎵 Apple Music playlist rendered in ${renderTime.toFixed(2)}ms`,
+      );
+    });
   }
   if (data.soundcloudPlaylist) {
-    renderPlaylistTracks(
-      [data.soundcloudPlaylist],
-      `${SERVICE_NAMES.SOUNDCLOUD}-data-placeholder`,
-      SERVICE_NAMES.SOUNDCLOUD,
-    );
+    renderTasks.push(() => {
+      const startTime = performance.now();
+      renderPlaylistTracks(
+        [data.soundcloudPlaylist],
+        `${SERVICE_NAMES.SOUNDCLOUD}-data-placeholder`,
+        SERVICE_NAMES.SOUNDCLOUD,
+      );
+      const renderTime = performance.now() - startTime;
+      renderTimings.push({ service: "SoundCloud", time: renderTime });
+      console.log(
+        `🎵 SoundCloud playlist rendered in ${renderTime.toFixed(2)}ms`,
+      );
+    });
   }
 
-  // Hide shimmer after all playlists are rendered
-  // Use requestAnimationFrame to ensure DOM updates are complete before hiding shimmer
-  requestAnimationFrame(() => {
-    hideShimmerLoaders();
-  });
+  // Execute render tasks asynchronously with better scheduling
+  let taskIndex = 0;
+  const overallStartTime = performance.now();
+
+  function renderNextTask() {
+    if (taskIndex < renderTasks.length) {
+      const taskStartTime = performance.now();
+      renderTasks[taskIndex]();
+      const taskTime = performance.now() - taskStartTime;
+
+      taskIndex++;
+
+      console.log(
+        `⚡ Task ${taskIndex}/${
+          renderTasks.length
+        } completed in ${taskTime.toFixed(2)}ms`,
+      );
+
+      // Use requestIdleCallback with timeout for better scheduling
+      if (window.requestIdleCallback) {
+        requestIdleCallback(renderNextTask, { timeout: 33 }); // 33ms = ~30fps
+      } else {
+        setTimeout(renderNextTask, 0);
+      }
+    } else {
+      // All tasks completed
+      const totalTime = performance.now() - overallStartTime;
+      console.log(
+        `🏁 All playlists rendered in ${totalTime.toFixed(2)}ms total`,
+      );
+      console.table(renderTimings);
+
+      // Hide shimmer after completion
+      requestAnimationFrame(() => {
+        hideShimmerLoaders();
+      });
+    }
+  }
+
+  console.log(`🚀 Starting async render of ${renderTasks.length} playlists...`);
+  renderNextTask();
 }
 
 export async function updateGenreData(
