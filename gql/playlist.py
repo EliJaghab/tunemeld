@@ -38,6 +38,7 @@ class PlaylistMetadataType:
     genre_name: str
     service_name: str
     service_icon_url: str
+    debug_cache_status: str | None = None
 
 
 @strawberry.type
@@ -141,7 +142,11 @@ class PlaylistQuery:
         print(f"[PERF] Cache lookup took {(cache_lookup_time - start_time) * 1000:.2f}ms, cached_result={cache_status}")
 
         if cached_result is not None:
-            result = [PlaylistMetadataType(**metadata) for metadata in cached_result]
+            result = []
+            for metadata in cached_result:
+                metadata_with_debug = metadata.copy()
+                metadata_with_debug["debug_cache_status"] = f"CACHE_HIT_at_{cache_lookup_time:.3f}"
+                result.append(PlaylistMetadataType(**metadata_with_debug))
             total_time = time.time()
             print(f"[PERF] Cache HIT - Total time: {(total_time - start_time) * 1000:.2f}ms")
             return result
@@ -177,7 +182,14 @@ class PlaylistQuery:
                 domain_metadata = PlaylistMetadata.from_raw_playlist_and_service(raw_playlist, service, genre)
                 metadata_dict = domain_metadata.to_dict()
                 cache_data.append(metadata_dict)
-                playlist_metadata.append(PlaylistMetadataType(**metadata_dict))
+
+                # Add debug info for cache miss
+                metadata_dict_with_debug = metadata_dict.copy()
+                current_time = time.time()
+                metadata_dict_with_debug["debug_cache_status"] = (
+                    f"CACHE_MISS_at_{current_time:.3f}_took_{(current_time - start_time) * 1000:.0f}ms"
+                )
+                playlist_metadata.append(PlaylistMetadataType(**metadata_dict_with_debug))
 
         processing_time = time.time()
         print(f"[PERF] Metadata processing took {(processing_time - services_time) * 1000:.2f}ms")
