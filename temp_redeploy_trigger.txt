@@ -1,1 +1,2 @@
 trigger vercel redeploy
+trigger redeploy with Redis env var
