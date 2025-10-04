@@ -1,27 +1,15 @@
 {
+  "github": {
+    "silent": true
+  },
   "builds": [
     {
       "src": "backend/core/wsgi.py",
-      "use": "@vercel/python"
-    },
-    {
-      "src": "api/test.py",
-      "use": "@vercel/python"
-    },
-    {
-      "src": "api/simple_test.py",
-      "use": "@vercel/python"
+      "use": "@vercel/python",
+      "config": { "maxLambdaSize": "50mb" }
     }
   ],
   "routes": [
-    {
-      "src": "/api/test",
-      "dest": "api/test.py"
-    },
-    {
-      "src": "/api/simple_test",
-      "dest": "api/simple_test.py"
-    },
     {
       "src": "/(.*)",
       "dest": "backend/core/wsgi.py"
