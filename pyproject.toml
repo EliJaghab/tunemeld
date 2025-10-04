@@ -33,8 +33,9 @@ dependencies = [
     "redis>=5.0.8",
     "django-redis>=5.4.0",
 
-    # Utilities
+    # Utilities (required by Django services)
     "python-dotenv>=1.0.0",
+    "beautifulsoup4>=4.12.3",
 ]
 
 [project.optional-dependencies]
