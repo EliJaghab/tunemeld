@@ -1,4 +1,4 @@
-from core.api import cache_api, events_api, health_api
+from core.api import cache_api, debug_cache_api, events_api, health_api
 from django.urls import path
 from django.views.decorators.csrf import csrf_exempt
 from strawberry.django.views import GraphQLView
@@ -99,5 +99,10 @@ urlpatterns = [
         "api/GetMiscButtonLabels/",
         csrf_exempt(GraphQLView.as_view(schema=schema, graphiql=False)),
         name="graphql_misc_button_labels",
+    ),
+    path(
+        "api/debug-cache/",
+        debug_cache_api.debug_cache_keys,
+        name="debug_cache_keys",
     ),
 ]
