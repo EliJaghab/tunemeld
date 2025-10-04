@@ -4,9 +4,17 @@
       "src": "backend/core/wsgi.py",
       "use": "@vercel/python",
       "config": { "maxLambdaSize": "50mb" }
+    },
+    {
+      "src": "api/test.py",
+      "use": "@vercel/python"
     }
   ],
   "routes": [
+    {
+      "src": "/api/test",
+      "dest": "api/test.py"
+    },
     {
       "src": "/(.*)",
       "dest": "backend/core/wsgi.py"
