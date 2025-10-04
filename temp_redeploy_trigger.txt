@@ -1,2 +1,3 @@
 trigger vercel redeploy
 trigger redeploy with Redis env var
+trigger redeploy with 50MB limit on all functions
