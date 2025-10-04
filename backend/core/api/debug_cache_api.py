@@ -1,7 +1,7 @@
 import os
 
 from core.constants import GraphQLCacheKey
-from core.utils.redis_cache import CachePrefix, redis_cache_get
+from core.utils.redis_cache import CachePrefix, _generate_cache_key, redis_cache_get
 from django.core.cache import caches
 from django.http import JsonResponse
 
@@ -28,11 +28,12 @@ def debug_cache_keys(request):
     # Check cache keys for each genre
     for genre in genres:
         cache_key = GraphQLCacheKey.playlists_by_genre(genre)
+        actual_redis_key = _generate_cache_key(CachePrefix.GQL_PLAYLIST_METADATA, cache_key)
         cache_value = redis_cache_get(CachePrefix.GQL_PLAYLIST_METADATA, cache_key)
 
         debug_info["cache_status"][genre] = {
             "cache_key": cache_key,
-            "full_redis_key": f"{CachePrefix.GQL_PLAYLIST_METADATA}:{cache_key}",
+            "actual_redis_key": actual_redis_key,
             "has_cached_value": cache_value is not None,
             "cache_value_type": type(cache_value).__name__ if cache_value else None,
             "cache_value_length": len(cache_value) if isinstance(cache_value, (list, dict, str)) else None,
@@ -45,7 +46,7 @@ def debug_cache_keys(request):
         redis_url = os.getenv("REDIS_URL")
         if redis_url:
             r = redis.from_url(redis_url)
-            all_keys = r.keys(f"{CachePrefix.GQL_PLAYLIST_METADATA}:*")
+            all_keys = r.keys(f"{CachePrefix.GQL_PLAYLIST_METADATA.value}:*")
             debug_info["existing_cache_keys"] = [key.decode() for key in all_keys]
         else:
             debug_info["existing_cache_keys"] = "REDIS_URL_NOT_SET"
