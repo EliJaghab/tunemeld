@@ -1,4 +1,4 @@
-from core.api import cache_api, debug_cache_api, events_api, health_api, redis_debug_api
+from core.api import cache_api, debug_cache_api, debug_migrations_api, events_api, health_api, redis_debug_api
 from django.urls import path
 from django.views.decorators.csrf import csrf_exempt
 from strawberry.django.views import GraphQLView
@@ -119,5 +119,10 @@ urlpatterns = [
         "api/check-individual-playlist-cache/",
         redis_debug_api.check_individual_playlist_cache,
         name="check_individual_playlist_cache",
+    ),
+    path(
+        "api/debug-migrations/",
+        debug_migrations_api.debug_migrations_status,
+        name="debug_migrations_status",
     ),
 ]
