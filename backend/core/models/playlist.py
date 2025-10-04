@@ -44,6 +44,7 @@ class RawPlaylistDataModel(models.Model):
         db_table = "raw_playlist_data"
         indexes: ClassVar = [
             models.Index(fields=["genre", "service"]),
+            models.Index(fields=["genre", "service", "-id"]),
             models.Index(fields=["created_at"]),
             models.Index(fields=["playlist_url"]),
         ]
@@ -95,6 +96,7 @@ class PlaylistModel(models.Model):
         ordering: ClassVar = ["service", "genre", "position"]
         indexes: ClassVar = [
             models.Index(fields=["service", "genre"]),
+            models.Index(fields=["genre", "service", "position"]),
             models.Index(fields=["isrc"]),
         ]
         constraints: ClassVar = [
