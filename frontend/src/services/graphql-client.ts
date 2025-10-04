@@ -233,6 +233,7 @@ class GraphQLClient {
           genreName
           serviceName
           serviceIconUrl
+          debugCacheStatus
         }
       }
     `;

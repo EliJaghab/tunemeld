@@ -81,6 +81,7 @@ export async function fetchInitialPageData(
         genreName
         serviceName
         serviceIconUrl
+        debugCacheStatus
       }
 
       # 2. Genre buttons (FAST)

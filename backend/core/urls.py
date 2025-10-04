@@ -1,4 +1,4 @@
-from core.api import cache_api, debug_cache_api, events_api, health_api
+from core.api import cache_api, debug_cache_api, events_api, health_api, redis_debug_api
 from django.urls import path
 from django.views.decorators.csrf import csrf_exempt
 from strawberry.django.views import GraphQLView
@@ -104,5 +104,20 @@ urlpatterns = [
         "api/debug-cache/",
         debug_cache_api.debug_cache_keys,
         name="debug_cache_keys",
+    ),
+    path(
+        "api/redis-debug/",
+        redis_debug_api.test_redis_cache,
+        name="redis_debug_test",
+    ),
+    path(
+        "api/clear-playlist-cache/",
+        redis_debug_api.clear_playlist_cache,
+        name="clear_playlist_cache",
+    ),
+    path(
+        "api/check-individual-playlist-cache/",
+        redis_debug_api.check_individual_playlist_cache,
+        name="check_individual_playlist_cache",
     ),
 ]
