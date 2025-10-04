@@ -29,7 +29,6 @@ venv/
 .github/
 .gitignore
 Makefile
-pyproject.toml
 setup.py
 
 # Documentation

@@ -5,3 +5,4 @@ remove all lambda size limits
 test minimal dependencies
 revert to simple working config
 test core deps only
+CRITICAL FIX: allow Vercel to read pyproject.toml
