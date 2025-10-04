@@ -60,9 +60,11 @@ make kill-redis        # Stops local Redis instance started by make serve-redis
 
 ### Redis Cache (`caches["redis"]`)
 
-- **Purpose**: Vercel Redis for GraphQL query results ONLY
+- **Purpose**: Redis Cloud for GraphQL query results ONLY
 - **Data**: GQL_PLAYLIST, GQL_PLAY_COUNT, GQL_PLAYLIST_METADATA
 - **Usage**: GraphQL query responses served to the frontend
+- **Production**: Redis Cloud instance (configured via `REDIS_URL` environment variable)
+- **Development**: Local Redis at `localhost:6379/1`
 - **Notes**: Cached entries are keyed by `CachePrefix` enums and stored via `core.utils.redis_cache`
 
 **Simple rule: CloudflareKV for Django/ETL operations, Redis for GraphQL.**
@@ -71,9 +73,17 @@ make kill-redis        # Stops local Redis instance started by make serve-redis
 
 **Cache Population**: Redis cache is populated ONLY by the daily ETL pipeline (Step 6: cache warming), not on serverless function startup.
 
-**Why**: Vercel Redis is persistent across serverless invocations, so ETL-populated cache remains available. Startup cache warming would cause unnecessary delays on every new function instance.
+**Why**: Redis Cloud is persistent across serverless invocations, so ETL-populated cache remains available. Startup cache warming would cause unnecessary delays on every new function instance.
 
-**Performance**: API responses consistently achieve 107-193ms with this architecture.
+**Cache Warming Flow**:
+
+1. **GitHub Actions ETL** runs daily at 2:30 AM UTC
+2. **Step 6** executes `e_clear_and_warm_track_cache.py`
+3. **GraphQL queries** executed with proper variable substitution (matching frontend queries exactly)
+4. **Redis cache** populated with all genre/service combinations
+5. **Production API** serves cached responses (<200ms vs 10+ seconds)
+
+**Performance**: API responses consistently achieve <200ms with properly warmed cache.
 
 ## Development Workflow
 
