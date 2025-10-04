@@ -37,6 +37,14 @@ dependencies = [
     "python-dotenv>=1.0.0",
     "croniter>=2.0.7",
     "PyYAML>=6.0.2",
+    "beautifulsoup4>=4.12.3",
+    "selenium>=4.22.0",
+    "spotipy>=2.24.0",
+    "spotdl>=4.2.8",
+    "webdriver-manager>=4.0.2",
+    "tenacity>=9.0.0",
+    "unidecode>=1.3.8",
+    "Pillow>=10.0.0",
 ]
 
 [project.optional-dependencies]
@@ -46,16 +54,6 @@ dev = [
     "ruff>=0.8.0",
     "pre-commit>=3.0.0",
     "mypy>=1.0.0",
-]
-etl = [
-    "beautifulsoup4>=4.12.3",
-    "selenium>=4.22.0",
-    "spotipy>=2.24.0",
-    "spotdl>=4.2.8",
-    "webdriver-manager>=4.0.2",
-    "tenacity>=9.0.0",
-    "unidecode>=1.3.8",
-    "Pillow>=10.0.0",
 ]
 
 [tool.ruff]
