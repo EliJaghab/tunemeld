@@ -87,6 +87,24 @@ def get_raw_playlist_data_by_genre_service(genre_name: str, service_name: str) -
     return None
 
 
+def get_all_raw_playlist_data_by_genre(genre_name: str) -> list[RawPlaylistData]:
+    """Get all raw playlist data for a genre in a single optimized query."""
+    try:
+        django_genre = GenreModel.objects.get(name=genre_name)
+    except GenreModel.DoesNotExist:
+        return []
+
+    # Get the latest raw playlist for each service in a single query
+    raw_playlists = (
+        RawPlaylistDataModel.objects.filter(genre=django_genre)
+        .select_related("service")
+        .order_by("service", "-id")
+        .distinct("service")
+    )
+
+    return [RawPlaylistData.from_django_model(raw_playlist) for raw_playlist in raw_playlists]
+
+
 def is_track_seen_on_service(isrc: str, genre_name: str, service_name: ServiceName) -> bool:
     """Check if a track with given ISRC was seen on a specific service for a genre."""
     try:

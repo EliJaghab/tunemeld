@@ -3,10 +3,10 @@ from datetime import datetime
 import strawberry
 from core.api.genre_service_api import (
     get_all_ranks,
+    get_all_raw_playlist_data_by_genre,
     get_all_services,
     get_genre,
     get_playlist_tracks_by_genre_service,
-    get_raw_playlist_data_by_genre_service,
     get_service,
     get_track_by_isrc,
     get_track_model_by_isrc,
@@ -139,18 +139,18 @@ class PlaylistQuery:
         if not genre_obj:
             return []
 
-        raw_playlists = []
+        # Use optimized bulk query instead of N+1 loop
+        raw_playlists = get_all_raw_playlist_data_by_genre(genre)
+
+        # Get services once for mapping
         services = get_all_services()
-        for service in services:
-            raw_playlist = get_raw_playlist_data_by_genre_service(genre, service.name)
-            if raw_playlist:
-                raw_playlists.append(raw_playlist)
+        service_lookup = {service.id: service for service in services}
 
         playlist_metadata = []
         cache_data = []
         for raw_playlist in raw_playlists:
-            # Find the service for this raw_playlist
-            service = next((s for s in services if s.id == raw_playlist.service_id), None)
+            # Use lookup instead of linear search
+            service = service_lookup.get(raw_playlist.service_id)
             if service:
                 domain_metadata = PlaylistMetadata.from_raw_playlist_and_service(raw_playlist, service, genre)
                 metadata_dict = domain_metadata.to_dict()
