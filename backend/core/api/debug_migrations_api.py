@@ -38,19 +38,32 @@ def debug_migrations_status(request):
             for row in cursor.fetchall():
                 indexes.append({"index_name": row[0], "table_name": row[1]})
 
-            # Check table row counts
-            cursor.execute("SELECT COUNT(*) FROM core_rawplaylistdatamodel")
-            raw_playlist_count = cursor.fetchone()[0]
+            # Check what tables actually exist
+            cursor.execute("""
+                SELECT table_name
+                FROM information_schema.tables
+                WHERE table_schema = 'public'
+                AND table_name LIKE '%playlist%'
+                ORDER BY table_name
+            """)
+            existing_tables = [row[0] for row in cursor.fetchall()]
 
-            cursor.execute("SELECT COUNT(*) FROM core_playlistmodel")
-            playlist_count = cursor.fetchone()[0]
+            # Get table counts for existing tables
+            table_counts = {}
+            for table_name in existing_tables:
+                try:
+                    cursor.execute(f"SELECT COUNT(*) FROM {table_name}")
+                    table_counts[table_name] = cursor.fetchone()[0]
+                except Exception as e:
+                    table_counts[table_name] = f"ERROR: {e}"
 
             return JsonResponse(
                 {
                     "status": "success",
                     "migrations": migrations,
                     "critical_indexes": indexes,
-                    "table_counts": {"raw_playlists": raw_playlist_count, "playlists": playlist_count},
+                    "existing_tables": existing_tables,
+                    "table_counts": table_counts,
                     "database_info": {
                         "vendor": connection.vendor,
                         "version": str(connection.pg_version) if hasattr(connection, "pg_version") else "unknown",
