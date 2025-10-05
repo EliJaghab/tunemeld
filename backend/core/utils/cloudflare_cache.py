@@ -1,3 +1,4 @@
+import datetime
 import hashlib
 import json
 import os
@@ -208,12 +209,20 @@ def cloudflare_cache_delete(prefix: CachePrefix, key_data: str) -> bool:
 
 
 def clear_rapidapi_cache() -> int:
-    """Clear RapidAPI cache keys only if triggered by scheduled GitHub Actions cron."""
+    """Clear RapidAPI cache keys only if triggered by scheduled GitHub Actions cron AND it's Saturday."""
     if os.getenv("GITHUB_EVENT_NAME") != "schedule":
         logger.info("Not a scheduled run - preserving RapidAPI cache to avoid rate limits")
         return 0
 
-    logger.info("Scheduled run detected - clearing RapidAPI cache for fresh playlist data")
+    # Check if it's Saturday (weekday 5 in Python's weekday() where Monday=0)
+    current_weekday = datetime.datetime.utcnow().weekday()
+    if current_weekday != 5:  # 5 = Saturday
+        logger.info(
+            f"Scheduled run on {datetime.datetime.utcnow().strftime('%A')} - preserving RapidAPI cache (Saturday only)"
+        )
+        return 0
+
+    logger.info("Saturday scheduled run detected - clearing RapidAPI cache for fresh playlist data")
 
     cleared_count = 0
 

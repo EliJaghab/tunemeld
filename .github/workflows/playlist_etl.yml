@@ -49,13 +49,6 @@ jobs:
           chrome-version: stable
           install-chromedriver: true
 
-      - name: Set PYTHONPATH and verify installation
-        run: |
-          echo "PYTHONPATH=$PWD" >> $GITHUB_ENV
-          echo "Verifying package installation..."
-          python -c "import bs4; print(f'BeautifulSoup4 version: {bs4.__version__}')"
-          python -c "import pydantic; print(f'Pydantic version: {pydantic.__version__}')"
-          echo "All packages verified successfully"
 
       - name: Pre-migration database safety check
         env:
@@ -90,13 +83,6 @@ jobs:
           CF_NAMESPACE_ID: ${{ secrets.CF_NAMESPACE_ID }}
           CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
         run: |
-          export PYTHONPATH=$PWD
-          echo "Current directory: $(pwd)"
-          echo "PYTHONPATH: $PYTHONPATH"
-          echo "Python path verification from backend directory:"
-          cd backend && python -c "import sys; print('Python sys.path:', sys.path[:3])"
-          cd backend && python -c "import bs4; print(f'BeautifulSoup4 accessible: {bs4.__version__}')"
-          cd $PWD
           if [ "${{ inputs.force_refresh }}" = "true" ]; then
             make run-playlist-etl-force-refresh
           else
