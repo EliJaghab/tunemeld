@@ -178,8 +178,8 @@ export async function fetchInitialPageData(
 
 // FAST background loading of service playlists (2nd request)
 async function fetchServicePlaylists(genre: string): Promise<void> {
-  const query = `
-    query GetServicePlaylists($genre: String!) {
+  const tuneMeldQuery = `
+    query GetTuneMeldPlaylist($genre: String!) {
       tuneMeldPlaylist: playlist(genre: $genre, service: "${SERVICE_NAMES.TUNEMELD}") {
         genreName
         serviceName
@@ -235,6 +235,31 @@ async function fetchServicePlaylists(genre: string): Promise<void> {
           trackDetailUrlYoutube: trackDetailUrl(genre: $genre, rank: "tunemeld-rank", player: "${SERVICE_NAMES.YOUTUBE}")
         }
       }
+    }
+  `;
+
+  const tuneMeldData = await graphqlClient.query(tuneMeldQuery, { genre });
+
+  if (tuneMeldData.tuneMeldPlaylist) {
+    renderPlaylistTracks(
+      [tuneMeldData.tuneMeldPlaylist],
+      "main-playlist-data-placeholder",
+      SERVICE_NAMES.TUNEMELD,
+    );
+  }
+
+  requestAnimationFrame(() => {
+    hideShimmerLoaders();
+  });
+
+  loadOtherServicePlaylists(genre).catch((error) => {
+    console.error("Failed to load other service playlists:", error);
+  });
+}
+
+async function loadOtherServicePlaylists(genre: string): Promise<void> {
+  const servicePlaylistsQuery = `
+    query GetOtherServicePlaylists($genre: String!) {
       spotifyPlaylist: playlist(genre: $genre, service: "${SERVICE_NAMES.SPOTIFY}") {
         genreName
         serviceName
@@ -403,15 +428,7 @@ async function fetchServicePlaylists(genre: string): Promise<void> {
     }
   `;
 
-  const data = await graphqlClient.query(query, { genre });
-
-  if (data.tuneMeldPlaylist) {
-    renderPlaylistTracks(
-      [data.tuneMeldPlaylist],
-      "main-playlist-data-placeholder",
-      SERVICE_NAMES.TUNEMELD,
-    );
-  }
+  const data = await graphqlClient.query(servicePlaylistsQuery, { genre });
 
   if (data.spotifyPlaylist) {
     renderPlaylistTracks(
@@ -436,10 +453,6 @@ async function fetchServicePlaylists(genre: string): Promise<void> {
       SERVICE_NAMES.SOUNDCLOUD,
     );
   }
-
-  requestAnimationFrame(() => {
-    hideShimmerLoaders();
-  });
 }
 
 export async function updateGenreData(
