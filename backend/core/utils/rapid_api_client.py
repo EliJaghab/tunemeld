@@ -43,12 +43,14 @@ def fetch_playlist_data(service_name: ServiceName, genre: GenreName, force_refre
 
 
 def _make_rapidapi_request(url: str, host: str) -> JSON:
-    """Make a RapidAPI request with automatic key rotation on rate limits"""
+    """Make a RapidAPI request with automatic key rotation on failures"""
     api_keys = [
         os.getenv("X_RAPIDAPI_KEY_A"),
         os.getenv("X_RAPIDAPI_KEY_B"),
         os.getenv("X_RAPIDAPI_KEY_C"),
     ]
+
+    last_exception = None
 
     for api_key in api_keys:
         headers = {
@@ -59,15 +61,16 @@ def _make_rapidapi_request(url: str, host: str) -> JSON:
 
         logger.info(f"Making RapidAPI request to {host}")
 
-        response = requests.get(url, headers=headers, timeout=60)
-
-        if response.status_code == 429:
-            logger.warning(f"RapidAPI rate limit exceeded for {host}. Trying next key...")
+        try:
+            response = requests.get(url, headers=headers, timeout=60)
+            response.raise_for_status()
+            logger.info(f"RapidAPI request successful - Status: {response.status_code}")
+            return cast("JSON", response.json())
+        except requests.exceptions.HTTPError as e:
+            last_exception = e
+            status = e.response.status_code if hasattr(e, "response") else "unknown"
+            logger.warning(f"RapidAPI request failed with status {status} for {host}. Trying next key...")
             continue
 
-        response.raise_for_status()
-        logger.info(f"RapidAPI request successful - Status: {response.status_code}")
-        return cast("JSON", response.json())
-
     logger.error(f"All RapidAPI keys exhausted for {host}")
-    raise requests.exceptions.HTTPError(f"All RapidAPI keys failed for {host}")
+    raise requests.exceptions.HTTPError(f"All RapidAPI keys failed for {host}") from last_exception
