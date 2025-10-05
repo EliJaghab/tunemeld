@@ -31,9 +31,12 @@ from core.utils.cloudflare_cache import (
     cloudflare_cache_set,
     generate_spotify_cache_key_data,
 )
-from core.utils.spotdl_client import fetch_spotify_playlist_with_spotdl
 from core.utils.utils import clean_unicode_text, get_logger
-from core.utils.webdriver import get_cached_webdriver
+
+# ETL utilities - import conditionally
+if ETL_DEPENDENCIES_AVAILABLE:
+    from core.utils.spotdl_client import fetch_spotify_playlist_with_spotdl
+    from core.utils.webdriver import get_cached_webdriver
 
 logger = get_logger(__name__)
 
