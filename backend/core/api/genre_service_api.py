@@ -98,8 +98,8 @@ def get_all_raw_playlist_data_by_genre(genre_name: str) -> list[RawPlaylistData]
     raw_playlists = (
         RawPlaylistDataModel.objects.filter(genre=django_genre)
         .select_related("service")
-        .order_by("service", "-id")
-        .distinct("service")
+        .order_by("service_id", "-id")
+        .distinct("service_id")
     )
 
     return [RawPlaylistData.from_django_model(raw_playlist) for raw_playlist in raw_playlists]
