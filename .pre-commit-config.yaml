@@ -98,3 +98,10 @@ repos:
         entry: make backend-startup-check
         language: system
         pass_filenames: false
+
+      - id: generate-pipfile
+        name: Generate Pipfile from pyproject.toml
+        entry: python scripts/generate_pipfile.py
+        language: system
+        files: pyproject.toml
+        pass_filenames: false
