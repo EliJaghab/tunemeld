@@ -30,6 +30,16 @@ def get_environment() -> str:
 
 ENVIRONMENT = get_environment()
 
+# Detect ETL dependencies availability for conditional imports
+# In serverless environments (Vercel), ETL dependencies are not installed
+try:
+    import selenium  # noqa: F401
+    import spotipy  # noqa: F401
+
+    ETL_DEPENDENCIES_AVAILABLE = True
+except ImportError:
+    ETL_DEPENDENCIES_AVAILABLE = False
+
 # In dev, load environment variables from .env.dev file
 if ENVIRONMENT == DEV:
     env_file = Path(__file__).resolve().parent.parent.parent / ".env.dev"

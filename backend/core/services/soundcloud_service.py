@@ -9,12 +9,12 @@ import requests
 from bs4 import BeautifulSoup, Tag
 
 # ETL-only imports - conditionally imported to avoid Vercel serverless bloat
-try:
-    from unidecode import unidecode
+from django.conf import settings
 
-    ETL_UTILS_AVAILABLE = True
-except ImportError:
-    ETL_UTILS_AVAILABLE = False
+if settings.ETL_DEPENDENCIES_AVAILABLE:
+    from unidecode import unidecode
+else:
+    unidecode = None  # type: ignore
 
 from tenacity import retry, stop_after_attempt, wait_exponential
 
@@ -212,8 +212,9 @@ def _normalize_text(text: str) -> str:
     # Then decode HTML entities
     text = html.unescape(text)
 
-    # Then convert Unicode to ASCII
-    text = unidecode(text)
+    # Then convert Unicode to ASCII (ETL only)
+    if unidecode is not None:
+        text = unidecode(text)
 
     # Remove punctuation and normalize spaces
     normalized = "".join(c if c not in string.punctuation else " " for c in text.lower())

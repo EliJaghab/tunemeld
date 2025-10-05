@@ -1,9 +1,10 @@
 import threading
 
 from core.utils.utils import get_logger
+from django.conf import settings
 
 # ETL-only imports - conditionally imported to avoid Vercel serverless bloat
-try:
+if settings.ETL_DEPENDENCIES_AVAILABLE:
     from selenium import webdriver
     from selenium.common.exceptions import NoSuchElementException
     from selenium.webdriver.chrome.options import Options
@@ -11,10 +12,15 @@ try:
     from selenium.webdriver.common.by import By
     from selenium.webdriver.remote.webdriver import WebDriver
     from webdriver_manager.chrome import ChromeDriverManager
-
-    SELENIUM_AVAILABLE = True
-except ImportError:
-    SELENIUM_AVAILABLE = False
+else:
+    # Create placeholder classes to prevent NameError
+    webdriver = None  # type: ignore
+    NoSuchElementException = Exception  # type: ignore
+    Options = None  # type: ignore
+    Service = None  # type: ignore
+    By = None  # type: ignore
+    WebDriver = None  # type: ignore
+    ChromeDriverManager = None  # type: ignore
 
 from tenacity import retry, stop_after_attempt, wait_exponential
 

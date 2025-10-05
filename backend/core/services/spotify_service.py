@@ -10,15 +10,18 @@ import requests
 from bs4 import BeautifulSoup, Tag
 
 # ETL-only imports - conditionally imported to avoid Vercel serverless bloat
-try:
+from django.conf import settings
+
+if settings.ETL_DEPENDENCIES_AVAILABLE:
     from selenium.webdriver.common.by import By
     from spotipy import Spotify
     from spotipy.exceptions import SpotifyException
     from spotipy.oauth2 import SpotifyClientCredentials
-
-    ETL_DEPENDENCIES_AVAILABLE = True
-except ImportError:
-    ETL_DEPENDENCIES_AVAILABLE = False
+else:
+    # Create placeholder classes to prevent NameError
+    Spotify = None  # type: ignore
+    SpotifyException = Exception  # type: ignore
+    By = None  # type: ignore
 
 from tenacity import retry, stop_after_attempt, wait_exponential
 
@@ -35,9 +38,12 @@ from core.utils.cloudflare_cache import (
 from core.utils.utils import clean_unicode_text, get_logger
 
 # ETL utilities - import conditionally
-if ETL_DEPENDENCIES_AVAILABLE:
+if settings.ETL_DEPENDENCIES_AVAILABLE:
     from core.utils.spotdl_client import fetch_spotify_playlist_with_spotdl
     from core.utils.webdriver import get_cached_webdriver
+else:
+    fetch_spotify_playlist_with_spotdl = None  # type: ignore
+    get_cached_webdriver = None  # type: ignore
 
 logger = get_logger(__name__)
 
