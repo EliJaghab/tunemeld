@@ -1,14 +1,30 @@
+#!/usr/bin/env python3
+"""
+WSGI module for TuneMeld Django application.
+This is the entry point for Vercel serverless functions.
+"""
+
 import json
 import os
 import sys
 import traceback
 from datetime import datetime
 
-# Add the backend directory to Python path for Vercel
-backend_path = os.path.dirname(os.path.dirname(__file__))
-sys.path.insert(0, backend_path)
+# IMMEDIATE startup logging to debug FUNCTION_INVOCATION_FAILED
+print("=== WSGI MODULE LOADING START ===", flush=True)
+print("=== BASIC IMPORTS SUCCESSFUL ===", flush=True)
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "core.settings")
+# Add the backend directory to Python path for Vercel
+try:
+    backend_path = os.path.dirname(os.path.dirname(__file__))
+    sys.path.insert(0, backend_path)
+    print(f"=== PATH SETUP: backend_path = {backend_path} ===", flush=True)
+
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "core.settings")
+    print(f"=== DJANGO_SETTINGS_MODULE = {os.environ.get('DJANGO_SETTINGS_MODULE')} ===", flush=True)
+except Exception as e:
+    print(f"=== CRITICAL: PATH SETUP FAILED: {e} ===", flush=True)
+    raise
 
 # Enhanced startup logging
 print(f"[{datetime.utcnow().isoformat()}] WSGI STARTUP: Python {sys.version}", file=sys.stderr)
