@@ -15,11 +15,12 @@ try:
     from spotipy import Spotify
     from spotipy.exceptions import SpotifyException
     from spotipy.oauth2 import SpotifyClientCredentials
-    from tenacity import retry, stop_after_attempt, wait_exponential
 
     ETL_DEPENDENCIES_AVAILABLE = True
 except ImportError:
     ETL_DEPENDENCIES_AVAILABLE = False
+
+from tenacity import retry, stop_after_attempt, wait_exponential
 
 if TYPE_CHECKING:
     from core.constants import GenreName

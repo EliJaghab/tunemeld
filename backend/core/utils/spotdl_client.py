@@ -5,14 +5,7 @@ from pathlib import Path
 from typing import Any
 
 from core.utils.utils import get_logger
-
-# ETL-only imports - conditionally imported to avoid Vercel serverless bloat
-try:
-    from tenacity import retry, stop_after_attempt, wait_exponential
-
-    TENACITY_AVAILABLE = True
-except ImportError:
-    TENACITY_AVAILABLE = False
+from tenacity import retry, stop_after_attempt, wait_exponential
 
 logger = get_logger(__name__)
 

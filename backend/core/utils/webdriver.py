@@ -10,12 +10,13 @@ try:
     from selenium.webdriver.chrome.service import Service
     from selenium.webdriver.common.by import By
     from selenium.webdriver.remote.webdriver import WebDriver
-    from tenacity import retry, stop_after_attempt, wait_exponential
     from webdriver_manager.chrome import ChromeDriverManager
 
     SELENIUM_AVAILABLE = True
 except ImportError:
     SELENIUM_AVAILABLE = False
+
+from tenacity import retry, stop_after_attempt, wait_exponential
 
 logger = get_logger(__name__)
 
