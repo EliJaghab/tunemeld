@@ -14,15 +14,16 @@ authors = [{name = "TuneMeld Team"}]
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
-    # Core Django framework and web dependencies
+    # FastAPI framework and web dependencies
+    "fastapi>=0.104.0",
+    "uvicorn>=0.24.0",
+    "strawberry-graphql[fastapi]>=0.209.0",
+    "pydantic>=2.9.0",
+
+    # Core Django framework (for models and database)
     "Django>=4.2,<5.0",
-    "django-cors-headers>=4.4.0",
-    "django-distill>=3.2.7",
     "dj-database-url>=2.1.0",
     "psycopg2-binary>=2.9.10",
-    "gunicorn>=20.1.0",
-    "strawberry-graphql[django]>=0.209.0",
-    "pydantic>=2.9.0",
 
     # External Services
     "requests>=2.32.3",
