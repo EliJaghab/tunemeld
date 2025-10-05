@@ -1,14 +1,21 @@
 import threading
 
 from core.utils.utils import get_logger
-from selenium import webdriver
-from selenium.common.exceptions import NoSuchElementException
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.common.by import By
-from selenium.webdriver.remote.webdriver import WebDriver
-from tenacity import retry, stop_after_attempt, wait_exponential
-from webdriver_manager.chrome import ChromeDriverManager
+
+# ETL-only imports - conditionally imported to avoid Vercel serverless bloat
+try:
+    from selenium import webdriver
+    from selenium.common.exceptions import NoSuchElementException
+    from selenium.webdriver.chrome.options import Options
+    from selenium.webdriver.chrome.service import Service
+    from selenium.webdriver.common.by import By
+    from selenium.webdriver.remote.webdriver import WebDriver
+    from tenacity import retry, stop_after_attempt, wait_exponential
+    from webdriver_manager.chrome import ChromeDriverManager
+
+    SELENIUM_AVAILABLE = True
+except ImportError:
+    SELENIUM_AVAILABLE = False
 
 logger = get_logger(__name__)
 

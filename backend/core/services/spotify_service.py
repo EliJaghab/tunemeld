@@ -8,11 +8,18 @@ from typing import TYPE_CHECKING
 
 import requests
 from bs4 import BeautifulSoup, Tag
-from selenium.webdriver.common.by import By
-from spotipy import Spotify
-from spotipy.exceptions import SpotifyException
-from spotipy.oauth2 import SpotifyClientCredentials
-from tenacity import retry, stop_after_attempt, wait_exponential
+
+# ETL-only imports - conditionally imported to avoid Vercel serverless bloat
+try:
+    from selenium.webdriver.common.by import By
+    from spotipy import Spotify
+    from spotipy.exceptions import SpotifyException
+    from spotipy.oauth2 import SpotifyClientCredentials
+    from tenacity import retry, stop_after_attempt, wait_exponential
+
+    ETL_DEPENDENCIES_AVAILABLE = True
+except ImportError:
+    ETL_DEPENDENCIES_AVAILABLE = False
 
 if TYPE_CHECKING:
     from core.constants import GenreName

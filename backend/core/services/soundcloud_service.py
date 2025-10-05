@@ -7,8 +7,15 @@ from urllib.parse import quote_plus, urlparse
 
 import requests
 from bs4 import BeautifulSoup, Tag
-from tenacity import retry, stop_after_attempt, wait_exponential
-from unidecode import unidecode
+
+# ETL-only imports - conditionally imported to avoid Vercel serverless bloat
+try:
+    from tenacity import retry, stop_after_attempt, wait_exponential
+    from unidecode import unidecode
+
+    ETL_UTILS_AVAILABLE = True
+except ImportError:
+    ETL_UTILS_AVAILABLE = False
 
 if TYPE_CHECKING:
     from core.constants import GenreName
