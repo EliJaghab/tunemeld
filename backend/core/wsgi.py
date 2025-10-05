@@ -9,6 +9,10 @@ from django.core.wsgi import get_wsgi_application
 backend_path = os.path.dirname(os.path.dirname(__file__))
 sys.path.insert(0, backend_path)
 
+# Add project root to Python path for gql module access
+project_root = os.path.dirname(backend_path)
+sys.path.insert(0, project_root)
+
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "core.settings")
 
 
