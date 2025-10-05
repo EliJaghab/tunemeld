@@ -49,10 +49,23 @@ jobs:
           CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
         run: make ci-db-migrate
 
-      - name: Clear and Warm Cache
+      - name: Clear Redis Cache
         env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
-          DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
           REDIS_URL: ${{ secrets.REDIS_URL }}
         run: |
-          cd backend && python manage.py warm_cache
+          # Install redis-cli
+          sudo apt-get update && sudo apt-get install -y redis-tools
+
+          # Extract Redis connection details
+          REDIS_HOST=$(echo $REDIS_URL | sed 's/redis:\/\/\([^:]*\):.*/\1/')
+          REDIS_PORT=$(echo $REDIS_URL | sed 's/.*:\([0-9]*\)\/.*/\1/')
+          REDIS_PASSWORD=$(echo $REDIS_URL | sed 's/redis:\/\/:\([^@]*\)@.*/\1/')
+
+          # Clear Redis cache
+          if [ -n "$REDIS_PASSWORD" ]; then
+            redis-cli -h $REDIS_HOST -p $REDIS_PORT -a $REDIS_PASSWORD FLUSHDB
+          else
+            redis-cli -h $REDIS_HOST -p $REDIS_PORT FLUSHDB
+          fi
+
+          echo "✅ Redis cache cleared! Next API requests will populate fresh cache."
