@@ -48,18 +48,7 @@ class GraphQLClient {
   ): Promise<any> {
     const startTime = Date.now();
 
-    // AGGRESSIVE DEBUG LOGGING
     const queryName = query.match(/query\s+(\w+)/)?.[1] || "UnknownQuery";
-    console.log(
-      `🔥 GRAPHQL REQUEST #${Math.random().toString(36).substr(2, 9)}:`,
-      {
-        queryName,
-        variables,
-        queryPreview: query.substring(0, 100) + "...",
-        timestamp: new Date().toISOString(),
-        stackTrace: new Error().stack?.split("\n").slice(1, 4),
-      },
-    );
 
     try {
       const headers = {
@@ -70,10 +59,6 @@ class GraphQLClient {
       const baseEndpoint = this.endpoint.replace("/api/gql/", "/api/");
       const customEndpoint = `${baseEndpoint}${queryName}/`;
 
-      // Add timeout to prevent infinite hanging
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
-
       const response = await fetch(customEndpoint, {
         method: "POST",
         headers,
@@ -81,10 +66,7 @@ class GraphQLClient {
           query,
           variables,
         }),
-        signal: controller.signal,
       });
-
-      clearTimeout(timeoutId);
 
       const duration = Date.now() - startTime;
 
@@ -433,12 +415,6 @@ class GraphQLClient {
     buttonType: string,
     context: string | null = null,
   ): Promise<ButtonLabel[]> {
-    console.error(`🚨 INDIVIDUAL BUTTON CALL DETECTED!`, {
-      buttonType,
-      context,
-      timestamp: new Date().toISOString(),
-      stackTrace: new Error().stack?.split("\n").slice(1, 5),
-    });
     const query = `
       query GetMiscButtonLabels($buttonType: String!, $context: String) {
         miscButtonLabels(buttonType: $buttonType, context: $context) {
