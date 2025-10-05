@@ -39,7 +39,7 @@ class GraphQLClient {
   private endpoint: string;
 
   constructor() {
-    this.endpoint = `${getDjangoApiBaseUrl()}/api/gql/`;
+    this.endpoint = `${getDjangoApiBaseUrl()}/api/gql`;
   }
 
   async query(
@@ -56,7 +56,7 @@ class GraphQLClient {
       };
 
       // Custom endpoint path for better debugging in Network tab
-      const baseEndpoint = this.endpoint.replace("/api/gql/", "/api/");
+      const baseEndpoint = this.endpoint.replace("/api/gql", "/api/");
       const customEndpoint = `${baseEndpoint}${queryName}/`;
 
       const response = await fetch(customEndpoint, {
