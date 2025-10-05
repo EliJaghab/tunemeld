@@ -129,77 +129,42 @@ class PlaylistQuery:
     @strawberry.field
     def playlists_by_genre(self, genre: str) -> list[PlaylistMetadataType]:
         """Get playlist metadata for all services for a given genre."""
-        import time
-
-        start_time = time.time()
-
         cache_key_data = GraphQLCacheKey.playlists_by_genre(genre)
-        print(f"[PERF] playlists_by_genre starting for genre='{genre}', cache_key='{cache_key_data}'")
 
         cached_result = redis_cache_get(CachePrefix.GQL_PLAYLIST_METADATA, cache_key_data)
-        cache_lookup_time = time.time()
-        cache_status = "HIT" if cached_result else "MISS"
-        print(f"[PERF] Cache lookup took {(cache_lookup_time - start_time) * 1000:.2f}ms, cached_result={cache_status}")
 
         if cached_result is not None:
             result = []
             for metadata in cached_result:
                 metadata_with_debug = metadata.copy()
-                metadata_with_debug["debug_cache_status"] = f"CACHE_HIT_at_{cache_lookup_time:.3f}"
+                metadata_with_debug["debug_cache_status"] = "CACHE_HIT"
                 result.append(PlaylistMetadataType(**metadata_with_debug))
-            total_time = time.time()
-            print(f"[PERF] Cache HIT - Total time: {(total_time - start_time) * 1000:.2f}ms")
             return result
 
         genre_obj = get_genre(genre)
         if not genre_obj:
-            print(f"[PERF] Genre '{genre}' not found")
             return []
 
-        genre_lookup_time = time.time()
-        print(f"[PERF] Genre lookup took {(genre_lookup_time - cache_lookup_time) * 1000:.2f}ms")
-
-        # Use optimized bulk query instead of N+1 loop
         raw_playlists = get_all_raw_playlist_data_by_genre(genre)
-        raw_playlists_time = time.time()
-        duration = (raw_playlists_time - genre_lookup_time) * 1000
-        print(f"[PERF] get_all_raw_playlist_data_by_genre took {duration:.2f}ms, found {len(raw_playlists)} playlists")
 
-        # Get services once for mapping
         services = get_all_services()
-        services_time = time.time()
-        duration = (services_time - raw_playlists_time) * 1000
-        print(f"[PERF] get_all_services took {duration:.2f}ms, found {len(services)} services")
 
         service_lookup = {service.id: service for service in services}
 
         playlist_metadata = []
         cache_data = []
         for raw_playlist in raw_playlists:
-            # Use lookup instead of linear search
             service = service_lookup.get(raw_playlist.service_id)
             if service:
                 domain_metadata = PlaylistMetadata.from_raw_playlist_and_service(raw_playlist, service, genre)
                 metadata_dict = domain_metadata.to_dict()
                 cache_data.append(metadata_dict)
 
-                # Add debug info for cache miss
                 metadata_dict_with_debug = metadata_dict.copy()
-                current_time = time.time()
-                metadata_dict_with_debug["debug_cache_status"] = (
-                    f"CACHE_MISS_at_{current_time:.3f}_took_{(current_time - start_time) * 1000:.0f}ms"
-                )
+                metadata_dict_with_debug["debug_cache_status"] = "CACHE_MISS"
                 playlist_metadata.append(PlaylistMetadataType(**metadata_dict_with_debug))
 
-        processing_time = time.time()
-        print(f"[PERF] Metadata processing took {(processing_time - services_time) * 1000:.2f}ms")
-
         redis_cache_set(CachePrefix.GQL_PLAYLIST_METADATA, cache_key_data, cache_data)
-        cache_set_time = time.time()
-        print(f"[PERF] Cache set took {(cache_set_time - processing_time) * 1000:.2f}ms")
-
-        total_time = time.time()
-        print(f"[PERF] playlists_by_genre TOTAL time: {(total_time - start_time) * 1000:.2f}ms")
 
         return playlist_metadata
 
@@ -229,3 +194,52 @@ class PlaylistQuery:
         redis_cache_set(CachePrefix.GQL_PLAYLIST_METADATA, GraphQLCacheKey.ALL_RANKS, cache_data)
 
         return rank_types
+
+    @strawberry.field
+    def service_playlists_by_genre(self, genre: str) -> list[PlaylistType]:
+        """Get all service playlists for a given genre."""
+        cache_key = f"service_playlists_by_genre:{genre}"
+        cached_result = redis_cache_get(CachePrefix.GQL_PLAYLIST, cache_key)
+
+        if cached_result is not None:
+            playlists = []
+            for playlist_data in cached_result:
+                playlist = Playlist.from_dict(playlist_data)
+                strawberry_tracks = [TrackType.from_django_model(track.to_django_model()) for track in playlist.tracks]
+                playlists.append(
+                    PlaylistType(
+                        genre_name=playlist.genre_name,
+                        service_name=playlist.service_name,
+                        tracks=strawberry_tracks,
+                    )
+                )
+            return playlists
+
+        services = [s.name for s in get_all_services()]
+        playlists = []
+        cache_data = []
+
+        for service in services:
+            track_positions = get_playlist_tracks_by_genre_service(genre, service)
+            django_tracks = [
+                get_track_model_by_isrc(isrc) for isrc, _ in track_positions if get_track_model_by_isrc(isrc)
+            ]
+
+            domain_tracks_for_cache = [
+                get_track_by_isrc(track.isrc) for track in django_tracks if get_track_by_isrc(track.isrc)
+            ]
+
+            domain_playlist = Playlist(genre_name=genre, service_name=service, tracks=domain_tracks_for_cache)
+            cache_data.append(domain_playlist.to_dict())
+
+            strawberry_tracks = [TrackType.from_django_model(track) for track in django_tracks]
+            playlists.append(
+                PlaylistType(
+                    genre_name=genre,
+                    service_name=service,
+                    tracks=strawberry_tracks,
+                )
+            )
+
+        redis_cache_set(CachePrefix.GQL_PLAYLIST, cache_key, cache_data)
+        return playlists

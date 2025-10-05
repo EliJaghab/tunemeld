@@ -81,7 +81,6 @@ export async function fetchInitialPageData(
         genreName
         serviceName
         serviceIconUrl
-        debugCacheStatus
       }
 
       # 2. Genre buttons (FAST)
@@ -190,10 +189,16 @@ export async function fetchInitialPageData(
 
 // FAST background loading of service playlists (2nd request)
 async function fetchServicePlaylists(genre: string): Promise<void> {
+  const startTime = performance.now();
   logRequest(
     "fetchServicePlaylists",
     `Background service playlists for genre: ${genre}`,
   );
+
+  console.log(
+    `🔄 [PERFORMANCE] fetchServicePlaylists started at ${new Date().toISOString()}`,
+  );
+
   const query = `
     query GetServicePlaylists($genre: String!) {
       # All playlists including TuneMeld (moved here for faster initial page load)
@@ -420,115 +425,80 @@ async function fetchServicePlaylists(genre: string): Promise<void> {
     }
   `;
 
+  const queryStartTime = performance.now();
+  console.log(
+    `🔄 [PERFORMANCE] Starting GraphQL query at ${new Date().toISOString()}`,
+  );
+
   const data = await graphqlClient.query(query, { genre });
 
-  // CRITICAL PERFORMANCE FIX: Render playlists asynchronously with timing
-  const renderTasks = [];
-  const renderTimings: Array<{ service: string; time: number }> = [];
+  const queryEndTime = performance.now();
+  const queryDuration = queryEndTime - queryStartTime;
+  console.log(
+    `⚡ [PERFORMANCE] GraphQL query completed in ${queryDuration.toFixed(2)}ms`,
+  );
+
+  const renderStartTime = performance.now();
+  console.log(
+    `🎨 [PERFORMANCE] Starting render at ${new Date().toISOString()}`,
+  );
 
   // Render TuneMeld playlist first (it's the main one)
   if (data.tuneMeldPlaylist) {
-    renderTasks.push(() => {
-      const startTime = performance.now();
-      renderPlaylistTracks(
-        [data.tuneMeldPlaylist],
-        "main-playlist-data-placeholder",
-        SERVICE_NAMES.TUNEMELD,
-      );
-      const renderTime = performance.now() - startTime;
-      renderTimings.push({ service: "TuneMeld", time: renderTime });
-      console.log(
-        `🎵 TuneMeld playlist rendered in ${renderTime.toFixed(2)}ms`,
-      );
-    });
+    renderPlaylistTracks(
+      [data.tuneMeldPlaylist],
+      "main-playlist-data-placeholder",
+      SERVICE_NAMES.TUNEMELD,
+    );
   }
 
-  // Render each service playlist
+  // Render each service playlist immediately as it loads
   if (data.spotifyPlaylist) {
-    renderTasks.push(() => {
-      const startTime = performance.now();
-      renderPlaylistTracks(
-        [data.spotifyPlaylist],
-        `${SERVICE_NAMES.SPOTIFY}-data-placeholder`,
-        SERVICE_NAMES.SPOTIFY,
-      );
-      const renderTime = performance.now() - startTime;
-      renderTimings.push({ service: "Spotify", time: renderTime });
-      console.log(`🎵 Spotify playlist rendered in ${renderTime.toFixed(2)}ms`);
-    });
+    renderPlaylistTracks(
+      [data.spotifyPlaylist],
+      `${SERVICE_NAMES.SPOTIFY}-data-placeholder`,
+      SERVICE_NAMES.SPOTIFY,
+    );
   }
   if (data.appleMusicPlaylist) {
-    renderTasks.push(() => {
-      const startTime = performance.now();
-      renderPlaylistTracks(
-        [data.appleMusicPlaylist],
-        `${SERVICE_NAMES.APPLE_MUSIC}-data-placeholder`,
-        SERVICE_NAMES.APPLE_MUSIC,
-      );
-      const renderTime = performance.now() - startTime;
-      renderTimings.push({ service: "Apple Music", time: renderTime });
-      console.log(
-        `🎵 Apple Music playlist rendered in ${renderTime.toFixed(2)}ms`,
-      );
-    });
+    renderPlaylistTracks(
+      [data.appleMusicPlaylist],
+      `${SERVICE_NAMES.APPLE_MUSIC}-data-placeholder`,
+      SERVICE_NAMES.APPLE_MUSIC,
+    );
   }
   if (data.soundcloudPlaylist) {
-    renderTasks.push(() => {
-      const startTime = performance.now();
-      renderPlaylistTracks(
-        [data.soundcloudPlaylist],
-        `${SERVICE_NAMES.SOUNDCLOUD}-data-placeholder`,
-        SERVICE_NAMES.SOUNDCLOUD,
-      );
-      const renderTime = performance.now() - startTime;
-      renderTimings.push({ service: "SoundCloud", time: renderTime });
-      console.log(
-        `🎵 SoundCloud playlist rendered in ${renderTime.toFixed(2)}ms`,
-      );
-    });
+    renderPlaylistTracks(
+      [data.soundcloudPlaylist],
+      `${SERVICE_NAMES.SOUNDCLOUD}-data-placeholder`,
+      SERVICE_NAMES.SOUNDCLOUD,
+    );
   }
 
-  // Execute render tasks asynchronously with better scheduling
-  let taskIndex = 0;
-  const overallStartTime = performance.now();
+  const renderEndTime = performance.now();
+  const renderDuration = renderEndTime - renderStartTime;
+  console.log(
+    `🎨 [PERFORMANCE] Render completed in ${renderDuration.toFixed(2)}ms`,
+  );
 
-  function renderNextTask() {
-    if (taskIndex < renderTasks.length) {
-      const taskStartTime = performance.now();
-      renderTasks[taskIndex]();
-      const taskTime = performance.now() - taskStartTime;
+  const totalEndTime = performance.now();
+  const totalDuration = totalEndTime - startTime;
+  console.log(
+    `🏁 [PERFORMANCE] fetchServicePlaylists TOTAL TIME: ${totalDuration.toFixed(
+      2,
+    )}ms`,
+  );
+  console.log(
+    `📊 [PERFORMANCE] Breakdown - Query: ${queryDuration.toFixed(
+      2,
+    )}ms, Render: ${renderDuration.toFixed(2)}ms`,
+  );
 
-      taskIndex++;
-
-      console.log(
-        `⚡ Task ${taskIndex}/${
-          renderTasks.length
-        } completed in ${taskTime.toFixed(2)}ms`,
-      );
-
-      // Use requestIdleCallback with timeout for better scheduling
-      if (window.requestIdleCallback) {
-        requestIdleCallback(renderNextTask, { timeout: 33 }); // 33ms = ~30fps
-      } else {
-        setTimeout(renderNextTask, 0);
-      }
-    } else {
-      // All tasks completed
-      const totalTime = performance.now() - overallStartTime;
-      console.log(
-        `🏁 All playlists rendered in ${totalTime.toFixed(2)}ms total`,
-      );
-      console.table(renderTimings);
-
-      // Hide shimmer after completion
-      requestAnimationFrame(() => {
-        hideShimmerLoaders();
-      });
-    }
-  }
-
-  console.log(`🚀 Starting async render of ${renderTasks.length} playlists...`);
-  renderNextTask();
+  // Hide shimmer after all playlists are rendered
+  // Use requestAnimationFrame to ensure DOM updates are complete before hiding shimmer
+  requestAnimationFrame(() => {
+    hideShimmerLoaders();
+  });
 }
 
 export async function updateGenreData(

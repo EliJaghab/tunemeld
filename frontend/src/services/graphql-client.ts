@@ -70,6 +70,10 @@ class GraphQLClient {
       const baseEndpoint = this.endpoint.replace("/api/gql/", "/api/");
       const customEndpoint = `${baseEndpoint}${queryName}/`;
 
+      // Add timeout to prevent infinite hanging
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+
       const response = await fetch(customEndpoint, {
         method: "POST",
         headers,
@@ -77,7 +81,10 @@ class GraphQLClient {
           query,
           variables,
         }),
+        signal: controller.signal,
       });
+
+      clearTimeout(timeoutId);
 
       const duration = Date.now() - startTime;
 

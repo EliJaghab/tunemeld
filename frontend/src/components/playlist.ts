@@ -221,7 +221,9 @@ export function renderPlaylistTracks(
     }
 
     // Single DOM append for this batch
-    placeholder.appendChild(fragment);
+    if (placeholder) {
+      placeholder.appendChild(fragment);
+    }
 
     currentBatch++;
     const batchTime = performance.now() - startTime;
@@ -229,7 +231,7 @@ export function renderPlaylistTracks(
     // Continue with next batch if more tracks remain
     if (currentBatch * BATCH_SIZE < allTracks.length) {
       // Use requestIdleCallback with timeout fallback to prevent blocking
-      if (window.requestIdleCallback) {
+      if ("requestIdleCallback" in window) {
         requestIdleCallback(renderBatch, { timeout: 16 }); // 16ms = one frame
       } else {
         setTimeout(renderBatch, 0);
