@@ -38,9 +38,19 @@ print(f"[{datetime.utcnow().isoformat()}] WSGI STARTUP: Python path = {sys.path[
 
 try:
     print(f"[{datetime.utcnow().isoformat()}] WSGI STARTUP: Importing Django WSGI...", file=sys.stderr)
-    from django.core.wsgi import get_wsgi_application
+    # Temporarily disable Django import to test if basic WSGI works
+    # from django.core.wsgi import get_wsgi_application
+    print(f"[{datetime.utcnow().isoformat()}] WSGI STARTUP: Django import SKIPPED for testing", file=sys.stderr)
 
-    print(f"[{datetime.utcnow().isoformat()}] WSGI STARTUP: Django import successful", file=sys.stderr)
+    def get_wsgi_application():
+        def test_app(environ, start_response):
+            status = "200 OK"
+            headers = [("Content-type", "application/json")]
+            start_response(status, headers)
+            return [json.dumps({"test": "WSGI working", "path": environ.get("PATH_INFO")}).encode()]
+
+        return test_app
+
 except Exception as e:
     print(f"[{datetime.utcnow().isoformat()}] WSGI STARTUP: FAILED to import Django: {e}", file=sys.stderr)
     raise
