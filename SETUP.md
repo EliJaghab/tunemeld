@@ -20,7 +20,7 @@ cd tunemeld
 # Python environment
 python3.13 -m venv venv
 source venv/bin/activate
-pip install -r requirements.txt
+pip install -e .
 
 # Frontend deps
 cd frontend && npm install && cd ..
