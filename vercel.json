@@ -2,6 +2,7 @@
   "github": {
     "silent": true
   },
+  "installCommand": "pip install -e .",
   "builds": [
     {
       "src": "backend/core/wsgi.py",
