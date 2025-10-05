@@ -147,6 +147,16 @@ def get_tunemeld_playlist_updated_at(genre_name: str) -> datetime | None:
     return None
 
 
-def get_track_model_by_isrc(isrc: str) -> TrackModel | None:
-    """Get Django TrackModel by ISRC for GraphQL DjangoObjectType compatibility."""
-    return TrackModel.objects.filter(isrc=isrc).order_by("-id").first()
+def get_tracks_by_isrcs(isrcs: list[str]) -> dict[str, Track]:
+    """Batch fetch tracks by ISRCs in a single query. Returns dict mapping ISRC -> Track domain object."""
+    if not isrcs:
+        return {}
+
+    django_tracks = TrackModel.objects.filter(isrc__in=isrcs).order_by("-id")
+
+    isrc_to_track = {}
+    for django_track in django_tracks:
+        if django_track.isrc not in isrc_to_track:
+            isrc_to_track[django_track.isrc] = Track.from_django_model(django_track)
+
+    return isrc_to_track

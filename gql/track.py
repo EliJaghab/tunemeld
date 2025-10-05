@@ -4,7 +4,6 @@ import strawberry
 from core.api.genre_service_api import (
     get_service,
     get_track_by_isrc,
-    get_track_model_by_isrc,
     get_track_rank_by_track_object,
 )
 from core.api.track_metadata_api import build_track_query_url
@@ -274,14 +273,10 @@ class TrackQuery:
 
         domain_track = get_track_by_isrc(isrc)
         if domain_track:
-            django_track = get_track_model_by_isrc(isrc)
-            if django_track:
-                cache_data = TrackType.to_cache_dict(django_track)
-                redis_cache_set(CachePrefix.GQL_TRACK, cache_key_data, cache_data)
-                return TrackType.from_django_model(django_track)
-            else:
-                redis_cache_set(CachePrefix.GQL_TRACK, cache_key_data, None)
-        else:
-            redis_cache_set(CachePrefix.GQL_TRACK, cache_key_data, None)
+            django_track = domain_track.to_django_model()
+            cache_data = TrackType.to_cache_dict(django_track)
+            redis_cache_set(CachePrefix.GQL_TRACK, cache_key_data, cache_data)
+            return TrackType.from_django_model(django_track)
 
+        redis_cache_set(CachePrefix.GQL_TRACK, cache_key_data, None)
         return None

@@ -8,8 +8,7 @@ from core.api.genre_service_api import (
     get_genre,
     get_playlist_tracks_by_genre_service,
     get_service,
-    get_track_by_isrc,
-    get_track_model_by_isrc,
+    get_tracks_by_isrcs,
     get_tunemeld_playlist_updated_at,
 )
 from core.constants import GraphQLCacheKey, ServiceName
@@ -100,25 +99,27 @@ class PlaylistQuery:
         # Get track positions from API layer
         track_positions = get_playlist_tracks_by_genre_service(genre, service)
 
-        django_tracks = []
+        # Batch fetch all tracks in single query
+        isrcs = [isrc for isrc, _position in track_positions]
+        isrc_to_track = get_tracks_by_isrcs(isrcs)
+
+        # Preserve playlist order and filter out missing tracks
+        domain_tracks = []
         for isrc, _position in track_positions:
-            django_track = get_track_model_by_isrc(isrc)
-            if django_track:
-                django_tracks.append(django_track)
+            track = isrc_to_track.get(isrc)
+            if track:
+                domain_tracks.append(track)
 
-        # Create domain Playlist object for caching (convert Django models to domain objects)
-        domain_tracks_for_cache = []
-        for django_track in django_tracks:
-            domain_track = get_track_by_isrc(django_track.isrc)
-            if domain_track:
-                domain_tracks_for_cache.append(domain_track)
-
-        domain_playlist = Playlist(genre_name=genre, service_name=service, tracks=domain_tracks_for_cache)
+        domain_playlist = Playlist(genre_name=genre, service_name=service, tracks=domain_tracks)
 
         redis_cache_set(CachePrefix.GQL_PLAYLIST, cache_key_data, domain_playlist.to_dict())
 
-        # Convert Django models to Strawberry types
-        strawberry_tracks = [TrackType.from_django_model(django_track) for django_track in django_tracks]
+        # Convert domain tracks to Strawberry types
+        strawberry_tracks = []
+        for track in domain_tracks:
+            django_track = track.to_django_model()
+            strawberry_track = TrackType.from_django_model(django_track)
+            strawberry_tracks.append(strawberry_track)
 
         return PlaylistType(
             genre_name=genre,
