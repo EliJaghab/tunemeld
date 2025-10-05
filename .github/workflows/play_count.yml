@@ -81,13 +81,13 @@ jobs:
           cd backend
           echo " Historical Track Play Count ETL Results:"
           python manage.py shell -c "
-          from core.models.play_counts import HistoricalTrackPlayCount
-          from core.models.genre_service import Service
-          print(f'Historical track play count records: {HistoricalTrackPlayCount.objects.count()}')
+          from core.models.play_counts import HistoricalTrackPlayCountModel
+          from core.models.genre_service import ServiceModel
+          print(f'Historical track play count records: {HistoricalTrackPlayCountModel.objects.count()}')
           print()
           print(' Breakdown by service:')
-          for service in Service.objects.all():
-              count = HistoricalTrackPlayCount.objects.filter(service=service).count()
+          for service in ServiceModel.objects.all():
+              count = HistoricalTrackPlayCountModel.objects.filter(service=service).count()
               if count > 0:
                   print(f'{service.name}: {count} historical play count records')
           "
