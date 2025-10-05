@@ -49,23 +49,10 @@ jobs:
           CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
         run: make ci-db-migrate
 
-      - name: Run Playlist ETL with Cache Warming
+      - name: Clear and Warm Cache
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
           REDIS_URL: ${{ secrets.REDIS_URL }}
-          X_RAPIDAPI_KEY_A: ${{ secrets.X_RAPIDAPI_KEY_A }}
-          X_RAPIDAPI_KEY_B: ${{ secrets.X_RAPIDAPI_KEY_B }}
-          MONGO_URI: ${{ secrets.MONGO_URI }}
-          SPOTIFY_CLIENT_ID: ${{ secrets.SPOTIFY_CLIENT_ID }}
-          SPOTIFY_CLIENT_SECRET: ${{ secrets.SPOTIFY_CLIENT_SECRET }}
-          GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
-          CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
-          CF_NAMESPACE_ID: ${{ secrets.CF_NAMESPACE_ID }}
-          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
         run: |
-          if [ "${{ inputs.force_refresh }}" = "true" ]; then
-            make run-playlist-etl-force-refresh
-          else
-            make run-playlist-etl
-          fi
+          cd backend && python manage.py warm_cache

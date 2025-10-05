@@ -1,4 +1,3 @@
-import hashlib
 import json
 from datetime import datetime
 from typing import Any
@@ -55,41 +54,7 @@ async def handle_invalid_request() -> Response:
     )
 
 
-async def handle_image_request(env: Any, isrc: str) -> Response:
-    """Handle image serving requests for /api/image/{isrc}"""
-    # Use same cache key format as Django: md5("album_cover_image:{isrc}")
-    full_key = f"album_cover_image:{isrc}"
-    cache_key = hashlib.md5(full_key.encode()).hexdigest()
-    image_data = await env.tunemeld_cache.get(cache_key, "arrayBuffer")
-
-    if image_data is not None:
-        return Response.new(
-            image_data,
-            status_code=200,
-            headers={
-                "Content-Type": "image/jpeg",
-                "Cache-Control": "public, max-age=31536000, immutable",
-                "ETag": f'"{isrc}"',
-                "Access-Control-Allow-Origin": "*",
-            },
-        )
-    else:
-        return Response.new("Image not found", status_code=404)
-
-
 async def on_fetch(request: Any, env: Any) -> Response:
-    url = request.url
-    path = url.split("?")[0]  # Remove query parameters
-    path_parts = path.split("/")
-
-    # Handle image serving: /api/image/{isrc}
-    if len(path_parts) >= 4 and path_parts[-3] == "api" and path_parts[-2] == "image":
-        isrc = path_parts[-1]
-        if isrc:
-            return await handle_image_request(env, isrc)
-        return Response.new("Invalid ISRC", status_code=400)
-
-    # Handle original KV API functionality
     key = request.query.get("key")
     value = request.query.get("value")
 

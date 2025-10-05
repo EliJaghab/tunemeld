@@ -1,10 +1,8 @@
-import asyncio
 from collections import Counter
 
 from core.constants import ServiceName
 from core.models import ServiceTrackModel, TrackModel
 from core.services.apple_music_service import get_apple_music_album_cover_url
-from core.services.image_cache_service import cache_image
 from core.services.soundcloud_service import get_soundcloud_url
 from core.services.youtube_service import YouTubeUrlResult, get_youtube_url
 from core.utils.utils import get_logger, process_in_parallel
@@ -147,17 +145,6 @@ class Command(BaseCommand):
             soundcloud_url, _soundcloud_result = get_soundcloud_url(primary_track.track_name, primary_track.artist_name)
             if soundcloud_url:
                 track_data["soundcloud_url"] = soundcloud_url
-
-        if track_data["album_cover_url"]:
-            try:
-                cached_image_url = asyncio.run(cache_image(track_data["album_cover_url"], isrc))
-                if cached_image_url:
-                    track_data["album_cover_url"] = cached_image_url
-                    logger.info(f"Updated album cover URL to Cloudflare Worker for ISRC {isrc}")
-                else:
-                    logger.warning(f"Image caching returned None for ISRC {isrc}, keeping original URL")
-            except Exception as e:
-                logger.warning(f"Failed to cache album cover for ISRC {isrc}: {e}")
 
         track, _created = TrackModel.objects.update_or_create(isrc=isrc, defaults=track_data)
         service_tracks.update(track=track)
