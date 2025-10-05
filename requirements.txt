@@ -1,4 +1,4 @@
-# Core Django framework and web dependencies
+# Core Django framework and web dependencies (Vercel serverless)
 Django>=4.2,<5.0
 django-cors-headers>=4.4.0
 django-distill>=3.2.7

@@ -48,14 +48,8 @@ dev = [
 ]
 etl = [
     # Heavy ETL dependencies - separated to avoid serverless bloat
-    "django-distill>=3.2.7",
-    "gunicorn>=20.1.0",
-    "pydantic>=2.9.0",
-    "cloudflare>=2.19.0",
-    "httpx>=0.27.0",
     "croniter>=2.0.7",
     "PyYAML>=6.0.2",
-    "beautifulsoup4>=4.12.3",
     "selenium>=4.22.0",
     "spotipy>=2.24.0",
     "spotdl>=4.2.8",
