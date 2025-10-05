@@ -99,9 +99,9 @@ repos:
         language: system
         pass_filenames: false
 
-      - id: generate-pipfile
-        name: Generate Pipfile from pyproject.toml
-        entry: python scripts/generate_pipfile.py
+      - id: generate-requirements
+        name: Generate requirements.txt from pyproject.toml
+        entry: python scripts/generate_requirements.py
         language: system
         files: pyproject.toml
         pass_filenames: false

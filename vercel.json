@@ -5,10 +5,7 @@
   "builds": [
     {
       "src": "backend/core/wsgi.py",
-      "use": "@vercel/python",
-      "config": {
-        "installCommand": "pip install -e ."
-      }
+      "use": "@vercel/python"
     }
   ],
   "routes": [
