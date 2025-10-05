@@ -47,6 +47,7 @@ def _make_rapidapi_request(url: str, host: str) -> JSON:
     api_keys = [
         os.getenv("X_RAPIDAPI_KEY_A"),
         os.getenv("X_RAPIDAPI_KEY_B"),
+        os.getenv("X_RAPIDAPI_KEY_C"),
     ]
 
     for api_key in api_keys:

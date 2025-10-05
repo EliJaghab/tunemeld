@@ -2,7 +2,7 @@ name: Playlist ETL
 
 on:
   schedule:
-    - cron: "30 2 * * *"
+    - cron: "30 2 * * 6"  # Saturday only at 2:30 AM UTC
   push:
     paths:
       - "backend/core/management/commands/playlist_etl_modules/**"
@@ -75,6 +75,7 @@ jobs:
           REDIS_URL: ${{ secrets.REDIS_URL }}
           X_RAPIDAPI_KEY_A: ${{ secrets.X_RAPIDAPI_KEY_A }}
           X_RAPIDAPI_KEY_B: ${{ secrets.X_RAPIDAPI_KEY_B }}
+          X_RAPIDAPI_KEY_C: ${{ secrets.X_RAPIDAPI_KEY_C }}
           MONGO_URI: ${{ secrets.MONGO_URI }}
           SPOTIFY_CLIENT_ID: ${{ secrets.SPOTIFY_CLIENT_ID }}
           SPOTIFY_CLIENT_SECRET: ${{ secrets.SPOTIFY_CLIENT_SECRET }}

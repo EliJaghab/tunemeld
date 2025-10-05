@@ -210,19 +210,27 @@ def cloudflare_cache_delete(prefix: CachePrefix, key_data: str) -> bool:
 
 def clear_rapidapi_cache() -> int:
     """Clear RapidAPI cache keys only if triggered by scheduled GitHub Actions cron AND it's Saturday."""
-    if os.getenv("GITHUB_EVENT_NAME") != "schedule":
-        logger.info("Not a scheduled run - preserving RapidAPI cache to avoid rate limits")
+    github_event = os.getenv("GITHUB_EVENT_NAME", "unknown")
+    current_time = datetime.datetime.utcnow()
+    current_weekday = current_time.weekday()
+    day_name = current_time.strftime("%A")
+
+    logger.info(f"🔍 CACHE AUDIT: Event={github_event}, Day={day_name}, Weekday={current_weekday}")
+    logger.info(f"   Time: {current_time.isoformat()}")
+
+    if github_event != "schedule":
+        logger.info("❌ CACHE PRESERVED: Not a scheduled run - preserving RapidAPI cache to avoid rate limits")
+        logger.info(f"   Event type: {github_event} (expected: 'schedule')")
         return 0
 
-    # Check if it's Saturday (weekday 5 in Python's weekday() where Monday=0)
-    current_weekday = datetime.datetime.utcnow().weekday()
     if current_weekday != 5:  # 5 = Saturday
-        logger.info(
-            f"Scheduled run on {datetime.datetime.utcnow().strftime('%A')} - preserving RapidAPI cache (Saturday only)"
-        )
+        logger.info(f"❌ CACHE PRESERVED: Scheduled run on {day_name} - preserving RapidAPI cache (Saturday only)")
+        logger.info(f"   Current weekday: {current_weekday} (expected: 5 for Saturday)")
         return 0
 
-    logger.info("Saturday scheduled run detected - clearing RapidAPI cache for fresh playlist data")
+    logger.info("✅ CACHE CLEARING TRIGGERED: Saturday scheduled run detected")
+    logger.info("   Clearing RapidAPI cache for fresh playlist data")
+    logger.info(f"   Conditions met: Event={github_event}, Day={day_name}, Weekday={current_weekday}")
 
     cleared_count = 0
 
