@@ -153,7 +153,7 @@ class Command(BaseCommand):
                 cached_image_url = asyncio.run(cache_image(track_data["album_cover_url"], isrc))
                 if cached_image_url:
                     track_data["album_cover_url"] = cached_image_url
-                    logger.info(f"Cached album cover for ISRC {isrc}")
+                    logger.info(f"Updated album cover URL to Cloudflare Worker for ISRC {isrc}")
                 else:
                     logger.warning(f"Image caching returned None for ISRC {isrc}, keeping original URL")
             except Exception as e:
