@@ -179,7 +179,7 @@ export async function fetchInitialPageData(
 // FAST background loading of service playlists (2nd request)
 async function fetchServicePlaylists(genre: string): Promise<void> {
   const tuneMeldQuery = `
-    query GetTuneMeldPlaylist($genre: String!) {
+    query GetServicePlaylists($genre: String!) {
       tuneMeldPlaylist: playlist(genre: $genre, service: "${SERVICE_NAMES.TUNEMELD}") {
         genreName
         serviceName
@@ -259,7 +259,7 @@ async function fetchServicePlaylists(genre: string): Promise<void> {
 
 async function loadOtherServicePlaylists(genre: string): Promise<void> {
   const servicePlaylistsQuery = `
-    query GetOtherServicePlaylists($genre: String!) {
+    query GetServicePlaylists($genre: String!) {
       spotifyPlaylist: playlist(genre: $genre, service: "${SERVICE_NAMES.SPOTIFY}") {
         genreName
         serviceName
