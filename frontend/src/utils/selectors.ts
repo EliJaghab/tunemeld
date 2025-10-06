@@ -256,9 +256,16 @@ async function fetchServicePlaylists(genre: string): Promise<void> {
     "[DEBUG] About to call loadOtherServicePlaylists for genre:",
     genre,
   );
-  loadOtherServicePlaylists(genre).catch((error) => {
-    console.error("Failed to load other service playlists:", error);
-  });
+
+  // CRITICAL DEBUG: Force call to loadOtherServicePlaylists
+  (async () => {
+    try {
+      await loadOtherServicePlaylists(genre);
+    } catch (error) {
+      console.error("Failed to load other service playlists:", error);
+    }
+  })();
+
   console.log("[DEBUG] Called loadOtherServicePlaylists (async, won't wait)");
 }
 
