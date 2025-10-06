@@ -191,15 +191,16 @@ is_dev_mgmt_command = ENVIRONMENT == DEV and not is_runserver
 # Redis configuration for Vercel Redis
 REDIS_URL = os.getenv("REDIS_URL", "redis://localhost:6379/1")
 
+# Default cache configuration - CloudflareKV for both dev and prod
+# Separate dev/prod CloudflareKV namespaces via environment variables
+default_cache_config = {
+    "BACKEND": "core.utils.cloudflare_cache.CloudflareKVCache",
+    "LOCATION": "",
+    "TIMEOUT": CACHE_TIMEOUT,
+}
+
 CACHES = {
-    "default": {
-        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
-        "LOCATION": "tunemeld-cache",
-        "TIMEOUT": CACHE_TIMEOUT,
-        "OPTIONS": {
-            "MAX_ENTRIES": 1000,
-        },
-    },
+    "default": default_cache_config,
     "redis": {
         "BACKEND": "django_redis.cache.RedisCache",
         "LOCATION": REDIS_URL,
