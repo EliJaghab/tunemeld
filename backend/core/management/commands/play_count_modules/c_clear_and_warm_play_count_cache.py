@@ -1,5 +1,6 @@
 import asyncio
 import logging
+import os
 
 from core.api.playlist import get_playlist_isrcs
 from core.constants import ServiceName
@@ -18,11 +19,15 @@ class Command(BaseCommand):
         asyncio.run(self.async_handle(*args, **options))
 
     async def async_handle(self, *args, **options):
+        os.environ["DJANGO_ALLOW_ASYNC_UNSAFE"] = "true"
+
         play_count_cleared = redis_cache_clear(CachePrefix.GQL_PLAY_COUNT)
         logger.info(f"Cleared {play_count_cleared} play count cache entries")
 
         await self._warm_play_count_cache()
         logger.info("Play count cache warmed")
+
+        del os.environ["DJANGO_ALLOW_ASYNC_UNSAFE"]
 
     async def _warm_play_count_cache(self):
         """Execute GraphQL queries to warm play count cache."""
