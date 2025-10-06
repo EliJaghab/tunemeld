@@ -168,6 +168,10 @@ class Command(BaseCommand):
                       spotifyUrl
                       appleMusicUrl
                       soundcloudUrl
+                      totalCurrentPlayCount
+                      totalWeeklyChangePercentage
+                      spotifyCurrentPlayCount
+                      youtubeCurrentPlayCount
                       buttonLabels {
                         buttonType
                         context
@@ -241,6 +245,10 @@ class Command(BaseCommand):
                       spotifyUrl
                       appleMusicUrl
                       soundcloudUrl
+                      totalCurrentPlayCount
+                      totalWeeklyChangePercentage
+                      spotifyCurrentPlayCount
+                      youtubeCurrentPlayCount
                       buttonLabels {
                         buttonType
                         context
@@ -304,6 +312,10 @@ class Command(BaseCommand):
                       spotifyUrl
                       appleMusicUrl
                       soundcloudUrl
+                      totalCurrentPlayCount
+                      totalWeeklyChangePercentage
+                      spotifyCurrentPlayCount
+                      youtubeCurrentPlayCount
                       buttonLabels {
                         buttonType
                         context
@@ -367,6 +379,10 @@ class Command(BaseCommand):
                       spotifyUrl
                       appleMusicUrl
                       soundcloudUrl
+                      totalCurrentPlayCount
+                      totalWeeklyChangePercentage
+                      spotifyCurrentPlayCount
+                      youtubeCurrentPlayCount
                       buttonLabels {
                         buttonType
                         context

@@ -27,14 +27,12 @@ interface NavigoRouter {
 
 class AppRouter {
   private router: NavigoRouter;
-  private currentGenre: string | null;
   private genres: { genres: Genre[]; defaultGenre: string } | null;
   private ranks: Rank[] | null;
   private isInitialLoad: boolean;
 
   constructor() {
     this.router = new Navigo("/");
-    this.currentGenre = null;
     this.genres = null;
     this.ranks = null;
     this.isInitialLoad = true;
@@ -44,35 +42,47 @@ class AppRouter {
     errorHandler.setRetryCallback(() => this.initialize());
 
     try {
-      // Wait for the massive query data to be available
-      const { getGlobalPageData } = await import("@/utils/selectors");
-      let globalData = getGlobalPageData();
+      const staticConfig = await graphqlClient.getStaticConfig();
 
-      // If no global data yet, trigger the initial load
-      if (!globalData) {
-        this.isInitialLoad = false; // Mark as no longer initial to prevent duplicate loading
-        const { updateGenreData } = await import("@/utils/selectors");
-        await updateGenreData("pop", true);
-        globalData = getGlobalPageData();
-        this.currentGenre = "pop"; // Track that we loaded pop data
-      }
+      // Store in router for routing logic
+      this.genres = {
+        genres: staticConfig.genres,
+        defaultGenre: staticConfig.genres?.[0]?.name || "pop",
+      };
+      this.ranks = staticConfig.ranks;
 
-      if (globalData) {
-        // Get genres from the focused query instead of making separate call
-        this.genres = globalData.genres;
-        this.ranks = globalData.ranks.ranks;
-      }
+      // Populate StateManager with static config
+      stateManager.setRanks(staticConfig.ranks);
+      stateManager.setGenres(staticConfig.genres);
+      stateManager.setButtonLabels({
+        closePlayer: staticConfig.closePlayerLabels,
+        themeToggleLight: staticConfig.themeToggleLightLabels,
+        themeToggleDark: staticConfig.themeToggleDarkLabels,
+        acceptTerms: staticConfig.acceptTermsLabels,
+        moreButtonAppleMusic: staticConfig.moreButtonAppleMusicLabels,
+        moreButtonSoundcloud: staticConfig.moreButtonSoundcloudLabels,
+        moreButtonSpotify: staticConfig.moreButtonSpotifyLabels,
+        moreButtonYoutube: staticConfig.moreButtonYoutubeLabels,
+      });
 
-      // Set the default rank field in StateManager
+      // Set the default rank field
       const defaultRank = this.ranks?.find((rank) => rank.isDefault);
       if (defaultRank) {
         stateManager.setDefaultRankField(defaultRank.sortField);
+      }
+
+      // Initialize current genre from URL to prevent flash
+      const urlParams = new URLSearchParams(window.location.search);
+      const genreFromUrl = urlParams.get("genre");
+      if (genreFromUrl && this.isValidGenre(genreFromUrl)) {
+        stateManager.setCurrentGenre(genreFromUrl);
       }
 
       this.setupRoutes();
       this.router.resolve();
     } catch (error) {
       console.error("Router initialization failed:", error);
+      throw error;
     }
   }
 
@@ -140,10 +150,10 @@ class AppRouter {
     player: string | null = null,
     isrc: string | null = null,
   ): Promise<void> {
-    const genreChanged = this.currentGenre !== genre;
+    const genreChanged = stateManager.getCurrentGenre() !== genre;
     const needsFullUpdate = genreChanged || this.isInitialLoad;
 
-    this.currentGenre = genre;
+    stateManager.setCurrentGenre(genre);
     this.updatePageTitle(genre);
     this.updateFavicon(genre);
     this.syncGenreButtons(genre);
@@ -294,7 +304,7 @@ class AppRouter {
   }
 
   getCurrentGenre(): string | null {
-    return this.currentGenre;
+    return stateManager.getCurrentGenre();
   }
 
   // Genre helpers

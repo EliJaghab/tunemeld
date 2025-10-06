@@ -28,6 +28,7 @@ import {
   TUNEMELD_RANK_FIELD,
   type ShimmerType,
 } from "../config/constants.js";
+import type { Rank, Genre, ButtonLabel, ButtonLabels } from "@/types";
 
 interface ShimmerState {
   services: boolean;
@@ -51,6 +52,9 @@ interface AppState {
   currentIsrc: string | null;
   currentPlayer: string | null;
   defaultRankField: string | null;
+  ranks: Rank[];
+  genres: Genre[];
+  buttonLabels: ButtonLabels | null;
   shimmer: ShimmerState;
   modals: {
     activeDescriptionModals: Set<ModalInfo>;
@@ -69,6 +73,9 @@ class StateManager {
       currentIsrc: null,
       currentPlayer: null,
       defaultRankField: null, // Store the default from backend
+      ranks: [],
+      genres: [],
+      buttonLabels: null,
       shimmer: {
         services: false,
         playlist: false,
@@ -320,6 +327,35 @@ class StateManager {
 
   getActiveModalCount(): number {
     return this.state.modals.activeDescriptionModals.size;
+  }
+
+  // Static Configuration Management
+  setRanks(ranks: Rank[]): void {
+    this.state.ranks = ranks;
+  }
+
+  getRanks(): Rank[] {
+    return this.state.ranks;
+  }
+
+  setGenres(genres: Genre[]): void {
+    this.state.genres = genres;
+  }
+
+  getGenres(): Genre[] {
+    return this.state.genres;
+  }
+
+  setButtonLabels(labels: ButtonLabels): void {
+    this.state.buttonLabels = labels;
+  }
+
+  getButtonLabels(): ButtonLabels | null {
+    return this.state.buttonLabels;
+  }
+
+  getButtonLabel(type: keyof ButtonLabels): ButtonLabel[] {
+    return this.state.buttonLabels?.[type] || [];
   }
 }
 

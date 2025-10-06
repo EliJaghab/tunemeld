@@ -4,10 +4,7 @@ import type { Rank } from "@/types/index";
 
 export async function loadAndRenderRankButtons(): Promise<void> {
   try {
-    // Get ranks from global data instead of router
-    const { getGlobalPageData } = await import("@/utils/selectors");
-    const globalData = getGlobalPageData();
-    const ranks = globalData?.ranks?.ranks || [];
+    const ranks = stateManager.getRanks();
     const sortControlsElement = document.getElementById("sort-controls");
 
     if (!ranks || ranks.length === 0 || !sortControlsElement) {
@@ -21,6 +18,14 @@ export async function loadAndRenderRankButtons(): Promise<void> {
     if (existingButtons.length !== ranks.length) {
       sortControlsElement.innerHTML = "";
     } else {
+      // Update active states on existing buttons to match current rank
+      existingButtons.forEach((button: Element) => {
+        const sortField = button.getAttribute("data-sort");
+        if (sortField) {
+          const isActive = stateManager.isRankActive(sortField);
+          button.classList.toggle("active", isActive);
+        }
+      });
       return; // Don't rebuild if we already have the right buttons
     }
 

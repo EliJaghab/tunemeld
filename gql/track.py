@@ -28,6 +28,10 @@ class TrackType:
     aggregate_rank: int | None = None
     aggregate_score: float | None = None
     updated_at: datetime | None = None
+    total_current_play_count: int | None = None
+    total_weekly_change_percentage: float | None = None
+    spotify_current_play_count: int | None = None
+    youtube_current_play_count: int | None = None
 
     @classmethod
     def from_cached_dict(cls, cached_data: dict) -> "TrackType":
@@ -44,6 +48,10 @@ class TrackType:
             aggregate_rank=cached_data["aggregate_rank"],
             aggregate_score=cached_data["aggregate_score"],
             updated_at=(datetime.fromisoformat(cached_data["updated_at"]) if cached_data["updated_at"] else None),
+            total_current_play_count=cached_data.get("total_current_play_count"),
+            total_weekly_change_percentage=cached_data.get("total_weekly_change_percentage"),
+            spotify_current_play_count=cached_data.get("spotify_current_play_count"),
+            youtube_current_play_count=cached_data.get("youtube_current_play_count"),
         )
         track._track_name = cached_data.get("track_name")
         track._artist_name = cached_data.get("artist_name")
@@ -85,6 +93,10 @@ class TrackType:
             aggregate_rank=None,
             aggregate_score=None,
             updated_at=domain_track.updated_at,
+            total_current_play_count=domain_track.total_current_play_count,
+            total_weekly_change_percentage=domain_track.total_weekly_change_percentage,
+            spotify_current_play_count=domain_track.spotify_current_play_count,
+            youtube_current_play_count=domain_track.youtube_current_play_count,
         )
 
         # Preserve data that gets lost in Django conversion
@@ -126,6 +138,10 @@ class TrackType:
     @classmethod
     def to_cache_dict(cls, django_track) -> dict:
         """Create cache dictionary from Django TrackModel."""
+        from core.api.play_count import get_track_play_count
+
+        play_count_data = get_track_play_count(django_track.isrc)
+
         return {
             "id": django_track.id,
             "isrc": django_track.isrc,
@@ -140,6 +156,16 @@ class TrackType:
             "aggregate_rank": django_track.aggregate_rank,
             "aggregate_score": django_track.aggregate_score,
             "updated_at": str(django_track.updated_at) if django_track.updated_at else None,
+            "total_current_play_count": play_count_data.total_current_play_count if play_count_data else None,
+            "total_weekly_change_percentage": play_count_data.total_weekly_change_percentage
+            if play_count_data
+            else None,
+            "spotify_current_play_count": play_count_data.spotify.current_play_count
+            if play_count_data and play_count_data.spotify
+            else None,
+            "youtube_current_play_count": play_count_data.youtube.current_play_count
+            if play_count_data and play_count_data.youtube
+            else None,
         }
 
     @strawberry.field(description="Track name truncated to 30 characters at word boundaries")

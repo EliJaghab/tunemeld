@@ -1,3 +1,5 @@
+import { stateManager } from "@/state/StateManager";
+
 function acceptTosPrivacy(): void {
   const overlay = document.getElementById("tosPrivacyOverlay");
   if (overlay) {
@@ -40,12 +42,11 @@ export async function initializeTosPrivacyOverlay(): Promise<void> {
 
   acceptButton.onclick = acceptTosPrivacy;
 
-  // Get button labels from global data
-  const { getGlobalPageData } = await import("@/utils/selectors");
-  const globalData = getGlobalPageData();
+  // Get button labels from StateManager
+  const acceptTermsLabels = stateManager.getButtonLabel("acceptTerms");
 
-  if (globalData && globalData.buttonLabels.acceptTerms.length > 0) {
-    const acceptLabel = globalData.buttonLabels.acceptTerms[0];
+  if (acceptTermsLabels.length > 0) {
+    const acceptLabel = acceptTermsLabels[0];
     if (acceptLabel.title) {
       acceptButton.title = acceptLabel.title;
     }

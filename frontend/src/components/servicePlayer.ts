@@ -1,6 +1,7 @@
 import { SERVICE_NAMES } from "@/config/constants";
 import { graphqlClient } from "@/services/graphql-client";
 import { appRouter } from "@/routing/router";
+import { stateManager } from "@/state/StateManager";
 import type {
   ServiceConfig,
   IframeConfig,
@@ -149,12 +150,11 @@ export async function setupClosePlayerButton(): Promise<void> {
   if (closeButton) {
     closeButton.addEventListener("click", closePlayer);
 
-    // Get button labels from global data
-    const { getGlobalPageData } = await import("@/utils/selectors");
-    const globalData = getGlobalPageData();
+    // Get button labels from StateManager
+    const closePlayerLabels = stateManager.getButtonLabel("closePlayer");
 
-    if (globalData && globalData.buttonLabels.closePlayer.length > 0) {
-      const closeLabel = globalData.buttonLabels.closePlayer[0];
+    if (closePlayerLabels.length > 0) {
+      const closeLabel = closePlayerLabels[0];
       if (closeLabel.title) {
         closeButton.title = closeLabel.title;
       }

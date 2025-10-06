@@ -18,49 +18,24 @@ import { appRouter } from "@/routing/router";
 import { graphqlClient } from "@/services/graphql-client";
 import { SERVICE_NAMES } from "@/config/constants";
 import { updatePlaylistHeaderSync } from "@/components/playlistHeader";
-import type { Playlist, Rank } from "@/types/index";
-
-// Global data store for initial page load data
-let globalPageData: AllGenreData | null = null;
-
-export function getGlobalPageData(): AllGenreData | null {
-  return globalPageData;
-}
-
-function setGlobalPageData(data: AllGenreData): void {
-  globalPageData = data;
-}
+import type { Playlist } from "@/types/index";
 
 interface AllGenreData {
   metadata: { serviceOrder: string[]; playlists: Playlist[] };
-  mainPlaylist: { playlist: Playlist | null };
-  ranks: { ranks: Rank[] };
-  genres: { genres: any[]; defaultGenre: string };
+  tuneMeldPlaylist: { playlist: Playlist | null };
   servicePlaylists: ({ playlist: Playlist } | null)[];
   serviceOrder: string[];
-  buttonLabels: {
-    closePlayer: any[];
-    themeToggleLight: any[];
-    themeToggleDark: any[];
-    acceptTerms: any[];
-    moreButtonAppleMusic: any[];
-    moreButtonSoundcloud: any[];
-    moreButtonSpotify: any[];
-    moreButtonYoutube: any[];
-  };
   // Individual service playlists from focused query
   spotifyPlaylist?: { playlist: Playlist } | undefined;
   appleMusicPlaylist?: { playlist: Playlist } | undefined;
   soundcloudPlaylist?: { playlist: Playlist } | undefined;
 }
 
-// FAST initial load: Service headers + buttons + TuneMeld playlist ONLY (~50KB)
-export async function fetchInitialPageData(
-  genre: string,
-): Promise<AllGenreData> {
+// FAST genre switch: Service headers metadata ONLY
+async function fetchInitialPageData(genre: string): Promise<AllGenreData> {
   const query = `
     query GetInitialPageData($genre: String!) {
-      # 1. Service headers and metadata (FAST)
+      # Service headers and metadata (FAST)
       serviceOrder
       playlistsByGenre(genre: $genre) {
         playlistName
@@ -71,76 +46,6 @@ export async function fetchInitialPageData(
         serviceName
         serviceIconUrl
       }
-
-      # 2. Genre buttons (FAST)
-      genres {
-        id
-        name
-        displayName
-        iconUrl
-      }
-
-      # 3. Rank buttons (FAST)
-      ranks {
-        name
-        displayName
-        sortField
-        sortOrder
-        isDefault
-        dataField
-      }
-
-      # 4. Button labels (FAST)
-      closePlayerLabels: miscButtonLabels(buttonType: "close_player") {
-        buttonType
-        context
-        title
-        ariaLabel
-      }
-      themeToggleLightLabels: miscButtonLabels(buttonType: "theme_toggle", context: "light") {
-        buttonType
-        context
-        title
-        ariaLabel
-      }
-      themeToggleDarkLabels: miscButtonLabels(buttonType: "theme_toggle", context: "dark") {
-        buttonType
-        context
-        title
-        ariaLabel
-      }
-      acceptTermsLabels: miscButtonLabels(buttonType: "accept_terms") {
-        buttonType
-        context
-        title
-        ariaLabel
-      }
-      moreButtonAppleMusicLabels: miscButtonLabels(buttonType: "more_button", context: "apple_music") {
-        buttonType
-        context
-        title
-        ariaLabel
-      }
-      moreButtonSoundcloudLabels: miscButtonLabels(buttonType: "more_button", context: "soundcloud") {
-        buttonType
-        context
-        title
-        ariaLabel
-      }
-      moreButtonSpotifyLabels: miscButtonLabels(buttonType: "more_button", context: "spotify") {
-        buttonType
-        context
-        title
-        ariaLabel
-      }
-      moreButtonYoutubeLabels: miscButtonLabels(buttonType: "more_button", context: "youtube") {
-        buttonType
-        context
-        title
-        ariaLabel
-      }
-
-      # TuneMeld playlist moved to GetServicePlaylists for better performance
     }
   `;
 
@@ -151,24 +56,9 @@ export async function fetchInitialPageData(
       serviceOrder: data.serviceOrder,
       playlists: data.playlistsByGenre,
     },
-    mainPlaylist: { playlist: null }, // Will be loaded in background
-    ranks: { ranks: data.ranks },
-    genres: {
-      genres: data.genres,
-      defaultGenre: data.genres?.[0]?.name || "pop",
-    },
+    tuneMeldPlaylist: { playlist: null }, // Will be loaded in background
     servicePlaylists: [], // Will be loaded separately!
     serviceOrder: data.serviceOrder,
-    buttonLabels: {
-      closePlayer: data.closePlayerLabels,
-      themeToggleLight: data.themeToggleLightLabels,
-      themeToggleDark: data.themeToggleDarkLabels,
-      acceptTerms: data.acceptTermsLabels,
-      moreButtonAppleMusic: data.moreButtonAppleMusicLabels,
-      moreButtonSoundcloud: data.moreButtonSoundcloudLabels,
-      moreButtonSpotify: data.moreButtonSpotifyLabels,
-      moreButtonYoutube: data.moreButtonYoutubeLabels,
-    },
     // Service playlists will be loaded in background
     spotifyPlaylist: undefined,
     appleMusicPlaylist: undefined,
@@ -199,6 +89,10 @@ async function fetchServicePlaylists(genre: string): Promise<void> {
           spotifyUrl
           appleMusicUrl
           soundcloudUrl
+          totalCurrentPlayCount
+          totalWeeklyChangePercentage
+          spotifyCurrentPlayCount
+          youtubeCurrentPlayCount
           buttonLabels {
             buttonType
             context
@@ -241,8 +135,12 @@ async function fetchServicePlaylists(genre: string): Promise<void> {
   const tuneMeldData = await graphqlClient.query(tuneMeldQuery, { genre });
 
   if (tuneMeldData.tuneMeldPlaylist) {
+    const data = [tuneMeldData.tuneMeldPlaylist];
+
+    setPlaylistData(data);
+
     renderPlaylistTracks(
-      [tuneMeldData.tuneMeldPlaylist],
+      data,
       "main-playlist-data-placeholder",
       SERVICE_NAMES.TUNEMELD,
     );
@@ -283,6 +181,10 @@ async function loadOtherServicePlaylists(genre: string): Promise<void> {
           spotifyUrl
           appleMusicUrl
           soundcloudUrl
+          totalCurrentPlayCount
+          totalWeeklyChangePercentage
+          spotifyCurrentPlayCount
+          youtubeCurrentPlayCount
           buttonLabels {
             buttonType
             context
@@ -338,6 +240,10 @@ async function loadOtherServicePlaylists(genre: string): Promise<void> {
           spotifyUrl
           appleMusicUrl
           soundcloudUrl
+          totalCurrentPlayCount
+          totalWeeklyChangePercentage
+          spotifyCurrentPlayCount
+          youtubeCurrentPlayCount
           buttonLabels {
             buttonType
             context
@@ -393,6 +299,10 @@ async function loadOtherServicePlaylists(genre: string): Promise<void> {
           spotifyUrl
           appleMusicUrl
           soundcloudUrl
+          totalCurrentPlayCount
+          totalWeeklyChangePercentage
+          spotifyCurrentPlayCount
+          youtubeCurrentPlayCount
           buttonLabels {
             buttonType
             context
@@ -475,9 +385,8 @@ export async function updateGenreData(
       }
     }
 
-    // Always fetch the initial data and update global state
+    // Always fetch the initial data
     const allData = await fetchInitialPageData(genre);
-    setGlobalPageData(allData);
 
     if (updateAll) {
       updatePlaylistHeaderSync(
@@ -506,11 +415,4 @@ export async function updateGenreData(
     console.error("Error updating genre data:", error);
     hideShimmerLoaders();
   }
-}
-
-export function setupGenreSelector(genreSelector: HTMLSelectElement): void {
-  genreSelector.addEventListener("change", async function (): Promise<void> {
-    const currentGenre = genreSelector.value;
-    appRouter.navigateToGenre(currentGenre);
-  });
 }

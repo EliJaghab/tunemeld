@@ -7,17 +7,6 @@ export const SERVICE_NAMES = {
   TOTAL: "total",
 } as const;
 
-export type ServiceName = (typeof SERVICE_NAMES)[keyof typeof SERVICE_NAMES];
-
-export const GENRE_NAMES = {
-  DANCE: "dance",
-  RAP: "rap",
-  COUNTRY: "country",
-  POP: "pop",
-} as const;
-
-export type GenreName = (typeof GENRE_NAMES)[keyof typeof GENRE_NAMES];
-
 // The rank that preserves backend-computed positions
 export const TUNEMELD_RANK_FIELD = "tunemeld-rank";
 

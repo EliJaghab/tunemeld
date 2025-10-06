@@ -27,17 +27,11 @@ async function addMoreButtonLabels(
   serviceName: string,
 ): Promise<void> {
   try {
-    // Get button labels from global data instead of individual GraphQL calls
-    const { getGlobalPageData } = await import("@/utils/selectors");
-    const globalData = getGlobalPageData();
-
-    if (!globalData?.buttonLabels) {
-      console.warn("Global data or button labels not available");
-      return;
-    }
-
     // Map service names to button label keys
-    const serviceToLabelKey: Record<string, string> = {
+    const serviceToLabelKey: Record<
+      string,
+      keyof import("@/types").ButtonLabels
+    > = {
       apple_music: "moreButtonAppleMusic",
       soundcloud: "moreButtonSoundcloud",
       spotify: "moreButtonSpotify",
@@ -50,7 +44,7 @@ async function addMoreButtonLabels(
       return;
     }
 
-    const buttonLabels = (globalData.buttonLabels as any)[labelKey];
+    const buttonLabels = stateManager.getButtonLabel(labelKey);
     if (buttonLabels && buttonLabels.length > 0) {
       const moreLabel = buttonLabels[0];
       if (moreLabel.title) {

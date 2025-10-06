@@ -324,10 +324,14 @@ class Track(BaseModel):
         button_labels = cls._get_button_labels(track, genre, service)
         enrichment["buttonLabels"] = [bl.to_dict() for bl in button_labels]
 
+        # Play count data
+        play_count_data = cls._get_play_count_data(track)
+        enrichment.update(play_count_data)
+
         return enrichment
 
     @staticmethod
-    def _build_service_source(track, service_name: ServiceName) -> ServiceSource | None:
+    def _build_service_source(track, service_name: "ServiceName") -> "ServiceSource | None":
         """Build service source object."""
         from core.api.genre_service_api import get_service
 
@@ -372,6 +376,38 @@ class Track(BaseModel):
             return url if url else f"/?genre={genre}&rank=tunemeld-rank&player={player}&isrc={track.isrc}"
         except Exception:
             return f"/?genre={genre}&rank=tunemeld-rank&player={player}&isrc={track.isrc}"
+
+    @staticmethod
+    def _get_play_count_data(track) -> dict[str, Any]:
+        """Get play count data for track."""
+        from core.api.play_count import get_track_play_count
+
+        try:
+            play_count_data = get_track_play_count(track.isrc)
+            if play_count_data:
+                return {
+                    "totalCurrentPlayCount": play_count_data.total_current_play_count,
+                    "totalWeeklyChangePercentage": play_count_data.total_weekly_change_percentage,
+                    "spotifyCurrentPlayCount": play_count_data.spotify.current_play_count
+                    if play_count_data.spotify
+                    else None,
+                    "youtubeCurrentPlayCount": play_count_data.youtube.current_play_count
+                    if play_count_data.youtube
+                    else None,
+                }
+            return {
+                "totalCurrentPlayCount": None,
+                "totalWeeklyChangePercentage": None,
+                "spotifyCurrentPlayCount": None,
+                "youtubeCurrentPlayCount": None,
+            }
+        except Exception:
+            return {
+                "totalCurrentPlayCount": None,
+                "totalWeeklyChangePercentage": None,
+                "spotifyCurrentPlayCount": None,
+                "youtubeCurrentPlayCount": None,
+            }
 
     @staticmethod
     def _get_button_labels(track, genre: str, service: str) -> list[ButtonLabel]:

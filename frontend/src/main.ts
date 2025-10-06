@@ -73,28 +73,23 @@ async function updateThemeToggleLabels(): Promise<void> {
   if (!themeToggleButton) return;
 
   const currentTheme = stateManager.getTheme();
-  const { getGlobalPageData } = await import("@/utils/selectors");
-  const globalData = getGlobalPageData();
+  const buttonLabels =
+    currentTheme === "dark"
+      ? stateManager.getButtonLabel("themeToggleDark")
+      : stateManager.getButtonLabel("themeToggleLight");
 
-  if (globalData) {
-    const buttonLabels =
-      currentTheme === "dark"
-        ? globalData.buttonLabels.themeToggleDark
-        : globalData.buttonLabels.themeToggleLight;
-
-    if (buttonLabels && buttonLabels.length > 0) {
-      const themeLabel = buttonLabels[0];
-      if (themeLabel.title) {
-        const label = document.querySelector(
-          'label[for="theme-toggle-button"]',
-        ) as HTMLLabelElement | null;
-        if (label) {
-          label.title = themeLabel.title;
-        }
+  if (buttonLabels && buttonLabels.length > 0) {
+    const themeLabel = buttonLabels[0];
+    if (themeLabel.title) {
+      const label = document.querySelector(
+        'label[for="theme-toggle-button"]',
+      ) as HTMLLabelElement | null;
+      if (label) {
+        label.title = themeLabel.title;
       }
-      if (themeLabel.ariaLabel) {
-        themeToggleButton.setAttribute("aria-label", themeLabel.ariaLabel);
-      }
+    }
+    if (themeLabel.ariaLabel) {
+      themeToggleButton.setAttribute("aria-label", themeLabel.ariaLabel);
     }
   }
 }

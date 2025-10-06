@@ -24,7 +24,7 @@ type TableStructures = {
   [K in ShimmerType]: TableStructure;
 };
 
-export const TABLE_STRUCTURES: TableStructures = {
+const TABLE_STRUCTURES: TableStructures = {
   [SHIMMER_TYPES.TUNEMELD]: {
     columns: [
       {

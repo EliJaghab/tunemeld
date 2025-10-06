@@ -101,6 +101,11 @@ urlpatterns = [
         name="graphql_misc_button_labels",
     ),
     path(
+        "api/GetStaticConfig/",
+        csrf_exempt(GraphQLView.as_view(schema=schema, graphiql=False)),
+        name="graphql_static_config",
+    ),
+    path(
         "api/debug-cache/",
         debug_cache_api.debug_cache_keys,
         name="debug_cache_keys",

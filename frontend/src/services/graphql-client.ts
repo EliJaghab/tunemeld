@@ -11,6 +11,19 @@ import type {
   ButtonLabel,
 } from "@/types/index";
 
+export interface StaticConfig {
+  genres: Genre[];
+  ranks: Rank[];
+  closePlayerLabels: ButtonLabel[];
+  themeToggleLightLabels: ButtonLabel[];
+  themeToggleDarkLabels: ButtonLabel[];
+  acceptTermsLabels: ButtonLabel[];
+  moreButtonAppleMusicLabels: ButtonLabel[];
+  moreButtonSoundcloudLabels: ButtonLabel[];
+  moreButtonSpotifyLabels: ButtonLabel[];
+  moreButtonYoutubeLabels: ButtonLabel[];
+}
+
 // Custom error types
 interface GraphQLError {
   message: string;
@@ -428,6 +441,95 @@ class GraphQLClient {
 
     const data = await this.query(query, { buttonType, context });
     return data.miscButtonLabels;
+  }
+
+  async getStaticConfig(): Promise<StaticConfig> {
+    const query = `
+      query GetStaticConfig {
+        genres {
+          id
+          name
+          displayName
+          iconUrl
+          buttonLabels {
+            buttonType
+            context
+            title
+            ariaLabel
+          }
+        }
+        ranks {
+          name
+          displayName
+          sortField
+          sortOrder
+          isDefault
+          dataField
+        }
+        closePlayerLabels: miscButtonLabels(buttonType: "close_player") {
+          buttonType
+          context
+          title
+          ariaLabel
+        }
+        themeToggleLightLabels: miscButtonLabels(buttonType: "theme_toggle", context: "light") {
+          buttonType
+          context
+          title
+          ariaLabel
+        }
+        themeToggleDarkLabels: miscButtonLabels(buttonType: "theme_toggle", context: "dark") {
+          buttonType
+          context
+          title
+          ariaLabel
+        }
+        acceptTermsLabels: miscButtonLabels(buttonType: "accept_terms") {
+          buttonType
+          context
+          title
+          ariaLabel
+        }
+        moreButtonAppleMusicLabels: miscButtonLabels(buttonType: "more_button", context: "apple_music") {
+          buttonType
+          context
+          title
+          ariaLabel
+        }
+        moreButtonSoundcloudLabels: miscButtonLabels(buttonType: "more_button", context: "soundcloud") {
+          buttonType
+          context
+          title
+          ariaLabel
+        }
+        moreButtonSpotifyLabels: miscButtonLabels(buttonType: "more_button", context: "spotify") {
+          buttonType
+          context
+          title
+          ariaLabel
+        }
+        moreButtonYoutubeLabels: miscButtonLabels(buttonType: "more_button", context: "youtube") {
+          buttonType
+          context
+          title
+          ariaLabel
+        }
+      }
+    `;
+
+    const data = await this.query(query, {});
+    return {
+      genres: data.genres,
+      ranks: data.ranks,
+      closePlayerLabels: data.closePlayerLabels,
+      themeToggleLightLabels: data.themeToggleLightLabels,
+      themeToggleDarkLabels: data.themeToggleDarkLabels,
+      acceptTermsLabels: data.acceptTermsLabels,
+      moreButtonAppleMusicLabels: data.moreButtonAppleMusicLabels,
+      moreButtonSoundcloudLabels: data.moreButtonSoundcloudLabels,
+      moreButtonSpotifyLabels: data.moreButtonSpotifyLabels,
+      moreButtonYoutubeLabels: data.moreButtonYoutubeLabels,
+    };
   }
 }
 

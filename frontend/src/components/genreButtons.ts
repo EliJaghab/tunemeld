@@ -4,10 +4,7 @@ import type { Genre, ButtonLabel } from "@/types";
 
 export async function loadAndRenderGenreButtons() {
   try {
-    // Get genres from global data instead of router
-    const { getGlobalPageData } = await import("@/utils/selectors");
-    const globalData = getGlobalPageData();
-    const genres = globalData?.genres?.genres || [];
+    const genres = stateManager.getGenres();
     const genreControlsElement = document.getElementById("genre-controls");
 
     if (!genres || genres.length === 0 || !genreControlsElement) {

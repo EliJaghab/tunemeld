@@ -111,10 +111,13 @@ export interface IframeConfig {
   referrerPolicy?: string;
 }
 
-export interface State {
-  currentColumn: string;
-  currentOrder: string;
-  currentGenre: string;
-  currentTheme: string;
-  modals: Record<string, { modal: HTMLElement; overlay: HTMLElement }>;
+export interface ButtonLabels {
+  closePlayer: ButtonLabel[];
+  themeToggleLight: ButtonLabel[];
+  themeToggleDark: ButtonLabel[];
+  acceptTerms: ButtonLabel[];
+  moreButtonAppleMusic: ButtonLabel[];
+  moreButtonSoundcloud: ButtonLabel[];
+  moreButtonSpotify: ButtonLabel[];
+  moreButtonYoutube: ButtonLabel[];
 }
