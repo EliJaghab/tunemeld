@@ -433,7 +433,7 @@ async function loadOtherServicePlaylists(genre: string): Promise<void> {
   if (data.spotifyPlaylist) {
     renderPlaylistTracks(
       [data.spotifyPlaylist],
-      "spotify-playlist-data-placeholder",
+      "spotify-data-placeholder",
       SERVICE_NAMES.SPOTIFY,
     );
   }
@@ -441,7 +441,7 @@ async function loadOtherServicePlaylists(genre: string): Promise<void> {
   if (data.appleMusicPlaylist) {
     renderPlaylistTracks(
       [data.appleMusicPlaylist],
-      "apple-music-playlist-data-placeholder",
+      "apple_music-data-placeholder",
       SERVICE_NAMES.APPLE_MUSIC,
     );
   }
@@ -449,7 +449,7 @@ async function loadOtherServicePlaylists(genre: string): Promise<void> {
   if (data.soundcloudPlaylist) {
     renderPlaylistTracks(
       [data.soundcloudPlaylist],
-      "soundcloud-playlist-data-placeholder",
+      "soundcloud-data-placeholder",
       SERVICE_NAMES.SOUNDCLOUD,
     );
   }
