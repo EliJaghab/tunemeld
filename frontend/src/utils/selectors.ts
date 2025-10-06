@@ -495,6 +495,10 @@ export async function updateGenreData(
   updateAll: boolean = false,
   skipInitialShimmer: boolean = false,
 ): Promise<void> {
+  console.log(
+    `[DEBUG] updateGenreData called with genre=${genre}, updateAll=${updateAll}, skipInitialShimmer=${skipInitialShimmer}`,
+  );
+
   try {
     // Only show shimmer if this isn't the initial load (router handles initial shimmer)
     if (!skipInitialShimmer) {
@@ -511,6 +515,7 @@ export async function updateGenreData(
     setGlobalPageData(allData);
 
     if (updateAll) {
+      console.log("[DEBUG] updateAll is TRUE - calling fetchServicePlaylists");
       updatePlaylistHeaderSync(
         allData.metadata.playlists,
         allData.metadata.serviceOrder,
@@ -526,6 +531,9 @@ export async function updateGenreData(
         console.error("Failed to load service playlists:", error);
       });
     } else {
+      console.log(
+        "[DEBUG] updateAll is FALSE - SKIPPING fetchServicePlaylists",
+      );
       // Non-updateAll case: TuneMeld playlist will come from service playlists query
       // Don't render anything here
     }
