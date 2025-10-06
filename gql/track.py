@@ -71,6 +71,59 @@ class TrackType:
         return track
 
     @classmethod
+    def from_domain_track(cls, domain_track) -> "TrackType":
+        """Create TrackType from Domain Track, preserving all rank and source data."""
+        track = cls(
+            id=domain_track.id,
+            isrc=domain_track.isrc,
+            album_name=domain_track.album_name,
+            spotify_url=domain_track.spotify_url,
+            apple_music_url=domain_track.apple_music_url,
+            youtube_url=domain_track.youtube_url,
+            soundcloud_url=domain_track.soundcloud_url,
+            album_cover_url=domain_track.album_cover_url,
+            aggregate_rank=None,
+            aggregate_score=None,
+            updated_at=domain_track.updated_at,
+        )
+
+        # Preserve data that gets lost in Django conversion
+        track._track_name = domain_track.track_name
+        track._artist_name = domain_track.artist_name
+
+        # Preserve rank data
+        track._tunemeld_rank = domain_track.tunemeld_rank
+        track._spotify_rank = domain_track.spotify_rank
+        track._apple_music_rank = domain_track.apple_music_rank
+        track._soundcloud_rank = domain_track.soundcloud_rank
+
+        # Preserve service sources
+        if domain_track.spotify_source:
+            track._spotify_source = domain_track.spotify_source.to_dict()
+        if domain_track.apple_music_source:
+            track._apple_music_source = domain_track.apple_music_source.to_dict()
+        if domain_track.soundcloud_source:
+            track._soundcloud_source = domain_track.soundcloud_source.to_dict()
+        if domain_track.youtube_source:
+            track._youtube_source = domain_track.youtube_source.to_dict()
+
+        # Preserve button labels
+        if domain_track.button_labels:
+            track._button_labels = [bl.to_dict() for bl in domain_track.button_labels]
+
+        # Preserve track detail URLs
+        if domain_track.track_detail_url_spotify:
+            track.track_detail_url_spotify = domain_track.track_detail_url_spotify
+        if domain_track.track_detail_url_apple_music:
+            track.track_detail_url_apple_music = domain_track.track_detail_url_apple_music
+        if domain_track.track_detail_url_soundcloud:
+            track.track_detail_url_soundcloud = domain_track.track_detail_url_soundcloud
+        if domain_track.track_detail_url_youtube:
+            track.track_detail_url_youtube = domain_track.track_detail_url_youtube
+
+        return track
+
+    @classmethod
     def to_cache_dict(cls, django_track) -> dict:
         """Create cache dictionary from Django TrackModel."""
         return {
@@ -132,6 +185,9 @@ class TrackType:
 
     @strawberry.field(description="Position in the TuneMeld playlist for current genre")
     def tunemeld_rank(self, info) -> int | None:
+        if hasattr(self, "_tunemeld_rank"):
+            return self._tunemeld_rank
+
         genre_name = info.variable_values["genre"]
         track_domain = get_track_by_isrc(self.isrc)
         if not track_domain:
@@ -176,9 +232,9 @@ class TrackType:
         if hasattr(self, "_spotify_source") and self._spotify_source:
             return ServiceType(
                 name=self._spotify_source["name"],
-                display_name=self._spotify_source["display_name"],
+                display_name=self._spotify_source["displayName"],
                 url=self._spotify_source["url"],
-                icon_url=self._spotify_source["icon_url"],
+                icon_url=self._spotify_source["iconUrl"],
             )
 
         if not self.spotify_url:
@@ -198,9 +254,9 @@ class TrackType:
         if hasattr(self, "_apple_music_source") and self._apple_music_source:
             return ServiceType(
                 name=self._apple_music_source["name"],
-                display_name=self._apple_music_source["display_name"],
+                display_name=self._apple_music_source["displayName"],
                 url=self._apple_music_source["url"],
-                icon_url=self._apple_music_source["icon_url"],
+                icon_url=self._apple_music_source["iconUrl"],
             )
 
         if not self.apple_music_url:
@@ -220,9 +276,9 @@ class TrackType:
         if hasattr(self, "_soundcloud_source") and self._soundcloud_source:
             return ServiceType(
                 name=self._soundcloud_source["name"],
-                display_name=self._soundcloud_source["display_name"],
+                display_name=self._soundcloud_source["displayName"],
                 url=self._soundcloud_source["url"],
-                icon_url=self._soundcloud_source["icon_url"],
+                icon_url=self._soundcloud_source["iconUrl"],
             )
 
         if not self.soundcloud_url:
@@ -242,9 +298,9 @@ class TrackType:
         if hasattr(self, "_youtube_source") and self._youtube_source:
             return ServiceType(
                 name=self._youtube_source["name"],
-                display_name=self._youtube_source["display_name"],
+                display_name=self._youtube_source["displayName"],
                 url=self._youtube_source["url"],
-                icon_url=self._youtube_source["icon_url"],
+                icon_url=self._youtube_source["iconUrl"],
             )
 
         if not self.youtube_url:
