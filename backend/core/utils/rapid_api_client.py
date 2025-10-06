@@ -66,10 +66,17 @@ def _make_rapidapi_request(url: str, host: str) -> JSON:
             response.raise_for_status()
             logger.info(f"RapidAPI request successful - Status: {response.status_code}")
             return cast("JSON", response.json())
-        except requests.exceptions.HTTPError as e:
+        except requests.exceptions.RequestException as e:
             last_exception = e
-            status = e.response.status_code if hasattr(e, "response") else "unknown"
-            logger.warning(f"RapidAPI request failed with status {status} for {host}. Trying next key...")
+            if isinstance(e, requests.exceptions.HTTPError):
+                status = e.response.status_code if hasattr(e, "response") else "unknown"
+                logger.warning(f"RapidAPI request failed with HTTP status {status} for {host}. Trying next key...")
+            elif isinstance(e, requests.exceptions.Timeout):
+                logger.warning(f"RapidAPI request timed out for {host}. Trying next key...")
+            elif isinstance(e, requests.exceptions.ConnectionError):
+                logger.warning(f"RapidAPI request connection failed for {host}. Trying next key...")
+            else:
+                logger.warning(f"RapidAPI request failed with {type(e).__name__} for {host}. Trying next key...")
             continue
 
     logger.error(f"All RapidAPI keys exhausted for {host}")
