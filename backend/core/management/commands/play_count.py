@@ -1,3 +1,4 @@
+import os
 import time
 import uuid
 from typing import Any
@@ -65,9 +66,14 @@ class Command(BaseCommand):
     def remove_previous_etl_run(self, current_etl_run_id: uuid.UUID) -> None:
         """Blue Green deployment of data - only wipe genre/service/rank data after full pipeline has run."""
         logger.info(f"Removing previous ETL run genre/service/rank data, keeping run ID: {current_etl_run_id}")
+
+        os.environ["DJANGO_ALLOW_ASYNC_UNSAFE"] = "true"
+
         GenreModel.objects.exclude(etl_run_id=current_etl_run_id).delete()
         ServiceModel.objects.exclude(etl_run_id=current_etl_run_id).delete()
         RankModel.objects.exclude(etl_run_id=current_etl_run_id).delete()
+
+        del os.environ["DJANGO_ALLOW_ASYNC_UNSAFE"]
 
     def _print_final_summary(self):
         today = timezone.now().date()
