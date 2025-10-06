@@ -136,9 +136,9 @@ serve-frontend:
 		echo " Use 'make kill-frontend' to stop existing server"; \
 		exit 1; \
 	fi
-	@echo " TypeScript will auto-compile on file changes"
+	@echo " TypeScript, CSS, and HTML will auto-compile on file changes"
 	@echo " Website will be available at: http://localhost:8080"
-	@echo " Press Ctrl+C to stop both processes"
+	@echo " Press Ctrl+C to stop all processes"
 	@echo ""
 	@cd frontend && npm run dev & cd frontend/dist && python -m http.server 8080 & wait
 serve-redis:

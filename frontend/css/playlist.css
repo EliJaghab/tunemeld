@@ -364,8 +364,9 @@
   display: block;
   color: var(--text-color);
   font-family: var(--font-family-primary);
-  font-size: var(--font-size-md);
+  font-size: var(--font-size-sm);
   font-weight: 600;
+  margin: 0;
   padding-bottom: var(--space-lg);
 }
 
