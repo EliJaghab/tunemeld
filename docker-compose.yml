@@ -6,7 +6,7 @@ services:
     ports:
       - "8000:8000"
     environment:
-      - DATABASE_URL=postgresql://tunemeld:tunemeld@postgres:5432/tunemeld
+      - DATABASE_URL=postgresql://tunemeld:${POSTGRES_PASSWORD}@postgres:5432/tunemeld
       - REDIS_URL=redis://redis:6379/1
       - DJANGO_SETTINGS_MODULE=core.settings
       - PYTHONPATH=/app/backend:/app
@@ -22,7 +22,7 @@ services:
     environment:
       - POSTGRES_DB=tunemeld
       - POSTGRES_USER=tunemeld
-      - POSTGRES_PASSWORD=tunemeld
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     ports:
       - "5432:5432"
     volumes:
