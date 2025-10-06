@@ -5,8 +5,8 @@
   "main": "dist/main.js",
   "scripts": {
     "build": "node build.js",
-    "build:watch": "node dev.js",
-    "dev": "node dev.js",
+    "build:watch": "node build.js && tsc --watch",
+    "dev": "node build.js && tsc --watch",
     "clean": "rm -rf dist"
   },
   "devDependencies": {
