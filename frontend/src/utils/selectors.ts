@@ -252,12 +252,6 @@ async function fetchServicePlaylists(genre: string): Promise<void> {
     hideShimmerLoaders();
   });
 
-  console.log(
-    "[DEBUG] About to call loadOtherServicePlaylists for genre:",
-    genre,
-  );
-
-  // CRITICAL DEBUG: Force call to loadOtherServicePlaylists
   (async () => {
     try {
       await loadOtherServicePlaylists(genre);
@@ -265,12 +259,9 @@ async function fetchServicePlaylists(genre: string): Promise<void> {
       console.error("Failed to load other service playlists:", error);
     }
   })();
-
-  console.log("[DEBUG] Called loadOtherServicePlaylists (async, won't wait)");
 }
 
 async function loadOtherServicePlaylists(genre: string): Promise<void> {
-  console.log("[DEBUG] Inside loadOtherServicePlaylists, genre:", genre);
   const servicePlaylistsQuery = `
     query GetServicePlaylists($genre: String!) {
       spotifyPlaylist: playlist(genre: $genre, service: "${SERVICE_NAMES.SPOTIFY}") {
@@ -441,20 +432,9 @@ async function loadOtherServicePlaylists(genre: string): Promise<void> {
     }
   `;
 
-  console.log("[DEBUG] Calling graphqlClient.query for service playlists");
   const data = await graphqlClient.query(servicePlaylistsQuery, { genre });
-  console.log("[DEBUG] Received data:", {
-    hasSpotify: !!data.spotifyPlaylist,
-    hasAppleMusic: !!data.appleMusicPlaylist,
-    hasSoundcloud: !!data.soundcloudPlaylist,
-  });
 
   if (data.spotifyPlaylist) {
-    console.log(
-      "[DEBUG] Rendering Spotify playlist with",
-      data.spotifyPlaylist.tracks?.length,
-      "tracks",
-    );
     renderPlaylistTracks(
       [data.spotifyPlaylist],
       "spotify-data-placeholder",
@@ -463,11 +443,6 @@ async function loadOtherServicePlaylists(genre: string): Promise<void> {
   }
 
   if (data.appleMusicPlaylist) {
-    console.log(
-      "[DEBUG] Rendering Apple Music playlist with",
-      data.appleMusicPlaylist.tracks?.length,
-      "tracks",
-    );
     renderPlaylistTracks(
       [data.appleMusicPlaylist],
       "apple_music-data-placeholder",
@@ -476,18 +451,12 @@ async function loadOtherServicePlaylists(genre: string): Promise<void> {
   }
 
   if (data.soundcloudPlaylist) {
-    console.log(
-      "[DEBUG] Rendering SoundCloud playlist with",
-      data.soundcloudPlaylist.tracks?.length,
-      "tracks",
-    );
     renderPlaylistTracks(
       [data.soundcloudPlaylist],
       "soundcloud-data-placeholder",
       SERVICE_NAMES.SOUNDCLOUD,
     );
   }
-  console.log("[DEBUG] Finished loadOtherServicePlaylists");
 }
 
 export async function updateGenreData(
@@ -495,10 +464,6 @@ export async function updateGenreData(
   updateAll: boolean = false,
   skipInitialShimmer: boolean = false,
 ): Promise<void> {
-  console.log(
-    `[DEBUG] updateGenreData called with genre=${genre}, updateAll=${updateAll}, skipInitialShimmer=${skipInitialShimmer}`,
-  );
-
   try {
     // Only show shimmer if this isn't the initial load (router handles initial shimmer)
     if (!skipInitialShimmer) {
@@ -515,7 +480,6 @@ export async function updateGenreData(
     setGlobalPageData(allData);
 
     if (updateAll) {
-      console.log("[DEBUG] updateAll is TRUE - calling fetchServicePlaylists");
       updatePlaylistHeaderSync(
         allData.metadata.playlists,
         allData.metadata.serviceOrder,
@@ -523,19 +487,10 @@ export async function updateGenreData(
         null,
       );
 
-      // Don't render TuneMeld playlist here since it's null initially
-      // It will be rendered when GetServicePlaylists completes
-
       // Load service playlists in background (fast 2nd request!)
       fetchServicePlaylists(genre).catch((error) => {
         console.error("Failed to load service playlists:", error);
       });
-    } else {
-      console.log(
-        "[DEBUG] updateAll is FALSE - SKIPPING fetchServicePlaylists",
-      );
-      // Non-updateAll case: TuneMeld playlist will come from service playlists query
-      // Don't render anything here
     }
 
     await loadAndRenderRankButtons();

@@ -48,22 +48,13 @@ class AppRouter {
       const { getGlobalPageData } = await import("@/utils/selectors");
       let globalData = getGlobalPageData();
 
-      console.log("[DEBUG ROUTER] globalData exists?", !!globalData);
-
       // If no global data yet, trigger the initial load
       if (!globalData) {
-        console.log(
-          "[DEBUG ROUTER] No global data - calling updateGenreData(pop, true)",
-        );
         this.isInitialLoad = false; // Mark as no longer initial to prevent duplicate loading
         const { updateGenreData } = await import("@/utils/selectors");
         await updateGenreData("pop", true);
         globalData = getGlobalPageData();
         this.currentGenre = "pop"; // Track that we loaded pop data
-      } else {
-        console.log(
-          "[DEBUG ROUTER] Global data already exists - skipping initial load",
-        );
       }
 
       if (globalData) {
@@ -151,10 +142,6 @@ class AppRouter {
   ): Promise<void> {
     const genreChanged = this.currentGenre !== genre;
     const needsFullUpdate = genreChanged || this.isInitialLoad;
-
-    console.log(
-      `[DEBUG ROUTER] activateGenre: currentGenre=${this.currentGenre}, requestedGenre=${genre}, genreChanged=${genreChanged}, isInitialLoad=${this.isInitialLoad}, needsFullUpdate=${needsFullUpdate}`,
-    );
 
     this.currentGenre = genre;
     this.updatePageTitle(genre);

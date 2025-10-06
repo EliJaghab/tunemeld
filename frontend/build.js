@@ -58,6 +58,15 @@ try {
   process.exit(1);
 }
 
+// Add .js extensions to all relative imports
+console.log("Adding .js extensions to imports...");
+try {
+  execSync("node add-js-extensions.js", { stdio: "inherit" });
+} catch (error) {
+  console.error("Adding .js extensions failed");
+  process.exit(1);
+}
+
 // Verify all expected files are present
 const expectedDirs = [
   "components",
