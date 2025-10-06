@@ -492,13 +492,18 @@ function createServicePlaylistTableRow(
 
   const rankCell = document.createElement("td");
   rankCell.className = "rank";
-  // Show current position if displayRank provided, otherwise show original tunemeldRank
-  const currentSortColumn = stateManager.getCurrentColumn();
-  const showDisplayRank =
-    displayRank !== undefined && currentSortColumn !== TUNEMELD_RANK_FIELD;
-  rankCell.textContent = showDisplayRank
-    ? displayRank.toString()
-    : track.tunemeldRank?.toString() || "";
+
+  // Determine which rank to display based on service
+  let serviceRank: number | null | undefined = null;
+  if (serviceName === SERVICE_NAMES.SPOTIFY) {
+    serviceRank = track.spotifyRank;
+  } else if (serviceName === SERVICE_NAMES.APPLE_MUSIC) {
+    serviceRank = track.appleMusicRank;
+  } else if (serviceName === SERVICE_NAMES.SOUNDCLOUD) {
+    serviceRank = track.soundcloudRank;
+  }
+
+  rankCell.textContent = serviceRank?.toString() || "";
 
   const coverCell = document.createElement("td");
   coverCell.className = "cover";
@@ -619,9 +624,8 @@ function displaySources(cell: HTMLTableCellElement, track: Track): void {
       rank: track.soundcloudRank,
     },
   ].filter((item) => {
-    // Show service icons whenever we have a source (URL)
-    // Rank badges will be added separately if available
-    return item.source !== null && item.source !== undefined;
+    // Only show service icons when the track has a rank for that service
+    return item.rank !== null && item.rank !== undefined;
   });
 
   serviceData.forEach((item) => {
