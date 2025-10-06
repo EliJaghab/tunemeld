@@ -1,6 +1,4 @@
-import os
 import time
-import uuid
 from typing import Any
 
 from core.management.commands.genre_service import Command as GenreServiceCommand
@@ -9,9 +7,7 @@ from core.management.commands.play_count_modules.b_aggregate_play_count import C
 from core.management.commands.play_count_modules.c_clear_and_warm_play_count_cache import (
     Command as WarmPlayCountCacheCommand,
 )
-from core.models.genre_service import GenreModel, ServiceModel
 from core.models.play_counts import HistoricalTrackPlayCountModel
-from core.models.playlist import RankModel
 from core.utils.utils import get_logger
 from django.core.management.base import BaseCommand
 from django.db import models, transaction
@@ -29,14 +25,13 @@ class Command(BaseCommand):
     def handle(self, *args: Any, **options: Any) -> None:
         start_time = time.time()
         limit = options.get("limit")
-        etl_run_id = uuid.uuid4()
 
         try:
             with transaction.atomic():
-                logger.info(f"Starting Play Count ETL Pipeline with run ID: {etl_run_id}")
+                logger.info("Starting Play Count ETL Pipeline")
 
                 logger.info("Step 1: Setting up genres and services...")
-                GenreServiceCommand().handle(etl_run_id=etl_run_id)
+                GenreServiceCommand().handle()
 
                 logger.info("Step 2: Running Historical Play Count extraction")
                 historical_command = HistoricalPlayCountCommand()
@@ -49,9 +44,6 @@ class Command(BaseCommand):
                 logger.info("Step 4: Clearing and warming play count cache...")
                 WarmPlayCountCacheCommand().handle()
 
-                logger.info("Step 5: Removing previous ETL run data...")
-                self.remove_previous_etl_run(etl_run_id)
-
                 duration = time.time() - start_time
                 logger.info(f"Play Count ETL Pipeline completed in {duration:.1f} seconds")
 
@@ -62,18 +54,6 @@ class Command(BaseCommand):
             duration = time.time() - start_time
             logger.info(f"Pipeline failed after {duration:.1f} seconds")
             raise
-
-    def remove_previous_etl_run(self, current_etl_run_id: uuid.UUID) -> None:
-        """Blue Green deployment of data - only wipe genre/service/rank data after full pipeline has run."""
-        logger.info(f"Removing previous ETL run genre/service/rank data, keeping run ID: {current_etl_run_id}")
-
-        os.environ["DJANGO_ALLOW_ASYNC_UNSAFE"] = "true"
-
-        GenreModel.objects.exclude(etl_run_id=current_etl_run_id).delete()
-        ServiceModel.objects.exclude(etl_run_id=current_etl_run_id).delete()
-        RankModel.objects.exclude(etl_run_id=current_etl_run_id).delete()
-
-        del os.environ["DJANGO_ALLOW_ASYNC_UNSAFE"]
 
     def _print_final_summary(self):
         today = timezone.now().date()
