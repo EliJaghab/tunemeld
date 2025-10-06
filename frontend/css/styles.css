@@ -1,5 +1,9 @@
 /* Global Styles */
 
+.hidden {
+  display: none !important;
+}
+
 a {
   color: var(--link-color);
 }

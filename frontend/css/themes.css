@@ -500,9 +500,9 @@ body.dark-mode {
 
 /* Playlist-specific shimmer components */
 .loading-overlay-playlist {
-  padding: var(--space-xl);
   flex-direction: column;
-  gap: var(--space-lg);
+  border: none;
+  outline: none;
 }
 
 .loading-overlay-playlist.active {
@@ -640,10 +640,6 @@ body.dark-mode {
 @media screen and (max-width: 768px) {
   .loading-overlay-service {
     padding: 0;
-  }
-
-  .loading-overlay-playlist {
-    padding: var(--space-md);
   }
 
   .playlist-shimmer-row {

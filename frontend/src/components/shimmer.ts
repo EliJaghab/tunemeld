@@ -80,10 +80,10 @@ function createPlaylistShimmer(
     "loading-overlay loading-overlay-playlist",
   ) as HTMLDivElement;
 
-  // Only include header shimmer on initial load
+  // Only include header and controls shimmer on initial load
   if (includeControls) {
     // Create playlist header shimmer
-    const header = createElement("div", "playlist-header-shimmer");
+    const headerShimmer = createElement("div", "playlist-header-shimmer");
     const titleRow = createElement("div", "playlist-title-shimmer");
 
     const logoShimmer = createElement("div", "shimmer shimmer-playlist-logo");
@@ -94,44 +94,37 @@ function createPlaylistShimmer(
     titleRow.appendChild(titleShimmer);
     titleRow.appendChild(descShimmer);
 
-    header.appendChild(titleRow);
-    overlay.appendChild(header);
-  }
+    headerShimmer.appendChild(titleRow);
+    overlay.appendChild(headerShimmer);
 
-  // Only include controls shimmer on initial load
-  if (includeControls) {
-    const controlsContainer = createElement("div", "playlist-controls-shimmer");
-
-    // Genre controls
-    const genreSection = createElement("div", "control-group-shimmer");
-    const genreLabel = createElement("div", "shimmer shimmer-control-label");
-    const genreButtons = createElement("div", "shimmer-buttons-row");
+    // Genre controls - using same structure as actual HTML
+    const genreSection = createElement("div", "control-group");
+    const genreLabel = createElement("label", "control-label shimmer");
+    const genreButtons = createElement("div", "genre-controls");
 
     for (let i = 0; i < 4; i++) {
-      genreButtons.appendChild(createElement("div", "shimmer shimmer-button"));
+      genreButtons.appendChild(createElement("div", "sort-button shimmer"));
     }
 
     genreSection.appendChild(genreLabel);
     genreSection.appendChild(genreButtons);
+    overlay.appendChild(genreSection);
 
-    // Ranking controls
-    const rankSection = createElement("div", "control-group-shimmer");
-    const rankLabel = createElement("div", "shimmer shimmer-control-label");
-    const rankButton = createElement("div", "shimmer-buttons-row");
+    // Ranking controls - using same structure as actual HTML
+    const rankSection = createElement("div", "control-group");
+    const rankLabel = createElement("label", "control-label shimmer");
+    const rankButtons = createElement("div", "sort-controls");
 
     for (let i = 0; i < 3; i++) {
-      rankButton.appendChild(createElement("div", "shimmer shimmer-button"));
+      rankButtons.appendChild(createElement("div", "sort-button shimmer"));
     }
 
     rankSection.appendChild(rankLabel);
-    rankSection.appendChild(rankButton);
-
-    controlsContainer.appendChild(genreSection);
-    controlsContainer.appendChild(rankSection);
-    overlay.appendChild(controlsContainer);
+    rankSection.appendChild(rankButtons);
+    overlay.appendChild(rankSection);
   }
 
-  // Use the appropriate table shimmer based on ranking type
+  // Always include table shimmer
   const tableContainer = createElement("div", "shimmer-table-container");
   tableContainer.appendChild(createShimmerTable(shimmerType));
   overlay.appendChild(tableContainer);
@@ -159,30 +152,43 @@ export function showShimmerLoaders(isInitialLoad: boolean = false): void {
     overlay.classList.add("active");
   });
 
+  const mainPlaylist = document.querySelector(".main-playlist");
+  if (!mainPlaylist) return;
+
+  const playlistHeader = mainPlaylist.querySelector(".playlist-header");
+  const playlistContent = mainPlaylist.querySelector(".playlist-content");
+  if (!playlistContent) return;
+
+  // Remove any existing shimmer first
+  const existingShimmer = playlistContent.querySelector(
+    ".loading-overlay-playlist",
+  );
+  if (existingShimmer) {
+    existingShimmer.remove();
+  }
+
   if (isInitialLoad) {
-    // Initial load: shimmer the whole main playlist with controls
-    const mainPlaylist = document.querySelector(".playlist.main-playlist");
-    if (mainPlaylist) {
-      let overlay = mainPlaylist.querySelector(".loading-overlay");
-      if (!overlay) {
-        overlay = createPlaylistShimmer(true, shimmerType);
-        mainPlaylist.appendChild(overlay);
-      }
-      overlay.classList.add("active");
-    }
+    // Initial load: hide real header, controls and table, show shimmer
+    playlistHeader?.classList.add("hidden");
+
+    const controlGroups = playlistContent.querySelectorAll(".control-group");
+    const playlistTable = playlistContent.querySelector(".playlist-table");
+
+    controlGroups.forEach((group) => group.classList.add("hidden"));
+    playlistTable?.classList.add("hidden");
+
+    // Create and insert shimmer header, controls and table
+    const shimmer = createPlaylistShimmer(true, shimmerType);
+    playlistContent.appendChild(shimmer);
   } else {
-    // Genre switching: only shimmer the table area, keep controls visible
-    const playlistTable = document.querySelector(
-      ".main-playlist .playlist-table",
-    );
+    // Genre switching: only hide/show table
+    const playlistTable = playlistContent.querySelector(".playlist-table");
     if (playlistTable) {
-      let overlay = playlistTable.querySelector(".loading-overlay");
-      if (!overlay) {
-        // Create table-only shimmer (just the track rows) using the appropriate configuration
-        overlay = createPlaylistShimmer(false, shimmerType);
-        playlistTable.appendChild(overlay);
-      }
-      overlay.classList.add("active");
+      playlistTable.classList.add("hidden");
+
+      // Create and insert table shimmer
+      const shimmer = createPlaylistShimmer(false, shimmerType);
+      playlistContent.appendChild(shimmer);
     }
   }
 }
@@ -199,9 +205,38 @@ export function hideShimmerLoaders(): void {
   // Update StateManager shimmer state
   stateManager.hideAllShimmers();
 
-  // Hide all loading overlays
-  const overlays = document.querySelectorAll(".loading-overlay");
-  overlays.forEach((overlay) => {
+  // Hide service overlays
+  const serviceOverlays = document.querySelectorAll(
+    ".service .loading-overlay",
+  );
+  serviceOverlays.forEach((overlay) => {
     overlay.classList.remove("active");
   });
+
+  // Show real playlist content and remove shimmer
+  const mainPlaylist = document.querySelector(".main-playlist");
+  if (mainPlaylist) {
+    const playlistHeader = mainPlaylist.querySelector(".playlist-header");
+    const playlistContent = mainPlaylist.querySelector(".playlist-content");
+
+    // Show real header
+    playlistHeader?.classList.remove("hidden");
+
+    if (playlistContent) {
+      // Show real controls and table
+      const controlGroups = playlistContent.querySelectorAll(".control-group");
+      const playlistTable = playlistContent.querySelector(".playlist-table");
+
+      controlGroups.forEach((group) => group.classList.remove("hidden"));
+      playlistTable?.classList.remove("hidden");
+
+      // Remove shimmer overlay
+      const shimmerOverlay = playlistContent.querySelector(
+        ".loading-overlay-playlist",
+      );
+      if (shimmerOverlay) {
+        shimmerOverlay.remove();
+      }
+    }
+  }
 }

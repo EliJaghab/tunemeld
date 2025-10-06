@@ -50,6 +50,12 @@
   display: none;
 }
 
+/* Playlist shimmer is not absolutely positioned */
+.loading-overlay-playlist {
+  position: static;
+  display: block;
+}
+
 .loading-overlay.active {
   display: block;
 }
@@ -87,9 +93,9 @@
 
 /* Playlist-specific shimmer components */
 .loading-overlay-playlist {
-  padding: var(--space-xxl);
   flex-direction: column;
-  gap: var(--space-lg);
+  border: none;
+  outline: none;
 }
 
 .loading-overlay-playlist.active {
@@ -134,6 +140,7 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-sm);
+  padding-bottom: var(--space-md);
 }
 
 .playlist-title-shimmer {
@@ -158,33 +165,17 @@
   height: var(--space-lg);
 }
 
-/* Controls shimmer */
-.playlist-controls-shimmer {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-lg);
-}
-
-.control-group-shimmer {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-sm);
-}
-
-.shimmer-control-label {
+/* Shimmer-specific sizing for labels */
+.control-label.shimmer {
   width: var(--shimmer-control-label-width);
   height: var(--space-lg);
+  display: block;
 }
 
-.shimmer-buttons-row {
-  display: flex;
-  gap: var(--space-lg);
-}
-
-.shimmer-button {
+/* Shimmer-specific sizing for buttons */
+.sort-button.shimmer {
   width: var(--shimmer-button-width);
   height: var(--shimmer-button-height);
-  border-radius: calc(var(--space-xl) + var(--space-xs));
 }
 
 /* Table shimmer */
@@ -255,15 +246,11 @@
     padding: 0;
   }
 
-  .loading-overlay-playlist {
-    padding: var(--space-xxl);
-  }
-
   .playlist-shimmer-row {
     height: var(--size-row-sm);
   }
 
-  .shimmer-button {
+  .sort-button.shimmer {
     width: var(--shimmer-button-width-mobile);
     height: var(--shimmer-button-height-mobile);
   }

@@ -22,6 +22,7 @@
 .playlist-content {
   display: block;
   padding-bottom: 0;
+  position: relative;
 }
 
 .playlist-content.collapsed {
@@ -81,8 +82,14 @@
   justify-content: flex-start;
   position: relative;
   padding: 0;
+  padding-bottom: var(--space-md);
   margin: 0;
   line-height: 1;
+}
+
+.playlist-content.collapsed + .playlist-header,
+.playlist:has(.playlist-content.collapsed) .playlist-header {
+  padding-bottom: 0;
 }
 
 .playlist-link {
@@ -355,8 +362,7 @@
 }
 
 .control-group {
-  margin-bottom: var(--space-lg);
-  margin-top: var(--space-lg);
+  margin: 0;
   padding: 0;
 }
 
@@ -366,16 +372,23 @@
   font-family: var(--font-family-primary);
   font-size: var(--font-size-md);
   font-weight: 600;
-  margin-bottom: var(--space-sm);
+  margin: 0;
+  margin-bottom: var(--space-md);
+  top: 0;
 }
 
 .sort-controls {
+  display: flex;
+  flex-wrap: wrap;
   gap: var(--space-lg);
-  margin-bottom: var(--space-xl);
+  margin-bottom: var(--space-md);
 }
 
 .genre-controls {
+  display: flex;
+  flex-wrap: wrap;
   gap: var(--space-lg);
+  margin-bottom: var(--space-md);
 }
 
 .sort-button {

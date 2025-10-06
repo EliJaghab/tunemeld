@@ -9,6 +9,21 @@ import {
 } from "@/config/constants";
 import type { Track, Playlist, ServiceSource, ButtonLabel } from "@/types";
 
+// TEMPORARY: Stub function to fix build
+interface PlayCount {
+  totalCurrentPlayCount?: number;
+  totalCurrentPlayCountAbbreviated?: string;
+  totalWeeklyChangePercentageFormatted?: string;
+  totalWeeklyChangePercentage?: number;
+  youtubeCurrentPlayCount?: number;
+  spotifyCurrentPlayCount?: number;
+  isrc?: string;
+}
+
+function getPlayCountForTrack(_isrc: string): PlayCount {
+  return {};
+}
+
 async function fetchAndDisplayData(
   url: string,
   placeholderId: string,
