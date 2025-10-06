@@ -87,7 +87,7 @@
 
 /* Playlist-specific shimmer components */
 .loading-overlay-playlist {
-  padding: var(--space-xl);
+  padding: var(--space-xxl);
   flex-direction: column;
   gap: var(--space-lg);
 }
@@ -194,7 +194,7 @@
 }
 
 .playlist-table-shimmer {
-  margin: var(--space-lg) 0;
+  margin: 0;
 }
 
 .playlist-shimmer-row {
@@ -256,7 +256,7 @@
   }
 
   .loading-overlay-playlist {
-    padding: var(--space-md);
+    padding: var(--space-xxl);
   }
 
   .playlist-shimmer-row {
