@@ -54,7 +54,7 @@ class Command(BaseCommand):
     ) -> RawPlaylistDataModel | None:
         logger.info(f"Getting playlist data for {service_name.value}/{genre.value}")
         service = get_service(service_name)
-        genre_obj = get_genre(genre.value)
+        genre_obj = get_genre(genre)
 
         if not service:
             raise ValueError(f"Service {service_name.value} not found in database")

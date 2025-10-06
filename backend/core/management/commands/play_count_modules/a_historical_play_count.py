@@ -32,7 +32,7 @@ class Command(BaseCommand):
         start_time = time.time()
         limit = options.get("limit")
 
-        tunemeld_isrcs = get_playlist_isrcs_by_service(ServiceName.TUNEMELD.value)
+        tunemeld_isrcs = get_playlist_isrcs_by_service(ServiceName.TUNEMELD)
 
         if not tunemeld_isrcs:
             logger.warning("No TuneMeld playlist tracks found. Ensure playlist aggregation has run.")

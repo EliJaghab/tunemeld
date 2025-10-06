@@ -63,6 +63,20 @@ GENRE_CONFIGS: dict[str, dict] = {
 PLAYLIST_GENRES: list[str] = [genre.value for genre in GenreName]
 SERVICES: list[str] = [service.value for service in ServiceName]
 
+# Service lists for iteration
+ALL_SERVICES: list[ServiceName] = [
+    ServiceName.SPOTIFY,
+    ServiceName.APPLE_MUSIC,
+    ServiceName.SOUNDCLOUD,
+    ServiceName.YOUTUBE,
+]
+RANKED_SERVICES: list[ServiceName] = [
+    ServiceName.TUNEMELD,
+    ServiceName.SPOTIFY,
+    ServiceName.APPLE_MUSIC,
+    ServiceName.SOUNDCLOUD,
+]  # YouTube has no rank
+
 
 class RankType(str, Enum):
     TUNEMELD_RANK = "tunemeld_rank"

@@ -1,6 +1,6 @@
 from core.api.genre_service_api import get_genre, get_service, get_track_by_isrc
 from core.api.open_graph_api import get_default_og_metadata, get_genre_og_metadata, get_track_og_metadata
-from core.constants import ServiceName
+from core.constants import GenreName, ServiceName
 
 
 def validate_track_url_params(genre: str, rank: str, player: str | None, isrc: str) -> dict:
@@ -24,7 +24,8 @@ def validate_track_url_params(genre: str, rank: str, player: str | None, isrc: s
     if not (genre and isrc):
         return result
 
-    genre_obj = get_genre(genre)
+    genre_enum = GenreName(genre)
+    genre_obj = get_genre(genre_enum)
     if not genre_obj:
         return result
     result["genre_obj"] = genre_obj
@@ -97,19 +98,20 @@ def get_track_metadata(genre: str, rank: str, player: str | None, isrc: str) -> 
 
 def get_genre_metadata(genre: str) -> dict:
     """Get metadata for genre-only URLs for social sharing previews."""
-    genre_obj = get_genre(genre)
+    genre_enum = GenreName(genre)
+    genre_obj = get_genre(genre_enum)
     if genre_obj:
         og_metadata = get_genre_og_metadata(genre)
         return {
             "valid": True,
             **og_metadata,
         }
-    else:
-        og_metadata = get_default_og_metadata()
-        return {
-            "valid": False,
-            **og_metadata,
-        }
+
+    og_metadata = get_default_og_metadata()
+    return {
+        "valid": False,
+        **og_metadata,
+    }
 
 
 def build_track_query_url(genre: str, rank: str, isrc: str, player: str) -> str | None:

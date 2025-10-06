@@ -11,7 +11,7 @@ from core.api.genre_service_api import (
     get_tracks_by_isrcs,
     get_tunemeld_playlist_updated_at,
 )
-from core.constants import GraphQLCacheKey, ServiceName
+from core.constants import GenreName, GraphQLCacheKey, ServiceName
 from core.utils.redis_cache import CachePrefix, redis_cache_get, redis_cache_set
 from domain_types.types import Playlist, PlaylistMetadata, RankData
 
@@ -62,7 +62,7 @@ class PlaylistQuery:
         if cached_result is not None:
             return cached_result
 
-        service_names = [ServiceName.APPLE_MUSIC.value, ServiceName.SOUNDCLOUD.value, ServiceName.SPOTIFY.value]
+        service_names = [ServiceName.APPLE_MUSIC, ServiceName.SOUNDCLOUD, ServiceName.SPOTIFY]
         services = []
         for name in service_names:
             service = get_service(name)
@@ -86,8 +86,7 @@ class PlaylistQuery:
 
             cached_strawberry_tracks = []
             for track in cached_playlist.tracks:
-                django_track = track.to_django_model()
-                strawberry_track = TrackType.from_django_model(django_track)
+                strawberry_track = TrackType.from_domain_track(track)
                 cached_strawberry_tracks.append(strawberry_track)
 
             return PlaylistType(
@@ -96,12 +95,15 @@ class PlaylistQuery:
                 tracks=cached_strawberry_tracks,
             )
 
-        # Get track positions from API layer
-        track_positions = get_playlist_tracks_by_genre_service(genre, service)
+        genre_enum = GenreName(genre)
+        service_enum = ServiceName(service)
 
-        # Batch fetch all tracks in single query
+        # Get track positions from API layer
+        track_positions = get_playlist_tracks_by_genre_service(genre_enum, service_enum)
+
+        # Batch fetch all tracks with enrichment (service sources, ranks, button labels)
         isrcs = [isrc for isrc, _position in track_positions]
-        isrc_to_track = get_tracks_by_isrcs(isrcs)
+        isrc_to_track = get_tracks_by_isrcs(isrcs, genre=genre_enum, service=service_enum)
 
         # Preserve playlist order and filter out missing tracks
         domain_tracks = []
@@ -117,8 +119,7 @@ class PlaylistQuery:
         # Convert domain tracks to Strawberry types
         strawberry_tracks = []
         for track in domain_tracks:
-            django_track = track.to_django_model()
-            strawberry_track = TrackType.from_django_model(django_track)
+            strawberry_track = TrackType.from_domain_track(track)
             strawberry_tracks.append(strawberry_track)
 
         return PlaylistType(
@@ -142,11 +143,12 @@ class PlaylistQuery:
                 result.append(PlaylistMetadataType(**metadata_with_debug))
             return result
 
-        genre_obj = get_genre(genre)
+        genre_enum = GenreName(genre)
+        genre_obj = get_genre(genre_enum)
         if not genre_obj:
             return []
 
-        raw_playlists = get_all_raw_playlist_data_by_genre(genre)
+        raw_playlists = get_all_raw_playlist_data_by_genre(genre_enum)
 
         services = get_all_services()
 
@@ -172,7 +174,8 @@ class PlaylistQuery:
     @strawberry.field
     def updated_at(self, genre: str) -> datetime | None:
         """Get the update timestamp of the TuneMeld playlist for a genre."""
-        return get_tunemeld_playlist_updated_at(genre)
+        genre_enum = GenreName(genre)
+        return get_tunemeld_playlist_updated_at(genre_enum)
 
     @strawberry.field
     def ranks(self) -> list[RankType]:

@@ -7,11 +7,25 @@ clean serialization/deserialization for GraphQL and cache layers.
 
 from dataclasses import dataclass
 from datetime import datetime
-from typing import Any, Self
+from typing import TYPE_CHECKING, Any, Self
 
 from core.constants import ServiceName
 from core.utils.utils import format_percentage_change, format_play_count
 from pydantic import BaseModel, Field
+
+if TYPE_CHECKING:
+    from core.constants import GenreName
+
+
+def _snake_to_camel(snake_str: str) -> str:
+    """Convert snake_case to camelCase (e.g., 'apple_music' -> 'appleMusic')."""
+    components = snake_str.split("_")
+    return components[0] + "".join(x.title() for x in components[1:])
+
+
+def _snake_to_pascal(snake_str: str) -> str:
+    """Convert snake_case to PascalCase (e.g., 'apple_music' -> 'AppleMusic')."""
+    return "".join(x.title() for x in snake_str.split("_"))
 
 
 # ETL and domain types
@@ -101,7 +115,7 @@ class Track(BaseModel):
     youtube_url: str | None = None
 
     # Rankings
-    tunemeld_rank: int
+    tunemeld_rank: int | None = None
     spotify_rank: int | None = None
     apple_music_rank: int | None = None
     soundcloud_rank: int | None = None
@@ -247,7 +261,12 @@ class Track(BaseModel):
         )
 
     @classmethod
-    def from_django_model(cls, django_track, genre: str | None = None, service: str | None = None) -> Self:
+    def from_django_model(
+        cls,
+        django_track,
+        genre: "GenreName | None" = None,
+        service: "ServiceName | None" = None,
+    ) -> Self:
         """Convert from Django TrackModel with full enrichment."""
         # Import inside method to avoid circular dependency
 
@@ -265,14 +284,14 @@ class Track(BaseModel):
             "appleMusicUrl": django_track.apple_music_url,
             "soundcloudUrl": django_track.soundcloud_url,
             "youtubeUrl": django_track.youtube_url,
-            "tunemeldRank": getattr(django_track, "tunemeld_rank", 0),
+            "tunemeldRank": getattr(django_track, "tunemeld_rank", None),
             "created_at": django_track.created_at.isoformat() if django_track.created_at else None,
             "updated_at": django_track.updated_at.isoformat() if django_track.updated_at else None,
         }
 
         # Add enrichment if genre/service provided
         if genre and service:
-            enriched_data = cls._enrich_track_data(django_track, genre, service)
+            enriched_data = cls._enrich_track_data(django_track, genre.value, service.value)
             track_data.update(enriched_data)
 
         return cls.from_dict(track_data)
@@ -280,31 +299,30 @@ class Track(BaseModel):
     @classmethod
     def _enrich_track_data(cls, track, genre: str, service: str) -> dict[str, Any]:
         """Enrich track with computed fields."""
-        from core.constants import ServiceName
+        from core.constants import ALL_SERVICES, RANKED_SERVICES
 
         enrichment: dict[str, Any] = {}
 
-        # Service sources
-        for service_name in [ServiceName.SPOTIFY, ServiceName.APPLE_MUSIC, ServiceName.SOUNDCLOUD, ServiceName.YOUTUBE]:
-            source_key = f"{service_name.value.replace('_', '')}Source"
-            enrichment[source_key] = cls._build_service_source(track, service_name)
+        # Service sources (must be dicts for from_dict() compatibility)
+        for service_name in ALL_SERVICES:
+            source_key = f"{_snake_to_camel(service_name.value)}Source"
+            source = cls._build_service_source(track, service_name)
+            enrichment[source_key] = source.to_dict() if source else None
 
-        # Service rankings
-        enrichment.update(
-            {
-                "spotifyRank": cls._get_service_rank(track, genre, ServiceName.SPOTIFY),
-                "appleMusicRank": cls._get_service_rank(track, genre, ServiceName.APPLE_MUSIC),
-                "soundcloudRank": cls._get_service_rank(track, genre, ServiceName.SOUNDCLOUD),
-            }
-        )
+        # Service rankings (YouTube has no rank)
+        for service_name in RANKED_SERVICES:
+            rank_key = f"{_snake_to_camel(service_name.value)}Rank"
+            enrichment[rank_key] = cls._get_service_rank(track, genre, service_name)
 
         # Track detail URLs
-        for player in ["spotify", "apple_music", "soundcloud", "youtube"]:
-            url_key = f"trackDetailUrl{player.replace('_', '').title()}"
+        for service_name in ALL_SERVICES:
+            player = service_name.value
+            url_key = f"trackDetailUrl{_snake_to_pascal(player)}"
             enrichment[url_key] = cls._build_track_detail_url(track, genre, player)
 
-        # Button labels
-        enrichment["buttonLabels"] = cls._get_button_labels(track, genre, service)
+        # Button labels (must be dicts for from_dict() compatibility)
+        button_labels = cls._get_button_labels(track, genre, service)
+        enrichment["buttonLabels"] = [bl.to_dict() for bl in button_labels]
 
         return enrichment
 
@@ -336,9 +354,11 @@ class Track(BaseModel):
     def _get_service_rank(track, genre: str, service_name: ServiceName) -> int | None:
         """Get track rank for service/genre."""
         from core.api.genre_service_api import get_track_rank_by_track_object
+        from core.constants import GenreName
 
         try:
-            return get_track_rank_by_track_object(track, genre, service_name.value)
+            genre_enum = GenreName(genre)
+            return get_track_rank_by_track_object(track, genre_enum, service_name)
         except Exception:
             return None
 
