@@ -125,11 +125,10 @@ class Command(BaseCommand):
                 variable_values={"genre": genre.value},
             )
 
-            # 2. GetServicePlaylists query (frontend query #2) - EXACT MATCH
+            # 2. First GetServicePlaylists query - TuneMeld ONLY (frontend query #2a)
             schema.execute_sync(
                 """
                 query GetServicePlaylists($genre: String!) {
-                  # All playlists including TuneMeld (moved here for faster initial page load)
                   tuneMeldPlaylist: playlist(genre: $genre, service: "tunemeld") {
                     genreName
                     serviceName
@@ -193,6 +192,15 @@ class Command(BaseCommand):
                       )
                     }
                   }
+                }
+                """,
+                variable_values={"genre": genre.value},
+            )
+
+            # 3. Second GetServicePlaylists query - Other services ONLY (frontend query #2b)
+            schema.execute_sync(
+                """
+                query GetServicePlaylists($genre: String!) {
                   spotifyPlaylist: playlist(genre: $genre, service: "spotify") {
                     genreName
                     serviceName
@@ -243,16 +251,16 @@ class Command(BaseCommand):
                         iconUrl
                       }
                       trackDetailUrlSpotify: trackDetailUrl(
-                        genre: $genre, rank: "tunemeld-rank", player: "spotify"
+                        genre: $genre, rank: "spotify-rank", player: "spotify"
                       )
                       trackDetailUrlAppleMusic: trackDetailUrl(
-                        genre: $genre, rank: "tunemeld-rank", player: "apple_music"
+                        genre: $genre, rank: "spotify-rank", player: "apple_music"
                       )
                       trackDetailUrlSoundcloud: trackDetailUrl(
-                        genre: $genre, rank: "tunemeld-rank", player: "soundcloud"
+                        genre: $genre, rank: "spotify-rank", player: "soundcloud"
                       )
                       trackDetailUrlYoutube: trackDetailUrl(
-                        genre: $genre, rank: "tunemeld-rank", player: "youtube"
+                        genre: $genre, rank: "spotify-rank", player: "youtube"
                       )
                     }
                   }
@@ -306,16 +314,16 @@ class Command(BaseCommand):
                         iconUrl
                       }
                       trackDetailUrlSpotify: trackDetailUrl(
-                        genre: $genre, rank: "tunemeld-rank", player: "spotify"
+                        genre: $genre, rank: "apple-music-rank", player: "spotify"
                       )
                       trackDetailUrlAppleMusic: trackDetailUrl(
-                        genre: $genre, rank: "tunemeld-rank", player: "apple_music"
+                        genre: $genre, rank: "apple-music-rank", player: "apple_music"
                       )
                       trackDetailUrlSoundcloud: trackDetailUrl(
-                        genre: $genre, rank: "tunemeld-rank", player: "soundcloud"
+                        genre: $genre, rank: "apple-music-rank", player: "soundcloud"
                       )
                       trackDetailUrlYoutube: trackDetailUrl(
-                        genre: $genre, rank: "tunemeld-rank", player: "youtube"
+                        genre: $genre, rank: "apple-music-rank", player: "youtube"
                       )
                     }
                   }
@@ -369,16 +377,16 @@ class Command(BaseCommand):
                         iconUrl
                       }
                       trackDetailUrlSpotify: trackDetailUrl(
-                        genre: $genre, rank: "tunemeld-rank", player: "spotify"
+                        genre: $genre, rank: "soundcloud-rank", player: "spotify"
                       )
                       trackDetailUrlAppleMusic: trackDetailUrl(
-                        genre: $genre, rank: "tunemeld-rank", player: "apple_music"
+                        genre: $genre, rank: "soundcloud-rank", player: "apple_music"
                       )
                       trackDetailUrlSoundcloud: trackDetailUrl(
-                        genre: $genre, rank: "tunemeld-rank", player: "soundcloud"
+                        genre: $genre, rank: "soundcloud-rank", player: "soundcloud"
                       )
                       trackDetailUrlYoutube: trackDetailUrl(
-                        genre: $genre, rank: "tunemeld-rank", player: "youtube"
+                        genre: $genre, rank: "soundcloud-rank", player: "youtube"
                       )
                     }
                   }
