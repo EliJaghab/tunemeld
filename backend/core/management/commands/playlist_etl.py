@@ -1,14 +1,12 @@
 import time
 from typing import Any
 
+from core.management.commands.clear_and_warm_cache import Command as ClearAndWarmCacheCommand
 from core.management.commands.genre_service import Command as GenreServiceCommand
 from core.management.commands.playlist_etl_modules.a_raw_playlist import Command as RawPlaylistCommand
 from core.management.commands.playlist_etl_modules.b_playlist_service_track import Command as ServiceTrackCommand
 from core.management.commands.playlist_etl_modules.c_track import Command as TrackCommand
 from core.management.commands.playlist_etl_modules.d_aggregate import Command as AggregateCommand
-from core.management.commands.playlist_etl_modules.e_clear_and_warm_track_cache import (
-    Command as ClearAndWarmTrackCacheCommand,
-)
 from core.utils.utils import get_logger
 from django.core.management.base import BaseCommand, CommandError
 
@@ -48,7 +46,7 @@ class Command(BaseCommand):
             AggregateCommand().handle()
 
             logger.info("Step 6: Clearing and warming track cache...")
-            ClearAndWarmTrackCacheCommand().handle()
+            ClearAndWarmCacheCommand().handle()
 
             elapsed_time = time.time() - start_time
             logger.info(f"ETL pipeline completed in {elapsed_time:.2f} seconds")

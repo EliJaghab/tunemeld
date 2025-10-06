@@ -25,6 +25,9 @@
   --brand-teal: teal;
   --bright-blue: #4a9eff;
 
+  /* Badge Color */
+  --badge-red: #dc3545;
+
   /* Neutral Tones */
   --light-neutral: #ddd;
   --medium-neutral: #e5e5e5;

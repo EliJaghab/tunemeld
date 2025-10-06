@@ -2,6 +2,7 @@ import logging
 
 from core.constants import GenreName
 from core.utils.redis_cache import CachePrefix, redis_cache_clear
+from core.utils.utils import process_in_parallel
 from django.core.management.base import BaseCommand
 
 from gql.schema import schema
@@ -10,10 +11,9 @@ logger = logging.getLogger(__name__)
 
 
 class Command(BaseCommand):
-    help = "Clear and warm Redis cache (clear then warm to prevent user latency)"
+    help = "Clear and warm track/playlist GraphQL cache (parallelized with 4 workers)"
 
     def handle(self, *args, **options):
-        logger.info("Clearing Redis cache...")
         total_cleared = 0
 
         # Clear all GraphQL cache prefixes
@@ -29,13 +29,31 @@ class Command(BaseCommand):
         logger.info(f"Cleared {total_cleared} GraphQL cache entries")
 
         self._warm_track_caches()
-        logger.info("Cache cleared and warmed successfully! Users will experience no latency.")
+        logger.info("Track/playlist cache warmed")
 
     def _warm_track_caches(self):
-        """Execute EXACTLY the same GraphQL queries that frontend makes."""
+        """Execute EXACTLY the same GraphQL queries that frontend makes in parallel."""
 
-        # Warm cache for each genre with the EXACT 2 queries that frontend makes
+        # Build list of all tasks to execute in parallel
+        tasks = []
         for genre in GenreName:
+            tasks.append((genre.value, "initial_page_data"))
+            tasks.append((genre.value, "tunemeld_playlist"))
+            tasks.append((genre.value, "other_playlists"))
+
+        # Process all cache warming queries in parallel
+        process_in_parallel(
+            items=tasks,
+            process_func=self._warm_single_query,
+            log_progress=True,
+            progress_interval=4,
+        )
+
+    def _warm_single_query(self, task: tuple[str, str]) -> None:
+        """Execute a single cache warming query."""
+        genre, query_type = task
+
+        if query_type == "initial_page_data":
             # 1. GetInitialPageData query (frontend query #1) - EXACT MATCH
             schema.execute_sync(
                 """
@@ -123,9 +141,10 @@ class Command(BaseCommand):
                   # TuneMeld playlist moved to GetServicePlaylists for better performance
                 }
                 """,
-                variable_values={"genre": genre.value},
+                variable_values={"genre": genre},
             )
 
+        elif query_type == "tunemeld_playlist":
             # 2. First GetServicePlaylists query - TuneMeld ONLY (frontend query #2a)
             schema.execute_sync(
                 """
@@ -195,9 +214,10 @@ class Command(BaseCommand):
                   }
                 }
                 """,
-                variable_values={"genre": genre.value},
+                variable_values={"genre": genre},
             )
 
+        elif query_type == "other_playlists":
             # 3. Second GetServicePlaylists query - Other services ONLY (frontend query #2b)
             schema.execute_sync(
                 """
@@ -393,7 +413,5 @@ class Command(BaseCommand):
                   }
                 }
                 """,
-                variable_values={"genre": genre.value},
+                variable_values={"genre": genre},
             )
-
-        logger.info("Cache warmed with EXACT frontend queries for all genres")
