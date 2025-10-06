@@ -81,6 +81,7 @@
   justify-content: flex-start;
   position: relative;
   padding: 0;
+  padding-bottom: var(--space-lg);
   margin: 0;
   line-height: 1;
 }
@@ -355,8 +356,7 @@
 }
 
 .control-group {
-  margin-bottom: var(--space-lg);
-  margin-top: var(--space-lg);
+  margin: 0;
   padding: 0;
 }
 
@@ -366,16 +366,17 @@
   font-family: var(--font-family-primary);
   font-size: var(--font-size-md);
   font-weight: 600;
-  margin-bottom: var(--space-sm);
+  padding-bottom: var(--space-lg);
 }
 
 .sort-controls {
   gap: var(--space-lg);
-  margin-bottom: var(--space-xl);
+  padding-bottom: var(--space-lg);
 }
 
 .genre-controls {
   gap: var(--space-lg);
+  padding-bottom: var(--space-lg);
 }
 
 .sort-button {
