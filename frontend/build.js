@@ -49,6 +49,15 @@ try {
   process.exit(1);
 }
 
+// Resolve path aliases to relative imports
+console.log("Resolving path aliases...");
+try {
+  execSync("npx tsc-alias", { stdio: "inherit" });
+} catch (error) {
+  console.error("Path alias resolution failed");
+  process.exit(1);
+}
+
 // Verify all expected files are present
 const expectedDirs = [
   "components",
