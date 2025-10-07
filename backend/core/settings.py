@@ -151,11 +151,11 @@ LOGGING = {
             "level": "INFO",
             "propagate": False,
         },
-        # "django.db.backends": {
-        #     "handlers": ["console"],
-        #     "level": "DEBUG",
-        #     "propagate": False,
-        # },
+        "django.db.backends": {
+            "handlers": ["console"],
+            "level": "DEBUG" if DEBUG else "WARNING",
+            "propagate": False,
+        },
         # Quiet noisy third-party loggers
         "WDM": {
             "handlers": ["console"],

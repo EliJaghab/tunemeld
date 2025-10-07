@@ -41,16 +41,6 @@ urlpatterns = [
     ),
     # Custom GraphQL endpoint names for better Network tab debugging
     path(
-        "api/GetInitialPageData/",
-        csrf_exempt(GraphQLView.as_view(schema=schema, graphiql=False)),
-        name="graphql_initial_page_data",
-    ),
-    path(
-        "api/GetServicePlaylists/",
-        csrf_exempt(GraphQLView.as_view(schema=schema, graphiql=False)),
-        name="graphql_service_playlists",
-    ),
-    path(
         "api/GetAvailableGenres/",
         csrf_exempt(GraphQLView.as_view(schema=schema, graphiql=False)),
         name="graphql_available_genres",
@@ -61,9 +51,9 @@ urlpatterns = [
         name="graphql_playlist_metadata",
     ),
     path(
-        "api/GetPlaylistTracks/",
+        "api/GetPlaylist/",
         csrf_exempt(GraphQLView.as_view(schema=schema, graphiql=False)),
-        name="graphql_playlist_tracks",
+        name="graphql_playlist",
     ),
     path(
         "api/GetPlaylistRanks/",
