@@ -1,7 +1,8 @@
 import { updatePlaylistHeader } from "@/components/playlistHeader";
 import {
   hideShimmerLoaders,
-  showGenreSwitchShimmer,
+  showServiceHeaderAndTrackShimmer,
+  showTrackShimmer,
   showShimmerLoaders,
 } from "@/components/shimmer";
 import {
@@ -88,30 +89,29 @@ async function loadOtherServicePlaylists(genre: string): Promise<void> {
 export async function updateGenreData(
   genre: string,
   updateAll: boolean = false,
-  skipInitialShimmer: boolean = false,
 ): Promise<void> {
   try {
-    // Only show shimmer if this isn't the initial load (router handles initial shimmer)
-    if (!skipInitialShimmer) {
-      showGenreSwitchShimmer();
-
-      // Show playlist shimmer immediately when switching genres
-      if (updateAll) {
-        showShimmerLoaders(false);
-      }
+    // Show appropriate shimmer based on update type
+    if (updateAll) {
+      // Genre change or initial load: show service header and track shimmer
+      showServiceHeaderAndTrackShimmer();
+    } else {
+      // Rank change: show only track shimmer
+      showTrackShimmer();
     }
 
     // Fetch metadata and service order first (lightweight, no tracks)
     const metadata = await graphqlClient.getPlaylistMetadata(genre);
 
-    if (updateAll) {
-      updatePlaylistHeaderSync(
-        metadata.playlists,
-        metadata.serviceOrder,
-        genre,
-        null,
-      );
+    // Always update the header with playlist metadata
+    updatePlaylistHeaderSync(
+      metadata.playlists,
+      metadata.serviceOrder,
+      genre,
+      null,
+    );
 
+    if (updateAll) {
       // Load TuneMeld playlist first, then others in background
       fetchTuneMeldPlaylist(genre).catch((error) => {
         console.error("Failed to load TuneMeld playlist:", error);

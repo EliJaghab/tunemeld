@@ -57,22 +57,8 @@ function createShimmerTable(shimmerType: ShimmerType): HTMLTableElement {
   return table;
 }
 
-function createServiceShimmer(): HTMLDivElement {
-  const overlay = createElement(
-    "div",
-    "loading-overlay loading-overlay-service",
-  ) as HTMLDivElement;
-  const imageShimmer = createElement("div", "shimmer shimmer-service-image");
-  const textShimmer = createElement("div", "shimmer shimmer-service-text");
-
-  overlay.appendChild(imageShimmer);
-  overlay.appendChild(textShimmer);
-
-  return overlay;
-}
-
 function createPlaylistShimmer(
-  includeControls: boolean = true,
+  includeServiceHeader: boolean = true,
   shimmerType: ShimmerType = SHIMMER_TYPES.TUNEMELD,
 ): HTMLDivElement {
   const overlay = createElement(
@@ -80,9 +66,9 @@ function createPlaylistShimmer(
     "loading-overlay loading-overlay-playlist",
   ) as HTMLDivElement;
 
-  // Only include header and controls shimmer on initial load
-  if (includeControls) {
-    // Create playlist header shimmer
+  // Include service header shimmer when needed (genre changes)
+  if (includeServiceHeader) {
+    // Create service header shimmer (shows service icons/metadata)
     const headerShimmer = createElement("div", "playlist-header-shimmer");
     const titleRow = createElement("div", "playlist-title-shimmer");
 
@@ -124,7 +110,7 @@ function createPlaylistShimmer(
     overlay.appendChild(rankSection);
   }
 
-  // Always include table shimmer
+  // Always include track shimmer (table rows)
   const tableContainer = createElement("div", "shimmer-table-container");
   tableContainer.appendChild(createShimmerTable(shimmerType));
   overlay.appendChild(tableContainer);
@@ -132,25 +118,20 @@ function createPlaylistShimmer(
   return overlay;
 }
 
-export function showShimmerLoaders(isInitialLoad: boolean = false): void {
-  // Update StateManager shimmer state
-  stateManager.showShimmer("services");
-  stateManager.showShimmer("playlist", isInitialLoad);
-
-  // Use StateManager to explicitly track shimmer type
-  stateManager.setShimmerTypeFromColumn(stateManager.getCurrentColumn());
-  const shimmerType = stateManager.getShimmerType() as ShimmerType;
-  const structure = getTableStructure(shimmerType);
-
-  // Inject and show service shimmer overlays
-  document.querySelectorAll(".service").forEach((service) => {
-    let overlay = service.querySelector(".loading-overlay");
-    if (!overlay) {
-      overlay = createServiceShimmer();
-      service.appendChild(overlay);
-    }
-    overlay.classList.add("active");
-  });
+export function showShimmerLoaders(
+  isInitialLoad: boolean = false,
+  forceShimmerType?: ShimmerType,
+  isGenreChange: boolean = false,
+): void {
+  // Use explicit shimmer type if provided, otherwise derive from current column
+  let shimmerType: ShimmerType;
+  if (forceShimmerType) {
+    shimmerType = forceShimmerType;
+    stateManager.setShimmerType(shimmerType);
+  } else {
+    stateManager.setShimmerTypeFromColumn(stateManager.getCurrentColumn());
+    shimmerType = stateManager.getShimmerType() as ShimmerType;
+  }
 
   const mainPlaylist = document.querySelector(".main-playlist");
   if (!mainPlaylist) return;
@@ -159,7 +140,7 @@ export function showShimmerLoaders(isInitialLoad: boolean = false): void {
   const playlistContent = mainPlaylist.querySelector(".playlist-content");
   if (!playlistContent) return;
 
-  // Remove any existing shimmer first
+  // Remove any existing shimmer
   const existingShimmer = playlistContent.querySelector(
     ".loading-overlay-playlist",
   );
@@ -167,76 +148,72 @@ export function showShimmerLoaders(isInitialLoad: boolean = false): void {
     existingShimmer.remove();
   }
 
+  // Always hide the table for any shimmer
+  const playlistTable = playlistContent.querySelector(".playlist-table");
+  playlistTable?.classList.add("hidden");
+
+  // Decide what to shimmer based on the type of change
   if (isInitialLoad) {
-    // Initial load: hide real header, controls and table, show shimmer
+    // Hide everything on initial load
     playlistHeader?.classList.add("hidden");
-
     const controlGroups = playlistContent.querySelectorAll(".control-group");
-    const playlistTable = playlistContent.querySelector(".playlist-table");
-
     controlGroups.forEach((group) => group.classList.add("hidden"));
-    playlistTable?.classList.add("hidden");
 
-    // Create and insert shimmer header, controls and table
+    // Show full shimmer (header + controls + table)
+    const shimmer = createPlaylistShimmer(true, shimmerType);
+    playlistContent.appendChild(shimmer);
+  } else if (isGenreChange) {
+    // Genre change: show service header shimmer and table shimmer
     const shimmer = createPlaylistShimmer(true, shimmerType);
     playlistContent.appendChild(shimmer);
   } else {
-    // Genre switching: only hide/show table
-    const playlistTable = playlistContent.querySelector(".playlist-table");
-    if (playlistTable) {
-      playlistTable.classList.add("hidden");
-
-      // Create and insert table shimmer
-      const shimmer = createPlaylistShimmer(false, shimmerType);
-      playlistContent.appendChild(shimmer);
-    }
+    // Rank switch: header stays visible, only table shimmers
+    // Show table shimmer only
+    const shimmer = createPlaylistShimmer(false, shimmerType);
+    playlistContent.appendChild(shimmer);
   }
 }
 
-export function showInitialShimmer(): void {
-  showShimmerLoaders(true);
+export function showServiceHeaderAndTrackShimmer(): void {
+  // Shows shimmer for service header and tracks (used during genre changes and initial load)
+  const isInitial = stateManager.isInitialLoad();
+  const currentShimmerType = stateManager.getShimmerType();
+  showShimmerLoaders(isInitial, currentShimmerType, !isInitial);
+
+  if (isInitial) {
+    stateManager.markInitialLoadComplete();
+  }
 }
 
-export function showGenreSwitchShimmer(): void {
-  showShimmerLoaders(false);
+export function showTrackShimmer(): void {
+  // Shows shimmer for tracks only (used during rank changes)
+  const currentShimmerType = stateManager.getShimmerType();
+  showShimmerLoaders(false, currentShimmerType, false);
 }
 
 export function hideShimmerLoaders(): void {
-  // Update StateManager shimmer state
   stateManager.hideAllShimmers();
 
-  // Hide service overlays
-  const serviceOverlays = document.querySelectorAll(
-    ".service .loading-overlay",
-  );
-  serviceOverlays.forEach((overlay) => {
-    overlay.classList.remove("active");
-  });
-
-  // Show real playlist content and remove shimmer
   const mainPlaylist = document.querySelector(".main-playlist");
-  if (mainPlaylist) {
-    const playlistHeader = mainPlaylist.querySelector(".playlist-header");
-    const playlistContent = mainPlaylist.querySelector(".playlist-content");
+  if (!mainPlaylist) return;
 
-    // Show real header
-    playlistHeader?.classList.remove("hidden");
+  const playlistHeader = mainPlaylist.querySelector(".playlist-header");
+  const playlistContent = mainPlaylist.querySelector(".playlist-content");
 
-    if (playlistContent) {
-      // Show real controls and table
-      const controlGroups = playlistContent.querySelectorAll(".control-group");
-      const playlistTable = playlistContent.querySelector(".playlist-table");
+  // Show everything
+  playlistHeader?.classList.remove("hidden");
 
-      controlGroups.forEach((group) => group.classList.remove("hidden"));
-      playlistTable?.classList.remove("hidden");
+  if (playlistContent) {
+    const controlGroups = playlistContent.querySelectorAll(".control-group");
+    const playlistTable = playlistContent.querySelector(".playlist-table");
 
-      // Remove shimmer overlay
-      const shimmerOverlay = playlistContent.querySelector(
-        ".loading-overlay-playlist",
-      );
-      if (shimmerOverlay) {
-        shimmerOverlay.remove();
-      }
-    }
+    controlGroups.forEach((group) => group.classList.remove("hidden"));
+    playlistTable?.classList.remove("hidden");
+
+    // Remove all shimmer overlays
+    const shimmerOverlay = playlistContent.querySelector(
+      ".loading-overlay-playlist",
+    );
+    shimmerOverlay?.remove();
   }
 }
