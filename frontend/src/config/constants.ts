@@ -12,8 +12,9 @@ export const TUNEMELD_RANK_FIELD = "tunemeld-rank";
 
 // Shimmer layout types
 export const SHIMMER_TYPES = {
-  TUNEMELD: "tunemeld",
-  PLAYCOUNT: "playcount",
+  TUNEMELD: "tunemeld", // Shows 3 service icons
+  TOTAL_PLAYS: "total-plays", // Shows 1 play count value
+  TRENDING: "trending", // Shows 1 trending value
 } as const;
 
 export type ShimmerType = (typeof SHIMMER_TYPES)[keyof typeof SHIMMER_TYPES];

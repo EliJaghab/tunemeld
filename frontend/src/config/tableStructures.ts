@@ -58,7 +58,7 @@ const TABLE_STRUCTURES: TableStructures = {
       "TuneMeld Rank: 5 columns - NO view count columns, NO external links",
   },
 
-  [SHIMMER_TYPES.PLAYCOUNT]: {
+  [SHIMMER_TYPES.TOTAL_PLAYS]: {
     columns: [
       {
         name: "rank",
@@ -85,28 +85,41 @@ const TABLE_STRUCTURES: TableStructures = {
         hasShimmer: true,
         shimmerClass: "shimmer-view-count",
       },
+    ],
+    description:
+      "Total Plays Rank: 5 columns - rank, cover, info, spacer, play count",
+  },
+
+  [SHIMMER_TYPES.TRENDING]: {
+    columns: [
+      {
+        name: "rank",
+        className: "rank",
+        hasShimmer: true,
+        shimmerClass: "shimmer-rank",
+      },
+      {
+        name: "cover",
+        className: "cover",
+        hasShimmer: true,
+        shimmerClass: "shimmer-album-cover",
+      },
+      {
+        name: "info",
+        className: "info",
+        hasShimmer: true,
+        shimmerClass: "shimmer-track-info",
+      },
+      { name: "spacer", className: "spacer", hasShimmer: false },
       {
         name: "trending",
         className: "trending",
         hasShimmer: true,
         shimmerClass: "shimmer-view-count",
       },
-      {
-        name: "seen-on",
-        className: "seen-on",
-        hasShimmer: true,
-        shimmerClass: "shimmer-source-icons",
-        shimmerCount: 3,
-      },
-      {
-        name: "external",
-        className: "external",
-        hasShimmer: true,
-        shimmerClass: "shimmer-external-links",
-      },
     ],
     description:
-      "Play Count Rank: 8 columns - WITH view count columns, WITH external links",
+      "Trending Rank: 5 columns - rank, cover, info, spacer, trending",
   },
 };
 
