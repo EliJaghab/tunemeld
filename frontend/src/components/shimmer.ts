@@ -57,74 +57,8 @@ function createShimmerTable(shimmerType: ShimmerType): HTMLTableElement {
   return table;
 }
 
-function createPlaylistHeaderShimmer(): HTMLDivElement {
-  // Create service header shimmer (shows service icons/metadata)
-  const headerShimmer = createElement(
-    "div",
-    "playlist-header-shimmer",
-  ) as HTMLDivElement;
-  const titleRow = createElement("div", "playlist-title-shimmer");
-
-  const logoShimmer = createElement("div", "shimmer shimmer-playlist-logo");
-  const titleShimmer = createElement("div", "shimmer shimmer-playlist-title");
-  const descShimmer = createElement("div", "shimmer shimmer-playlist-desc");
-
-  titleRow.appendChild(logoShimmer);
-  titleRow.appendChild(titleShimmer);
-  titleRow.appendChild(descShimmer);
-
-  headerShimmer.appendChild(titleRow);
-  return headerShimmer;
-}
-
-function createControlButtonsShimmer(): HTMLDivElement {
-  const controlsContainer = createElement(
-    "div",
-    "controls-shimmer-container",
-  ) as HTMLDivElement;
-
-  // Genre controls shimmer
-  const genreSection = createElement("div", "control-group");
-  const genreLabel = createElement("label", "control-label shimmer");
-  const genreButtons = createElement("div", "genre-controls");
-
-  for (let i = 0; i < 4; i++) {
-    genreButtons.appendChild(createElement("div", "sort-button shimmer"));
-  }
-
-  genreSection.appendChild(genreLabel);
-  genreSection.appendChild(genreButtons);
-  controlsContainer.appendChild(genreSection);
-
-  // Ranking controls shimmer
-  const rankSection = createElement("div", "control-group");
-  const rankLabel = createElement("label", "control-label shimmer");
-  const rankButtons = createElement("div", "sort-controls");
-
-  for (let i = 0; i < 3; i++) {
-    rankButtons.appendChild(createElement("div", "sort-button shimmer"));
-  }
-
-  rankSection.appendChild(rankLabel);
-  rankSection.appendChild(rankButtons);
-  controlsContainer.appendChild(rankSection);
-
-  return controlsContainer;
-}
-
-function createTrackTableShimmer(shimmerType: ShimmerType): HTMLDivElement {
-  const tableContainer = createElement(
-    "div",
-    "shimmer-table-container",
-  ) as HTMLDivElement;
-  tableContainer.appendChild(createShimmerTable(shimmerType));
-  return tableContainer;
-}
-
 function createPlaylistShimmer(
-  shimmerPlaylistHeader: boolean,
-  shimmerButtons: boolean,
-  shimmerTracks: boolean,
+  includeServiceHeader: boolean = true,
   shimmerType: ShimmerType = SHIMMER_TYPES.TUNEMELD,
 ): HTMLDivElement {
   const overlay = createElement(
@@ -132,26 +66,62 @@ function createPlaylistShimmer(
     "loading-overlay loading-overlay-playlist",
   ) as HTMLDivElement;
 
-  if (shimmerPlaylistHeader) {
-    overlay.appendChild(createPlaylistHeaderShimmer());
+  // Include service header shimmer when needed (genre changes)
+  if (includeServiceHeader) {
+    // Create service header shimmer (shows service icons/metadata)
+    const headerShimmer = createElement("div", "playlist-header-shimmer");
+    const titleRow = createElement("div", "playlist-title-shimmer");
+
+    const logoShimmer = createElement("div", "shimmer shimmer-playlist-logo");
+    const titleShimmer = createElement("div", "shimmer shimmer-playlist-title");
+    const descShimmer = createElement("div", "shimmer shimmer-playlist-desc");
+
+    titleRow.appendChild(logoShimmer);
+    titleRow.appendChild(titleShimmer);
+    titleRow.appendChild(descShimmer);
+
+    headerShimmer.appendChild(titleRow);
+    overlay.appendChild(headerShimmer);
+
+    // Genre controls - using same structure as actual HTML
+    const genreSection = createElement("div", "control-group");
+    const genreLabel = createElement("label", "control-label shimmer");
+    const genreButtons = createElement("div", "genre-controls");
+
+    for (let i = 0; i < 4; i++) {
+      genreButtons.appendChild(createElement("div", "sort-button shimmer"));
+    }
+
+    genreSection.appendChild(genreLabel);
+    genreSection.appendChild(genreButtons);
+    overlay.appendChild(genreSection);
+
+    // Ranking controls - using same structure as actual HTML
+    const rankSection = createElement("div", "control-group");
+    const rankLabel = createElement("label", "control-label shimmer");
+    const rankButtons = createElement("div", "sort-controls");
+
+    for (let i = 0; i < 3; i++) {
+      rankButtons.appendChild(createElement("div", "sort-button shimmer"));
+    }
+
+    rankSection.appendChild(rankLabel);
+    rankSection.appendChild(rankButtons);
+    overlay.appendChild(rankSection);
   }
 
-  if (shimmerButtons) {
-    overlay.appendChild(createControlButtonsShimmer());
-  }
-
-  if (shimmerTracks) {
-    overlay.appendChild(createTrackTableShimmer(shimmerType));
-  }
+  // Always include track shimmer (table rows)
+  const tableContainer = createElement("div", "shimmer-table-container");
+  tableContainer.appendChild(createShimmerTable(shimmerType));
+  overlay.appendChild(tableContainer);
 
   return overlay;
 }
 
 export function showShimmerLoaders(
-  shimmerPlaylistHeader: boolean,
-  shimmerButtons: boolean,
-  shimmerTracks: boolean,
+  isInitialLoad: boolean = false,
   forceShimmerType?: ShimmerType,
+  isGenreChange: boolean = false,
 ): void {
   // Use explicit shimmer type if provided, otherwise derive from current column
   let shimmerType: ShimmerType;
@@ -178,51 +148,47 @@ export function showShimmerLoaders(
     existingShimmer.remove();
   }
 
-  // Hide elements based on what we're shimmering
-  if (shimmerPlaylistHeader) {
-    playlistHeader?.classList.add("hidden");
-  }
+  // Always hide the table for any shimmer
+  const playlistTable = playlistContent.querySelector(".playlist-table");
+  playlistTable?.classList.add("hidden");
 
-  if (shimmerButtons) {
+  // Decide what to shimmer based on the type of change
+  if (isInitialLoad) {
+    // Hide everything on initial load
+    playlistHeader?.classList.add("hidden");
     const controlGroups = playlistContent.querySelectorAll(".control-group");
     controlGroups.forEach((group) => group.classList.add("hidden"));
-  }
 
-  if (shimmerTracks) {
-    const playlistTable = playlistContent.querySelector(".playlist-table");
-    playlistTable?.classList.add("hidden");
+    // Show full shimmer (header + controls + table)
+    const shimmer = createPlaylistShimmer(true, shimmerType);
+    playlistContent.appendChild(shimmer);
+  } else if (isGenreChange) {
+    // Genre change: show service header shimmer and table shimmer
+    const shimmer = createPlaylistShimmer(true, shimmerType);
+    playlistContent.appendChild(shimmer);
+  } else {
+    // Rank switch: header stays visible, only table shimmers
+    // Show table shimmer only
+    const shimmer = createPlaylistShimmer(false, shimmerType);
+    playlistContent.appendChild(shimmer);
   }
-
-  // Create and add the shimmer overlay
-  const shimmer = createPlaylistShimmer(
-    shimmerPlaylistHeader,
-    shimmerButtons,
-    shimmerTracks,
-    shimmerType,
-  );
-  playlistContent.appendChild(shimmer);
 }
 
 export function showServiceHeaderAndTrackShimmer(): void {
   // Shows shimmer for service header and tracks (used during genre changes and initial load)
   const isInitial = stateManager.isInitialLoad();
   const currentShimmerType = stateManager.getShimmerType();
+  showShimmerLoaders(isInitial, currentShimmerType, !isInitial);
 
   if (isInitial) {
-    // Initial load: shimmer everything (playlist header, buttons, tracks)
-    showShimmerLoaders(true, true, true, currentShimmerType);
     stateManager.markInitialLoadComplete();
-  } else {
-    // Genre change: shimmer playlist header and tracks, but NOT buttons
-    showShimmerLoaders(true, false, true, currentShimmerType);
   }
 }
 
 export function showTrackShimmer(): void {
   // Shows shimmer for tracks only (used during rank changes)
   const currentShimmerType = stateManager.getShimmerType();
-  // Rank change: only shimmer tracks
-  showShimmerLoaders(false, false, true, currentShimmerType);
+  showShimmerLoaders(false, currentShimmerType, false);
 }
 
 export function hideShimmerLoaders(): void {
