@@ -247,12 +247,9 @@ class GraphQLClient {
     };
   }
 
-  async getPlaylistTracks(
-    genre: string,
-    service: string,
-  ): Promise<{ playlist: Playlist }> {
+  async getPlaylist(genre: string, service: string): Promise<Playlist | null> {
     const query = `
-      query GetPlaylistTracks($genre: String!, $service: String!) {
+      query GetPlaylist($genre: String!, $service: String!) {
         playlist(genre: $genre, service: $service) {
           genreName
           serviceName
@@ -272,6 +269,10 @@ class GraphQLClient {
             spotifyUrl
             appleMusicUrl
             soundcloudUrl
+            totalCurrentPlayCount
+            totalWeeklyChangePercentage
+            spotifyCurrentPlayCount
+            youtubeCurrentPlayCount
             buttonLabels {
               buttonType
               context
@@ -302,16 +303,17 @@ class GraphQLClient {
               url
               iconUrl
             }
-            trackDetailUrlSpotify: trackDetailUrl(genre: $genre, rank: "tunemeld-rank", player: "${SERVICE_NAMES.SPOTIFY}")
-            trackDetailUrlAppleMusic: trackDetailUrl(genre: $genre, rank: "tunemeld-rank", player: "${SERVICE_NAMES.APPLE_MUSIC}")
-            trackDetailUrlSoundcloud: trackDetailUrl(genre: $genre, rank: "tunemeld-rank", player: "${SERVICE_NAMES.SOUNDCLOUD}")
-            trackDetailUrlYoutube: trackDetailUrl(genre: $genre, rank: "tunemeld-rank", player: "${SERVICE_NAMES.YOUTUBE}")
+            trackDetailUrlSpotify: trackDetailUrl(genre: $genre, rank: "tunemeld-rank", player: "spotify")
+            trackDetailUrlAppleMusic: trackDetailUrl(genre: $genre, rank: "tunemeld-rank", player: "apple_music")
+            trackDetailUrlSoundcloud: trackDetailUrl(genre: $genre, rank: "tunemeld-rank", player: "soundcloud")
+            trackDetailUrlYoutube: trackDetailUrl(genre: $genre, rank: "tunemeld-rank", player: "youtube")
           }
         }
       }
     `;
 
-    return await this.query(query, { genre, service });
+    const data = await this.query(query, { genre, service });
+    return data.playlist;
   }
 
   async fetchPlaylistRanks(): Promise<{ ranks: Rank[] }> {

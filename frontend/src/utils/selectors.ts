@@ -20,125 +20,16 @@ import { SERVICE_NAMES } from "@/config/constants";
 import { updatePlaylistHeaderSync } from "@/components/playlistHeader";
 import type { Playlist } from "@/types/index";
 
-interface AllGenreData {
-  metadata: { serviceOrder: string[]; playlists: Playlist[] };
-  tuneMeldPlaylist: { playlist: Playlist | null };
-  servicePlaylists: ({ playlist: Playlist } | null)[];
-  serviceOrder: string[];
-  // Individual service playlists from focused query
-  spotifyPlaylist?: { playlist: Playlist } | undefined;
-  appleMusicPlaylist?: { playlist: Playlist } | undefined;
-  soundcloudPlaylist?: { playlist: Playlist } | undefined;
-}
+// Load TuneMeld playlist first (fast display)
+async function fetchTuneMeldPlaylist(genre: string): Promise<void> {
+  const playlist = await graphqlClient.getPlaylist(
+    genre,
+    SERVICE_NAMES.TUNEMELD,
+  );
 
-// FAST genre switch: Service headers metadata ONLY
-async function fetchInitialPageData(genre: string): Promise<AllGenreData> {
-  const query = `
-    query GetInitialPageData($genre: String!) {
-      # Service headers and metadata (FAST)
-      serviceOrder
-      playlistsByGenre(genre: $genre) {
-        playlistName
-        playlistCoverUrl
-        playlistCoverDescriptionText
-        playlistUrl
-        genreName
-        serviceName
-        serviceIconUrl
-      }
-    }
-  `;
-
-  const data = await graphqlClient.query(query, { genre });
-
-  return {
-    metadata: {
-      serviceOrder: data.serviceOrder,
-      playlists: data.playlistsByGenre,
-    },
-    tuneMeldPlaylist: { playlist: null }, // Will be loaded in background
-    servicePlaylists: [], // Will be loaded separately!
-    serviceOrder: data.serviceOrder,
-    // Service playlists will be loaded in background
-    spotifyPlaylist: undefined,
-    appleMusicPlaylist: undefined,
-    soundcloudPlaylist: undefined,
-  };
-}
-
-// FAST background loading of service playlists (2nd request)
-async function fetchServicePlaylists(genre: string): Promise<void> {
-  const tuneMeldQuery = `
-    query GetServicePlaylists($genre: String!) {
-      tuneMeldPlaylist: playlist(genre: $genre, service: "${SERVICE_NAMES.TUNEMELD}") {
-        genreName
-        serviceName
-        tracks {
-          tunemeldRank
-          spotifyRank
-          appleMusicRank
-          soundcloudRank
-          isrc
-          trackName
-          artistName
-          fullTrackName
-          fullArtistName
-          albumName
-          albumCoverUrl
-          youtubeUrl
-          spotifyUrl
-          appleMusicUrl
-          soundcloudUrl
-          totalCurrentPlayCount
-          totalWeeklyChangePercentage
-          spotifyCurrentPlayCount
-          youtubeCurrentPlayCount
-          buttonLabels {
-            buttonType
-            context
-            title
-            ariaLabel
-          }
-          spotifySource {
-            name
-            displayName
-            url
-            iconUrl
-          }
-          appleMusicSource {
-            name
-            displayName
-            url
-            iconUrl
-          }
-          soundcloudSource {
-            name
-            displayName
-            url
-            iconUrl
-          }
-          youtubeSource {
-            name
-            displayName
-            url
-            iconUrl
-          }
-          trackDetailUrlSpotify: trackDetailUrl(genre: $genre, rank: "tunemeld-rank", player: "${SERVICE_NAMES.SPOTIFY}")
-          trackDetailUrlAppleMusic: trackDetailUrl(genre: $genre, rank: "tunemeld-rank", player: "${SERVICE_NAMES.APPLE_MUSIC}")
-          trackDetailUrlSoundcloud: trackDetailUrl(genre: $genre, rank: "tunemeld-rank", player: "${SERVICE_NAMES.SOUNDCLOUD}")
-          trackDetailUrlYoutube: trackDetailUrl(genre: $genre, rank: "tunemeld-rank", player: "${SERVICE_NAMES.YOUTUBE}")
-        }
-      }
-    }
-  `;
-
-  const tuneMeldData = await graphqlClient.query(tuneMeldQuery, { genre });
-
-  if (tuneMeldData.tuneMeldPlaylist) {
-    const data = [tuneMeldData.tuneMeldPlaylist];
-
+  if (playlist) {
+    const data = [playlist];
     setPlaylistData(data);
-
     renderPlaylistTracks(
       data,
       "main-playlist-data-placeholder",
@@ -150,6 +41,7 @@ async function fetchServicePlaylists(genre: string): Promise<void> {
     hideShimmerLoaders();
   });
 
+  // Load other services in background
   (async () => {
     try {
       await loadOtherServicePlaylists(genre);
@@ -160,209 +52,33 @@ async function fetchServicePlaylists(genre: string): Promise<void> {
 }
 
 async function loadOtherServicePlaylists(genre: string): Promise<void> {
-  const servicePlaylistsQuery = `
-    query GetServicePlaylists($genre: String!) {
-      spotifyPlaylist: playlist(genre: $genre, service: "${SERVICE_NAMES.SPOTIFY}") {
-        genreName
-        serviceName
-        tracks {
-          tunemeldRank
-          spotifyRank
-          appleMusicRank
-          soundcloudRank
-          isrc
-          trackName
-          artistName
-          fullTrackName
-          fullArtistName
-          albumName
-          albumCoverUrl
-          youtubeUrl
-          spotifyUrl
-          appleMusicUrl
-          soundcloudUrl
-          totalCurrentPlayCount
-          totalWeeklyChangePercentage
-          spotifyCurrentPlayCount
-          youtubeCurrentPlayCount
-          buttonLabels {
-            buttonType
-            context
-            title
-            ariaLabel
-          }
-          spotifySource {
-            name
-            displayName
-            url
-            iconUrl
-          }
-          appleMusicSource {
-            name
-            displayName
-            url
-            iconUrl
-          }
-          soundcloudSource {
-            name
-            displayName
-            url
-            iconUrl
-          }
-          youtubeSource {
-            name
-            displayName
-            url
-            iconUrl
-          }
-          trackDetailUrlSpotify: trackDetailUrl(genre: $genre, rank: "spotify-rank", player: "${SERVICE_NAMES.SPOTIFY}")
-          trackDetailUrlAppleMusic: trackDetailUrl(genre: $genre, rank: "spotify-rank", player: "${SERVICE_NAMES.APPLE_MUSIC}")
-          trackDetailUrlSoundcloud: trackDetailUrl(genre: $genre, rank: "spotify-rank", player: "${SERVICE_NAMES.SOUNDCLOUD}")
-          trackDetailUrlYoutube: trackDetailUrl(genre: $genre, rank: "spotify-rank", player: "${SERVICE_NAMES.YOUTUBE}")
-        }
-      }
-      appleMusicPlaylist: playlist(genre: $genre, service: "${SERVICE_NAMES.APPLE_MUSIC}") {
-        genreName
-        serviceName
-        tracks {
-          tunemeldRank
-          spotifyRank
-          appleMusicRank
-          soundcloudRank
-          isrc
-          trackName
-          artistName
-          fullTrackName
-          fullArtistName
-          albumName
-          albumCoverUrl
-          youtubeUrl
-          spotifyUrl
-          appleMusicUrl
-          soundcloudUrl
-          totalCurrentPlayCount
-          totalWeeklyChangePercentage
-          spotifyCurrentPlayCount
-          youtubeCurrentPlayCount
-          buttonLabels {
-            buttonType
-            context
-            title
-            ariaLabel
-          }
-          spotifySource {
-            name
-            displayName
-            url
-            iconUrl
-          }
-          appleMusicSource {
-            name
-            displayName
-            url
-            iconUrl
-          }
-          soundcloudSource {
-            name
-            displayName
-            url
-            iconUrl
-          }
-          youtubeSource {
-            name
-            displayName
-            url
-            iconUrl
-          }
-          trackDetailUrlSpotify: trackDetailUrl(genre: $genre, rank: "apple-music-rank", player: "${SERVICE_NAMES.SPOTIFY}")
-          trackDetailUrlAppleMusic: trackDetailUrl(genre: $genre, rank: "apple-music-rank", player: "${SERVICE_NAMES.APPLE_MUSIC}")
-          trackDetailUrlSoundcloud: trackDetailUrl(genre: $genre, rank: "apple-music-rank", player: "${SERVICE_NAMES.SOUNDCLOUD}")
-          trackDetailUrlYoutube: trackDetailUrl(genre: $genre, rank: "apple-music-rank", player: "${SERVICE_NAMES.YOUTUBE}")
-        }
-      }
-      soundcloudPlaylist: playlist(genre: $genre, service: "${SERVICE_NAMES.SOUNDCLOUD}") {
-        genreName
-        serviceName
-        tracks {
-          tunemeldRank
-          spotifyRank
-          appleMusicRank
-          soundcloudRank
-          isrc
-          trackName
-          artistName
-          fullTrackName
-          fullArtistName
-          albumName
-          albumCoverUrl
-          youtubeUrl
-          spotifyUrl
-          appleMusicUrl
-          soundcloudUrl
-          totalCurrentPlayCount
-          totalWeeklyChangePercentage
-          spotifyCurrentPlayCount
-          youtubeCurrentPlayCount
-          buttonLabels {
-            buttonType
-            context
-            title
-            ariaLabel
-          }
-          spotifySource {
-            name
-            displayName
-            url
-            iconUrl
-          }
-          appleMusicSource {
-            name
-            displayName
-            url
-            iconUrl
-          }
-          soundcloudSource {
-            name
-            displayName
-            url
-            iconUrl
-          }
-          youtubeSource {
-            name
-            displayName
-            url
-            iconUrl
-          }
-          trackDetailUrlSpotify: trackDetailUrl(genre: $genre, rank: "soundcloud-rank", player: "${SERVICE_NAMES.SPOTIFY}")
-          trackDetailUrlAppleMusic: trackDetailUrl(genre: $genre, rank: "soundcloud-rank", player: "${SERVICE_NAMES.APPLE_MUSIC}")
-          trackDetailUrlSoundcloud: trackDetailUrl(genre: $genre, rank: "soundcloud-rank", player: "${SERVICE_NAMES.SOUNDCLOUD}")
-          trackDetailUrlYoutube: trackDetailUrl(genre: $genre, rank: "soundcloud-rank", player: "${SERVICE_NAMES.YOUTUBE}")
-        }
-      }
-    }
-  `;
+  // Load other service playlists in parallel for better performance
+  const [spotifyPlaylist, appleMusicPlaylist, soundcloudPlaylist] =
+    await Promise.all([
+      graphqlClient.getPlaylist(genre, SERVICE_NAMES.SPOTIFY),
+      graphqlClient.getPlaylist(genre, SERVICE_NAMES.APPLE_MUSIC),
+      graphqlClient.getPlaylist(genre, SERVICE_NAMES.SOUNDCLOUD),
+    ]);
 
-  const data = await graphqlClient.query(servicePlaylistsQuery, { genre });
-
-  if (data.spotifyPlaylist) {
+  if (spotifyPlaylist) {
     renderPlaylistTracks(
-      [data.spotifyPlaylist],
+      [spotifyPlaylist],
       "spotify-data-placeholder",
       SERVICE_NAMES.SPOTIFY,
     );
   }
 
-  if (data.appleMusicPlaylist) {
+  if (appleMusicPlaylist) {
     renderPlaylistTracks(
-      [data.appleMusicPlaylist],
+      [appleMusicPlaylist],
       "apple_music-data-placeholder",
       SERVICE_NAMES.APPLE_MUSIC,
     );
   }
 
-  if (data.soundcloudPlaylist) {
+  if (soundcloudPlaylist) {
     renderPlaylistTracks(
-      [data.soundcloudPlaylist],
+      [soundcloudPlaylist],
       "soundcloud-data-placeholder",
       SERVICE_NAMES.SOUNDCLOUD,
     );
@@ -385,20 +101,20 @@ export async function updateGenreData(
       }
     }
 
-    // Always fetch the initial data
-    const allData = await fetchInitialPageData(genre);
+    // Fetch metadata and service order first (lightweight, no tracks)
+    const metadata = await graphqlClient.getPlaylistMetadata(genre);
 
     if (updateAll) {
       updatePlaylistHeaderSync(
-        allData.metadata.playlists,
-        allData.metadata.serviceOrder,
+        metadata.playlists,
+        metadata.serviceOrder,
         genre,
         null,
       );
 
-      // Load service playlists in background (fast 2nd request!)
-      fetchServicePlaylists(genre).catch((error) => {
-        console.error("Failed to load service playlists:", error);
+      // Load TuneMeld playlist first, then others in background
+      fetchTuneMeldPlaylist(genre).catch((error) => {
+        console.error("Failed to load TuneMeld playlist:", error);
       });
     }
 
@@ -407,7 +123,7 @@ export async function updateGenreData(
     if (currentColumn) {
       sortTable(currentColumn, stateManager.getCurrentOrder());
     }
-    // Note: hideShimmerLoaders() is called in fetchServicePlaylists when complete
+    // Note: hideShimmerLoaders() is called in fetchTuneMeldPlaylist when complete
     resetCollapseStates();
     await addToggleEventListeners();
     setupBodyClickListener(genre);
