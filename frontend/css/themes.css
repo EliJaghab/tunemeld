@@ -79,9 +79,9 @@
   --glass-highlight-strong: rgba(255, 255, 255, 0.25);
   --glass-overlay-light: rgba(0, 0, 0, 0.08);
   --glass-overlay-medium: rgba(0, 0, 0, 0.15);
-  --glass-blur-light: blur(20px);
-  --glass-blur-medium: blur(40px);
-  --glass-blur-heavy: blur(60px);
+  --glass-blur-light: blur(2px);
+  --glass-blur-medium: blur(2px);
+  --glass-blur-heavy: blur(2px);
 
   /* Border Radius */
   --radius-large: 10px;
@@ -155,7 +155,7 @@
     var(--space-xl) * 2
   ); /* mobile button skeleton height */
   --shimmer-service-text-height: calc(
-    var(--space-lg) * 2
+    var(--space-lg) * 3
   ); /* service text skeleton height */
 
   /* Shimmer component definitions - all use consistent height */
