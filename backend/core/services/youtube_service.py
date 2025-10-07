@@ -83,10 +83,11 @@ def get_youtube_url(
     reraise=True,
 )
 def get_youtube_track_view_count(youtube_url: str, api_key: str | None = None) -> int:
-    """Get YouTube track view count. Raises exception if failed."""
+    """Get YouTube track view count. Returns 0 if API key missing or extraction fails."""
     api_key = api_key or os.getenv("GOOGLE_API_KEY")
     if not api_key:
-        raise ValueError("YouTube API key not provided.")
+        logger.warning(f"YouTube API key not provided for: {youtube_url}")
+        return 0
 
     video_id = youtube_url.split("v=")[-1]
 

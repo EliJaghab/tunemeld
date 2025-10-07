@@ -1,11 +1,10 @@
 import time
 from collections import Counter
 from collections.abc import Callable
-from typing import TYPE_CHECKING
 
-from core.api.genre_service_api import get_service
 from core.api.playlist import get_playlist_isrcs_by_service
 from core.constants import ServiceName
+from core.models.genre_service import ServiceModel
 from core.models.play_counts import HistoricalTrackPlayCountModel
 from core.models.track import TrackModel
 from core.services.soundcloud_service import get_soundcloud_track_view_count
@@ -15,9 +14,6 @@ from core.utils.utils import get_logger, process_in_parallel
 from django.core.management.base import BaseCommand
 from django.db import models
 from django.utils import timezone
-
-if TYPE_CHECKING:
-    from core.models.genre_service import ServiceModel
 
 logger = get_logger(__name__)
 
@@ -56,9 +52,9 @@ class Command(BaseCommand):
         logger.info(f"Processing {len(tracks_list)} tracks with valid URLs using parallel processing...")
 
         services = {
-            ServiceName.SPOTIFY: get_service(ServiceName.SPOTIFY),
-            ServiceName.YOUTUBE: get_service(ServiceName.YOUTUBE),
-            ServiceName.SOUNDCLOUD: get_service(ServiceName.SOUNDCLOUD),
+            ServiceName.SPOTIFY: ServiceModel.objects.get(name=ServiceName.SPOTIFY.value),
+            ServiceName.YOUTUBE: ServiceModel.objects.get(name=ServiceName.YOUTUBE.value),
+            ServiceName.SOUNDCLOUD: ServiceModel.objects.get(name=ServiceName.SOUNDCLOUD.value),
         }
 
         success_count = Counter()

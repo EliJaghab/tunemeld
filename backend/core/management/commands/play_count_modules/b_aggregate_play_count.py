@@ -40,9 +40,9 @@ class Command(BaseCommand):
         for isrc in todays_isrcs:
             # Get today's counts for all available services for this ISRC
             todays_counts = HistoricalTrackPlayCountModel.objects.filter(isrc=isrc, recorded_date=today).aggregate(
-                youtube_count=Sum("current_play_count", filter=Q(service=youtube_service)),
-                spotify_count=Sum("current_play_count", filter=Q(service=spotify_service)),
-                soundcloud_count=Sum("current_play_count", filter=Q(service=soundcloud_service)),
+                youtube_count=Sum("current_play_count", filter=Q(service_id=youtube_service.id)),
+                spotify_count=Sum("current_play_count", filter=Q(service_id=spotify_service.id)),
+                soundcloud_count=Sum("current_play_count", filter=Q(service_id=soundcloud_service.id)),
             )
 
             youtube_count = todays_counts["youtube_count"] or 0
@@ -67,9 +67,9 @@ class Command(BaseCommand):
             comparison_counts = HistoricalTrackPlayCountModel.objects.filter(
                 isrc=isrc, recorded_date=comparison_date
             ).aggregate(
-                youtube_count=Sum("current_play_count", filter=Q(service=youtube_service)),
-                spotify_count=Sum("current_play_count", filter=Q(service=spotify_service)),
-                soundcloud_count=Sum("current_play_count", filter=Q(service=soundcloud_service)),
+                youtube_count=Sum("current_play_count", filter=Q(service_id=youtube_service.id)),
+                spotify_count=Sum("current_play_count", filter=Q(service_id=spotify_service.id)),
+                soundcloud_count=Sum("current_play_count", filter=Q(service_id=soundcloud_service.id)),
             )
 
             comparison_youtube = comparison_counts["youtube_count"] or 0
@@ -120,7 +120,7 @@ class Command(BaseCommand):
                 # Create or update service-specific record
                 _service_record, created = AggregatePlayCountModel.objects.update_or_create(
                     isrc=isrc,
-                    service=service,
+                    service_id=service.id,
                     recorded_date=today,
                     defaults={
                         "current_play_count": current_count,

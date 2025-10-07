@@ -303,7 +303,21 @@ def get_spotify_playlist(genre: "GenreName", force_refresh: bool = False) -> Pla
 
 @retry(wait=wait_exponential(multiplier=1, min=2, max=10), stop=stop_after_attempt(3), reraise=True)
 def get_spotify_track_view_count(track_url: str) -> int:
-    """Get Spotify track view count. Raises exception if failed."""
+    """Get Spotify track view count using webdriver if available, otherwise return 0."""
+    if settings.ETL_DEPENDENCIES_AVAILABLE and get_cached_webdriver is not None:
+        try:
+            return get_spotify_track_view_count_with_webdriver(track_url)
+        except Exception as e:
+            logger.warning(f"Webdriver extraction failed for {track_url}: {e}")
+            return 0
+    else:
+        # In serverless environment or webdriver not available
+        logger.info(f"Webdriver not available for Spotify extraction: {track_url}")
+        return 0
+
+
+def get_spotify_track_view_count_with_webdriver(track_url: str) -> int:
+    """Get Spotify track view count using webdriver. Raises exception if failed."""
     webdriver = get_cached_webdriver()
 
     try:

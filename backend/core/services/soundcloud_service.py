@@ -112,7 +112,7 @@ def get_soundcloud_playlist(genre: "GenreName", force_refresh: bool = False) -> 
 
 @retry(wait=wait_exponential(multiplier=1, min=2, max=10), stop=stop_after_attempt(3), reraise=True)
 def get_soundcloud_track_view_count(track_url: str) -> int:
-    """Get SoundCloud track view count. Raises exception if failed."""
+    """Get SoundCloud track view count from meta tag."""
     logger.info(f"Accessing SoundCloud URL: {track_url}")
     user_agent = (
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
@@ -123,19 +123,28 @@ def get_soundcloud_track_view_count(track_url: str) -> int:
     response = requests.get(
         track_url,
         headers={"User-Agent": user_agent},
+        timeout=10,
     )
     response.raise_for_status()
 
     html_content = response.text
 
-    # Fallback: search for any numeric playback_count in the HTML
-    playback_matches = re.findall(r'"playback_count":\s*(\d+)', html_content)
-    if playback_matches:
-        view_count = int(playback_matches[0])
-        logger.info(f"Found SoundCloud play count: {view_count}")
+    # Look for meta tag - this is the most reliable method
+    # <meta property="soundcloud:play_count" content="44561">
+    meta_match = re.search(r'<meta\s+property="soundcloud:play_count"\s+content="(\d+)"', html_content)
+    if meta_match:
+        view_count = int(meta_match.group(1))
+        logger.info(f"Found SoundCloud play count: {view_count:,}")
         return view_count
 
-    raise ValueError("No playback_count found in SoundCloud HTML")
+    # Fallback: Look for playback_count in JSON data if meta tag fails
+    playback_match = re.search(r'"playback_count":\s*(\d+)', html_content)
+    if playback_match:
+        view_count = int(playback_match.group(1))
+        logger.info(f"Found SoundCloud play count via JSON: {view_count:,}")
+        return view_count
+
+    raise ValueError(f"Could not extract play count from SoundCloud URL: {track_url}")
 
 
 def _verify_soundcloud_track_page(url: str, expected_track_name: str, expected_artist_name: str) -> bool:
