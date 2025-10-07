@@ -1,5 +1,6 @@
 import { stateManager } from "@/state/StateManager";
 import { appRouter } from "@/routing/router";
+import { TUNEMELD_RANK_FIELD } from "@/config/constants";
 import type { Rank } from "@/types/index";
 
 export async function loadAndRenderRankButtons(): Promise<void> {
@@ -66,6 +67,9 @@ export async function loadAndRenderRankButtons(): Promise<void> {
 
           stateManager.setCurrentColumn(sortField);
           stateManager.setCurrentOrder(sortOrder);
+
+          // Set shimmer type based on the rank we're switching TO
+          stateManager.setShimmerTypeFromSortField(sortField);
 
           appRouter.navigateToRank(rank.sortField);
         });
