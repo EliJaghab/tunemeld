@@ -262,6 +262,10 @@ class StateManager {
     this.state.shimmer.isInitialLoad = false;
   }
 
+  markInitialLoadComplete(): void {
+    this.state.shimmer.isInitialLoad = false;
+  }
+
   // Shimmer Type Management - explicit tracking of which shimmer layout to use
   setShimmerType(type: ShimmerType): void {
     this.state.shimmer.currentType = type;
@@ -273,10 +277,30 @@ class StateManager {
 
   setShimmerTypeFromColumn(column: string | null): void {
     // Convert column name to shimmer type
+    // Each rank has its own specific shimmer layout
     if (column === TUNEMELD_RANK_FIELD || column === null) {
       this.setShimmerType(SHIMMER_TYPES.TUNEMELD);
+    } else if (column === "total-plays") {
+      this.setShimmerType(SHIMMER_TYPES.TOTAL_PLAYS);
+    } else if (column === "trending") {
+      this.setShimmerType(SHIMMER_TYPES.TRENDING);
     } else {
-      this.setShimmerType(SHIMMER_TYPES.PLAYCOUNT);
+      // Default fallback
+      this.setShimmerType(SHIMMER_TYPES.TUNEMELD);
+    }
+  }
+
+  setShimmerTypeFromSortField(sortField: string): void {
+    // Centralized logic for determining shimmer type from sort field
+    if (sortField === TUNEMELD_RANK_FIELD) {
+      this.setShimmerType(SHIMMER_TYPES.TUNEMELD);
+    } else if (sortField === "total-plays") {
+      this.setShimmerType(SHIMMER_TYPES.TOTAL_PLAYS);
+    } else if (sortField === "trending") {
+      this.setShimmerType(SHIMMER_TYPES.TRENDING);
+    } else {
+      // Default fallback
+      this.setShimmerType(SHIMMER_TYPES.TUNEMELD);
     }
   }
 
