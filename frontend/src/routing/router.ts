@@ -7,7 +7,6 @@ import {
   openTrackFromUrl,
 } from "@/components/servicePlayer";
 import { errorHandler } from "@/utils/error-handler";
-import { showInitialShimmer } from "@/components/shimmer";
 import { graphqlClient } from "@/services/graphql-client";
 import type { Genre, Rank, Track } from "@/types";
 
@@ -157,6 +156,7 @@ class AppRouter {
     this.updatePageTitle(genre);
     this.updateFavicon(genre);
     this.syncGenreButtons(genre);
+    // IMPORTANT: Sync rank state BEFORE loading content (which shows shimmer)
     this.syncRankState(rank);
     this.syncTrackState(player, isrc);
     await this.loadGenreContent(genre, needsFullUpdate);
@@ -236,14 +236,11 @@ class AppRouter {
     genre: string,
     fullUpdate: boolean = true,
   ): Promise<void> {
-    // Show initial shimmer only on first app load
-    const wasInitialLoad = this.isInitialLoad;
     if (this.isInitialLoad) {
-      showInitialShimmer();
       this.isInitialLoad = false;
     }
 
-    await updateGenreData(genre, fullUpdate, wasInitialLoad);
+    await updateGenreData(genre, fullUpdate);
     if (fullUpdate) {
       setupBodyClickListener(genre);
     }

@@ -9,7 +9,6 @@ import { initializeTosPrivacyOverlay } from "./tosPrivacy.js";
 import { stateManager } from "@/state/StateManager";
 import { appRouter } from "@/routing/router";
 import { applyCacheBusting } from "@/config/config";
-import { showInitialShimmer } from "@/components/shimmer";
 
 applyCacheBusting();
 
@@ -29,7 +28,6 @@ async function initializeApp(): Promise<void> {
     mainContent.style.visibility = "visible";
   }
   document.body.style.opacity = "1";
-  showInitialShimmer();
 
   try {
     // Initialize router first - this does the focused GraphQL query
