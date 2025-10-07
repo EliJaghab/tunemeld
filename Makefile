@@ -10,6 +10,7 @@
 	kill-frontend \
 	kill-backend \
 	clear-cache \
+	sync-prod \
 	makemigrations \
 	migrate \
 	migrate-dev \
@@ -155,7 +156,7 @@ serve-redis:
 	fi
 
 
-serve-backend: serve-redis clear-cache
+serve-backend: serve-redis
 	@echo " Starting Django backend server..."
 	@if lsof -ti tcp:8000 > /dev/null 2>&1; then \
 		echo " Backend server already running at: http://localhost:8000"; \
@@ -168,8 +169,18 @@ serve-backend: serve-redis clear-cache
 
 clear-cache:
 	@echo " Clearing Redis cache..."
-	@redis-cli FLUSHDB > /dev/null 2>&1 || echo " Redis not running, skipping cache clear"
+	@redis-cli -n 1 FLUSHDB > /dev/null 2>&1 || echo " Redis not running, skipping cache clear"
 	@echo " Cache cleared! Frontend requests will automatically populate cache."
+
+sync-prod: serve-redis
+	@echo " Syncing production to local (database + Redis cache)..."
+	@echo " WARNING: This will overwrite your local data!"
+ifeq ($(GITHUB_ACTIONS),)
+	@cd backend && $(VENV)/bin/python manage.py sync_prod
+else
+	@cd backend && python manage.py sync_prod
+endif
+	@echo " Production synced to local!"
 
 
 kill-frontend:
