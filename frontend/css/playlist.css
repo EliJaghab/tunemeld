@@ -56,12 +56,14 @@
   min-width: 0;
   font-family: var(--font-family-primary);
   font-size: var(--font-size-lg);
-  /* Desktop: allow more text */
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  -webkit-line-clamp: var(--desktop-line-clamp);
-  line-clamp: var(--desktop-line-clamp);
+  /* Allow multiline text without clamping */
+  display: block;
+  overflow: visible;
+  white-space: normal;
+  word-wrap: break-word;
+  padding-right: calc(
+    var(--size-icon-sm) + var(--space-md)
+  ); /* Space for collapse button */
 }
 
 .subtitle-separator {
@@ -215,12 +217,15 @@
   text-align: left;
   color: var(--text-color);
   display: flex;
-  align-items: center;
+  align-items: flex-start; /* For multiline */
   gap: var(--space-lg);
   flex-wrap: wrap;
   flex: 1;
   margin: 0;
-  line-height: 1;
+  line-height: 1.4; /* Better line height for multiline text */
+  padding-right: calc(
+    var(--size-icon-sm) + var(--space-sm)
+  ); /* Account for button */
 }
 
 .source-icon {

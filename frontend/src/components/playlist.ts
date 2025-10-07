@@ -7,22 +7,8 @@ import {
   TUNEMELD_RANK_FIELD,
   PLAYLIST_PLACEHOLDERS,
 } from "@/config/constants";
+import { hideShimmerLoaders } from "@/components/shimmer";
 import type { Track, Playlist, ServiceSource, ButtonLabel } from "@/types";
-
-// TEMPORARY: Stub function to fix build
-interface PlayCount {
-  totalCurrentPlayCount?: number;
-  totalCurrentPlayCountAbbreviated?: string;
-  totalWeeklyChangePercentageFormatted?: string;
-  totalWeeklyChangePercentage?: number;
-  youtubeCurrentPlayCount?: number;
-  spotifyCurrentPlayCount?: number;
-  isrc?: string;
-}
-
-function getPlayCountForTrack(_isrc: string): PlayCount {
-  return {};
-}
 
 async function fetchAndDisplayData(
   url: string,
@@ -195,13 +181,14 @@ function createTuneMeldPlaylistTableRow(
   row.appendChild(trackInfoCell);
   row.appendChild(spacerCell);
 
-  // Only show play counts if we're not in TuneMeld rank mode
   const currentRankColumn = stateManager.getCurrentColumn();
-  if (currentRankColumn !== TUNEMELD_RANK_FIELD) {
+  if (currentRankColumn === TUNEMELD_RANK_FIELD || currentRankColumn === null) {
+    // Show service icons for TuneMeld rank
+    row.appendChild(seenOnCell);
+  } else {
+    // Show play count value for Total Plays or Trending
     displayPlayCounts(track, row);
   }
-
-  row.appendChild(seenOnCell);
   row.appendChild(externalLinksCell);
 
   return row;
@@ -284,35 +271,32 @@ function createTrendingElement(percentage: string): HTMLElement {
 }
 
 function displayPlayCounts(track: Track, row: HTMLTableRowElement): void {
-  const totalPlaysCell = document.createElement("td");
-  totalPlaysCell.className = "total-play-count";
+  const currentRankColumn = stateManager.getCurrentColumn();
 
-  const trendingCell = document.createElement("td");
-  trendingCell.className = "trending";
+  // Create a single cell for the value based on the current rank
+  const valueCell = document.createElement("td");
+  valueCell.className = "play-count-value";
 
-  const playCountData = getPlayCountForTrack(track.isrc);
-  const totalCurrentPlayCount = playCountData.totalCurrentPlayCount;
-  const totalCurrentPlayCountAbbreviated =
-    playCountData.totalCurrentPlayCountAbbreviated;
-  const totalWeeklyChangePercentageFormatted =
-    playCountData.totalWeeklyChangePercentageFormatted;
-
-  if (totalCurrentPlayCount && totalCurrentPlayCountAbbreviated) {
+  if (currentRankColumn === "total-plays" && track.totalCurrentPlayCount) {
+    // Show total play count
     const element = createTotalPlayCountElement(
-      totalCurrentPlayCountAbbreviated,
+      track.totalCurrentPlayCount,
       track,
     );
-    totalPlaysCell.appendChild(element);
-  }
-
-  if (totalWeeklyChangePercentageFormatted) {
-    const formattedPercentage = totalWeeklyChangePercentageFormatted + "%";
+    valueCell.appendChild(element);
+  } else if (
+    currentRankColumn === "trending" &&
+    track.totalWeeklyChangePercentage !== null &&
+    track.totalWeeklyChangePercentage !== undefined
+  ) {
+    // Show trending percentage
+    const sign = track.totalWeeklyChangePercentage > 0 ? "+" : "";
+    const formattedPercentage = `${sign}${track.totalWeeklyChangePercentage}%`;
     const element = createTrendingElement(formattedPercentage);
-    trendingCell.appendChild(element);
+    valueCell.appendChild(element);
   }
 
-  row.appendChild(totalPlaysCell);
-  row.appendChild(trendingCell);
+  row.appendChild(valueCell);
 }
 
 function createServicePlaylistTableRow(
@@ -585,24 +569,27 @@ export function sortTable(column: string, order: string): void {
     "main-playlist-data-placeholder",
     SERVICE_NAMES.TUNEMELD,
   );
+
+  // Hide shimmer after sorting/rendering is complete
+  requestAnimationFrame(() => {
+    hideShimmerLoaders();
+  });
 }
 
 function getPlayCount(track: Track, platform: string): number | null {
-  // Get play count data from lookup map
-  const playCountData = getPlayCountForTrack(track.isrc);
-
+  // Get play count data directly from track object
   if (platform === SERVICE_NAMES.YOUTUBE) {
-    return playCountData.youtubeCurrentPlayCount ?? null;
+    return track.youtubeCurrentPlayCount ?? null;
   } else if (platform === SERVICE_NAMES.SPOTIFY) {
-    return playCountData.spotifyCurrentPlayCount ?? null;
+    return track.spotifyCurrentPlayCount ?? null;
   } else if (
     platform === "Total Plays" ||
     platform === SERVICE_NAMES.TOTAL ||
     platform === "total-plays"
   ) {
-    return playCountData.totalCurrentPlayCount ?? null;
+    return track.totalCurrentPlayCount ?? null;
   } else if (platform === "Trending" || platform === "trending") {
-    return playCountData.totalWeeklyChangePercentage ?? null;
+    return track.totalWeeklyChangePercentage ?? null;
   }
   return null;
 }
