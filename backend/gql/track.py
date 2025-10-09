@@ -28,10 +28,10 @@ class TrackType:
     aggregate_rank: int | None = None
     aggregate_score: float | None = None
     updated_at: datetime | None = None
-    total_current_play_count: int | None = None
+    total_current_play_count: float | None = None
     total_weekly_change_percentage: float | None = None
-    spotify_current_play_count: int | None = None
-    youtube_current_play_count: int | None = None
+    spotify_current_play_count: float | None = None
+    youtube_current_play_count: float | None = None
 
     @classmethod
     def from_cached_dict(cls, cached_data: dict) -> "TrackType":

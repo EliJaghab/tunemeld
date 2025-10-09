@@ -12,31 +12,31 @@ class TrackPlayCountType:
 
     isrc: str
 
-    spotify_current_play_count: int | None = None
+    spotify_current_play_count: float | None = None
     spotify_weekly_change_percentage: float | None = None
     spotify_updated_at: datetime | None = None
     spotify_current_play_count_abbreviated: str | None = None
     spotify_weekly_change_percentage_formatted: str | None = None
 
-    apple_music_current_play_count: int | None = None
+    apple_music_current_play_count: float | None = None
     apple_music_weekly_change_percentage: float | None = None
     apple_music_updated_at: datetime | None = None
     apple_music_current_play_count_abbreviated: str | None = None
     apple_music_weekly_change_percentage_formatted: str | None = None
 
-    youtube_current_play_count: int | None = None
+    youtube_current_play_count: float | None = None
     youtube_weekly_change_percentage: float | None = None
     youtube_updated_at: datetime | None = None
     youtube_current_play_count_abbreviated: str | None = None
     youtube_weekly_change_percentage_formatted: str | None = None
 
-    soundcloud_current_play_count: int | None = None
+    soundcloud_current_play_count: float | None = None
     soundcloud_weekly_change_percentage: float | None = None
     soundcloud_updated_at: datetime | None = None
     soundcloud_current_play_count_abbreviated: str | None = None
     soundcloud_weekly_change_percentage_formatted: str | None = None
 
-    total_current_play_count: int | None = None
+    total_current_play_count: float | None = None
     total_weekly_change_percentage: float | None = None
     total_current_play_count_abbreviated: str | None = None
     total_weekly_change_percentage_formatted: str | None = None
