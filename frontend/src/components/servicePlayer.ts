@@ -173,12 +173,12 @@ async function handleLinkClick(
   genre: string,
   isrc: string | null,
 ): Promise<void> {
+  event.preventDefault();
+
   const url = link.href;
   const serviceType = getServiceType(url);
 
   if (serviceType !== "none") {
-    event.preventDefault();
-
     // Use centralized navigation to update URL and show player
     appRouter.navigateToTrack(genre, "tunemeld-rank", serviceType, isrc);
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -319,6 +319,12 @@ function closePlayer(): void {
   if (playerContent) {
     const existingSpacing = playerContent.querySelectorAll(".vertical-spacing");
     existingSpacing.forEach((spacing) => spacing.remove());
+  }
+
+  // Navigate back to genre/rank URL (remove player and isrc params)
+  if (currentGenre) {
+    const currentRank = stateManager.getCurrentColumn();
+    appRouter.navigateToGenre(currentGenre, currentRank || null);
   }
 }
 

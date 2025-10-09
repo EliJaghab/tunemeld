@@ -420,12 +420,12 @@ function createTuneMeldPlaylistTableRow(
 
   const trackTitle = document.createElement("a");
   trackTitle.className = "track-title";
-  // For TuneMeld Playlist, use the first available internal track URL (YouTube priority)
+  // For TuneMeld Playlist, use the first available actual service URL (YouTube priority)
   const trackUrl =
-    track.trackDetailUrlYoutube ||
-    track.trackDetailUrlSpotify ||
-    track.trackDetailUrlAppleMusic ||
-    track.trackDetailUrlSoundcloud ||
+    track.youtubeSource?.url ||
+    track.spotifySource?.url ||
+    track.appleMusicSource?.url ||
+    track.soundcloudSource?.url ||
     "#";
   trackTitle.href = trackUrl;
   trackTitle.textContent = track.trackName || "Unknown Track";
@@ -672,23 +672,23 @@ function createServicePlaylistTableRow(
 
   const trackTitle = document.createElement("a");
   trackTitle.className = "track-title";
-  // For service playlists, use the specific service's internal track URL
+  // For service playlists, use the specific service's actual URL
   let trackUrl = "#";
   if (serviceName === SERVICE_NAMES.SPOTIFY) {
-    trackUrl = track.trackDetailUrlSpotify || "#";
+    trackUrl = track.spotifySource?.url || "#";
   } else if (serviceName === SERVICE_NAMES.APPLE_MUSIC) {
-    trackUrl = track.trackDetailUrlAppleMusic || "#";
+    trackUrl = track.appleMusicSource?.url || "#";
   } else if (serviceName === SERVICE_NAMES.SOUNDCLOUD) {
-    trackUrl = track.trackDetailUrlSoundcloud || "#";
+    trackUrl = track.soundcloudSource?.url || "#";
   } else if (serviceName === SERVICE_NAMES.YOUTUBE) {
-    trackUrl = track.trackDetailUrlYoutube || "#";
+    trackUrl = track.youtubeSource?.url || "#";
   } else if (serviceName === SERVICE_NAMES.TOTAL) {
-    // For total views, use first available internal URL
+    // For total views, use first available actual URL
     trackUrl =
-      track.trackDetailUrlYoutube ||
-      track.trackDetailUrlSpotify ||
-      track.trackDetailUrlAppleMusic ||
-      track.trackDetailUrlSoundcloud ||
+      track.youtubeSource?.url ||
+      track.spotifySource?.url ||
+      track.appleMusicSource?.url ||
+      track.soundcloudSource?.url ||
       "#";
   }
   trackTitle.href = trackUrl;

@@ -162,13 +162,20 @@ class AppRouter {
     const genreChanged = stateManager.getCurrentGenre() !== genre;
     const needsFullUpdate = genreChanged || this.isInitialLoad;
 
+    // Only load content if genre changed or initial load
+    // Never reload content when just opening/closing player within same genre
+    const shouldLoadContent = needsFullUpdate;
+
     stateManager.setCurrentGenre(genre);
     this.updatePageTitle(genre);
     this.updateFavicon(genre);
     this.syncGenreButtons(genre);
     this.syncRankState(rank);
     this.syncTrackState(player, isrc);
-    await this.loadGenreContent(genre, needsFullUpdate);
+
+    if (shouldLoadContent) {
+      await this.loadGenreContent(genre, needsFullUpdate);
+    }
 
     if (player && isrc) {
       await this.openTrackPlayer(genre, player, isrc);
