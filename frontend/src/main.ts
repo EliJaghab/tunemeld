@@ -1,6 +1,7 @@
 import { loadTitleContent } from "@/components/title";
 import { loadAndRenderRankButtons } from "@/components/rankButton";
 import { loadAndRenderGenreButtons } from "@/components/genreButtons";
+import { debugLog } from "@/config/config";
 import {
   setupBodyClickListener,
   setupClosePlayerButton,
@@ -14,40 +15,50 @@ applyCacheBusting();
 
 document.addEventListener("DOMContentLoaded", initializeApp);
 
+const mainDebug = (message: string, meta?: unknown) => {
+  debugLog("Main", message, meta);
+};
+
 async function initializeApp(): Promise<void> {
+  mainDebug("initializeApp: start");
+  const mainContent = document.getElementById("main-content");
   await loadTitleContent();
 
+  mainDebug("initializeApp: title content loaded");
   stateManager.initializeFromDOM();
   const currentTheme = stateManager.getTheme();
   if (currentTheme) {
     stateManager.applyTheme(currentTheme);
   }
 
-  const mainContent = document.getElementById("main-content");
-  if (mainContent) {
-    mainContent.style.visibility = "visible";
-  }
-  document.body.style.opacity = "1";
-
   try {
-    // Initialize router first - this does the focused GraphQL query
+    mainDebug("initializeApp: initializing router");
+    // Initialize router first - handles initial shimmer and GraphQL queries
+    // Keep content hidden until shimmer is ready
     await appRouter.initialize();
+    mainDebug("initializeApp: router initialized");
+
+    if (mainContent) {
+      mainContent.style.visibility = "visible";
+    }
+    document.body.style.transition = "opacity 0.2s ease-in";
+    document.body.style.opacity = "1";
 
     // Only after router is initialized, set up UI components that depend on global data
+    mainDebug("initializeApp: setting up theme toggle");
     await setupThemeToggle();
+    mainDebug("initializeApp: loading genre buttons");
     await loadAndRenderGenreButtons();
+    mainDebug("initializeApp: loading rank buttons");
     await loadAndRenderRankButtons();
+    mainDebug("initializeApp: setting up close player button");
     await setupClosePlayerButton();
+    mainDebug("initializeApp: initializing TOS overlay");
     await initializeTosPrivacyOverlay();
+    mainDebug("initializeApp: end");
   } catch (error: unknown) {
     console.error("App initialization failed:", error);
   }
-
-  if (mainContent) {
-    mainContent.style.visibility = "visible";
-  }
-  document.body.style.transition = "opacity 0.2s ease-in";
-  document.body.style.opacity = "1";
 }
 
 async function setupThemeToggle(): Promise<void> {

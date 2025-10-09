@@ -141,7 +141,7 @@ serve-frontend:
 	@echo " Website will be available at: http://localhost:8080"
 	@echo " Press Ctrl+C to stop all processes"
 	@echo ""
-	@cd frontend && npm run dev & cd frontend/dist && python -m http.server 8080 & wait
+	@cd frontend && npm run dev & (cd frontend/dist && python -m http.server 8080)
 serve-redis:
 	@if [ -n "$$REDIS_URL" ]; then \
 		echo " Using REDIS_URL from environment"; \

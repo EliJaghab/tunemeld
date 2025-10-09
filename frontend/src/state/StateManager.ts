@@ -28,6 +28,7 @@ import {
   TUNEMELD_RANK_FIELD,
   type ShimmerType,
 } from "../config/constants.js";
+import { debugLog } from "@/config/config";
 import type { Rank, Genre, ButtonLabel, ButtonLabels } from "@/types";
 
 interface ShimmerState {
@@ -44,6 +45,15 @@ interface ModalInfo {
   overlay: HTMLElement;
 }
 
+interface LoadingState {
+  tracksLoaded: boolean;
+  genreButtonsLoaded: boolean;
+  rankButtonsLoaded: boolean;
+  genreImagesLoaded: boolean;
+  serviceDataLoaded: boolean;
+  playlistDataLoaded: boolean;
+}
+
 interface AppState {
   sortColumn: string | null;
   sortOrder: string;
@@ -56,10 +66,15 @@ interface AppState {
   genres: Genre[];
   buttonLabels: ButtonLabels | null;
   shimmer: ShimmerState;
+  loading: LoadingState;
   modals: {
     activeDescriptionModals: Set<ModalInfo>;
   };
 }
+
+const stateDebug = (message: string, meta?: unknown) => {
+  debugLog("StateManager", message, meta);
+};
 
 class StateManager {
   private state: AppState;
@@ -81,6 +96,14 @@ class StateManager {
         playlist: false,
         isInitialLoad: false,
         currentType: SHIMMER_TYPES.TUNEMELD,
+      },
+      loading: {
+        tracksLoaded: false,
+        genreButtonsLoaded: false,
+        rankButtonsLoaded: false,
+        genreImagesLoaded: false,
+        serviceDataLoaded: false,
+        playlistDataLoaded: false,
       },
       modals: {
         activeDescriptionModals: new Set(),
@@ -232,10 +255,12 @@ class StateManager {
       this.state.shimmer.services = isActive;
     } else if (type === "playlist") {
       this.state.shimmer.playlist = isActive;
-      // Only set isInitialLoad to true if explicitly passed, don't override it back to false
-      if (isInitialLoad) {
-        this.state.shimmer.isInitialLoad = isInitialLoad;
-      }
+    }
+
+    // Set isInitialLoad flag globally, not tied to shimmer type
+    // Only set to true if explicitly passed, don't override back to false
+    if (isInitialLoad) {
+      this.state.shimmer.isInitialLoad = isInitialLoad;
     }
   }
 
@@ -351,6 +376,63 @@ class StateManager {
 
   getActiveModalCount(): number {
     return this.state.modals.activeDescriptionModals.size;
+  }
+
+  // Loading State Management
+  markLoaded(component: keyof LoadingState): void {
+    stateDebug(`markLoaded:${component}`);
+    this.state.loading[component] = true;
+    this.checkIfFullyLoaded();
+  }
+
+  resetLoadingState(): void {
+    this.state.loading = {
+      tracksLoaded: false,
+      genreButtonsLoaded: false,
+      rankButtonsLoaded: false,
+      genreImagesLoaded: false,
+      serviceDataLoaded: false,
+      playlistDataLoaded: false,
+    };
+  }
+
+  isFullyLoaded(): boolean {
+    return Object.values(this.state.loading).every((loaded) => loaded);
+  }
+
+  checkIfFullyLoaded(): void {
+    stateDebug("checkIfFullyLoaded: checking if all components are loaded");
+    // Only hide shimmer when ALL components are loaded
+    if (this.state.shimmer.isInitialLoad) {
+      const allLoaded =
+        this.state.loading.tracksLoaded &&
+        this.state.loading.genreButtonsLoaded &&
+        this.state.loading.rankButtonsLoaded &&
+        this.state.loading.genreImagesLoaded &&
+        this.state.loading.serviceDataLoaded &&
+        this.state.loading.playlistDataLoaded;
+
+      stateDebug(`checkIfFullyLoaded: allLoaded = ${allLoaded}`);
+      if (allLoaded) {
+        stateDebug("checkIfFullyLoaded: all components loaded, hiding shimmer");
+        // Import dynamically to avoid circular dependency
+        import("@/components/shimmer").then(({ hideShimmerLoaders }) => {
+          hideShimmerLoaders();
+        });
+      }
+    }
+  }
+
+  async preloadImages(urls: string[]): Promise<void> {
+    const promises = urls.map((url) => {
+      return new Promise<void>((resolve) => {
+        const img = new Image();
+        img.onload = () => resolve();
+        img.onerror = () => resolve(); // Resolve even on error to not block
+        img.src = url;
+      });
+    });
+    await Promise.all(promises);
   }
 
   // Static Configuration Management

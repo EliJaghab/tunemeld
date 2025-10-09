@@ -2,6 +2,12 @@ import { stateManager } from "@/state/StateManager";
 import { appRouter } from "@/routing/router";
 import type { Genre, ButtonLabel } from "@/types";
 
+function createElement(tag: string, className?: string): HTMLElement {
+  const element = document.createElement(tag);
+  if (className) element.className = className;
+  return element;
+}
+
 export async function loadAndRenderGenreButtons() {
   try {
     const genres = stateManager.getGenres();
@@ -12,7 +18,26 @@ export async function loadAndRenderGenreButtons() {
       return;
     }
 
-    genreControlsElement.innerHTML = "";
+    // Preload all genre images first
+    const imageUrls = genres.map((g: Genre) => g.iconUrl).filter(Boolean);
+    await stateManager.preloadImages(imageUrls);
+    stateManager.markLoaded("genreImagesLoaded");
+
+    // Don't clear shimmer yet if initial load
+    const hasShimmer = genreControlsElement.querySelector(".shimmer");
+    if (!hasShimmer) {
+      genreControlsElement.innerHTML = "";
+    }
+
+    // Create container for real buttons (hidden initially if shimmer present)
+    const realButtonsContainer = hasShimmer
+      ? (createElement("div") as HTMLDivElement)
+      : genreControlsElement;
+
+    if (hasShimmer) {
+      realButtonsContainer.style.display = "none";
+      realButtonsContainer.id = "genre-controls-real";
+    }
 
     genres.forEach((genre: Genre) => {
       const button = document.createElement("button");
@@ -58,8 +83,16 @@ export async function loadAndRenderGenreButtons() {
         appRouter.navigateToGenre(genre.name, currentRank || null);
       });
 
-      genreControlsElement.appendChild(button);
+      realButtonsContainer.appendChild(button);
     });
+
+    // If we created a hidden container, append it
+    if (hasShimmer && realButtonsContainer !== genreControlsElement) {
+      genreControlsElement.appendChild(realButtonsContainer);
+    }
+
+    // Mark genre buttons as loaded
+    stateManager.markLoaded("genreButtonsLoaded");
   } catch (error) {
     console.error("Failed to load genre buttons:", error);
   }

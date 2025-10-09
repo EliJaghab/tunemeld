@@ -172,6 +172,19 @@
   white-space: nowrap;
 }
 
+.playlist-table.hide-source-icons td.seen-on {
+  display: none;
+}
+
+.playlist-table td.playcount-hidden {
+  display: none;
+}
+
+.playlist-table.playcount-total-only td.trending,
+.playlist-table.playcount-trending-only td.total-play-count {
+  display: none;
+}
+
 /* Playlist Loading States */
 .playlist {
   position: relative;
@@ -234,30 +247,35 @@
   border-radius: 50%;
 }
 
-.play-count-container {
+.total-play-count-container {
   display: flex;
   align-items: center;
   gap: var(--space-sm);
   justify-content: flex-start;
 }
 
-.play-count-logo {
-  height: var(--size-icon-xs);
-  width: var(--size-icon-xs);
-  flex-shrink: 0;
+.total-play-count-text {
+  font-weight: 600;
 }
 
-.play-count-percentage {
+.trending-container {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  justify-content: flex-start;
+}
+
+.trending-percentage {
   font-size: inherit;
   font-weight: inherit;
   opacity: 0.9;
 }
 
-.play-count-percentage.positive {
+.trending-percentage.positive {
   color: #22c55e;
 }
 
-.play-count-percentage.negative {
+.trending-percentage.negative {
   color: #ef4444;
 }
 
@@ -288,6 +306,10 @@
 
 .playlist-table a:hover {
   opacity: 0.7;
+}
+
+.playlist-data-hidden {
+  display: none;
 }
 
 .th {
@@ -540,7 +562,8 @@
   }
 
   /* Mobile: Stack percentage under play count */
-  .play-count-container {
+  .total-play-count-container,
+  .trending-container {
     flex-direction: column;
     align-items: flex-start;
     gap: var(--space-xs);
@@ -561,7 +584,7 @@
     font-size: var(--font-size-mobile-sm);
   }
 
-  .play-count-percentage {
+  .trending-percentage {
     margin-left: 0;
   }
 }

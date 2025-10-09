@@ -1,5 +1,5 @@
-import { DJANGO_API_BASE_URL } from "@/config/config";
 import { stateManager } from "@/state/StateManager";
+import { debugLog } from "@/config/config";
 import { appRouter } from "@/routing/router";
 import { graphqlClient } from "@/services/graphql-client";
 import {
@@ -7,7 +7,12 @@ import {
   TUNEMELD_RANK_FIELD,
   PLAYLIST_PLACEHOLDERS,
 } from "@/config/constants";
-import { hideShimmerLoaders } from "@/components/shimmer";
+import {
+  hideShimmerLoaders,
+  markTunemeldTrackShimmerHidden,
+  registerPlaylistReveal,
+  trackLoadLog,
+} from "@/components/shimmer";
 import type { Track, Playlist, ServiceSource, ButtonLabel } from "@/types";
 
 async function fetchAndDisplayData(
@@ -29,21 +34,199 @@ async function fetchAndDisplayData(
   }
 }
 
+type PlayCountDisplayMode = "total" | "trending" | "both";
+
+const TOTAL_PLAY_IDENTIFIERS = new Set([
+  "totalplaycount",
+  "totalplays",
+  "totalcurrentplaycount",
+]);
+
+const TRENDING_IDENTIFIERS = new Set([
+  "totalweeklychangepercentage",
+  "totalweeklychange",
+  "totalweeklychangepercent",
+  "trending",
+]);
+
+const SOURCE_ICON_HIDDEN_IDENTIFIERS = new Set([
+  ...TOTAL_PLAY_IDENTIFIERS,
+  ...TRENDING_IDENTIFIERS,
+]);
+
+function normalizeIdentifier(value: string | null | undefined): string | null {
+  if (!value) return null;
+  return value.toLowerCase().replace(/[^a-z0-9]+/g, "");
+}
+
+function matchesIdentifier(
+  identifierSet: Set<string>,
+  ...values: Array<string | null | undefined>
+): boolean {
+  return values.some((value) => {
+    const normalized = normalizeIdentifier(value);
+    return normalized !== null && identifierSet.has(normalized);
+  });
+}
+
+function getPlayCountDisplayMode(
+  sortField: string | null,
+): PlayCountDisplayMode {
+  const ranks = stateManager.getRanks();
+  const matchingRank = ranks.find((rank) => rank.sortField === sortField);
+
+  const additionalValues = matchingRank
+    ? [
+        matchingRank.sortField,
+        matchingRank.name,
+        matchingRank.dataField,
+        matchingRank.displayName,
+      ]
+    : [];
+
+  if (matchesIdentifier(TRENDING_IDENTIFIERS, sortField, ...additionalValues)) {
+    return "trending";
+  }
+
+  if (
+    matchesIdentifier(TOTAL_PLAY_IDENTIFIERS, sortField, ...additionalValues)
+  ) {
+    return "total";
+  }
+
+  return "both";
+}
+
+function shouldHideSourceIcons(sortField: string | null): boolean {
+  return getPlayCountDisplayMode(sortField) !== "both";
+}
+
+function waitForImageElements(images: HTMLImageElement[]): Promise<void> {
+  if (images.length === 0) {
+    return Promise.resolve();
+  }
+
+  const imagePromises = images.map((image) => {
+    if (image.complete && image.naturalWidth > 0) {
+      return Promise.resolve();
+    }
+
+    return new Promise<void>((resolve) => {
+      const cleanup = (): void => {
+        image.removeEventListener("load", onLoad);
+        image.removeEventListener("error", onError);
+        resolve();
+      };
+
+      const onLoad = (): void => cleanup();
+      const onError = (): void => cleanup();
+
+      image.addEventListener("load", onLoad, { once: true });
+      image.addEventListener("error", onError, { once: true });
+    });
+  });
+
+  return Promise.allSettled(imagePromises).then(() => undefined);
+}
+
+const playlistDebug = (message: string, meta?: unknown) => {
+  debugLog("Playlist", message, meta);
+};
+
 export function renderPlaylistTracks(
   playlists: Playlist[],
   placeholderId: string,
   serviceName: string | null,
-  serviceDisplayName?: string | null,
+  serviceDisplayName: string | null = null,
+  options: { forceRender?: boolean } = {},
 ): void {
+  const { forceRender = false } = options;
+  const isTuneMeldPlaylist = serviceName === SERVICE_NAMES.TUNEMELD;
+  const isInitialLoad = stateManager.isInitialLoad();
+  playlistDebug("renderPlaylistTracks:start", {
+    placeholderId,
+    serviceName,
+    playlistCount: playlists.length,
+    forceRender,
+    isInitialLoad,
+    shouldKeepSkeletonPotential: isTuneMeldPlaylist && isInitialLoad,
+  });
+
   const placeholder = document.getElementById(placeholderId);
   if (!placeholder) {
     console.error(`Placeholder with ID ${placeholderId} not found.`);
     return;
   }
 
-  placeholder.innerHTML = "";
+  const renderToken = `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+  placeholder.dataset.renderToken = renderToken;
 
-  const isTuneMeldPlaylist = serviceName === SERVICE_NAMES.TUNEMELD;
+  const shouldKeepSkeleton =
+    isTuneMeldPlaylist && (isInitialLoad || forceRender);
+  if (!shouldKeepSkeleton) {
+    if (isTuneMeldPlaylist) {
+      markTunemeldTrackShimmerHidden({
+        reason: forceRender ? "force-render-clear" : "pre-render-clear",
+        placeholderChildren: placeholder.childElementCount,
+      });
+    }
+    placeholder.innerHTML = "";
+    placeholder.setAttribute("data-rendered", "true");
+  } else {
+    placeholder.setAttribute("data-rendered", "false");
+  }
+
+  const tableElement = placeholder.closest<HTMLTableElement>("table");
+  const dataContainerId = `${placeholderId}--data`;
+  let dataContainer = document.getElementById(
+    dataContainerId,
+  ) as HTMLTableSectionElement | null;
+  if (!dataContainer) {
+    dataContainer = document.createElement("tbody");
+    dataContainer.id = dataContainerId;
+    dataContainer.className = "playlist-data";
+    placeholder.parentElement?.insertBefore(
+      dataContainer,
+      placeholder.nextSibling,
+    );
+  }
+  dataContainer.innerHTML = "";
+
+  if (isTuneMeldPlaylist && shouldKeepSkeleton) {
+    dataContainer.classList.add("playlist-data-hidden");
+  } else {
+    dataContainer.classList.remove("playlist-data-hidden");
+  }
+
+  const currentSortField = stateManager.getCurrentColumn();
+  const playCountMode = getPlayCountDisplayMode(currentSortField);
+  const hideSourceIcons = shouldHideSourceIcons(currentSortField);
+
+  if (tableElement) {
+    tableElement.classList.remove(
+      "hide-source-icons",
+      "playcount-total-only",
+      "playcount-trending-only",
+    );
+
+    if (isTuneMeldPlaylist) {
+      if (hideSourceIcons) {
+        tableElement.classList.add("hide-source-icons");
+      }
+      if (playCountMode === "total") {
+        tableElement.classList.add("playcount-total-only");
+      } else if (playCountMode === "trending") {
+        tableElement.classList.add("playcount-trending-only");
+      }
+    }
+
+    playlistDebug("renderPlaylistTracks:table state", {
+      isTuneMeldPlaylist,
+      playCountMode,
+      hideSourceIcons,
+      classList: tableElement.className,
+    });
+  }
 
   const fragment = document.createDocumentFragment();
 
@@ -55,13 +238,97 @@ export function renderPlaylistTracks(
         !isTuneMeldPlaylist || !isShowingTuneMeldRanks ? index + 1 : undefined;
 
       const row = isTuneMeldPlaylist
-        ? createTuneMeldPlaylistTableRow(track, displayRank)
-        : createServicePlaylistTableRow(track, serviceName || "", index + 1);
+        ? createTuneMeldPlaylistTableRow(track, displayRank, playCountMode)
+        : createServicePlaylistTableRow(
+            track,
+            serviceName || "",
+            index + 1,
+            playCountMode,
+          );
+      playlistDebug("renderPlaylistTracks:row", {
+        isrc: track.isrc,
+        trackName: track.trackName,
+        isTuneMeldPlaylist,
+        index,
+        playCountMode,
+      });
       fragment.appendChild(row);
     });
   });
 
-  placeholder.appendChild(fragment);
+  dataContainer.appendChild(fragment);
+
+  if (isTuneMeldPlaylist) {
+    const albumImages = Array.from(
+      dataContainer.querySelectorAll<HTMLImageElement>("img.album-cover"),
+    );
+    const imagesPromise = waitForImageElements(albumImages);
+    registerPlaylistReveal(imagesPromise);
+
+    imagesPromise.finally(() => {
+      if (placeholder.dataset.renderToken !== renderToken) {
+        playlistDebug(
+          "renderPlaylistTracks: imagesPromise stale token, skipping reveal",
+        );
+        return;
+      }
+
+      if (tableElement) {
+        tableElement.classList.remove("tracks-hidden");
+        tableElement.classList.remove(
+          "hide-source-icons",
+          "playcount-total-only",
+          "playcount-trending-only",
+        );
+        if (hideSourceIcons) {
+          tableElement.classList.add("hide-source-icons");
+        }
+        if (playCountMode === "total") {
+          tableElement.classList.add("playcount-total-only");
+        } else if (playCountMode === "trending") {
+          tableElement.classList.add("playcount-trending-only");
+        }
+
+        playlistDebug("renderPlaylistTracks: reveal table", {
+          playCountMode,
+          classList: tableElement.className,
+        });
+      }
+
+      markTunemeldTrackShimmerHidden({ reason: "tracks-ready" });
+
+      placeholder.innerHTML = "";
+      placeholder.setAttribute("data-rendered", "true");
+
+      trackLoadLog("Tunemeld tracks rendered", {
+        trackCount: dataContainer.childElementCount,
+        playCountMode,
+      });
+
+      dataContainer.classList.remove("playlist-data-hidden");
+
+      stateManager.markLoaded("tracksLoaded");
+      stateManager.markLoaded("playlistDataLoaded");
+
+      playlistDebug(
+        "renderPlaylistTracks: calling hideShimmerLoaders after reveal",
+      );
+      hideShimmerLoaders();
+    });
+  } else {
+    placeholder.innerHTML = "";
+    placeholder.setAttribute("data-rendered", "true");
+    stateManager.markLoaded("serviceDataLoaded");
+    stateManager.markLoaded("tracksLoaded");
+    dataContainer.classList.remove("playlist-data-hidden");
+  }
+
+  playlistDebug("renderPlaylistTracks:end", {
+    placeholderId,
+    serviceName,
+    isTuneMeldPlaylist,
+    playCountMode,
+  });
 }
 
 function setTrackInfoLabels(
@@ -106,7 +373,8 @@ function setTrackInfoLabels(
 
 function createTuneMeldPlaylistTableRow(
   track: Track,
-  displayRank?: number,
+  displayRank: number | undefined,
+  playCountMode: PlayCountDisplayMode,
 ): HTMLTableRowElement {
   const row = document.createElement("tr");
 
@@ -181,59 +449,16 @@ function createTuneMeldPlaylistTableRow(
   row.appendChild(trackInfoCell);
   row.appendChild(spacerCell);
 
+  // Only show play counts if we're not in TuneMeld rank mode
   const currentRankColumn = stateManager.getCurrentColumn();
-  if (currentRankColumn === TUNEMELD_RANK_FIELD || currentRankColumn === null) {
-    // Show service icons for TuneMeld rank
-    row.appendChild(seenOnCell);
-  } else {
-    // Show play count value for Total Plays or Trending
-    displayPlayCounts(track, row);
+  if (currentRankColumn !== TUNEMELD_RANK_FIELD) {
+    displayPlayCounts(track, row, playCountMode);
   }
+
+  row.appendChild(seenOnCell);
   row.appendChild(externalLinksCell);
 
   return row;
-}
-
-function createPlayCountElement(
-  playCount: number | string,
-  source: string,
-  url: string | null = null,
-  percentage: string | null = null,
-): HTMLElement {
-  const container = document.createElement("div");
-  container.className = "play-count-container";
-
-  const text = document.createElement("span");
-  text.textContent =
-    typeof playCount === "string" ? playCount : playCount.toLocaleString();
-
-  container.appendChild(text);
-
-  if (percentage && percentage !== "0") {
-    const percentageSpan = document.createElement("span");
-    percentageSpan.textContent = ` ${percentage}%`;
-    percentageSpan.className = "play-count-percentage";
-
-    if (percentage && percentage.startsWith("-")) {
-      percentageSpan.classList.add("negative");
-    } else if (percentage !== "0") {
-      percentageSpan.classList.add("positive");
-    }
-
-    container.appendChild(percentageSpan);
-  }
-
-  if (url) {
-    const link = document.createElement("a");
-    link.href = url;
-    link.target = "_blank";
-    link.style.textDecoration = "none";
-    link.style.color = "inherit";
-    link.appendChild(container);
-    return link;
-  }
-
-  return container;
 }
 
 function createTotalPlayCountElement(
@@ -260,49 +485,143 @@ function createTrendingElement(percentage: string): HTMLElement {
   text.textContent = percentage;
   text.className = "trending-percentage";
 
-  if (percentage.startsWith("-")) {
-    text.classList.add("negative");
-  } else if (percentage !== "0%" && percentage !== "+0%") {
-    text.classList.add("positive");
+  const numericValue = parseFloat(percentage.replace(/[^0-9.-]+/g, ""));
+  if (!Number.isNaN(numericValue)) {
+    if (numericValue < 0) {
+      text.classList.add("negative");
+    } else if (numericValue > 0) {
+      text.classList.add("positive");
+    }
   }
 
   container.appendChild(text);
   return container;
 }
 
-function displayPlayCounts(track: Track, row: HTMLTableRowElement): void {
-  const currentRankColumn = stateManager.getCurrentColumn();
+function formatAbbreviatedPlayCount(count: number): string {
+  const abs = Math.abs(count);
+  if (abs >= 1_000_000_000) {
+    return `${(count / 1_000_000_000).toFixed(1)}B`;
+  }
+  if (abs >= 1_000_000) {
+    return `${(count / 1_000_000).toFixed(1)}M`;
+  }
+  if (abs >= 1_000) {
+    return `${(count / 1_000).toFixed(1)}K`;
+  }
+  return count.toLocaleString();
+}
 
-  // Create a single cell for the value based on the current rank
-  const valueCell = document.createElement("td");
-  valueCell.className = "play-count-value";
+function getPlayCountForTrack(track: Track) {
+  const countValue = track.totalCurrentPlayCount;
+  const percentageValue = track.totalWeeklyChangePercentage;
 
-  if (currentRankColumn === "total-plays" && track.totalCurrentPlayCount) {
-    // Show total play count
-    const element = createTotalPlayCountElement(
-      track.totalCurrentPlayCount,
-      track,
-    );
-    valueCell.appendChild(element);
-  } else if (
-    currentRankColumn === "trending" &&
-    track.totalWeeklyChangePercentage !== null &&
-    track.totalWeeklyChangePercentage !== undefined
-  ) {
-    // Show trending percentage
-    const sign = track.totalWeeklyChangePercentage > 0 ? "+" : "";
-    const formattedPercentage = `${sign}${track.totalWeeklyChangePercentage}%`;
-    const element = createTrendingElement(formattedPercentage);
-    valueCell.appendChild(element);
+  const parsedCount =
+    typeof countValue === "string"
+      ? Number(countValue)
+      : typeof countValue === "number"
+      ? countValue
+      : null;
+
+  let abbreviated: string | null = null;
+  if (typeof parsedCount === "number" && !Number.isNaN(parsedCount)) {
+    abbreviated = formatAbbreviatedPlayCount(parsedCount);
   }
 
-  row.appendChild(valueCell);
+  const parsedPercentage =
+    typeof percentageValue === "string"
+      ? Number(percentageValue)
+      : typeof percentageValue === "number"
+      ? percentageValue
+      : null;
+
+  let percentageFormatted: string | null = null;
+  if (typeof parsedPercentage === "number" && !Number.isNaN(parsedPercentage)) {
+    const rounded = Math.round(parsedPercentage * 10) / 10;
+    let formattedNumber = rounded.toFixed(1);
+    if (formattedNumber.endsWith(".0")) {
+      formattedNumber = formattedNumber.slice(0, -2);
+    }
+    const sign = rounded > 0 ? "+" : "";
+    percentageFormatted = `${sign}${formattedNumber}%`;
+  }
+
+  playlistDebug("getPlayCountForTrack", {
+    isrc: track.isrc,
+    trackName: track.trackName,
+    rawTotalCurrentPlayCount: countValue,
+    parsedTotalCurrentPlayCount: parsedCount,
+    formattedTotalCurrentPlayCount: abbreviated,
+    rawWeeklyChange: percentageValue,
+    parsedWeeklyChange: parsedPercentage,
+    formattedWeeklyChange: percentageFormatted,
+  });
+
+  return {
+    totalCurrentPlayCount: parsedCount ?? null,
+    totalCurrentPlayCountAbbreviated: abbreviated,
+    totalWeeklyChangePercentage: parsedPercentage ?? null,
+    totalWeeklyChangePercentageFormatted: percentageFormatted,
+    youtubeCurrentPlayCount: track.youtubeCurrentPlayCount,
+    spotifyCurrentPlayCount: track.spotifyCurrentPlayCount,
+  };
+}
+
+function displayPlayCounts(
+  track: Track,
+  row: HTMLTableRowElement,
+  mode: PlayCountDisplayMode,
+): void {
+  const showTotal = mode !== "trending";
+  const showTrending = mode !== "total";
+
+  const totalPlaysCell = document.createElement("td");
+  totalPlaysCell.className = "total-play-count";
+
+  const trendingCell = document.createElement("td");
+  trendingCell.className = "trending";
+
+  const playCountData = getPlayCountForTrack(track);
+  const totalCurrentPlayCountAbbreviated =
+    playCountData.totalCurrentPlayCountAbbreviated;
+  const totalWeeklyChangePercentageFormatted =
+    playCountData.totalWeeklyChangePercentageFormatted;
+
+  if (showTotal && totalCurrentPlayCountAbbreviated !== null) {
+    const element = createTotalPlayCountElement(
+      totalCurrentPlayCountAbbreviated,
+      track,
+    );
+    totalPlaysCell.appendChild(element);
+  } else if (!showTotal) {
+    totalPlaysCell.classList.add("playcount-hidden");
+  }
+
+  if (showTrending && totalWeeklyChangePercentageFormatted) {
+    const element = createTrendingElement(totalWeeklyChangePercentageFormatted);
+    trendingCell.appendChild(element);
+  } else if (!showTrending) {
+    trendingCell.classList.add("playcount-hidden");
+  }
+
+  playlistDebug("displayPlayCounts", {
+    isrc: track.isrc,
+    mode,
+    showTotal,
+    showTrending,
+    totalValue: totalCurrentPlayCountAbbreviated,
+    trendingValue: totalWeeklyChangePercentageFormatted,
+  });
+
+  row.appendChild(totalPlaysCell);
+  row.appendChild(trendingCell);
 }
 
 function createServicePlaylistTableRow(
   track: Track,
   serviceName: string,
   displayRank?: number,
+  playCountMode: PlayCountDisplayMode = "both",
 ): HTMLTableRowElement {
   const row = document.createElement("tr");
 
@@ -380,13 +699,13 @@ function createServicePlaylistTableRow(
 
   // Check if this is the total views page - if so, show play counts instead of just external links
   if (serviceName === SERVICE_NAMES.TOTAL) {
-    // Add spacer column to match PLAYCOUNT table structure
+    // Add spacer column to match TOTAL_PLAYS table structure
     const spacerCell = document.createElement("td");
     spacerCell.className = "spacer";
     row.appendChild(spacerCell);
 
     // Add play count columns
-    displayPlayCounts(track, row);
+    displayPlayCounts(track, row, playCountMode);
 
     // Add seen-on column (service icons)
     const seenOnCell = document.createElement("td");
@@ -425,6 +744,10 @@ function createServicePlaylistTableRow(
 }
 
 function displaySources(cell: HTMLTableCellElement, track: Track): void {
+  if (shouldHideSourceIcons(stateManager.getCurrentColumn())) {
+    return;
+  }
+
   const sourcesContainer = document.createElement("div");
   sourcesContainer.className = "track-sources";
 
@@ -564,32 +887,32 @@ export function sortTable(column: string, order: string): void {
   // Update the module-level data so subsequent operations work correctly
   playlistData = sortedData;
 
-  renderPlaylistTracks(
-    sortedData,
-    "main-playlist-data-placeholder",
-    SERVICE_NAMES.TUNEMELD,
-  );
-
-  // Hide shimmer after sorting/rendering is complete
-  requestAnimationFrame(() => {
-    hideShimmerLoaders();
-  });
+  // Only render if not initial load (shimmer is showing)
+  if (!stateManager.isInitialLoad()) {
+    renderPlaylistTracks(
+      sortedData,
+      "main-playlist-data-placeholder",
+      SERVICE_NAMES.TUNEMELD,
+    );
+  }
 }
 
 function getPlayCount(track: Track, platform: string): number | null {
-  // Get play count data directly from track object
+  // Get play count data from lookup map
+  const playCountData = getPlayCountForTrack(track);
+
   if (platform === SERVICE_NAMES.YOUTUBE) {
-    return track.youtubeCurrentPlayCount ?? null;
+    return playCountData.youtubeCurrentPlayCount ?? null;
   } else if (platform === SERVICE_NAMES.SPOTIFY) {
-    return track.spotifyCurrentPlayCount ?? null;
+    return playCountData.spotifyCurrentPlayCount ?? null;
   } else if (
     platform === "Total Plays" ||
     platform === SERVICE_NAMES.TOTAL ||
     platform === "total-plays"
   ) {
-    return track.totalCurrentPlayCount ?? null;
+    return playCountData.totalCurrentPlayCount ?? null;
   } else if (platform === "Trending" || platform === "trending") {
-    return track.totalWeeklyChangePercentage ?? null;
+    return playCountData.totalWeeklyChangePercentage ?? null;
   }
   return null;
 }

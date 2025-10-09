@@ -5,8 +5,64 @@
 
 import { SERVICE_NAMES } from "@/config/constants";
 import { graphqlClient } from "@/services/graphql-client";
+import { debugLog } from "@/config/config";
 import { stateManager } from "@/state/StateManager";
 import type { Playlist } from "@/types/index";
+
+const headerDebug = (message: string, meta?: unknown) => {
+  debugLog("Header", message, meta);
+};
+
+const serviceHeaderLoadTracker = (() => {
+  let expected = 0;
+  const loaded = new Set<string>();
+
+  function log(message: string, meta?: Record<string, unknown>): void {
+    headerDebug(message, meta);
+  }
+
+  return {
+    init(total: number): void {
+      expected = total;
+      loaded.clear();
+      log("service header tracker initialized", { expected });
+      if (expected === 0) {
+        this.flush();
+      }
+    },
+    markLoaded(serviceId: string): void {
+      if (loaded.has(serviceId)) {
+        return;
+      }
+      loaded.add(serviceId);
+      log("service header loaded", {
+        serviceId,
+        loadedCount: loaded.size,
+        expected,
+      });
+      if (loaded.size >= expected && expected > 0) {
+        this.flush();
+      }
+    },
+    flush(): void {
+      log("all service headers loaded", { loadedCount: loaded.size, expected });
+      hideAllServiceShimmers();
+      stateManager.markLoaded("serviceDataLoaded");
+    },
+  };
+})();
+
+function hideAllServiceShimmers(): void {
+  document.querySelectorAll(".service").forEach((service) => {
+    const overlay = service.querySelector(
+      ".loading-overlay",
+    ) as HTMLElement | null;
+    if (overlay) {
+      overlay.classList.remove("active");
+    }
+  });
+  stateManager.hideShimmer("services");
+}
 
 // Extend Window interface for HLS
 declare global {
@@ -76,9 +132,12 @@ function updateTuneMeldDescription(
   }
 }
 
-function displayAppleMusicVideo(url: string): void {
+function displayAppleMusicVideo(url: string, onReady?: () => void): void {
   const videoContainer = document.getElementById("apple_music-video-container");
-  if (!videoContainer) return;
+  if (!videoContainer) {
+    onReady?.();
+    return;
+  }
 
   cleanupExistingVideos();
 
@@ -88,6 +147,13 @@ function displayAppleMusicVideo(url: string): void {
   const video = document.getElementById(
     "apple_music-video",
   ) as HTMLVideoElement | null;
+
+  let notifiedReady = false;
+  const notifyReady = (): void => {
+    if (notifiedReady) return;
+    notifiedReady = true;
+    onReady?.();
+  };
 
   if (video && typeof Hls !== "undefined" && Hls.isSupported()) {
     const hls = new Hls();
@@ -105,7 +171,9 @@ function displayAppleMusicVideo(url: string): void {
           }
         });
       }
+      notifyReady();
     });
+    video.addEventListener("loadeddata", notifyReady, { once: true });
   } else if (video && video.canPlayType("application/vnd.apple.mpegurl")) {
     video.src = url;
     video.addEventListener("canplay", function () {
@@ -119,7 +187,12 @@ function displayAppleMusicVideo(url: string): void {
           }
         });
       }
+      notifyReady();
     });
+    video.addEventListener("loadeddata", notifyReady, { once: true });
+  } else {
+    // If video element cannot play HLS, fall back immediately
+    notifyReady();
   }
 }
 
@@ -312,6 +385,31 @@ function toggleDescriptionExpand(event: Event): void {
   }
 }
 
+function preloadCoverImage(
+  coverUrl: string,
+  onLoad: () => void,
+  onError: () => void,
+): void {
+  if (!coverUrl) {
+    onError();
+    return;
+  }
+
+  const image = new Image();
+  image.onload = onLoad;
+  image.onerror = onError;
+  image.src = coverUrl;
+}
+
+function getServiceOverlay(
+  serviceContainer: HTMLElement | null,
+): HTMLElement | null {
+  if (!serviceContainer) return null;
+  return serviceContainer.querySelector(
+    ".loading-overlay",
+  ) as HTMLElement | null;
+}
+
 function updateServiceHeaderArt(
   service: string,
   coverUrl: string,
@@ -323,7 +421,15 @@ function updateServiceHeaderArt(
   serviceIconUrl: string,
   displayCallback?: ((data: any) => void) | null,
 ): void {
-  const elementPrefix = service || service.toLowerCase();
+  headerDebug("updateServiceHeaderArt", {
+    service,
+    coverUrl,
+    playlistUrl,
+    playlistName,
+  });
+  const elementPrefix = service
+    ? service.toLowerCase().replace(/\s+/g, "_")
+    : "";
 
   const imagePlaceholder = document.getElementById(
     `${elementPrefix}-image-placeholder`,
@@ -334,11 +440,44 @@ function updateServiceHeaderArt(
   const coverLinkElement = document.getElementById(
     `${elementPrefix}-cover-link`,
   );
+  const serviceContainer = document.getElementById(elementPrefix);
+  const overlay = getServiceOverlay(serviceContainer);
+
+  if (overlay) {
+    overlay.classList.add("active");
+  }
 
   if (coverUrl.endsWith(".m3u8") && service === SERVICE_NAMES.APPLE_MUSIC) {
-    displayAppleMusicVideo(coverUrl);
-  } else if (imagePlaceholder) {
-    imagePlaceholder.style.backgroundImage = `url('${coverUrl}')`;
+    displayAppleMusicVideo(coverUrl, () => {
+      serviceHeaderLoadTracker.markLoaded(elementPrefix);
+    });
+  } else if (imagePlaceholder && coverUrl) {
+    const pendingToken = `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+    imagePlaceholder.dataset.pendingCover = pendingToken;
+
+    preloadCoverImage(
+      coverUrl,
+      () => {
+        if (imagePlaceholder.dataset.pendingCover !== pendingToken) {
+          return;
+        }
+        imagePlaceholder.dataset.pendingCover = "";
+        imagePlaceholder.style.backgroundImage = `url("${coverUrl}")`;
+        serviceHeaderLoadTracker.markLoaded(elementPrefix);
+      },
+      () => {
+        if (imagePlaceholder.dataset.pendingCover !== pendingToken) {
+          return;
+        }
+        imagePlaceholder.dataset.pendingCover = "";
+        console.warn(
+          `Failed to load service header image for ${service}: ${coverUrl}`,
+        );
+        serviceHeaderLoadTracker.markLoaded(elementPrefix);
+      },
+    );
+  } else {
+    serviceHeaderLoadTracker.markLoaded(elementPrefix);
   }
 
   if (coverLinkElement) {
@@ -391,6 +530,8 @@ export async function updatePlaylistHeader(
     );
     updateTuneMeldDescription(tuneMeldPlaylist?.playlistCoverDescriptionText);
 
+    serviceHeaderLoadTracker.init(serviceOrder.length);
+
     serviceOrder.forEach((serviceName) => {
       const playlist = playlists.find((p) => p.serviceName === serviceName);
       if (playlist) {
@@ -407,6 +548,10 @@ export async function updatePlaylistHeader(
         );
       } else {
         console.warn(`No playlist data found for service: ${serviceName}`);
+        const elementPrefix = serviceName
+          ? serviceName.toLowerCase().replace(/\s+/g, "_")
+          : "";
+        serviceHeaderLoadTracker.markLoaded(elementPrefix);
       }
     });
   } catch (error) {
@@ -434,6 +579,8 @@ export function updatePlaylistHeaderSync(
   );
   updateTuneMeldDescription(tuneMeldPlaylist?.playlistCoverDescriptionText);
 
+  serviceHeaderLoadTracker.init(serviceOrder.length);
+
   serviceOrder.forEach((serviceName) => {
     const playlist = playlists.find((p) => p.serviceName === serviceName);
     if (playlist) {
@@ -448,6 +595,12 @@ export function updatePlaylistHeaderSync(
         playlist.serviceIconUrl || "",
         displayServiceCallback,
       );
+    } else {
+      console.warn(`No playlist data found for service: ${serviceName}`);
+      const elementPrefix = serviceName
+        ? serviceName.toLowerCase().replace(/\s+/g, "_")
+        : "";
+      serviceHeaderLoadTracker.markLoaded(elementPrefix);
     }
   });
 }

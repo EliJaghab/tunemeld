@@ -1,14 +1,21 @@
 // @ts-ignore: Navigo is imported from CDN and has its own types
 import Navigo from "https://cdn.jsdelivr.net/npm/navigo@8.11.1/+esm";
 import { updateGenreData } from "@/utils/selectors";
+import { debugLog } from "@/config/config";
 import { stateManager } from "@/state/StateManager";
 import {
   setupBodyClickListener,
   openTrackFromUrl,
 } from "@/components/servicePlayer";
 import { errorHandler } from "@/utils/error-handler";
+import { showInitialShimmer } from "@/components/shimmer";
 import { graphqlClient } from "@/services/graphql-client";
 import type { Genre, Rank, Track } from "@/types";
+
+const ROUTER_LOG_PREFIX = "[Router]";
+const routerDebug = (message: string, meta?: unknown) => {
+  debugLog("Router", message, meta);
+};
 
 // Define track info interface for page title updates
 interface TrackInfo {
@@ -38,10 +45,12 @@ class AppRouter {
   }
 
   async initialize(): Promise<void> {
+    routerDebug("initialize: start");
     errorHandler.setRetryCallback(() => this.initialize());
 
     try {
       const staticConfig = await graphqlClient.getStaticConfig();
+      routerDebug("initialize: static config fetched");
 
       // Store in router for routing logic
       this.genres = {
@@ -79,6 +88,7 @@ class AppRouter {
 
       this.setupRoutes();
       this.router.resolve();
+      routerDebug("initialize: end");
     } catch (error) {
       console.error("Router initialization failed:", error);
       throw error;
@@ -156,7 +166,6 @@ class AppRouter {
     this.updatePageTitle(genre);
     this.updateFavicon(genre);
     this.syncGenreButtons(genre);
-    // IMPORTANT: Sync rank state BEFORE loading content (which shows shimmer)
     this.syncRankState(rank);
     this.syncTrackState(player, isrc);
     await this.loadGenreContent(genre, needsFullUpdate);
@@ -236,14 +245,37 @@ class AppRouter {
     genre: string,
     fullUpdate: boolean = true,
   ): Promise<void> {
+    routerDebug("loadGenreContent: start", { genre, fullUpdate });
+    // Show initial shimmer only on first app load
+    const wasInitialLoad = this.isInitialLoad;
+    routerDebug("loadGenreContent:start", {
+      genre,
+      fullUpdate,
+      wasInitialLoad,
+    });
     if (this.isInitialLoad) {
+      routerDebug("loadGenreContent: initial load, showing shimmer");
+      showInitialShimmer();
+
+      // Make content visible now that shimmer is showing
+      const mainContent = document.getElementById("main-content");
+      if (mainContent) {
+        mainContent.style.visibility = "visible";
+      }
+      document.body.style.opacity = "1";
+
       this.isInitialLoad = false;
     }
 
-    await updateGenreData(genre, fullUpdate);
+    await updateGenreData(genre, fullUpdate, wasInitialLoad);
     if (fullUpdate) {
       setupBodyClickListener(genre);
     }
+    routerDebug("loadGenreContent: end", { genre, fullUpdate });
+    routerDebug("loadGenreContent:end", {
+      genre,
+      fullUpdate,
+    });
   }
 
   navigateToGenre(genre: string, rank: string | null = null): void {

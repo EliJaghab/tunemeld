@@ -79,9 +79,9 @@
   --glass-highlight-strong: rgba(255, 255, 255, 0.25);
   --glass-overlay-light: rgba(0, 0, 0, 0.08);
   --glass-overlay-medium: rgba(0, 0, 0, 0.15);
-  --glass-blur-light: blur(2px);
-  --glass-blur-medium: blur(2px);
-  --glass-blur-heavy: blur(2px);
+  --glass-blur-light: blur(20px);
+  --glass-blur-medium: blur(40px);
+  --glass-blur-heavy: blur(60px);
 
   /* Border Radius */
   --radius-large: 10px;
@@ -155,7 +155,7 @@
     var(--space-xl) * 2
   ); /* mobile button skeleton height */
   --shimmer-service-text-height: calc(
-    var(--space-lg) * 3
+    var(--space-lg) * 2
   ); /* service text skeleton height */
 
   /* Shimmer component definitions - all use consistent height */
@@ -460,11 +460,20 @@ body.dark-mode {
   bottom: 0;
   background-color: var(--container-background);
   z-index: 10;
-  display: none;
+  display: block;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
 }
 
 .loading-overlay.active {
-  display: block;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.loading-overlay.fade-out {
+  opacity: 0;
+  pointer-events: none;
 }
 
 .loading-overlay.flex {
@@ -477,6 +486,7 @@ body.dark-mode {
 
 /* Service-specific shimmer components */
 .loading-overlay-service {
+  display: flex;
   flex-direction: column;
   align-items: center;
   padding: 0;
@@ -501,8 +511,6 @@ body.dark-mode {
 /* Playlist-specific shimmer components */
 .loading-overlay-playlist {
   flex-direction: column;
-  border: none;
-  outline: none;
 }
 
 .loading-overlay-playlist.active {

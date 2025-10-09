@@ -9,10 +9,8 @@ import {
   SHIMMER_TYPES,
   type ShimmerType,
 } from "@/config/constants";
-import {
-  createShimmerRowFromStructure,
-  getTableStructure,
-} from "@/config/tableStructures";
+import { debugLog } from "@/config/config";
+import { createShimmerRowFromStructure } from "@/config/tableStructures";
 
 /**
  * SHIMMER COLUMN CONFIGURATIONS
@@ -22,6 +20,188 @@ import {
  */
 
 const SHIMMER_ROW_COUNT = 20;
+const shimmerDebug = (message: string, meta?: unknown) => {
+  debugLog("Shimmer", message, meta);
+};
+const SHIMMER_LOG_PREFIX = "[Shimmer]";
+
+export const trackLoadLog = (
+  phase: string,
+  meta?: Record<string, unknown>,
+): void => {
+  const timestamp = new Date().toISOString();
+  console.log(`[TrackLoad ${timestamp}] ${phase}`, meta || {});
+};
+
+let tunemeldTrackShimmerActive = false;
+let trackShimmerObserver: MutationObserver | null = null;
+
+export const markTunemeldTrackShimmerHidden = (
+  meta?: Record<string, unknown>,
+): void => {
+  if (tunemeldTrackShimmerActive) {
+    tunemeldTrackShimmerActive = false;
+    trackLoadLog("Tunemeld track shimmer hidden", meta);
+  }
+};
+
+function attachTrackShimmerObserver(placeholder: HTMLElement): void {
+  if (trackShimmerObserver) {
+    return;
+  }
+
+  trackShimmerObserver = new MutationObserver(() => {
+    if (!tunemeldTrackShimmerActive) {
+      return;
+    }
+
+    const remainingShimmer = placeholder.querySelector(".shimmer");
+    if (!remainingShimmer || placeholder.childElementCount === 0) {
+      markTunemeldTrackShimmerHidden({
+        reason: "mutation-cleared",
+        childCount: placeholder.childElementCount,
+        hasShimmer: !!remainingShimmer,
+      });
+    }
+  });
+
+  trackShimmerObserver.observe(placeholder, {
+    childList: true,
+    subtree: true,
+  });
+}
+
+interface ShimmerOptions {
+  includeServices?: boolean;
+  includePlaylist?: boolean;
+  includeHeaderAndControls?: boolean;
+  isInitialLoad?: boolean;
+}
+
+let playlistRevealPromise: Promise<void> | null = null;
+const inlineShimmerRegistry = new Map<
+  HTMLElement,
+  { placeholder: HTMLElement; originalDisplay: string }
+>();
+
+function determinePlaceholderDisplay(element: HTMLElement): string {
+  const computedDisplay = window.getComputedStyle(element).display;
+  if (computedDisplay === "inline" || computedDisplay === "inline-block") {
+    return "inline-block";
+  }
+  return "block";
+}
+
+function createInlinePlaceholder(
+  element: HTMLElement,
+  className: string,
+  fallbackWidth?: string,
+  fallbackHeight?: string,
+): HTMLElement | null {
+  const parent = element.parentElement;
+  if (!parent) {
+    console.warn(
+      SHIMMER_LOG_PREFIX,
+      "createInlinePlaceholder: element without parent",
+      element,
+    );
+    return null;
+  }
+
+  const placeholder = createElement(
+    "span",
+    `shimmer inline-shimmer ${className}`,
+  );
+  const display = determinePlaceholderDisplay(element);
+  placeholder.style.display = display;
+
+  const rect = element.getBoundingClientRect();
+  const width = rect.width || (fallbackWidth ? parseFloat(fallbackWidth) : 0);
+  const height =
+    rect.height || (fallbackHeight ? parseFloat(fallbackHeight) : 0);
+
+  if (width) {
+    placeholder.style.width = `${width}px`;
+  } else if (fallbackWidth) {
+    placeholder.style.width = fallbackWidth;
+  }
+
+  if (height) {
+    placeholder.style.height = `${height}px`;
+  } else if (fallbackHeight) {
+    placeholder.style.height = fallbackHeight;
+  }
+
+  parent.insertBefore(placeholder, element);
+  return placeholder;
+}
+
+function applyInlineShimmer(
+  element: HTMLElement,
+  className: string,
+  fallbackWidth?: string,
+  fallbackHeight?: string,
+): void {
+  if (inlineShimmerRegistry.has(element)) {
+    return;
+  }
+
+  const placeholder = createInlinePlaceholder(
+    element,
+    className,
+    fallbackWidth,
+    fallbackHeight,
+  );
+  if (!placeholder) {
+    return;
+  }
+
+  inlineShimmerRegistry.set(element, {
+    placeholder,
+    originalDisplay: element.style.display,
+  });
+
+  element.style.display = "none";
+  shimmerDebug("applyInlineShimmer", { element, className });
+}
+
+function clearInlineShimmer(element: HTMLElement | null): void {
+  if (!element) return;
+
+  const record = inlineShimmerRegistry.get(element);
+  if (!record) {
+    return;
+  }
+
+  record.placeholder.remove();
+  element.style.display = record.originalDisplay || "";
+  inlineShimmerRegistry.delete(element);
+  shimmerDebug("clearInlineShimmer", { element });
+}
+
+export function registerPlaylistReveal(promise: Promise<void> | null): void {
+  if (!promise) {
+    shimmerDebug("registerPlaylistReveal: cleared");
+    playlistRevealPromise = null;
+    return;
+  }
+
+  shimmerDebug("registerPlaylistReveal: registered promise");
+  playlistRevealPromise = promise.finally(() => {
+    shimmerDebug("playlistRevealPromise: resolved");
+  });
+}
+
+function consumePlaylistReveal(): Promise<void> | null {
+  const promise = playlistRevealPromise;
+  playlistRevealPromise = null;
+  if (promise) {
+    shimmerDebug("consumePlaylistReveal: promise consumed");
+  } else {
+    shimmerDebug("consumePlaylistReveal: no pending promise");
+  }
+  return promise;
+}
 
 // Helper functions
 function createElement(tag: string, className?: string): HTMLElement {
@@ -39,181 +219,417 @@ function createShimmerTableRow(
   return createShimmerRowFromStructure(shimmerType);
 }
 
-function createShimmerTable(shimmerType: ShimmerType): HTMLTableElement {
-  const table = createElement(
-    "table",
-    "playlist-table playlist-table-shimmer",
-  ) as HTMLTableElement;
-  const tbody = createElement("tbody") as HTMLTableSectionElement;
+function resetShimmerAnimations(container: ParentNode): void {
+  container.querySelectorAll<HTMLElement>(".shimmer").forEach((element) => {
+    element.classList.remove("morphing-out");
+    // Force reflow so future animations restart cleanly
+    void element.offsetWidth;
+  });
 
-  for (let i = 0; i < SHIMMER_ROW_COUNT; i++) {
-    const row = createShimmerTableRow(shimmerType);
-    if (row) {
-      tbody.appendChild(row);
-    }
+  if (container instanceof HTMLElement) {
+    container.classList.remove("fade-out");
   }
-
-  table.appendChild(tbody);
-  return table;
 }
 
-function createPlaylistShimmer(
-  includeServiceHeader: boolean = true,
-  shimmerType: ShimmerType = SHIMMER_TYPES.TUNEMELD,
-): HTMLDivElement {
+function createServiceShimmer(): HTMLDivElement {
   const overlay = createElement(
     "div",
-    "loading-overlay loading-overlay-playlist",
+    "loading-overlay loading-overlay-service",
   ) as HTMLDivElement;
+  const imageShimmer = createElement("div", "shimmer shimmer-service-image");
+  const textShimmer = createElement("div", "shimmer shimmer-service-text");
 
-  // Include service header shimmer when needed (genre changes)
-  if (includeServiceHeader) {
-    // Create service header shimmer (shows service icons/metadata)
-    const headerShimmer = createElement("div", "playlist-header-shimmer");
-    const titleRow = createElement("div", "playlist-title-shimmer");
-
-    const logoShimmer = createElement("div", "shimmer shimmer-playlist-logo");
-    const titleShimmer = createElement("div", "shimmer shimmer-playlist-title");
-    const descShimmer = createElement("div", "shimmer shimmer-playlist-desc");
-
-    titleRow.appendChild(logoShimmer);
-    titleRow.appendChild(titleShimmer);
-    titleRow.appendChild(descShimmer);
-
-    headerShimmer.appendChild(titleRow);
-    overlay.appendChild(headerShimmer);
-
-    // Genre controls - using same structure as actual HTML
-    const genreSection = createElement("div", "control-group");
-    const genreLabel = createElement("label", "control-label shimmer");
-    const genreButtons = createElement("div", "genre-controls");
-
-    for (let i = 0; i < 4; i++) {
-      genreButtons.appendChild(createElement("div", "sort-button shimmer"));
-    }
-
-    genreSection.appendChild(genreLabel);
-    genreSection.appendChild(genreButtons);
-    overlay.appendChild(genreSection);
-
-    // Ranking controls - using same structure as actual HTML
-    const rankSection = createElement("div", "control-group");
-    const rankLabel = createElement("label", "control-label shimmer");
-    const rankButtons = createElement("div", "sort-controls");
-
-    for (let i = 0; i < 3; i++) {
-      rankButtons.appendChild(createElement("div", "sort-button shimmer"));
-    }
-
-    rankSection.appendChild(rankLabel);
-    rankSection.appendChild(rankButtons);
-    overlay.appendChild(rankSection);
-  }
-
-  // Always include track shimmer (table rows)
-  const tableContainer = createElement("div", "shimmer-table-container");
-  tableContainer.appendChild(createShimmerTable(shimmerType));
-  overlay.appendChild(tableContainer);
+  overlay.appendChild(imageShimmer);
+  overlay.appendChild(textShimmer);
 
   return overlay;
 }
 
-export function showShimmerLoaders(
-  isInitialLoad: boolean = false,
-  forceShimmerType?: ShimmerType,
-  isGenreChange: boolean = false,
-): void {
-  // Use explicit shimmer type if provided, otherwise derive from current column
-  let shimmerType: ShimmerType;
-  if (forceShimmerType) {
-    shimmerType = forceShimmerType;
-    stateManager.setShimmerType(shimmerType);
+function showShimmerLoaders(options: ShimmerOptions = {}): void {
+  const {
+    includeServices = true,
+    includePlaylist = true,
+    includeHeaderAndControls = false,
+    isInitialLoad = false,
+  } = options;
+
+  shimmerDebug("showShimmerLoaders", {
+    includeServices,
+    includePlaylist,
+    includeHeaderAndControls,
+    isInitialLoad,
+  });
+
+  if (includeServices) {
+    stateManager.showShimmer("services", isInitialLoad);
   } else {
+    stateManager.hideShimmer("services");
+  }
+
+  if (includePlaylist) {
+    stateManager.showShimmer("playlist", isInitialLoad);
     stateManager.setShimmerTypeFromColumn(stateManager.getCurrentColumn());
-    shimmerType = stateManager.getShimmerType() as ShimmerType;
-  }
-
-  const mainPlaylist = document.querySelector(".main-playlist");
-  if (!mainPlaylist) return;
-
-  const playlistHeader = mainPlaylist.querySelector(".playlist-header");
-  const playlistContent = mainPlaylist.querySelector(".playlist-content");
-  if (!playlistContent) return;
-
-  // Remove any existing shimmer
-  const existingShimmer = playlistContent.querySelector(
-    ".loading-overlay-playlist",
-  );
-  if (existingShimmer) {
-    existingShimmer.remove();
-  }
-
-  // Always hide the table for any shimmer
-  const playlistTable = playlistContent.querySelector(".playlist-table");
-  playlistTable?.classList.add("hidden");
-
-  // Decide what to shimmer based on the type of change
-  if (isInitialLoad) {
-    // Hide everything on initial load
-    playlistHeader?.classList.add("hidden");
-    const controlGroups = playlistContent.querySelectorAll(".control-group");
-    controlGroups.forEach((group) => group.classList.add("hidden"));
-
-    // Show full shimmer (header + controls + table)
-    const shimmer = createPlaylistShimmer(true, shimmerType);
-    playlistContent.appendChild(shimmer);
-  } else if (isGenreChange) {
-    // Genre change: show service header shimmer and table shimmer
-    const shimmer = createPlaylistShimmer(true, shimmerType);
-    playlistContent.appendChild(shimmer);
   } else {
-    // Rank switch: header stays visible, only table shimmers
-    // Show table shimmer only
-    const shimmer = createPlaylistShimmer(false, shimmerType);
-    playlistContent.appendChild(shimmer);
+    stateManager.hideShimmer("playlist");
+  }
+
+  if (includeServices) {
+    document.querySelectorAll(".service").forEach((service) => {
+      let overlay = service.querySelector(".loading-overlay");
+      if (!overlay) {
+        overlay = createServiceShimmer();
+        service.appendChild(overlay);
+      }
+      resetShimmerAnimations(overlay);
+      overlay.classList.remove("fade-out");
+      overlay.classList.add("active");
+      console.log(
+        SHIMMER_LOG_PREFIX,
+        "service shimmer active",
+        (service as HTMLElement).id || "unknown-service",
+      );
+    });
+  }
+
+  if (includePlaylist) {
+    const shimmerType = stateManager.getShimmerType() as ShimmerType;
+    injectShimmerIntoPlaceholders(shimmerType, includeHeaderAndControls);
   }
 }
 
-export function showServiceHeaderAndTrackShimmer(): void {
-  // Shows shimmer for service header and tracks (used during genre changes and initial load)
-  const isInitial = stateManager.isInitialLoad();
-  const currentShimmerType = stateManager.getShimmerType();
-  showShimmerLoaders(isInitial, currentShimmerType, !isInitial);
-
-  if (isInitial) {
-    stateManager.markInitialLoadComplete();
-  }
+export function showInitialShimmer(): void {
+  shimmerDebug("showInitialShimmer: start");
+  // Reset loading states to ensure proper shimmer coordination
+  stateManager.resetLoadingState();
+  showShimmerLoaders({
+    includeServices: true,
+    includePlaylist: true,
+    includeHeaderAndControls: true,
+    isInitialLoad: true,
+  });
+  shimmerDebug("showInitialShimmer: end");
 }
 
-export function showTrackShimmer(): void {
-  // Shows shimmer for tracks only (used during rank changes)
-  const currentShimmerType = stateManager.getShimmerType();
-  showShimmerLoaders(false, currentShimmerType, false);
+export function showGenreSwitchShimmer(): void {
+  showShimmerLoaders({
+    includeServices: true,
+    includePlaylist: true,
+    includeHeaderAndControls: false,
+  });
+  shimmerDebug("showGenreSwitchShimmer invoked");
+}
+
+export { showGenreSwitchShimmer as showServiceHeaderAndTrackShimmer };
+
+export function showRankSwitchShimmer(): void {
+  showShimmerLoaders({
+    includeServices: false,
+    includePlaylist: true,
+    includeHeaderAndControls: false,
+  });
+  shimmerDebug("showRankSwitchShimmer invoked");
+}
+
+function injectShimmerIntoPlaceholders(
+  shimmerType: ShimmerType,
+  includeHeaderAndControls: boolean,
+): void {
+  if (!stateManager.getShimmerState("playlist")) {
+    console.log(
+      SHIMMER_LOG_PREFIX,
+      "injectShimmerIntoPlaceholders skipped (playlist shimmer inactive)",
+    );
+    return;
+  }
+
+  shimmerDebug("injectShimmerIntoPlaceholders", {
+    shimmerType,
+    includeHeaderAndControls,
+  });
+
+  // Main playlist tracks
+  const mainPlaylistPlaceholder = document.getElementById(
+    "main-playlist-data-placeholder",
+  );
+  if (mainPlaylistPlaceholder) {
+    attachTrackShimmerObserver(mainPlaylistPlaceholder);
+    mainPlaylistPlaceholder.innerHTML = "";
+    mainPlaylistPlaceholder.setAttribute("data-rendered", "false");
+    const currentColumn = stateManager.getCurrentColumn();
+    const hideServiceIconShimmer =
+      shimmerType === SHIMMER_TYPES.TOTAL_PLAYS &&
+      currentColumn !== TUNEMELD_RANK_FIELD;
+
+    for (let i = 0; i < SHIMMER_ROW_COUNT; i++) {
+      const row = createShimmerTableRow(shimmerType);
+      if (row) {
+        if (hideServiceIconShimmer) {
+          const seenOnCell = row.querySelector("td.seen-on");
+          if (seenOnCell) {
+            row.removeChild(seenOnCell);
+          }
+        }
+        mainPlaylistPlaceholder.appendChild(row);
+      }
+    }
+    console.log(
+      SHIMMER_LOG_PREFIX,
+      "main playlist shimmer rows injected",
+      mainPlaylistPlaceholder.childElementCount,
+    );
+
+    if (!tunemeldTrackShimmerActive) {
+      tunemeldTrackShimmerActive = true;
+      trackLoadLog("Tunemeld track shimmer shown", {
+        rowCount: mainPlaylistPlaceholder.childElementCount,
+        isInitialLoad: stateManager.isInitialLoad(),
+        shimmerType,
+      });
+    }
+  }
+
+  // Service playlist tracks (for initial load)
+  if (includeHeaderAndControls) {
+    const servicePlaceholders = [
+      "soundcloud-data-placeholder",
+      "apple_music-data-placeholder",
+      "spotify-data-placeholder",
+    ];
+
+    servicePlaceholders.forEach((id) => {
+      const placeholder = document.getElementById(id);
+      if (placeholder) {
+        placeholder.innerHTML = "";
+        for (let i = 0; i < 10; i++) {
+          const row = createShimmerTableRow(SHIMMER_TYPES.TUNEMELD);
+          if (row) {
+            placeholder.appendChild(row);
+          }
+        }
+        console.log(
+          SHIMMER_LOG_PREFIX,
+          `service shimmer rows injected for ${id}`,
+          placeholder.childElementCount,
+        );
+      }
+    });
+  }
+
+  // Handle header and controls shimmer for initial load
+  if (includeHeaderAndControls) {
+    // Shimmer for TuneMeld logo
+    const tuneMeldLogo = document.querySelector(
+      ".main-playlist .source-icon",
+    ) as HTMLImageElement;
+    if (tuneMeldLogo) {
+      applyInlineShimmer(tuneMeldLogo, "shimmer-inline-logo", "24px", "24px");
+    }
+
+    // Shimmer for Genre label
+    const genreLabel = document.querySelector(
+      ".control-group:has(#genre-controls) .control-label",
+    );
+    if (genreLabel && genreLabel.textContent === "Genre") {
+      const labelShimmer = createElement("span", "shimmer");
+      labelShimmer.style.width = "60px";
+      labelShimmer.style.height = "20px";
+      labelShimmer.style.display = "inline-block";
+      genreLabel.innerHTML = "";
+      genreLabel.appendChild(labelShimmer);
+    }
+
+    // Create shimmer elements for genre buttons
+    const genreControlsContainer = document.getElementById("genre-controls");
+    if (
+      genreControlsContainer &&
+      genreControlsContainer.children.length === 0
+    ) {
+      for (let i = 0; i < 4; i++) {
+        const shimmerButton = createElement("div", "sort-button shimmer");
+        shimmerButton.style.width = "80px";
+        shimmerButton.style.height = "32px";
+        genreControlsContainer.appendChild(shimmerButton);
+      }
+    }
+
+    // Shimmer for Ranking label
+    const rankLabel = document.querySelector(
+      ".control-group:has(#sort-controls) .control-label",
+    );
+    if (rankLabel && rankLabel.textContent === "Ranking") {
+      const labelShimmer = createElement("span", "shimmer");
+      labelShimmer.style.width = "80px";
+      labelShimmer.style.height = "20px";
+      labelShimmer.style.display = "inline-block";
+      rankLabel.innerHTML = "";
+      rankLabel.appendChild(labelShimmer);
+    }
+
+    // Create shimmer elements for rank buttons
+    const sortControlsContainer = document.getElementById("sort-controls");
+    if (sortControlsContainer && sortControlsContainer.children.length === 0) {
+      for (let i = 0; i < 3; i++) {
+        const shimmerButton = createElement("div", "sort-button shimmer");
+        shimmerButton.style.width = "100px";
+        shimmerButton.style.height = "32px";
+        sortControlsContainer.appendChild(shimmerButton);
+      }
+    }
+
+    // Create shimmer for playlist title/description
+    const playlistTitle = document.getElementById("tunemeld-playlist-title");
+    const playlistDesc = document.getElementById("playlist-description");
+
+    if (playlistTitle) {
+      applyInlineShimmer(
+        playlistTitle as HTMLElement,
+        "shimmer-inline-title",
+        "140px",
+        "24px",
+      );
+    }
+
+    if (playlistDesc) {
+      applyInlineShimmer(
+        playlistDesc as HTMLElement,
+        "shimmer-inline-description",
+        "220px",
+        "20px",
+      );
+    }
+  }
 }
 
 export function hideShimmerLoaders(): void {
-  stateManager.hideAllShimmers();
+  shimmerDebug("hideShimmerLoaders: start");
+  const initialLoad = stateManager.isInitialLoad();
+  const mainPlaceholder = document.getElementById(
+    "main-playlist-data-placeholder",
+  );
+  const shouldRenderCached =
+    initialLoad &&
+    !!mainPlaceholder &&
+    mainPlaceholder.getAttribute("data-rendered") !== "true";
 
-  const mainPlaylist = document.querySelector(".main-playlist");
-  if (!mainPlaylist) return;
+  shimmerDebug("hideShimmerLoaders: context", {
+    initialLoad,
+    shouldRenderCached,
+  });
 
-  const playlistHeader = mainPlaylist.querySelector(".playlist-header");
-  const playlistContent = mainPlaylist.querySelector(".playlist-content");
-
-  // Show everything
-  playlistHeader?.classList.remove("hidden");
-
-  if (playlistContent) {
-    const controlGroups = playlistContent.querySelectorAll(".control-group");
-    const playlistTable = playlistContent.querySelector(".playlist-table");
-
-    controlGroups.forEach((group) => group.classList.remove("hidden"));
-    playlistTable?.classList.remove("hidden");
-
-    // Remove all shimmer overlays
-    const shimmerOverlay = playlistContent.querySelector(
-      ".loading-overlay-playlist",
+  if (shouldRenderCached) {
+    shimmerDebug(
+      "hideShimmerLoaders: initial load, rendering cached playlists",
     );
-    shimmerOverlay?.remove();
+    window.dispatchEvent(new CustomEvent("renderCachedPlaylists"));
+  }
+
+  const runFadeOut = (): void => {
+    shimmerDebug("hideShimmerLoaders: runFadeOut");
+    const shimmers = document.querySelectorAll(".shimmer");
+    shimmers.forEach((shimmer) => {
+      shimmer.classList.add("morphing-out");
+    });
+
+    const playlistOverlays = document.querySelectorAll<HTMLElement>(
+      ".loading-overlay-playlist.active, .loading-overlay-table.active",
+    );
+    playlistOverlays.forEach((overlay) => {
+      overlay.classList.add("fade-out");
+    });
+
+    setTimeout(() => {
+      shimmerDebug("hideShimmerLoaders: timeout cleanup");
+      stateManager.hideAllShimmers();
+
+      playlistOverlays.forEach((overlay) => {
+        overlay.classList.remove("active", "fade-out");
+        resetShimmerAnimations(overlay);
+      });
+
+      markTunemeldTrackShimmerHidden({ reason: "hide-shimmer-loaders" });
+
+      // Show the real TuneMeld logo
+      const tuneMeldLogo = document.querySelector(
+        ".main-playlist .source-icon",
+      ) as HTMLImageElement | null;
+      clearInlineShimmer(tuneMeldLogo);
+
+      const playlistTitle = document.getElementById(
+        "tunemeld-playlist-title",
+      ) as HTMLElement | null;
+      clearInlineShimmer(playlistTitle);
+
+      const playlistDesc = document.getElementById(
+        "playlist-description",
+      ) as HTMLElement | null;
+      clearInlineShimmer(playlistDesc);
+
+      const genreLabel = document.querySelector(
+        ".control-group:has(#genre-controls) .control-label",
+      );
+      if (genreLabel && genreLabel.querySelector(".shimmer")) {
+        genreLabel.innerHTML = "Genre";
+      }
+
+      const rankLabel = document.querySelector(
+        ".control-group:has(#sort-controls) .control-label",
+      );
+      if (rankLabel && rankLabel.querySelector(".shimmer")) {
+        rankLabel.innerHTML = "Ranking";
+      }
+
+      const genreControls = document.getElementById("genre-controls");
+      if (genreControls) {
+        genreControls.querySelectorAll(".shimmer").forEach((el) => el.remove());
+        const realButtons = document.getElementById("genre-controls-real");
+        if (realButtons) {
+          realButtons.style.display = "";
+          while (realButtons.firstChild) {
+            genreControls.appendChild(realButtons.firstChild);
+          }
+          realButtons.remove();
+        }
+      }
+
+      const sortControls = document.getElementById("sort-controls");
+      if (sortControls) {
+        sortControls.querySelectorAll(".shimmer").forEach((el) => el.remove());
+        const realButtons = document.getElementById("sort-controls-real");
+        if (realButtons) {
+          realButtons.style.display = "";
+          while (realButtons.firstChild) {
+            sortControls.appendChild(realButtons.firstChild);
+          }
+          realButtons.remove();
+        }
+      }
+
+      shimmerDebug("hideShimmerLoaders: end");
+    }, 300);
+  };
+
+  const revealPromise = consumePlaylistReveal();
+  if (revealPromise) {
+    revealPromise
+      .catch((error) => {
+        console.warn(
+          SHIMMER_LOG_PREFIX,
+          "hideShimmerLoaders: playlist reveal promise rejected",
+          error,
+        );
+      })
+      .finally(() => {
+        console.log(
+          SHIMMER_LOG_PREFIX,
+          "hideShimmerLoaders: reveal promise settled, running fade-out",
+        );
+        runFadeOut();
+      });
+  } else {
+    console.log(
+      SHIMMER_LOG_PREFIX,
+      "hideShimmerLoaders: no reveal promise, running fade-out immediately",
+    );
+    runFadeOut();
   }
 }

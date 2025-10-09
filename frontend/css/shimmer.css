@@ -13,12 +13,51 @@
   }
 }
 
+@keyframes morphOut {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
 /* Core shimmer class - apply to any element */
 .shimmer {
   border-radius: var(--border-radius-small);
   overflow: hidden;
   position: relative;
   background-color: var(--skeleton-color);
+  transition: opacity 0.3s ease-out;
+}
+
+.shimmer.morphing-out {
+  animation: morphOut 0.3s ease-out forwards;
+}
+
+.inline-shimmer {
+  display: inline-block;
+  position: relative;
+  border-radius: var(--border-radius-small);
+}
+
+.inline-shimmer.shimmer-inline-logo {
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  margin-right: var(--space-xs);
+}
+
+.inline-shimmer.shimmer-inline-title {
+  height: 24px;
+  min-width: 120px;
+  margin-right: var(--space-sm);
+}
+
+.inline-shimmer.shimmer-inline-description {
+  height: 20px;
+  min-width: 180px;
+  margin-left: var(--space-sm);
 }
 
 .shimmer::before {
@@ -47,17 +86,20 @@
   bottom: 0;
   background-color: var(--container-background);
   z-index: 10;
-  display: none;
-}
-
-/* Playlist shimmer is not absolutely positioned */
-.loading-overlay-playlist {
-  position: static;
   display: block;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
 }
 
 .loading-overlay.active {
-  display: block;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.loading-overlay.fade-out {
+  opacity: 0;
+  pointer-events: none;
 }
 
 .loading-overlay.flex {
@@ -70,6 +112,7 @@
 
 /* Service-specific shimmer components */
 .loading-overlay-service {
+  display: flex;
   flex-direction: column;
   align-items: center;
   padding: 0;
@@ -94,8 +137,6 @@
 /* Playlist-specific shimmer components */
 .loading-overlay-playlist {
   flex-direction: column;
-  border: none;
-  outline: none;
 }
 
 .loading-overlay-playlist.active {
@@ -135,47 +176,46 @@
   overflow: visible;
 }
 
-/* Playlist header shimmer */
-.playlist-header-shimmer {
+/* Playlist header shimmer - uses actual content classes */
+.loading-overlay-playlist .playlist-header {
   display: flex;
   flex-direction: column;
-  gap: var(--space-sm);
-  padding-bottom: var(--space-md);
 }
 
-.playlist-title-shimmer {
+.loading-overlay-playlist .playlist-title {
   display: flex;
   align-items: center;
   gap: var(--space-sm);
 }
 
-.shimmer-playlist-logo {
+.loading-overlay-playlist .source-icon.shimmer {
   width: var(--size-icon-sm);
   height: var(--size-icon-sm);
   border-radius: var(--border-radius-small);
 }
 
-.shimmer-playlist-title {
-  width: var(--shimmer-playlist-title-width);
-  height: var(--space-lg);
+/* Controls shimmer - uses actual content classes */
+.loading-overlay-playlist .control-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
 }
 
-.shimmer-playlist-desc {
-  width: var(--shimmer-playlist-desc-width);
-  height: var(--space-lg);
-}
-
-/* Shimmer-specific sizing for labels */
-.control-label.shimmer {
+.loading-overlay-playlist .control-label.shimmer {
   width: var(--shimmer-control-label-width);
   height: var(--space-lg);
-  display: block;
 }
 
-/* Shimmer-specific sizing for buttons */
-.sort-button.shimmer {
+.loading-overlay-playlist .genre-controls,
+.loading-overlay-playlist .sort-controls {
+  display: flex;
+  gap: var(--space-lg);
+}
+
+.loading-overlay-playlist .sort-button.shimmer {
   width: var(--shimmer-button-width);
   height: var(--shimmer-button-height);
+  border-radius: calc(var(--space-xl) + var(--space-xs));
 }
 
 /* Table shimmer */
@@ -250,7 +290,7 @@
     height: var(--size-row-sm);
   }
 
-  .sort-button.shimmer {
+  .shimmer-button {
     width: var(--shimmer-button-width-mobile);
     height: var(--shimmer-button-height-mobile);
   }
