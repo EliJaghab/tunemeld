@@ -2,19 +2,13 @@ import os
 import sys
 from http.server import BaseHTTPRequestHandler
 from io import BytesIO
-from pathlib import Path
 from urllib.parse import unquote
 
 import django
 from django.core.wsgi import get_wsgi_application
 
-# Add the backend directory to Python path
-current_path = Path(__file__).parent
-backend_path = current_path.parent / "backend"
-sys.path.insert(0, str(backend_path))
-
 # Set Django settings module
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "core.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "backend.core.settings")
 
 # Initialize Django
 django.setup()

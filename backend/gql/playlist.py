@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Any, cast
 
 import strawberry
 from core.api.genre_service_api import (
@@ -15,7 +16,7 @@ from core.constants import GenreName, GraphQLCacheKey, ServiceName
 from core.utils.redis_cache import CachePrefix, redis_cache_get, redis_cache_set
 from domain_types.types import Playlist, PlaylistMetadata, RankData
 
-from gql.track import TrackType
+from backend.gql.track import TrackType
 
 
 @strawberry.type
@@ -60,7 +61,7 @@ class PlaylistQuery:
         cached_result = redis_cache_get(CachePrefix.GQL_PLAYLIST_METADATA, GraphQLCacheKey.SERVICE_ORDER)
 
         if cached_result is not None:
-            return cached_result
+            return cast("list[str]", cached_result)
 
         service_names = [ServiceName.APPLE_MUSIC, ServiceName.SOUNDCLOUD, ServiceName.SPOTIFY]
         services = []
@@ -108,8 +109,8 @@ class PlaylistQuery:
         # Preserve playlist order and filter out missing tracks
         domain_tracks = []
         for isrc, _position in track_positions:
-            track = isrc_to_track.get(isrc)
-            if track:
+            track = isrc_to_track.get(isrc)  # type: ignore[assignment]
+            if track is not None:
                 domain_tracks.append(track)
 
         domain_playlist = Playlist(genre_name=genre, service_name=service, tracks=domain_tracks)
@@ -137,7 +138,8 @@ class PlaylistQuery:
 
         if cached_result is not None:
             result = []
-            for metadata in cached_result:
+            metadata_list = cast("list[dict[str, Any]]", cached_result)
+            for metadata in metadata_list:
                 metadata_with_debug = metadata.copy()
                 metadata_with_debug["debug_cache_status"] = "CACHE_HIT"
                 result.append(PlaylistMetadataType(**metadata_with_debug))
@@ -183,7 +185,8 @@ class PlaylistQuery:
         cached_result = redis_cache_get(CachePrefix.GQL_PLAYLIST_METADATA, GraphQLCacheKey.ALL_RANKS)
 
         if cached_result is not None:
-            return [RankType(**rank) for rank in cached_result]
+            rank_list = cast("list[dict[str, Any]]", cached_result)
+            return [RankType(**rank) for rank in rank_list]
 
         domain_ranks = get_all_ranks()
 

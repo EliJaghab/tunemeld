@@ -35,8 +35,8 @@ def _generate_cache_key(prefix: CachePrefix, key_data: str) -> str:
     return f"{prefix.value}:{hashed_suffix}"
 
 
-def redis_cache_get(prefix: CachePrefix, key_data: str) -> dict[str, Any] | None:
-    """Get JSON data from Redis cache. Returns parsed dict or None if not found."""
+def redis_cache_get(prefix: CachePrefix, key_data: str) -> Any:
+    """Get JSON data from Redis cache. Returns parsed data or None if not found."""
 
     start_time = time.time()
     cache_key = _generate_cache_key(prefix, key_data)
@@ -58,8 +58,8 @@ def redis_cache_get(prefix: CachePrefix, key_data: str) -> dict[str, Any] | None
         return None
 
 
-def redis_cache_set(prefix: CachePrefix, key_data: str, value: dict[str, Any], ttl: int | None = None) -> None:
-    """Store JSON-serializable dict in Redis cache."""
+def redis_cache_set(prefix: CachePrefix, key_data: str, value: Any, ttl: int | None = None) -> None:
+    """Store JSON-serializable data in Redis cache."""
 
     cache_key = _generate_cache_key(prefix, key_data)
 

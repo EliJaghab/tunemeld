@@ -7,7 +7,7 @@ from core.constants import ServiceName
 from core.utils.redis_cache import CachePrefix, redis_cache_clear
 from django.core.management.base import BaseCommand
 
-from gql.schema import schema
+from backend.gql.schema import schema
 
 logger = logging.getLogger(__name__)
 

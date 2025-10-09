@@ -5,7 +5,7 @@ from core.services.iframe_service import generate_iframe_src
 from core.utils.redis_cache import CachePrefix, redis_cache_get, redis_cache_set
 from domain_types.types import IframeConfig
 
-from gql.button_labels import (
+from backend.gql.button_labels import (
     ButtonLabelType,
     generate_misc_button_labels,
     generate_rank_button_labels,

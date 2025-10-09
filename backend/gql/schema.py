@@ -1,11 +1,11 @@
 import strawberry
 from strawberry.schema.config import StrawberryConfig
 
-from gql.genre import GenreQuery
-from gql.play_count import PlayCountQuery
-from gql.playlist import PlaylistQuery
-from gql.service import ServiceQuery
-from gql.track import TrackQuery
+from backend.gql.genre import GenreQuery
+from backend.gql.play_count import PlayCountQuery
+from backend.gql.playlist import PlaylistQuery
+from backend.gql.service import ServiceQuery
+from backend.gql.track import TrackQuery
 
 
 @strawberry.type

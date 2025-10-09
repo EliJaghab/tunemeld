@@ -1,10 +1,12 @@
+from typing import Any, cast
+
 import strawberry
 from core.constants import GENRE_CONFIGS, GenreName, GraphQLCacheKey
 from core.models.genre_service import GenreModel
 from core.utils.redis_cache import CachePrefix, redis_cache_get, redis_cache_set
 from domain_types.types import Genre
 
-from gql.button_labels import ButtonLabelType, generate_genre_button_labels
+from backend.gql.button_labels import ButtonLabelType, generate_genre_button_labels
 
 
 @strawberry.type
@@ -37,7 +39,8 @@ class GenreQuery:
         if cached_result is not None:
             # Convert cached data back to genre objects with button labels
             genres = []
-            for genre_data in cached_result:
+            genre_data_list = cast("list[dict[str, Any]]", cached_result)
+            for genre_data in genre_data_list:
                 genre = GenreModel(**{k: v for k, v in genre_data.items() if k != "button_labels"})
                 genre.button_labels = genre_data.get("button_labels", [])
                 genres.append(GenreType.from_django_model(genre))

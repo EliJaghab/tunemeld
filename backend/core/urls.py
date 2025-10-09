@@ -3,7 +3,7 @@ from django.urls import path
 from django.views.decorators.csrf import csrf_exempt
 from strawberry.django.views import GraphQLView
 
-from gql.schema import schema
+from backend.gql.schema import schema
 
 # API-only endpoints - frontend served by Cloudflare Pages
 urlpatterns = [

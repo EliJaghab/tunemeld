@@ -11,8 +11,8 @@ from core.constants import GraphQLCacheKey, ServiceName
 from core.utils.redis_cache import CachePrefix, redis_cache_get, redis_cache_set
 from core.utils.utils import truncate_to_words
 
-from gql.button_labels import ButtonLabelType, generate_track_button_labels
-from gql.service import ServiceType
+from backend.gql.button_labels import ButtonLabelType, generate_track_button_labels
+from backend.gql.service import ServiceType
 
 
 @strawberry.type
@@ -53,8 +53,8 @@ class TrackType:
             spotify_current_play_count=cached_data.get("spotify_current_play_count"),
             youtube_current_play_count=cached_data.get("youtube_current_play_count"),
         )
-        track._track_name = cached_data.get("track_name")
-        track._artist_name = cached_data.get("artist_name")
+        track._track_name = cached_data.get("track_name")  # type: ignore[attr-defined]
+        track._artist_name = cached_data.get("artist_name")  # type: ignore[attr-defined]
         return track
 
     @classmethod
@@ -73,8 +73,8 @@ class TrackType:
             aggregate_score=django_track.aggregate_score,
             updated_at=django_track.updated_at,
         )
-        track._track_name = django_track.track_name
-        track._artist_name = django_track.artist_name
+        track._track_name = django_track.track_name  # type: ignore[attr-defined]
+        track._artist_name = django_track.artist_name  # type: ignore[attr-defined]
 
         return track
 
@@ -100,38 +100,38 @@ class TrackType:
         )
 
         # Preserve data that gets lost in Django conversion
-        track._track_name = domain_track.track_name
-        track._artist_name = domain_track.artist_name
+        track._track_name = domain_track.track_name  # type: ignore[attr-defined]
+        track._artist_name = domain_track.artist_name  # type: ignore[attr-defined]
 
         # Preserve rank data
-        track._tunemeld_rank = domain_track.tunemeld_rank
-        track._spotify_rank = domain_track.spotify_rank
-        track._apple_music_rank = domain_track.apple_music_rank
-        track._soundcloud_rank = domain_track.soundcloud_rank
+        track._tunemeld_rank = domain_track.tunemeld_rank  # type: ignore[attr-defined]
+        track._spotify_rank = domain_track.spotify_rank  # type: ignore[attr-defined]
+        track._apple_music_rank = domain_track.apple_music_rank  # type: ignore[attr-defined]
+        track._soundcloud_rank = domain_track.soundcloud_rank  # type: ignore[attr-defined]
 
         # Preserve service sources
         if domain_track.spotify_source:
-            track._spotify_source = domain_track.spotify_source.to_dict()
+            track._spotify_source = domain_track.spotify_source.to_dict()  # type: ignore[attr-defined]
         if domain_track.apple_music_source:
-            track._apple_music_source = domain_track.apple_music_source.to_dict()
+            track._apple_music_source = domain_track.apple_music_source.to_dict()  # type: ignore[attr-defined]
         if domain_track.soundcloud_source:
-            track._soundcloud_source = domain_track.soundcloud_source.to_dict()
+            track._soundcloud_source = domain_track.soundcloud_source.to_dict()  # type: ignore[attr-defined]
         if domain_track.youtube_source:
-            track._youtube_source = domain_track.youtube_source.to_dict()
+            track._youtube_source = domain_track.youtube_source.to_dict()  # type: ignore[attr-defined]
 
         # Preserve button labels
         if domain_track.button_labels:
-            track._button_labels = [bl.to_dict() for bl in domain_track.button_labels]
+            track._button_labels = [bl.to_dict() for bl in domain_track.button_labels]  # type: ignore[attr-defined]
 
         # Preserve track detail URLs
         if domain_track.track_detail_url_spotify:
-            track.track_detail_url_spotify = domain_track.track_detail_url_spotify
+            track.track_detail_url_spotify = domain_track.track_detail_url_spotify  # type: ignore[attr-defined]
         if domain_track.track_detail_url_apple_music:
-            track.track_detail_url_apple_music = domain_track.track_detail_url_apple_music
+            track.track_detail_url_apple_music = domain_track.track_detail_url_apple_music  # type: ignore[attr-defined]
         if domain_track.track_detail_url_soundcloud:
-            track.track_detail_url_soundcloud = domain_track.track_detail_url_soundcloud
+            track.track_detail_url_soundcloud = domain_track.track_detail_url_soundcloud  # type: ignore[attr-defined]
         if domain_track.track_detail_url_youtube:
-            track.track_detail_url_youtube = domain_track.track_detail_url_youtube
+            track.track_detail_url_youtube = domain_track.track_detail_url_youtube  # type: ignore[attr-defined]
 
         return track
 
@@ -202,7 +202,7 @@ class TrackType:
         return generate_track_button_labels(self, genre=genre, service=service)
 
     @strawberry.field(description="Internal URL for this track with genre/rank/player context")
-    def track_detail_url(self, genre: str, rank: str, player: str) -> str:
+    def track_detail_url(self, genre: str, rank: str, player: str) -> str | None:
         cache_key = f"track_detail_url_{player}"
         if hasattr(self, cache_key):
             return getattr(self, cache_key)
@@ -218,7 +218,7 @@ class TrackType:
         track_domain = get_track_by_isrc(self.isrc)
         if not track_domain:
             return None
-        return get_track_rank_by_track_object(track_domain, genre_name, ServiceName.TUNEMELD.value)
+        return get_track_rank_by_track_object(track_domain, genre_name, ServiceName.TUNEMELD)
 
     @strawberry.field(description="Position on SoundCloud playlist for current genre")
     def soundcloud_rank(self, info) -> int | None:
@@ -229,7 +229,7 @@ class TrackType:
         track_domain = get_track_by_isrc(self.isrc)
         if not track_domain:
             return None
-        return get_track_rank_by_track_object(track_domain, genre_name, ServiceName.SOUNDCLOUD.value)
+        return get_track_rank_by_track_object(track_domain, genre_name, ServiceName.SOUNDCLOUD)
 
     @strawberry.field(description="Position on Spotify playlist for current genre")
     def spotify_rank(self, info) -> int | None:
@@ -240,7 +240,7 @@ class TrackType:
         track_domain = get_track_by_isrc(self.isrc)
         if not track_domain:
             return None
-        return get_track_rank_by_track_object(track_domain, genre_name, ServiceName.SPOTIFY.value)
+        return get_track_rank_by_track_object(track_domain, genre_name, ServiceName.SPOTIFY)
 
     @strawberry.field(description="Position on Apple Music playlist for current genre")
     def apple_music_rank(self, info) -> int | None:
@@ -251,7 +251,7 @@ class TrackType:
         track_domain = get_track_by_isrc(self.isrc)
         if not track_domain:
             return None
-        return get_track_rank_by_track_object(track_domain, genre_name, ServiceName.APPLE_MUSIC.value)
+        return get_track_rank_by_track_object(track_domain, genre_name, ServiceName.APPLE_MUSIC)
 
     @strawberry.field(description="Spotify service source with metadata")
     def spotify_source(self) -> ServiceType | None:
