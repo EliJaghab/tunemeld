@@ -79,6 +79,7 @@ const stateDebug = (message: string, meta?: unknown) => {
 class StateManager {
   private state: AppState;
   private domElements: Map<string, HTMLElement>;
+  private serviceHeaderRevealToken: symbol | null;
   constructor() {
     this.state = {
       sortColumn: null, // Will be set from backend default
@@ -110,6 +111,7 @@ class StateManager {
       },
     };
     this.domElements = new Map();
+    this.serviceHeaderRevealToken = null;
   }
 
   initializeFromDOM(): void {
@@ -285,6 +287,35 @@ class StateManager {
     this.state.shimmer.services = false;
     this.state.shimmer.playlist = false;
     this.state.shimmer.isInitialLoad = false;
+  }
+
+  registerServiceHeaderReveal(promise: Promise<void>): void {
+    stateDebug("registerServiceHeaderReveal: registered");
+    const token = Symbol("serviceHeaderReveal");
+    this.serviceHeaderRevealToken = token;
+
+    const trackedPromise = promise
+      .catch((error: unknown) => {
+        stateDebug("registerServiceHeaderReveal: promise rejected", {
+          error,
+        });
+      })
+      .then(() => {
+        if (this.serviceHeaderRevealToken === token) {
+          stateDebug("registerServiceHeaderReveal: resolved");
+          this.markLoaded("serviceDataLoaded");
+        } else {
+          stateDebug(
+            "registerServiceHeaderReveal: resolved but token mismatch",
+          );
+        }
+      });
+
+    trackedPromise.finally(() => {
+      if (this.serviceHeaderRevealToken === token) {
+        this.serviceHeaderRevealToken = null;
+      }
+    });
   }
 
   markInitialLoadComplete(): void {

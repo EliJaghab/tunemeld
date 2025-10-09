@@ -13,57 +13,6 @@ const headerDebug = (message: string, meta?: unknown) => {
   debugLog("Header", message, meta);
 };
 
-const serviceHeaderLoadTracker = (() => {
-  let expected = 0;
-  const loaded = new Set<string>();
-
-  function log(message: string, meta?: Record<string, unknown>): void {
-    headerDebug(message, meta);
-  }
-
-  return {
-    init(total: number): void {
-      expected = total;
-      loaded.clear();
-      log("service header tracker initialized", { expected });
-      if (expected === 0) {
-        this.flush();
-      }
-    },
-    markLoaded(serviceId: string): void {
-      if (loaded.has(serviceId)) {
-        return;
-      }
-      loaded.add(serviceId);
-      log("service header loaded", {
-        serviceId,
-        loadedCount: loaded.size,
-        expected,
-      });
-      if (loaded.size >= expected && expected > 0) {
-        this.flush();
-      }
-    },
-    flush(): void {
-      log("all service headers loaded", { loadedCount: loaded.size, expected });
-      hideAllServiceShimmers();
-      stateManager.markLoaded("serviceDataLoaded");
-    },
-  };
-})();
-
-function hideAllServiceShimmers(): void {
-  document.querySelectorAll(".service").forEach((service) => {
-    const overlay = service.querySelector(
-      ".loading-overlay",
-    ) as HTMLElement | null;
-    if (overlay) {
-      overlay.classList.remove("active");
-    }
-  });
-  stateManager.hideShimmer("services");
-}
-
 // Extend Window interface for HLS
 declare global {
   interface Window {
@@ -132,11 +81,10 @@ function updateTuneMeldDescription(
   }
 }
 
-function displayAppleMusicVideo(url: string, onReady?: () => void): void {
+function displayAppleMusicVideo(url: string): Promise<void> {
   const videoContainer = document.getElementById("apple_music-video-container");
   if (!videoContainer) {
-    onReady?.();
-    return;
+    return Promise.resolve();
   }
 
   cleanupExistingVideos();
@@ -148,52 +96,49 @@ function displayAppleMusicVideo(url: string, onReady?: () => void): void {
     "apple_music-video",
   ) as HTMLVideoElement | null;
 
-  let notifiedReady = false;
-  const notifyReady = (): void => {
-    if (notifiedReady) return;
-    notifiedReady = true;
-    onReady?.();
-  };
+  return new Promise<void>((resolve) => {
+    let notifiedReady = false;
+    const notifyReady = (): void => {
+      if (notifiedReady) return;
+      notifiedReady = true;
+      resolve();
+    };
 
-  if (video && typeof Hls !== "undefined" && Hls.isSupported()) {
-    const hls = new Hls();
-    window.appleMusicHls = hls; // Store globally for cleanup
-    hls.loadSource(url);
-    hls.attachMedia(video);
-    hls.on(Hls.Events.MANIFEST_PARSED, function () {
-      // Add error handling for play() promise
-      const playPromise = video.play();
-      if (playPromise !== undefined) {
-        playPromise.catch((error: Error) => {
-          // Ignore AbortError when video is removed during genre switches
-          if (error.name !== "AbortError") {
-            console.warn("Apple Music video play failed:", error);
-          }
-        });
-      }
+    if (video && typeof Hls !== "undefined" && Hls.isSupported()) {
+      const hls = new Hls();
+      window.appleMusicHls = hls; // Store globally for cleanup
+      hls.loadSource(url);
+      hls.attachMedia(video);
+      hls.on(Hls.Events.MANIFEST_PARSED, function () {
+        const playPromise = video.play();
+        if (playPromise !== undefined) {
+          playPromise.catch((error: Error) => {
+            if (error.name !== "AbortError") {
+              console.warn("Apple Music video play failed:", error);
+            }
+          });
+        }
+        notifyReady();
+      });
+      video.addEventListener("loadeddata", notifyReady, { once: true });
+    } else if (video && video.canPlayType("application/vnd.apple.mpegurl")) {
+      video.src = url;
+      video.addEventListener("canplay", function () {
+        const playPromise = video.play();
+        if (playPromise !== undefined) {
+          playPromise.catch((error: Error) => {
+            if (error.name !== "AbortError") {
+              console.warn("Apple Music video play failed:", error);
+            }
+          });
+        }
+        notifyReady();
+      });
+      video.addEventListener("loadeddata", notifyReady, { once: true });
+    } else {
       notifyReady();
-    });
-    video.addEventListener("loadeddata", notifyReady, { once: true });
-  } else if (video && video.canPlayType("application/vnd.apple.mpegurl")) {
-    video.src = url;
-    video.addEventListener("canplay", function () {
-      // Add error handling for play() promise
-      const playPromise = video.play();
-      if (playPromise !== undefined) {
-        playPromise.catch((error: Error) => {
-          // Ignore AbortError when video is removed during genre switches
-          if (error.name !== "AbortError") {
-            console.warn("Apple Music video play failed:", error);
-          }
-        });
-      }
-      notifyReady();
-    });
-    video.addEventListener("loadeddata", notifyReady, { once: true });
-  } else {
-    // If video element cannot play HLS, fall back immediately
-    notifyReady();
-  }
+    }
+  });
 }
 
 function cleanupExistingVideos(): void {
@@ -385,20 +330,19 @@ function toggleDescriptionExpand(event: Event): void {
   }
 }
 
-function preloadCoverImage(
-  coverUrl: string,
-  onLoad: () => void,
-  onError: () => void,
-): void {
-  if (!coverUrl) {
-    onError();
-    return;
-  }
+function preloadCoverImage(coverUrl: string): Promise<HTMLImageElement> {
+  return new Promise((resolve, reject) => {
+    if (!coverUrl) {
+      reject(new Error("Missing cover URL"));
+      return;
+    }
 
-  const image = new Image();
-  image.onload = onLoad;
-  image.onerror = onError;
-  image.src = coverUrl;
+    const image = new Image();
+    image.onload = () => resolve(image);
+    image.onerror = () =>
+      reject(new Error(`Failed to load cover image: ${coverUrl}`));
+    image.src = coverUrl;
+  });
 }
 
 function getServiceOverlay(
@@ -410,7 +354,16 @@ function getServiceOverlay(
   ) as HTMLElement | null;
 }
 
-function updateServiceHeaderArt(
+function hideServiceHeaderShimmers(): void {
+  document
+    .querySelectorAll<HTMLElement>(".service .loading-overlay")
+    .forEach((overlay) => {
+      overlay.classList.remove("active", "fade-out");
+    });
+  stateManager.hideShimmer("services");
+}
+
+async function updateServiceHeaderArt(
   service: string,
   coverUrl: string,
   playlistUrl: string,
@@ -420,7 +373,7 @@ function updateServiceHeaderArt(
   genre: string,
   serviceIconUrl: string,
   displayCallback?: ((data: any) => void) | null,
-): void {
+): Promise<void> {
   headerDebug("updateServiceHeaderArt", {
     service,
     coverUrl,
@@ -447,37 +400,39 @@ function updateServiceHeaderArt(
     overlay.classList.add("active");
   }
 
+  let assetPromise: Promise<void> = Promise.resolve();
+
   if (coverUrl.endsWith(".m3u8") && service === SERVICE_NAMES.APPLE_MUSIC) {
-    displayAppleMusicVideo(coverUrl, () => {
-      serviceHeaderLoadTracker.markLoaded(elementPrefix);
+    assetPromise = displayAppleMusicVideo(coverUrl).catch((error: unknown) => {
+      headerDebug("service header apple music video failed", {
+        service,
+        coverUrl,
+        error,
+      });
     });
   } else if (imagePlaceholder && coverUrl) {
     const pendingToken = `${Date.now()}-${Math.random().toString(16).slice(2)}`;
     imagePlaceholder.dataset.pendingCover = pendingToken;
 
-    preloadCoverImage(
-      coverUrl,
-      () => {
+    assetPromise = preloadCoverImage(coverUrl)
+      .then(() => {
         if (imagePlaceholder.dataset.pendingCover !== pendingToken) {
           return;
         }
-        imagePlaceholder.dataset.pendingCover = "";
         imagePlaceholder.style.backgroundImage = `url("${coverUrl}")`;
-        serviceHeaderLoadTracker.markLoaded(elementPrefix);
-      },
-      () => {
-        if (imagePlaceholder.dataset.pendingCover !== pendingToken) {
-          return;
+      })
+      .catch((error: unknown) => {
+        headerDebug("service header image failed", {
+          service,
+          coverUrl,
+          error,
+        });
+      })
+      .finally(() => {
+        if (imagePlaceholder.dataset.pendingCover === pendingToken) {
+          imagePlaceholder.dataset.pendingCover = "";
         }
-        imagePlaceholder.dataset.pendingCover = "";
-        console.warn(
-          `Failed to load service header image for ${service}: ${coverUrl}`,
-        );
-        serviceHeaderLoadTracker.markLoaded(elementPrefix);
-      },
-    );
-  } else {
-    serviceHeaderLoadTracker.markLoaded(elementPrefix);
+      });
   }
 
   if (coverLinkElement) {
@@ -508,6 +463,8 @@ function updateServiceHeaderArt(
       genre,
     });
   }
+
+  await assetPromise;
 }
 
 /**
@@ -530,12 +487,10 @@ export async function updatePlaylistHeader(
     );
     updateTuneMeldDescription(tuneMeldPlaylist?.playlistCoverDescriptionText);
 
-    serviceHeaderLoadTracker.init(serviceOrder.length);
-
-    serviceOrder.forEach((serviceName) => {
+    const serviceLoadPromises = serviceOrder.map((serviceName) => {
       const playlist = playlists.find((p) => p.serviceName === serviceName);
       if (playlist) {
-        updateServiceHeaderArt(
+        return updateServiceHeaderArt(
           serviceName,
           playlist.playlistCoverUrl || "",
           playlist.playlistUrl || "",
@@ -546,16 +501,25 @@ export async function updatePlaylistHeader(
           playlist.serviceIconUrl || "",
           displayServiceCallback,
         );
-      } else {
-        console.warn(`No playlist data found for service: ${serviceName}`);
-        const elementPrefix = serviceName
-          ? serviceName.toLowerCase().replace(/\s+/g, "_")
-          : "";
-        serviceHeaderLoadTracker.markLoaded(elementPrefix);
       }
+
+      console.warn(`No playlist data found for service: ${serviceName}`);
+      return Promise.resolve();
     });
+
+    const aggregatedPromise = Promise.all(serviceLoadPromises)
+      .then(() => {
+        hideServiceHeaderShimmers();
+      })
+      .catch((error) => {
+        headerDebug("service header batch failed", { error });
+        hideServiceHeaderShimmers();
+      });
+    stateManager.registerServiceHeaderReveal(aggregatedPromise);
   } catch (error) {
     console.error("Error fetching playlist metadata:", error);
+    stateManager.registerServiceHeaderReveal(Promise.resolve());
+    hideServiceHeaderShimmers();
     throw error;
   }
 }
@@ -579,12 +543,10 @@ export function updatePlaylistHeaderSync(
   );
   updateTuneMeldDescription(tuneMeldPlaylist?.playlistCoverDescriptionText);
 
-  serviceHeaderLoadTracker.init(serviceOrder.length);
-
-  serviceOrder.forEach((serviceName) => {
+  const serviceLoadPromises = serviceOrder.map((serviceName) => {
     const playlist = playlists.find((p) => p.serviceName === serviceName);
     if (playlist) {
-      updateServiceHeaderArt(
+      return updateServiceHeaderArt(
         serviceName,
         playlist.playlistCoverUrl || "",
         playlist.playlistUrl || "",
@@ -595,12 +557,20 @@ export function updatePlaylistHeaderSync(
         playlist.serviceIconUrl || "",
         displayServiceCallback,
       );
-    } else {
-      console.warn(`No playlist data found for service: ${serviceName}`);
-      const elementPrefix = serviceName
-        ? serviceName.toLowerCase().replace(/\s+/g, "_")
-        : "";
-      serviceHeaderLoadTracker.markLoaded(elementPrefix);
     }
+
+    console.warn(`No playlist data found for service: ${serviceName}`);
+    return Promise.resolve(() => {});
   });
+
+  const aggregatedPromise = Promise.all(serviceLoadPromises)
+    .then(() => {
+      hideServiceHeaderShimmers();
+    })
+    .catch((error) => {
+      headerDebug("service header batch failed", { error });
+      hideServiceHeaderShimmers();
+    });
+
+  stateManager.registerServiceHeaderReveal(aggregatedPromise);
 }

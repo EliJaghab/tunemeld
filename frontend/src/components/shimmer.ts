@@ -9,7 +9,7 @@ import {
   SHIMMER_TYPES,
   type ShimmerType,
 } from "@/config/constants";
-import { debugLog } from "@/config/config";
+import { DEBUG_LOG_ENABLED, debugLog } from "@/config/config";
 import { createShimmerRowFromStructure } from "@/config/tableStructures";
 
 /**
@@ -29,8 +29,15 @@ export const trackLoadLog = (
   phase: string,
   meta?: Record<string, unknown>,
 ): void => {
+  if (!DEBUG_LOG_ENABLED) {
+    return;
+  }
   const timestamp = new Date().toISOString();
-  console.log(`[TrackLoad ${timestamp}] ${phase}`, meta || {});
+  if (meta === undefined) {
+    console.debug(`[TrackLoad ${timestamp}] ${phase}`);
+  } else {
+    console.debug(`[TrackLoad ${timestamp}] ${phase}`, meta);
+  }
 };
 
 let tunemeldTrackShimmerActive = false;
@@ -283,11 +290,9 @@ function showShimmerLoaders(options: ShimmerOptions = {}): void {
       resetShimmerAnimations(overlay);
       overlay.classList.remove("fade-out");
       overlay.classList.add("active");
-      console.log(
-        SHIMMER_LOG_PREFIX,
-        "service shimmer active",
-        (service as HTMLElement).id || "unknown-service",
-      );
+      shimmerDebug("service shimmer active", {
+        serviceId: (service as HTMLElement).id || "unknown-service",
+      });
     });
   }
 
@@ -335,8 +340,7 @@ function injectShimmerIntoPlaceholders(
   includeHeaderAndControls: boolean,
 ): void {
   if (!stateManager.getShimmerState("playlist")) {
-    console.log(
-      SHIMMER_LOG_PREFIX,
+    shimmerDebug(
       "injectShimmerIntoPlaceholders skipped (playlist shimmer inactive)",
     );
     return;
@@ -372,11 +376,9 @@ function injectShimmerIntoPlaceholders(
         mainPlaylistPlaceholder.appendChild(row);
       }
     }
-    console.log(
-      SHIMMER_LOG_PREFIX,
-      "main playlist shimmer rows injected",
-      mainPlaylistPlaceholder.childElementCount,
-    );
+    shimmerDebug("main playlist shimmer rows injected", {
+      count: mainPlaylistPlaceholder.childElementCount,
+    });
 
     if (!tunemeldTrackShimmerActive) {
       tunemeldTrackShimmerActive = true;
@@ -406,11 +408,9 @@ function injectShimmerIntoPlaceholders(
             placeholder.appendChild(row);
           }
         }
-        console.log(
-          SHIMMER_LOG_PREFIX,
-          `service shimmer rows injected for ${id}`,
-          placeholder.childElementCount,
-        );
+        shimmerDebug(`service shimmer rows injected for ${id}`, {
+          count: placeholder.childElementCount,
+        });
       }
     });
   }
@@ -530,10 +530,10 @@ export function hideShimmerLoaders(): void {
       shimmer.classList.add("morphing-out");
     });
 
-    const playlistOverlays = document.querySelectorAll<HTMLElement>(
-      ".loading-overlay-playlist.active, .loading-overlay-table.active",
+    const activeOverlays = document.querySelectorAll<HTMLElement>(
+      ".loading-overlay-playlist.active, .loading-overlay-table.active, .loading-overlay-service.active",
     );
-    playlistOverlays.forEach((overlay) => {
+    activeOverlays.forEach((overlay) => {
       overlay.classList.add("fade-out");
     });
 
@@ -541,7 +541,7 @@ export function hideShimmerLoaders(): void {
       shimmerDebug("hideShimmerLoaders: timeout cleanup");
       stateManager.hideAllShimmers();
 
-      playlistOverlays.forEach((overlay) => {
+      activeOverlays.forEach((overlay) => {
         overlay.classList.remove("active", "fade-out");
         resetShimmerAnimations(overlay);
       });
@@ -619,15 +619,13 @@ export function hideShimmerLoaders(): void {
         );
       })
       .finally(() => {
-        console.log(
-          SHIMMER_LOG_PREFIX,
-          "hideShimmerLoaders: reveal promise settled, running fade-out",
+        shimmerDebug(
+          "hideShimmerLoaders: reveal promises settled, running fade-out",
         );
         runFadeOut();
       });
   } else {
-    console.log(
-      SHIMMER_LOG_PREFIX,
+    shimmerDebug(
       "hideShimmerLoaders: no reveal promise, running fade-out immediately",
     );
     runFadeOut();
