@@ -10,7 +10,7 @@ from core.management.commands.play_count_modules.c_clear_and_warm_play_count_cac
 from core.models.play_counts import HistoricalTrackPlayCountModel
 from core.utils.utils import get_logger
 from django.core.management.base import BaseCommand
-from django.db import models, transaction
+from django.db import connection, models, transaction
 from django.utils import timezone
 
 logger = get_logger(__name__)
@@ -33,13 +33,22 @@ class Command(BaseCommand):
                 logger.info("Step 1: Setting up genres and services...")
                 GenreServiceCommand().handle()
 
+                # Close DB connection to prevent SSL timeout errors when Step 2 leaves connection idle
+                # for extended periods during external API calls (Spotify/YouTube/SoundCloud scraping).
+                # Prevents: django.db.utils.OperationalError: SSL connection has been closed unexpectedly
+                connection.close()
+
                 logger.info("Step 2: Running Historical Play Count extraction")
                 historical_command = HistoricalPlayCountCommand()
                 historical_command.handle(limit=limit)
 
+                connection.close()
+
                 logger.info("Step 3: Computing aggregate play counts with weekly changes")
                 aggregate_command = AggregatePlayCountCommand()
                 aggregate_command.handle()
+
+                connection.close()
 
                 logger.info("Step 4: Clearing and warming play count cache...")
                 WarmPlayCountCacheCommand().handle()
