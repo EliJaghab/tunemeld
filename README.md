@@ -27,8 +27,8 @@ Instead of manually checking Spotify, Apple Music, and SoundCloud each week, Tun
 ┌─────────────┐    ┌─────────────┐    ┌─────────────┐
 │  Frontend   │───▶│   Backend   │───▶│ PostgreSQL  │
 │ Static HTML │    │   Django    │    │  Database   │
-│ Cloudflare  │    │   Vercel    │    │   Railway   │
-│   Pages     │    │ Serverless  │    │             │
+│ Cloudflare  │    │   Vercel    │    │   Vercel    │
+│   Pages     │    │ Serverless  │    │  Postgres   │
 └─────────────┘    └─────────────┘    └─────────────┘
        │                    │
        ▼                    ▼
@@ -51,7 +51,7 @@ Instead of manually checking Spotify, Apple Music, and SoundCloud each week, Tun
 
 - **Django** - Serverless functions on Vercel
 - **GraphQL API** - Single endpoint for all data
-- **PostgreSQL** - Neon hosted database
+- **PostgreSQL** - Vercel Postgres (managed database)
 
 ### Caching
 
@@ -132,10 +132,10 @@ Groups tracks by International Standard Recording Code to solve "same song, diff
 - Environment variables in Vercel dashboard
 - PostgreSQL connection via Neon
 
-### Database: Neon PostgreSQL
+### Database: Vercel Postgres
 
-- Serverless PostgreSQL database
-- Automatic scaling and branching
+- Managed PostgreSQL with autoscaling
+- Branching for preview deployments
 
 ## Development
 
