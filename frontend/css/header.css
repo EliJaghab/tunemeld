@@ -32,6 +32,13 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  opacity: 1;
+  transition: opacity var(--fade-duration-medium) ease-in-out;
+}
+
+.image-placeholder.header-hidden,
+.video-container.header-hidden {
+  opacity: 0;
 }
 
 .image-placeholder img,
@@ -85,8 +92,13 @@
   margin-top: var(--space-md);
   min-height: 2.7rem;
   cursor: pointer;
-  transition: all 0.3s ease-in-out;
+  transition: opacity var(--fade-duration-medium) ease-in-out;
   font-size: var(--font-size-lg);
+  opacity: 1;
+}
+
+.title-description.header-hidden {
+  opacity: 0;
 }
 
 .title-description .more-button {

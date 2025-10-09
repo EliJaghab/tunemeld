@@ -355,11 +355,13 @@ function getServiceOverlay(
 }
 
 function hideServiceHeaderShimmers(): void {
+  headerDebug("hideServiceHeaderShimmers invoked");
   document
     .querySelectorAll<HTMLElement>(".service .loading-overlay")
     .forEach((overlay) => {
       overlay.classList.remove("active", "fade-out");
     });
+
   stateManager.hideShimmer("services");
 }
 
@@ -386,18 +388,31 @@ async function updateServiceHeaderArt(
 
   const imagePlaceholder = document.getElementById(
     `${elementPrefix}-image-placeholder`,
-  );
+  ) as HTMLElement | null;
   const titleDescriptionElement = document.getElementById(
     `${elementPrefix}-title-description`,
-  );
+  ) as HTMLElement | null;
   const coverLinkElement = document.getElementById(
     `${elementPrefix}-cover-link`,
   );
   const serviceContainer = document.getElementById(elementPrefix);
   const overlay = getServiceOverlay(serviceContainer);
 
+  const hasExistingContent =
+    imagePlaceholder?.style.backgroundImage ||
+    titleDescriptionElement?.textContent;
+
+  if (hasExistingContent) {
+    imagePlaceholder?.classList.add("header-hidden");
+    titleDescriptionElement?.classList.add("header-hidden");
+  }
+
   if (overlay) {
     overlay.classList.add("active");
+  }
+
+  if (hasExistingContent) {
+    await new Promise((resolve) => setTimeout(resolve, 300));
   }
 
   let assetPromise: Promise<void> = Promise.resolve();
@@ -465,6 +480,14 @@ async function updateServiceHeaderArt(
   }
 
   await assetPromise;
+  headerDebug("service header asset ready", { service, coverUrl });
+
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      imagePlaceholder?.classList.remove("header-hidden");
+      titleDescriptionElement?.classList.remove("header-hidden");
+    });
+  });
 }
 
 /**
@@ -509,6 +532,7 @@ export async function updatePlaylistHeader(
 
     const aggregatedPromise = Promise.all(serviceLoadPromises)
       .then(() => {
+        headerDebug("service header batch resolved");
         hideServiceHeaderShimmers();
       })
       .catch((error) => {
@@ -565,6 +589,7 @@ export function updatePlaylistHeaderSync(
 
   const aggregatedPromise = Promise.all(serviceLoadPromises)
     .then(() => {
+      headerDebug("service header batch resolved (sync)");
       hideServiceHeaderShimmers();
     })
     .catch((error) => {
