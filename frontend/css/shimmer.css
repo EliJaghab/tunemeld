@@ -28,11 +28,11 @@
   overflow: hidden;
   position: relative;
   background-color: var(--skeleton-color);
-  transition: opacity 0.3s ease-out;
+  transition: opacity 0.5s ease-in-out;
 }
 
 .shimmer.morphing-out {
-  animation: morphOut 0.3s ease-out forwards;
+  animation: morphOut 0.5s ease-in-out forwards;
 }
 
 .inline-shimmer {
@@ -84,12 +84,11 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: var(--container-background);
   z-index: 10;
   display: block;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.3s ease;
+  transition: opacity var(--fade-duration-medium) ease-in-out;
 }
 
 .loading-overlay.active {
@@ -100,6 +99,7 @@
 .loading-overlay.fade-out {
   opacity: 0;
   pointer-events: none;
+  z-index: 0;
 }
 
 .loading-overlay.flex {

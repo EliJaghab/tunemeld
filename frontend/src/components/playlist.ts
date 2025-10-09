@@ -143,6 +143,7 @@ export function renderPlaylistTracks(
   const { forceRender = false } = options;
   const isTuneMeldPlaylist = serviceName === SERVICE_NAMES.TUNEMELD;
   const isInitialLoad = stateManager.isInitialLoad();
+  const playlistShimmerActive = stateManager.getShimmerState("playlist");
   playlistDebug("renderPlaylistTracks:start", {
     placeholderId,
     serviceName,
@@ -162,7 +163,8 @@ export function renderPlaylistTracks(
   placeholder.dataset.renderToken = renderToken;
 
   const shouldKeepSkeleton =
-    isTuneMeldPlaylist && (isInitialLoad || forceRender);
+    isTuneMeldPlaylist && playlistShimmerActive && !forceRender;
+
   if (!shouldKeepSkeleton) {
     if (isTuneMeldPlaylist) {
       markTunemeldTrackShimmerHidden({
@@ -174,6 +176,7 @@ export function renderPlaylistTracks(
     placeholder.setAttribute("data-rendered", "true");
   } else {
     placeholder.setAttribute("data-rendered", "false");
+    // Don't return - continue rendering tracks so they're ready when shimmer fades
   }
 
   const tableElement = placeholder.closest<HTMLTableElement>("table");
@@ -191,20 +194,23 @@ export function renderPlaylistTracks(
     );
   }
 
-  const revealDataContainer = isTuneMeldPlaylist
-    ? () => {
-        requestAnimationFrame(() => {
-          dataContainer?.classList.remove("playlist-data-hidden");
-        });
-      }
-    : () => {};
+  const hasExistingContent = dataContainer.childElementCount > 0;
 
-  if (isTuneMeldPlaylist && shouldKeepSkeleton) {
+  const revealDataContainer = (newFragment: DocumentFragment) => {
+    dataContainer.innerHTML = "";
+    dataContainer.appendChild(newFragment);
     dataContainer.classList.add("playlist-data-hidden");
-  } else {
-    dataContainer.classList.remove("playlist-data-hidden");
-  }
-  dataContainer.innerHTML = "";
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        if (isTuneMeldPlaylist) {
+          hideShimmerLoaders();
+        }
+
+        dataContainer?.classList.remove("playlist-data-hidden");
+      });
+    });
+  };
 
   const currentSortField = stateManager.getCurrentColumn();
   const playCountMode = getPlayCountDisplayMode(currentSortField);
@@ -264,11 +270,11 @@ export function renderPlaylistTracks(
     });
   });
 
-  dataContainer.appendChild(fragment);
-
   if (isTuneMeldPlaylist) {
+    const tempContainer = document.createElement("div");
+    tempContainer.appendChild(fragment.cloneNode(true) as DocumentFragment);
     const albumImages = Array.from(
-      dataContainer.querySelectorAll<HTMLImageElement>("img.album-cover"),
+      tempContainer.querySelectorAll<HTMLImageElement>("img.album-cover"),
     );
     const imagesPromise = waitForImageElements(albumImages);
     registerPlaylistReveal(imagesPromise);
@@ -305,7 +311,6 @@ export function renderPlaylistTracks(
 
       markTunemeldTrackShimmerHidden({ reason: "tracks-ready" });
 
-      placeholder.innerHTML = "";
       placeholder.setAttribute("data-rendered", "true");
 
       trackLoadLog("Tunemeld tracks rendered", {
@@ -313,22 +318,23 @@ export function renderPlaylistTracks(
         playCountMode,
       });
 
-      revealDataContainer();
+      revealDataContainer(fragment);
 
       stateManager.markLoaded("tracksLoaded");
       stateManager.markLoaded("playlistDataLoaded");
 
-      playlistDebug(
-        "renderPlaylistTracks: calling hideShimmerLoaders after reveal",
-      );
-      hideShimmerLoaders();
+      setTimeout(() => {
+        if (placeholder.dataset.renderToken === renderToken) {
+          placeholder.innerHTML = "";
+        }
+      }, 550);
     });
   } else {
     placeholder.innerHTML = "";
     placeholder.setAttribute("data-rendered", "true");
     stateManager.markLoaded("serviceDataLoaded");
     stateManager.markLoaded("tracksLoaded");
-    revealDataContainer();
+    revealDataContainer(fragment);
   }
 
   playlistDebug("renderPlaylistTracks:end", {
@@ -901,6 +907,8 @@ export function sortTable(column: string, order: string): void {
       sortedData,
       "main-playlist-data-placeholder",
       SERVICE_NAMES.TUNEMELD,
+      null,
+      { forceRender: true },
     );
   }
 }

@@ -320,6 +320,7 @@ export function showGenreSwitchShimmer(): void {
     includeServices: true,
     includePlaylist: true,
     includeHeaderAndControls: false,
+    isInitialLoad: false,
   });
   shimmerDebug("showGenreSwitchShimmer invoked");
 }
@@ -331,6 +332,7 @@ export function showRankSwitchShimmer(): void {
     includeServices: false,
     includePlaylist: true,
     includeHeaderAndControls: false,
+    isInitialLoad: false,
   });
   shimmerDebug("showRankSwitchShimmer invoked");
 }
@@ -615,7 +617,7 @@ export function hideShimmerLoaders(): void {
       }
 
       shimmerDebug("hideShimmerLoaders: end");
-    }, 300);
+    }, 500);
   };
 
   const revealPromise = consumePlaylistReveal();

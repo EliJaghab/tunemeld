@@ -42,8 +42,6 @@ export function renderCachedPlaylists(): void {
         cachedSpotifyData,
         "spotify-data-placeholder",
         SERVICE_NAMES.SPOTIFY,
-        null,
-        { forceRender: true },
       );
     }
   }
@@ -58,8 +56,6 @@ export function renderCachedPlaylists(): void {
         cachedAppleMusicData,
         "apple_music-data-placeholder",
         SERVICE_NAMES.APPLE_MUSIC,
-        null,
-        { forceRender: true },
       );
     }
   }
@@ -74,8 +70,6 @@ export function renderCachedPlaylists(): void {
         cachedSoundcloudData,
         "soundcloud-data-placeholder",
         SERVICE_NAMES.SOUNDCLOUD,
-        null,
-        { forceRender: true },
       );
     }
   }
@@ -138,7 +132,7 @@ async function fetchServicePlaylists(genre: string): Promise<void> {
       "main-playlist-data-placeholder",
       SERVICE_NAMES.TUNEMELD,
       null,
-      { forceRender: false },
+      { forceRender: !isInitial },
     );
   }
 

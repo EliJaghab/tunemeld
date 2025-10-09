@@ -260,8 +260,8 @@ class StateManager {
     }
 
     // Set isInitialLoad flag globally, not tied to shimmer type
-    // Only set to true if explicitly passed, don't override back to false
-    if (isInitialLoad) {
+    // Always update the flag when shimmer is being shown
+    if (isActive) {
       this.state.shimmer.isInitialLoad = isInitialLoad;
     }
   }
