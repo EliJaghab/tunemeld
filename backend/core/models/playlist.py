@@ -169,7 +169,6 @@ class PlaylistMetadata(TypedDict, total=False):
     playlist_tagline: str | None
     playlist_featured_artist: str | None
     playlist_track_count: int | None
-    playlist_saves_count: str | None
     playlist_creator: str | None
     playlist_stream_url: str | None
 

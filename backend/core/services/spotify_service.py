@@ -188,51 +188,14 @@ def _extract_featured_artist_from_text(text: str) -> str | None:
     return None
 
 
-def _extract_saves_and_track_count(doc: BeautifulSoup) -> tuple[str | None, int | None]:
-    """Extract saves count and track count from Spotify page"""
-    saves_count = None
-    track_count = None
-
-    # Find spans that contain saves count text
-    saves_elements = []
-    for span in doc.find_all("span"):
-        text = span.get_text(strip=True)
-        if text and re.search(r"\d+[,\d]*\s*saves?", text):
-            saves_elements.append(span)
-    if saves_elements:
-        saves_text = saves_elements[0].get_text(strip=True)
-        saves_match = re.search(r"(\d+[,\d]*)\s*saves?", saves_text)
-        if saves_match:
-            raw_saves = saves_match.group(1)
-            saves_count = _format_saves_count(raw_saves)
-
+def _extract_track_count(doc: BeautifulSoup) -> int | None:
+    """Extract track count from Spotify page"""
     og_desc = _get_meta_content(doc, "og:description")
     if og_desc:
         track_match = re.search(r"(\d+)\s*(?:items?|songs?|tracks?)", og_desc, re.IGNORECASE)
         if track_match:
-            track_count = int(track_match.group(1))
-
-        saves_match = re.search(r"(\d+\.?\d*[KMB])\s*saves?", og_desc, re.IGNORECASE)
-        if saves_match and not saves_count:
-            saves_count = saves_match.group(1)
-
-    return saves_count, track_count
-
-
-def _format_saves_count(raw_saves: str) -> str:
-    """Format raw saves count to human-readable format"""
-    try:
-        num = int(raw_saves.replace(",", ""))
-        if num >= 1_000_000_000:
-            return f"{num / 1_000_000_000:.1f}B".rstrip("0").rstrip(".")
-        elif num >= 1_000_000:
-            return f"{num / 1_000_000:.1f}M".rstrip("0").rstrip(".")
-        elif num >= 1_000:
-            return f"{num / 1_000:.1f}K".rstrip("0").rstrip(".")
-        else:
-            return str(num)
-    except ValueError:
-        return raw_saves
+            return int(track_match.group(1))
+    return None
 
 
 def _extract_spotify_metadata_from_html(url: str, html_content: str) -> PlaylistMetadata:
@@ -259,9 +222,7 @@ def _extract_spotify_metadata_from_html(url: str, html_content: str) -> Playlist
             metadata["playlist_tagline"] = clean_unicode_text(tagline)
             metadata["playlist_cover_description_text"] = clean_unicode_text(tagline)
 
-    saves_count, track_count = _extract_saves_and_track_count(doc)
-    if saves_count:
-        metadata["playlist_saves_count"] = saves_count
+    track_count = _extract_track_count(doc)
     if track_count:
         metadata["playlist_track_count"] = track_count
 

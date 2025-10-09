@@ -196,13 +196,14 @@ def truncate_to_words(text: str, max_chars: int = 30) -> str:
 
 def format_play_count(count: int | None) -> str:
     """
-    Format play count into abbreviated string with max 6 characters.
+    Format play count into abbreviated string with dynamic precision (5-6 chars total).
 
     Examples:
-        1,560 -> "1.56k"
-        100,400 -> "100.4k"
+        1,560 -> "1.560K"
+        3,967 -> "3.967K"
+        100,400 -> "100.4K"
         234,500,000 -> "234.5M"
-        1,200,000,000 -> "1.2B"
+        3,653,000,000 -> "3.653B"
         50 -> "50"
         None -> "0"
     """
@@ -212,16 +213,16 @@ def format_play_count(count: int | None) -> str:
     if count < 1000:
         return str(count)
 
-    suffixes = [(1_000_000_000, "B"), (1_000_000, "M"), (1000, "k")]
+    suffixes = [(1_000_000_000, "B"), (1_000_000, "M"), (1_000, "K")]
 
     for threshold, suffix in suffixes:
         if count >= threshold:
             value = count / threshold
-            if value >= 100:
-                return f"{value:.0f}{suffix}"
-            elif value >= 10:
-                return f"{value:.1f}{suffix}"
+            if value < 10:
+                return f"{value:.3f}{suffix}".rstrip("0").rstrip(".")
+            elif value < 100:
+                return f"{value:.2f}{suffix}".rstrip("0").rstrip(".")
             else:
-                return f"{value:.2f}{suffix}"
+                return f"{value:.1f}{suffix}".rstrip("0").rstrip(".")
 
     return str(count)
