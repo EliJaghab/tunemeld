@@ -54,14 +54,14 @@ class Command(BaseCommand):
             if total_count == 0:
                 continue
 
-            # Get earliest available date for this ISRC (use min between earliest date and week ago)
+            # Get earliest available date for this ISRC (use max between earliest date and week ago)
             earliest_date = (
                 HistoricalTrackPlayCountModel.objects.filter(isrc=isrc)
                 .values_list("recorded_date", flat=True)
                 .order_by("recorded_date")
                 .first()
             )
-            comparison_date = min(earliest_date, week_ago) if earliest_date else week_ago
+            comparison_date = max(earliest_date, week_ago) if earliest_date else week_ago
 
             # Get comparison counts from the determined date
             comparison_counts = HistoricalTrackPlayCountModel.objects.filter(

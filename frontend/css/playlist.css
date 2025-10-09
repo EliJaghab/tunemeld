@@ -267,16 +267,16 @@
 
 .trending-percentage {
   font-size: inherit;
-  font-weight: inherit;
+  font-weight: 600;
   opacity: 0.9;
 }
 
 .trending-percentage.positive {
-  color: #22c55e;
+  color: var(--trending-dark-green);
 }
 
 .trending-percentage.negative {
-  color: #ef4444;
+  color: var(--trending-red);
 }
 
 .total-play-count a,

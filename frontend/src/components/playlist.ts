@@ -601,6 +601,13 @@ function displayPlayCounts(
   const totalWeeklyChangePercentageFormatted =
     playCountData.totalWeeklyChangePercentageFormatted;
 
+  console.log("[Trending Debug]", {
+    trackName: track.trackName,
+    showTrending,
+    totalWeeklyChangePercentageFormatted,
+    rawPercentage: playCountData.totalWeeklyChangePercentage,
+  });
+
   if (showTotal && totalCurrentPlayCountAbbreviated !== null) {
     const element = createTotalPlayCountElement(
       totalCurrentPlayCountAbbreviated,
