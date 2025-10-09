@@ -146,15 +146,14 @@ async function fetchServicePlaylists(genre: string): Promise<void> {
 
   // Don't hide shimmer here - let StateManager coordinate when everything is loaded
 
-  (async () => {
-    try {
-      selectorsDebug("fetchServicePlaylists: loading other service playlists");
-      await loadOtherServicePlaylists(genre);
-      selectorsDebug("fetchServicePlaylists: other service playlists loaded");
-    } catch (error) {
-      console.error("Failed to load other service playlists:", error);
-    }
-  })();
+  // Load service playlists AFTER TuneMeld playlist is rendered
+  try {
+    selectorsDebug("fetchServicePlaylists: loading other service playlists");
+    await loadOtherServicePlaylists(genre);
+    selectorsDebug("fetchServicePlaylists: other service playlists loaded");
+  } catch (error) {
+    console.error("Failed to load other service playlists:", error);
+  }
 }
 
 async function loadOtherServicePlaylists(genre: string): Promise<void> {
@@ -181,34 +180,31 @@ async function loadOtherServicePlaylists(genre: string): Promise<void> {
     cachedSoundcloudData = [soundcloudPlaylist];
   }
 
-  const isInitial = stateManager.isInitialLoad();
-
-  if (!isInitial) {
-    selectorsDebug("loadOtherServicePlaylists: rendering tracks");
-    if (spotifyPlaylist) {
-      renderPlaylistTracks(
-        [spotifyPlaylist],
-        "spotify-data-placeholder",
-        SERVICE_NAMES.SPOTIFY,
-      );
-    }
-
-    if (appleMusicPlaylist) {
-      renderPlaylistTracks(
-        [appleMusicPlaylist],
-        "apple_music-data-placeholder",
-        SERVICE_NAMES.APPLE_MUSIC,
-      );
-    }
-
-    if (soundcloudPlaylist) {
-      renderPlaylistTracks(
-        [soundcloudPlaylist],
-        "soundcloud-data-placeholder",
-        SERVICE_NAMES.SOUNDCLOUD,
-      );
-    }
+  selectorsDebug("loadOtherServicePlaylists: rendering tracks");
+  if (spotifyPlaylist) {
+    renderPlaylistTracks(
+      [spotifyPlaylist],
+      "spotify-data-placeholder",
+      SERVICE_NAMES.SPOTIFY,
+    );
   }
+
+  if (appleMusicPlaylist) {
+    renderPlaylistTracks(
+      [appleMusicPlaylist],
+      "apple_music-data-placeholder",
+      SERVICE_NAMES.APPLE_MUSIC,
+    );
+  }
+
+  if (soundcloudPlaylist) {
+    renderPlaylistTracks(
+      [soundcloudPlaylist],
+      "soundcloud-data-placeholder",
+      SERVICE_NAMES.SOUNDCLOUD,
+    );
+  }
+
   selectorsDebug("loadOtherServicePlaylists: end");
 }
 
