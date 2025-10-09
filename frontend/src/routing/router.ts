@@ -162,6 +162,11 @@ class AppRouter {
     const genreChanged = stateManager.getCurrentGenre() !== genre;
     const needsFullUpdate = genreChanged || this.isInitialLoad;
 
+    // Check if rank changed before we update state
+    const previousRank = stateManager.getCurrentColumn();
+    const currentRankField = rank || this.getDefaultRank();
+    const rankChanged = previousRank !== currentRankField;
+
     // Only load content if genre changed or initial load
     // Never reload content when just opening/closing player within same genre
     const shouldLoadContent = needsFullUpdate;
@@ -175,6 +180,14 @@ class AppRouter {
 
     if (shouldLoadContent) {
       await this.loadGenreContent(genre, needsFullUpdate);
+    } else if (rankChanged && !genreChanged && !this.isInitialLoad) {
+      // Rank changed within same genre - just re-sort without reloading content
+      const { sortTable } = await import("@/components/playlist");
+      const newRankField = stateManager.getCurrentColumn();
+      const newOrder = stateManager.getCurrentOrder();
+      if (newRankField) {
+        sortTable(newRankField, newOrder);
+      }
     }
 
     if (player && isrc) {

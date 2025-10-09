@@ -901,16 +901,14 @@ export function sortTable(column: string, order: string): void {
   // Update the module-level data so subsequent operations work correctly
   playlistData = sortedData;
 
-  // Only render if not initial load (shimmer is showing)
-  if (!stateManager.isInitialLoad()) {
-    renderPlaylistTracks(
-      sortedData,
-      "main-playlist-data-placeholder",
-      SERVICE_NAMES.TUNEMELD,
-      null,
-      { forceRender: true },
-    );
-  }
+  // Always render when sorting - remove isInitialLoad check
+  renderPlaylistTracks(
+    sortedData,
+    "main-playlist-data-placeholder",
+    SERVICE_NAMES.TUNEMELD,
+    null,
+    { forceRender: true },
+  );
 }
 
 function getPlayCount(track: Track, platform: string): number | null {

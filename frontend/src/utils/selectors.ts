@@ -127,13 +127,21 @@ async function fetchServicePlaylists(genre: string): Promise<void> {
       },
     );
 
-    renderPlaylistTracks(
-      data,
-      "main-playlist-data-placeholder",
-      SERVICE_NAMES.TUNEMELD,
-      null,
-      { forceRender: !isInitial },
-    );
+    // Sort data immediately after fetching if current rank is not default
+    const currentColumn = stateManager.getCurrentColumn();
+    const currentOrder = stateManager.getCurrentOrder();
+    if (currentColumn) {
+      sortTable(currentColumn, currentOrder);
+    } else {
+      // No current column - just render with backend order
+      renderPlaylistTracks(
+        data,
+        "main-playlist-data-placeholder",
+        SERVICE_NAMES.TUNEMELD,
+        null,
+        { forceRender: !isInitial },
+      );
+    }
   }
 
   // Don't hide shimmer here - let StateManager coordinate when everything is loaded
@@ -265,10 +273,7 @@ export async function updateGenreData(
       stateManager.markLoaded("rankButtonsLoaded");
     }
 
-    const currentColumn = stateManager.getCurrentColumn();
-    if (currentColumn) {
-      sortTable(currentColumn, stateManager.getCurrentOrder());
-    }
+    // Note: Sorting is now handled in fetchServicePlaylists after data is loaded
     // Note: Shimmer is hidden by StateManager when all components are loaded
     resetCollapseStates();
     await addToggleEventListeners();

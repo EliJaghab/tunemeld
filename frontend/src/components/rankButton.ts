@@ -106,15 +106,10 @@ export async function loadAndRenderRankButtons(): Promise<void> {
             });
           button.classList.add("active");
 
-          const sortField = rank.sortField;
-          const sortOrder = rank.sortOrder;
-
-          stateManager.setCurrentColumn(sortField);
-          stateManager.setCurrentOrder(sortOrder);
-
           // Set shimmer type based on the rank we're switching TO
-          stateManager.setShimmerTypeFromSortField(sortField);
+          stateManager.setShimmerTypeFromSortField(rank.sortField);
 
+          // Let the router update the state via syncRankState()
           appRouter.navigateToRank(rank.sortField);
         });
 
