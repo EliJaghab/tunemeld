@@ -190,13 +190,21 @@ export function renderPlaylistTracks(
       placeholder.nextSibling,
     );
   }
-  dataContainer.innerHTML = "";
+
+  const revealDataContainer = isTuneMeldPlaylist
+    ? () => {
+        requestAnimationFrame(() => {
+          dataContainer?.classList.remove("playlist-data-hidden");
+        });
+      }
+    : () => {};
 
   if (isTuneMeldPlaylist && shouldKeepSkeleton) {
     dataContainer.classList.add("playlist-data-hidden");
   } else {
     dataContainer.classList.remove("playlist-data-hidden");
   }
+  dataContainer.innerHTML = "";
 
   const currentSortField = stateManager.getCurrentColumn();
   const playCountMode = getPlayCountDisplayMode(currentSortField);
@@ -305,7 +313,7 @@ export function renderPlaylistTracks(
         playCountMode,
       });
 
-      dataContainer.classList.remove("playlist-data-hidden");
+      revealDataContainer();
 
       stateManager.markLoaded("tracksLoaded");
       stateManager.markLoaded("playlistDataLoaded");
@@ -320,7 +328,7 @@ export function renderPlaylistTracks(
     placeholder.setAttribute("data-rendered", "true");
     stateManager.markLoaded("serviceDataLoaded");
     stateManager.markLoaded("tracksLoaded");
-    dataContainer.classList.remove("playlist-data-hidden");
+    revealDataContainer();
   }
 
   playlistDebug("renderPlaylistTracks:end", {

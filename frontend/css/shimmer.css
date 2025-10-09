@@ -213,9 +213,42 @@
 }
 
 .loading-overlay-playlist .sort-button.shimmer {
-  width: var(--shimmer-button-width);
-  height: var(--shimmer-button-height);
-  border-radius: calc(var(--space-xl) + var(--space-xs));
+  position: relative;
+  pointer-events: none;
+  overflow: hidden;
+  color: transparent;
+  border-color: transparent;
+}
+
+.loading-overlay-playlist .sort-button.shimmer::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    90deg,
+    var(--skeleton-color) 0%,
+    rgba(255, 255, 255, var(--shimmer-opacity)) 50%,
+    var(--skeleton-color) 100%
+  );
+  animation: shimmer var(--shimmer-duration) infinite;
+  opacity: 0.9;
+}
+
+.shimmer-control-bar {
+  display: block;
+  width: 6ch;
+  height: var(--font-size-md);
+  border-radius: var(--border-radius-small);
+  background: transparent;
+}
+
+.shimmer-control-genre .shimmer-control-bar {
+  width: 7ch;
+}
+
+.shimmer-control-rank .shimmer-control-bar {
+  width: 8ch;
 }
 
 /* Table shimmer */
@@ -288,11 +321,6 @@
 
   .playlist-shimmer-row {
     height: var(--size-row-sm);
-  }
-
-  .shimmer-button {
-    width: var(--shimmer-button-width-mobile);
-    height: var(--shimmer-button-height-mobile);
   }
 
   .shimmer-playlist-desc {

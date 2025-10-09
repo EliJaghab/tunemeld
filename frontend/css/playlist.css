@@ -308,8 +308,13 @@
   opacity: 0.7;
 }
 
-.playlist-data-hidden {
-  display: none;
+.playlist-data {
+  opacity: 1;
+  transition: opacity 200ms ease-in-out;
+}
+
+.playlist-data.playlist-data-hidden {
+  opacity: 0;
 }
 
 .th {

@@ -445,9 +445,14 @@ function injectShimmerIntoPlaceholders(
       genreControlsContainer.children.length === 0
     ) {
       for (let i = 0; i < 4; i++) {
-        const shimmerButton = createElement("div", "sort-button shimmer");
-        shimmerButton.style.width = "80px";
-        shimmerButton.style.height = "32px";
+        const shimmerButton = createElement(
+          "div",
+          "sort-button shimmer shimmer-control shimmer-control-genre",
+        );
+        shimmerButton.setAttribute("aria-hidden", "true");
+        shimmerButton.tabIndex = -1;
+        const innerBar = createElement("span", "shimmer-control-bar");
+        shimmerButton.appendChild(innerBar);
         genreControlsContainer.appendChild(shimmerButton);
       }
     }
@@ -469,9 +474,14 @@ function injectShimmerIntoPlaceholders(
     const sortControlsContainer = document.getElementById("sort-controls");
     if (sortControlsContainer && sortControlsContainer.children.length === 0) {
       for (let i = 0; i < 3; i++) {
-        const shimmerButton = createElement("div", "sort-button shimmer");
-        shimmerButton.style.width = "100px";
-        shimmerButton.style.height = "32px";
+        const shimmerButton = createElement(
+          "div",
+          "sort-button shimmer shimmer-control shimmer-control-rank",
+        );
+        shimmerButton.setAttribute("aria-hidden", "true");
+        shimmerButton.tabIndex = -1;
+        const innerBar = createElement("span", "shimmer-control-bar");
+        shimmerButton.appendChild(innerBar);
         sortControlsContainer.appendChild(shimmerButton);
       }
     }
