@@ -3,6 +3,49 @@
 from django.db import migrations, models
 
 
+def add_genius_fields_if_not_exist(apps, schema_editor):
+    """Add genius fields only if they don't already exist."""
+    with schema_editor.connection.cursor() as cursor:
+        # Check if genius_url column exists
+        cursor.execute(
+            """
+            SELECT column_name
+            FROM information_schema.columns
+            WHERE table_name='tracks' AND column_name='genius_url'
+            """
+        )
+        if not cursor.fetchone():
+            cursor.execute(
+                """
+                ALTER TABLE tracks
+                ADD COLUMN genius_url VARCHAR(200) NULL
+                """
+            )
+
+        # Check if genius_lyrics column exists
+        cursor.execute(
+            """
+            SELECT column_name
+            FROM information_schema.columns
+            WHERE table_name='tracks' AND column_name='genius_lyrics'
+            """
+        )
+        if not cursor.fetchone():
+            cursor.execute(
+                """
+                ALTER TABLE tracks
+                ADD COLUMN genius_lyrics TEXT NULL
+                """
+            )
+
+
+def reverse_genius_fields(apps, schema_editor):
+    """Remove genius fields."""
+    with schema_editor.connection.cursor() as cursor:
+        cursor.execute("ALTER TABLE tracks DROP COLUMN IF EXISTS genius_url")
+        cursor.execute("ALTER TABLE tracks DROP COLUMN IF EXISTS genius_lyrics")
+
+
 class Migration(migrations.Migration):
 
     dependencies = [
@@ -10,18 +53,5 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AddField(
-            model_name="trackmodel",
-            name="genius_lyrics",
-            field=models.TextField(
-                blank=True, help_text="Full song lyrics from Genius", null=True
-            ),
-        ),
-        migrations.AddField(
-            model_name="trackmodel",
-            name="genius_url",
-            field=models.URLField(
-                blank=True, help_text="Genius lyrics page URL", null=True
-            ),
-        ),
+        migrations.RunPython(add_genius_fields_if_not_exist, reverse_genius_fields),
     ]
