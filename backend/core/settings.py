@@ -33,6 +33,7 @@ ENVIRONMENT = get_environment()
 # Detect ETL dependencies availability for conditional imports
 # In serverless environments (Vercel), ETL dependencies are not installed
 try:
+    import lyricsgenius  # noqa: F401
     import selenium  # noqa: F401
     import spotipy  # noqa: F401
 

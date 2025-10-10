@@ -13,6 +13,7 @@ class ServiceName(str, Enum):
     APPLE_MUSIC = "apple_music"
     SOUNDCLOUD = "soundcloud"
     YOUTUBE = "youtube"
+    GENIUS = "genius"
     TUNEMELD = "tunemeld"
     TOTAL = "total"
 
@@ -178,6 +179,12 @@ SERVICE_CONFIGS: dict[str, dict] = {
         "icon_url": "/images/youtube_logo.png",
         "url_field": "youtubeUrl",
         "source_field": "youtubeSource",
+    },
+    ServiceName.GENIUS.value: {
+        "display_name": "Genius",
+        "icon_url": "/images/genius_logo.png",
+        "url_field": "geniusUrl",
+        "source_field": "geniusSource",
     },
     ServiceName.TUNEMELD.value: {
         "display_name": "tunemeld",

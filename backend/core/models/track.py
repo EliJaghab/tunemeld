@@ -33,6 +33,9 @@ class TrackModel(models.Model):
     apple_music_url = models.URLField(null=True, blank=True, help_text="Apple Music track URL")
     youtube_url = models.URLField(null=True, blank=True, help_text="YouTube track URL")
     soundcloud_url = models.URLField(null=True, blank=True, help_text="SoundCloud track URL")
+    genius_url = models.URLField(null=True, blank=True, help_text="Genius lyrics page URL")
+
+    genius_lyrics = models.TextField(null=True, blank=True, help_text="Full song lyrics from Genius")
 
     album_cover_url = models.URLField(null=True, blank=True, help_text="Album cover image URL")
 

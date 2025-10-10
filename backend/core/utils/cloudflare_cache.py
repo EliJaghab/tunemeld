@@ -32,6 +32,8 @@ CLOUDFLARE_CACHE_TTL_MAP = {
     "apple_cover": SEVEN_DAYS_TTL,
     "soundcloud_url": NO_EXPIRATION_TTL,
     "album_cover_image": SEVEN_DAYS_TTL,
+    "genius_url": NO_EXPIRATION_TTL,
+    "genius_lyrics": NO_EXPIRATION_TTL,
 }
 
 
@@ -45,6 +47,8 @@ class CachePrefix(str, Enum):
     APPLE_COVER = "apple_cover"
     SOUNDCLOUD_URL = "soundcloud_url"
     ALBUM_COVER_IMAGE = "album_cover_image"
+    GENIUS_URL = "genius_url"
+    GENIUS_LYRICS = "genius_lyrics"
 
 
 class CloudflareKVCache(BaseCache):
