@@ -24,18 +24,4 @@ class Migration(migrations.Migration):
                 blank=True, help_text="Genius lyrics page URL", null=True
             ),
         ),
-        migrations.AddIndex(
-            model_name="playlistmodel",
-            index=models.Index(
-                fields=["genre", "service", "position"],
-                name="playlists_genre_i_41d81a_idx",
-            ),
-        ),
-        migrations.AddIndex(
-            model_name="rawplaylistdatamodel",
-            index=models.Index(
-                fields=["genre", "service", "-id"],
-                name="raw_playlis_genre_i_a9748c_idx",
-            ),
-        ),
     ]
