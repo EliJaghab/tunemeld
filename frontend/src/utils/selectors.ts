@@ -1,10 +1,6 @@
 import { updatePlaylistHeader } from "@/components/playlistHeader";
 import { debugLog } from "@/config/config";
-import {
-  hideShimmerLoaders,
-  showGenreSwitchShimmer,
-  showRankSwitchShimmer,
-} from "@/components/shimmer";
+import { hideShimmerLoaders } from "@/components/shimmer";
 import {
   addToggleEventListeners,
   renderPlaylistTracks,
@@ -224,16 +220,8 @@ export async function updateGenreData(
       cachedSoundcloudData = null;
     }
 
-    // Only show shimmer if this isn't the initial load (router handles initial shimmer)
-    if (!skipInitialShimmer) {
-      if (updateAll) {
-        selectorsDebug("updateGenreData: genre switch, showing full shimmer");
-        showGenreSwitchShimmer();
-      } else {
-        selectorsDebug("updateGenreData: rank switch, playlist shimmer only");
-        showRankSwitchShimmer();
-      }
-    }
+    // Shimmer is now handled by button click handlers and initial load
+    // No shimmer logic needed here
 
     // Always fetch the initial data
     selectorsDebug("updateGenreData: fetching initial page data");

@@ -239,16 +239,12 @@ function resetShimmerAnimations(container: ParentNode): void {
 }
 
 function createServiceShimmer(): HTMLDivElement {
-  const overlay = createElement(
-    "div",
-    "loading-overlay loading-overlay-service",
-  ) as HTMLDivElement;
-  const imageShimmer = createElement("div", "shimmer shimmer-service-image");
-  const textShimmer = createElement("div", "shimmer shimmer-service-text");
-
-  overlay.appendChild(imageShimmer);
-  overlay.appendChild(textShimmer);
-
+  const overlay = document.createElement("div");
+  overlay.className = "loading-overlay loading-overlay-service";
+  overlay.innerHTML = `
+    <div class="shimmer shimmer-service-image"></div>
+    <div class="shimmer shimmer-service-text"></div>
+  `;
   return overlay;
 }
 
@@ -316,6 +312,8 @@ export function showInitialShimmer(): void {
 }
 
 export function showGenreSwitchShimmer(): void {
+  // Reset loading states to prevent premature shimmer hiding from previous load flags
+  stateManager.resetLoadingState();
   showShimmerLoaders({
     includeServices: true,
     includePlaylist: true,
@@ -328,6 +326,8 @@ export function showGenreSwitchShimmer(): void {
 export { showGenreSwitchShimmer as showServiceHeaderAndTrackShimmer };
 
 export function showRankSwitchShimmer(): void {
+  // Reset loading states to prevent premature shimmer hiding from previous load flags
+  stateManager.resetLoadingState();
   showShimmerLoaders({
     includeServices: false,
     includePlaylist: true,
@@ -335,6 +335,36 @@ export function showRankSwitchShimmer(): void {
     isInitialLoad: false,
   });
   shimmerDebug("showRankSwitchShimmer invoked");
+}
+
+/**
+ * Wrapper that shows shimmer, executes callback, then hides shimmer
+ */
+export async function withGenreShimmer<T>(
+  callback: () => Promise<T> | T,
+): Promise<T> {
+  showGenreSwitchShimmer();
+  try {
+    const result = await callback();
+    return result;
+  } finally {
+    hideShimmerLoaders();
+  }
+}
+
+/**
+ * Wrapper that shows shimmer, executes callback, then hides shimmer
+ */
+export async function withRankShimmer<T>(
+  callback: () => Promise<T> | T,
+): Promise<T> {
+  showRankSwitchShimmer();
+  try {
+    const result = await callback();
+    return result;
+  } finally {
+    hideShimmerLoaders();
+  }
 }
 
 function injectShimmerIntoPlaceholders(
@@ -361,6 +391,9 @@ function injectShimmerIntoPlaceholders(
     attachTrackShimmerObserver(mainPlaylistPlaceholder);
     mainPlaylistPlaceholder.innerHTML = "";
     mainPlaylistPlaceholder.setAttribute("data-rendered", "false");
+
+    // Keep old tracks visible - don't clear or hide data container
+    // New tracks will replace old ones when ready
     const currentColumn = stateManager.getCurrentColumn();
     const hideServiceIconShimmer =
       shimmerType === SHIMMER_TYPES.TOTAL_PLAYS &&
@@ -427,65 +460,45 @@ function injectShimmerIntoPlaceholders(
       applyInlineShimmer(tuneMeldLogo, "shimmer-inline-logo", "24px", "24px");
     }
 
-    // Shimmer for Genre label
     const genreLabel = document.querySelector(
       ".control-group:has(#genre-controls) .control-label",
     );
     if (genreLabel && genreLabel.textContent === "Genre") {
-      const labelShimmer = createElement("span", "shimmer");
-      labelShimmer.style.width = "60px";
-      labelShimmer.style.height = "20px";
-      labelShimmer.style.display = "inline-block";
-      genreLabel.innerHTML = "";
-      genreLabel.appendChild(labelShimmer);
+      genreLabel.innerHTML =
+        '<span class="shimmer" style="width: 60px; height: 20px; display: inline-block;"></span>';
     }
 
-    // Create shimmer elements for genre buttons
     const genreControlsContainer = document.getElementById("genre-controls");
     if (
       genreControlsContainer &&
       genreControlsContainer.children.length === 0
     ) {
-      for (let i = 0; i < 4; i++) {
-        const shimmerButton = createElement(
-          "div",
-          "sort-button shimmer shimmer-control shimmer-control-genre",
-        );
-        shimmerButton.setAttribute("aria-hidden", "true");
-        shimmerButton.tabIndex = -1;
-        const innerBar = createElement("span", "shimmer-control-bar");
-        shimmerButton.appendChild(innerBar);
-        genreControlsContainer.appendChild(shimmerButton);
-      }
+      genreControlsContainer.innerHTML = Array(4)
+        .fill(0)
+        .map(
+          () =>
+            '<div class="sort-button shimmer shimmer-control shimmer-control-genre" aria-hidden="true" tabindex="-1"><span class="shimmer-control-bar"></span></div>',
+        )
+        .join("");
     }
 
-    // Shimmer for Ranking label
     const rankLabel = document.querySelector(
       ".control-group:has(#sort-controls) .control-label",
     );
     if (rankLabel && rankLabel.textContent === "Ranking") {
-      const labelShimmer = createElement("span", "shimmer");
-      labelShimmer.style.width = "80px";
-      labelShimmer.style.height = "20px";
-      labelShimmer.style.display = "inline-block";
-      rankLabel.innerHTML = "";
-      rankLabel.appendChild(labelShimmer);
+      rankLabel.innerHTML =
+        '<span class="shimmer" style="width: 80px; height: 20px; display: inline-block;"></span>';
     }
 
-    // Create shimmer elements for rank buttons
     const sortControlsContainer = document.getElementById("sort-controls");
     if (sortControlsContainer && sortControlsContainer.children.length === 0) {
-      for (let i = 0; i < 3; i++) {
-        const shimmerButton = createElement(
-          "div",
-          "sort-button shimmer shimmer-control shimmer-control-rank",
-        );
-        shimmerButton.setAttribute("aria-hidden", "true");
-        shimmerButton.tabIndex = -1;
-        const innerBar = createElement("span", "shimmer-control-bar");
-        shimmerButton.appendChild(innerBar);
-        sortControlsContainer.appendChild(shimmerButton);
-      }
+      sortControlsContainer.innerHTML = Array(3)
+        .fill(0)
+        .map(
+          () =>
+            '<div class="sort-button shimmer shimmer-control shimmer-control-rank" aria-hidden="true" tabindex="-1"><span class="shimmer-control-bar"></span></div>',
+        )
+        .join("");
     }
 
     // Create shimmer for playlist title/description

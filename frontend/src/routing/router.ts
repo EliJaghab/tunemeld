@@ -171,6 +171,12 @@ class AppRouter {
     // Never reload content when just opening/closing player within same genre
     const shouldLoadContent = needsFullUpdate;
 
+    // Show shimmer for genre switches (but not initial load - that's handled separately)
+    if (genreChanged && !this.isInitialLoad) {
+      const { showGenreSwitchShimmer } = await import("@/components/shimmer");
+      showGenreSwitchShimmer();
+    }
+
     stateManager.setCurrentGenre(genre);
     this.updatePageTitle(genre);
     this.updateFavicon(genre);
@@ -181,12 +187,37 @@ class AppRouter {
     if (shouldLoadContent) {
       await this.loadGenreContent(genre, needsFullUpdate);
     } else if (rankChanged && !genreChanged && !this.isInitialLoad) {
-      // Rank changed within same genre - just re-sort without reloading content
+      const { showRankSwitchShimmer, hideShimmerLoaders } = await import(
+        "@/components/shimmer"
+      );
       const { sortTable } = await import("@/components/playlist");
+
+      const shimmerStartTime = performance.now();
+      showRankSwitchShimmer();
+
       const newRankField = stateManager.getCurrentColumn();
       const newOrder = stateManager.getCurrentOrder();
       if (newRankField) {
+        // Wait for shimmer to paint before sorting
+        await new Promise((resolve) =>
+          requestAnimationFrame(() => resolve(null)),
+        );
         sortTable(newRankField, newOrder);
+
+        // Ensure shimmer is visible for at least 150ms before hiding
+        const shimmerDuration = performance.now() - shimmerStartTime;
+        const minShimmerDuration = 150;
+        const remainingTime = Math.max(0, minShimmerDuration - shimmerDuration);
+
+        if (remainingTime > 0) {
+          await new Promise((resolve) => setTimeout(resolve, remainingTime));
+        }
+
+        // Wait for sort to paint before hiding shimmer
+        await new Promise((resolve) =>
+          requestAnimationFrame(() => resolve(null)),
+        );
+        hideShimmerLoaders();
       }
     }
 

@@ -162,8 +162,7 @@ export function renderPlaylistTracks(
   const renderToken = `${Date.now()}-${Math.random().toString(16).slice(2)}`;
   placeholder.dataset.renderToken = renderToken;
 
-  const shouldKeepSkeleton =
-    isTuneMeldPlaylist && playlistShimmerActive && !forceRender;
+  const shouldKeepSkeleton = isTuneMeldPlaylist && playlistShimmerActive;
 
   if (!shouldKeepSkeleton) {
     if (isTuneMeldPlaylist) {
@@ -199,14 +198,13 @@ export function renderPlaylistTracks(
   const revealDataContainer = (newFragment: DocumentFragment) => {
     dataContainer.innerHTML = "";
     dataContainer.appendChild(newFragment);
+    dataContainer.style.display = "";
     dataContainer.classList.add("playlist-data-hidden");
 
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
-        if (isTuneMeldPlaylist) {
-          hideShimmerLoaders();
-        }
-
+        // Shimmer hiding is handled by updateGenreData in selectors.ts
+        // Don't hide here - this gets called during intermediate renders
         dataContainer?.classList.remove("playlist-data-hidden");
       });
     });
@@ -356,7 +354,6 @@ function setTrackInfoLabels(
   const fullArtistName =
     track.fullArtistName || track.artistName || "Unknown Artist";
 
-  // Use button labels already included in track data
   if (track.buttonLabels && track.buttonLabels.length > 0) {
     const trackLabel = track.buttonLabels.find(
       (label: ButtonLabel) => label.buttonType === "track_title",
@@ -364,7 +361,6 @@ function setTrackInfoLabels(
 
     if (trackLabel) {
       if (trackLabel.title) {
-        // Replace placeholders with actual track info
         trackTitle.title = trackLabel.title
           .replace("{trackName}", fullTrackName)
           .replace("{artistName}", fullArtistName);
@@ -380,9 +376,175 @@ function setTrackInfoLabels(
     }
   }
 
-  // Set artist tooltip
   artistElement.title = fullArtistName;
   artistElement.setAttribute("aria-label", `Artist: ${fullArtistName}`);
+}
+
+function getRankValue(
+  track: Track,
+  serviceName: string,
+  displayRank?: number,
+): string {
+  if (serviceName === SERVICE_NAMES.TUNEMELD) {
+    const currentSortColumn = stateManager.getCurrentColumn();
+    const showDisplayRank =
+      displayRank !== undefined && currentSortColumn !== TUNEMELD_RANK_FIELD;
+    return showDisplayRank
+      ? displayRank.toString()
+      : track.tunemeldRank?.toString() || "-";
+  }
+
+  const rankMap: Record<string, number | null | undefined> = {
+    [SERVICE_NAMES.SPOTIFY]: track.spotifyRank,
+    [SERVICE_NAMES.APPLE_MUSIC]: track.appleMusicRank,
+    [SERVICE_NAMES.SOUNDCLOUD]: track.soundcloudRank,
+  };
+
+  return rankMap[serviceName]?.toString() || "";
+}
+
+function getTrackUrl(track: Track, serviceName: string): string {
+  if (
+    serviceName === SERVICE_NAMES.TUNEMELD ||
+    serviceName === SERVICE_NAMES.TOTAL
+  ) {
+    return (
+      track.youtubeSource?.url ||
+      track.spotifySource?.url ||
+      track.appleMusicSource?.url ||
+      track.soundcloudSource?.url ||
+      "#"
+    );
+  }
+
+  const urlMap: Record<string, string | undefined> = {
+    [SERVICE_NAMES.SPOTIFY]: track.spotifySource?.url,
+    [SERVICE_NAMES.APPLE_MUSIC]: track.appleMusicSource?.url,
+    [SERVICE_NAMES.SOUNDCLOUD]: track.soundcloudSource?.url,
+    [SERVICE_NAMES.YOUTUBE]: track.youtubeSource?.url,
+  };
+
+  return urlMap[serviceName] || "#";
+}
+
+function getTrackLabels(track: Track): {
+  titleAttr: string;
+  ariaLabel: string;
+  artistTitle: string;
+} {
+  const fullTrackName =
+    track.fullTrackName || track.trackName || "Unknown Track";
+  const fullArtistName =
+    track.fullArtistName || track.artistName || "Unknown Artist";
+
+  let titleAttr = `${fullTrackName} by ${fullArtistName}`;
+  let ariaLabel = `Play ${fullTrackName} by ${fullArtistName}`;
+
+  if (track.buttonLabels && track.buttonLabels.length > 0) {
+    const trackLabel = track.buttonLabels.find(
+      (label: ButtonLabel) => label.buttonType === "track_title",
+    );
+    if (trackLabel) {
+      if (trackLabel.title) {
+        titleAttr = trackLabel.title
+          .replace("{trackName}", fullTrackName)
+          .replace("{artistName}", fullArtistName);
+      }
+      if (trackLabel.ariaLabel) {
+        ariaLabel = trackLabel.ariaLabel
+          .replace("{trackName}", fullTrackName)
+          .replace("{artistName}", fullArtistName);
+      }
+    }
+  }
+
+  return {
+    titleAttr,
+    ariaLabel,
+    artistTitle: `Artist: ${fullArtistName}`,
+  };
+}
+
+function renderCoverCellHtml(track: Track): string {
+  return `
+    <td class="cover">
+      <img class="album-cover"
+           src="${track.albumCoverUrl || ""}"
+           alt="Album Cover">
+    </td>
+  `;
+}
+
+function renderTrackInfoCellHtml(track: Track, serviceName: string): string {
+  const trackUrl = getTrackUrl(track, serviceName);
+  const trackName = track.trackName || "Unknown Track";
+  const artistName = track.artistName || "Unknown Artist";
+  const labels = getTrackLabels(track);
+
+  return `
+    <td class="info">
+      <div class="track-info-div">
+        <a class="track-title"
+           href="${trackUrl}"
+           title="${labels.titleAttr}"
+           aria-label="${labels.ariaLabel}">
+          ${trackName}
+        </a>
+        <br>
+        <span class="artist-name"
+              title="${labels.artistTitle}">
+          ${artistName}
+        </span>
+      </div>
+    </td>
+  `;
+}
+
+function renderPlayCountCellsHtml(
+  track: Track,
+  playCountMode: PlayCountDisplayMode,
+): string {
+  const playCountData = getPlayCountForTrack(track);
+  const showTotal = playCountMode !== "trending";
+  const showTrending = playCountMode !== "total";
+
+  let totalHtml = "";
+  let trendingHtml = "";
+
+  if (showTotal && playCountData.totalCurrentPlayCountAbbreviated) {
+    totalHtml = `
+      <td class="total-play-count">
+        <div class="total-play-count-container">
+          <span class="total-play-count-text">
+            ${playCountData.totalCurrentPlayCountAbbreviated}
+          </span>
+        </div>
+      </td>
+    `;
+  } else if (!showTotal) {
+    totalHtml = '<td class="total-play-count playcount-hidden"></td>';
+  }
+
+  if (showTrending && playCountData.totalWeeklyChangePercentageFormatted) {
+    const percentage = playCountData.totalWeeklyChangePercentageFormatted;
+    const numericValue = parseFloat(percentage.replace(/[^0-9.-]+/g, ""));
+    const trendClass =
+      numericValue < 0 ? "negative" : numericValue > 0 ? "positive" : "";
+
+    trendingHtml = `
+      <td class="trending">
+        <div class="trending-container">
+          <span class="trending-percentage ${trendClass}">
+            ${percentage}
+          </span>
+        </div>
+      </td>
+    `;
+  } else if (!showTrending) {
+    trendingHtml = '<td class="trending playcount-hidden"></td>';
+  }
+
+  return totalHtml + trendingHtml;
 }
 
 function createTuneMeldPlaylistTableRow(
@@ -391,125 +553,31 @@ function createTuneMeldPlaylistTableRow(
   playCountMode: PlayCountDisplayMode,
 ): HTMLTableRowElement {
   const row = document.createElement("tr");
-
   row.setAttribute("data-isrc", track.isrc);
   row.setAttribute("data-track", JSON.stringify(track));
 
-  const rankCell = document.createElement("td");
-  rankCell.className = "rank";
-  // Show current position if displayRank provided, otherwise show original tunemeldRank
-  const currentSortColumn = stateManager.getCurrentColumn();
-  const showDisplayRank =
-    displayRank !== undefined && currentSortColumn !== TUNEMELD_RANK_FIELD;
-  rankCell.textContent = showDisplayRank
-    ? displayRank.toString()
-    : track.tunemeldRank?.toString() || "-";
-
-  const coverCell = document.createElement("td");
-  coverCell.className = "cover";
-  const albumCover = document.createElement("img");
-  albumCover.className = "album-cover";
-  albumCover.src = track.albumCoverUrl || "";
-  albumCover.alt = "Album Cover";
-  coverCell.appendChild(albumCover);
-
-  const trackInfoCell = document.createElement("td");
-  trackInfoCell.className = "info";
-  const trackInfoDiv = document.createElement("div");
-  trackInfoDiv.className = "track-info-div";
-
-  const trackTitle = document.createElement("a");
-  trackTitle.className = "track-title";
-  // For TuneMeld Playlist, use the first available actual service URL (YouTube priority)
-  const trackUrl =
-    track.youtubeSource?.url ||
-    track.spotifySource?.url ||
-    track.appleMusicSource?.url ||
-    track.soundcloudSource?.url ||
-    "#";
-  trackTitle.href = trackUrl;
-  trackTitle.textContent = track.trackName || "Unknown Track";
-
-  const artistNameElement = document.createElement("span");
-  artistNameElement.className = "artist-name";
-  artistNameElement.textContent = track.artistName || "Unknown Artist";
-
-  // Set backend-driven labels
-  setTrackInfoLabels(
-    trackTitle,
-    artistNameElement,
-    track,
-    SERVICE_NAMES.TUNEMELD,
-  );
-
-  trackInfoDiv.appendChild(trackTitle);
-  trackInfoDiv.appendChild(document.createElement("br"));
-  trackInfoDiv.appendChild(artistNameElement);
-
-  trackInfoCell.appendChild(trackInfoDiv);
-
-  const spacerCell = document.createElement("td");
-  spacerCell.className = "spacer";
-
-  const seenOnCell = document.createElement("td");
-  seenOnCell.className = "seen-on";
-  displaySources(seenOnCell, track);
-
-  const externalLinksCell = document.createElement("td");
-  externalLinksCell.className = "external";
-
-  row.appendChild(rankCell);
-  row.appendChild(coverCell);
-  row.appendChild(trackInfoCell);
-  row.appendChild(spacerCell);
-
-  // Only show play counts if we're not in TuneMeld rank mode
+  const rankValue = getRankValue(track, SERVICE_NAMES.TUNEMELD, displayRank);
   const currentRankColumn = stateManager.getCurrentColumn();
-  if (currentRankColumn !== TUNEMELD_RANK_FIELD) {
-    displayPlayCounts(track, row, playCountMode);
-  }
+  const showPlayCounts = currentRankColumn !== TUNEMELD_RANK_FIELD;
 
-  row.appendChild(seenOnCell);
-  row.appendChild(externalLinksCell);
+  row.innerHTML = `
+    <td class="rank">${rankValue}</td>
+    ${renderCoverCellHtml(track)}
+    ${renderTrackInfoCellHtml(track, SERVICE_NAMES.TUNEMELD)}
+    <td class="spacer"></td>
+    ${showPlayCounts ? renderPlayCountCellsHtml(track, playCountMode) : ""}
+    <td class="seen-on" data-seen-on="${track.isrc}"></td>
+    <td class="external"></td>
+  `;
+
+  const seenOnCell = row.querySelector(
+    `[data-seen-on="${track.isrc}"]`,
+  ) as HTMLTableCellElement;
+  if (seenOnCell) {
+    displaySources(seenOnCell, track);
+  }
 
   return row;
-}
-
-function createTotalPlayCountElement(
-  playCount: number | string,
-  track: Track,
-): HTMLElement {
-  const container = document.createElement("div");
-  container.className = "total-play-count-container";
-
-  const text = document.createElement("span");
-  text.textContent =
-    typeof playCount === "string" ? playCount : playCount.toLocaleString();
-  text.className = "total-play-count-text";
-
-  container.appendChild(text);
-  return container;
-}
-
-function createTrendingElement(percentage: string): HTMLElement {
-  const container = document.createElement("div");
-  container.className = "trending-container";
-
-  const text = document.createElement("span");
-  text.textContent = percentage;
-  text.className = "trending-percentage";
-
-  const numericValue = parseFloat(percentage.replace(/[^0-9.-]+/g, ""));
-  if (!Number.isNaN(numericValue)) {
-    if (numericValue < 0) {
-      text.classList.add("negative");
-    } else if (numericValue > 0) {
-      text.classList.add("positive");
-    }
-  }
-
-  container.appendChild(text);
-  return container;
 }
 
 function formatAbbreviatedPlayCount(count: number): string {
@@ -581,63 +649,6 @@ function getPlayCountForTrack(track: Track) {
   };
 }
 
-function displayPlayCounts(
-  track: Track,
-  row: HTMLTableRowElement,
-  mode: PlayCountDisplayMode,
-): void {
-  const showTotal = mode !== "trending";
-  const showTrending = mode !== "total";
-
-  const totalPlaysCell = document.createElement("td");
-  totalPlaysCell.className = "total-play-count";
-
-  const trendingCell = document.createElement("td");
-  trendingCell.className = "trending";
-
-  const playCountData = getPlayCountForTrack(track);
-  const totalCurrentPlayCountAbbreviated =
-    playCountData.totalCurrentPlayCountAbbreviated;
-  const totalWeeklyChangePercentageFormatted =
-    playCountData.totalWeeklyChangePercentageFormatted;
-
-  console.log("[Trending Debug]", {
-    trackName: track.trackName,
-    showTrending,
-    totalWeeklyChangePercentageFormatted,
-    rawPercentage: playCountData.totalWeeklyChangePercentage,
-  });
-
-  if (showTotal && totalCurrentPlayCountAbbreviated !== null) {
-    const element = createTotalPlayCountElement(
-      totalCurrentPlayCountAbbreviated,
-      track,
-    );
-    totalPlaysCell.appendChild(element);
-  } else if (!showTotal) {
-    totalPlaysCell.classList.add("playcount-hidden");
-  }
-
-  if (showTrending && totalWeeklyChangePercentageFormatted) {
-    const element = createTrendingElement(totalWeeklyChangePercentageFormatted);
-    trendingCell.appendChild(element);
-  } else if (!showTrending) {
-    trendingCell.classList.add("playcount-hidden");
-  }
-
-  playlistDebug("displayPlayCounts", {
-    isrc: track.isrc,
-    mode,
-    showTotal,
-    showTrending,
-    totalValue: totalCurrentPlayCountAbbreviated,
-    trendingValue: totalWeeklyChangePercentageFormatted,
-  });
-
-  row.appendChild(totalPlaysCell);
-  row.appendChild(trendingCell);
-}
-
 function createServicePlaylistTableRow(
   track: Track,
   serviceName: string,
@@ -645,120 +656,54 @@ function createServicePlaylistTableRow(
   playCountMode: PlayCountDisplayMode = "both",
 ): HTMLTableRowElement {
   const row = document.createElement("tr");
-
   row.setAttribute("data-isrc", track.isrc);
   row.setAttribute("data-track", JSON.stringify(track));
 
-  const rankCell = document.createElement("td");
-  rankCell.className = "rank";
+  const rankValue = getRankValue(track, serviceName, displayRank);
+  const isTotalService = serviceName === SERVICE_NAMES.TOTAL;
 
-  // Determine which rank to display based on service
-  let serviceRank: number | null | undefined = null;
-  if (serviceName === SERVICE_NAMES.SPOTIFY) {
-    serviceRank = track.spotifyRank;
-  } else if (serviceName === SERVICE_NAMES.APPLE_MUSIC) {
-    serviceRank = track.appleMusicRank;
-  } else if (serviceName === SERVICE_NAMES.SOUNDCLOUD) {
-    serviceRank = track.soundcloudRank;
-  }
+  if (isTotalService) {
+    row.innerHTML = `
+      <td class="rank">${rankValue}</td>
+      ${renderCoverCellHtml(track)}
+      ${renderTrackInfoCellHtml(track, serviceName)}
+      <td class="spacer"></td>
+      ${renderPlayCountCellsHtml(track, playCountMode)}
+      <td class="seen-on" data-seen-on="${track.isrc}"></td>
+      <td class="external" data-external="${track.isrc}"></td>
+    `;
 
-  rankCell.textContent = serviceRank?.toString() || "";
-
-  const coverCell = document.createElement("td");
-  coverCell.className = "cover";
-  const albumCover = document.createElement("img");
-  albumCover.className = "album-cover";
-  albumCover.src = track.albumCoverUrl || "";
-  albumCover.alt = "Album Cover";
-  coverCell.appendChild(albumCover);
-
-  const trackInfoCell = document.createElement("td");
-  trackInfoCell.className = "info";
-  const trackInfoDiv = document.createElement("div");
-  trackInfoDiv.className = "track-info-div";
-
-  const trackTitle = document.createElement("a");
-  trackTitle.className = "track-title";
-  // For service playlists, use the specific service's actual URL
-  let trackUrl = "#";
-  if (serviceName === SERVICE_NAMES.SPOTIFY) {
-    trackUrl = track.spotifySource?.url || "#";
-  } else if (serviceName === SERVICE_NAMES.APPLE_MUSIC) {
-    trackUrl = track.appleMusicSource?.url || "#";
-  } else if (serviceName === SERVICE_NAMES.SOUNDCLOUD) {
-    trackUrl = track.soundcloudSource?.url || "#";
-  } else if (serviceName === SERVICE_NAMES.YOUTUBE) {
-    trackUrl = track.youtubeSource?.url || "#";
-  } else if (serviceName === SERVICE_NAMES.TOTAL) {
-    // For total views, use first available actual URL
-    trackUrl =
-      track.youtubeSource?.url ||
-      track.spotifySource?.url ||
-      track.appleMusicSource?.url ||
-      track.soundcloudSource?.url ||
-      "#";
-  }
-  trackTitle.href = trackUrl;
-  trackTitle.textContent = track.trackName || "Unknown Track";
-
-  const artistNameElement = document.createElement("span");
-  artistNameElement.className = "artist-name";
-  artistNameElement.textContent = track.artistName || "Unknown Artist";
-
-  // Set backend-driven labels
-  setTrackInfoLabels(trackTitle, artistNameElement, track, serviceName);
-
-  trackInfoDiv.appendChild(trackTitle);
-  trackInfoDiv.appendChild(document.createElement("br"));
-  trackInfoDiv.appendChild(artistNameElement);
-
-  trackInfoCell.appendChild(trackInfoDiv);
-
-  row.appendChild(rankCell);
-  row.appendChild(coverCell);
-  row.appendChild(trackInfoCell);
-
-  // Check if this is the total views page - if so, show play counts instead of just external links
-  if (serviceName === SERVICE_NAMES.TOTAL) {
-    // Add spacer column to match TOTAL_PLAYS table structure
-    const spacerCell = document.createElement("td");
-    spacerCell.className = "spacer";
-    row.appendChild(spacerCell);
-
-    // Add play count columns
-    displayPlayCounts(track, row, playCountMode);
-
-    // Add seen-on column (service icons)
-    const seenOnCell = document.createElement("td");
-    seenOnCell.className = "seen-on";
-    displaySources(seenOnCell, track);
-    row.appendChild(seenOnCell);
-
-    // Add external links column
-    const externalLinksCell = document.createElement("td");
-    externalLinksCell.className = "external";
-    if (track.youtubeSource) {
-      const youtubeLink = createSourceLinkFromService(
-        track.youtubeSource,
-        null,
-        track,
-      );
-      externalLinksCell.appendChild(youtubeLink);
+    const seenOnCell = row.querySelector(
+      `[data-seen-on="${track.isrc}"]`,
+    ) as HTMLTableCellElement;
+    if (seenOnCell) {
+      displaySources(seenOnCell, track);
     }
-    row.appendChild(externalLinksCell);
+
+    const externalCell = row.querySelector(
+      `[data-external="${track.isrc}"]`,
+    ) as HTMLTableCellElement;
+    if (externalCell && track.youtubeSource) {
+      externalCell.appendChild(
+        createSourceLinkFromService(track.youtubeSource, null, track),
+      );
+    }
   } else {
-    // Regular service playlist - just show external links
-    const externalLinksCell = document.createElement("td");
-    externalLinksCell.className = "external";
-    if (track.youtubeSource) {
-      const youtubeLink = createSourceLinkFromService(
-        track.youtubeSource,
-        null,
-        track,
+    row.innerHTML = `
+      <td class="rank">${rankValue}</td>
+      ${renderCoverCellHtml(track)}
+      ${renderTrackInfoCellHtml(track, serviceName)}
+      <td class="external" data-external="${track.isrc}"></td>
+    `;
+
+    const externalCell = row.querySelector(
+      `[data-external="${track.isrc}"]`,
+    ) as HTMLTableCellElement;
+    if (externalCell && track.youtubeSource) {
+      externalCell.appendChild(
+        createSourceLinkFromService(track.youtubeSource, null, track),
       );
-      externalLinksCell.appendChild(youtubeLink);
     }
-    row.appendChild(externalLinksCell);
   }
 
   return row;
