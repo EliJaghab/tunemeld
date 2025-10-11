@@ -64,7 +64,14 @@ export function getDjangoApiBaseUrl(): string {
     : "https://api.tunemeld.com";
 }
 
+export function getAppBaseUrl(): string {
+  return isLocalDevelopment()
+    ? "http://localhost:8080"
+    : "https://tunemeld.com";
+}
+
 export const DJANGO_API_BASE_URL = getDjangoApiBaseUrl();
+export const APP_BASE_URL = getAppBaseUrl();
 
 export const DEBUG_LOG_ENABLED = isLocalDevelopment();
 
