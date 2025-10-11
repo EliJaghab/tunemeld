@@ -74,52 +74,37 @@ export async function loadAndRenderRankButtons(): Promise<void> {
       sortControlsElement.innerHTML = "";
     }
 
-    // Create buttons synchronously - no more individual GraphQL requests!
-    const buttonPromises = ranks.map(
-      async (rank: Rank, index: number): Promise<HTMLButtonElement> => {
-        const button = document.createElement("button");
-        const isCurrentlyActive = stateManager.isRankActive(rank.sortField);
-        button.className = isCurrentlyActive
-          ? "sort-button active"
-          : "sort-button";
-        button.setAttribute("data-sort", rank.sortField);
-        button.setAttribute("data-order", rank.sortOrder);
+    ranks.forEach((rank: Rank) => {
+      if (!rank.displayName) {
+        console.error("Missing displayName for rank:", rank);
+        throw new Error(`Rank missing required displayName: ${rank.sortField}`);
+      }
 
-        if (!rank.displayName) {
-          console.error("Missing displayName for rank:", rank);
-          throw new Error(
-            `Rank missing required displayName: ${rank.sortField}`,
-          );
-        }
+      const isCurrentlyActive = stateManager.isRankActive(rank.sortField);
+      const className = isCurrentlyActive
+        ? "sort-button active"
+        : "sort-button";
 
-        button.title = `Sort by ${rank.displayName}`;
-        button.setAttribute("aria-label", `Sort tracks by ${rank.displayName}`);
+      const button = document.createElement("button");
+      button.className = className;
+      button.setAttribute("data-sort", rank.sortField);
+      button.setAttribute("data-order", rank.sortOrder);
+      button.title = `Sort by ${rank.displayName}`;
+      button.setAttribute("aria-label", `Sort tracks by ${rank.displayName}`);
+      button.textContent = rank.displayName;
 
-        const text = document.createTextNode(rank.displayName);
-        button.appendChild(text);
+      button.addEventListener("click", function (): void {
+        document
+          .querySelectorAll(".sort-controls .sort-button")
+          .forEach((btn: Element) => {
+            btn.classList.remove("active");
+          });
+        button.classList.add("active");
 
-        button.addEventListener("click", function (): void {
-          document
-            .querySelectorAll(".sort-controls .sort-button")
-            .forEach((btn: Element) => {
-              btn.classList.remove("active");
-            });
-          button.classList.add("active");
+        stateManager.setShimmerTypeFromSortField(rank.sortField);
+        appRouter.navigateToRank(rank.sortField);
+      });
 
-          // Set shimmer type based on the rank we're switching TO
-          stateManager.setShimmerTypeFromSortField(rank.sortField);
-
-          // Let the router update the state via syncRankState()
-          appRouter.navigateToRank(rank.sortField);
-        });
-
-        return button;
-      },
-    );
-
-    // Wait for all buttons to be created and then append them
-    const buttons = await Promise.all(buttonPromises);
-    buttons.forEach((button: HTMLButtonElement) => {
       realButtonsContainer.appendChild(button);
     });
 

@@ -242,25 +242,20 @@ async function openPlayer(
       );
     }
 
-    // Dynamically inject vertical spacing before and after player controls
     const playerContent = document.getElementById("player-content");
     const playerControls = document.getElementById("player-controls");
     if (playerContent && playerControls) {
-      // Remove any existing vertical spacing
-      const existingSpacing =
-        playerContent.querySelectorAll(".vertical-spacing");
-      existingSpacing.forEach((spacing) => spacing.remove());
+      playerContent
+        .querySelectorAll(".vertical-spacing")
+        .forEach((spacing) => spacing.remove());
 
-      // Add vertical spacing before controls
-      const verticalSpacingBefore = document.createElement("div");
-      verticalSpacingBefore.className = "vertical-spacing";
-      playerContent.insertBefore(verticalSpacingBefore, playerControls);
+      const spacingBefore = document.createElement("div");
+      spacingBefore.className = "vertical-spacing";
+      playerContent.insertBefore(spacingBefore, playerControls);
 
-      // Add vertical spacing after controls
-      const verticalSpacingAfter = document.createElement("div");
-      verticalSpacingAfter.className =
-        "vertical-spacing player-controls-spacing";
-      playerContent.appendChild(verticalSpacingAfter);
+      const spacingAfter = document.createElement("div");
+      spacingAfter.className = "vertical-spacing player-controls-spacing";
+      playerContent.appendChild(spacingAfter);
     }
 
     createServiceButtons(trackData);
@@ -386,7 +381,6 @@ async function createServiceButtons(trackData: Track | null): Promise<void> {
         const button = document.createElement("button");
         button.className = "service-link-button";
 
-        // Use backend button labels if available, otherwise fallback
         try {
           const buttonLabels = await graphqlClient.getMiscButtonLabels(
             "service_player_button",
@@ -394,14 +388,10 @@ async function createServiceButtons(trackData: Track | null): Promise<void> {
           );
           if (buttonLabels && buttonLabels.length > 0) {
             const serviceLabel = buttonLabels[0];
-            if (serviceLabel.title) {
-              button.title = serviceLabel.title;
-            }
-            if (serviceLabel.ariaLabel) {
+            if (serviceLabel.title) button.title = serviceLabel.title;
+            if (serviceLabel.ariaLabel)
               button.setAttribute("aria-label", serviceLabel.ariaLabel);
-            }
           } else {
-            // Fallback to basic label
             button.title = `Play on ${source.displayName}`;
           }
         } catch (error) {
@@ -409,10 +399,11 @@ async function createServiceButtons(trackData: Track | null): Promise<void> {
           button.title = `Play on ${source.displayName}`;
         }
 
+        button.innerHTML = `<img src="${source.iconUrl}" alt="${source.displayName}" class="service-icon">`;
+
         button.addEventListener("click", async () => {
           const serviceType = getServiceType(url);
           if (serviceType !== "none") {
-            // Use centralized navigation to update URL
             const currentGenre = appRouter.getCurrentGenre();
             if (currentGenre) {
               appRouter.navigateToTrack(
@@ -426,12 +417,6 @@ async function createServiceButtons(trackData: Track | null): Promise<void> {
           }
         });
 
-        const icon = document.createElement("img");
-        icon.src = source.iconUrl;
-        icon.alt = source.displayName;
-        icon.className = "service-icon";
-
-        button.appendChild(icon);
         serviceButtonsContainer.appendChild(button);
       }
     }

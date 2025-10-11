@@ -40,35 +40,27 @@ export async function loadAndRenderGenreButtons() {
     }
 
     genres.forEach((genre: Genre) => {
-      const button = document.createElement("button");
       const isCurrentlyActive = appRouter.getCurrentGenre() === genre.name;
-      button.className = isCurrentlyActive
+      const className = isCurrentlyActive
         ? "sort-button active"
         : "sort-button";
+
+      const genreLabel = genre.buttonLabels?.find(
+        (label: ButtonLabel) => label.buttonType === "genre_button",
+      );
+
+      const button = document.createElement("button");
+      button.className = className;
       button.setAttribute("data-genre", genre.name);
 
-      if (genre.buttonLabels && genre.buttonLabels.length > 0) {
-        const genreLabel = genre.buttonLabels.find(
-          (label: ButtonLabel) => label.buttonType === "genre_button",
-        );
-        if (genreLabel) {
-          if (genreLabel.title) {
-            button.title = genreLabel.title;
-          }
-          if (genreLabel.ariaLabel) {
-            button.setAttribute("aria-label", genreLabel.ariaLabel);
-          }
-        }
-      }
+      if (genreLabel?.title) button.title = genreLabel.title;
+      if (genreLabel?.ariaLabel)
+        button.setAttribute("aria-label", genreLabel.ariaLabel);
 
-      const icon = document.createElement("img");
-      icon.src = genre.iconUrl;
-      icon.alt = genre.displayName;
-      icon.className = "button-icon";
-      button.appendChild(icon);
-
-      const text = document.createTextNode(genre.displayName);
-      button.appendChild(text);
+      button.innerHTML = `
+        <img class="button-icon" src="${genre.iconUrl}" alt="${genre.displayName}">
+        ${genre.displayName}
+      `;
 
       button.addEventListener("click", function () {
         document
@@ -78,7 +70,6 @@ export async function loadAndRenderGenreButtons() {
           });
         button.classList.add("active");
 
-        // Preserve current rank when changing genre
         const currentRank = stateManager.getCurrentColumn();
         appRouter.navigateToGenre(genre.name, currentRank || null);
       });
