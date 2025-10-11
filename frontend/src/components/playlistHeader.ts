@@ -243,7 +243,7 @@ function createAndAttachModal(
 
 function setupDescriptionModal(
   descriptionElement: HTMLElement,
-  fullText: string,
+  description: string,
   title: string,
   serviceName: string,
   genre: string,
@@ -274,38 +274,19 @@ function setupDescriptionModal(
     );
   }
 
-  if (fullText.length > estimatedMaxTextLength) {
-    let truncatedText = fullText.substring(0, estimatedMaxTextLength);
+  const fullText = `${title}\n${description}`;
+
+  if (description.length > estimatedMaxTextLength) {
+    let truncatedText = description.substring(0, estimatedMaxTextLength);
     const lastSpaceIndex = truncatedText.lastIndexOf(" ");
     if (lastSpaceIndex > MIN_CHAR_LIMIT) {
       truncatedText = truncatedText.substring(0, lastSpaceIndex);
     }
     truncatedText += "... ";
 
-    // Check if this is a combined title-description format
-    if (fullText.includes(" · ")) {
-      const [titlePart, ...descParts] = fullText.split(" · ");
-      const remainingDesc = descParts.join(" · ");
-      if (truncatedText.includes(" · ")) {
-        const [truncatedTitle, ...truncatedDescParts] =
-          truncatedText.split(" · ");
-        const truncatedDesc = truncatedDescParts.join(" · ");
-        descriptionElement.innerHTML = `<strong>${truncatedTitle}</strong> · ${truncatedDesc}<span class="more-button">more</span>`;
-      } else {
-        descriptionElement.innerHTML = `<strong>${truncatedText}</strong><span class="more-button">more</span>`;
-      }
-    } else {
-      descriptionElement.innerHTML = `${truncatedText}<span class="more-button">more</span>`;
-    }
+    descriptionElement.innerHTML = `${truncatedText}<span class="more-button">more</span>`;
   } else {
-    // Check if this is a combined title-description format
-    if (fullText.includes(" · ")) {
-      const [titlePart, ...descParts] = fullText.split(" · ");
-      const remainingDesc = descParts.join(" · ");
-      descriptionElement.innerHTML = `<strong>${titlePart}</strong> · ${remainingDesc}`;
-    } else {
-      descriptionElement.textContent = fullText;
-    }
+    descriptionElement.innerHTML = description;
   }
 
   // Always create and attach modal, regardless of text length
@@ -455,10 +436,10 @@ async function updateServiceHeaderArt(
   }
 
   if (titleDescriptionElement) {
-    const combinedText = `${playlistName} · ${playlistDescription}`;
+    const combinedDescription = `${playlistName} · ${playlistDescription}`;
     setupDescriptionModal(
       titleDescriptionElement,
-      combinedText,
+      combinedDescription,
       playlistName,
       serviceName,
       genre,

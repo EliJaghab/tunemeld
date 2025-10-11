@@ -2,6 +2,7 @@
 	lint \
 	invalidate_cache \
 	setup_env \
+	build-frontend \
 	serve-frontend \
 	serve-backend \
 	serve-redis \
@@ -53,10 +54,16 @@ setup_env:
 	@# Note: .env files not present in repo, need to be created locally
 
 
+build-frontend:
+	@echo " Building frontend TypeScript..."
+	cd frontend && npm run build
+	@echo " Frontend built successfully!"
+
 format: install-pre-commit
 	@echo " Running pre-commit hooks to format and lint code..."
 	source .venv/bin/activate && pre-commit run --all-files
 	@echo " Code formatted and linted!"
+	@$(MAKE) build-frontend
 
 invalidate_cache:
 	@echo "Warning: No environment file found. Skipping cache invalidation."
