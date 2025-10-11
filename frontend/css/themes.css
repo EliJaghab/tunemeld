@@ -231,6 +231,9 @@
   --font-size-mobile-md: 12px; /* Standard mobile text */
   --font-size-mobile-lg: 15px; /* Larger mobile text */
 
+  /* Font Weights */
+  --font-weight-button: 700; /* Bold button text */
+
   /* Text Truncation Utilities */
   --mobile-line-clamp: 2;
   --desktop-line-clamp: 3;

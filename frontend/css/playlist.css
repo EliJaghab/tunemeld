@@ -436,7 +436,7 @@
   cursor: pointer;
   transition: all 0.3s ease;
   font-family: var(--font-family-primary);
-  font-weight: 500;
+  font-weight: var(--font-weight-button);
   display: inline-flex;
   align-items: center;
   gap: var(--space-sm);

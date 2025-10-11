@@ -36,7 +36,7 @@ a {
   position: relative;
   overflow: hidden;
   font-family: var(--font-family-primary);
-  font-weight: 500;
+  font-weight: var(--font-weight-button);
   transition: all 0.3s ease;
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.1),
@@ -76,7 +76,7 @@ a {
   width: var(--collapse-button-width);
   position: relative;
   overflow: hidden;
-  font-weight: 500;
+  font-weight: var(--font-weight-button);
   transition: all 0.3s ease;
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.1),
