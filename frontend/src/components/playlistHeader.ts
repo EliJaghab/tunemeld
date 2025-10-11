@@ -284,9 +284,21 @@ function setupDescriptionModal(
     }
     truncatedText += "... ";
 
-    descriptionElement.innerHTML = `${truncatedText}<span class="more-button">more</span>`;
+    if (truncatedText.includes(" · ")) {
+      const [titlePart, ...descParts] = truncatedText.split(" · ");
+      const remainingDesc = descParts.join(" · ");
+      descriptionElement.innerHTML = `<strong>${titlePart}</strong> · ${remainingDesc}<span class="more-button">more</span>`;
+    } else {
+      descriptionElement.innerHTML = `<strong>${truncatedText}</strong><span class="more-button">more</span>`;
+    }
   } else {
-    descriptionElement.innerHTML = description;
+    if (description.includes(" · ")) {
+      const [titlePart, ...descParts] = description.split(" · ");
+      const remainingDesc = descParts.join(" · ");
+      descriptionElement.innerHTML = `<strong>${titlePart}</strong> · ${remainingDesc}`;
+    } else {
+      descriptionElement.innerHTML = `<strong>${description}</strong>`;
+    }
   }
 
   // Always create and attach modal, regardless of text length
