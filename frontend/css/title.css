@@ -9,9 +9,15 @@
   gap: var(--space-md);
 }
 
+.logo-title-link {
+  display: contents;
+  text-decoration: none;
+  color: inherit;
+}
+
 img#tunemeld-logo {
-  width: var(--size-tunemeld-logo, 75px); /* Add fallback for immediate load */
-  height: var(--size-tunemeld-logo, 75px); /* Add fallback for immediate load */
+  width: var(--size-tunemeld-logo, 75px);
+  height: var(--size-tunemeld-logo, 75px);
   grid-column: 1;
   grid-row: 1 / 3;
   margin: 0;
