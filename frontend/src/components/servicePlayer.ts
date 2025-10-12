@@ -102,7 +102,8 @@ export function setupBodyClickListener(genre: string): void {
       }
       const row = link.closest("tr");
       const isrc = row ? row.getAttribute("data-isrc") : null;
-      handleLinkClick(event, link, genre, isrc);
+      const currentGenre = appRouter.getCurrentGenre() || genre;
+      handleLinkClick(event, link, currentGenre, isrc);
     }
   });
 
@@ -179,8 +180,8 @@ async function handleLinkClick(
   const serviceType = getServiceType(url);
 
   if (serviceType !== "none") {
-    // Use centralized navigation to update URL and show player
-    appRouter.navigateToTrack(genre, "tunemeld-rank", serviceType, isrc);
+    const currentRank = stateManager.getCurrentColumn();
+    appRouter.navigateToTrack(genre, currentRank, serviceType, isrc);
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 }
@@ -406,9 +407,10 @@ async function createServiceButtons(trackData: Track | null): Promise<void> {
           if (serviceType !== "none") {
             const currentGenre = appRouter.getCurrentGenre();
             if (currentGenre) {
+              const currentRank = stateManager.getCurrentColumn();
               appRouter.navigateToTrack(
                 currentGenre,
-                "tunemeld-rank",
+                currentRank,
                 serviceType,
                 trackData.isrc,
               );
