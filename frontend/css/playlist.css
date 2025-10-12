@@ -271,14 +271,6 @@
   opacity: 0.9;
 }
 
-.trending-percentage.positive {
-  color: var(--trending-dark-green);
-}
-
-.trending-percentage.negative {
-  color: var(--trending-red);
-}
-
 .total-play-count a,
 .trending a {
   text-decoration: none;
