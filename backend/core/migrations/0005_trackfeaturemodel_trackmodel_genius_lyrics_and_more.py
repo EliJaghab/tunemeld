@@ -65,17 +65,6 @@ class Migration(migrations.Migration):
                 "db_table": "track_features",
             },
         ),
-        migrations.AddIndex(
-            model_name="rawplaylistdatamodel",
-            index=models.Index(
-                fields=["genre", "service", "-id"],
-                name="raw_playlis_genre_i_a9748c_idx",
-            ),
-        ),
-        migrations.AddIndex(
-            model_name="trackfeaturemodel",
-            index=models.Index(fields=["isrc"], name="track_featu_isrc_aaff49_idx"),
-        ),
         migrations.AddConstraint(
             model_name="trackfeaturemodel",
             constraint=models.UniqueConstraint(

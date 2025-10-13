@@ -19,4 +19,22 @@ class Migration(migrations.Migration):
                 DROP INDEX IF EXISTS playlists_genre_i_41d81a_idx;
             """,
         ),
+        migrations.RunSQL(
+            sql="""
+                CREATE INDEX IF NOT EXISTS raw_playlis_genre_i_a9748c_idx
+                ON core_rawplaylistdatamodel (genre_id, service_id, id DESC);
+            """,
+            reverse_sql="""
+                DROP INDEX IF EXISTS raw_playlis_genre_i_a9748c_idx;
+            """,
+        ),
+        migrations.RunSQL(
+            sql="""
+                CREATE INDEX IF NOT EXISTS track_featu_isrc_aaff49_idx
+                ON track_features (isrc);
+            """,
+            reverse_sql="""
+                DROP INDEX IF EXISTS track_featu_isrc_aaff49_idx;
+            """,
+        ),
     ]
