@@ -69,9 +69,9 @@ Instead of manually checking Spotify, Apple Music, and SoundCloud each week, Tun
 
 ### Playlist ETL Pipeline
 
-**Schedule**: Daily at 2:30 AM UTC via GitHub Actions
+**Schedule**: Weekly on Saturday at 2:30 AM UTC via GitHub Actions
 
-**Why This Schedule**: Music industry releases new tracks on Thursday nights (00:00 Friday local time). Streaming services update their curated editorial playlists on Friday/Saturday. Running ETL on Saturday afternoon Eastern time (2:30 AM UTC Sunday) captures all fresh playlist updates after the weekly music release cycle.
+**Why This Schedule**: New music releases Friday at midnight globally. Streaming services update their editorial playlists Friday/Saturday. Running ETL on Saturday afternoon Eastern time (2:30 AM UTC Sunday) captures all fresh playlist updates after the weekly music release cycle.
 
 **9-Step Process**:
 
@@ -93,15 +93,60 @@ Updates Spotify and YouTube view counts for engagement tracking.
 
 ## Data Sources
 
-**Services**: Spotify, Apple Music, SoundCloud
-**Genres**: Pop, Dance/Electronic, Hip-Hop/Rap, Country
-**Playlists**: Editorial/curated playlists from each service
+TuneMeld tracks trending music by aggregating playlists that are manually curated by editorial teams at Spotify, Apple Music, and SoundCloud. Each service has professional curators who hand-pick tracks after new music releases every Friday, updating their playlists weekly. TuneMeld aggregates these expert-selected tracks across all three platforms to find cross-service consensus, resulting in 12 distinct data sources (3 services × 4 genres).
 
-**Configuration**: `backend/core/constants.py`
+### Services & Data Collection Methods
+
+**Spotify**
+
+- Method: SpotDL library for playlist extraction
+- Provides: Track metadata, ISRCs, Spotify URLs
+- Playlist Type: Editorial curator playlists (manually curated by Spotify's editorial team)
+
+**Apple Music**
+
+- Method: RapidAPI (Apple Music API)
+- Provides: Track metadata, ISRCs, Apple Music URLs
+- Playlist Type: Editorial curator playlists (manually curated by Apple Music's editorial team)
+
+**SoundCloud**
+
+- Method: RapidAPI (SoundCloud API)
+- Provides: Track metadata, SoundCloud URLs
+- Playlist Type: Curator playlists and trending charts (manually curated by SoundCloud's editorial team)
+
+### Genres Tracked
+
+- Pop
+- Dance/Electronic
+- Hip-Hop/Rap
+- Country
+
+### Update Schedule
+
+**When**: Every Saturday at 2:30 AM UTC (Saturday afternoon Eastern Time)
+
+**Why This Schedule**: New music releases Friday at midnight globally. Each streaming service's curators manually update their editorial playlists every Friday/Saturday, hand-picking the best new releases across genres. Running ETL on Saturday captures all fresh curator selections from the weekly music release cycle.
+
+**Frequency**: Weekly (aligned with music industry release schedule)
+
+**Volume**: ~220-250 unique curator-selected tracks per week across all playlists
+
+### Data Collection Workflow
+
+1. **Playlist Extraction**: Fetch manually curated playlists from all 12 sources (3 services × 4 genres)
+2. **ISRC Lookup**: Query Spotify API to extract ISRCs for cross-platform track matching
+3. **Metadata Enrichment**: Gather YouTube view counts, album covers, and platform URLs
+4. **Normalization**: Deduplicate tracks using ISRCs (same song across different platforms)
+5. **Ranking**: Calculate aggregate scores based on cross-service curator consensus
 
 ### ISRC Normalization
 
-Groups tracks by International Standard Recording Code to solve "same song, different metadata" problem. Priority: Spotify > Apple Music > SoundCloud.
+Groups tracks by International Standard Recording Code (ISRC) to solve "same song, different metadata" problem. When a track appears on multiple platforms, TuneMeld unifies them into a single canonical record.
+
+**Priority**: Spotify > Apple Music > SoundCloud (metadata quality)
+
+**Configuration**: `backend/core/constants.py` - Contains genre definitions, playlist URLs, and service configurations
 
 ## Cache Strategy
 

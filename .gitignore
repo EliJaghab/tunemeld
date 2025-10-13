@@ -13,6 +13,7 @@ __pycache__/
 /staticfiles/
 backend/lib/
 backend/bin/
+backend/prod_data.json
 
 # Virtual Environment
 venv/
