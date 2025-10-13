@@ -34,6 +34,7 @@ CLOUDFLARE_CACHE_TTL_MAP = {
     "album_cover_image": SEVEN_DAYS_TTL,
     "genius_url": NO_EXPIRATION_TTL,
     "genius_lyrics": NO_EXPIRATION_TTL,
+    "reccobeats_audio_features": NO_EXPIRATION_TTL,
 }
 
 
@@ -49,6 +50,7 @@ class CachePrefix(str, Enum):
     ALBUM_COVER_IMAGE = "album_cover_image"
     GENIUS_URL = "genius_url"
     GENIUS_LYRICS = "genius_lyrics"
+    RECCOBEATS_AUDIO_FEATURES = "reccobeats_audio_features"
 
 
 class CloudflareKVCache(BaseCache):

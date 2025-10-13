@@ -22,6 +22,8 @@
 	ci-db-migrate \
 	ci-db-validate \
 	run-playlist-etl \
+	run-audio-features-etl \
+	test-audio-features-etl \
 	pre-commit-check \
 	pre-commit-install \
 	ruff-check \
@@ -303,3 +305,21 @@ else
 	@cd backend && python manage.py playlist_etl --force-refresh
 endif
 	@echo " Playlist ETL Pipeline with Force Refresh completed"
+
+run-audio-features-etl:
+	@echo " Running Audio Features ETL Pipeline..."
+ifeq ($(GITHUB_ACTIONS),)
+	@cd backend && $(VENV)/bin/python manage.py audio_features_etl
+else
+	@cd backend && python manage.py audio_features_etl
+endif
+	@echo " Audio Features ETL Pipeline completed"
+
+test-audio-features-etl:
+	@echo " Running Audio Features ETL (limited for testing)..."
+ifeq ($(GITHUB_ACTIONS),)
+	@cd backend && $(VENV)/bin/python manage.py audio_features_etl --limit 10
+else
+	@cd backend && python manage.py audio_features_etl --limit 10
+endif
+	@echo " Audio Features ETL test completed"

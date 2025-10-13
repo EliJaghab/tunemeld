@@ -1,4 +1,8 @@
 from enum import Enum
+from pathlib import Path
+
+PRODUCTION_ENV_PATH = Path(__file__).resolve().parent.parent.parent / ".env.production"
+DEV_ENV_PATH = Path(__file__).resolve().parent.parent.parent / ".env.dev"
 
 
 class GenreName(str, Enum):

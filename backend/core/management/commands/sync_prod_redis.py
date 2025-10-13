@@ -1,7 +1,7 @@
-from pathlib import Path
 from typing import Any
 
 import redis
+from core.constants import PRODUCTION_ENV_PATH
 from core.utils.utils import get_logger
 from django.core.management.base import BaseCommand
 from dotenv import dotenv_values
@@ -13,12 +13,10 @@ class Command(BaseCommand):
     help = "Sync production Redis cache to local Redis for development"
 
     def handle(self, *args: Any, **options: Any) -> None:
-        env_prod_path = Path(__file__).resolve().parent.parent.parent.parent.parent / ".env.production"
+        if not PRODUCTION_ENV_PATH.exists():
+            raise ValueError(f".env.production file not found at {PRODUCTION_ENV_PATH}")
 
-        if not env_prod_path.exists():
-            raise ValueError(f".env.production file not found at {env_prod_path}")
-
-        prod_env = dotenv_values(env_prod_path)
+        prod_env = dotenv_values(PRODUCTION_ENV_PATH)
         prod_redis_url = prod_env.get("REDIS_URL")
 
         if not prod_redis_url:

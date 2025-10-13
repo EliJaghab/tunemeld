@@ -1,7 +1,7 @@
 import os
-from pathlib import Path
 from typing import Any
 
+from core.constants import DEV_ENV_PATH, PRODUCTION_ENV_PATH
 from core.utils.utils import get_logger
 from django.core import management
 from django.core.management.base import BaseCommand
@@ -14,12 +14,10 @@ class Command(BaseCommand):
     help = "Sync production database to local using Django ORM"
 
     def handle(self, *args: Any, **options: Any) -> None:
-        env_prod_path = Path(__file__).resolve().parent.parent.parent.parent.parent / ".env.production"
+        if not PRODUCTION_ENV_PATH.exists():
+            raise ValueError(f".env.production file not found at {PRODUCTION_ENV_PATH}")
 
-        if not env_prod_path.exists():
-            raise ValueError(f".env.production file not found at {env_prod_path}")
-
-        prod_env = dotenv_values(env_prod_path)
+        prod_env = dotenv_values(PRODUCTION_ENV_PATH)
         prod_db_url = prod_env.get("DATABASE_URL")
 
         if not prod_db_url:
@@ -32,19 +30,18 @@ class Command(BaseCommand):
             with open("prod_data.json", "w") as f:
                 management.call_command(
                     "dumpdata",
-                    "--natural-foreign",
-                    "--natural-primary",
+                    "core",
+                    "--format=json",
                     stdout=f,
                 )
             logger.info("Production data exported")
         except Exception as e:
             raise RuntimeError(f"Failed to export production data: {e}") from e
 
-        env_dev_path = Path(__file__).resolve().parent.parent.parent.parent.parent / ".env.dev"
-        if not env_dev_path.exists():
-            raise ValueError(f".env.dev file not found at {env_dev_path}")
+        if not DEV_ENV_PATH.exists():
+            raise ValueError(f".env.dev file not found at {DEV_ENV_PATH}")
 
-        dev_env = dotenv_values(env_dev_path)
+        dev_env = dotenv_values(DEV_ENV_PATH)
         local_db_url = dev_env.get("DATABASE_URL")
 
         if not local_db_url:

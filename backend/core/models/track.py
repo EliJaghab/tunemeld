@@ -56,3 +56,42 @@ class TrackModel(models.Model):
 
     def __str__(self):
         return f"{self.track_name} by {self.artist_name} ({self.isrc})"
+
+
+class TrackFeatureModel(models.Model):
+    """
+    Audio features for tracks (Spotify audio features).
+
+    Decoupled from TrackModel to keep features separate and extensible.
+    """
+
+    isrc = models.CharField(
+        max_length=12,
+        validators=[RegexValidator(r"^[A-Z]{2}[A-Z0-9]{3}[0-9]{7}$", "Invalid ISRC format")],
+        help_text="International Standard Recording Code (12 characters)",
+        db_index=True,
+        unique=True,
+    )
+
+    danceability = models.FloatField(help_text="Spotify danceability (0-1)")
+    energy = models.FloatField(help_text="Spotify energy (0-1)")
+    valence = models.FloatField(help_text="Spotify valence (0-1)")
+    acousticness = models.FloatField(help_text="Spotify acousticness (0-1)")
+    instrumentalness = models.FloatField(help_text="Spotify instrumentalness (0-1)")
+    speechiness = models.FloatField(help_text="Spotify speechiness (0-1)")
+    liveness = models.FloatField(help_text="Spotify liveness (0-1)")
+    tempo = models.FloatField(help_text="Spotify tempo (BPM)")
+    loudness = models.FloatField(help_text="Spotify loudness (dB)")
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = "track_features"
+        constraints: ClassVar = [models.UniqueConstraint(fields=["isrc"], name="unique_track_feature_isrc")]
+        indexes: ClassVar = [
+            models.Index(fields=["isrc"]),
+        ]
+
+    def __str__(self):
+        return f"Features for {self.isrc}"

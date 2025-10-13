@@ -8,19 +8,15 @@ from typing import TYPE_CHECKING
 
 import requests
 from bs4 import BeautifulSoup, Tag
-
-# ETL-only imports - conditionally imported to avoid Vercel serverless bloat
+from core.services.reccobeats_service import fetch_reccobeats_audio_features
 from django.conf import settings
+from spotipy import Spotify
+from spotipy.exceptions import SpotifyException
+from spotipy.oauth2 import SpotifyClientCredentials
 
 if settings.ETL_DEPENDENCIES_AVAILABLE:
     from selenium.webdriver.common.by import By
-    from spotipy import Spotify
-    from spotipy.exceptions import SpotifyException
-    from spotipy.oauth2 import SpotifyClientCredentials
 else:
-    # Create placeholder classes to prevent NameError
-    Spotify = None  # type: ignore
-    SpotifyException = Exception  # type: ignore
     By = None  # type: ignore
 
 from tenacity import retry, stop_after_attempt, wait_exponential
@@ -330,3 +326,44 @@ def get_spotify_track_view_count_with_webdriver(track_url: str) -> int:
         with contextlib.suppress(builtins.BaseException):
             webdriver.close_driver()
         raise e
+
+
+def extract_spotify_track_id_from_url(spotify_url: str) -> str:
+    """
+    Extract track ID from Spotify URL.
+
+    Args:
+        spotify_url: Spotify track URL (e.g., https://open.spotify.com/track/7xGfFoTpQ2E7fRF5lN10tr)
+
+    Returns:
+        Spotify track ID (e.g., 7xGfFoTpQ2E7fRF5lN10tr)
+    """
+    return spotify_url.split("/track/")[1].split("?")[0]
+
+
+def get_spotify_audio_features(
+    spotify_track_id: str, client_id: str | None = None, client_secret: str | None = None
+) -> dict | None:
+    """
+    Fetch audio features for a Spotify track using ReccoBeats API.
+
+    Args:
+        spotify_track_id: Spotify track ID
+        client_id: Ignored (kept for compatibility)
+        client_secret: Ignored (kept for compatibility)
+
+    Returns:
+        Dictionary with audio features or None if track not found:
+        {
+            "danceability": float (0-1),
+            "energy": float (0-1),
+            "valence": float (0-1),
+            "acousticness": float (0-1),
+            "instrumentalness": float (0-1),
+            "speechiness": float (0-1),
+            "liveness": float (0-1),
+            "tempo": float (BPM),
+            "loudness": float (dB)
+        }
+    """
+    return fetch_reccobeats_audio_features(spotify_track_id)
