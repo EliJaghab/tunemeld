@@ -66,13 +66,6 @@ class Migration(migrations.Migration):
             },
         ),
         migrations.AddIndex(
-            model_name="playlistmodel",
-            index=models.Index(
-                fields=["genre", "service", "position"],
-                name="playlists_genre_i_41d81a_idx",
-            ),
-        ),
-        migrations.AddIndex(
             model_name="rawplaylistdatamodel",
             index=models.Index(
                 fields=["genre", "service", "-id"],
