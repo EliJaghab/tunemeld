@@ -60,10 +60,10 @@ Instead of manually checking Spotify, Apple Music, and SoundCloud each week, Tun
 
 ### Data Sources
 
-- **Spotify** - Via SpotDL (ISRC + metadata)
+- **Spotify** - Via SpotDL (ISRC + metadata), Selenium (view count scraping)
 - **Apple Music** - Via RapidAPI
 - **SoundCloud** - Via RapidAPI
-- **YouTube** - View count scraping
+- **YouTube** - YouTube Data API v3 (video URLs + view counts)
 
 ## Data Pipeline
 
@@ -89,7 +89,7 @@ Instead of manually checking Spotify, Apple Music, and SoundCloud each week, Tun
 
 **Schedule**: Daily at 2:00 AM UTC via GitHub Actions
 
-Updates Spotify and YouTube view counts for engagement tracking.
+Updates Spotify (via Selenium scraping) and YouTube (via Data API v3) view counts for engagement tracking.
 
 ## Data Sources
 
