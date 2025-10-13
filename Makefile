@@ -267,7 +267,6 @@ ci-db-migrate:
 	@cd backend && python manage.py showmigrations
 	@echo ""
 	@echo " Applying migrations to production PostgreSQL..."
-	@cd backend && python manage.py migrate core 0005 --fake --noinput || true
 	@cd backend && python manage.py migrate --noinput
 	@echo ""
 	@echo " Verifying migration consistency..."
