@@ -13,7 +13,7 @@ class Migration(migrations.Migration):
         migrations.RunSQL(
             sql="""
                 CREATE INDEX IF NOT EXISTS playlists_genre_i_41d81a_idx
-                ON core_playlistmodel (genre_id, service_id, position);
+                ON playlists (genre_id, service_id, position);
             """,
             reverse_sql="""
                 DROP INDEX IF EXISTS playlists_genre_i_41d81a_idx;
@@ -22,7 +22,7 @@ class Migration(migrations.Migration):
         migrations.RunSQL(
             sql="""
                 CREATE INDEX IF NOT EXISTS raw_playlis_genre_i_a9748c_idx
-                ON core_rawplaylistdatamodel (genre_id, service_id, id DESC);
+                ON raw_playlist_data (genre_id, service_id, id DESC);
             """,
             reverse_sql="""
                 DROP INDEX IF EXISTS raw_playlis_genre_i_a9748c_idx;
