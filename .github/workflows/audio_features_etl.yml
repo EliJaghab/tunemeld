@@ -81,9 +81,9 @@ jobs:
           DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
         run: |
           cd backend
-          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-          echo "📊 Audio Features ETL Results"
-          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "========================================================================"
+          echo " Audio Features ETL Results"
+          echo "========================================================================"
           python manage.py shell -c "
           from core.models.track import TrackModel, TrackFeatureModel
 
@@ -100,10 +100,10 @@ jobs:
               print(f'Audio features coverage: {coverage:.1f}%')
 
           print()
-          print('🎵 Sample audio features (first 3 tracks):')
+          print('Sample audio features (first 3 tracks):')
           for feature in TrackFeatureModel.objects.select_related('track')[:3]:
               track = TrackModel.objects.get(isrc=feature.isrc)
-              print(f'  • {track.track_name} - {track.artist_name}')
+              print(f'  - {track.track_name} - {track.artist_name}')
               print(f'    Energy: {feature.energy:.2f}, Danceability: {feature.danceability:.2f}, Valence: {feature.valence:.2f}')
           "
 
@@ -118,9 +118,9 @@ jobs:
 
       - name: Log ETL Completion
         run: |
-          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-          echo "✅ Audio Features ETL Pipeline completed successfully"
-          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-          echo "📈 Data persisted to production PostgreSQL database"
-          echo "🎯 Similar tracks functionality now available for processed tracks"
-          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "========================================================================"
+          echo " Audio Features ETL Pipeline completed successfully"
+          echo "========================================================================"
+          echo " Data persisted to production PostgreSQL database"
+          echo " Similar tracks functionality now available for processed tracks"
+          echo "========================================================================"
