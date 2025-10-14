@@ -48,6 +48,15 @@ class AppRouter {
     routerDebug("initialize: start");
     errorHandler.setRetryCallback(() => this.initialize());
 
+    // Show content with shimmer immediately to prevent blank screen
+    const mainContent = document.getElementById("main-content");
+    if (mainContent) {
+      mainContent.style.visibility = "visible";
+    }
+    document.body.style.transition = "opacity 0.2s ease-in";
+    document.body.style.opacity = "1";
+    showInitialShimmer();
+
     try {
       const staticConfig = await graphqlClient.getStaticConfig();
       routerDebug("initialize: static config fetched");
@@ -301,16 +310,7 @@ class AppRouter {
       wasInitialLoad,
     });
     if (this.isInitialLoad) {
-      routerDebug("loadGenreContent: initial load, showing shimmer");
-      showInitialShimmer();
-
-      // Make content visible now that shimmer is showing
-      const mainContent = document.getElementById("main-content");
-      if (mainContent) {
-        mainContent.style.visibility = "visible";
-      }
-      document.body.style.opacity = "1";
-
+      routerDebug("loadGenreContent: initial load");
       this.isInitialLoad = false;
     }
 

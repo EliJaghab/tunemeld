@@ -33,16 +33,9 @@ async function initializeApp(): Promise<void> {
 
   try {
     mainDebug("initializeApp: initializing router");
-    // Initialize router first - handles initial shimmer and GraphQL queries
-    // Keep content hidden until shimmer is ready
+    // Initialize router first - handles initial shimmer, visibility, and GraphQL queries
     await appRouter.initialize();
     mainDebug("initializeApp: router initialized");
-
-    if (mainContent) {
-      mainContent.style.visibility = "visible";
-    }
-    document.body.style.transition = "opacity 0.2s ease-in";
-    document.body.style.opacity = "1";
 
     // Only after router is initialized, set up UI components that depend on global data
     mainDebug("initializeApp: setting up theme toggle");
