@@ -101,7 +101,7 @@ jobs:
 
           print()
           print('Sample audio features (first 3 tracks):')
-          for feature in TrackFeatureModel.objects.select_related('track')[:3]:
+          for feature in TrackFeatureModel.objects.all()[:3]:
               track = TrackModel.objects.get(isrc=feature.isrc)
               print(f'  - {track.track_name} - {track.artist_name}')
               print(f'    Energy: {feature.energy:.2f}, Danceability: {feature.danceability:.2f}, Valence: {feature.valence:.2f}')
