@@ -138,6 +138,7 @@ IFRAME_CONFIGS: dict[str, dict] = {
     },
     ServiceName.APPLE_MUSIC.value: {
         "embed_base_url": "https://embed.music.apple.com/us/album/",
+        "embed_params": "app=music&amp;autoplay=true",
         "allow": "autoplay *; encrypted-media *;",
         "height": "175",
     },

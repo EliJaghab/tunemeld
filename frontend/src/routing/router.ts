@@ -111,11 +111,7 @@ class AppRouter {
         const defaultGenre = this.getDefaultGenre();
         const defaultRank = this.getDefaultRank();
         if (defaultGenre) {
-          // Update URL without triggering another resolve to prevent double-loading
-          let url = `/?genre=${encodeURIComponent(defaultGenre)}`;
-          if (defaultRank) {
-            url += `&rank=${encodeURIComponent(defaultRank)}`;
-          }
+          const url = this.buildUrl(defaultGenre, defaultRank || null);
           window.history.replaceState({}, "", url);
           await this.handleGenreRoute(defaultGenre, defaultRank || null);
         }
@@ -329,15 +325,31 @@ class AppRouter {
     });
   }
 
+  private buildUrl(
+    genre: string,
+    rank: string | null = null,
+    player: string | null = null,
+    isrc: string | null = null,
+  ): string {
+    let url = `/?genre=${encodeURIComponent(genre)}`;
+    if (rank) {
+      url += `&rank=${encodeURIComponent(rank)}`;
+    }
+    if (player) {
+      url += `&player=${encodeURIComponent(player)}`;
+    }
+    if (isrc) {
+      url += `&isrc=${encodeURIComponent(isrc)}`;
+    }
+    return url;
+  }
+
   navigateToGenre(genre: string, rank: string | null = null): void {
     if (!this.router.routes || this.router.routes.length === 0) {
       this.setupRoutes();
     }
 
-    let url = `/?genre=${encodeURIComponent(genre)}`;
-    if (rank) {
-      url += `&rank=${encodeURIComponent(rank)}`;
-    }
+    const url = this.buildUrl(genre, rank);
     window.history.pushState({}, "", url);
     this.router.resolve();
   }
@@ -359,18 +371,19 @@ class AppRouter {
       this.setupRoutes();
     }
 
-    let url = `/?genre=${encodeURIComponent(genre)}`;
-    if (rank) {
-      url += `&rank=${encodeURIComponent(rank)}`;
-    }
-    if (player) {
-      url += `&player=${encodeURIComponent(player)}`;
-    }
-    if (isrc) {
-      url += `&isrc=${encodeURIComponent(isrc)}`;
-    }
+    const url = this.buildUrl(genre, rank, player, isrc);
     window.history.pushState({}, "", url);
     this.router.resolve();
+  }
+
+  updateUrlOnly(
+    genre: string,
+    rank: string | null,
+    player: string | null,
+    isrc: string | null,
+  ): void {
+    const url = this.buildUrl(genre, rank, player, isrc);
+    window.history.replaceState({}, "", url);
   }
 
   async openTrackPlayer(

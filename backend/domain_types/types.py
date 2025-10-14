@@ -369,7 +369,7 @@ class Track(BaseModel):
     @staticmethod
     def _build_track_detail_url(track, genre: str, player: str) -> str:
         """Build track detail URL for player."""
-        from core.api.track_metadata_api import build_track_query_url
+        from core.api.track_api import build_track_query_url
 
         try:
             url = build_track_query_url(genre, "tunemeld-rank", track.isrc, player)

@@ -42,7 +42,10 @@ def generate_iframe_src(service_name: str, url: str) -> str:
 
     elif service_name == ServiceName.APPLE_MUSIC:
         music_id = get_apple_music_id(url)
-        return f"{base_url}{music_id}"
+        src = f"{base_url}{music_id}"
+        if config.get("embed_params"):
+            src += f"&{config['embed_params']}"
+        return src
 
     elif service_name == ServiceName.YOUTUBE:
         video_id = get_youtube_video_id(url)

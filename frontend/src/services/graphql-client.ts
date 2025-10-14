@@ -533,6 +533,28 @@ class GraphQLClient {
       moreButtonYoutubeLabels: data.moreButtonYoutubeLabels,
     };
   }
+
+  async getSimilarTracks(isrc: string, limit: number = 10): Promise<Track[]> {
+    const query = `
+      query GetSimilarTracks($isrc: String!, $limit: Int!) {
+        trackByIsrc(isrc: $isrc) {
+          similarTracks(limit: $limit) {
+            isrc
+            trackName
+            artistName
+            albumCoverUrl
+            spotifyUrl
+            appleMusicUrl
+            soundcloudUrl
+            youtubeUrl
+          }
+        }
+      }
+    `;
+
+    const data = await this.query(query, { isrc, limit });
+    return data.trackByIsrc?.similarTracks || [];
+  }
 }
 
 export const graphqlClient = new GraphQLClient();

@@ -6,7 +6,7 @@ from core.api.genre_service_api import (
     get_track_by_isrc,
     get_track_rank_by_track_object,
 )
-from core.api.track_metadata_api import build_track_query_url
+from core.api.track_api import build_track_query_url, get_similar_tracks
 from core.constants import GraphQLCacheKey, ServiceName
 from core.utils.redis_cache import CachePrefix, redis_cache_get, redis_cache_set
 from core.utils.utils import truncate_to_words
@@ -340,6 +340,31 @@ class TrackType:
                 icon_url=service.icon_url,
             )
         return None
+
+    @strawberry.field(description="Tracks similar to this track based on audio features")
+    def similar_tracks(self, limit: int = 10) -> list["TrackType"]:
+        """
+        Get tracks similar to this track based on audio features.
+
+        Args:
+            limit: Maximum number of similar tracks to return (default: 10)
+
+        Returns:
+            List of similar tracks, ranked by similarity
+        """
+        similar_tracks_data = get_similar_tracks(isrc=self.isrc, limit=limit)
+
+        results: list[TrackType] = []
+        for track_data in similar_tracks_data:
+            similar_isrc = str(track_data["isrc"])
+
+            domain_track = get_track_by_isrc(similar_isrc)
+            if domain_track:
+                django_track = domain_track.to_django_model()
+                track_type = TrackType.from_django_model(django_track)
+                results.append(track_type)
+
+        return results
 
 
 @strawberry.type

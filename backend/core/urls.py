@@ -96,6 +96,11 @@ urlpatterns = [
         name="graphql_static_config",
     ),
     path(
+        "api/GetSimilarTracks/",
+        csrf_exempt(GraphQLView.as_view(schema=schema, graphiql=False)),
+        name="graphql_similar_tracks",
+    ),
+    path(
         "api/debug-cache/",
         debug_cache_api.debug_cache_keys,
         name="debug_cache_keys",

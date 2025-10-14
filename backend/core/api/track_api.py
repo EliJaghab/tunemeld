@@ -1,6 +1,8 @@
 from core.api.genre_service_api import get_genre, get_service, get_track_by_isrc
 from core.api.open_graph_api import get_default_og_metadata, get_genre_og_metadata, get_track_og_metadata
 from core.constants import GenreName, ServiceName
+from core.models.track import TrackModel
+from core.utils.track_similarity import get_similar_tracks as get_similar_tracks_util
 
 
 def validate_track_url_params(genre: str, rank: str, player: str | None, isrc: str) -> dict:
@@ -138,3 +140,37 @@ def build_track_query_url(genre: str, rank: str, isrc: str, player: str) -> str 
         pass
 
     return None
+
+
+def get_similar_tracks(isrc: str, limit: int = 10) -> list[dict[str, str | float]]:
+    """
+    Get tracks similar to the given track based on audio features.
+
+    Args:
+        isrc: Source track ISRC
+        limit: Maximum number of similar tracks to return (default: 10)
+
+    Returns:
+        List of dicts with track metadata and similarity scores, ranked by similarity
+        Example: [
+            {
+                "isrc": "GBUM72504512",
+                "track_name": "Blessings",
+                "artist_name": "Calvin Harris",
+                "similarity_score": 0.9816
+            },
+            ...
+        ]
+
+    Raises:
+        ValueError: If track not found or has no audio features
+    """
+    if not TrackModel.objects.filter(isrc=isrc).exists():
+        raise ValueError(f"Track with ISRC {isrc} not found")
+
+    results = get_similar_tracks_util(isrc=isrc, limit=limit)
+
+    if not results:
+        raise ValueError("No similar tracks found (track may not have audio features)")
+
+    return results

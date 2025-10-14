@@ -174,15 +174,15 @@ function createAndAttachModal(
   playlistUrl: string,
 ): void {
   const modal = document.createElement("div");
-  modal.className = "description-modal";
+  modal.className = "modal-base description-modal";
 
   const modalContent = document.createElement("div");
-  modalContent.className = "description-modal-content";
+  modalContent.className = "modal-content-base description-modal-content";
   modalContent.textContent = fullText;
 
   modal.innerHTML = `
-    <button class="description-modal-close">&times;</button>
-    <div class="description-modal-header">
+    <button class="modal-close-base description-modal-close">&times;</button>
+    <div class="modal-header-base description-modal-header">
       <img src="${serviceIconUrl}" alt="${serviceName}" class="description-modal-icon" />
       <a href="${playlistUrl}" target="_blank" class="description-modal-title">${title}</a>
     </div>
@@ -191,7 +191,7 @@ function createAndAttachModal(
   document.body.appendChild(modal);
 
   const overlay = document.createElement("div");
-  overlay.className = "description-overlay";
+  overlay.className = "modal-overlay-base description-overlay";
   document.body.appendChild(overlay);
 
   // Register modal with state manager

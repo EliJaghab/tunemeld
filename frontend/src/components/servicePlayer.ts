@@ -2,6 +2,10 @@ import { SERVICE_NAMES } from "@/config/constants";
 import { graphqlClient } from "@/services/graphql-client";
 import { appRouter } from "@/routing/router";
 import { stateManager } from "@/state/StateManager";
+import {
+  initSimilarTracksModal,
+  openSimilarTracksModal,
+} from "@/components/similarTracksModal";
 import type {
   ServiceConfig,
   IframeConfig,
@@ -186,7 +190,7 @@ async function handleLinkClick(
   }
 }
 
-async function openPlayer(
+export async function openPlayer(
   url: string,
   serviceType: string,
   trackData: Track | null = null,
@@ -423,6 +427,20 @@ async function createServiceButtons(trackData: Track | null): Promise<void> {
       }
     }
   }
+
+  // Add "More Like This" button as the rightmost button
+  const moreLikeThisButton = document.createElement("button");
+  moreLikeThisButton.className = "service-link-button more-like-this-button";
+  moreLikeThisButton.title = "More Like This";
+  moreLikeThisButton.setAttribute("aria-label", "Show similar tracks");
+  moreLikeThisButton.innerHTML = `<img src="/images/more_like_this.png" alt="More Like This" class="service-icon">`;
+
+  moreLikeThisButton.addEventListener("click", async () => {
+    initSimilarTracksModal();
+    await openSimilarTracksModal(trackData);
+  });
+
+  serviceButtonsContainer.appendChild(moreLikeThisButton);
 
   serviceButtonsContainer.style.display = "flex";
 }
