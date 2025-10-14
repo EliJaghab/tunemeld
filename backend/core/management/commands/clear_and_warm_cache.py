@@ -25,11 +25,15 @@ class Command(BaseCommand):
         total_cleared += redis_cache_clear(CachePrefix.GQL_IFRAME_URL)
         total_cleared += redis_cache_clear(CachePrefix.GQL_BUTTON_LABELS)
         total_cleared += redis_cache_clear(CachePrefix.GQL_TRACK)
+        total_cleared += redis_cache_clear(CachePrefix.TRENDING_ISRCS)
 
-        logger.info(f"Cleared {total_cleared} GraphQL cache entries")
+        logger.info(f"Cleared {total_cleared} cache entries")
 
         self._warm_track_caches()
         logger.info("Track/playlist cache warmed")
+
+        self._warm_trending_isrcs_cache()
+        logger.info("Trending ISRCs cache warmed")
 
     def _warm_track_caches(self):
         """Execute EXACTLY the same GraphQL queries that frontend makes in parallel."""
@@ -431,3 +435,12 @@ class Command(BaseCommand):
                 """,
                 variable_values={"genre": genre},
             )
+
+    def _warm_trending_isrcs_cache(self):
+        """Warm the trending ISRCs cache for ReccoBeats integration."""
+        from core.api.trending_isrcs_api import _build_trending_isrcs_response
+        from core.utils.redis_cache import SEVEN_DAYS_TTL, redis_cache_set
+
+        trending_data = _build_trending_isrcs_response()
+        redis_cache_set(CachePrefix.TRENDING_ISRCS, "weekly_trending_isrcs", trending_data, ttl=SEVEN_DAYS_TTL)
+        logger.info(f"Warmed trending ISRCs cache with {trending_data['metadata']['total_isrcs']} unique ISRCs")

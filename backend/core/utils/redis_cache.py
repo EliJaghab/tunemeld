@@ -26,6 +26,7 @@ class CachePrefix(str, Enum):
     GQL_IFRAME_URL = "gql_iframe_url"
     GQL_BUTTON_LABELS = "gql_button_labels"
     GQL_TRACK = "gql_track"
+    TRENDING_ISRCS = "trending_isrcs"
 
 
 def _generate_cache_key(prefix: CachePrefix, key_data: str) -> str:

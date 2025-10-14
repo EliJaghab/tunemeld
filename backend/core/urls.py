@@ -1,4 +1,12 @@
-from core.api import cache_api, debug_cache_api, debug_migrations_api, events_api, health_api, redis_debug_api
+from core.api import (
+    cache_api,
+    debug_cache_api,
+    debug_migrations_api,
+    events_api,
+    health_api,
+    redis_debug_api,
+    trending_isrcs_api,
+)
 from django.urls import path
 from django.views.decorators.csrf import csrf_exempt
 from strawberry.django.views import GraphQLView
@@ -124,5 +132,10 @@ urlpatterns = [
         "api/debug-migrations/",
         debug_migrations_api.debug_migrations_status,
         name="debug_migrations_status",
+    ),
+    path(
+        "api/trending-isrcs/",
+        trending_isrcs_api.get_trending_isrcs,
+        name="trending_isrcs",
     ),
 ]
