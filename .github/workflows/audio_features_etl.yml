@@ -1,0 +1,126 @@
+name: Audio Features ETL
+
+on:
+  workflow_dispatch:
+    inputs:
+      limit:
+        description: "Limit tracks to process (for testing, leave empty for all)"
+        required: false
+        type: string
+      force_refresh:
+        description: "Force refresh audio features even if they already exist"
+        required: false
+        default: false
+        type: boolean
+
+jobs:
+  run-audio-features-etl:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e .[etl]
+
+      - name: Pre-migration database safety check
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
+          CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
+          CF_NAMESPACE_ID: ${{ secrets.CF_NAMESPACE_ID }}
+          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+        run: make ci-db-safety-check
+
+      - name: Apply database migrations to production PostgreSQL
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
+          CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
+          CF_NAMESPACE_ID: ${{ secrets.CF_NAMESPACE_ID }}
+          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+        run: make ci-db-migrate
+
+      - name: Run Audio Features ETL Pipeline
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
+          SPOTIFY_CLIENT_ID: ${{ secrets.SPOTIFY_CLIENT_ID }}
+          SPOTIFY_CLIENT_SECRET: ${{ secrets.SPOTIFY_CLIENT_SECRET }}
+          CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
+          CF_NAMESPACE_ID: ${{ secrets.CF_NAMESPACE_ID }}
+          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+        run: |
+          cd backend
+          if [ -n "${{ inputs.limit }}" ]; then
+            if [ "${{ inputs.force_refresh }}" = "true" ]; then
+              python manage.py audio_features_etl --limit ${{ inputs.limit }} --force-refresh
+            else
+              python manage.py audio_features_etl --limit ${{ inputs.limit }}
+            fi
+          else
+            if [ "${{ inputs.force_refresh }}" = "true" ]; then
+              python manage.py audio_features_etl --force-refresh
+            else
+              python manage.py audio_features_etl
+            fi
+          fi
+
+      - name: Verify Audio Features ETL Results
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
+        run: |
+          cd backend
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "📊 Audio Features ETL Results"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          python manage.py shell -c "
+          from core.models.track import TrackModel, TrackFeatureModel
+
+          total_tracks = TrackModel.objects.count()
+          tracks_with_spotify = TrackModel.objects.filter(spotify_url__isnull=False).count()
+          tracks_with_features = TrackFeatureModel.objects.count()
+
+          print(f'Total tracks: {total_tracks:,}')
+          print(f'Tracks with Spotify URLs: {tracks_with_spotify:,}')
+          print(f'Tracks with audio features: {tracks_with_features:,}')
+
+          if tracks_with_spotify > 0:
+              coverage = (tracks_with_features / tracks_with_spotify) * 100
+              print(f'Audio features coverage: {coverage:.1f}%')
+
+          print()
+          print('🎵 Sample audio features (first 3 tracks):')
+          for feature in TrackFeatureModel.objects.select_related('track')[:3]:
+              track = TrackModel.objects.get(isrc=feature.isrc)
+              print(f'  • {track.track_name} - {track.artist_name}')
+              print(f'    Energy: {feature.energy:.2f}, Danceability: {feature.danceability:.2f}, Valence: {feature.valence:.2f}')
+          "
+
+      - name: Post-ETL database validation
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
+          CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
+          CF_NAMESPACE_ID: ${{ secrets.CF_NAMESPACE_ID }}
+          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+        run: make ci-db-validate
+
+      - name: Log ETL Completion
+        run: |
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "✅ Audio Features ETL Pipeline completed successfully"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "📈 Data persisted to production PostgreSQL database"
+          echo "🎯 Similar tracks functionality now available for processed tracks"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
