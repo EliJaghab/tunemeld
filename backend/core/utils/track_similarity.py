@@ -1,6 +1,18 @@
 import numpy as np
 from core.models.track import TrackFeatureModel, TrackModel
 
+FEATURE_WEIGHTS = {
+    "danceability": 2.0,
+    "energy": 2.0,
+    "valence": 1.5,
+    "acousticness": 1.0,
+    "instrumentalness": 0.8,
+    "speechiness": 0.8,
+    "liveness": 0.5,
+    "tempo": 1.2,
+    "loudness": 1.0,
+}
+
 
 def extract_features(feature_model: TrackFeatureModel) -> dict[str, float]:
     """Extract audio features from TrackFeatureModel into a dict."""
@@ -19,23 +31,25 @@ def extract_features(feature_model: TrackFeatureModel) -> dict[str, float]:
 
 def normalize_features(features: dict[str, float]) -> np.ndarray:
     """
-    Normalize audio features to 0-1 range.
+    Normalize audio features to 0-1 range with feature weighting.
 
-    Tempo and loudness are scaled to match other features (0-1 range).
+    Tempo and loudness are scaled to match other features (0-1 range),
+    then all features are weighted based on their importance.
     """
-    return np.array(
+    normalized = np.array(
         [
-            features["danceability"],
-            features["energy"],
-            features["valence"],
-            features["acousticness"],
-            features["instrumentalness"],
-            features["speechiness"],
-            features["liveness"],
-            features["tempo"] / 250.0,  # Typical max tempo ~250 BPM
-            (features["loudness"] + 60) / 60.0,  # Loudness range: -60 to 0 dB
+            features["danceability"] * FEATURE_WEIGHTS["danceability"],
+            features["energy"] * FEATURE_WEIGHTS["energy"],
+            features["valence"] * FEATURE_WEIGHTS["valence"],
+            features["acousticness"] * FEATURE_WEIGHTS["acousticness"],
+            features["instrumentalness"] * FEATURE_WEIGHTS["instrumentalness"],
+            features["speechiness"] * FEATURE_WEIGHTS["speechiness"],
+            features["liveness"] * FEATURE_WEIGHTS["liveness"],
+            (features["tempo"] / 250.0) * FEATURE_WEIGHTS["tempo"],
+            ((features["loudness"] + 60) / 60.0) * FEATURE_WEIGHTS["loudness"],
         ]
     )
+    return normalized
 
 
 def cosine_similarity(vec1: np.ndarray, vec2: np.ndarray) -> float:
@@ -43,7 +57,35 @@ def cosine_similarity(vec1: np.ndarray, vec2: np.ndarray) -> float:
     dot_product = np.dot(vec1, vec2)
     norm1 = np.linalg.norm(vec1)
     norm2 = np.linalg.norm(vec2)
+    if norm1 == 0 or norm2 == 0:
+        return 0.0
     return float(dot_product / (norm1 * norm2))
+
+
+def euclidean_distance(vec1: np.ndarray, vec2: np.ndarray) -> float:
+    """Calculate Euclidean distance between two feature vectors."""
+    return float(np.linalg.norm(vec1 - vec2))
+
+
+def hybrid_similarity(
+    vec1: np.ndarray,
+    vec2: np.ndarray,
+    cosine_weight: float = 0.6,
+    distance_weight: float = 0.4,
+) -> float:
+    """
+    Calculate hybrid similarity combining cosine similarity and Euclidean distance.
+
+    Higher score = more similar
+    """
+    cos_sim = cosine_similarity(vec1, vec2)
+    eucl_dist = euclidean_distance(vec1, vec2)
+
+    max_dist = 10.0
+    normalized_dist = min(eucl_dist / max_dist, 1.0)
+    distance_similarity = 1.0 - normalized_dist
+
+    return (cosine_weight * cos_sim) + (distance_weight * distance_similarity)
 
 
 def get_similar_tracks(
@@ -51,7 +93,9 @@ def get_similar_tracks(
     limit: int = 10,
 ) -> list[dict[str, str | float]]:
     """
-    Find tracks similar to the given track based on audio features using cosine similarity.
+    Find tracks similar to the given track based on audio features.
+
+    Pure audio feature matching - no genre filtering to encourage cross-genre discovery.
 
     Args:
         isrc: The ISRC of the source track
@@ -74,7 +118,7 @@ def get_similar_tracks(
     for feature in all_features:
         candidate_features_dict = extract_features(feature)
         candidate_vector = normalize_features(candidate_features_dict)
-        similarity = cosine_similarity(source_vector, candidate_vector)
+        similarity = hybrid_similarity(source_vector, candidate_vector)
         similarities.append((feature.isrc, similarity))
 
     similarities.sort(key=lambda x: x[1], reverse=True)
