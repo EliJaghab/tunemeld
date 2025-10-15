@@ -324,6 +324,20 @@ label {
   margin-top: var(--space-md);
 }
 
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.col-md-12 {
+  width: 100%;
+}
+
+.text-center {
+  text-align: center;
+}
+
 /* Desktop-Specific Styles */
 @media screen and (min-width: 768px) {
   #main-content {
