@@ -56,23 +56,19 @@ class Command(BaseCommand):
         return self.create_canonical_track(isrc, service_tracks)
 
     def get_unique_isrcs(self) -> list[str]:
-        """Get ISRCs that are on current playlists but need URL enrichment (YouTube, Spotify, or SoundCloud)."""
+        """Get ISRCs that are on current playlists but need URL enrichment (YouTube or SoundCloud)."""
         playlist_isrcs = set(ServiceTrackModel.objects.values_list("isrc", flat=True).distinct())
 
-        # Get tracks that have ALL valid URLs (skip these)
+        # Get tracks that have required URLs (skip these)
+        # Note: Spotify URL is NOT required - not all tracks are available on Spotify
         tracks_fully_enriched = set(
             TrackModel.objects.filter(
                 isrc__in=playlist_isrcs,
-                # YouTube URL exists and is not empty (youtube.com is placeholder, needs scraping)
                 youtube_url__isnull=False,
-                # SoundCloud URL exists and is not empty
                 soundcloud_url__isnull=False,
-                # Spotify URL exists and is not empty
-                spotify_url__isnull=False,
             )
             .exclude(youtube_url="")
             .exclude(soundcloud_url="")
-            .exclude(spotify_url="")
             .values_list("isrc", flat=True)
         )
 
