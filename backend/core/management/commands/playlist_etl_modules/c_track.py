@@ -97,6 +97,18 @@ class Command(BaseCommand):
         # Fallback to first track if no priority service found
         return service_tracks.first() if service_tracks else None
 
+    def clean_track_name(self, track_name: str, artist_name: str) -> str:
+        """Clean track names by removing duplicate artist prefix (common in SoundCloud)."""
+        if not track_name or not artist_name or " - " not in track_name:
+            return track_name
+
+        if track_name.startswith(artist_name + " - "):
+            cleaned = track_name.split(" - ", 1)[1]
+            logger.debug(f'Cleaned track name: "{track_name}" -> "{cleaned}"')
+            return cleaned
+
+        return track_name
+
     def create_canonical_track(self, isrc: str, service_tracks) -> YouTubeUrlResult | None:
         """Create a canonical Track record from multiple ServiceTrack records."""
 
@@ -104,9 +116,11 @@ class Command(BaseCommand):
         if not primary_track:
             return None
 
+        cleaned_track_name = self.clean_track_name(primary_track.track_name, primary_track.artist_name)
+
         track_data = {
             "isrc": isrc,
-            "track_name": primary_track.track_name,
+            "track_name": cleaned_track_name,
             "artist_name": primary_track.artist_name,
             "album_name": primary_track.album_name,
             "album_cover_url": primary_track.album_cover_url,
