@@ -1,12 +1,13 @@
 #!/usr/bin/env node
 
-/**
- * Post-processes compiled JavaScript files to add .js extensions to relative imports.
- * This is required for ES modules to work in browsers without a bundler.
- */
-
 const fs = require("fs");
 const path = require("path");
+
+const log = {
+  info: (msg) => console.log(`[INFO] ${msg}`),
+  success: (msg) => console.log(`[SUCCESS] ${msg}`),
+  error: (msg) => console.error(`[ERROR] ${msg}`),
+};
 
 function addJsExtensions(dir) {
   const files = fs.readdirSync(dir, { withFileTypes: true });
@@ -20,7 +21,6 @@ function addJsExtensions(dir) {
       let content = fs.readFileSync(fullPath, "utf8");
 
       // Replace relative imports that don't already have .js extension
-      // Matches: from "./path" or from "../path"  (not already ending in .js)
       content = content.replace(
         /from\s+['"](\.\.?\/[^'"]+?)(?<!\.js)['"]/g,
         (match, importPath) => {
@@ -42,6 +42,4 @@ function addJsExtensions(dir) {
 }
 
 const distDir = path.join(__dirname, "dist");
-console.log("Adding .js extensions to relative imports...");
 addJsExtensions(distDir);
-console.log("Done!");

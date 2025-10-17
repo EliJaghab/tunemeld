@@ -8,17 +8,26 @@ const DIST_DIR = path.join(__dirname, "dist");
 const SRC_DIR = path.join(__dirname, "src");
 const STATIC_FILES = ["index.html", "css", "images", "html"];
 
-console.log("Building TuneMeld frontend...");
+const log = {
+  info: (msg) => console.log(`[INFO] ${msg}`),
+  success: (msg) => console.log(`[SUCCESS] ${msg}`),
+  error: (msg) => console.error(`[ERROR] ${msg}`),
+  warn: (msg) => console.warn(`[WARN] ${msg}`),
+  build: (msg) => console.log(`[BUILD] ${msg}`),
+};
+
+log.build("Starting TuneMeld frontend production build");
 
 // Clean dist directory
 if (fs.existsSync(DIST_DIR)) {
   fs.rmSync(DIST_DIR, { recursive: true });
 }
 fs.mkdirSync(DIST_DIR);
+log.info("Cleaned dist directory");
 
 // Verify src directory exists
 if (!fs.existsSync(SRC_DIR)) {
-  console.error(`Error: Source directory ${SRC_DIR} does not exist`);
+  log.error(`Source directory ${SRC_DIR} does not exist`);
   process.exit(1);
 }
 
@@ -30,40 +39,46 @@ STATIC_FILES.forEach((item) => {
   if (fs.existsSync(srcPath)) {
     if (fs.lstatSync(srcPath).isDirectory()) {
       fs.cpSync(srcPath, destPath, { recursive: true });
-      console.log(`Copied ${item}/ to ${item}/`);
+      log.info(`Copied ${item}/ directory`);
     } else {
       fs.copyFileSync(srcPath, destPath);
-      console.log(`Copied ${item}`);
+      log.info(`Copied ${item}`);
     }
   } else {
-    console.warn(`Warning: ${item} not found, skipping`);
+    log.warn(`${item} not found, skipping`);
   }
 });
 
 // Run TypeScript compiler
-console.log("Compiling TypeScript...");
+log.build("Compiling TypeScript");
 try {
-  execSync("npx tsc", { stdio: "inherit" });
+  execSync("npx tsc", { stdio: "pipe" });
+  log.success("TypeScript compiled");
 } catch (error) {
-  console.error("TypeScript compilation failed");
+  log.error("TypeScript compilation failed");
+  console.error(error.stdout?.toString() || error.message);
   process.exit(1);
 }
 
 // Resolve path aliases to relative imports
-console.log("Resolving path aliases...");
+log.build("Resolving path aliases");
 try {
-  execSync("npx tsc-alias", { stdio: "inherit" });
+  execSync("npx tsc-alias", { stdio: "pipe" });
+  log.success("Path aliases resolved");
 } catch (error) {
-  console.error("Path alias resolution failed");
+  log.error("Path alias resolution failed");
+  console.error(error.message);
   process.exit(1);
 }
 
 // Add .js extensions to all relative imports
-console.log("Adding .js extensions to imports...");
+log.build("Adding .js extensions to imports");
 try {
-  execSync("node add-js-extensions.js", { stdio: "inherit" });
+  execSync("node add-js-extensions.js", { stdio: "pipe" });
+  log.success(".js extensions added");
 } catch (error) {
-  console.error("Adding .js extensions failed");
+  log.error("Adding .js extensions failed");
+  console.error(error.message);
   process.exit(1);
 }
 
@@ -82,13 +97,9 @@ const missingDirs = expectedDirs.filter(
 );
 
 if (missingDirs.length > 0) {
-  console.error(
-    `Error: Missing compiled directories: ${missingDirs.join(", ")}`,
-  );
+  log.error(`Missing compiled directories: ${missingDirs.join(", ")}`);
   process.exit(1);
 }
 
-// Frontend build complete - Cloudflare Pages will deploy from dist/
-console.log("Frontend build ready for Cloudflare Pages deployment from dist/");
-
-console.log("Build complete! All files compiled successfully.");
+log.success("Production build complete");
+log.info("Ready for Cloudflare Pages deployment from dist/");
