@@ -10,5 +10,5 @@ class CoreConfig(AppConfig):
     name = "core"
 
     def ready(self):
-        logger.debug(f"STATIC_URL: {settings.STATIC_URL}")
-        logger.debug(f"STATIC_ROOT: {settings.STATIC_ROOT}")
+        logger.info(f"STATIC_URL: {settings.STATIC_URL}")
+        logger.info(f"STATIC_ROOT: {settings.STATIC_ROOT}")

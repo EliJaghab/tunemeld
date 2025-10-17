@@ -59,7 +59,6 @@ class CloudflareKVCache(BaseCache):
 
     def __init__(self, server, params):
         super().__init__(params)
-        logger.debug("Initializing CloudflareKVCache class...")
 
         self.CF_ACCOUNT_ID = settings.CF_ACCOUNT_ID or ""
         self.CF_NAMESPACE_ID = settings.CF_NAMESPACE_ID or ""
@@ -80,7 +79,6 @@ class CloudflareKVCache(BaseCache):
             or getattr(settings, "TESTING", False)
             or os.getenv("CI", "").lower() == "true"
         )
-        logger.debug(f"Cache init: SECRET_KEY={secret_key}, is_ci={is_ci}")
 
         if not self.CF_ACCOUNT_ID or not self.CF_NAMESPACE_ID or not self.CF_API_TOKEN:
             if is_ci:
@@ -98,7 +96,6 @@ class CloudflareKVCache(BaseCache):
                 raise ValueError(f"Missing required Cloudflare KV credentials: {', '.join(missing)}")
 
         self.BASE_URL = self.BASE_URL_TEMPLATE.format(self.CF_ACCOUNT_ID, self.CF_NAMESPACE_ID)
-        logger.info("CloudflareKVCache initialized with Cloudflare KV + shared connection pool")
 
     def get(self, key: str, default: Any = None, version: int | None = None) -> Any:
         if settings.ENVIRONMENT == DEV and os.getenv("ENABLE_CACHE_IN_DEV", "").lower() != "true":
