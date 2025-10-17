@@ -56,8 +56,6 @@
   min-width: 0;
   font-family: var(--font-family-primary);
   font-size: var(--font-size-lg);
-  /* Allow multiline text without clamping */
-  display: block;
   overflow: visible;
   white-space: normal;
   word-wrap: break-word;
@@ -230,15 +228,23 @@
   text-align: left;
   color: var(--text-color);
   display: flex;
-  align-items: flex-start; /* For multiline */
+  align-items: center;
   gap: var(--space-lg);
   flex-wrap: wrap;
   flex: 1;
   margin: 0;
-  line-height: 1.4; /* Better line height for multiline text */
+  line-height: 1.4;
   padding-right: calc(
     var(--size-icon-sm) + var(--space-sm)
   ); /* Account for button */
+}
+
+.playlist-title a {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  text-decoration: none;
+  color: var(--text-color);
 }
 
 .source-icon {
@@ -546,7 +552,7 @@
   /* Mobile: TuneMeld description on same line as title */
   .main-playlist .playlist-title {
     flex-wrap: wrap;
-    align-items: flex-start;
+    align-items: center;
     position: relative;
   }
 

@@ -113,6 +113,11 @@ a {
   justify-content: center;
 }
 
+.footer-container {
+  text-align: center;
+  width: 100%;
+}
+
 .footer-link {
   color: var(--text-color);
   font-size: var(--font-size-sm);

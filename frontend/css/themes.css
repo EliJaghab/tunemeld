@@ -1,3 +1,14 @@
+/* Minimal CSS Reset - replaces Bootstrap base styles */
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
 /* Critical root variables - always available */
 :root {
   /* Size System - defined first for immediate availability */
@@ -329,6 +340,7 @@ body {
   background-color: var(--background-color);
   color: var(--text-color);
   font-size: var(--font-size-lg);
+  font-family: var(--font-family-primary);
 }
 
 /* ==========================================================================
