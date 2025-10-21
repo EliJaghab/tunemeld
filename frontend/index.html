@@ -49,8 +49,13 @@
   </head>
   <body>
     <div class="container" id="main-content">
-      <div id="title-container"></div>
-      <section id="header-art" class="header-art-section">
+      <div id="title-container" role="banner"></div>
+      <section
+        id="header-art"
+        class="header-art-section"
+        role="region"
+        aria-label="Featured playlists"
+      >
         <div id="apple_music" class="service">
           <a id="apple_music-cover-link" href="#" target="_blank">
             <div id="apple_music-video-container" class="video-container">
@@ -89,7 +94,12 @@
         </div>
       </section>
       <div class="vertical-spacing"></div>
-      <div id="player-container" style="display: none">
+      <div
+        id="player-container"
+        style="display: none"
+        role="region"
+        aria-label="Music player"
+      >
         <div id="player-content">
           <div id="service-player-placeholder"></div>
           <div id="player-controls">
@@ -104,7 +114,7 @@
           </div>
         </div>
       </div>
-      <div class="playlist main-playlist" id="main-playlist">
+      <div class="playlist main-playlist" id="main-playlist" role="main">
         <div class="playlist-header">
           <div class="playlist-title">
             <a id="tunemeld-playlist-link" target="_blank">
@@ -123,21 +133,30 @@
           </div>
         </div>
         <div class="playlist-content">
-          <div class="control-group">
-            <label class="control-label">Genre</label>
-            <div class="genre-controls flex-row" id="genre-controls"></div>
-          </div>
-          <div class="control-group">
-            <label class="control-label">Ranking</label>
-            <div class="sort-controls flex-row" id="sort-controls"></div>
-          </div>
-          <table class="playlist-table">
+          <nav role="navigation" aria-label="Playlist filters">
+            <div class="control-group">
+              <label class="control-label">Genre</label>
+              <div class="genre-controls flex-row" id="genre-controls"></div>
+            </div>
+            <div class="control-group">
+              <label class="control-label">Ranking</label>
+              <div class="sort-controls flex-row" id="sort-controls"></div>
+            </div>
+          </nav>
+          <table
+            class="playlist-table"
+            aria-label="TuneMeld aggregated playlist"
+          >
             <tbody id="main-playlist-data-placeholder"></tbody>
           </table>
         </div>
       </div>
       <div class="vertical-spacing"></div>
-      <div class="playlist-section">
+      <div
+        class="playlist-section"
+        role="region"
+        aria-label="Service playlists"
+      >
         <div class="playlist-column">
           <div class="playlist" id="soundcloud-playlist">
             <div class="playlist-header">
@@ -159,7 +178,7 @@
               </div>
             </div>
             <div class="playlist-content">
-              <table class="playlist-table">
+              <table class="playlist-table" aria-label="SoundCloud playlist">
                 <tbody id="soundcloud-data-placeholder"></tbody>
               </table>
             </div>
@@ -186,7 +205,7 @@
               </div>
             </div>
             <div class="playlist-content">
-              <table class="playlist-table">
+              <table class="playlist-table" aria-label="Apple Music playlist">
                 <tbody id="apple_music-data-placeholder"></tbody>
               </table>
             </div>
@@ -210,7 +229,7 @@
               </div>
             </div>
             <div class="playlist-content">
-              <table class="playlist-table">
+              <table class="playlist-table" aria-label="Spotify playlist">
                 <tbody id="spotify-data-placeholder"></tbody>
               </table>
             </div>
@@ -218,7 +237,7 @@
         </div>
       </div>
       <div class="vertical-spacing"></div>
-      <div class="footer-container">
+      <div class="footer-container" role="contentinfo">
         <a
           href="https://www.youtube.com/t/terms"
           target="_blank"
