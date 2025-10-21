@@ -54,6 +54,12 @@ interface LoadingState {
   playlistDataLoaded: boolean;
 }
 
+interface PlaylistCollapseState {
+  spotify: boolean;
+  apple_music: boolean;
+  soundcloud: boolean;
+}
+
 interface AppState {
   sortColumn: string | null;
   sortOrder: string;
@@ -70,6 +76,7 @@ interface AppState {
   modals: {
     activeDescriptionModals: Set<ModalInfo>;
   };
+  playlistCollapsed: PlaylistCollapseState;
 }
 
 const stateDebug = (message: string, meta?: unknown) => {
@@ -108,6 +115,11 @@ class StateManager {
       },
       modals: {
         activeDescriptionModals: new Set(),
+      },
+      playlistCollapsed: {
+        spotify: false,
+        apple_music: false,
+        soundcloud: false,
       },
     };
     this.domElements = new Map();
@@ -493,6 +505,31 @@ class StateManager {
 
   getButtonLabel(type: keyof ButtonLabels): ButtonLabel[] {
     return this.state.buttonLabels?.[type] || [];
+  }
+
+  // Playlist Collapse State Management
+  isPlaylistCollapsed(serviceName: string): boolean {
+    const key = serviceName as keyof PlaylistCollapseState;
+    return this.state.playlistCollapsed[key] ?? false;
+  }
+
+  setPlaylistCollapsed(serviceName: string, collapsed: boolean): void {
+    const key = serviceName as keyof PlaylistCollapseState;
+    if (key in this.state.playlistCollapsed) {
+      this.state.playlistCollapsed[key] = collapsed;
+      stateDebug(`setPlaylistCollapsed: ${serviceName} = ${collapsed}`);
+    }
+  }
+
+  togglePlaylistCollapsed(serviceName: string): boolean {
+    const key = serviceName as keyof PlaylistCollapseState;
+    if (key in this.state.playlistCollapsed) {
+      this.state.playlistCollapsed[key] = !this.state.playlistCollapsed[key];
+      const newState = this.state.playlistCollapsed[key];
+      stateDebug(`togglePlaylistCollapsed: ${serviceName} = ${newState}`);
+      return newState;
+    }
+    return false;
   }
 }
 

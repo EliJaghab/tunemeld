@@ -15,25 +15,6 @@ import {
 } from "@/components/shimmer";
 import type { Track, Playlist, ServiceSource, ButtonLabel } from "@/types";
 
-async function fetchAndDisplayData(
-  url: string,
-  placeholderId: string,
-  serviceName: string | null,
-): Promise<void> {
-  try {
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error(`Failed to fetch ${url}. Status: ${response.status}`);
-    }
-    const responseData = await response.json();
-    const data = responseData.data || responseData;
-    playlistData = data;
-    renderPlaylistTracks(data, placeholderId, serviceName);
-  } catch (error) {
-    console.error("Error fetching and displaying data:", error);
-  }
-}
-
 type PlayCountDisplayMode = "total" | "trending" | "both";
 
 const TOTAL_PLAY_IDENTIFIERS = new Set([
@@ -138,9 +119,9 @@ export function renderPlaylistTracks(
   placeholderId: string,
   serviceName: string | null,
   serviceDisplayName: string | null = null,
-  options: { forceRender?: boolean } = {},
+  options: { forceRender?: boolean; showAllTracks?: boolean } = {},
 ): void {
-  const { forceRender = false } = options;
+  const { forceRender = false, showAllTracks = false } = options;
   const isTuneMeldPlaylist = serviceName === SERVICE_NAMES.TUNEMELD;
   const isInitialLoad = stateManager.isInitialLoad();
   const playlistShimmerActive = stateManager.getShimmerState("playlist");
@@ -241,9 +222,19 @@ export function renderPlaylistTracks(
   }
 
   const fragment = document.createDocumentFragment();
+  const INITIAL_TRACK_LIMIT = 5;
 
   playlists.forEach((playlist: Playlist) => {
-    playlist.tracks?.forEach((track: Track, index: number) => {
+    const tracks = playlist.tracks || [];
+    const isServicePlaylist = !isTuneMeldPlaylist;
+    const shouldLimitTracks = isServicePlaylist && !showAllTracks;
+    const tracksToRender = shouldLimitTracks
+      ? tracks.slice(0, INITIAL_TRACK_LIMIT)
+      : tracks;
+    const hasMoreTracks =
+      shouldLimitTracks && tracks.length > INITIAL_TRACK_LIMIT;
+
+    tracksToRender.forEach((track: Track, index: number) => {
       const currentSortColumn = stateManager.getCurrentColumn();
       const isShowingTuneMeldRanks = currentSortColumn === TUNEMELD_RANK_FIELD;
       const displayRank =
@@ -266,6 +257,15 @@ export function renderPlaylistTracks(
       });
       fragment.appendChild(row);
     });
+
+    if (hasMoreTracks) {
+      const showAllRow = createShowAllTracksRow(
+        placeholderId,
+        tracks.length,
+        serviceName,
+      );
+      fragment.appendChild(showAllRow);
+    }
   });
 
   if (isTuneMeldPlaylist) {
@@ -818,10 +818,57 @@ function createSourceLinkFromService(
   return container;
 }
 
-let playlistData: Playlist[] = [];
+function createShowAllTracksRow(
+  placeholderId: string,
+  totalTrackCount: number,
+  serviceName: string | null,
+): HTMLTableRowElement {
+  const row = document.createElement("tr");
+  row.className = "show-all-tracks-row";
+
+  const cell = document.createElement("td");
+  cell.colSpan = 4;
+  cell.className = "show-all-tracks-cell";
+
+  const button = document.createElement("button");
+  button.className = "show-all-tracks-button";
+  button.textContent = `Show All ${totalTrackCount} Tracks`;
+  button.setAttribute("aria-label", `Show all ${totalTrackCount} tracks`);
+  button.dataset.placeholderId = placeholderId;
+  button.dataset.serviceName = serviceName || "";
+  button.dataset.totalTrackCount = totalTrackCount.toString();
+
+  cell.appendChild(button);
+  row.appendChild(cell);
+
+  return row;
+}
+
+const playlistDataCache = new Map<string, Playlist>();
 
 export function setPlaylistData(data: Playlist[]): void {
-  playlistData = data;
+  data.forEach((playlist) => {
+    if (playlist.serviceName) {
+      playlistDataCache.set(playlist.serviceName, playlist);
+    }
+  });
+}
+
+export function cachePlaylistData(
+  serviceName: string,
+  playlist: Playlist,
+): void {
+  playlistDataCache.set(serviceName, playlist);
+}
+
+export function getPlaylistFromCache(
+  serviceName: string,
+): Playlist | undefined {
+  return playlistDataCache.get(serviceName);
+}
+
+export function getAllCachedPlaylists(): Playlist[] {
+  return Array.from(playlistDataCache.values());
 }
 
 export function sortTable(column: string, order: string): void {
@@ -833,29 +880,25 @@ export function sortTable(column: string, order: string): void {
     return;
   }
 
-  const sortedData = playlistData.map((playlist: Playlist) => {
-    playlist.tracks?.sort((a, b) => {
-      let aValue = (a as any)[rankConfig.dataField] as number;
-      let bValue = (b as any)[rankConfig.dataField] as number;
+  const tuneMeldPlaylist = getPlaylistFromCache(SERVICE_NAMES.TUNEMELD);
+  if (!tuneMeldPlaylist) {
+    return;
+  }
 
-      if (aValue == null) aValue = 0;
-      if (bValue == null) bValue = 0;
+  tuneMeldPlaylist.tracks?.sort((a, b) => {
+    let aValue = (a as any)[rankConfig.dataField] as number;
+    let bValue = (b as any)[rankConfig.dataField] as number;
 
-      return order === "asc" ? aValue - bValue : bValue - aValue;
-    });
+    if (aValue == null) aValue = 0;
+    if (bValue == null) bValue = 0;
 
-    // Note: tunemeldRank should NEVER be modified as it preserves backend-computed positions
-    // Rank display numbers are handled in renderPlaylistTracks based on current sort order
-
-    return playlist;
+    return order === "asc" ? aValue - bValue : bValue - aValue;
   });
 
-  // Update the module-level data so subsequent operations work correctly
-  playlistData = sortedData;
+  playlistDataCache.set(SERVICE_NAMES.TUNEMELD, tuneMeldPlaylist);
 
-  // Always render when sorting - remove isInitialLoad check
   renderPlaylistTracks(
-    sortedData,
+    [tuneMeldPlaylist],
     "main-playlist-data-placeholder",
     SERVICE_NAMES.TUNEMELD,
     null,
@@ -895,16 +938,38 @@ export function resetCollapseStates() {
   });
 }
 
+const buttonsWithListeners = new WeakSet<HTMLElement>();
+let showAllListenerAdded = false;
+
 export async function addToggleEventListeners() {
-  document.querySelectorAll(".collapse-button").forEach((button) => {
-    button.removeEventListener("click", toggleCollapse);
+  const collapseButtons = document.querySelectorAll(".collapse-button");
+
+  collapseButtons.forEach((button) => {
+    const htmlButton = button as HTMLElement;
+
+    if (buttonsWithListeners.has(htmlButton)) {
+      return;
+    }
+
+    htmlButton.addEventListener("click", (event: Event) => {
+      toggleCollapse(event);
+    });
+
+    buttonsWithListeners.add(htmlButton);
   });
 
-  document.querySelectorAll(".collapse-button").forEach((button) => {
-    button.addEventListener("click", toggleCollapse);
-  });
+  // Add event delegation for Show All buttons (only once)
+  if (!showAllListenerAdded) {
+    document.body.addEventListener("click", (event: Event) => {
+      const target = event.target as HTMLElement;
+      if (target && target.classList.contains("show-all-tracks-button")) {
+        event.preventDefault();
+        handleShowAllTracks(target);
+      }
+    });
+    showAllListenerAdded = true;
+  }
 
-  // Add initial labels to all collapse buttons
   await Promise.all(
     Array.from(document.querySelectorAll(".collapse-button")).map(
       async (button: Element) => {
@@ -925,13 +990,63 @@ export async function addToggleEventListeners() {
   );
 }
 
+function handleShowAllTracks(button: HTMLElement): void {
+  const placeholderId = button.dataset.placeholderId;
+  const serviceName = button.dataset.serviceName;
+
+  if (!placeholderId || !serviceName) {
+    return;
+  }
+
+  const playlist = getPlaylistFromCache(serviceName);
+  if (!playlist) {
+    return;
+  }
+
+  const placeholder = document.getElementById(placeholderId);
+  if (placeholder) {
+    placeholder.dataset.showAllTracks = "true";
+  }
+
+  const playlistId = `#${serviceName}-playlist`;
+  const playlistContent = document.querySelector(
+    `${playlistId} .playlist-content`,
+  ) as HTMLElement | null;
+  const playlistElement = document.querySelector(
+    playlistId,
+  ) as HTMLElement | null;
+
+  if (playlistContent?.classList.contains("collapsed")) {
+    playlistContent.classList.remove("collapsed");
+  }
+  if (playlistElement?.classList.contains("collapsed")) {
+    playlistElement.classList.remove("collapsed");
+  }
+
+  const collapseButton = document.querySelector(
+    `.collapse-button[data-target="${playlistId}"]`,
+  ) as HTMLElement | null;
+  if (collapseButton) {
+    collapseButton.textContent = "▼";
+  }
+
+  renderPlaylistTracks([playlist], placeholderId, serviceName, null, {
+    showAllTracks: true,
+  });
+}
+
 async function toggleCollapse(event: Event): Promise<void> {
-  const button = event.currentTarget as HTMLElement;
+  const button = (event.target || event.currentTarget) as HTMLElement;
   const targetId = button?.getAttribute("data-target");
-  const content = targetId
-    ? document.querySelector(`${targetId} .playlist-content`)
-    : null;
-  const playlist = targetId ? document.querySelector(targetId) : null;
+
+  if (!targetId) {
+    return;
+  }
+
+  const content = document.querySelector(
+    `${targetId} .playlist-content`,
+  ) as HTMLElement | null;
+  const playlist = document.querySelector(targetId) as HTMLElement | null;
 
   if (content) {
     content.classList.toggle("collapsed");
@@ -941,6 +1056,7 @@ async function toggleCollapse(event: Event): Promise<void> {
   }
 
   const isCollapsed = content?.classList.contains("collapsed") || false;
+
   if (button) {
     button.textContent = isCollapsed ? "▲" : "▼";
   }

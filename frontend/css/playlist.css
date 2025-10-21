@@ -130,18 +130,20 @@
 
 .playlist-table td.rank {
   text-align: center;
-  width: 1%;
+  width: 50px;
+  min-width: 50px;
   padding: 0;
 }
 
 .playlist-table td.cover {
   text-align: center;
-  width: 0%;
+  width: 80px;
+  min-width: 80px;
 }
 
 .playlist-table td.info {
-  width: 1%;
-  white-space: nowrap;
+  width: 100%;
+  white-space: normal;
 }
 
 .playlist-table td.spacer {
@@ -165,9 +167,12 @@
 }
 
 .playlist-table td.external {
-  width: 1%;
+  width: 60px;
+  min-width: 60px;
   text-align: center;
   white-space: nowrap;
+  padding-left: var(--space-xs);
+  padding-right: var(--space-xs);
 }
 
 .playlist-table.hide-source-icons td.seen-on {
@@ -591,4 +596,43 @@
   .trending-percentage {
     margin-left: 0;
   }
+}
+
+/* Show All Tracks Button */
+.show-all-tracks-row {
+  background-color: transparent;
+  border: none;
+}
+
+.show-all-tracks-cell {
+  text-align: center !important;
+  padding: var(--space-lg) 0 !important;
+  border: none !important;
+}
+
+.show-all-tracks-button {
+  background: var(--glass-bg-light);
+  backdrop-filter: var(--glass-blur-medium) saturate(250%) brightness(1.05);
+  border: 0.5px solid var(--glass-border-light);
+  border-radius: var(--border-radius-large);
+  box-shadow:
+    inset 0 1px 0 var(--glass-highlight-subtle),
+    0 4px 16px var(--glass-overlay-light);
+  color: var(--text-color);
+  cursor: pointer;
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-md);
+  font-weight: 600;
+  padding: var(--space-md) var(--space-xl);
+  transition: opacity 0.2s ease;
+  display: inline-block;
+  margin: 0 auto;
+}
+
+.show-all-tracks-button:hover {
+  opacity: 0.8;
+}
+
+.show-all-tracks-button:active {
+  opacity: 0.6;
 }

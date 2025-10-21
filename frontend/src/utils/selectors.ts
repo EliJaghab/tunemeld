@@ -3,6 +3,8 @@ import { debugLog } from "@/config/config";
 import { hideShimmerLoaders } from "@/components/shimmer";
 import {
   addToggleEventListeners,
+  cachePlaylistData,
+  getPlaylistFromCache,
   renderPlaylistTracks,
   resetCollapseStates,
   setPlaylistData,
@@ -17,58 +19,37 @@ import { SERVICE_NAMES } from "@/config/constants";
 import { updatePlaylistHeaderSync } from "@/components/playlistHeader";
 import type { Playlist } from "@/types/index";
 
-// Cached playlist data for rendering after shimmer (services only)
-let cachedSpotifyData: Playlist[] | null = null;
-let cachedAppleMusicData: Playlist[] | null = null;
-let cachedSoundcloudData: Playlist[] | null = null;
-
 const selectorsDebug = (message: string, meta?: unknown) => {
   debugLog("Selectors", message, meta);
 };
 
 export function renderCachedPlaylists(): void {
-  if (cachedSpotifyData) {
-    const spotifyPlaceholder = document.getElementById(
-      "spotify-data-placeholder",
-    );
-    const alreadyRendered =
-      spotifyPlaceholder?.getAttribute("data-rendered") === "true";
-    if (spotifyPlaceholder && !alreadyRendered) {
-      renderPlaylistTracks(
-        cachedSpotifyData,
-        "spotify-data-placeholder",
-        SERVICE_NAMES.SPOTIFY,
-      );
+  const services = [
+    {
+      name: SERVICE_NAMES.SPOTIFY,
+      placeholderId: "spotify-data-placeholder",
+    },
+    {
+      name: SERVICE_NAMES.APPLE_MUSIC,
+      placeholderId: "apple_music-data-placeholder",
+    },
+    {
+      name: SERVICE_NAMES.SOUNDCLOUD,
+      placeholderId: "soundcloud-data-placeholder",
+    },
+  ];
+
+  services.forEach(({ name, placeholderId }) => {
+    const playlist = getPlaylistFromCache(name);
+    if (playlist) {
+      const placeholder = document.getElementById(placeholderId);
+      const alreadyRendered =
+        placeholder?.getAttribute("data-rendered") === "true";
+      if (placeholder && !alreadyRendered) {
+        renderPlaylistTracks([playlist], placeholderId, name);
+      }
     }
-  }
-  if (cachedAppleMusicData) {
-    const applePlaceholder = document.getElementById(
-      "apple_music-data-placeholder",
-    );
-    const alreadyRendered =
-      applePlaceholder?.getAttribute("data-rendered") === "true";
-    if (applePlaceholder && !alreadyRendered) {
-      renderPlaylistTracks(
-        cachedAppleMusicData,
-        "apple_music-data-placeholder",
-        SERVICE_NAMES.APPLE_MUSIC,
-      );
-    }
-  }
-  if (cachedSoundcloudData) {
-    const soundcloudPlaceholder = document.getElementById(
-      "soundcloud-data-placeholder",
-    );
-    const alreadyRendered =
-      soundcloudPlaceholder?.getAttribute("data-rendered") === "true";
-    if (soundcloudPlaceholder && !alreadyRendered) {
-      renderPlaylistTracks(
-        cachedSoundcloudData,
-        "soundcloud-data-placeholder",
-        SERVICE_NAMES.SOUNDCLOUD,
-      );
-    }
-  }
+  });
 }
 
 // Listen for the event to render cached playlists
@@ -165,19 +146,9 @@ async function loadOtherServicePlaylists(genre: string): Promise<void> {
     "loadOtherServicePlaylists: other service playlists data fetched",
   );
 
-  // Cache the data
-  if (spotifyPlaylist) {
-    cachedSpotifyData = [spotifyPlaylist];
-  }
-  if (appleMusicPlaylist) {
-    cachedAppleMusicData = [appleMusicPlaylist];
-  }
-  if (soundcloudPlaylist) {
-    cachedSoundcloudData = [soundcloudPlaylist];
-  }
-
   selectorsDebug("loadOtherServicePlaylists: rendering tracks");
   if (spotifyPlaylist) {
+    cachePlaylistData(SERVICE_NAMES.SPOTIFY, spotifyPlaylist);
     renderPlaylistTracks(
       [spotifyPlaylist],
       "spotify-data-placeholder",
@@ -186,6 +157,7 @@ async function loadOtherServicePlaylists(genre: string): Promise<void> {
   }
 
   if (appleMusicPlaylist) {
+    cachePlaylistData(SERVICE_NAMES.APPLE_MUSIC, appleMusicPlaylist);
     renderPlaylistTracks(
       [appleMusicPlaylist],
       "apple_music-data-placeholder",
@@ -194,6 +166,7 @@ async function loadOtherServicePlaylists(genre: string): Promise<void> {
   }
 
   if (soundcloudPlaylist) {
+    cachePlaylistData(SERVICE_NAMES.SOUNDCLOUD, soundcloudPlaylist);
     renderPlaylistTracks(
       [soundcloudPlaylist],
       "soundcloud-data-placeholder",
@@ -213,13 +186,6 @@ export async function updateGenreData(
     `updateGenreData: start, genre=${genre}, updateAll=${updateAll}, skipInitialShimmer=${skipInitialShimmer}`,
   );
   try {
-    // Clear cached data when switching genres
-    if (!skipInitialShimmer) {
-      cachedSpotifyData = null;
-      cachedAppleMusicData = null;
-      cachedSoundcloudData = null;
-    }
-
     // Shimmer is now handled by button click handlers and initial load
     // No shimmer logic needed here
 
