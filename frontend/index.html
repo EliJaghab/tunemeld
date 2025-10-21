@@ -49,7 +49,7 @@
   </head>
   <body>
     <div class="container" id="main-content">
-      <div id="title-container" role="banner"></div>
+      <header id="title-container"></header>
       <section
         id="header-art"
         class="header-art-section"
@@ -114,7 +114,7 @@
           </div>
         </div>
       </div>
-      <div class="playlist main-playlist" id="main-playlist" role="main">
+      <main class="playlist main-playlist" id="main-playlist">
         <div class="playlist-header">
           <div class="playlist-title">
             <a id="tunemeld-playlist-link" target="_blank">
@@ -133,7 +133,7 @@
           </div>
         </div>
         <div class="playlist-content">
-          <nav role="navigation" aria-label="Playlist filters">
+          <nav aria-label="Playlist filters">
             <div class="control-group">
               <label class="control-label">Genre</label>
               <div class="genre-controls flex-row" id="genre-controls"></div>
@@ -150,7 +150,7 @@
             <tbody id="main-playlist-data-placeholder"></tbody>
           </table>
         </div>
-      </div>
+      </main>
       <div class="vertical-spacing"></div>
       <div
         class="playlist-section"
@@ -158,7 +158,7 @@
         aria-label="Service playlists"
       >
         <div class="playlist-column">
-          <div class="playlist" id="soundcloud-playlist">
+          <article class="playlist" id="soundcloud-playlist">
             <div class="playlist-header">
               <div class="playlist-title">
                 <a id="soundcloud-playlist-link" target="_blank">
@@ -182,10 +182,10 @@
                 <tbody id="soundcloud-data-placeholder"></tbody>
               </table>
             </div>
-          </div>
+          </article>
         </div>
         <div class="playlist-column">
-          <div class="playlist" id="apple_music-playlist">
+          <article class="playlist" id="apple_music-playlist">
             <div class="playlist-header">
               <div class="playlist-title">
                 <a id="apple_music-playlist-link" target="_blank">
@@ -209,10 +209,10 @@
                 <tbody id="apple_music-data-placeholder"></tbody>
               </table>
             </div>
-          </div>
+          </article>
         </div>
         <div class="playlist-column">
-          <div class="playlist" id="spotify-playlist">
+          <article class="playlist" id="spotify-playlist">
             <div class="playlist-header">
               <div class="playlist-title">
                 <a id="spotify-playlist-link" target="_blank">
@@ -233,11 +233,11 @@
                 <tbody id="spotify-data-placeholder"></tbody>
               </table>
             </div>
-          </div>
+          </article>
         </div>
       </div>
       <div class="vertical-spacing"></div>
-      <div class="footer-container" role="contentinfo">
+      <footer class="footer-container">
         <a
           href="https://www.youtube.com/t/terms"
           target="_blank"
@@ -260,7 +260,7 @@
         <a href="terms-of-use.html" target="_blank" class="footer-link"
           >Terms of Use</a
         >
-      </div>
+      </footer>
       <div id="tosPrivacyOverlay" class="overlay">
         <div class="overlay-content">
           <p>
