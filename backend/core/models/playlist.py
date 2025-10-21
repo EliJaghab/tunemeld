@@ -39,6 +39,7 @@ class RawPlaylistDataModel(models.Model):
 
     data = models.JSONField(help_text="Raw JSON data from service API")
     created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         db_table = "raw_playlist_data"
@@ -46,6 +47,7 @@ class RawPlaylistDataModel(models.Model):
             models.Index(fields=["genre", "service"]),
             models.Index(fields=["genre", "service", "-id"]),
             models.Index(fields=["created_at"]),
+            models.Index(fields=["updated_at"]),
             models.Index(fields=["playlist_url"]),
         ]
         constraints: ClassVar = [
