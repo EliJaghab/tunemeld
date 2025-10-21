@@ -1057,6 +1057,26 @@ async function toggleCollapse(event: Event): Promise<void> {
 
   const isCollapsed = content?.classList.contains("collapsed") || false;
 
+  // Extract service name from targetId (e.g., "#spotify-playlist" -> "spotify")
+  const serviceName = targetId.replace("#", "").replace("-playlist", "");
+
+  if (isCollapsed) {
+    // REMOVE elements from DOM when collapsing
+    const placeholderId = `${serviceName}-data-placeholder`;
+    const dataContainerId = `${placeholderId}--data`;
+    const dataContainer = document.getElementById(dataContainerId);
+    if (dataContainer) {
+      dataContainer.remove();
+    }
+  } else {
+    // RE-RENDER playlist from cache when expanding
+    const cachedPlaylist = getPlaylistFromCache(serviceName);
+    if (cachedPlaylist) {
+      const placeholderId = `${serviceName}-data-placeholder`;
+      renderPlaylistTracks([cachedPlaylist], placeholderId, serviceName);
+    }
+  }
+
   if (button) {
     button.textContent = isCollapsed ? "▲" : "▼";
   }
