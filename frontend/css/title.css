@@ -41,106 +41,52 @@ h1.main-title {
   margin: 0;
 }
 
-#theme-toggle-button {
-  display: none;
-}
-
 .theme-toggle {
-  width: var(--toggle-width);
-  height: var(--toggle-height);
+  width: 44px;
+  height: 44px;
   position: relative;
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background: var(--glass-bg-light);
   backdrop-filter: var(--glass-blur-medium) saturate(250%) brightness(1.05);
   -webkit-backdrop-filter: var(--glass-blur-medium) saturate(250%)
     brightness(1.05);
   border: 0.5px solid var(--glass-border-light);
-  border-radius: var(--toggle-border-radius);
+  border-radius: 50%;
   box-shadow:
     inset 0 1px 0 var(--glass-highlight-subtle),
     0 4px 16px var(--glass-overlay-light);
   cursor: pointer;
   padding: 0;
-  overflow: hidden;
+  transition: opacity 0.2s ease;
 }
 
-.theme-toggle:after {
-  content: "";
-  width: var(--toggle-ball-size);
-  height: var(--toggle-ball-size);
-  position: absolute;
-  top: var(--ball-position-offset);
-  left: var(--ball-position-offset);
-  background: var(--glass-highlight-medium);
-  backdrop-filter: var(--glass-blur-light) saturate(200%) brightness(1.2);
-  -webkit-backdrop-filter: var(--glass-blur-light) saturate(200%)
-    brightness(1.2);
-  border: 0.5px solid var(--glass-highlight-strong);
-  border-radius: 50%;
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.4),
-    0 4px 12px var(--glass-overlay-medium);
-  transition: all 0.3s ease;
+.theme-toggle:hover {
+  opacity: 0.8;
 }
 
 .theme-toggle img {
+  width: 24px;
+  height: 24px;
   position: absolute;
-  width: var(--sun-icon-size);
-  height: var(--sun-icon-size);
-  top: calc((var(--toggle-height) - var(--sun-icon-size)) / 2);
-  z-index: 101;
-  transition: opacity 0.3s ease;
-  padding: 0;
+  transition: opacity 0.2s ease;
 }
 
 .theme-toggle .sun {
-  left: var(--ball-position-margin);
-  fill: #fff;
-}
-
-.theme-toggle .moon {
-  right: var(--ball-position-margin);
-  fill: var(--moon-color);
-  opacity: 0;
-}
-
-#theme-toggle-button:checked + .theme-toggle {
-  background: var(--toggle-background-checked);
-}
-
-#theme-toggle-button:checked + .theme-toggle:after {
-  left: calc(
-    var(--toggle-width) - var(--toggle-ball-size) - var(--ball-position-offset)
-  );
-  background: var(--glass-highlight-subtle);
-  backdrop-filter: var(--glass-blur-light) saturate(150%) brightness(0.9);
-  -webkit-backdrop-filter: var(--glass-blur-light) saturate(150%)
-    brightness(0.9);
-  border-color: var(--glass-highlight-medium);
-}
-
-#theme-toggle-button:checked + .theme-toggle .sun {
-  opacity: 0;
-}
-
-#theme-toggle-button:checked + .theme-toggle .moon {
   opacity: 1;
 }
 
-.theme-toggle:active:after {
-  width: var(--gooey-effect-size);
+.theme-toggle .moon {
+  opacity: 0;
 }
 
-#theme-toggle-button:active + .theme-toggle:after {
-  width: var(--gooey-effect-size);
-  left: calc(var(--ball-position-offset) + 2px);
+.theme-toggle.dark-mode .sun {
+  opacity: 0;
 }
 
-#theme-toggle-button:checked:active + .theme-toggle:after {
-  width: var(--gooey-effect-size);
-  left: calc(
-    var(--toggle-width) - var(--toggle-ball-size) - var(--gooey-effect-size) 2px
-  );
+.theme-toggle.dark-mode .moon {
+  opacity: 1;
 }
 
 #soundcloud-link {
@@ -201,11 +147,6 @@ h1.main-title {
 
 /* Desktop-Specific Styles */
 @media screen and (min-width: 768px) {
-  :root {
-    --toggle-width: 100px;
-    --toggle-height: 44px;
-  }
-
   .main-title {
     margin-top: 40px;
   }
@@ -234,9 +175,14 @@ h1.main-title {
 
 /* Mobile Styles */
 @media screen and (max-width: 480px) {
-  :root {
-    --toggle-width: 80px;
-    --toggle-height: 36px;
+  .theme-toggle {
+    width: 36px;
+    height: 36px;
+  }
+
+  .theme-toggle img {
+    width: 20px;
+    height: 20px;
   }
 
   .main-title {

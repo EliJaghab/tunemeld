@@ -189,10 +189,10 @@ class StateManager {
     document.body.classList.toggle("dark-mode", isDarkMode);
 
     const themeToggleButton = this.getElement("theme-toggle-button") as
-      | HTMLInputElement
+      | HTMLButtonElement
       | undefined;
     if (themeToggleButton) {
-      themeToggleButton.checked = isDarkMode;
+      themeToggleButton.classList.toggle("dark-mode", isDarkMode);
     }
   }
 
