@@ -26,8 +26,8 @@ def generate_track_button_labels(track, genre=None, service=None):
     """
     labels = []
 
-    full_track_name = track.track_name or "Unknown Track"
-    full_artist_name = track.artist_name or "Unknown Artist"
+    full_track_name = getattr(track, "_track_name", None) or "Unknown Track"
+    full_artist_name = getattr(track, "_artist_name", None) or "Unknown Artist"
     full_track_display = f"'{full_track_name}' by {full_artist_name}"
 
     # Service source icon buttons
