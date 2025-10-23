@@ -2,20 +2,8 @@
   "github": {
     "silent": true
   },
-  "builds": [
-    {
-      "src": "backend/core/wsgi.py",
-      "use": "@vercel/python"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "backend/core/wsgi.py"
-    }
-  ],
   "functions": {
-    "backend/**/*.py": {
+    "api/**/*.py": {
       "memory": 1024,
       "maxDuration": 10
     }
