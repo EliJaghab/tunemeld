@@ -1,17 +1,37 @@
 {
-  "github": {
-    "silent": true
-  },
-  "builds": [
-    {
-      "src": "backend/core/wsgi.py",
-      "use": "@vercel/python"
+  "functions": {
+    "api/**/*.py": {
+      "memory": 1024,
+      "maxDuration": 10
     }
-  ],
-  "routes": [
+  },
+  "regions": ["iad1"],
+  "headers": [
     {
-      "src": "/(.*)",
-      "dest": "backend/core/wsgi.py"
+      "source": "/api/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, s-maxage=60, stale-while-revalidate=300"
+        }
+      ]
+    },
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "X-XSS-Protection",
+          "value": "1; mode=block"
+        }
+      ]
     }
   ]
 }
