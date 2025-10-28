@@ -18,21 +18,6 @@ class YouTubeUrlResult(Enum):
     API_FAILURE_ERROR = "api_failure_error"
 
 
-def _basic_title_check(track_name: str, youtube_url: str) -> bool:
-    """Simple check - does track name appear in YouTube video title?"""
-    try:
-        response = requests.get(youtube_url, timeout=5)
-        if response.status_code == 200:
-            title_start = response.text.find("<title>")
-            title_end = response.text.find("</title>")
-            if title_start != -1 and title_end != -1:
-                title = response.text[title_start + 7 : title_end].lower()
-                return track_name.lower() in title
-    except Exception:
-        pass
-    return True  # If check fails, assume it's fine
-
-
 def get_youtube_url(
     track_name: str, artist_name: str, api_key: str | None = None
 ) -> tuple[str | None, YouTubeUrlResult]:
@@ -45,7 +30,6 @@ def get_youtube_url(
     if youtube_url:
         return str(youtube_url), YouTubeUrlResult.CACHE_HIT
 
-    # Simple search with basic validation for new results only
     query = f'"{track_name}" "{artist_name}"'
     youtube_search_url = (
         f"https://www.googleapis.com/youtube/v3/search?part=snippet&q={quote_plus(query)}&type=video&key={api_key}"
@@ -55,17 +39,32 @@ def get_youtube_url(
     if response.status_code == 200:
         data = response.json()
         if data.get("items"):
-            video_id = data["items"][0]["id"].get("videoId")
-            if video_id:
+            item = data["items"][0]
+            video_id = item["id"].get("videoId")
+            snippet_title = item.get("snippet", {}).get("title", "")
+
+            if video_id and snippet_title:
                 youtube_url = f"https://www.youtube.com/watch?v={video_id}"
 
-                # Light validation - just check if track name appears in title
-                if _basic_title_check(track_name, youtube_url):
+                snippet_lower = snippet_title.lower()
+                track_lower = track_name.lower()
+
+                # Check if track name is in snippet
+                track_match = track_lower in snippet_lower
+
+                # For artist, split by comma and check if any artist name appears in snippet
+                artist_names = [name.strip().lower() for name in artist_name.split(",")]
+                artist_match = any(artist in snippet_lower for artist in artist_names if artist)
+
+                if track_match or artist_match:
                     logger.info(f"Found YouTube URL for {track_name} by {artist_name}: {youtube_url}")
                     cloudflare_cache_set(CachePrefix.YOUTUBE_URL, key_data, youtube_url)
                     return youtube_url, YouTubeUrlResult.API_SUCCESS
                 else:
-                    logger.info(f"YouTube result failed basic check for {track_name}, skipping")
+                    logger.info(
+                        f"YouTube result failed validation for {track_name} by {artist_name} "
+                        f"(snippet: {snippet_title}), skipping"
+                    )
 
         logger.info(f"No video found for {track_name} by {artist_name}")
         return None, YouTubeUrlResult.API_FAILURE_NOT_FOUND
