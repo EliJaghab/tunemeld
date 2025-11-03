@@ -4,7 +4,7 @@ from core.constants import ServiceName
 from core.models.playlist import PlaylistModel, RawPlaylistDataModel, ServiceTrackModel
 from core.services.apple_music_service import get_apple_music_album_cover_url
 from core.services.spotify_service import get_spotify_isrc
-from core.utils.utils import clean_unicode_text, get_logger, process_in_parallel
+from core.utils.utils import clean_unicode_text, get_logger, parse_artist_from_title, process_in_parallel
 from django.core.management.base import BaseCommand
 from django.db import transaction
 from domain_types.types import NormalizedTrack
@@ -181,8 +181,20 @@ class Command(BaseCommand):
 
         tracks = []
         for i, item in enumerate(raw_data["tracks"]["items"]):
-            track_name = clean_unicode_text(item["title"])
-            artist_name = clean_unicode_text(item["publisher"]["artist"]) or "Unknown Artist"
+            raw_title = item["title"]
+            raw_artist = item["publisher"].get("artist")
+
+            if not raw_artist:
+                parsed_artist, parsed_track = parse_artist_from_title(raw_title)
+                track_name = clean_unicode_text(parsed_track)
+                artist_name = clean_unicode_text(parsed_artist)
+                logger.info(
+                    f"Parsed artist from title: '{raw_title}' -> Artist: '{artist_name}', Track: '{track_name}'"
+                )
+            else:
+                track_name = clean_unicode_text(raw_title)
+                artist_name = clean_unicode_text(raw_artist)
+
             isrc = item["publisher"].get("isrc")
 
             if not isrc:

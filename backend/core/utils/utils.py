@@ -194,6 +194,37 @@ def truncate_to_words(text: str, max_chars: int = 30) -> str:
     return truncated + "..."
 
 
+def parse_artist_from_title(title: str) -> tuple[str, str]:
+    """
+    Parse artist and track name from a combined title string when artist metadata is missing.
+
+    Common patterns in SoundCloud tracks:
+    - "Artist - Track" (most common)
+    - "Artist-Track" (no spaces)
+    - "Track-Artist" (less common, hard to detect)
+
+    Strategy:
+    1. Find the first occurrence of a dash (with or without spaces)
+    2. Split on that dash and normalize by stripping spaces
+    3. Assume first part is artist, second part is track name
+
+    Returns:
+        tuple[str, str]: (artist_name, track_name)
+        - If parsing fails, returns ("Unknown Artist", original_title)
+    """
+    if not title:
+        return ("Unknown Artist", title)
+
+    dash_index = title.find("-")
+    if dash_index != -1:
+        artist = title[:dash_index].strip()
+        track = title[dash_index + 1 :].strip()
+        if artist and track:
+            return (artist, track)
+
+    return ("Unknown Artist", title)
+
+
 def format_play_count(count: int | None) -> str:
     """
     Format play count into abbreviated string with dynamic precision (5-6 chars total).

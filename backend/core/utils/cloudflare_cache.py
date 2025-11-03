@@ -112,7 +112,25 @@ class CloudflareKVCache(BaseCache):
             if CloudflareKVCache._session is None:
                 return default
             response = CloudflareKVCache._session.get(url)
-            value = response.json().get("value")
+
+            if response.status_code == 404:
+                return default
+
+            if response is None:
+                logger.warning(f"Null response for key {key}")
+                return default
+
+            try:
+                response_data = response.json()
+            except json.JSONDecodeError:
+                logger.warning(f"Invalid JSON response for key {key}: {response.text[:100]}")
+                return default
+
+            if not isinstance(response_data, dict):
+                logger.warning(f"Unexpected response type for key {key}: {type(response_data)}")
+                return default
+
+            value = response_data.get("value")
             return json.loads(value) if value else default
         except Exception as e:
             logger.warning(f"Cache timeout or error for key {key}: {e}")
