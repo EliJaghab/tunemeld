@@ -185,17 +185,35 @@ class Command(BaseCommand):
             raw_artist = item["publisher"].get("artist")
 
             if not raw_artist:
-                parsed_artist, parsed_track = parse_artist_from_title(raw_title)
-                track_name = clean_unicode_text(parsed_track)
-                artist_name = clean_unicode_text(parsed_artist)
+                (option1_artist, option1_track), (option2_artist, option2_track) = parse_artist_from_title(raw_title)
                 logger.info(
-                    f"Parsed artist from title: '{raw_title}' -> Artist: '{artist_name}', Track: '{track_name}'"
+                    f"Parsed artist from title: '{raw_title}' -> "
+                    f"Option 1: '{option1_artist}' - '{option1_track}', "
+                    f"Option 2: '{option2_artist}' - '{option2_track}'"
                 )
+
+                isrc = item["publisher"].get("isrc")
+                used_option2 = False
+
+                if not isrc:
+                    logger.info(f"No ISRC, trying Spotify lookup with option 1: {option1_track} by {option1_artist}")
+                    isrc = get_spotify_isrc(option1_track, option1_artist)
+
+                if not isrc:
+                    logger.info(f"Option 1 failed, trying option 2: {option2_track} by {option2_artist}")
+                    isrc = get_spotify_isrc(option2_track, option2_artist)
+                    used_option2 = True
+
+                if used_option2:
+                    track_name = clean_unicode_text(option2_track)
+                    artist_name = clean_unicode_text(option2_artist)
+                else:
+                    track_name = clean_unicode_text(option1_track)
+                    artist_name = clean_unicode_text(option1_artist)
             else:
                 track_name = clean_unicode_text(raw_title)
                 artist_name = clean_unicode_text(raw_artist)
-
-            isrc = item["publisher"].get("isrc")
+                isrc = item["publisher"].get("isrc")
 
             if not isrc:
                 logger.info(f"No ISRC for SoundCloud track, trying Spotify lookup: {track_name} by {artist_name}")

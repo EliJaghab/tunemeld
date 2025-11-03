@@ -126,7 +126,7 @@ class CloudflareKVCache(BaseCache):
                 logger.warning(f"Invalid JSON response for key {key}: {response.text[:100]}")
                 return default
 
-            if not isinstance(response_data, dict):
+            if response_data is None or not isinstance(response_data, dict):
                 logger.warning(f"Unexpected response type for key {key}: {type(response_data)}")
                 return default
 

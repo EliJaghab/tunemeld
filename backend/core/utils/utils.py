@@ -194,35 +194,36 @@ def truncate_to_words(text: str, max_chars: int = 30) -> str:
     return truncated + "..."
 
 
-def parse_artist_from_title(title: str) -> tuple[str, str]:
+def parse_artist_from_title(title: str) -> tuple[tuple[str, str], tuple[str, str]]:
     """
     Parse artist and track name from a combined title string when artist metadata is missing.
 
     Common patterns in SoundCloud tracks:
     - "Artist - Track" (most common)
+    - "Track - Artist" (less common)
     - "Artist-Track" (no spaces)
-    - "Track-Artist" (less common, hard to detect)
 
     Strategy:
     1. Find the first occurrence of a dash (with or without spaces)
     2. Split on that dash and normalize by stripping spaces
-    3. Assume first part is artist, second part is track name
+    3. Return BOTH possible combinations: (artist, track) and (track, artist)
+       so caller can try both with Spotify lookup
 
     Returns:
-        tuple[str, str]: (artist_name, track_name)
-        - If parsing fails, returns ("Unknown Artist", original_title)
+        tuple[tuple[str, str], tuple[str, str]]: ((option1_artist, option1_track), (option2_artist, option2_track))
+        - If parsing fails, returns (("Unknown Artist", original_title), ("Unknown Artist", original_title))
     """
     if not title:
-        return ("Unknown Artist", title)
+        return (("Unknown Artist", title), ("Unknown Artist", title))
 
     dash_index = title.find("-")
     if dash_index != -1:
-        artist = title[:dash_index].strip()
-        track = title[dash_index + 1 :].strip()
-        if artist and track:
-            return (artist, track)
+        part1 = title[:dash_index].strip()
+        part2 = title[dash_index + 1 :].strip()
+        if part1 and part2:
+            return ((part1, part2), (part2, part1))
 
-    return ("Unknown Artist", title)
+    return (("Unknown Artist", title), ("Unknown Artist", title))
 
 
 def format_play_count(count: int | None) -> str:
