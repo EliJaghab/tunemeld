@@ -182,7 +182,8 @@ class Command(BaseCommand):
         tracks = []
         for i, item in enumerate(raw_data["tracks"]["items"]):
             raw_title = item["title"]
-            raw_artist = item["publisher"].get("artist")
+            publisher = item.get("publisher") or {}
+            raw_artist = publisher.get("artist")
 
             if not raw_artist:
                 (option1_artist, option1_track), (option2_artist, option2_track) = parse_artist_from_title(raw_title)
@@ -192,7 +193,7 @@ class Command(BaseCommand):
                     f"Option 2: '{option2_artist}' - '{option2_track}'"
                 )
 
-                isrc = item["publisher"].get("isrc")
+                isrc = publisher.get("isrc")
                 used_option2 = False
 
                 if not isrc:
@@ -213,7 +214,7 @@ class Command(BaseCommand):
             else:
                 track_name = clean_unicode_text(raw_title)
                 artist_name = clean_unicode_text(raw_artist)
-                isrc = item["publisher"].get("isrc")
+                isrc = publisher.get("isrc")
 
             if not isrc:
                 logger.info(f"No ISRC for SoundCloud track, trying Spotify lookup: {track_name} by {artist_name}")
