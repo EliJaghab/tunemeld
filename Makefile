@@ -150,7 +150,7 @@ serve-frontend:
 	@echo " Website will be available at: http://localhost:8080"
 	@echo " Press Ctrl+C to stop all processes"
 	@echo ""
-	@cd frontend && npm run dev & (cd frontend/dist && python -m http.server 8080)
+	@cd frontend && npm run dev & (cd frontend/dist && python3 -m http.server 8080)
 serve-redis:
 	@if [ -n "$$REDIS_URL" ]; then \
 		echo " Using REDIS_URL from environment"; \
@@ -173,7 +173,7 @@ serve-backend: serve-redis
 	else \
 		echo " Backend API: http://localhost:8000"; \
 		echo " Press Ctrl+C to stop"; \
-		cd backend && python manage.py runserver; \
+		cd backend && $(VENV)/bin/python manage.py runserver; \
 	fi
 
 clear-cache:
