@@ -19,6 +19,7 @@
     "rootDir": "./src",
     "lib": ["DOM", "ES2020"],
     "types": ["node"],
+    "jsx": "react-jsx",
     "baseUrl": "./src",
     "paths": {
       "@/*": ["./*"],
@@ -28,9 +29,10 @@
       "@/utils/*": ["./utils/*"],
       "@/routing/*": ["./routing/*"],
       "@/state/*": ["./state/*"],
-      "@/types/*": ["./types/*"]
+      "@/types/*": ["./types/*"],
+      "@/v2/*": ["./v2/*"]
     }
   },
-  "include": ["src/**/*.ts"],
+  "include": ["src/**/*.ts", "src/**/*.tsx"],
   "exclude": ["node_modules", "dist"]
 }

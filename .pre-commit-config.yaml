@@ -31,6 +31,12 @@ repos:
         language: system
         pass_filenames: false
         types: [ts, tsx]
+      - id: eslint-frontend
+        name: eslint-frontend
+        entry: bash -c "cd frontend && npm run lint"
+        language: system
+        pass_filenames: false
+        types: [ts, tsx]
 
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.4.0

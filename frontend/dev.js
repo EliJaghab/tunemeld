@@ -6,7 +6,7 @@ const { execSync, spawn } = require("child_process");
 
 const DIST_DIR = path.join(__dirname, "dist");
 const SRC_DIR = path.join(__dirname, "src");
-const STATIC_FILES = ["index.html", "css", "images", "html"];
+const STATIC_FILES = ["index.html", "index-v2.html", "css", "images", "html"];
 
 const log = {
   info: (msg) => console.log(`[INFO] ${msg}`),
@@ -128,19 +128,21 @@ WATCH_DIRS.forEach(({ src, extensions }) => {
 });
 
 // Watch index.html in root
-const indexHtml = path.join(__dirname, "index.html");
-if (fs.existsSync(indexHtml)) {
-  fs.watchFile(indexHtml, () => {
-    const destPath = path.join(DIST_DIR, "index.html");
-    try {
-      fs.copyFileSync(indexHtml, destPath);
-      log.info("Updated index.html");
-    } catch (error) {
-      log.error(`Failed to copy index.html: ${error.message}`);
-    }
-  });
-  log.info("Watching index.html");
-}
+["index.html", "index-v2.html"].forEach((file) => {
+  const filePath = path.join(__dirname, file);
+  if (fs.existsSync(filePath)) {
+    fs.watchFile(filePath, () => {
+      const destPath = path.join(DIST_DIR, file);
+      try {
+        fs.copyFileSync(filePath, destPath);
+        log.info(`Updated ${file}`);
+      } catch (error) {
+        log.error(`Failed to copy ${file}: ${error.message}`);
+      }
+    });
+    log.info(`Watching ${file}`);
+  }
+});
 
 // Start TypeScript watcher with post-processing
 log.info("Starting TypeScript watcher");

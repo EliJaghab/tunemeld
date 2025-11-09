@@ -6,7 +6,7 @@ const { execSync } = require("child_process");
 
 const DIST_DIR = path.join(__dirname, "dist");
 const SRC_DIR = path.join(__dirname, "src");
-const STATIC_FILES = ["index.html", "css", "images", "html"];
+const STATIC_FILES = ["index.html", "index-v2.html", "css", "images", "html"];
 
 const log = {
   info: (msg) => console.log(`[INFO] ${msg}`),
@@ -91,6 +91,7 @@ const expectedDirs = [
   "routing",
   "services",
   "types",
+  "v2",
 ];
 const missingDirs = expectedDirs.filter(
   (dir) => !fs.existsSync(path.join(DIST_DIR, dir)),
