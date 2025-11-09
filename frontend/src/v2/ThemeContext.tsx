@@ -4,7 +4,7 @@ import {
   type ThemeValue,
   isThemeValue,
   THEME_STORAGE_KEY,
-} from "@/v2/theme";
+} from "@/v2/constants";
 
 export const ThemeContext = createContext<
   [ThemeValue, (theme: ThemeValue) => void]
