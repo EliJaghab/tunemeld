@@ -94,6 +94,27 @@ make kill-redis        # Stops local Redis instance started by make serve-redis
 
 **Claude Code must run `make format` (pre-commit hooks) before completing any coding task.**
 
+## Frontend Development - Console Verification
+
+**After ANY frontend changes (HTML, CSS, TypeScript, React components), ALWAYS verify in browser:**
+
+1. Navigate to `http://localhost:8080/index-v2.html` using Chrome DevTools MCP
+2. Run `mcp__chrome-devtools__list_console_messages` to check for errors
+3. Address ALL console errors before completing the task
+
+**Why**: Console errors catch runtime issues that pre-commit hooks miss (missing imports, 404s, module resolution failures, etc.)
+
+**Example workflow:**
+
+```
+1. Make frontend changes
+2. Run `make format`
+3. Navigate browser to localhost:8080/index-v2.html
+4. Check console messages
+5. Fix any errors found
+6. Complete task
+```
+
 ## ETL Commands
 
 ```bash

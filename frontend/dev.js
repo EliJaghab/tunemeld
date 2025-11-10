@@ -6,7 +6,14 @@ const { execSync, spawn } = require("child_process");
 
 const DIST_DIR = path.join(__dirname, "dist");
 const SRC_DIR = path.join(__dirname, "src");
-const STATIC_FILES = ["index.html", "index-v2.html", "css", "images", "html"];
+const STATIC_FILES = [
+  "index.html",
+  "index-v2.html",
+  "css",
+  "images",
+  "html",
+  "src/v2/styles/tailwind.css",
+];
 
 const log = {
   info: (msg) => console.log(`[INFO] ${msg}`),
@@ -152,6 +159,21 @@ const tscWatch = spawn("npx", ["tsc", "--watch"], {
   shell: true,
 });
 
+const tailwindWatch = spawn(
+  "npx",
+  [
+    "tailwindcss",
+    "-i",
+    "./src/v2/styles/tailwind.css",
+    "-o",
+    "./dist/v2/tailwind.css",
+    "--watch",
+  ],
+  {
+    shell: true,
+  },
+);
+
 let isProcessing = false;
 
 tscWatch.stdout.on("data", (data) => {
@@ -199,11 +221,13 @@ tscWatch.stderr.on("data", (data) => {
 process.on("SIGINT", () => {
   log.info("Stopping watchers");
   tscWatch.kill();
+  tailwindWatch.kill();
   process.exit(0);
 });
 
 process.on("SIGTERM", () => {
   log.info("Stopping watchers");
   tscWatch.kill();
+  tailwindWatch.kill();
   process.exit(0);
 });

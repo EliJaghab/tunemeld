@@ -49,6 +49,20 @@ STATIC_FILES.forEach((item) => {
   }
 });
 
+// Run Tailwind build for v2
+log.build("Building Tailwind CSS for v2");
+try {
+  execSync(
+    "npx tailwindcss -i ./src/v2/styles/tailwind.css -o ./dist/v2/tailwind.css",
+    { stdio: "pipe" },
+  );
+  log.success("Tailwind CSS built");
+} catch (error) {
+  log.error("Tailwind build failed");
+  console.error(error.stdout?.toString() || error.message);
+  process.exit(1);
+}
+
 // Run TypeScript compiler
 log.build("Compiling TypeScript");
 try {
