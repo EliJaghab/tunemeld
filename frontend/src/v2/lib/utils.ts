@@ -1,13 +1,6 @@
-type ClassValue = string | null | undefined | false | ClassValue[];
+import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
 
-function flattenClasses(value: ClassValue): string[] {
-  if (!value) return [];
-  if (Array.isArray(value)) {
-    return value.flatMap((item) => flattenClasses(item));
-  }
-  return [value];
-}
-
-export function cn(...inputs: ClassValue[]): string {
-  return inputs.flatMap((value) => flattenClasses(value)).join(" ");
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
 }
