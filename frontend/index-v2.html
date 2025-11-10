@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="css/error-banner.css" />
     <link rel="stylesheet" href="css/rank-badge.css" />
     <link rel="stylesheet" href="v2/tailwind.css" />
+    <link rel="stylesheet" href="v2/components/GlassSurface.css" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -32,7 +33,14 @@
         "imports": {
           "react": "https://esm.sh/react@19.2.0",
           "react-dom/client": "https://esm.sh/react-dom@19.2.0/client",
-          "react/jsx-runtime": "https://esm.sh/react@19.2.0/jsx-runtime"
+          "react/jsx-runtime": "https://esm.sh/react@19.2.0/jsx-runtime",
+          "three": "https://esm.sh/three@0.155.0",
+          "postprocessing": "https://esm.sh/postprocessing@6.35.2?external=three",
+          "@react-three/fiber": "https://esm.sh/@react-three/fiber@9.4.0?external=three&deps=react@19.2.0,react-dom@19.2.0",
+          "@react-three/postprocessing": "https://esm.sh/@react-three/postprocessing@3.0.4?external=three,postprocessing&deps=react@19.2.0,react-dom@19.2.0",
+          "three/examples/jsm/postprocessing/Pass.js": "https://esm.sh/three@0.155.0/examples/jsm/postprocessing/Pass.js?external=three",
+          "clsx": "https://esm.sh/clsx@2.1.1",
+          "tailwind-merge": "https://esm.sh/tailwind-merge@3.4.0"
         }
       }
     </script>

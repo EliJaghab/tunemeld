@@ -8,6 +8,36 @@ const DIST_DIR = path.join(__dirname, "dist");
 const SRC_DIR = path.join(__dirname, "src");
 const STATIC_FILES = ["index.html", "index-v2.html", "css", "images", "html"];
 
+const copyV2CssFiles = () => {
+  const srcDir = path.join(SRC_DIR, "v2");
+  const destDir = path.join(DIST_DIR, "v2");
+
+  const copyRecursive = (source, destination) => {
+    if (!fs.existsSync(source)) return;
+    const entries = fs.readdirSync(source, { withFileTypes: true });
+
+    entries.forEach((entry) => {
+      const srcPath = path.join(source, entry.name);
+      const destPath = path.join(destination, entry.name);
+
+      if (entry.isDirectory()) {
+        copyRecursive(srcPath, destPath);
+      } else if (entry.isFile() && entry.name.endsWith(".css")) {
+        fs.mkdirSync(path.dirname(destPath), { recursive: true });
+        fs.copyFileSync(srcPath, destPath);
+        log.info(
+          `Copied CSS ${path.relative(SRC_DIR, srcPath)} -> ${path.relative(
+            DIST_DIR,
+            destPath,
+          )}`,
+        );
+      }
+    });
+  };
+
+  copyRecursive(srcDir, destDir);
+};
+
 const log = {
   info: (msg) => console.log(`[INFO] ${msg}`),
   success: (msg) => console.log(`[SUCCESS] ${msg}`),
@@ -90,6 +120,8 @@ log.build("Adding .js extensions to imports");
 try {
   execSync("node add-js-extensions.js", { stdio: "pipe" });
   log.success(".js extensions added");
+  copyV2CssFiles();
+  log.success("Component CSS copied");
 } catch (error) {
   log.error("Adding .js extensions failed");
   console.error(error.message);

@@ -14,6 +14,35 @@ const STATIC_FILES = [
   "html",
   "src/v2/styles/tailwind.css",
 ];
+const copyV2CssFiles = () => {
+  const srcDir = path.join(SRC_DIR, "v2");
+  const destDir = path.join(DIST_DIR, "v2");
+
+  const copyRecursive = (source, destination) => {
+    if (!fs.existsSync(source)) return;
+    const entries = fs.readdirSync(source, { withFileTypes: true });
+
+    entries.forEach((entry) => {
+      const srcPath = path.join(source, entry.name);
+      const destPath = path.join(destination, entry.name);
+
+      if (entry.isDirectory()) {
+        copyRecursive(srcPath, destPath);
+      } else if (entry.isFile() && entry.name.endsWith(".css")) {
+        fs.mkdirSync(path.dirname(destPath), { recursive: true });
+        fs.copyFileSync(srcPath, destPath);
+        log.info(
+          `Copied CSS ${path.relative(SRC_DIR, srcPath)} -> ${path.relative(
+            DIST_DIR,
+            destPath,
+          )}`,
+        );
+      }
+    });
+  };
+
+  copyRecursive(srcDir, destDir);
+};
 
 const log = {
   info: (msg) => console.log(`[INFO] ${msg}`),
@@ -83,6 +112,8 @@ log.build("Adding .js extensions to imports");
 try {
   execSync("node add-js-extensions.js", { stdio: "pipe" });
   log.success(".js extensions added");
+  copyV2CssFiles();
+  log.success("Component CSS copied");
 } catch (error) {
   log.error("Adding .js extensions failed");
   console.error(error.message);
@@ -134,6 +165,16 @@ WATCH_DIRS.forEach(({ src, extensions }) => {
   log.info(`Watching ${src}/ directory`);
 });
 
+// Watch v2 CSS files
+const v2Dir = path.join(SRC_DIR, "v2");
+if (fs.existsSync(v2Dir)) {
+  fs.watch(v2Dir, { recursive: true }, (eventType, filename) => {
+    if (filename && filename.endsWith(".css")) {
+      copyV2CssFiles();
+    }
+  });
+  log.info("Watching src/v2 CSS files");
+}
 // Watch index.html in root
 ["index.html", "index-v2.html"].forEach((file) => {
   const filePath = path.join(__dirname, file);
@@ -203,6 +244,8 @@ tscWatch.stdout.on("data", (data) => {
 
       execSync("node add-js-extensions.js", { stdio: "pipe" });
       log.success(".js extensions added");
+      copyV2CssFiles();
+      log.success("Component CSS copied");
 
       console.log("");
     } catch (error) {
