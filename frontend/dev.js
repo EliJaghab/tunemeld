@@ -6,14 +6,7 @@ const { execSync, spawn } = require("child_process");
 
 const DIST_DIR = path.join(__dirname, "dist");
 const SRC_DIR = path.join(__dirname, "src");
-const STATIC_FILES = [
-  "index.html",
-  "index-v2.html",
-  "css",
-  "images",
-  "html",
-  "src/v2/styles/tailwind.css",
-];
+const STATIC_FILES = ["index.html", "index-v2.html", "css", "images", "html"];
 const copyV2CssFiles = () => {
   const srcDir = path.join(SRC_DIR, "v2");
   const destDir = path.join(DIST_DIR, "v2");
@@ -84,6 +77,20 @@ STATIC_FILES.forEach((item) => {
     log.warn(`${item} not found, skipping`);
   }
 });
+
+// Build Tailwind CSS initially
+log.build("Building Tailwind CSS for v2");
+try {
+  execSync(
+    "npx tailwindcss -i ./src/v2/styles/tailwind.css -o ./dist/v2/tailwind.css",
+    { stdio: "pipe" },
+  );
+  log.success("Tailwind CSS built");
+} catch (error) {
+  log.error("Tailwind CSS build failed");
+  console.error(error.message);
+  process.exit(1);
+}
 
 // Run TypeScript compiler once
 log.build("Compiling TypeScript");
@@ -257,7 +264,39 @@ tscWatch.stdout.on("data", (data) => {
 });
 
 tscWatch.stderr.on("data", (data) => {
-  log.error(data.toString().trim());
+  const output = data.toString();
+
+  if (output.includes("error TS")) {
+    log.error(output.trim());
+  } else if (output.includes("Found 0 errors")) {
+    log.success("TypeScript compilation complete");
+  } else if (output.includes("File change detected")) {
+    log.build("Recompiling TypeScript");
+  }
+
+  if (
+    (output.includes("Watching for file changes") ||
+      output.includes("Found 0 errors")) &&
+    !isProcessing
+  ) {
+    isProcessing = true;
+
+    try {
+      execSync("npx tsc-alias", { stdio: "pipe" });
+      log.success("Path aliases resolved");
+
+      execSync("node add-js-extensions.js", { stdio: "pipe" });
+      log.success(".js extensions added");
+      copyV2CssFiles();
+      log.success("Component CSS copied");
+
+      console.log("");
+    } catch (error) {
+      log.error(`Post-processing failed: ${error.message}`);
+    } finally {
+      isProcessing = false;
+    }
+  }
 });
 
 // Handle process termination

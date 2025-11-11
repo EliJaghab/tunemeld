@@ -31,7 +31,7 @@ export const ThemeContextProvider = ({
   const [theme, setTheme] = useState<ThemeValue>(() => getInitialTheme());
 
   useEffect(() => {
-    document.body.classList.toggle("dark-mode", theme === THEME.DARK);
+    document.documentElement.classList.toggle("dark", theme === THEME.DARK);
     localStorage.setItem(THEME_STORAGE_KEY, theme);
   }, [theme]);
 

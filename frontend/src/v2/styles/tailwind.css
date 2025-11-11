@@ -5,10 +5,15 @@
 
 @layer base {
   :root {
+    --color-background: #050211;
+    --color-surface: #1b1428;
+    --color-surface-alt: #241b35;
+    --color-surface-muted: #312646;
+    --color-text: #f6f5ff;
+    --color-muted: #b3adc9;
+    --color-border: #2f2740;
     color-scheme: dark;
     font-family: theme("fontFamily.sans");
-    background-color: theme("colors.background");
-    color: theme("colors.text");
   }
 
   body {
