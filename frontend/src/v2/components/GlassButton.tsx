@@ -35,7 +35,7 @@ export function GlassButton({
       greenOffset={5}
       blueOffset={10}
       className={`cursor-pointer transition-all hover:scale-105 ${
-        active ? "ring-2 ring-accent" : ""
+        active ? "outline outline-[1px] outline-white outline-offset-0" : ""
       } ${className}`}
     >
       <button
