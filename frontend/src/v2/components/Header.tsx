@@ -13,56 +13,58 @@ export function Header(): React.ReactElement {
   const toggleTheme = () => setTheme(isDark ? THEME.LIGHT : THEME.DARK);
 
   return (
-    <div className="flex justify-center px-3 desktop:px-4">
-      <GlassSurface
-        width="100%"
-        height="auto"
-        borderRadius={50}
-        backgroundOpacity={0.1}
-        saturation={1}
-        borderWidth={0}
-        brightness={50}
-        opacity={0.93}
-        blur={11}
-        displace={0.5}
-        distortionScale={-180}
-        redOffset={0}
-        greenOffset={10}
-        blueOffset={20}
-        className="w-full max-w-container px-2 py-2 desktop:px-2 desktop:py-2"
-      >
-        <div className="flex w-full items-center justify-between gap-3 text-white desktop:gap-6">
-          <div className="flex items-center gap-2 desktop:gap-3">
-            <a
-              href={APP_BASE_URL}
-              className="flex items-center gap-2 desktop:gap-3"
+    <header id="title-container">
+      <div className="flex justify-center px-3 desktop:px-4">
+        <GlassSurface
+          width="100%"
+          height="auto"
+          borderRadius={50}
+          backgroundOpacity={0.1}
+          saturation={1}
+          borderWidth={0}
+          brightness={50}
+          opacity={0.93}
+          blur={11}
+          displace={0.5}
+          distortionScale={-180}
+          redOffset={0}
+          greenOffset={10}
+          blueOffset={20}
+          className="w-full max-w-container px-2 py-2 desktop:px-2 desktop:py-2"
+        >
+          <div className="flex w-full items-center justify-between gap-3 text-white desktop:gap-6">
+            <div className="flex items-center gap-2 desktop:gap-3">
+              <a
+                href={APP_BASE_URL}
+                className="flex items-center gap-2 desktop:gap-3"
+              >
+                <ResponsiveIcon
+                  src="./images/tunemeld.png"
+                  alt="tunemeld Logo"
+                  size="xl"
+                  className="rounded-full shadow-lg"
+                />
+                <span className="text-sm font-semibold tracking-wide desktop:text-base">
+                  tunemeld
+                </span>
+              </a>
+            </div>
+
+            <button
+              className="flex items-center justify-center rounded-full bg-white/10 p-1.5 transition hover:bg-white/20 desktop:p-2"
+              onClick={toggleTheme}
+              aria-label={buttonLabel}
+              type="button"
             >
               <ResponsiveIcon
-                src="./images/tunemeld.png"
-                alt="tunemeld Logo"
-                size="xl"
-                className="rounded-full shadow-lg"
+                src={isDark ? "./images/sun.svg" : "./images/moon.svg"}
+                alt={isDark ? "Light mode" : "Dark mode"}
+                size="xs"
               />
-              <span className="text-sm font-semibold tracking-wide desktop:text-base">
-                tunemeld
-              </span>
-            </a>
+            </button>
           </div>
-
-          <button
-            className="flex items-center justify-center rounded-full bg-white/10 p-1.5 transition hover:bg-white/20 desktop:p-2"
-            onClick={toggleTheme}
-            aria-label={buttonLabel}
-            type="button"
-          >
-            <ResponsiveIcon
-              src={isDark ? "./images/sun.svg" : "./images/moon.svg"}
-              alt={isDark ? "Light mode" : "Dark mode"}
-              size="xs"
-            />
-          </button>
-        </div>
-      </GlassSurface>
-    </div>
+        </GlassSurface>
+      </div>
+    </header>
   );
 }

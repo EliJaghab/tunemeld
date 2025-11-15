@@ -1,15 +1,35 @@
 import React, { useEffect } from "react";
+import { BrowserRouter, useSearchParams } from "react-router-dom";
 import { ThemeContextProvider } from "@/v2/ThemeContext";
 import { Header } from "@/v2/components/Header";
-import { ServicePlaylistArt } from "@/v2/components/ServicePlaylistArt";
 import { GenreButtons } from "@/v2/components/GenreButtons";
-import { ServiceMetadataProvider } from "@/v2/ServiceMetadataContext";
-import { ActiveGenreProvider } from "@/v2/ActiveGenreContext";
-import { SERVICE } from "@/v2/constants";
+import { ServiceArtSection } from "@/v2/components/ServiceArtSection";
+import { GENRE, type GenreValue } from "@/v2/constants";
 import Dither from "@/v2/components/Dither";
 import { VerticalPadding } from "@/v2/components/VerticalPadding";
 
-function AppContent(): React.ReactElement {
+function useGenreFromUrl(): GenreValue {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const genreParam = searchParams.get("genre");
+  const validGenre =
+    genreParam && Object.values(GENRE).includes(genreParam as GenreValue)
+      ? (genreParam as GenreValue)
+      : GENRE.POP;
+
+  useEffect(() => {
+    if (!genreParam || genreParam !== validGenre) {
+      setSearchParams({ genre: validGenre }, { replace: true });
+    }
+  }, [genreParam, validGenre, setSearchParams]);
+
+  return validGenre;
+}
+
+function AppContent({
+  activeGenre,
+}: {
+  activeGenre: GenreValue;
+}): React.ReactElement {
   useEffect(() => {
     document.title = "tunemeld";
   }, []);
@@ -29,17 +49,9 @@ function AppContent(): React.ReactElement {
       />
       <main className="relative z-10">
         <VerticalPadding size="lg" />
-        <header id="title-container">
-          <Header />
-        </header>
+        <Header />
         <VerticalPadding size="lg" />
-        <section className="flex justify-center px-3 desktop:px-4">
-          <div className="flex gap-6 justify-center">
-            <ServicePlaylistArt serviceName={SERVICE.APPLE_MUSIC} />
-            <ServicePlaylistArt serviceName={SERVICE.SOUNDCLOUD} />
-            <ServicePlaylistArt serviceName={SERVICE.SPOTIFY} />
-          </div>
-        </section>
+        <ServiceArtSection genre={activeGenre} />
         <VerticalPadding size="lg" />
         <GenreButtons />
         <VerticalPadding size="lg" />
@@ -48,14 +60,18 @@ function AppContent(): React.ReactElement {
   );
 }
 
+function AppWithProviders(): React.ReactElement {
+  const activeGenre = useGenreFromUrl();
+
+  return <AppContent activeGenre={activeGenre} />;
+}
+
 export function App(): React.ReactElement {
   return (
-    <ThemeContextProvider>
-      <ActiveGenreProvider>
-        <ServiceMetadataProvider>
-          <AppContent />
-        </ServiceMetadataProvider>
-      </ActiveGenreProvider>
-    </ThemeContextProvider>
+    <BrowserRouter>
+      <ThemeContextProvider>
+        <AppWithProviders />
+      </ThemeContextProvider>
+    </BrowserRouter>
   );
 }
