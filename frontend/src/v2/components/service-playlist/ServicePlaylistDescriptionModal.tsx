@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import GlassSurface from "@/v2/components/GlassSurface";
+import GlassSurface from "@/v2/components/shared/GlassSurface";
 
 interface ServicePlaylistDescriptionModalProps {
   isOpen: boolean;

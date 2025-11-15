@@ -2,8 +2,8 @@ import React, { useContext } from "react";
 import { APP_BASE_URL } from "@/config/config";
 import { ThemeContext } from "@/v2/ThemeContext";
 import { THEME } from "@/v2/constants";
-import GlassSurface from "@/v2/components/GlassSurface";
-import { ResponsiveIcon } from "@/v2/components/ResponsiveIcon";
+import GlassSurface from "@/v2/components/shared/GlassSurface";
+import { ResponsiveIcon } from "@/v2/components/shared";
 
 export function Header(): React.ReactElement {
   const [theme, setTheme] = useContext(ThemeContext);

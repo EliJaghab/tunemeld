@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { ServiceArt } from "@/v2/components/ServiceArt";
+import { ServiceArt } from "@/v2/components/service-playlist";
 import { ServiceMetadataProvider } from "@/v2/ServiceMetadataContext";
 import { graphqlClient } from "@/services/graphql-client";
-import { ServicePlaylistDescriptionModal } from "@/v2/components/ServicePlaylistDescriptionModal";
+import { ServicePlaylistDescriptionModal } from "@/v2/components/service-playlist";
 import {
   SERVICE,
   type GenreValue,

@@ -1,5 +1,5 @@
 import React from "react";
-import GlassSurface from "@/v2/components/GlassSurface";
+import GlassSurface from "@/v2/components/shared/GlassSurface";
 
 interface GlassButtonProps {
   onClick?: () => void;

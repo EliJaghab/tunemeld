@@ -1,8 +1,8 @@
 import React from "react";
 import { useServiceMetadata } from "@/v2/ServiceMetadataContext";
 import { SERVICE, type ServiceName } from "@/v2/constants";
-import { MediaSquare } from "@/v2/components/MediaSquare";
-import { PlaylistDescription } from "@/v2/components/PlaylistDescription";
+import { MediaSquare } from "@/v2/components/shared";
+import { PlaylistDescription } from "@/v2/components/service-playlist";
 
 interface ServiceArtProps {
   serviceName: ServiceName;

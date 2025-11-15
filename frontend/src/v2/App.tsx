@@ -1,12 +1,14 @@
-import React, { useContext, useEffect } from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter, useSearchParams } from "react-router-dom";
-import { ThemeContext, ThemeContextProvider } from "@/v2/ThemeContext";
-import { Header } from "@/v2/components/Header";
-import { GenreButtons } from "@/v2/components/GenreButtons";
-import { ServiceArtSection } from "@/v2/components/ServiceArtSection";
-import { GENRE, THEME, type GenreValue } from "@/v2/constants";
-import Dither from "@/v2/components/Dither";
-import { VerticalPadding } from "@/v2/components/VerticalPadding";
+import { ThemeContextProvider } from "@/v2/ThemeContext";
+import { Header } from "@/v2/components/header";
+import {
+  GenreButtons,
+  VerticalPadding,
+  TuneMeldBackground,
+} from "@/v2/components/shared";
+import { ServiceArtSection } from "@/v2/components/service-playlist";
+import { GENRE, type GenreValue } from "@/v2/constants";
 
 function useGenreFromUrl(): GenreValue {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -30,27 +32,13 @@ function AppContent({
 }: {
   activeGenre: GenreValue;
 }): React.ReactElement {
-  const [theme] = useContext(ThemeContext);
-  const invertPalette = theme === THEME.LIGHT;
-
   useEffect(() => {
     document.title = "tunemeld";
   }, []);
 
   return (
     <div className="relative min-h-screen bg-background px-4 text-text">
-      <Dither
-        className="pointer-events-none absolute inset-0 z-0 h-full w-full select-none"
-        waveColor={[0.2, 0.2, 0.2]}
-        disableAnimation={false}
-        enableMouseInteraction={true}
-        mouseRadius={0.2}
-        colorNum={3}
-        waveAmplitude={0.25}
-        waveFrequency={2}
-        waveSpeed={0.05}
-        invertPalette={invertPalette}
-      />
+      <TuneMeldBackground />
       <main className="relative z-10">
         <VerticalPadding size="lg" />
         <Header />

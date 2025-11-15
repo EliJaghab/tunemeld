@@ -1,7 +1,7 @@
 import React from "react";
 import { useSearchParams } from "react-router-dom";
-import { GlassButton } from "@/v2/components/GlassButton";
-import { ResponsiveIcon } from "@/v2/components/ResponsiveIcon";
+import { GlassButton } from "@/v2/components/shared";
+import { ResponsiveIcon } from "@/v2/components/shared";
 import { GENRE, type GenreValue } from "@/v2/constants";
 
 interface GenreButtonData {
