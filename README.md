@@ -255,7 +255,3 @@ make format
 ### Cache Keys
 
 All GraphQL responses cached with structured keys for efficient invalidation and warming.
-
----
-
-**Built with performance and data quality in mind** 🎵
