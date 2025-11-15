@@ -11,6 +11,7 @@ interface PlaylistDescriptionProps {
     playlistName?: string;
     description?: string;
   }) => void;
+  className?: string;
 }
 
 export function PlaylistDescription({
@@ -19,6 +20,7 @@ export function PlaylistDescription({
   playlistName,
   serviceDisplayName,
   onOpenModal,
+  className = "",
 }: PlaylistDescriptionProps): React.ReactElement {
   const [isTruncated, setIsTruncated] = useState(false);
   const [displayText, setDisplayText] = useState("");
@@ -48,7 +50,17 @@ export function PlaylistDescription({
       setIsTruncated(needsTruncation);
 
       if (needsTruncation) {
-        const truncated = truncateTextForLines(description, 4, testElement, 55);
+        const reserveSpace =
+          typeof window !== "undefined" &&
+          window.matchMedia("(min-width: 768px)").matches
+            ? 30
+            : 16;
+        const truncated = truncateTextForLines(
+          description,
+          4,
+          testElement,
+          reserveSpace,
+        );
         setDisplayText(truncated);
       } else {
         setDisplayText(description);
@@ -62,7 +74,7 @@ export function PlaylistDescription({
     <>
       <div
         id={`${serviceName}-title-description`}
-        className="title-description text-black dark:text-white relative"
+        className={`relative h-full overflow-hidden text-xs leading-[1.1rem] tracking-tight desktop:text-base desktop:leading-6 desktop:tracking-normal text-black dark:text-white ${className}`}
       >
         <div ref={textRef}>{displayText}</div>
         {isTruncated && (
@@ -74,7 +86,7 @@ export function PlaylistDescription({
                 ...(description && { description }),
               })
             }
-            className="font-bold text-black dark:text-white hover:underline absolute bottom-0 right-0"
+            className="font-semibold text-xs desktop:text-base text-black dark:text-white hover:underline absolute bottom-0 right-0"
           >
             ...more
           </button>

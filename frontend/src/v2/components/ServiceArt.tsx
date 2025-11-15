@@ -33,57 +33,65 @@ export function ServiceArt({
   return (
     <div
       id={serviceName}
-      className="service flex-1 min-w-0 rounded-media bg-white/60 dark:bg-gray-700/60 backdrop-blur-md border border-white/20 dark:border-gray-600/20 shadow-lg p-4"
+      className="service flex-1 min-w-0 rounded-media bg-white/60 dark:bg-gray-700/60 backdrop-blur-md border border-white/20 dark:border-gray-600/20 shadow-lg p-2 desktop:p-4"
     >
-      {isLoading ? (
-        <>
-          <div className="block mb-3">
-            <div className="aspect-square w-full bg-black/10 dark:bg-white/10 rounded-2xl"></div>
-          </div>
-          <div className="mb-3">
-            <div className="h-6 bg-black/10 dark:bg-white/10 rounded w-3/4"></div>
-            <div className="h-5 bg-black/10 dark:bg-white/10 rounded mt-1 w-1/2"></div>
-          </div>
-          <div className="border-t border-black/20 dark:border-white/30"></div>
-          <div className="title-description relative">
-            <div className="h-[21.6px] bg-black/10 dark:bg-white/10 rounded w-full"></div>
-            <div className="h-[21.6px] bg-black/10 dark:bg-white/10 rounded w-full"></div>
-            <div className="h-[21.6px] bg-black/10 dark:bg-white/10 rounded w-full"></div>
-            <div className="h-[21.6px] bg-black/10 dark:bg-white/10 rounded w-3/4"></div>
-          </div>
-        </>
-      ) : (
-        <>
-          <a
-            id={`${serviceName}-cover-link`}
-            href={metadata?.href ?? "#"}
-            target="_blank"
-            rel="noreferrer"
-            className="block mb-3"
-          >
-            {coverUrl && (
+      <div className="mb-2.5 desktop:mb-4">
+        {isLoading ? (
+          <div className="aspect-square w-full bg-black/10 dark:bg-white/10 rounded-media"></div>
+        ) : (
+          coverUrl && (
+            <a
+              id={`${serviceName}-cover-link`}
+              href={metadata?.href ?? "#"}
+              target="_blank"
+              rel="noreferrer"
+              className="block"
+            >
               <MediaSquare
                 src={coverUrl}
                 type={coverType}
                 alt={`${serviceName} playlist cover`}
               />
-            )}
-          </a>
-          {(serviceDisplayName || playlistName) && (
-            <div className="mb-3">
+            </a>
+          )
+        )}
+      </div>
+
+      <div className="mb-2 desktop:mb-4 min-h-[48px] desktop:min-h-[72px] flex flex-col justify-center">
+        {isLoading ? (
+          <div className="space-y-2">
+            <div className="h-5 desktop:h-6 bg-black/10 dark:bg-white/10 rounded w-3/4"></div>
+            <div className="h-4 desktop:h-5 bg-black/10 dark:bg-white/10 rounded w-1/2"></div>
+          </div>
+        ) : (
+          (serviceDisplayName || playlistName) && (
+            <>
               {serviceDisplayName && (
-                <h2 className="text-xl font-bold text-black dark:text-white leading-tight">
+                <h2 className="text-sm desktop:text-xl font-bold text-black dark:text-white leading-snug desktop:leading-tight tracking-tight">
                   {serviceDisplayName}'s
                 </h2>
               )}
               {playlistName && (
-                <h3 className="text-base font-semibold text-black dark:text-white leading-tight mt-1 tracking-tighter whitespace-nowrap overflow-hidden">
+                <h3 className="text-xs desktop:text-lg font-semibold text-black dark:text-white leading-snug desktop:leading-tight mt-0.5 desktop:mt-1 tracking-tight whitespace-nowrap overflow-hidden">
                   {playlistName}
                 </h3>
               )}
-            </div>
-          )}
-          <div className="border-t border-black/20 dark:border-white/30"></div>
+            </>
+          )
+        )}
+      </div>
+
+      <div className="border-t border-black/20 dark:border-white/30"></div>
+
+      <div className="mt-3 desktop:mt-4 h-[80px] desktop:h-[96px]">
+        {isLoading ? (
+          <div className="flex h-full flex-col justify-between space-y-2">
+            <div className="h-4 desktop:h-5 bg-black/10 dark:bg-white/10 rounded w-full"></div>
+            <div className="h-4 desktop:h-5 bg-black/10 dark:bg-white/10 rounded w-full"></div>
+            <div className="h-4 desktop:h-5 bg-black/10 dark:bg-white/10 rounded w-full"></div>
+            <div className="h-4 desktop:h-5 bg-black/10 dark:bg-white/10 rounded w-3/4"></div>
+          </div>
+        ) : (
           <PlaylistDescription
             key={metadata?.description}
             description={metadata?.description}
@@ -91,9 +99,10 @@ export function ServiceArt({
             playlistName={playlistName}
             serviceDisplayName={serviceDisplayName}
             onOpenModal={onOpenModal}
+            className="h-full"
           />
-        </>
-      )}
+        )}
+      </div>
     </div>
   );
 }

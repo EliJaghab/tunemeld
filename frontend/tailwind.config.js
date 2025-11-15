@@ -58,6 +58,7 @@ module.exports = {
       sans: ["'DM Sans'", ...defaultTheme.fontFamily.sans],
     },
     fontSize: {
+      "2xs": ["10px", "14px"],
       xs: ["12px", "18px"],
       sm: ["14px", "20px"],
       base: ["16px", "24px"],
