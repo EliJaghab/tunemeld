@@ -37,6 +37,7 @@ class PlaylistMetadataType:
     playlist_url: str
     genre_name: str
     service_name: str
+    service_display_name: str
     service_icon_url: str
     debug_cache_status: str | None = None
 

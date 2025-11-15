@@ -816,6 +816,7 @@ class PlaylistMetadata:
     playlist_url: str
     genre_name: str
     service_name: str
+    service_display_name: str
     service_icon_url: str
 
     @classmethod
@@ -837,6 +838,7 @@ class PlaylistMetadata:
             playlist_url=raw_playlist.playlist_url,
             genre_name=genre,
             service_name=service.name,
+            service_display_name=service.display_name,
             service_icon_url=service.icon_url,
         )
 
@@ -848,6 +850,7 @@ class PlaylistMetadata:
             "playlist_url": self.playlist_url,
             "genre_name": self.genre_name,
             "service_name": self.service_name,
+            "service_display_name": self.service_display_name,
             "service_icon_url": self.service_icon_url,
         }
 

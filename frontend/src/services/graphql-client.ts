@@ -234,6 +234,7 @@ class GraphQLClient {
           playlistUrl
           genreName
           serviceName
+          serviceDisplayName
           serviceIconUrl
           debugCacheStatus
         }

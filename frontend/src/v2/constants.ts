@@ -22,6 +22,8 @@ export type ServiceMetadata = {
   href: string;
   description?: string | undefined;
   coverUrl?: string | undefined;
+  playlistName?: string | undefined;
+  serviceDisplayName?: string | undefined;
 };
 
 export const GENRE = {

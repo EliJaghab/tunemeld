@@ -58,6 +58,7 @@ export interface Playlist {
   playlistCoverUrl?: string | null;
   playlistCoverDescriptionText?: string | null;
   playlistUrl?: string | null;
+  serviceDisplayName?: string | null;
   serviceIconUrl?: string | null;
   updatedAt?: string | null;
 }
