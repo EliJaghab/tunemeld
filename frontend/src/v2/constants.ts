@@ -20,23 +20,8 @@ export type ServiceName = (typeof SERVICE)[keyof typeof SERVICE];
 
 export type ServiceMetadata = {
   href: string;
-  description?: string;
-  videoSrc?: string;
-};
-
-export const DEFAULT_SERVICE_METADATA: Record<ServiceName, ServiceMetadata> = {
-  [SERVICE.APPLE_MUSIC]: {
-    href: "https://music.apple.com",
-    description: "Apple Music Featured Playlist",
-  },
-  [SERVICE.SOUNDCLOUD]: {
-    href: "https://soundcloud.com",
-    description: "SoundCloud Featured Playlist",
-  },
-  [SERVICE.SPOTIFY]: {
-    href: "https://spotify.com",
-    description: "Spotify Featured Playlist",
-  },
+  description?: string | undefined;
+  coverUrl?: string | undefined;
 };
 
 export const GENRE = {
