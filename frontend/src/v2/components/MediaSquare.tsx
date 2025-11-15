@@ -52,9 +52,10 @@ export function MediaSquare({
   }, [type, src]);
 
   return type === "video" ? (
-    <div className="video-container">
+    <div className="video-container rounded-media overflow-hidden">
       <video
         ref={videoRef}
+        className="w-full h-full object-cover rounded-media"
         muted
         autoPlay
         loop
@@ -64,7 +65,7 @@ export function MediaSquare({
     </div>
   ) : (
     <div
-      className="image-placeholder"
+      className="image-placeholder rounded-media"
       style={{ backgroundImage: `url("${src}")` }}
       role="img"
       aria-label={alt}

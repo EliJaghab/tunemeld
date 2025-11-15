@@ -35,13 +35,15 @@ export function GlassButton({
       greenOffset={5}
       blueOffset={10}
       className={`cursor-pointer transition-all hover:scale-105 ${
-        active ? "outline outline-[1px] outline-white outline-offset-0" : ""
+        active
+          ? "outline outline-[2px] outline-black dark:outline-white outline-offset-0"
+          : ""
       } ${className}`}
     >
       <button
         type={type}
         onClick={onClick}
-        className="flex items-center gap-2 px-4 py-2 text-white desktop:gap-3 desktop:px-6 desktop:py-3"
+        className="flex items-center gap-2 px-4 py-2 text-black dark:text-white desktop:gap-3 desktop:px-6 desktop:py-3"
         aria-label={ariaLabel}
       >
         {children}

@@ -54,9 +54,9 @@ export function GenreButtons(): React.ReactElement {
             <ResponsiveIcon
               src={genre.iconUrl}
               alt={genre.displayName}
-              size="xs"
+              size="md"
             />
-            <span className="text-[0.6875rem] font-medium desktop:text-xs">
+            <span className="text-xs font-bold desktop:text-sm">
               {genre.displayName}
             </span>
           </GlassButton>

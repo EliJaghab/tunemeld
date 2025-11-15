@@ -29,6 +29,9 @@ const colors = {
   border: "var(--color-border)",
   white: "#FFFFFF",
   black: "#000000",
+  gray: {
+    700: "#111827",
+  },
 };
 
 /** @type {import('tailwindcss').Config} */
@@ -68,6 +71,7 @@ module.exports = {
       borderRadius: {
         pill: "999px",
         glass: "50px",
+        media: "16px",
       },
       boxShadow: {
         glass: "0 25px 60px rgba(0,0,0,0.45)",
@@ -77,5 +81,6 @@ module.exports = {
       },
     },
   },
+  darkMode: "class",
   plugins: [],
 };

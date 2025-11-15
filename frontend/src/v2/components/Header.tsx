@@ -44,7 +44,7 @@ export function Header(): React.ReactElement {
                   size="xl"
                   className="rounded-full shadow-lg"
                 />
-                <span className="text-sm font-semibold tracking-wide desktop:text-base">
+                <span className="text-sm font-semibold tracking-wide text-black dark:text-white desktop:text-base">
                   tunemeld
                 </span>
               </a>
