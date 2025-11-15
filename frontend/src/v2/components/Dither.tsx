@@ -16,6 +16,7 @@ type DitherProps = {
   disableAnimation?: boolean;
   enableMouseInteraction?: boolean;
   mouseRadius?: number;
+  invertPalette?: boolean;
   className?: string;
   style?: React.CSSProperties;
 };
@@ -23,6 +24,7 @@ type DitherProps = {
 type RetroEffectProps = {
   colorNum: number;
   pixelSize: number;
+  invertPalette: boolean;
 };
 
 type DitheredWavesProps = {
@@ -35,6 +37,7 @@ type DitheredWavesProps = {
   disableAnimation: boolean;
   enableMouseInteraction: boolean;
   mouseRadius: number;
+  invertPalette: boolean;
 };
 
 const waveVertexShader = `
@@ -132,6 +135,7 @@ const ditherFragmentShader = `
 precision highp float;
 uniform float colorNum;
 uniform float pixelSize;
+uniform int invertPalette;
 const float bayerMatrix8x8[64] = float[64](
   0.0/64.0, 48.0/64.0, 12.0/64.0, 60.0/64.0,  3.0/64.0, 51.0/64.0, 15.0/64.0, 63.0/64.0,
   32.0/64.0,16.0/64.0, 44.0/64.0, 28.0/64.0, 35.0/64.0,19.0/64.0, 47.0/64.0, 31.0/64.0,
@@ -160,6 +164,9 @@ void mainImage(in vec4 inputColor, in vec2 uv, out vec4 outputColor) {
   vec2 uvPixel = normalizedPixelSize * floor(uv / normalizedPixelSize);
   vec4 color = texture2D(inputBuffer, uvPixel);
   color.rgb = dither(uv, color.rgb);
+  if (invertPalette == 1) {
+    color.rgb = vec3(1.0) - color.rgb;
+  }
   outputColor = color;
 }
 `;
@@ -171,6 +178,7 @@ class RetroEffectImpl extends Effect {
     const uniforms = new Map<string, THREE.Uniform>([
       ["colorNum", new THREE.Uniform(colorNum)],
       ["pixelSize", new THREE.Uniform(pixelSize)],
+      ["invertPalette", new THREE.Uniform(0)],
     ]);
     super("RetroEffect", ditherFragmentShader, { uniforms });
     this.uniforms = uniforms;
@@ -183,13 +191,22 @@ class RetroEffectImpl extends Effect {
   set pixelSize(value: number) {
     this.uniforms.get("pixelSize")!.value = value;
   }
+
+  set invertPalette(value: boolean) {
+    this.uniforms.get("invertPalette")!.value = value ? 1 : 0;
+  }
 }
 
 const WrappedRetro = wrapEffect(RetroEffectImpl);
 
 const RetroEffect = forwardRef<Effect, RetroEffectProps>(
-  ({ colorNum, pixelSize }, ref) => (
-    <WrappedRetro ref={ref} colorNum={colorNum} pixelSize={pixelSize} />
+  ({ colorNum, pixelSize, invertPalette }, ref) => (
+    <WrappedRetro
+      ref={ref}
+      colorNum={colorNum}
+      pixelSize={pixelSize}
+      invertPalette={invertPalette}
+    />
   ),
 );
 RetroEffect.displayName = "RetroEffect";
@@ -204,6 +221,7 @@ function DitheredWaves({
   disableAnimation,
   enableMouseInteraction,
   mouseRadius,
+  invertPalette,
 }: DitheredWavesProps) {
   const mesh = useRef<THREE.Mesh | null>(null);
   const mouseRef = useRef(new THREE.Vector2());
@@ -280,7 +298,11 @@ function DitheredWaves({
       </mesh>
 
       <EffectComposer>
-        <RetroEffect colorNum={colorNum} pixelSize={pixelSize} />
+        <RetroEffect
+          colorNum={colorNum}
+          pixelSize={pixelSize}
+          invertPalette={invertPalette}
+        />
       </EffectComposer>
 
       <mesh
@@ -306,6 +328,7 @@ export default function Dither({
   disableAnimation = false,
   enableMouseInteraction = true,
   mouseRadius = 1,
+  invertPalette = false,
   className,
   style,
 }: DitherProps) {
@@ -331,6 +354,7 @@ export default function Dither({
           disableAnimation={disableAnimation}
           enableMouseInteraction={enableMouseInteraction}
           mouseRadius={mouseRadius}
+          invertPalette={invertPalette}
         />
       </Canvas>
     </div>

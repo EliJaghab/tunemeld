@@ -1,10 +1,10 @@
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { BrowserRouter, useSearchParams } from "react-router-dom";
-import { ThemeContextProvider } from "@/v2/ThemeContext";
+import { ThemeContext, ThemeContextProvider } from "@/v2/ThemeContext";
 import { Header } from "@/v2/components/Header";
 import { GenreButtons } from "@/v2/components/GenreButtons";
 import { ServiceArtSection } from "@/v2/components/ServiceArtSection";
-import { GENRE, type GenreValue } from "@/v2/constants";
+import { GENRE, THEME, type GenreValue } from "@/v2/constants";
 import Dither from "@/v2/components/Dither";
 import { VerticalPadding } from "@/v2/components/VerticalPadding";
 
@@ -30,6 +30,9 @@ function AppContent({
 }: {
   activeGenre: GenreValue;
 }): React.ReactElement {
+  const [theme] = useContext(ThemeContext);
+  const invertPalette = theme === THEME.LIGHT;
+
   useEffect(() => {
     document.title = "tunemeld";
   }, []);
@@ -40,12 +43,13 @@ function AppContent({
         className="pointer-events-none absolute inset-0 z-0 h-full w-full select-none"
         waveColor={[0.2, 0.2, 0.2]}
         disableAnimation={false}
-        enableMouseInteraction={false}
-        mouseRadius={0.3}
+        enableMouseInteraction={true}
+        mouseRadius={0.2}
         colorNum={3}
         waveAmplitude={0.25}
         waveFrequency={2}
         waveSpeed={0.05}
+        invertPalette={invertPalette}
       />
       <main className="relative z-10">
         <VerticalPadding size="lg" />
