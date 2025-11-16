@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { ThemeContext } from "@/v2/ThemeContext";
 import { THEME } from "@/v2/constants";
-import { Dither } from "@/v2/components/shared";
+import { Dither } from "@/v2/components/shared/Dither";
 
 export function TuneMeldBackground(): React.ReactElement {
   const [theme] = useContext(ThemeContext);

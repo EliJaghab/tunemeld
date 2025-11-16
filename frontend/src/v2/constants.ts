@@ -1,3 +1,5 @@
+import type { Rank } from "@/types";
+
 export const THEME = {
   LIGHT: "light",
   DARK: "dark",
@@ -34,3 +36,30 @@ export const GENRE = {
 } as const;
 
 export type GenreValue = (typeof GENRE)[keyof typeof GENRE];
+
+export const RANKS: Rank[] = [
+  {
+    name: "tunemeld-rank",
+    displayName: "TuneMeld Rank",
+    sortField: "tunemeld-rank",
+    sortOrder: "asc",
+    isDefault: true,
+    dataField: "tunemeldRank",
+  },
+  {
+    name: "total-plays",
+    displayName: "Total Plays",
+    sortField: "total-plays",
+    sortOrder: "desc",
+    isDefault: false,
+    dataField: "totalCurrentPlayCount",
+  },
+  {
+    name: "trending",
+    displayName: "Trending",
+    sortField: "trending",
+    sortOrder: "desc",
+    isDefault: false,
+    dataField: "totalWeeklyChangePercentage",
+  },
+];

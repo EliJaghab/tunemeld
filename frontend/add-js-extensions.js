@@ -24,6 +24,17 @@ function addJsExtensions(dir) {
       content = content.replace(
         /from\s+['"](\.\.?\/[^'"]+?)(?<!\.js)['"]/g,
         (match, importPath) => {
+          // Resolve the full path relative to the current file's directory
+          const currentFileDir = path.dirname(fullPath);
+          const resolvedPath = path.resolve(currentFileDir, importPath);
+
+          // Check if it's a directory - if so, add /index.js, otherwise add .js
+          if (
+            fs.existsSync(resolvedPath) &&
+            fs.statSync(resolvedPath).isDirectory()
+          ) {
+            return `from '${importPath}/index.js'`;
+          }
           return `from '${importPath}.js'`;
         },
       );
@@ -32,6 +43,15 @@ function addJsExtensions(dir) {
       content = content.replace(
         /import\s*\(\s*['"](\.\.?\/[^'"]+?)(?<!\.js)['"]\s*\)/g,
         (match, importPath) => {
+          const currentFileDir = path.dirname(fullPath);
+          const resolvedPath = path.resolve(currentFileDir, importPath);
+
+          if (
+            fs.existsSync(resolvedPath) &&
+            fs.statSync(resolvedPath).isDirectory()
+          ) {
+            return `import('${importPath}/index.js')`;
+          }
           return `import('${importPath}.js')`;
         },
       );

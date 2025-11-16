@@ -1,4 +1,5 @@
-import React, { useRef, useEffect, forwardRef } from "react";
+import React, { useRef, useEffect, forwardRef, memo } from "react";
+import { createPortal } from "react-dom";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { EffectComposer, wrapEffect } from "@react-three/postprocessing";
 import { Effect } from "postprocessing";
@@ -211,133 +212,228 @@ const RetroEffect = forwardRef<Effect, RetroEffectProps>(
 );
 RetroEffect.displayName = "RetroEffect";
 
-function DitheredWaves({
-  waveSpeed,
-  waveFrequency,
-  waveAmplitude,
-  waveColor,
-  colorNum,
-  pixelSize,
-  disableAnimation,
-  enableMouseInteraction,
-  mouseRadius,
-  invertPalette,
-}: DitheredWavesProps) {
-  const mesh = useRef<THREE.Mesh | null>(null);
-  const mouseRef = useRef(new THREE.Vector2());
-  const { viewport, size, gl } = useThree();
+const DitheredWaves = memo(
+  function DitheredWaves({
+    waveSpeed,
+    waveFrequency,
+    waveAmplitude,
+    waveColor,
+    colorNum,
+    pixelSize,
+    disableAnimation,
+    enableMouseInteraction,
+    mouseRadius,
+    invertPalette,
+  }: DitheredWavesProps) {
+    const mesh = useRef<THREE.Mesh | null>(null);
+    const mouseRef = useRef(new THREE.Vector2());
+    const { viewport, size, gl } = useThree();
 
-  const waveUniformsRef = useRef({
-    time: new THREE.Uniform(0),
-    resolution: new THREE.Uniform(new THREE.Vector2(0, 0)),
-    waveSpeed: new THREE.Uniform(waveSpeed),
-    waveFrequency: new THREE.Uniform(waveFrequency),
-    waveAmplitude: new THREE.Uniform(waveAmplitude),
-    waveColor: new THREE.Uniform(new THREE.Color(...waveColor)),
-    mousePos: new THREE.Uniform(new THREE.Vector2(0, 0)),
-    enableMouseInteraction: new THREE.Uniform(enableMouseInteraction ? 1 : 0),
-    mouseRadius: new THREE.Uniform(mouseRadius),
-  });
+    // Store viewport/size in refs to prevent re-renders when they change
+    const viewportRef = useRef(viewport);
+    const sizeRef = useRef(size);
 
-  useEffect(() => {
-    const dpr = gl.getPixelRatio();
-    const w = Math.floor(size.width * dpr),
-      h = Math.floor(size.height * dpr);
-    const res = waveUniformsRef.current.resolution.value;
-    if (res.x !== w || res.y !== h) {
-      res.set(w, h);
+    // Update refs when they change, but don't trigger re-render
+    useEffect(() => {
+      viewportRef.current = viewport;
+      sizeRef.current = size;
+    }, [viewport, size]);
+
+    // Store props in refs so we can update uniforms without re-rendering
+    const propsRef = useRef({
+      waveSpeed,
+      waveFrequency,
+      waveAmplitude,
+      waveColor,
+      disableAnimation,
+      enableMouseInteraction,
+      mouseRadius,
+    });
+
+    // Update refs when props change
+    useEffect(() => {
+      propsRef.current = {
+        waveSpeed,
+        waveFrequency,
+        waveAmplitude,
+        waveColor,
+        disableAnimation,
+        enableMouseInteraction,
+        mouseRadius,
+      };
+    }, [
+      waveSpeed,
+      waveFrequency,
+      waveAmplitude,
+      waveColor,
+      disableAnimation,
+      enableMouseInteraction,
+      mouseRadius,
+    ]);
+
+    const waveUniformsRef = useRef({
+      time: new THREE.Uniform(0),
+      resolution: new THREE.Uniform(new THREE.Vector2(0, 0)),
+      waveSpeed: new THREE.Uniform(waveSpeed),
+      waveFrequency: new THREE.Uniform(waveFrequency),
+      waveAmplitude: new THREE.Uniform(waveAmplitude),
+      waveColor: new THREE.Uniform(new THREE.Color(...waveColor)),
+      mousePos: new THREE.Uniform(new THREE.Vector2(0, 0)),
+      enableMouseInteraction: new THREE.Uniform(enableMouseInteraction ? 1 : 0),
+      mouseRadius: new THREE.Uniform(mouseRadius),
+    });
+
+    useEffect(() => {
+      const dpr = gl.getPixelRatio();
+      const currentSize = sizeRef.current;
+      const w = Math.floor(currentSize.width * dpr),
+        h = Math.floor(currentSize.height * dpr);
+      const res = waveUniformsRef.current.resolution.value;
+      if (res.x !== w || res.y !== h) {
+        res.set(w, h);
+      }
+    }, [gl]);
+
+    // Update resolution when size changes, but don't trigger re-render
+    useEffect(() => {
+      const dpr = gl.getPixelRatio();
+      const w = Math.floor(size.width * dpr),
+        h = Math.floor(size.height * dpr);
+      const res = waveUniformsRef.current.resolution.value;
+      if (res.x !== w || res.y !== h) {
+        res.set(w, h);
+      }
+    }, [size.width, size.height, gl]);
+
+    const prevColor = useRef([...waveColor]);
+    const frameCountRef = useRef(0);
+    useFrame(({ clock }) => {
+      frameCountRef.current++;
+      const uniforms = waveUniformsRef.current;
+      const props = propsRef.current;
+
+      // Update viewport from ref in useFrame to avoid re-renders
+      const currentViewport = viewportRef.current;
+      if (mesh.current) {
+        mesh.current.scale.set(
+          currentViewport.width,
+          currentViewport.height,
+          1,
+        );
+      }
+
+      if (!props.disableAnimation) {
+        uniforms.time.value = clock.getElapsedTime();
+      }
+
+      // Only update uniforms if props actually changed
+      uniforms.waveSpeed.value = props.waveSpeed;
+      uniforms.waveFrequency.value = props.waveFrequency;
+      uniforms.waveAmplitude.value = props.waveAmplitude;
+
+      if (
+        !prevColor.current.every(
+          (value, index) => value === props.waveColor[index],
+        )
+      ) {
+        uniforms.waveColor.value.set(...props.waveColor);
+        prevColor.current = [...props.waveColor];
+      }
+
+      uniforms.enableMouseInteraction.value = props.enableMouseInteraction
+        ? 1
+        : 0;
+      uniforms.mouseRadius.value = props.mouseRadius;
+
+      if (props.enableMouseInteraction) {
+        uniforms.mousePos.value.copy(mouseRef.current);
+      }
+    });
+
+    const handlePointerMove = (event: PointerEvent) => {
+      if (!propsRef.current.enableMouseInteraction) return;
+      const rect = gl.domElement.getBoundingClientRect();
+      const dpr = gl.getPixelRatio();
+      mouseRef.current.set(
+        (event.clientX - rect.left) * dpr,
+        (event.clientY - rect.top) * dpr,
+      );
+    };
+
+    // Use initial viewport for render, but update in useFrame
+    // Store shader material in ref to prevent recreation on re-render
+    const shaderMaterialRef = useRef<THREE.ShaderMaterial | null>(null);
+    if (!shaderMaterialRef.current) {
+      shaderMaterialRef.current = new THREE.ShaderMaterial({
+        vertexShader: waveVertexShader,
+        fragmentShader: waveFragmentShader,
+        uniforms: waveUniformsRef.current,
+      });
     }
-  }, [size, gl]);
 
-  const prevColor = useRef([...waveColor]);
-  useFrame(({ clock }) => {
-    const uniforms = waveUniformsRef.current;
+    return (
+      <>
+        <mesh ref={mesh} scale={[viewport.width, viewport.height, 1]}>
+          <planeGeometry args={[1, 1]} />
+          <primitive object={shaderMaterialRef.current} attach="material" />
+        </mesh>
 
-    if (!disableAnimation) {
-      uniforms.time.value = clock.getElapsedTime();
-    }
+        <EffectComposer>
+          <RetroEffect
+            colorNum={colorNum}
+            pixelSize={pixelSize}
+            invertPalette={invertPalette}
+          />
+        </EffectComposer>
 
-    uniforms.waveSpeed.value = waveSpeed;
-    uniforms.waveFrequency.value = waveFrequency;
-    uniforms.waveAmplitude.value = waveAmplitude;
-
-    if (
-      !prevColor.current.every((value, index) => value === waveColor[index])
-    ) {
-      uniforms.waveColor.value.set(...waveColor);
-      prevColor.current = [...waveColor];
-    }
-
-    uniforms.enableMouseInteraction.value = enableMouseInteraction ? 1 : 0;
-    uniforms.mouseRadius.value = mouseRadius;
-
-    if (enableMouseInteraction) {
-      uniforms.mousePos.value.copy(mouseRef.current);
-    }
-  });
-
-  const handlePointerMove = (event: PointerEvent) => {
-    if (!enableMouseInteraction) return;
-    const rect = gl.domElement.getBoundingClientRect();
-    const dpr = gl.getPixelRatio();
-    mouseRef.current.set(
-      (event.clientX - rect.left) * dpr,
-      (event.clientY - rect.top) * dpr,
+        <mesh
+          onPointerMove={handlePointerMove}
+          position={[0, 0, 0.01]}
+          scale={[viewport.width, viewport.height, 1]}
+          visible={false}
+        >
+          <planeGeometry args={[1, 1]} />
+          <meshBasicMaterial transparent opacity={0} />
+        </mesh>
+      </>
     );
-  };
+  },
+  (prevProps, nextProps) => {
+    // Prevent re-render unless props actually change
+    // This prevents React Three Fiber context updates from causing re-renders
+    const propsEqual =
+      prevProps.waveSpeed === nextProps.waveSpeed &&
+      prevProps.waveFrequency === nextProps.waveFrequency &&
+      prevProps.waveAmplitude === nextProps.waveAmplitude &&
+      prevProps.waveColor[0] === nextProps.waveColor[0] &&
+      prevProps.waveColor[1] === nextProps.waveColor[1] &&
+      prevProps.waveColor[2] === nextProps.waveColor[2] &&
+      prevProps.colorNum === nextProps.colorNum &&
+      prevProps.pixelSize === nextProps.pixelSize &&
+      prevProps.disableAnimation === nextProps.disableAnimation &&
+      prevProps.enableMouseInteraction === nextProps.enableMouseInteraction &&
+      prevProps.mouseRadius === nextProps.mouseRadius &&
+      prevProps.invertPalette === nextProps.invertPalette;
 
-  return (
-    <>
-      <mesh ref={mesh} scale={[viewport.width, viewport.height, 1]}>
-        <planeGeometry args={[1, 1]} />
-        <shaderMaterial
-          vertexShader={waveVertexShader}
-          fragmentShader={waveFragmentShader}
-          uniforms={waveUniformsRef.current}
-        />
-      </mesh>
+    return propsEqual;
+  },
+);
 
-      <EffectComposer>
-        <RetroEffect
-          colorNum={colorNum}
-          pixelSize={pixelSize}
-          invertPalette={invertPalette}
-        />
-      </EffectComposer>
-
-      <mesh
-        onPointerMove={handlePointerMove}
-        position={[0, 0, 0.01]}
-        scale={[viewport.width, viewport.height, 1]}
-        visible={false}
-      >
-        <planeGeometry args={[1, 1]} />
-        <meshBasicMaterial transparent opacity={0} />
-      </mesh>
-    </>
-  );
-}
-
-export default function Dither({
-  waveSpeed = 0.05,
-  waveFrequency = 3,
-  waveAmplitude = 0.3,
-  waveColor = [0.5, 0.5, 0.5] as WaveColor,
-  colorNum = 4,
-  pixelSize = 2,
-  disableAnimation = false,
-  enableMouseInteraction = true,
-  mouseRadius = 1,
-  invertPalette = false,
-  className,
-  style,
-}: DitherProps) {
-  const wrapperClass =
-    className ??
-    "pointer-events-none absolute inset-0 -z-10 h-full w-full select-none";
-
-  return (
-    <div className={wrapperClass} style={style}>
+// Isolated Canvas component that only re-renders when invertPalette changes
+const IsolatedCanvas = memo(
+  function IsolatedCanvas({
+    waveSpeed,
+    waveFrequency,
+    waveAmplitude,
+    waveColor,
+    colorNum,
+    pixelSize,
+    disableAnimation,
+    enableMouseInteraction,
+    mouseRadius,
+    invertPalette,
+  }: DitheredWavesProps) {
+    return (
       <Canvas
         style={{ width: "100%", height: "100%" }}
         camera={{ position: [0, 0, 6] }}
@@ -357,6 +453,80 @@ export default function Dither({
           invertPalette={invertPalette}
         />
       </Canvas>
-    </div>
+    );
+  },
+  (prevProps, nextProps) => {
+    // Only re-render if invertPalette changes (for theme switching)
+    // All other props are stable and shouldn't cause re-renders
+    const shouldSkip =
+      prevProps.waveSpeed === nextProps.waveSpeed &&
+      prevProps.waveFrequency === nextProps.waveFrequency &&
+      prevProps.waveAmplitude === nextProps.waveAmplitude &&
+      prevProps.waveColor[0] === nextProps.waveColor[0] &&
+      prevProps.waveColor[1] === nextProps.waveColor[1] &&
+      prevProps.waveColor[2] === nextProps.waveColor[2] &&
+      prevProps.colorNum === nextProps.colorNum &&
+      prevProps.pixelSize === nextProps.pixelSize &&
+      prevProps.disableAnimation === nextProps.disableAnimation &&
+      prevProps.enableMouseInteraction === nextProps.enableMouseInteraction &&
+      prevProps.mouseRadius === nextProps.mouseRadius &&
+      prevProps.invertPalette === nextProps.invertPalette;
+
+    return shouldSkip;
+  },
+);
+
+// Create a singleton container for the Canvas that's isolated from layout changes
+let canvasContainer: HTMLDivElement | null = null;
+
+function getCanvasContainer(): HTMLDivElement {
+  if (!canvasContainer) {
+    canvasContainer = document.createElement("div");
+    canvasContainer.style.cssText =
+      "position: fixed; inset: 0; pointer-events: none; z-index: 0; width: 100vw; height: 100vh;";
+    document.body.appendChild(canvasContainer);
+  }
+  return canvasContainer;
+}
+
+export function Dither({
+  waveSpeed = 0.05,
+  waveFrequency = 3,
+  waveAmplitude = 0.3,
+  waveColor = [0.5, 0.5, 0.5] as WaveColor,
+  colorNum = 4,
+  pixelSize = 2,
+  disableAnimation = false,
+  enableMouseInteraction = true,
+  mouseRadius = 1,
+  invertPalette = false,
+  className,
+  style,
+}: DitherProps) {
+  const wrapperClass =
+    className ??
+    "pointer-events-none absolute inset-0 -z-10 h-full w-full select-none";
+
+  const container = getCanvasContainer();
+
+  return (
+    <>
+      <div className={wrapperClass} style={style} />
+      {createPortal(
+        <IsolatedCanvas
+          waveSpeed={waveSpeed}
+          waveFrequency={waveFrequency}
+          waveAmplitude={waveAmplitude}
+          waveColor={waveColor}
+          colorNum={colorNum}
+          pixelSize={pixelSize}
+          disableAnimation={disableAnimation}
+          enableMouseInteraction={enableMouseInteraction}
+          mouseRadius={mouseRadius}
+          invertPalette={invertPalette}
+        />,
+        container,
+      )}
+    </>
   );
 }

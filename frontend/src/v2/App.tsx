@@ -1,13 +1,12 @@
 import React, { useEffect } from "react";
 import { BrowserRouter, useSearchParams } from "react-router-dom";
 import { ThemeContextProvider } from "@/v2/ThemeContext";
-import { Header } from "@/v2/components/header";
-import {
-  GenreButtons,
-  VerticalPadding,
-  TuneMeldBackground,
-} from "@/v2/components/shared";
-import { ServiceArtSection } from "@/v2/components/service-playlist";
+import { Header } from "@/v2/components/header/Header";
+import { GenreButtons } from "@/v2/components/shared/GenreButtons";
+import { VerticalPadding } from "@/v2/components/shared/VerticalPadding";
+import { TuneMeldBackground } from "@/v2/components/shared/TuneMeldBackground";
+import { ServiceArtSection } from "@/v2/components/service-playlist/ServiceArtSection";
+import { TuneMeldPlaylist } from "@/v2/components/playlist/TuneMeldPlaylist/TuneMeldPlaylist";
 import { GENRE, type GenreValue } from "@/v2/constants";
 
 function useGenreFromUrl(): GenreValue {
@@ -37,25 +36,29 @@ function AppContent({
   }, []);
 
   return (
-    <div className="relative min-h-screen bg-background px-4 text-text">
-      <TuneMeldBackground />
-      <main className="relative z-10">
-        <VerticalPadding size="lg" />
-        <Header />
-        <VerticalPadding size="lg" />
-        <ServiceArtSection genre={activeGenre} />
-        <VerticalPadding size="lg" />
-        <GenreButtons />
-        <VerticalPadding size="lg" />
-      </main>
-    </div>
+    <main className="relative z-10">
+      <VerticalPadding size="lg" />
+      <Header />
+      <VerticalPadding size="lg" />
+      <ServiceArtSection genre={activeGenre} />
+      <VerticalPadding size="lg" />
+      <GenreButtons />
+      <VerticalPadding size="lg" />
+      <TuneMeldPlaylist genre={activeGenre} />
+      <VerticalPadding size="lg" />
+    </main>
   );
 }
 
 function AppWithProviders(): React.ReactElement {
   const activeGenre = useGenreFromUrl();
 
-  return <AppContent activeGenre={activeGenre} />;
+  return (
+    <div className="relative min-h-screen bg-background px-4 text-text">
+      <TuneMeldBackground />
+      <AppContent activeGenre={activeGenre} />
+    </div>
+  );
 }
 
 export function App(): React.ReactElement {

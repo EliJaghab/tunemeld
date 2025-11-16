@@ -3,7 +3,7 @@ import { APP_BASE_URL } from "@/config/config";
 import { ThemeContext } from "@/v2/ThemeContext";
 import { THEME } from "@/v2/constants";
 import GlassSurface from "@/v2/components/shared/GlassSurface";
-import { ResponsiveIcon } from "@/v2/components/shared";
+import { ResponsiveIcon } from "@/v2/components/shared/ResponsiveIcon";
 
 export function Header(): React.ReactElement {
   const [theme, setTheme] = useContext(ThemeContext);
@@ -32,7 +32,7 @@ export function Header(): React.ReactElement {
           blueOffset={20}
           className="w-full max-w-container px-2 py-2 desktop:px-2 desktop:py-2"
         >
-          <div className="flex w-full items-center justify-between gap-3 text-white desktop:gap-6">
+          <div className="flex w-full items-center justify-between gap-3 desktop:gap-6">
             <div className="flex items-center gap-2 desktop:gap-3">
               <a
                 href={APP_BASE_URL}
@@ -60,6 +60,7 @@ export function Header(): React.ReactElement {
                 src={isDark ? "./images/sun.svg" : "./images/moon.svg"}
                 alt={isDark ? "Light mode" : "Dark mode"}
                 size="xs"
+                className="brightness-0 dark:brightness-0 dark:invert"
               />
             </button>
           </div>

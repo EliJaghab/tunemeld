@@ -1,8 +1,8 @@
 import React from "react";
 import { useServiceMetadata } from "@/v2/ServiceMetadataContext";
 import { SERVICE, type ServiceName } from "@/v2/constants";
-import { MediaSquare } from "@/v2/components/shared";
-import { PlaylistDescription } from "@/v2/components/service-playlist";
+import { MediaSquare } from "@/v2/components/shared/MediaSquare";
+import { PlaylistDescription } from "@/v2/components/service-playlist/PlaylistDescription";
 
 interface ServiceArtProps {
   serviceName: ServiceName;
@@ -33,7 +33,7 @@ export function ServiceArt({
   return (
     <div
       id={serviceName}
-      className="service flex-1 min-w-0 rounded-media bg-white/60 dark:bg-gray-700/60 backdrop-blur-md border border-white/20 dark:border-gray-600/20 shadow-lg p-2 desktop:p-4"
+      className="service flex-1 min-w-0 rounded-media border-2 border-gray-500 dark:border-gray-600 p-2 desktop:p-4 !bg-transparent"
     >
       <div className="mb-2.5 desktop:mb-4">
         {isLoading ? (

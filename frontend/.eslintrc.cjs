@@ -13,12 +13,13 @@ module.exports = {
     tsconfigRootDir: __dirname,
     project: path.join(__dirname, "tsconfig.json"),
   },
-  plugins: ["@typescript-eslint", "import"],
+  plugins: ["@typescript-eslint", "import", "react-hooks"],
   extends: [
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:import/recommended",
     "plugin:import/typescript",
+    "plugin:react-hooks/recommended",
     "prettier",
   ],
   ignorePatterns: ["dist/**"],
@@ -36,7 +37,12 @@ module.exports = {
         "no-restricted-imports": [
           "error",
           {
-            patterns: ["../*", "./*"],
+            patterns: [
+              {
+                group: ["../*", "./*"],
+                message: "Relative imports are not allowed. Use absolute imports with @/ aliases instead.",
+              },
+            ],
           },
         ],
       },

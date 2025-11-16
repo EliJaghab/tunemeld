@@ -1,7 +1,6 @@
 import React from "react";
 import { useSearchParams } from "react-router-dom";
-import { GlassButton } from "@/v2/components/shared";
-import { ResponsiveIcon } from "@/v2/components/shared";
+import { FilterButton } from "@/v2/components/shared/FilterButton";
 import { GENRE, type GenreValue } from "@/v2/constants";
 
 interface GenreButtonData {
@@ -45,21 +44,14 @@ export function GenreButtons(): React.ReactElement {
     <div className="flex justify-center px-3 desktop:px-4">
       <div className="flex flex-wrap gap-2 justify-center max-w-container">
         {GENRES.map((genre) => (
-          <GlassButton
+          <FilterButton
             key={genre.name}
             onClick={() => handleGenreClick(genre.name)}
             active={activeGenre === genre.name}
+            text={genre.displayName}
+            iconUrl={genre.iconUrl}
             ariaLabel={`View ${genre.displayName} playlists`}
-          >
-            <ResponsiveIcon
-              src={genre.iconUrl}
-              alt={genre.displayName}
-              size="md"
-            />
-            <span className="text-xs font-bold desktop:text-sm">
-              {genre.displayName}
-            </span>
-          </GlassButton>
+          />
         ))}
       </div>
     </div>

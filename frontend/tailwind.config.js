@@ -42,9 +42,6 @@ module.exports = {
     "./index-v2.html",
   ],
   theme: {
-    screens: {
-      desktop: "768px",
-    },
     container: {
       center: true,
       padding: {
@@ -69,6 +66,9 @@ module.exports = {
       "4xl": ["40px", "48px"],
     },
     extend: {
+      screens: {
+        desktop: "768px",
+      },
       borderRadius: {
         pill: "999px",
         glass: "50px",
