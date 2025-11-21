@@ -79,17 +79,13 @@ STATIC_FILES.forEach((item) => {
   }
 });
 
-// Run Tailwind build for v2
-log.build("Building Tailwind CSS for v2");
+// Build V2 with Vite (includes Tailwind CSS, React, optimizations)
+log.build("Building V2 with Vite");
 try {
-  execSync(
-    "npx tailwindcss -i ./src/v2/styles/tailwind.css -o ./dist/v2/tailwind.css",
-    { stdio: "pipe" },
-  );
-  log.success("Tailwind CSS built");
+  execSync("npm run build:v2", { stdio: "inherit" });
+  log.success("V2 built with Vite");
 } catch (error) {
-  log.error("Tailwind build failed");
-  console.error(error.stdout?.toString() || error.message);
+  log.error("Vite build failed");
   process.exit(1);
 }
 
