@@ -1,19 +1,17 @@
+@import "tw-animate-css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import "tw-animate-css";
 
 @layer base {
   :root {
-    --color-background: #050211;
-    --color-surface: #1b1428;
-    --color-surface-alt: #241b35;
-    --color-surface-muted: #312646;
-    --color-text: #f6f5ff;
-    --color-muted: #b3adc9;
-    --color-border: #2f2740;
-    color-scheme: dark;
+    color-scheme: light;
     font-family: theme("fontFamily.sans");
+  }
+
+  .dark {
+    color-scheme: dark;
   }
 
   body {
