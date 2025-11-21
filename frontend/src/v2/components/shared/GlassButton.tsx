@@ -5,25 +5,33 @@ import GlassSurface from "@/v2/components/shared/GlassSurface";
 interface GlassButtonProps {
   onClick?: () => void;
   className?: string;
+  buttonClassName?: string;
   children: React.ReactNode;
   active?: boolean;
   ariaLabel?: string;
   type?: "button" | "submit" | "reset";
+  borderRadius?: number;
+  width?: number | string;
+  height?: number | string;
 }
 
 export function GlassButton({
   onClick,
   className = "",
+  buttonClassName = "",
   children,
   active = false,
   ariaLabel,
   type = "button",
+  borderRadius = 50,
+  width = "auto",
+  height = "auto",
 }: GlassButtonProps): React.ReactElement {
   return (
     <GlassSurface
-      width="auto"
-      height="auto"
-      borderRadius={50}
+      width={width}
+      height={height}
+      borderRadius={borderRadius}
       backgroundOpacity={active ? 0 : 0.1}
       borderWidth={0}
       blur={6}
@@ -46,7 +54,7 @@ export function GlassButton({
         onClick={onClick}
         className={clsx(
           "flex items-center gap-2",
-          "px-4 py-2 desktop:gap-3 desktop:px-6 desktop:py-3",
+          buttonClassName || "px-4 py-2 desktop:gap-3 desktop:px-6 desktop:py-3",
           active ? "text-white" : "text-black dark:text-white"
         )}
         aria-label={ariaLabel}

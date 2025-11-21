@@ -2,6 +2,8 @@ import React from "react";
 import clsx from "clsx";
 import { TuneMeldRow } from "@/v2/components/playlist/TuneMeldPlaylist/TuneMeldRow";
 import { FilterButton } from "@/v2/components/shared/FilterButton";
+import { GlassButton } from "@/v2/components/shared/GlassButton";
+import { ResponsiveIcon } from "@/v2/components/shared/ResponsiveIcon";
 import type { Track, Rank } from "@/types";
 
 interface TuneMeldPlaylistTableProps {
@@ -75,32 +77,33 @@ export function TuneMeldPlaylistTable({
               </div>
             )}
           </div>
-          <button
+          <GlassButton
             onClick={onToggle}
             className={clsx(
-              "w-8 h-8",
-              "flex items-center justify-center",
               "flex-shrink-0 self-start",
-              "rounded-full",
-              "hover:bg-black/5 dark:hover:bg-white/5",
-              "transition-colors"
+              "rounded-full"
             )}
-            aria-label={isCollapsed ? "Expand playlist" : "Collapse playlist"}
+            width={28}
+            height={28}
+            borderRadius={14}
+            buttonClassName={clsx(
+              "!p-0",
+              "flex items-center justify-center",
+              "w-full h-full",
+              "rounded-full"
+            )}
+            ariaLabel={isCollapsed ? "Expand playlist" : "Collapse playlist"}
           >
-            <span
+            <ResponsiveIcon
+              src={isCollapsed ? "./images/plus.svg" : "./images/minus.svg"}
+              alt={isCollapsed ? "Expand" : "Collapse"}
+              size="xs"
               className={clsx(
-                "text-sm",
-                "text-black dark:text-white",
-                "inline-block",
-                "transition-transform"
+                "brightness-0 dark:brightness-0 dark:invert",
+                "transition-opacity"
               )}
-              style={{
-                transform: isCollapsed ? "rotate(0deg)" : "rotate(180deg)",
-              }}
-            >
-              ▼
-            </span>
-          </button>
+            />
+          </GlassButton>
         </div>
       </div>
 
