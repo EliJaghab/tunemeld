@@ -13,22 +13,22 @@ const GENRES: GenreButtonData[] = [
   {
     name: GENRE.POP,
     displayName: "Pop",
-    iconUrl: "./images/genre-pop.png",
+    iconUrl: "/images/genre-pop.png",
   },
   {
     name: GENRE.RAP,
     displayName: "Rap",
-    iconUrl: "./images/genre-rap.png",
+    iconUrl: "/images/genre-rap.png",
   },
   {
     name: GENRE.DANCE,
     displayName: "Dance",
-    iconUrl: "./images/genre-dance.png",
+    iconUrl: "/images/genre-dance.png",
   },
   {
     name: GENRE.COUNTRY,
     displayName: "Country",
-    iconUrl: "./images/genre-country.png",
+    iconUrl: "/images/genre-country.png",
   },
 ];
 

@@ -1,6 +1,25 @@
 import React from "react";
 import type { ServiceSource } from "@/types";
 
+interface RankBadgeProps {
+  rank: number;
+}
+
+function RankBadge({ rank }: RankBadgeProps) {
+  const isDoubleDigit = rank >= 10;
+  return (
+    <span
+      className={`absolute -top-1 -right-1 desktop:-top-[7px] desktop:-right-[7px] flex items-center justify-center text-white font-bold text-[9px] desktop:text-[11px] leading-none z-10 rounded-full bg-badge-red shadow-[0_1px_3px_rgba(0,0,0,0.3)] px-0.5 ${
+        isDoubleDigit
+          ? "min-w-[14px] w-[18px] h-[14px] desktop:min-w-[18px] desktop:w-[22px] desktop:h-[18px] desktop:rounded-[11px]"
+          : "w-[14px] h-[14px] desktop:w-[18px] desktop:h-[18px]"
+      }`}
+    >
+      {rank}
+    </span>
+  );
+}
+
 interface ServiceIconProps {
   source?: ServiceSource;
   rank?: number | null | undefined;
@@ -25,14 +44,8 @@ export function ServiceIcon({ source, rank, size = "md" }: ServiceIconProps) {
     );
   }
 
-  // If source exists, display service icon with rank badge
-  const badgeClass =
-    rank !== null && rank !== undefined && rank >= 10
-      ? "rank-badge double-digit"
-      : "rank-badge single-digit";
-
   return (
-    <div className="source-icon-container relative inline-block">
+    <div className="relative inline-block">
       <a
         href={source.url}
         target="_blank"
@@ -42,12 +55,10 @@ export function ServiceIcon({ source, rank, size = "md" }: ServiceIconProps) {
         <img
           src={source.iconUrl}
           alt={source.displayName}
-          className="source-icon h-5 w-5 desktop:h-6 desktop:w-6 rounded-full flex-shrink-0"
+          className="w-6 h-6 desktop:w-[30px] desktop:h-[30px]"
         />
       </a>
-      {rank !== null && rank !== undefined && (
-        <span className={badgeClass}>{rank}</span>
-      )}
+      {rank !== null && rank !== undefined && <RankBadge rank={rank} />}
     </div>
   );
 }

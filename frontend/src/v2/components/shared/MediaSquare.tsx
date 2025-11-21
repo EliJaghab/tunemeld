@@ -65,7 +65,7 @@ export function MediaSquare({
     </div>
   ) : (
     <div
-      className="image-placeholder rounded-media"
+      className="image-placeholder rounded-media aspect-square w-full bg-cover bg-center"
       style={{ backgroundImage: `url("${src}")` }}
       role="img"
       aria-label={alt}

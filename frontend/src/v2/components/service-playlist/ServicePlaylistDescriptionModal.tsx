@@ -45,16 +45,8 @@ export function ServicePlaylistDescriptionModal({
           height="auto"
           borderRadius={32}
           backgroundOpacity={0.5}
-          saturation={1}
           borderWidth={0.5}
-          brightness={100}
-          opacity={0.98}
           blur={20}
-          displace={0.5}
-          distortionScale={-180}
-          redOffset={0}
-          greenOffset={10}
-          blueOffset={20}
         >
           <div className="p-5">
             <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/40 to-transparent" />

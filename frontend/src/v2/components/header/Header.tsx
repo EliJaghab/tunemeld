@@ -20,16 +20,8 @@ export function Header(): React.ReactElement {
           height="auto"
           borderRadius={50}
           backgroundOpacity={0.1}
-          saturation={1}
           borderWidth={0}
-          brightness={50}
-          opacity={0.93}
           blur={11}
-          displace={0.5}
-          distortionScale={-180}
-          redOffset={0}
-          greenOffset={10}
-          blueOffset={20}
           className="w-full max-w-container px-2 py-2 desktop:px-2 desktop:py-2"
         >
           <div className="flex w-full items-center justify-between gap-3 desktop:gap-6">

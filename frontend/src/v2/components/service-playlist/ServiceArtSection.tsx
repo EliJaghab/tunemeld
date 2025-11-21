@@ -97,7 +97,7 @@ export function ServiceArtSection({
       value={metadata || ({} as Record<ServiceName, ServiceMetadata>)}
     >
       <section className="flex justify-center px-2 desktop:px-4">
-        <div className="flex gap-1.5 justify-center w-full max-w-container desktop:gap-6">
+        <div className="flex gap-4 justify-center w-full max-w-container desktop:gap-8">
           <ServiceArt
             serviceName={SERVICE.APPLE_MUSIC}
             onOpenModal={setModalContent}
