@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import clsx from "clsx";
 import { truncateTextForLines } from "@/v2/lib/truncateText";
 
 interface PlaylistDescriptionProps {
@@ -59,7 +60,7 @@ export function PlaylistDescription({
           description,
           4,
           testElement,
-          reserveSpace,
+          reserveSpace
         );
         setDisplayText(truncated);
       } else {
@@ -70,26 +71,45 @@ export function PlaylistDescription({
     }
   }, [description]);
 
+  const handleClick = () => {
+    onOpenModal({
+      ...(serviceDisplayName && {
+        serviceDisplayName,
+      }),
+      ...(playlistName && {
+        playlistName,
+      }),
+      ...(description && {
+        description,
+      }),
+    });
+  };
+
   return (
     <>
       <div
         id={`${serviceName}-title-description`}
-        className={`relative h-full overflow-hidden text-xs leading-[1.1rem] tracking-tight desktop:text-base desktop:leading-6 desktop:tracking-normal text-black dark:text-white ${className}`}
+        onClick={handleClick}
+        className={clsx(
+          "relative h-full overflow-hidden",
+          "text-xs desktop:text-base",
+          "leading-[1.1rem] desktop:leading-6",
+          "tracking-tight desktop:tracking-normal",
+          "text-black dark:text-white",
+          "cursor-pointer",
+          className
+        )}
       >
         <div ref={textRef}>{displayText}</div>
         {isTruncated && (
-          <button
-            onClick={() =>
-              onOpenModal({
-                ...(serviceDisplayName && { serviceDisplayName }),
-                ...(playlistName && { playlistName }),
-                ...(description && { description }),
-              })
-            }
-            className="font-semibold text-xs desktop:text-base text-black dark:text-white hover:underline absolute bottom-0 right-0"
+          <span
+            className={clsx(
+              "font-semibold text-xs desktop:text-base",
+              "absolute bottom-0 right-0"
+            )}
           >
             ...more
-          </button>
+          </span>
         )}
       </div>
     </>

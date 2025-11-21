@@ -3,6 +3,7 @@ import { useServiceMetadata } from "@/v2/ServiceMetadataContext";
 import { SERVICE, type ServiceName } from "@/v2/constants";
 import { MediaSquare } from "@/v2/components/shared/MediaSquare";
 import { PlaylistDescription } from "@/v2/components/service-playlist/PlaylistDescription";
+import clsx from "clsx";
 
 interface ServiceArtProps {
   serviceName: ServiceName;
@@ -33,11 +34,22 @@ export function ServiceArt({
   return (
     <div
       id={serviceName}
-      className="service flex-1 min-w-0 rounded-media border-2 border-gray-500 dark:border-gray-600 p-2 desktop:p-4 !bg-transparent"
+      className={clsx(
+        "service w-full rounded-media",
+        "border-2 border-gray-500 dark:border-gray-600",
+        "p-2 desktop:p-4",
+        "!bg-transparent"
+      )}
     >
-      <div className="mb-2.5 desktop:mb-4">
+      <div className={clsx("mb-2.5 desktop:mb-4")}>
         {isLoading ? (
-          <div className="aspect-square w-full bg-black/10 dark:bg-white/10 rounded-media"></div>
+          <div
+            className={clsx(
+              "aspect-square w-full",
+              "bg-black/10 dark:bg-white/10",
+              "rounded-media"
+            )}
+          ></div>
         ) : (
           coverUrl && (
             <a
@@ -45,7 +57,7 @@ export function ServiceArt({
               href={metadata?.href ?? "#"}
               target="_blank"
               rel="noreferrer"
-              className="block"
+              className={clsx("block")}
             >
               <MediaSquare
                 src={coverUrl}
@@ -57,39 +69,125 @@ export function ServiceArt({
         )}
       </div>
 
-      <div className="mb-2 desktop:mb-4 min-h-[48px] desktop:min-h-[72px] flex flex-col justify-center">
+      <div
+        className={clsx(
+          "mb-2 desktop:mb-4",
+          "min-h-[48px] desktop:min-h-[72px]",
+          "flex flex-col justify-center"
+        )}
+      >
         {isLoading ? (
-          <div className="space-y-2">
-            <div className="h-5 desktop:h-6 bg-black/10 dark:bg-white/10 rounded w-3/4"></div>
-            <div className="h-4 desktop:h-5 bg-black/10 dark:bg-white/10 rounded w-1/2"></div>
+          <div className={clsx("space-y-2")}>
+            <div
+              className={clsx(
+                "h-5 desktop:h-6",
+                "bg-black/10 dark:bg-white/10 rounded",
+                "w-3/4"
+              )}
+            ></div>
+            <div
+              className={clsx(
+                "h-4 desktop:h-5",
+                "bg-black/10 dark:bg-white/10 rounded",
+                "w-1/2"
+              )}
+            ></div>
           </div>
         ) : (
           (serviceDisplayName || playlistName) && (
             <>
               {serviceDisplayName && (
-                <h2 className="text-sm desktop:text-xl font-bold text-black dark:text-white leading-snug desktop:leading-tight tracking-tight">
-                  {serviceDisplayName}'s
-                </h2>
+                <button
+                  onClick={() =>
+                    onOpenModal({
+                      ...(serviceDisplayName && {
+                        serviceDisplayName,
+                      }),
+                      ...(playlistName && {
+                        playlistName,
+                      }),
+                    })
+                  }
+                  className={clsx(
+                    "text-sm desktop:text-xl font-bold",
+                    "text-black dark:text-white",
+                    "leading-snug desktop:leading-tight",
+                    "tracking-tight",
+                    "text-left truncate w-full"
+                  )}
+                  title={serviceDisplayName + "'s"}
+                >
+                  {serviceDisplayName}
+                  's
+                </button>
               )}
               {playlistName && (
-                <h3 className="text-xs desktop:text-lg font-semibold text-black dark:text-white leading-snug desktop:leading-tight mt-0.5 desktop:mt-1 tracking-tight whitespace-nowrap overflow-hidden">
+                <button
+                  onClick={() =>
+                    onOpenModal({
+                      ...(serviceDisplayName && {
+                        serviceDisplayName,
+                      }),
+                      ...(playlistName && {
+                        playlistName,
+                      }),
+                    })
+                  }
+                  className={clsx(
+                    "text-xs desktop:text-lg font-semibold",
+                    "text-black dark:text-white",
+                    "leading-snug desktop:leading-tight",
+                    "tracking-tight",
+                    "mt-0.5 desktop:mt-1",
+                    "truncate w-full text-left"
+                  )}
+                  title={playlistName}
+                >
                   {playlistName}
-                </h3>
+                </button>
               )}
             </>
           )
         )}
       </div>
 
-      <div className="border-t border-black/20 dark:border-white/30"></div>
+      <div
+        className={clsx("border-t border-black/20 dark:border-white/30")}
+      ></div>
 
-      <div className="mt-3 desktop:mt-4 h-[80px] desktop:h-[96px]">
+      <div className={clsx("mt-3 desktop:mt-4 h-[80px] desktop:h-[96px]")}>
         {isLoading ? (
-          <div className="flex h-full flex-col justify-between space-y-2">
-            <div className="h-4 desktop:h-5 bg-black/10 dark:bg-white/10 rounded w-full"></div>
-            <div className="h-4 desktop:h-5 bg-black/10 dark:bg-white/10 rounded w-full"></div>
-            <div className="h-4 desktop:h-5 bg-black/10 dark:bg-white/10 rounded w-full"></div>
-            <div className="h-4 desktop:h-5 bg-black/10 dark:bg-white/10 rounded w-3/4"></div>
+          <div
+            className={clsx("flex h-full flex-col justify-between space-y-2")}
+          >
+            <div
+              className={clsx(
+                "h-4 desktop:h-5",
+                "bg-black/10 dark:bg-white/10 rounded",
+                "w-full"
+              )}
+            ></div>
+            <div
+              className={clsx(
+                "h-4 desktop:h-5",
+                "bg-black/10 dark:bg-white/10 rounded",
+                "w-full"
+              )}
+            ></div>
+            <div
+              className={clsx(
+                "h-4 desktop:h-5",
+                "bg-black/10 dark:bg-white/10 rounded",
+                "w-full"
+              )}
+            ></div>
+            <div
+              className={clsx(
+                "h-4 desktop:h-5",
+                "bg-black/10 dark:bg-white/10 rounded",
+                "w-3/4"
+              )}
+            ></div>
           </div>
         ) : (
           <PlaylistDescription
@@ -99,7 +197,7 @@ export function ServiceArt({
             playlistName={playlistName}
             serviceDisplayName={serviceDisplayName}
             onOpenModal={onOpenModal}
-            className="h-full"
+            className={clsx("h-full")}
           />
         )}
       </div>

@@ -1,4 +1,5 @@
 import React from "react";
+import clsx from "clsx";
 
 const VERTICAL_PADDING_SIZES = {
   xs: 4,
@@ -22,8 +23,10 @@ export function VerticalPadding({
   return (
     <div
       aria-hidden="true"
-      className="w-full"
-      style={{ height: `${height}px` }}
+      className={clsx("w-full")}
+      style={{
+        height: `${height}px`,
+      }}
     />
   );
 }

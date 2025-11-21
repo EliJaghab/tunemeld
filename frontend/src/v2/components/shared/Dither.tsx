@@ -181,7 +181,9 @@ class RetroEffectImpl extends Effect {
       ["pixelSize", new THREE.Uniform(pixelSize)],
       ["invertPalette", new THREE.Uniform(0)],
     ]);
-    super("RetroEffect", ditherFragmentShader, { uniforms });
+    super("RetroEffect", ditherFragmentShader, {
+      uniforms,
+    });
     this.uniforms = uniforms;
   }
 
@@ -208,7 +210,7 @@ const RetroEffect = forwardRef<Effect, RetroEffectProps>(
       pixelSize={pixelSize}
       invertPalette={invertPalette}
     />
-  ),
+  )
 );
 RetroEffect.displayName = "RetroEffect";
 
@@ -318,7 +320,7 @@ const DitheredWaves = memo(
         mesh.current.scale.set(
           currentViewport.width,
           currentViewport.height,
-          1,
+          1
         );
       }
 
@@ -333,7 +335,7 @@ const DitheredWaves = memo(
 
       if (
         !prevColor.current.every(
-          (value, index) => value === props.waveColor[index],
+          (value, index) => value === props.waveColor[index]
         )
       ) {
         uniforms.waveColor.value.set(...props.waveColor);
@@ -356,7 +358,7 @@ const DitheredWaves = memo(
       const dpr = gl.getPixelRatio();
       mouseRef.current.set(
         (event.clientX - rect.left) * dpr,
-        (event.clientY - rect.top) * dpr,
+        (event.clientY - rect.top) * dpr
       );
     };
 
@@ -416,7 +418,7 @@ const DitheredWaves = memo(
       prevProps.invertPalette === nextProps.invertPalette;
 
     return propsEqual;
-  },
+  }
 );
 
 // Isolated Canvas component that only re-renders when invertPalette changes
@@ -435,10 +437,18 @@ const IsolatedCanvas = memo(
   }: DitheredWavesProps) {
     return (
       <Canvas
-        style={{ width: "100%", height: "100%" }}
-        camera={{ position: [0, 0, 6] }}
+        style={{
+          width: "100%",
+          height: "100%",
+        }}
+        camera={{
+          position: [0, 0, 6],
+        }}
         dpr={1}
-        gl={{ antialias: true, preserveDrawingBuffer: true }}
+        gl={{
+          antialias: true,
+          preserveDrawingBuffer: true,
+        }}
       >
         <DitheredWaves
           waveSpeed={waveSpeed}
@@ -473,7 +483,7 @@ const IsolatedCanvas = memo(
       prevProps.invertPalette === nextProps.invertPalette;
 
     return shouldSkip;
-  },
+  }
 );
 
 // Create a singleton container for the Canvas that's isolated from layout changes
@@ -525,7 +535,7 @@ export function Dither({
           mouseRadius={mouseRadius}
           invertPalette={invertPalette}
         />,
-        container,
+        container
       )}
     </>
   );

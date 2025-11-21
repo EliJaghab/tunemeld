@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useId } from "react";
+import clsx from "clsx";
 
 interface GlassSurfaceProps {
   children: React.ReactNode;
@@ -96,14 +97,23 @@ const GlassSurface: React.FC<GlassSurfaceProps> = ({
   useEffect(() => {
     updateDisplacementMap();
     [
-      { ref: redChannelRef, offset: redOffset },
-      { ref: greenChannelRef, offset: greenOffset },
-      { ref: blueChannelRef, offset: blueOffset },
+      {
+        ref: redChannelRef,
+        offset: redOffset,
+      },
+      {
+        ref: greenChannelRef,
+        offset: greenOffset,
+      },
+      {
+        ref: blueChannelRef,
+        offset: blueOffset,
+      },
     ].forEach(({ ref, offset }) => {
       if (ref.current) {
         ref.current.setAttribute(
           "scale",
-          (distortionScale + offset).toString(),
+          (distortionScale + offset).toString()
         );
         ref.current.setAttribute("xChannelSelector", xChannel);
         ref.current.setAttribute("yChannelSelector", yChannel);
@@ -183,8 +193,10 @@ const GlassSurface: React.FC<GlassSurfaceProps> = ({
   const hasCustomBackground = style?.background !== undefined;
 
   // Base classes for all variants
-  const baseClasses =
-    "relative flex items-center justify-center overflow-hidden transition-opacity duration-[260ms] ease-out";
+  const baseClasses = [
+    "relative flex items-center justify-center overflow-hidden",
+    "transition-opacity duration-[260ms] ease-out",
+  ];
 
   // SVG variant styles (complex backdrop-filter and box-shadow)
   const svgStyles =
@@ -219,11 +231,13 @@ const GlassSurface: React.FC<GlassSurfaceProps> = ({
   return (
     <div
       ref={containerRef}
-      className={`${baseClasses} ${className}`}
+      className={clsx(baseClasses, className)}
       style={finalStyle}
     >
       <svg
-        className="w-full h-full pointer-events-none absolute inset-0 opacity-0 -z-10"
+        className={clsx(
+          "w-full h-full pointer-events-none absolute inset-0 opacity-0 -z-10"
+        )}
         xmlns="http://www.w3.org/2000/svg"
       >
         <defs>
@@ -307,7 +321,12 @@ const GlassSurface: React.FC<GlassSurfaceProps> = ({
         </defs>
       </svg>
 
-      <div className="w-full h-full flex items-center justify-center p-0 rounded-[inherit] relative z-10">
+      <div
+        className={clsx(
+          "w-full h-full flex items-center justify-center p-0",
+          "rounded-[inherit] relative z-10"
+        )}
+      >
         {children}
       </div>
     </div>

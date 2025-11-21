@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import clsx from "clsx";
 import { BrowserRouter, useSearchParams } from "react-router-dom";
 import { ThemeContextProvider } from "@/v2/ThemeContext";
 import { Header } from "@/v2/components/header/Header";
@@ -19,7 +20,14 @@ function useGenreFromUrl(): GenreValue {
 
   useEffect(() => {
     if (!genreParam || genreParam !== validGenre) {
-      setSearchParams({ genre: validGenre }, { replace: true });
+      setSearchParams(
+        {
+          genre: validGenre,
+        },
+        {
+          replace: true,
+        }
+      );
     }
   }, [genreParam, validGenre, setSearchParams]);
 
@@ -36,7 +44,7 @@ function AppContent({
   }, []);
 
   return (
-    <main className="relative z-10">
+    <main className={clsx("relative z-10")}>
       <VerticalPadding size="lg" />
       <Header />
       <VerticalPadding size="lg" />
@@ -54,7 +62,7 @@ function AppWithProviders(): React.ReactElement {
   const activeGenre = useGenreFromUrl();
 
   return (
-    <div className="relative min-h-screen bg-background px-4 text-text">
+    <div className={clsx("relative min-h-screen bg-background px-4 text-text")}>
       <TuneMeldBackground />
       <AppContent activeGenre={activeGenre} />
     </div>

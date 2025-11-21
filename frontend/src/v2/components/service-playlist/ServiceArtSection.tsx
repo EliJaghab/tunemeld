@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import clsx from "clsx";
 import { ServiceArt } from "@/v2/components/service-playlist/ServiceArt";
 import { ServiceMetadataProvider } from "@/v2/ServiceMetadataContext";
 import { graphqlClient } from "@/services/graphql-client";
@@ -96,8 +97,13 @@ export function ServiceArtSection({
     <ServiceMetadataProvider
       value={metadata || ({} as Record<ServiceName, ServiceMetadata>)}
     >
-      <section className="flex justify-center px-2 desktop:px-4">
-        <div className="flex gap-4 justify-center w-full max-w-container desktop:gap-8">
+      <section className={clsx("flex justify-center px-2 desktop:px-4")}>
+        <div
+          className={clsx(
+            "grid grid-cols-3 gap-4 w-full max-w-container",
+            "desktop:gap-8"
+          )}
+        >
           <ServiceArt
             serviceName={SERVICE.APPLE_MUSIC}
             onOpenModal={setModalContent}
@@ -120,22 +126,42 @@ export function ServiceArtSection({
         isOpen={modalContent !== null}
         onClose={() => setModalContent(null)}
       >
-        <div className="pr-10">
+        <div className={clsx("pr-10")}>
           {(modalContent?.serviceDisplayName || modalContent?.playlistName) && (
-            <div className="mb-3">
+            <div className={clsx("mb-3")}>
               {modalContent?.serviceDisplayName && (
-                <h2 className="text-base desktop:text-2xl font-bold text-black dark:text-white">
-                  {modalContent.serviceDisplayName}'s
+                <h2
+                  className={clsx(
+                    "text-base desktop:text-2xl font-bold",
+                    "text-black dark:text-white"
+                  )}
+                >
+                  {modalContent.serviceDisplayName}
+                  's
                 </h2>
               )}
               {modalContent?.playlistName && (
-                <h3 className="text-sm desktop:text-xl font-semibold text-black dark:text-white mt-1">
+                <h3
+                  className={clsx(
+                    "text-sm desktop:text-xl font-semibold",
+                    "text-black dark:text-white",
+                    "mt-1"
+                  )}
+                >
                   {modalContent.playlistName}
                 </h3>
               )}
             </div>
           )}
-          <div className="text-sm desktop:text-base text-black dark:text-white leading-6 whitespace-pre-wrap break-words max-h-[60vh] overflow-y-auto py-2">
+          <div
+            className={clsx(
+              "text-sm desktop:text-base",
+              "text-black dark:text-white",
+              "leading-6 whitespace-pre-wrap break-words",
+              "max-h-[60vh] overflow-y-auto",
+              "py-2"
+            )}
+          >
             {modalContent?.description}
           </div>
         </div>

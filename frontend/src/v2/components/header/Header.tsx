@@ -1,4 +1,5 @@
 import React, { useContext } from "react";
+import clsx from "clsx";
 import { APP_BASE_URL } from "@/config/config";
 import { ThemeContext } from "@/v2/ThemeContext";
 import { THEME } from "@/v2/constants";
@@ -14,7 +15,7 @@ export function Header(): React.ReactElement {
 
   return (
     <header id="title-container">
-      <div className="flex justify-center px-3 desktop:px-4">
+      <div className={clsx("flex justify-center px-3 desktop:px-4")}>
         <GlassSurface
           width="100%"
           height="auto"
@@ -22,28 +23,48 @@ export function Header(): React.ReactElement {
           backgroundOpacity={0.1}
           borderWidth={0}
           blur={11}
-          className="w-full max-w-container px-2 py-2 desktop:px-2 desktop:py-2"
+          className={clsx(
+            "w-full max-w-container",
+            "px-2 py-2 desktop:px-2 desktop:py-2"
+          )}
         >
-          <div className="flex w-full items-center justify-between gap-3 desktop:gap-6">
-            <div className="flex items-center gap-2 desktop:gap-3">
+          <div
+            className={clsx(
+              "flex w-full items-center justify-between",
+              "gap-3 desktop:gap-6"
+            )}
+          >
+            <div className={clsx("flex items-center gap-2 desktop:gap-3")}>
               <a
                 href={APP_BASE_URL}
-                className="flex items-center gap-2 desktop:gap-3"
+                className={clsx("flex items-center gap-2 desktop:gap-3")}
               >
                 <ResponsiveIcon
                   src="./images/tunemeld.png"
                   alt="tunemeld Logo"
                   size="xl"
-                  className="rounded-full shadow-lg"
+                  className={clsx("rounded-full shadow-lg")}
                 />
-                <span className="text-sm font-semibold tracking-wide text-black dark:text-white desktop:text-base">
+                <span
+                  className={clsx(
+                    "text-sm desktop:text-base font-semibold",
+                    "tracking-wide",
+                    "text-black dark:text-white"
+                  )}
+                >
                   tunemeld
                 </span>
               </a>
             </div>
 
             <button
-              className="flex h-6 w-6 items-center justify-center rounded-full bg-white/10 transition hover:bg-white/20 desktop:h-8 desktop:w-8"
+              className={clsx(
+                "flex items-center justify-center",
+                "h-6 w-6 desktop:h-8 desktop:w-8",
+                "rounded-full",
+                "bg-white/10 hover:bg-white/20",
+                "transition"
+              )}
               onClick={toggleTheme}
               aria-label={buttonLabel}
               type="button"
@@ -52,7 +73,7 @@ export function Header(): React.ReactElement {
                 src={isDark ? "./images/sun.svg" : "./images/moon.svg"}
                 alt={isDark ? "Light mode" : "Dark mode"}
                 size="xs"
-                className="brightness-0 dark:brightness-0 dark:invert"
+                className={clsx("brightness-0 dark:brightness-0 dark:invert")}
               />
             </button>
           </div>

@@ -1,4 +1,5 @@
 import React from "react";
+import clsx from "clsx";
 
 interface CollapsibleSectionProps {
   isCollapsed: boolean;
@@ -14,10 +15,10 @@ export function CollapsibleSection({
   children,
 }: CollapsibleSectionProps) {
   return (
-    <div className="w-full">
+    <div className={clsx("w-full")}>
       <div
         onClick={onToggle}
-        className="cursor-pointer select-none"
+        className={clsx("cursor-pointer select-none")}
         role="button"
         aria-expanded={!isCollapsed}
         tabIndex={0}
@@ -32,7 +33,9 @@ export function CollapsibleSection({
       </div>
 
       {!isCollapsed && (
-        <div className="mt-3 desktop:mt-4 overflow-hidden">{children}</div>
+        <div className={clsx("mt-3 desktop:mt-4 overflow-hidden")}>
+          {children}
+        </div>
       )}
     </div>
   );

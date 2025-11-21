@@ -1,4 +1,5 @@
 import React from "react";
+import clsx from "clsx";
 import { ServiceIcon } from "@/v2/components/playlist/shared/ServiceIcon";
 import type { Track } from "@/types";
 
@@ -29,7 +30,12 @@ export function SeenOn({ track }: SeenOnProps) {
   }
 
   return (
-    <div className="track-sources flex justify-center items-center gap-1 desktop:gap-2">
+    <div
+      className={clsx(
+        "track-sources flex justify-center items-center",
+        "gap-1 desktop:gap-2"
+      )}
+    >
       {serviceData.map(
         (item) =>
           item.source && (
@@ -38,7 +44,7 @@ export function SeenOn({ track }: SeenOnProps) {
               source={item.source}
               rank={item.rank}
             />
-          ),
+          )
       )}
     </div>
   );

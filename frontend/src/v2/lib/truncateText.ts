@@ -2,7 +2,7 @@ export function truncateTextForLines(
   text: string,
   maxLines: number,
   element: HTMLElement,
-  reserveSpace: number = 30,
+  reserveSpace: number = 30
 ): string {
   const computedStyle = getComputedStyle(element);
   const lineHeight = parseFloat(computedStyle.lineHeight);

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import clsx from "clsx";
 import { TuneMeldPlaylistTable } from "@/v2/components/playlist/TuneMeldPlaylist/TuneMeldPlaylistTable";
 import { PlaylistSkeleton } from "@/v2/components/playlist/shared/PlaylistSkeleton";
 import { graphqlClient } from "@/services/graphql-client";
@@ -44,7 +45,7 @@ export function TuneMeldPlaylist({ genre }: TuneMeldPlaylistProps) {
         }
 
         const tuneMeldPlaylist = metadataData.playlists.find(
-          (p) => p.serviceName === "tunemeld",
+          (p) => p.serviceName === "tunemeld"
         );
         if (tuneMeldPlaylist?.playlistCoverDescriptionText) {
           setDescription(tuneMeldPlaylist.playlistCoverDescriptionText);
@@ -68,15 +69,25 @@ export function TuneMeldPlaylist({ genre }: TuneMeldPlaylistProps) {
   }, [genre]);
 
   return (
-    <div className="flex justify-center px-3 desktop:px-4">
-      <div className="w-full max-w-container">
-        <div className="border-2 border-gray-500 dark:border-gray-600 rounded-media isolation-isolate">
+    <div className={clsx("flex justify-center px-3 desktop:px-4")}>
+      <div className={clsx("w-full max-w-container")}>
+        <div
+          className={clsx(
+            "border-2 border-gray-500 dark:border-gray-600",
+            "rounded-media isolation-isolate"
+          )}
+        >
           {loading ? (
-            <div className="p-4 desktop:p-6">
+            <div className={clsx("p-4 desktop:p-6")}>
               <PlaylistSkeleton rows={10} />
             </div>
           ) : tracks.length === 0 ? (
-            <div className="p-4 desktop:p-6 text-center py-8 text-gray-600 dark:text-gray-400">
+            <div
+              className={clsx(
+                "p-4 desktop:p-6 text-center py-8",
+                "text-gray-600 dark:text-gray-400"
+              )}
+            >
               No tracks found
             </div>
           ) : (

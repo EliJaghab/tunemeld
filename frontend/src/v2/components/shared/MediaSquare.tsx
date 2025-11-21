@@ -1,8 +1,11 @@
 import React, { useEffect, useRef } from "react";
+import clsx from "clsx";
 
 interface HlsStatic {
   isSupported(): boolean;
-  Events: { MANIFEST_PARSED: string };
+  Events: {
+    MANIFEST_PARSED: string;
+  };
   new (): {
     loadSource(url: string): void;
     attachMedia(video: HTMLVideoElement): void;
@@ -52,10 +55,10 @@ export function MediaSquare({
   }, [type, src]);
 
   return type === "video" ? (
-    <div className="video-container rounded-media overflow-hidden">
+    <div className={clsx("video-container rounded-media overflow-hidden")}>
       <video
         ref={videoRef}
-        className="w-full h-full object-cover rounded-media"
+        className={clsx("w-full h-full object-cover rounded-media")}
         muted
         autoPlay
         loop
@@ -65,8 +68,13 @@ export function MediaSquare({
     </div>
   ) : (
     <div
-      className="image-placeholder rounded-media aspect-square w-full bg-cover bg-center"
-      style={{ backgroundImage: `url("${src}")` }}
+      className={clsx(
+        "image-placeholder rounded-media aspect-square w-full",
+        "bg-cover bg-center"
+      )}
+      style={{
+        backgroundImage: `url("${src}")`,
+      }}
       role="img"
       aria-label={alt}
     />

@@ -1,4 +1,5 @@
 import React, { useContext } from "react";
+import clsx from "clsx";
 import { ThemeContext } from "@/v2/ThemeContext";
 import { THEME } from "@/v2/constants";
 import { Dither } from "@/v2/components/shared/Dither";
@@ -9,7 +10,10 @@ export function TuneMeldBackground(): React.ReactElement {
 
   return (
     <Dither
-      className="pointer-events-none absolute inset-0 z-0 h-full w-full select-none"
+      className={clsx(
+        "pointer-events-none absolute inset-0 z-0 h-full w-full",
+        "select-none"
+      )}
       waveColor={[0.2, 0.2, 0.2]}
       disableAnimation={false}
       enableMouseInteraction={true}
