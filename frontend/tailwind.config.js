@@ -13,25 +13,55 @@ const spacingScale = {
   12: "48px",
 };
 
+const palette = {
+  deepSpace: "#050211",
+  midnight: "#1b1428",
+  twilight: "#241b35",
+  twilightMuted: "#312646",
+  ghostWhite: "#f6f5ff",
+  lilacGrey: "#b3adc9",
+  deepPurpleBorder: "#2f2740",
+  electricPurple: "#7C5CFF",
+  softPurple: "#A18CFF",
+  darkViolet: "#1B0E3F",
+  teal: "#008080",
+  skyBlue: "#4a9eff",
+  oceanBlue: "#00BFFF",
+  redError: "#dc3545",
+  white: "#FFFFFF",
+  black: "#000000",
+  darkGray: "#111827",
+};
+
 const colors = {
   transparent: "transparent",
   current: "currentColor",
   inherit: "inherit",
-  background: "var(--color-background)",
-  surface: "var(--color-surface)",
-  "surface-alt": "var(--color-surface-alt)",
-  "surface-muted": "var(--color-surface-muted)",
-  accent: "#7C5CFF",
-  "accent-soft": "#A18CFF",
-  "accent-contrast": "#1B0E3F",
-  text: "var(--color-text)",
-  muted: "var(--color-muted)",
-  border: "var(--color-border)",
-  white: "#FFFFFF",
-  black: "#000000",
+
+  // Semantic mappings
+  background: palette.deepSpace,
+  surface: palette.midnight,
+  "surface-alt": palette.twilight,
+  "surface-muted": palette.twilightMuted,
+  text: palette.ghostWhite,
+  muted: palette.lilacGrey,
+  border: palette.deepPurpleBorder,
+
+  accent: palette.electricPurple,
+  "accent-soft": palette.softPurple,
+  "accent-contrast": palette.darkViolet,
+
+  white: palette.white,
+  black: palette.black,
   gray: {
-    700: "#111827",
+    700: palette.darkGray,
   },
+
+  // Brand colors
+  "badge-red": palette.redError,
+  "tunemeld-blue": palette.oceanBlue,
+  "brand-teal": palette.teal,
+  "bright-blue": palette.skyBlue,
 };
 
 /** @type {import('tailwindcss').Config} */
