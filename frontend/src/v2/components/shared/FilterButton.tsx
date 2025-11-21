@@ -26,27 +26,27 @@ export function FilterButton({
       width="auto"
       height="auto"
       borderRadius={50}
-      backgroundOpacity={0.05}
-      saturation={1}
+      backgroundOpacity={active ? 0 : 0.05}
       borderWidth={0}
-      brightness={50}
-      opacity={0.93}
       blur={6}
-      displace={0.2}
-      distortionScale={-180}
-      redOffset={0}
-      greenOffset={5}
-      blueOffset={10}
-      className={`cursor-pointer transition-all hover:scale-105 rounded-full ${
-        active
-          ? "border-2 border-black dark:border-white"
-          : "border-2 border-transparent"
+      className={`cursor-pointer transition-all hover:scale-105 ${
+        active ? "!bg-brand-teal dark:!bg-bright-blue" : ""
       } ${className}`}
+      style={
+        active
+          ? {
+              backdropFilter: "none",
+              WebkitBackdropFilter: "none",
+            }
+          : {}
+      }
     >
       <button
         type={type}
         onClick={onClick}
-        className="flex items-center gap-2 px-3 py-1.5 desktop:px-4 desktop:py-2 text-sm desktop:text-base font-medium !text-black dark:!text-white"
+        className={`flex items-center gap-2 px-3 py-2 desktop:px-4 desktop:py-2 text-sm desktop:text-base font-medium ${
+          active ? "!text-white" : "!text-black dark:!text-white"
+        }`}
         aria-label={ariaLabel}
       >
         {iconUrl && <ResponsiveIcon src={iconUrl} alt="" size="md" />}
