@@ -43,7 +43,7 @@ export function Header(): React.ReactElement {
             </div>
 
             <button
-              className="flex items-center justify-center rounded-full bg-white/10 p-1.5 transition hover:bg-white/20 desktop:p-2"
+              className="flex h-6 w-6 items-center justify-center rounded-full bg-white/10 transition hover:bg-white/20 desktop:h-8 desktop:w-8"
               onClick={toggleTheme}
               aria-label={buttonLabel}
               type="button"
