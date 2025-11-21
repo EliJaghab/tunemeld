@@ -2,6 +2,8 @@ import React from "react";
 import { createRoot } from "react-dom/client";
 import { App } from "@/v2/App";
 
+import "@/v2/styles/tailwind.css";
+
 const rootElement = document.getElementById("app-v2");
 
 if (!rootElement) {

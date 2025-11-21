@@ -5,7 +5,7 @@
  * Any changes to table structure must be made here to update both simultaneously.
  */
 
-import { SHIMMER_TYPES, type ShimmerType } from "./constants.js";
+import { SHIMMER_TYPES, type ShimmerType } from "@/config/constants";
 
 interface ColumnConfig {
   name: string;

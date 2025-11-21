@@ -6,7 +6,7 @@ import {
   setupBodyClickListener,
   setupClosePlayerButton,
 } from "@/components/servicePlayer";
-import { initializeTosPrivacyOverlay } from "./tosPrivacy.js";
+import { initializeTosPrivacyOverlay } from "@/tosPrivacy";
 import { stateManager } from "@/state/StateManager";
 import { appRouter } from "@/routing/router";
 import { applyCacheBusting } from "@/config/config";

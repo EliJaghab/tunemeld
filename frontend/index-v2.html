@@ -3,23 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" href="images/tunemeld.png" type="image/x-icon" />
-
-    <link rel="stylesheet" href="css/themes.css" />
-    <link rel="stylesheet" href="css/title.css" />
-    <link rel="stylesheet" href="css/header.css" />
-    <link rel="stylesheet" href="css/shimmer.css" />
-    <link rel="stylesheet" href="css/modal.css" />
-    <link rel="stylesheet" href="css/playlist.css" />
-    <link rel="stylesheet" href="css/servicePlayer.css" />
-    <link rel="stylesheet" href="css/error-banner.css" />
-    <link rel="stylesheet" href="css/rank-badge.css" />
-    <link rel="stylesheet" href="v2/tailwind.css" />
-    <link rel="stylesheet" href="v2/components/shared/GlassSurface.css" />
+    <link rel="icon" href="/images/tunemeld.png" type="image/x-icon" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="preconnect" href="https://cdnjs.cloudflare.com/" />
     <link
       href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,600&display=swap"
       rel="stylesheet"
@@ -28,31 +15,12 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
     />
-    <script type="importmap">
-      {
-        "imports": {
-          "react": "https://esm.sh/react@19.2.0",
-          "react-dom": "https://esm.sh/react-dom@19.2.0",
-          "react-dom/client": "https://esm.sh/react-dom@19.2.0/client",
-          "react/jsx-runtime": "https://esm.sh/react@19.2.0/jsx-runtime",
-          "react-router-dom": "https://esm.sh/react-router-dom@7.9.5?deps=react@19.2.0,react-dom@19.2.0",
-          "three": "https://esm.sh/three@0.155.0",
-          "postprocessing": "https://esm.sh/postprocessing@6.35.2?external=three",
-          "@react-three/fiber": "https://esm.sh/@react-three/fiber@9.4.0?external=three&deps=react@19.2.0,react-dom@19.2.0",
-          "@react-three/postprocessing": "https://esm.sh/@react-three/postprocessing@3.0.4?external=three,postprocessing&deps=react@19.2.0,react-dom@19.2.0",
-          "three/examples/jsm/postprocessing/Pass.js": "https://esm.sh/three@0.155.0/examples/jsm/postprocessing/Pass.js?external=three",
-          "clsx": "https://esm.sh/clsx@2.1.1",
-          "tailwind-merge": "https://esm.sh/tailwind-merge@3.4.0"
-        }
-      }
-    </script>
 
     <title>tunemeld</title>
   </head>
   <body>
     <div id="app-v2"></div>
-
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-    <script type="module" src="main-v2.js"></script>
+    <script type="module" src="/src/main-v2.tsx"></script>
   </body>
 </html>

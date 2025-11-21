@@ -27,7 +27,7 @@ import {
   SHIMMER_TYPES,
   TUNEMELD_RANK_FIELD,
   type ShimmerType,
-} from "../config/constants.js";
+} from "@/config/constants";
 import { debugLog } from "@/config/config";
 import type { Rank, Genre, ButtonLabel, ButtonLabels } from "@/types";
 
