@@ -34,11 +34,11 @@ const GlassSurface: React.FC<GlassSurfaceProps> = ({
   blur = 11,
   displace = 0,
   backgroundOpacity = 0,
-  saturation = 1,
-  distortionScale = -180,
+  saturation = 1.8,
+  distortionScale = -25,
   redOffset = 0,
-  greenOffset = 10,
-  blueOffset = 20,
+  greenOffset = 5,
+  blueOffset = 10,
   xChannel = "R",
   yChannel = "G",
   mixBlendMode = "difference",
@@ -146,21 +146,6 @@ const GlassSurface: React.FC<GlassSurfaceProps> = ({
   }, []);
 
   useEffect(() => {
-    if (!containerRef.current) return;
-
-    const resizeObserver = new ResizeObserver(() => {
-      setTimeout(updateDisplacementMap, 0);
-    });
-
-    resizeObserver.observe(containerRef.current);
-
-    return () => {
-      resizeObserver.disconnect();
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
     setTimeout(updateDisplacementMap, 0);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [width, height]);
@@ -189,15 +174,58 @@ const GlassSurface: React.FC<GlassSurfaceProps> = ({
     "--filter-id": `url(#${filterId})`,
   };
 
+  const isSVG = supportsSVGFilters();
+  const isDark =
+    typeof document !== "undefined" &&
+    document.documentElement.classList.contains("dark");
+
+  // Check if background is explicitly set in style prop (for active buttons)
+  const hasCustomBackground = style?.background !== undefined;
+
+  // Base classes for all variants
+  const baseClasses =
+    "relative flex items-center justify-center overflow-hidden transition-opacity duration-[260ms] ease-out";
+
+  // SVG variant styles (complex backdrop-filter and box-shadow)
+  const svgStyles =
+    isSVG && !hasCustomBackground
+      ? {
+          background: `hsl(0 0% ${
+            backgroundOpacity > 0 ? (isDark ? "0%" : "100%") : "0%"
+          } / ${backgroundOpacity})`,
+          backdropFilter: `var(--filter-id, url(#${filterId})) saturate(${saturation})`,
+          boxShadow: `
+      0 0 2px 1px color-mix(in oklch, ${
+        isDark ? "white" : "black"
+      }, transparent ${isDark ? "65%" : "85%"}) inset,
+      0 0 10px 4px color-mix(in oklch, ${
+        isDark ? "white" : "black"
+      }, transparent ${isDark ? "85%" : "90%"}) inset,
+      0px 4px 16px rgba(17, 17, 26, 0.05),
+      0px 8px 24px rgba(17, 17, 26, 0.05),
+      0px 16px 56px rgba(17, 17, 26, 0.05),
+      0px 4px 16px rgba(17, 17, 26, 0.05) inset,
+      0px 8px 24px rgba(17, 17, 26, 0.05) inset,
+      0px 16px 56px rgba(17, 17, 26, 0.05) inset
+    `,
+        }
+      : {};
+
+  const finalStyle = {
+    ...containerStyle,
+    ...svgStyles,
+  };
+
   return (
     <div
       ref={containerRef}
-      className={`glass-surface ${
-        supportsSVGFilters() ? "glass-surface--svg" : "glass-surface--fallback"
-      } ${className}`}
-      style={containerStyle}
+      className={`${baseClasses} ${className}`}
+      style={finalStyle}
     >
-      <svg className="glass-surface__filter" xmlns="http://www.w3.org/2000/svg">
+      <svg
+        className="w-full h-full pointer-events-none absolute inset-0 opacity-0 -z-10"
+        xmlns="http://www.w3.org/2000/svg"
+      >
         <defs>
           <filter
             id={filterId}
@@ -273,13 +301,15 @@ const GlassSurface: React.FC<GlassSurfaceProps> = ({
             <feGaussianBlur
               ref={gaussianBlurRef}
               in="output"
-              stdDeviation="0.7"
+              stdDeviation={displace > 0 ? displace.toString() : "0.3"}
             />
           </filter>
         </defs>
       </svg>
 
-      <div className="glass-surface__content">{children}</div>
+      <div className="w-full h-full flex items-center justify-center p-0 rounded-[inherit] relative z-10">
+        {children}
+      </div>
     </div>
   );
 };
