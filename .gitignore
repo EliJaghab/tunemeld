@@ -24,6 +24,11 @@ venv_temp/
 node_modules/
 npm-debug.log*
 
+# Compiled TypeScript output from v1 build (should not be committed)
+frontend/src/**/*.js
+!frontend/src/**/*.test.js
+!frontend/src/**/*.spec.js
+
 # Environment variables
 .env.dev
 .env.prod
