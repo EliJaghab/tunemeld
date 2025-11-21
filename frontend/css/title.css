@@ -74,19 +74,19 @@ h1.main-title {
 }
 
 .theme-toggle .sun {
-  opacity: 1;
+  opacity: 0;
 }
 
 .theme-toggle .moon {
-  opacity: 0;
+  opacity: 1;
 }
 
 .theme-toggle.dark-mode .sun {
-  opacity: 0;
+  opacity: 1;
 }
 
 .theme-toggle.dark-mode .moon {
-  opacity: 1;
+  opacity: 0;
 }
 
 #soundcloud-link {
