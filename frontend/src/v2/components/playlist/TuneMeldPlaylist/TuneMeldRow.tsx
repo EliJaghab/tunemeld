@@ -8,19 +8,29 @@ interface TuneMeldRowProps {
   track: Track;
   displayRank: number;
   isLast?: boolean;
+  onTrackClick?: (track: Track) => void;
 }
 
 export function TuneMeldRow({
   track,
   displayRank,
   isLast = false,
+  onTrackClick,
 }: TuneMeldRowProps) {
+  const handleClick = () => {
+    if (onTrackClick) {
+      onTrackClick(track);
+    }
+  };
+
   return (
     <tr
+      onClick={handleClick}
       className={clsx(
         !isLast && "border-b border-gray-200 dark:border-gray-700",
         "hover:bg-gray-50 dark:hover:bg-gray-900",
-        "transition-colors"
+        "transition-colors",
+        onTrackClick && "cursor-pointer"
       )}
     >
       <TrackCell

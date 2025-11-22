@@ -14,6 +14,7 @@ interface TuneMeldPlaylistTableProps {
   ranks: Rank[];
   activeRank: string | null;
   onRankChange: (sortField: string) => void;
+  onTrackClick?: (track: Track) => void;
 }
 
 export function TuneMeldPlaylistTable({
@@ -24,6 +25,7 @@ export function TuneMeldPlaylistTable({
   ranks,
   activeRank,
   onRankChange,
+  onTrackClick,
 }: TuneMeldPlaylistTableProps) {
   return (
     <div className={clsx("overflow-x-auto")}>
@@ -113,6 +115,7 @@ export function TuneMeldPlaylistTable({
                 track={track}
                 displayRank={index + 1}
                 isLast={index === tracks.length - 1}
+                onTrackClick={onTrackClick}
               />
             ))}
           </tbody>

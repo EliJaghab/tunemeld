@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import clsx from "clsx";
 import GlassSurface from "@/v2/components/shared/GlassSurface";
+import { CloseButton } from "@/v2/components/shared/CloseButton";
 
 interface ServicePlaylistDescriptionModalProps {
   isOpen: boolean;
@@ -46,13 +47,11 @@ export function ServicePlaylistDescriptionModal({
       return;
     }
 
-    // Navigate to playlist URL if available
     if (playlistUrl) {
       window.open(playlistUrl, "_blank", "noopener,noreferrer");
     }
   };
 
-  // Create proper label for accessibility and hover tooltip
   const getModalLabel = () => {
     if (playlistName && serviceDisplayName) {
       return `Visit ${playlistName} on ${serviceDisplayName}`;
@@ -87,9 +86,14 @@ export function ServicePlaylistDescriptionModal({
           backgroundOpacity={0.5}
           borderWidth={0.5}
           blur={20}
+          className="!items-start !justify-start"
         >
           <div
-            className={clsx("p-5", playlistUrl && "cursor-pointer")}
+            className={clsx(
+              "p-5 text-left",
+              "!flex !flex-col !items-start !justify-start",
+              playlistUrl && "cursor-pointer"
+            )}
             onClick={handleModalClick}
             title={playlistUrl ? getModalLabel() : undefined}
             aria-label={playlistUrl ? getModalLabel() : undefined}
@@ -108,31 +112,14 @@ export function ServicePlaylistDescriptionModal({
                 "bg-gradient-to-r from-transparent via-white/40 to-transparent"
               )}
             />
-            <button
+            <CloseButton
               onClick={(e) => {
                 e.stopPropagation();
                 onClose();
               }}
-              className={clsx(
-                "absolute top-4 right-4 w-8 h-8",
-                "bg-white/60 dark:bg-gray-700/60 backdrop-blur-md",
-                "border border-white/20 dark:border-gray-600/20",
-                "rounded-full text-lg",
-                "text-black dark:text-white",
-                "cursor-pointer z-10",
-                "flex items-center justify-center",
-                "font-mono leading-none",
-                "shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_4px_12px_rgba(0,0,0,0.1)]",
-                "transition-all",
-                "hover:bg-white/80 dark:hover:bg-gray-600/80",
-                "hover:border-white/30 dark:hover:border-gray-500/30",
-                "hover:scale-105",
-                "hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.2),0_6px_16px_rgba(0,0,0,0.15)]"
-              )}
-              aria-label="Close modal"
-            >
-              ×
-            </button>
+              ariaLabel="Close modal"
+              position="top-right"
+            />
             <div className={clsx("relative")}>{children}</div>
           </div>
         </GlassSurface>

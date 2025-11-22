@@ -9,9 +9,13 @@ import { RANKS } from "@/v2/constants";
 
 interface TuneMeldPlaylistProps {
   genre: GenreValue;
+  onTrackClick?: (track: Track) => void;
 }
 
-export function TuneMeldPlaylist({ genre }: TuneMeldPlaylistProps) {
+export function TuneMeldPlaylist({
+  genre,
+  onTrackClick,
+}: TuneMeldPlaylistProps) {
   const [tracks, setTracks] = useState<Track[]>([]);
   const [description, setDescription] = useState<string | null>(null);
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -99,6 +103,7 @@ export function TuneMeldPlaylist({ genre }: TuneMeldPlaylistProps) {
               ranks={RANKS}
               activeRank={activeRank}
               onRankChange={setActiveRank}
+              onTrackClick={onTrackClick}
             />
           )}
         </div>

@@ -1,0 +1,114 @@
+import React, { useEffect } from "react";
+import clsx from "clsx";
+import GlassSurface from "@/v2/components/shared/GlassSurface";
+import { MediaSquare } from "@/v2/components/shared/MediaSquare";
+import { CloseButton } from "@/v2/components/shared/CloseButton";
+import type { Track } from "@/types";
+
+interface MediaPlayerProps {
+  track: Track | null;
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+export function MediaPlayer({
+  track,
+  isOpen,
+  onClose,
+}: MediaPlayerProps): React.ReactElement | null {
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && isOpen) {
+        onClose();
+      }
+    };
+
+    document.addEventListener("keydown", handleEscape);
+    return () => document.removeEventListener("keydown", handleEscape);
+  }, [isOpen, onClose]);
+
+  if (!isOpen || !track) return null;
+
+  return (
+    <div
+      className={clsx(
+        "fixed bottom-0 left-0 right-0 z-[1001]",
+        "px-4 pb-4 desktop:px-6 desktop:pb-6",
+        "pointer-events-none"
+      )}
+    >
+      <div className={clsx("max-w-4xl mx-auto pointer-events-auto")}>
+        <GlassSurface
+          width="100%"
+          height="auto"
+          borderRadius={32}
+          backgroundOpacity={0.5}
+          borderWidth={0.5}
+          blur={20}
+          className="!items-start !justify-start"
+        >
+          <div
+            className={clsx(
+              "p-5 text-left w-full",
+              "!flex !flex-row !items-center !justify-start !gap-4",
+              "relative"
+            )}
+          >
+            <div
+              className={clsx(
+                "absolute top-0 left-0 right-0 h-px",
+                "bg-gradient-to-r from-transparent via-white/40 to-transparent"
+              )}
+            />
+
+            <CloseButton
+              onClick={(e) => {
+                e.stopPropagation();
+                onClose();
+              }}
+              ariaLabel="Close media player"
+              position="top-right"
+            />
+
+            {track.albumCoverUrl && (
+              <div
+                className={clsx("flex-shrink-0 overflow-hidden")}
+                style={{
+                  width: "64px",
+                  height: "64px",
+                }}
+              >
+                <MediaSquare
+                  src={track.albumCoverUrl}
+                  type="image"
+                  alt={`${track.trackName} cover`}
+                />
+              </div>
+            )}
+
+            <div className={clsx("flex-1 min-w-0 flex flex-col gap-1")}>
+              <div
+                className={clsx(
+                  "font-semibold text-base desktop:text-lg",
+                  "text-black dark:text-white",
+                  "line-clamp-1"
+                )}
+              >
+                {track.trackName}
+              </div>
+              <div
+                className={clsx(
+                  "text-sm desktop:text-base",
+                  "text-black/70 dark:text-white/70",
+                  "line-clamp-1"
+                )}
+              >
+                {track.artistName}
+              </div>
+            </div>
+          </div>
+        </GlassSurface>
+      </div>
+    </div>
+  );
+}

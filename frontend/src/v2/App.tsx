@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import clsx from "clsx";
 import { BrowserRouter, useSearchParams } from "react-router-dom";
 import { ThemeContextProvider } from "@/v2/ThemeContext";
@@ -8,7 +8,9 @@ import { VerticalPadding } from "@/v2/components/shared/VerticalPadding";
 import { TuneMeldBackground } from "@/v2/components/shared/TuneMeldBackground";
 import { ServiceArtSection } from "@/v2/components/service-playlist/ServiceArtSection";
 import { TuneMeldPlaylist } from "@/v2/components/playlist/TuneMeldPlaylist/TuneMeldPlaylist";
+import { MediaPlayer } from "@/v2/components/media-player/MediaPlayer";
 import { GENRE, type GenreValue } from "@/v2/constants";
+import type { Track } from "@/types";
 
 function useGenreFromUrl(): GenreValue {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -39,22 +41,42 @@ function AppContent({
 }: {
   activeGenre: GenreValue;
 }): React.ReactElement {
+  const [selectedTrack, setSelectedTrack] = useState<Track | null>(null);
+  const [isMediaPlayerOpen, setIsMediaPlayerOpen] = useState(false);
+
   useEffect(() => {
     document.title = "tunemeld";
   }, []);
 
+  const handleTrackClick = (track: Track) => {
+    setSelectedTrack(track);
+    setIsMediaPlayerOpen(true);
+  };
+
+  const handleCloseMediaPlayer = () => {
+    setIsMediaPlayerOpen(false);
+    setSelectedTrack(null);
+  };
+
   return (
-    <main className={clsx("relative z-10")}>
-      <VerticalPadding size="lg" />
-      <Header />
-      <VerticalPadding size="lg" />
-      <ServiceArtSection genre={activeGenre} />
-      <VerticalPadding size="lg" />
-      <GenreButtons />
-      <VerticalPadding size="lg" />
-      <TuneMeldPlaylist genre={activeGenre} />
-      <VerticalPadding size="lg" />
-    </main>
+    <>
+      <main className={clsx("relative z-10")}>
+        <VerticalPadding size="lg" />
+        <Header />
+        <VerticalPadding size="lg" />
+        <ServiceArtSection genre={activeGenre} />
+        <VerticalPadding size="lg" />
+        <GenreButtons />
+        <VerticalPadding size="lg" />
+        <TuneMeldPlaylist genre={activeGenre} onTrackClick={handleTrackClick} />
+        <VerticalPadding size="lg" />
+      </main>
+      <MediaPlayer
+        track={selectedTrack}
+        isOpen={isMediaPlayerOpen}
+        onClose={handleCloseMediaPlayer}
+      />
+    </>
   );
 }
 
