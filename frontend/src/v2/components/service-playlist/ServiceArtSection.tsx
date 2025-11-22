@@ -90,6 +90,7 @@ export function ServiceArtSection({
 
         data.playlists.forEach((playlist) => {
           const serviceName = playlist.serviceName as ServiceName;
+
           if (playlist.playlistUrl) {
             const metadata: ServiceMetadata = {
               href: playlist.playlistUrl,
@@ -116,12 +117,10 @@ export function ServiceArtSection({
         });
 
         setMetadata(newMetadata);
+        setLoading(false);
       } catch (err) {
         if (!cancelled) {
           console.error("Failed to fetch playlist metadata:", err);
-        }
-      } finally {
-        if (!cancelled) {
           setLoading(false);
         }
       }

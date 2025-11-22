@@ -55,10 +55,27 @@ export function MediaSquare({
   }, [type, src]);
 
   return type === "video" ? (
-    <div className={clsx("video-container rounded-media overflow-hidden")}>
+    <div
+      className={clsx(
+        "video-container rounded-media overflow-hidden aspect-square w-full",
+        "bg-black/10 dark:bg-white/10"
+      )}
+      style={{
+        minHeight: 0,
+        minWidth: 0,
+        position: "relative",
+      }}
+    >
       <video
         ref={videoRef}
         className={clsx("w-full h-full object-cover rounded-media")}
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+        }}
         muted
         autoPlay
         loop
