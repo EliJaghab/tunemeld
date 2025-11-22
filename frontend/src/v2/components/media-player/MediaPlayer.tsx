@@ -102,9 +102,10 @@ export function MediaPlayer({
                   "bg-white/60 dark:bg-gray-700/60 backdrop-blur-md",
                   "border border-white/20 dark:border-gray-600/20",
                   "rounded-2xl",
-                  "p-2 desktop:p-2.5",
+                  "px-2 pt-2 pb-0.5 desktop:px-2.5 desktop:pt-2.5 desktop:pb-1",
                   "shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_4px_12px_rgba(0,0,0,0.1)]",
-                  "overflow-visible"
+                  "overflow-visible",
+                  "flex items-center"
                 )}
               >
                 <div
