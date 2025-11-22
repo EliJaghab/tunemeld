@@ -3,5 +3,9 @@
   "version": "1.0.0",
   "scripts": {
     "build": "cd frontend && npm install && npm run build"
+  },
+  "devDependencies": {
+    "prettier-plugin-classnames": "^0.8.5",
+    "prettier-plugin-tailwindcss": "^0.7.1"
   }
 }
