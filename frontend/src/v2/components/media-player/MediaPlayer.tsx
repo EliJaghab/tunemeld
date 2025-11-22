@@ -4,18 +4,21 @@ import GlassSurface from "@/v2/components/shared/GlassSurface";
 import { MediaSquare } from "@/v2/components/shared/MediaSquare";
 import { CloseButton } from "@/v2/components/shared/CloseButton";
 import { ServiceIcon } from "@/v2/components/playlist/shared/ServiceIcon";
+import { PLAYER, type PlayerValue } from "@/v2/constants";
 import type { Track } from "@/types";
 
 interface MediaPlayerProps {
   track: Track | null;
   isOpen: boolean;
   onClose: () => void;
+  onServiceClick?: (player: PlayerValue) => void;
 }
 
 export function MediaPlayer({
   track,
   isOpen,
   onClose,
+  onServiceClick,
 }: MediaPlayerProps): React.ReactElement | null {
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
@@ -109,18 +112,34 @@ export function MediaPlayer({
                     "flex items-center gap-2 desktop:gap-2.5 relative"
                   )}
                 >
-                  {serviceData.map(
-                    (item) =>
-                      item.source && (
-                        <ServiceIcon
-                          key={item.source.name}
-                          source={item.source}
-                          rank={item.rank ?? undefined}
-                          size="md"
-                          badgeSize="md"
-                        />
-                      )
-                  )}
+                  {serviceData.map((item) => {
+                    if (!item.source) return null;
+
+                    const playerMapping: Record<string, PlayerValue> = {
+                      spotify: PLAYER.SPOTIFY,
+                      apple_music: PLAYER.APPLE_MUSIC,
+                      soundcloud: PLAYER.SOUNDCLOUD,
+                      youtube: PLAYER.YOUTUBE,
+                    };
+
+                    const player =
+                      playerMapping[item.source.name.toLowerCase()];
+
+                    return (
+                      <ServiceIcon
+                        key={item.source.name}
+                        source={item.source}
+                        rank={item.rank ?? undefined}
+                        size="md"
+                        badgeSize="md"
+                        onClick={() => {
+                          if (onServiceClick && player) {
+                            onServiceClick(player);
+                          }
+                        }}
+                      />
+                    );
+                  })}
                 </div>
               </div>
             )}

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import clsx from "clsx";
-import { BrowserRouter, useSearchParams } from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
 import { ThemeContextProvider } from "@/v2/ThemeContext";
 import { Header } from "@/v2/components/header/Header";
 import { GenreButtons } from "@/v2/components/shared/GenreButtons";
@@ -9,54 +9,27 @@ import { TuneMeldBackground } from "@/v2/components/shared/TuneMeldBackground";
 import { ServiceArtSection } from "@/v2/components/service-playlist/ServiceArtSection";
 import { TuneMeldPlaylist } from "@/v2/components/playlist/TuneMeldPlaylist/TuneMeldPlaylist";
 import { MediaPlayer } from "@/v2/components/media-player/MediaPlayer";
-import { GENRE, type GenreValue } from "@/v2/constants";
+import { useAppRouting } from "@/v2/hooks/useAppRouting";
 import type { Track } from "@/types";
 
-function useGenreFromUrl(): GenreValue {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const genreParam = searchParams.get("genre");
-  const validGenre =
-    genreParam && Object.values(GENRE).includes(genreParam as GenreValue)
-      ? (genreParam as GenreValue)
-      : GENRE.POP;
+function AppContent(): React.ReactElement {
+  const [playlistTracks, setPlaylistTracks] = useState<Track[]>([]);
 
-  useEffect(() => {
-    if (!genreParam || genreParam !== validGenre) {
-      setSearchParams(
-        {
-          genre: validGenre,
-        },
-        {
-          replace: true,
-        }
-      );
-    }
-  }, [genreParam, validGenre, setSearchParams]);
-
-  return validGenre;
-}
-
-function AppContent({
-  activeGenre,
-}: {
-  activeGenre: GenreValue;
-}): React.ReactElement {
-  const [selectedTrack, setSelectedTrack] = useState<Track | null>(null);
-  const [isMediaPlayerOpen, setIsMediaPlayerOpen] = useState(false);
+  const {
+    genre: activeGenre,
+    rank: activeRank,
+    selectedTrack,
+    isMediaPlayerOpen,
+    openTrack,
+    closeMediaPlayer,
+    setPlayer,
+    setRank,
+    setGenre,
+  } = useAppRouting(playlistTracks);
 
   useEffect(() => {
     document.title = "tunemeld";
   }, []);
-
-  const handleTrackClick = (track: Track) => {
-    setSelectedTrack(track);
-    setIsMediaPlayerOpen(true);
-  };
-
-  const handleCloseMediaPlayer = () => {
-    setIsMediaPlayerOpen(false);
-    setSelectedTrack(null);
-  };
 
   return (
     <>
@@ -66,27 +39,32 @@ function AppContent({
         <VerticalPadding size="lg" />
         <ServiceArtSection genre={activeGenre} />
         <VerticalPadding size="lg" />
-        <GenreButtons />
+        <GenreButtons activeGenre={activeGenre} onGenreChange={setGenre} />
         <VerticalPadding size="lg" />
-        <TuneMeldPlaylist genre={activeGenre} onTrackClick={handleTrackClick} />
+        <TuneMeldPlaylist
+          genre={activeGenre}
+          onTrackClick={(track) => openTrack(track, playlistTracks)}
+          onTracksLoaded={setPlaylistTracks}
+          activeRank={activeRank}
+          onRankChange={setRank}
+        />
         <VerticalPadding size="lg" />
       </main>
       <MediaPlayer
         track={selectedTrack}
         isOpen={isMediaPlayerOpen}
-        onClose={handleCloseMediaPlayer}
+        onClose={closeMediaPlayer}
+        onServiceClick={setPlayer}
       />
     </>
   );
 }
 
 function AppWithProviders(): React.ReactElement {
-  const activeGenre = useGenreFromUrl();
-
   return (
     <div className={clsx("relative min-h-screen bg-background px-4 text-text")}>
       <TuneMeldBackground />
-      <AppContent activeGenre={activeGenre} />
+      <AppContent />
     </div>
   );
 }

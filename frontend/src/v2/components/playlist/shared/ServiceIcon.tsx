@@ -60,6 +60,7 @@ interface ServiceIconProps {
   rank?: number | null | undefined;
   size?: "sm" | "md" | "lg";
   badgeSize?: "sm" | "md" | "lg";
+  onClick?: (e: React.MouseEvent) => void;
 }
 
 export function ServiceIcon({
@@ -67,6 +68,7 @@ export function ServiceIcon({
   rank,
   size = "md",
   badgeSize,
+  onClick,
 }: ServiceIconProps) {
   const sizeClasses = {
     sm: "text-xs",
@@ -96,20 +98,42 @@ export function ServiceIcon({
     );
   }
 
+  const handleClick = (e: React.MouseEvent) => {
+    if (onClick) {
+      e.preventDefault();
+      e.stopPropagation();
+      onClick(e);
+    }
+  };
+
   return (
     <div className={clsx("relative inline-block")}>
-      <a
-        href={source.url}
-        target="_blank"
-        rel="noreferrer"
-        aria-label={`${source.displayName}${rank ? ` - Rank ${rank}` : ""}`}
-      >
-        <img
-          src={source.iconUrl}
-          alt={source.displayName}
-          className={clsx(iconSizes[size])}
-        />
-      </a>
+      {onClick ? (
+        <button
+          onClick={handleClick}
+          className={clsx("cursor-pointer")}
+          aria-label={`${source.displayName}${rank ? ` - Rank ${rank}` : ""}`}
+        >
+          <img
+            src={source.iconUrl}
+            alt={source.displayName}
+            className={clsx(iconSizes[size])}
+          />
+        </button>
+      ) : (
+        <a
+          href={source.url}
+          target="_blank"
+          rel="noreferrer"
+          aria-label={`${source.displayName}${rank ? ` - Rank ${rank}` : ""}`}
+        >
+          <img
+            src={source.iconUrl}
+            alt={source.displayName}
+            className={clsx(iconSizes[size])}
+          />
+        </a>
+      )}
       {rank !== null && rank !== undefined && (
         <RankBadge rank={rank} size={effectiveBadgeSize} />
       )}

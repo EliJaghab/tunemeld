@@ -10,20 +10,38 @@ import { RANKS } from "@/v2/constants";
 interface TuneMeldPlaylistProps {
   genre: GenreValue;
   onTrackClick?: (track: Track) => void;
+  onTracksLoaded?: (tracks: Track[]) => void;
+  activeRank?: string;
+  onRankChange?: (rank: string) => void;
 }
 
 export function TuneMeldPlaylist({
   genre,
   onTrackClick,
+  onTracksLoaded,
+  activeRank: activeRankProp,
+  onRankChange: onRankChangeProp,
 }: TuneMeldPlaylistProps) {
   const [tracks, setTracks] = useState<Track[]>([]);
   const [description, setDescription] = useState<string | null>(null);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [activeRank, setActiveRank] = useState<string | null>(() => {
-    const defaultRank = RANKS.find((r) => r.isDefault);
-    return defaultRank ? defaultRank.sortField : RANKS[0]?.sortField || null;
-  });
+  const [internalActiveRank, setInternalActiveRank] = useState<string | null>(
+    () => {
+      const defaultRank = RANKS.find((r) => r.isDefault);
+      return defaultRank ? defaultRank.sortField : RANKS[0]?.sortField || null;
+    }
+  );
+
+  // Use prop if provided, otherwise use internal state
+  const activeRank = activeRankProp || internalActiveRank;
+  const handleRankChange = (rank: string) => {
+    if (onRankChangeProp) {
+      onRankChangeProp(rank);
+    } else {
+      setInternalActiveRank(rank);
+    }
+  };
 
   const handleToggle = () => {
     setIsCollapsed(!isCollapsed);
@@ -44,8 +62,10 @@ export function TuneMeldPlaylist({
 
         if (playlistData && playlistData.tracks) {
           setTracks(playlistData.tracks);
+          onTracksLoaded?.(playlistData.tracks);
         } else {
           setTracks([]);
+          onTracksLoaded?.([]);
         }
 
         const tuneMeldPlaylist = metadataData.playlists.find(
@@ -102,7 +122,7 @@ export function TuneMeldPlaylist({
               description={description}
               ranks={RANKS}
               activeRank={activeRank}
-              onRankChange={setActiveRank}
+              onRankChange={handleRankChange}
               onTrackClick={onTrackClick}
             />
           )}

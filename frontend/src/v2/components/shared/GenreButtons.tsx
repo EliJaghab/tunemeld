@@ -1,6 +1,5 @@
 import React from "react";
 import clsx from "clsx";
-import { useSearchParams } from "react-router-dom";
 import { FilterButton } from "@/v2/components/shared/FilterButton";
 import { GENRE, type GenreValue } from "@/v2/constants";
 
@@ -33,16 +32,15 @@ const GENRES: GenreButtonData[] = [
   },
 ];
 
-export function GenreButtons(): React.ReactElement {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const activeGenre = searchParams.get("genre") as GenreValue | null;
+interface GenreButtonsProps {
+  activeGenre: GenreValue;
+  onGenreChange: (genre: GenreValue) => void;
+}
 
-  const handleGenreClick = (genre: GenreValue) => {
-    setSearchParams({
-      genre,
-    });
-  };
-
+export function GenreButtons({
+  activeGenre,
+  onGenreChange,
+}: GenreButtonsProps): React.ReactElement {
   return (
     <div className={clsx("flex justify-center px-3 desktop:px-4")}>
       <div
@@ -51,7 +49,7 @@ export function GenreButtons(): React.ReactElement {
         {GENRES.map((genre) => (
           <FilterButton
             key={genre.name}
-            onClick={() => handleGenreClick(genre.name)}
+            onClick={() => onGenreChange(genre.name)}
             active={activeGenre === genre.name}
             text={genre.displayName}
             iconUrl={genre.iconUrl}
