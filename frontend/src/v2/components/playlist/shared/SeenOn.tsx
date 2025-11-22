@@ -31,10 +31,10 @@ export function SeenOn({ track }: SeenOnProps) {
 
   return (
     <div
-      className={clsx(
-        "track-sources flex justify-center items-center",
-        "gap-1 desktop:gap-2"
-      )}
+      className={clsx("track-sources flex justify-center items-center")}
+      style={{
+        gap: "12px",
+      }}
     >
       {serviceData.map(
         (item) =>
@@ -43,6 +43,8 @@ export function SeenOn({ track }: SeenOnProps) {
               key={item.source.name}
               source={item.source}
               rank={item.rank}
+              size="md"
+              badgeSize="sm"
             />
           )
       )}

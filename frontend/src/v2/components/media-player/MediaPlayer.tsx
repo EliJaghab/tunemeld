@@ -3,6 +3,7 @@ import clsx from "clsx";
 import GlassSurface from "@/v2/components/shared/GlassSurface";
 import { MediaSquare } from "@/v2/components/shared/MediaSquare";
 import { CloseButton } from "@/v2/components/shared/CloseButton";
+import { ServiceIcon } from "@/v2/components/playlist/shared/ServiceIcon";
 import type { Track } from "@/types";
 
 interface MediaPlayerProps {
@@ -29,6 +30,27 @@ export function MediaPlayer({
 
   if (!isOpen || !track) return null;
 
+  const serviceData = [
+    {
+      source: track.spotifySource,
+      rank: track.spotifyRank,
+    },
+    {
+      source: track.appleMusicSource,
+      rank: track.appleMusicRank,
+    },
+    {
+      source: track.soundcloudSource,
+      rank: track.soundcloudRank,
+    },
+    {
+      source: track.youtubeSource,
+      rank: null,
+    },
+  ].filter((item) => {
+    return item.source !== null && item.source !== undefined;
+  });
+
   return (
     <div
       className={clsx(
@@ -49,7 +71,7 @@ export function MediaPlayer({
         >
           <div
             className={clsx(
-              "p-5 text-left w-full",
+              "p-5 text-left w-full min-h-[100px]",
               "!flex !flex-row !items-center !justify-start !gap-4",
               "relative"
             )}
@@ -70,6 +92,39 @@ export function MediaPlayer({
               position="top-right"
             />
 
+            {serviceData.length > 0 && (
+              <div
+                className={clsx(
+                  "absolute bottom-4 right-4",
+                  "bg-white/60 dark:bg-gray-700/60 backdrop-blur-md",
+                  "border border-white/20 dark:border-gray-600/20",
+                  "rounded-2xl",
+                  "p-2 desktop:p-2.5",
+                  "shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_4px_12px_rgba(0,0,0,0.1)]",
+                  "overflow-visible"
+                )}
+              >
+                <div
+                  className={clsx(
+                    "flex items-center gap-2 desktop:gap-2.5 relative"
+                  )}
+                >
+                  {serviceData.map(
+                    (item) =>
+                      item.source && (
+                        <ServiceIcon
+                          key={item.source.name}
+                          source={item.source}
+                          rank={item.rank ?? undefined}
+                          size="md"
+                          badgeSize="md"
+                        />
+                      )
+                  )}
+                </div>
+              </div>
+            )}
+
             {track.albumCoverUrl && (
               <div
                 className={clsx("flex-shrink-0 overflow-hidden")}
@@ -86,7 +141,7 @@ export function MediaPlayer({
               </div>
             )}
 
-            <div className={clsx("flex-1 min-w-0 flex flex-col gap-1")}>
+            <div className={clsx("flex-1 min-w-0 flex flex-col gap-1 pr-20")}>
               <div
                 className={clsx(
                   "font-semibold text-base desktop:text-lg",
