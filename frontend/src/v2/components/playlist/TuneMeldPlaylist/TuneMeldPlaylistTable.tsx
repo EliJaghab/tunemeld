@@ -41,7 +41,7 @@ export function TuneMeldPlaylistTable({
                 "text-black dark:text-white"
               )}
             >
-              TuneMeld Playlist
+              Tunemeld Playlist
               <span
                 className={clsx(
                   "ml-2",
@@ -79,10 +79,7 @@ export function TuneMeldPlaylistTable({
           </div>
           <GlassButton
             onClick={onToggle}
-            className={clsx(
-              "flex-shrink-0 self-start",
-              "rounded-full"
-            )}
+            className={clsx("flex-shrink-0 self-start", "rounded-full")}
             width={28}
             height={28}
             borderRadius={14}

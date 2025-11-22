@@ -6,7 +6,14 @@ const { execSync } = require("child_process");
 
 const DIST_DIR = path.join(__dirname, "dist");
 const SRC_DIR = path.join(__dirname, "src");
-const STATIC_FILES = ["index.html", "index-v2.html", "css", "images", "html"];
+const STATIC_FILES = [
+  "index.html",
+  "index-v2.html",
+  "css",
+  "images",
+  "html",
+  "_headers",
+];
 
 const copyV2CssFiles = () => {
   const srcDir = path.join(SRC_DIR, "v2");
@@ -28,8 +35,8 @@ const copyV2CssFiles = () => {
         log.info(
           `Copied CSS ${path.relative(SRC_DIR, srcPath)} -> ${path.relative(
             DIST_DIR,
-            destPath,
-          )}`,
+            destPath
+          )}`
         );
       }
     });
@@ -136,7 +143,7 @@ const expectedDirs = [
   "v2",
 ];
 const missingDirs = expectedDirs.filter(
-  (dir) => !fs.existsSync(path.join(DIST_DIR, dir)),
+  (dir) => !fs.existsSync(path.join(DIST_DIR, dir))
 );
 
 if (missingDirs.length > 0) {
