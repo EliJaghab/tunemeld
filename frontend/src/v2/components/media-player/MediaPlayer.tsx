@@ -1,10 +1,12 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import clsx from "clsx";
 import GlassSurface from "@/v2/components/shared/GlassSurface";
 import { MediaSquare } from "@/v2/components/shared/MediaSquare";
 import { CloseButton } from "@/v2/components/shared/CloseButton";
 import { ServiceIcon } from "@/v2/components/playlist/shared/ServiceIcon";
 import { ServicePlayer } from "@/v2/components/media-player/players/ServicePlayer";
+import { MiniPlayer } from "@/v2/components/media-player/mini-player/MiniPlayer";
+import { ChevronDown } from "@/v2/components/shared/icons/ChevronDown";
 import { PLAYER, type PlayerValue } from "@/v2/constants";
 import type { Track } from "@/types";
 
@@ -23,6 +25,9 @@ export function MediaPlayer({
   onClose,
   onServiceClick,
 }: MediaPlayerProps): React.ReactElement | null {
+  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(true); // Assume playing when opened
+
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === "Escape" && isOpen) {
@@ -34,7 +39,52 @@ export function MediaPlayer({
     return () => document.removeEventListener("keydown", handleEscape);
   }, [isOpen, onClose]);
 
+  // Reset collapse state when track changes
+  useEffect(() => {
+    if (track) {
+      setIsCollapsed(false);
+      setIsPlaying(true);
+    }
+  }, [track]);
+
   if (!isOpen || !track) return null;
+
+  const handleCollapse = () => {
+    setIsCollapsed(true);
+  };
+
+  const handleExpand = () => {
+    setIsCollapsed(false);
+  };
+
+  // Toggle play is a stub for now as controlling iframes requires SDKs
+  const handleTogglePlay = () => {
+    setIsPlaying(!isPlaying);
+    // In a real implementation, this would communicate with the service player
+  };
+
+  if (isCollapsed) {
+    return (
+      <>
+        <div className="hidden">
+          {/* Keep player mounted to maintain state/audio if supported */}
+          {activePlayer && (
+            <ServicePlayer track={track} activePlayer={activePlayer} />
+          )}
+        </div>
+        <MiniPlayer
+          track={track}
+          onExpand={handleExpand}
+          onClose={() => {
+            setIsCollapsed(false); // Reset collapse state
+            onClose(); // Call parent onClose
+          }}
+          isPlaying={isPlaying}
+          onTogglePlay={handleTogglePlay}
+        />
+      </>
+    );
+  }
 
   const serviceData = [
     {
@@ -89,14 +139,32 @@ export function MediaPlayer({
               )}
             />
 
-            <CloseButton
-              onClick={(e) => {
-                e.stopPropagation();
-                onClose();
-              }}
-              ariaLabel="Close media player"
-              position="top-right"
-            />
+            <div className="absolute top-4 right-4 flex items-center gap-2 z-50">
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleCollapse();
+                }}
+                className={clsx(
+                  "w-8 h-8 rounded-full flex items-center justify-center",
+                  `bg-white/20 hover:bg-white/30 active:bg-white/40
+                  backdrop-blur-md`,
+                  "text-black dark:text-white transition-colors",
+                  "border border-white/10"
+                )}
+                aria-label="Collapse player"
+              >
+                <ChevronDown className="w-5 h-5" />
+              </button>
+              <CloseButton
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onClose();
+                }}
+                ariaLabel="Close media player"
+                position="relative" // Override absolute positioning
+              />
+            </div>
 
             <div
               className={clsx("flex flex-row items-center gap-4 w-full pr-12")}
