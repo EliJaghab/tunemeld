@@ -35,11 +35,13 @@ export function ServicePlaylistDescriptionModal({
   if (!isOpen) return null;
 
   const handleModalClick = (e: React.MouseEvent) => {
-    // Don't navigate if clicking the close button or its children
+    // Don't navigate if clicking the close button, link emoji, or their children
     const target = e.target as HTMLElement;
     if (
       target.closest('button[aria-label="Close modal"]') ||
-      target.closest('button[aria-label="Close modal"]')?.contains(target)
+      target.closest('button[aria-label="Close modal"]')?.contains(target) ||
+      target.closest("a[href]") ||
+      target.tagName === "A"
     ) {
       return;
     }
@@ -53,7 +55,7 @@ export function ServicePlaylistDescriptionModal({
   // Create proper label for accessibility and hover tooltip
   const getModalLabel = () => {
     if (playlistName && serviceDisplayName) {
-      return `Visit ${playlistName} on ${serviceDisplayName} website`;
+      return `Visit ${playlistName} on ${serviceDisplayName}`;
     } else if (playlistName) {
       return `Visit ${playlistName} playlist`;
     } else if (serviceDisplayName) {

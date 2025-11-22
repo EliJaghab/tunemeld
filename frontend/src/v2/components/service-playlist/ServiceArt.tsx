@@ -53,19 +53,33 @@ export function ServiceArt({
           ></div>
         ) : (
           coverUrl && (
-            <a
+            <button
               id={`${serviceName}-cover-link`}
-              href={metadata?.href ?? "#"}
-              target="_blank"
-              rel="noreferrer"
-              className={clsx("block")}
+              onClick={() =>
+                onOpenModal({
+                  ...(serviceDisplayName && {
+                    serviceDisplayName,
+                  }),
+                  ...(playlistName && {
+                    playlistName,
+                  }),
+                  ...(metadata?.description && {
+                    description: metadata.description,
+                  }),
+                  ...(metadata?.href && {
+                    playlistUrl: metadata.href,
+                  }),
+                })
+              }
+              className={clsx("block w-full cursor-pointer")}
+              aria-label={`Open ${playlistName || serviceDisplayName || "playlist"} description`}
             >
               <MediaSquare
                 src={coverUrl}
                 type={coverType}
                 alt={`${serviceName} playlist cover`}
               />
-            </a>
+            </button>
           )
         )}
       </div>
@@ -96,7 +110,16 @@ export function ServiceArt({
           </div>
         ) : (
           (serviceDisplayName || playlistName) && (
-            <>
+            <div
+              className={clsx("w-full")}
+              title={
+                serviceDisplayName && playlistName
+                  ? `${serviceDisplayName}'s ${playlistName}`
+                  : serviceDisplayName
+                    ? `${serviceDisplayName}'s`
+                    : playlistName || undefined
+              }
+            >
               {serviceDisplayName && (
                 <button
                   onClick={() =>
@@ -122,7 +145,6 @@ export function ServiceArt({
                     "tracking-tight",
                     "text-left truncate w-full"
                   )}
-                  title={serviceDisplayName + "'s"}
                 >
                   {serviceDisplayName}
                   's
@@ -154,12 +176,11 @@ export function ServiceArt({
                     "mt-0.5 desktop:mt-1",
                     "truncate w-full text-left"
                   )}
-                  title={playlistName}
                 >
                   {playlistName}
                 </button>
               )}
-            </>
+            </div>
           )
         )}
       </div>

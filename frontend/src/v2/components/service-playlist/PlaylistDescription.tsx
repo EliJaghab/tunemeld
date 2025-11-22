@@ -99,6 +99,7 @@ export function PlaylistDescription({
           "cursor-pointer",
           className
         )}
+        title={description || undefined}
       >
         <div ref={textRef}>{displayText}</div>
         {isTruncated && (
@@ -107,6 +108,7 @@ export function PlaylistDescription({
               "font-semibold text-xs desktop:text-base",
               "absolute bottom-0 right-0"
             )}
+            title="Show more"
           >
             ...more
           </span>

@@ -22,6 +22,46 @@ interface ModalContent {
   playlistUrl?: string;
 }
 
+interface ExternalLinkEmojiProps {
+  playlistUrl: string;
+  playlistName?: string;
+  serviceDisplayName?: string;
+}
+
+function ExternalLinkEmoji({
+  playlistUrl,
+  playlistName,
+  serviceDisplayName,
+}: ExternalLinkEmojiProps): React.ReactElement {
+  const getLabel = () => {
+    if (playlistName && serviceDisplayName) {
+      return `Visit ${playlistName} on ${serviceDisplayName}`;
+    } else if (playlistName) {
+      return `Visit ${playlistName}`;
+    }
+    return "Visit playlist";
+  };
+
+  return (
+    <a
+      href={playlistUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      onClick={(e) => e.stopPropagation()}
+      className={clsx(
+        "inline-flex items-center",
+        "text-base desktop:text-xl",
+        "hover:scale-110 transition-transform",
+        "cursor-pointer"
+      )}
+      title={getLabel()}
+      aria-label={getLabel()}
+    >
+      🔗
+    </a>
+  );
+}
+
 export function ServiceArtSection({
   genre,
 }: ServiceArtSectionProps): React.ReactElement | null {
@@ -126,9 +166,15 @@ export function ServiceArtSection({
       <ServicePlaylistDescriptionModal
         isOpen={modalContent !== null}
         onClose={() => setModalContent(null)}
-        playlistUrl={modalContent?.playlistUrl}
-        playlistName={modalContent?.playlistName}
-        serviceDisplayName={modalContent?.serviceDisplayName}
+        {...(modalContent?.playlistUrl && {
+          playlistUrl: modalContent.playlistUrl,
+        })}
+        {...(modalContent?.playlistName && {
+          playlistName: modalContent.playlistName,
+        })}
+        {...(modalContent?.serviceDisplayName && {
+          serviceDisplayName: modalContent.serviceDisplayName,
+        })}
       >
         <div className={clsx("pr-10")}>
           {(modalContent?.serviceDisplayName || modalContent?.playlistName) && (
@@ -149,10 +195,22 @@ export function ServiceArtSection({
                   className={clsx(
                     "text-sm desktop:text-xl font-semibold",
                     "text-black dark:text-white",
-                    "mt-1"
+                    "mt-1",
+                    "flex items-center gap-2"
                   )}
                 >
-                  {modalContent.playlistName}
+                  <span>{modalContent.playlistName}</span>
+                  {modalContent?.playlistUrl && (
+                    <ExternalLinkEmoji
+                      playlistUrl={modalContent.playlistUrl}
+                      {...(modalContent.playlistName && {
+                        playlistName: modalContent.playlistName,
+                      })}
+                      {...(modalContent?.serviceDisplayName && {
+                        serviceDisplayName: modalContent.serviceDisplayName,
+                      })}
+                    />
+                  )}
                 </h3>
               )}
             </div>
