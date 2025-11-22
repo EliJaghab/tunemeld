@@ -209,16 +209,16 @@ const GlassSurface: React.FC<GlassSurfaceProps> = ({
           boxShadow: `
       0 0 2px 1px color-mix(in oklch, ${
         isDark ? "white" : "black"
-      }, transparent ${isDark ? "65%" : "85%"}) inset,
+      }, transparent ${isDark ? "65%" : "92%"}) inset,
       0 0 10px 4px color-mix(in oklch, ${
         isDark ? "white" : "black"
-      }, transparent ${isDark ? "85%" : "90%"}) inset,
+      }, transparent ${isDark ? "85%" : "95%"}) inset,
       0px 4px 16px rgba(17, 17, 26, 0.05),
       0px 8px 24px rgba(17, 17, 26, 0.05),
       0px 16px 56px rgba(17, 17, 26, 0.05),
-      0px 4px 16px rgba(17, 17, 26, 0.05) inset,
-      0px 8px 24px rgba(17, 17, 26, 0.05) inset,
-      0px 16px 56px rgba(17, 17, 26, 0.05) inset
+      0px 4px 16px rgba(17, 17, 26, ${isDark ? "0.05" : "0.02"}) inset,
+      0px 8px 24px rgba(17, 17, 26, ${isDark ? "0.05" : "0.02"}) inset,
+      0px 16px 56px rgba(17, 17, 26, ${isDark ? "0.05" : "0.02"}) inset
     `,
         }
       : {};
