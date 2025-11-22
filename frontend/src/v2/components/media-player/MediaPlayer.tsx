@@ -4,11 +4,13 @@ import GlassSurface from "@/v2/components/shared/GlassSurface";
 import { MediaSquare } from "@/v2/components/shared/MediaSquare";
 import { CloseButton } from "@/v2/components/shared/CloseButton";
 import { ServiceIcon } from "@/v2/components/playlist/shared/ServiceIcon";
+import { ServicePlayer } from "@/v2/components/media-player/players/ServicePlayer";
 import { PLAYER, type PlayerValue } from "@/v2/constants";
 import type { Track } from "@/types";
 
 interface MediaPlayerProps {
   track: Track | null;
+  activePlayer?: PlayerValue | null;
   isOpen: boolean;
   onClose: () => void;
   onServiceClick?: (player: PlayerValue) => void;
@@ -16,6 +18,7 @@ interface MediaPlayerProps {
 
 export function MediaPlayer({
   track,
+  activePlayer,
   isOpen,
   onClose,
   onServiceClick,
@@ -75,8 +78,8 @@ export function MediaPlayer({
           <div
             className={clsx(
               "p-5 text-left w-full min-h-[100px]",
-              "!flex !flex-row !items-center !justify-start !gap-4",
-              "relative"
+              "flex flex-col w-full relative",
+              "min-h-min"
             )}
           >
             <div
@@ -95,10 +98,57 @@ export function MediaPlayer({
               position="top-right"
             />
 
+            <div
+              className={clsx("flex flex-row items-center gap-4 w-full pr-12")}
+            >
+              {track.albumCoverUrl && (
+                <div
+                  className={clsx("flex-shrink-0 overflow-hidden")}
+                  style={{
+                    width: "64px",
+                    height: "64px",
+                  }}
+                >
+                  <MediaSquare
+                    src={track.albumCoverUrl}
+                    type="image"
+                    alt={`${track.trackName} cover`}
+                  />
+                </div>
+              )}
+
+              <div className={clsx("flex-1 min-w-0 flex flex-col gap-1")}>
+                <div
+                  className={clsx(
+                    "font-semibold text-base desktop:text-lg",
+                    "text-black dark:text-white",
+                    "line-clamp-1"
+                  )}
+                >
+                  {track.trackName}
+                </div>
+                <div
+                  className={clsx(
+                    "text-sm desktop:text-base",
+                    "text-black/70 dark:text-white/70",
+                    "line-clamp-1"
+                  )}
+                >
+                  {track.artistName}
+                </div>
+              </div>
+            </div>
+
+            {/* Player Area */}
+            {activePlayer && (
+              <ServicePlayer track={track} activePlayer={activePlayer} />
+            )}
+
+            {/* Footer: Service Icons */}
             {serviceData.length > 0 && (
               <div
                 className={clsx(
-                  "absolute bottom-4 right-4",
+                  "mt-4 self-end", // Align to right
                   "bg-white/60 dark:bg-gray-700/60 backdrop-blur-md",
                   "border border-white/20 dark:border-gray-600/20",
                   "rounded-2xl",
@@ -109,9 +159,7 @@ export function MediaPlayer({
                 )}
               >
                 <div
-                  className={clsx(
-                    "flex items-center gap-2 desktop:gap-2.5 relative"
-                  )}
+                  className={clsx("flex items-center gap-2 desktop:gap-2.5")}
                 >
                   {serviceData.map((item) => {
                     if (!item.source) return null;
@@ -144,43 +192,6 @@ export function MediaPlayer({
                 </div>
               </div>
             )}
-
-            {track.albumCoverUrl && (
-              <div
-                className={clsx("flex-shrink-0 overflow-hidden")}
-                style={{
-                  width: "64px",
-                  height: "64px",
-                }}
-              >
-                <MediaSquare
-                  src={track.albumCoverUrl}
-                  type="image"
-                  alt={`${track.trackName} cover`}
-                />
-              </div>
-            )}
-
-            <div className={clsx("flex-1 min-w-0 flex flex-col gap-1 pr-20")}>
-              <div
-                className={clsx(
-                  "font-semibold text-base desktop:text-lg",
-                  "text-black dark:text-white",
-                  "line-clamp-1"
-                )}
-              >
-                {track.trackName}
-              </div>
-              <div
-                className={clsx(
-                  "text-sm desktop:text-base",
-                  "text-black/70 dark:text-white/70",
-                  "line-clamp-1"
-                )}
-              >
-                {track.artistName}
-              </div>
-            </div>
           </div>
         </GlassSurface>
       </div>

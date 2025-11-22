@@ -18,6 +18,7 @@ function AppContent(): React.ReactElement {
   const {
     genre: activeGenre,
     rank: activeRank,
+    player: activePlayer,
     selectedTrack,
     isMediaPlayerOpen,
     openTrack,
@@ -52,6 +53,7 @@ function AppContent(): React.ReactElement {
       </main>
       <MediaPlayer
         track={selectedTrack}
+        activePlayer={activePlayer}
         isOpen={isMediaPlayerOpen}
         onClose={closeMediaPlayer}
         onServiceClick={setPlayer}
