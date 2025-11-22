@@ -1,10 +1,12 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import clsx from "clsx";
 import GlassSurface from "@/v2/components/shared/GlassSurface";
 import { MediaSquare } from "@/v2/components/shared/MediaSquare";
 import { CloseButton } from "@/v2/components/shared/CloseButton";
 import { ServiceIcon } from "@/v2/components/playlist/shared/ServiceIcon";
 import { ServicePlayer } from "@/v2/components/media-player/players/ServicePlayer";
+import { MiniPlayer } from "@/v2/components/media-player/mini-player/MiniPlayer";
+import { ChevronDown } from "@/v2/components/shared/icons/ChevronDown";
 import { PLAYER, type PlayerValue } from "@/v2/constants";
 import type { Track } from "@/types";
 
@@ -23,6 +25,9 @@ export function MediaPlayer({
   onClose,
   onServiceClick,
 }: MediaPlayerProps): React.ReactElement | null {
+  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
+
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === "Escape" && isOpen) {
@@ -33,6 +38,13 @@ export function MediaPlayer({
     document.addEventListener("keydown", handleEscape);
     return () => document.removeEventListener("keydown", handleEscape);
   }, [isOpen, onClose]);
+
+  // Reset collapse state when track changes or player opens/closes
+  useEffect(() => {
+    if (isOpen) {
+      setIsCollapsed(false);
+    }
+  }, [track, isOpen]);
 
   if (!isOpen || !track) return null;
 
@@ -56,6 +68,25 @@ export function MediaPlayer({
   ].filter((item) => {
     return item.source !== null && item.source !== undefined;
   });
+
+  const handleTogglePlay = () => {
+    setIsPlaying(!isPlaying);
+  };
+
+  if (isCollapsed) {
+    return (
+      <MiniPlayer
+        track={track}
+        isPlaying={isPlaying}
+        onTogglePlay={handleTogglePlay}
+        onExpand={() => setIsCollapsed(false)}
+        onClose={() => {
+          // setIsCollapsed(false); // FIXED: Don't expand before closing!
+          onClose();
+        }}
+      />
+    );
+  }
 
   return (
     <div
@@ -89,21 +120,40 @@ export function MediaPlayer({
               )}
             />
 
-            <CloseButton
-              onClick={(e) => {
-                e.stopPropagation();
-                onClose();
-              }}
-              ariaLabel="Close media player"
-              position="top-right"
-            />
+            {/* Top right buttons */}
+            <div className="absolute top-4 right-4 flex gap-2 z-10">
+              <button
+                onClick={() => setIsCollapsed(true)}
+                aria-label="Collapse media player"
+                className={clsx(
+                  "w-8 h-8 rounded-full flex items-center justify-center",
+                  `bg-white/60 hover:bg-white/80 active:bg-white/90
+                  dark:bg-gray-700/60 dark:hover:bg-gray-600/80
+                  backdrop-blur-md`,
+                  "text-black dark:text-white transition-colors",
+                  "border border-white/20 dark:border-gray-600/20",
+                  "shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_4px_12px_rgba(0,0,0,0.1)]"
+                )}
+              >
+                <ChevronDown className="w-4 h-4" />
+              </button>
+              <CloseButton
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onClose();
+                }}
+                ariaLabel="Close media player"
+                position="relative"
+              />
+            </div>
 
+            {/* Header: Album Art + Info */}
             <div
-              className={clsx("flex flex-row items-center gap-4 w-full pr-12")}
+              className={clsx("flex flex-row items-center gap-4 w-full pr-24")}
             >
               {track.albumCoverUrl && (
                 <div
-                  className={clsx("flex-shrink-0 overflow-hidden")}
+                  className={clsx("flex-shrink-0 overflow-hidden rounded-lg")}
                   style={{
                     width: "64px",
                     height: "64px",
@@ -148,7 +198,7 @@ export function MediaPlayer({
             {serviceData.length > 0 && (
               <div
                 className={clsx(
-                  "mt-4 self-end", // Align to right
+                  "mt-4 self-end",
                   "bg-white/60 dark:bg-gray-700/60 backdrop-blur-md",
                   "border border-white/20 dark:border-gray-600/20",
                   "rounded-2xl",

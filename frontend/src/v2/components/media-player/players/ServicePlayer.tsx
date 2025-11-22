@@ -69,8 +69,6 @@ export function ServicePlayer({
     };
   }, [track, activePlayer]);
 
-  if (!iframeSrc) return null;
-
   const getHeight = () => {
     switch (activePlayer) {
       case PLAYER.YOUTUBE:
@@ -83,6 +81,18 @@ export function ServicePlayer({
         return "80px";
     }
   };
+
+  if (!iframeSrc) {
+    return (
+      <div
+        className={clsx(
+          `w-full mt-4 overflow-hidden rounded-lg bg-black/5 dark:bg-white/5
+          animate-pulse`
+        )}
+        style={{ height: getHeight() }}
+      />
+    );
+  }
 
   return (
     <div className={clsx("w-full mt-4 overflow-hidden rounded-lg")}>

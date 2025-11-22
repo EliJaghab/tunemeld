@@ -27,6 +27,7 @@ interface UseAppRoutingReturn {
 export function useAppRouting(playlistTracks: Track[]): UseAppRoutingReturn {
   const [searchParams, setSearchParams] = useSearchParams();
   const [selectedTrack, setSelectedTrack] = useState<Track | null>(null);
+  const [activePlayer, setActivePlayer] = useState<PlayerValue | null>(null);
   const [isMediaPlayerOpen, setIsMediaPlayerOpen] = useState(false);
 
   const genreParam = searchParams.get("genre");
@@ -52,11 +53,23 @@ export function useAppRouting(playlistTracks: Track[]): UseAppRoutingReturn {
     RANK.TUNEMELD_RANK;
 
   const isrc = searchParams.get("isrc");
-  const playerParam = searchParams.get("player");
-  const player: PlayerValue | null =
-    playerParam && Object.values(PLAYER).includes(playerParam as PlayerValue)
-      ? (playerParam as PlayerValue)
-      : null;
+
+  // Sync activePlayer with URL, but preserve it during closing state (when isrc is removed)
+  useEffect(() => {
+    const playerParam = searchParams.get("player");
+    const isrcParam = searchParams.get("isrc");
+
+    if (
+      playerParam &&
+      Object.values(PLAYER).includes(playerParam as PlayerValue)
+    ) {
+      setActivePlayer(playerParam as PlayerValue);
+    } else if (!playerParam && isrcParam) {
+      // Only clear player if we have a track (isrc) but no player param
+      // This avoids clearing it when the URL is cleared during closing
+      setActivePlayer(null);
+    }
+  }, [searchParams]);
 
   const getDefaultPlayer = useCallback((track: Track): PlayerValue | null => {
     if (track.youtubeSource) return PLAYER.YOUTUBE;
@@ -82,12 +95,12 @@ export function useAppRouting(playlistTracks: Track[]): UseAppRoutingReturn {
       if (isrc) {
         newParams.set("isrc", isrc);
       }
-      if (player) {
-        newParams.set("player", player);
+      if (activePlayer) {
+        newParams.set("player", activePlayer);
       }
       setSearchParams(newParams, { replace: false });
     },
-    [searchParams, isrc, player, setSearchParams]
+    [searchParams, isrc, activePlayer, setSearchParams]
   );
 
   const openTrack = useCallback(
@@ -106,15 +119,11 @@ export function useAppRouting(playlistTracks: Track[]): UseAppRoutingReturn {
       }
 
       setSearchParams(newParams, { replace: false });
-      setSelectedTrack(track);
-      setIsMediaPlayerOpen(true);
     },
     [genre, rank, searchParams, setSearchParams, getDefaultPlayer]
   );
 
   const closeMediaPlayer = useCallback(() => {
-    setIsMediaPlayerOpen(false);
-    setSelectedTrack(null);
     const newParams = new URLSearchParams(searchParams);
     newParams.delete("isrc");
     newParams.delete("player");
@@ -152,7 +161,7 @@ export function useAppRouting(playlistTracks: Track[]): UseAppRoutingReturn {
     genre,
     rank,
     isrc,
-    player,
+    player: activePlayer,
     selectedTrack,
     isMediaPlayerOpen,
     setGenre,
