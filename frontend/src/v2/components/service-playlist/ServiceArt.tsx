@@ -304,9 +304,11 @@ export function ServiceArt({
       id={serviceName}
       className={clsx(
         "service w-full rounded-media",
-        "border-2 border-gray-500 dark:border-gray-600",
+        "border-2 border-gray-300 dark:border-white",
         "p-2 desktop:p-4",
-        "!bg-transparent"
+        "bg-transparent",
+        "hover:!bg-gray-50 dark:hover:!bg-gray-900",
+        "transition-colors"
       )}
     >
       <div className={clsx("mb-2.5 desktop:mb-4")}>

@@ -73,7 +73,7 @@ export function TuneMeldPlaylist({ genre }: TuneMeldPlaylistProps) {
       <div className={clsx("w-full max-w-container")}>
         <div
           className={clsx(
-            "border-2 border-gray-500 dark:border-gray-600",
+            "border-2 border-gray-300 dark:border-white",
             "rounded-media isolation-isolate"
           )}
         >

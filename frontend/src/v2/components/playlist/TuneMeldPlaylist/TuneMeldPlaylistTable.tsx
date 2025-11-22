@@ -30,7 +30,7 @@ export function TuneMeldPlaylistTable({
       <div
         className={clsx(
           "px-4 py-3 desktop:px-6 desktop:py-4",
-          !isCollapsed && "border-b-2 border-gray-300 dark:border-gray-600"
+          !isCollapsed && "border-b-2 border-gray-300 dark:border-white"
         )}
       >
         <div className={clsx("flex items-start justify-between")}>
@@ -105,13 +105,14 @@ export function TuneMeldPlaylistTable({
       </div>
 
       {!isCollapsed && (
-        <table className={clsx("w-full")}>
+        <table className={clsx("w-full overflow-hidden rounded-b-[16px]")}>
           <tbody>
             {tracks.map((track, index) => (
               <TuneMeldRow
                 key={track.isrc}
                 track={track}
                 displayRank={index + 1}
+                isLast={index === tracks.length - 1}
               />
             ))}
           </tbody>
