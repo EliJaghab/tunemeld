@@ -4,7 +4,7 @@ import clsx from "clsx";
 interface CloseButtonProps {
   onClick: (e: React.MouseEvent) => void;
   ariaLabel?: string;
-  position?: "top-left" | "top-right" | "relative";
+  position?: "top-left" | "top-right";
   className?: string;
 }
 
@@ -14,18 +14,14 @@ export function CloseButton({
   position = "top-right",
   className = "",
 }: CloseButtonProps): React.ReactElement {
-  const isAbsolute = position !== "relative";
-  const positionClasses = isAbsolute
-    ? position === "top-left"
-      ? "absolute top-4 left-4"
-      : "absolute top-4 right-4"
-    : "relative";
+  const positionClasses =
+    position === "top-left" ? "top-4 left-4" : "top-4 right-4";
 
   return (
     <button
       onClick={onClick}
       className={clsx(
-        "w-8 h-8",
+        "absolute w-8 h-8",
         positionClasses,
         "bg-white/60 dark:bg-gray-700/60 backdrop-blur-md",
         "border border-white/20 dark:border-gray-600/20",

@@ -22,7 +22,6 @@ interface GlassSurfaceProps {
   mixBlendMode?: string;
   className?: string;
   style?: React.CSSProperties;
-  onClick?: (e: React.MouseEvent) => void;
 }
 
 const GlassSurface: React.FC<GlassSurfaceProps> = ({
@@ -46,7 +45,6 @@ const GlassSurface: React.FC<GlassSurfaceProps> = ({
   mixBlendMode = "difference",
   className = "",
   style = {},
-  onClick,
 }) => {
   const uniqueId = useId().replace(/:/g, "-");
   const filterId = `glass-filter-${uniqueId}`;
@@ -235,7 +233,6 @@ const GlassSurface: React.FC<GlassSurfaceProps> = ({
       ref={containerRef}
       className={clsx(baseClasses, className)}
       style={finalStyle}
-      onClick={onClick}
     >
       <svg
         className={clsx(
