@@ -151,5 +151,27 @@ if (missingDirs.length > 0) {
   process.exit(1);
 }
 
+// Verify critical JavaScript files exist
+const criticalFiles = [
+  "routing/router.js",
+  "state/StateManager.js",
+  "components/title.js",
+  "main.js",
+];
+const missingFiles = criticalFiles.filter(
+  (file) => !fs.existsSync(path.join(DIST_DIR, file))
+);
+
+if (missingFiles.length > 0) {
+  log.error(`Missing critical JavaScript files: ${missingFiles.join(", ")}`);
+  process.exit(1);
+}
+
+// Verify _headers file exists
+if (!fs.existsSync(path.join(DIST_DIR, "_headers"))) {
+  log.error("Missing _headers file in dist/");
+  process.exit(1);
+}
+
 log.success("Production build complete");
 log.info("Ready for Cloudflare Pages deployment from dist/");
