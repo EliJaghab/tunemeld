@@ -54,7 +54,14 @@ const colors = {
   white: palette.white,
   black: palette.black,
   gray: {
+    50: "#f9fafb",
+    200: "#e5e7eb",
+    300: "#d1d5db",
+    400: "#9ca3af",
+    500: "#6b7280",
+    600: "#4b5563",
     700: palette.darkGray,
+    900: "#111827",
   },
 
   // Brand colors
