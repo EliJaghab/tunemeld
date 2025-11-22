@@ -19,6 +19,7 @@ interface ModalContent {
   serviceDisplayName?: string;
   playlistName?: string;
   description?: string;
+  playlistUrl?: string;
 }
 
 export function ServiceArtSection({
@@ -125,6 +126,9 @@ export function ServiceArtSection({
       <ServicePlaylistDescriptionModal
         isOpen={modalContent !== null}
         onClose={() => setModalContent(null)}
+        playlistUrl={modalContent?.playlistUrl}
+        playlistName={modalContent?.playlistName}
+        serviceDisplayName={modalContent?.serviceDisplayName}
       >
         <div className={clsx("pr-10")}>
           {(modalContent?.serviceDisplayName || modalContent?.playlistName) && (

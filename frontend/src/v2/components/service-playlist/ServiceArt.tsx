@@ -11,6 +11,7 @@ interface ServiceArtProps {
     serviceDisplayName?: string;
     playlistName?: string;
     description?: string;
+    playlistUrl?: string;
   }) => void;
   isLoading?: boolean;
 }
@@ -106,6 +107,12 @@ export function ServiceArt({
                       ...(playlistName && {
                         playlistName,
                       }),
+                      ...(metadata?.description && {
+                        description: metadata.description,
+                      }),
+                      ...(metadata?.href && {
+                        playlistUrl: metadata.href,
+                      }),
                     })
                   }
                   className={clsx(
@@ -130,6 +137,12 @@ export function ServiceArt({
                       }),
                       ...(playlistName && {
                         playlistName,
+                      }),
+                      ...(metadata?.description && {
+                        description: metadata.description,
+                      }),
+                      ...(metadata?.href && {
+                        playlistUrl: metadata.href,
                       }),
                     })
                   }
@@ -196,7 +209,14 @@ export function ServiceArt({
             serviceName={serviceName}
             playlistName={playlistName}
             serviceDisplayName={serviceDisplayName}
-            onOpenModal={onOpenModal}
+            onOpenModal={(content) =>
+              onOpenModal({
+                ...content,
+                ...(metadata?.href && {
+                  playlistUrl: metadata.href,
+                }),
+              })
+            }
             className={clsx("h-full")}
           />
         )}

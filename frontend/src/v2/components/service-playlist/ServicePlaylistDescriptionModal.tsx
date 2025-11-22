@@ -7,6 +7,9 @@ interface ServicePlaylistDescriptionModalProps {
   onClose: () => void;
   children: React.ReactNode;
   maxWidth?: string;
+  playlistUrl?: string;
+  playlistName?: string;
+  serviceDisplayName?: string;
 }
 
 export function ServicePlaylistDescriptionModal({
@@ -14,6 +17,9 @@ export function ServicePlaylistDescriptionModal({
   onClose,
   children,
   maxWidth = "600px",
+  playlistUrl,
+  playlistName,
+  serviceDisplayName,
 }: ServicePlaylistDescriptionModalProps): React.ReactElement | null {
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
@@ -27,6 +33,34 @@ export function ServicePlaylistDescriptionModal({
   }, [isOpen, onClose]);
 
   if (!isOpen) return null;
+
+  const handleModalClick = (e: React.MouseEvent) => {
+    // Don't navigate if clicking the close button or its children
+    const target = e.target as HTMLElement;
+    if (
+      target.closest('button[aria-label="Close modal"]') ||
+      target.closest('button[aria-label="Close modal"]')?.contains(target)
+    ) {
+      return;
+    }
+
+    // Navigate to playlist URL if available
+    if (playlistUrl) {
+      window.open(playlistUrl, "_blank", "noopener,noreferrer");
+    }
+  };
+
+  // Create proper label for accessibility and hover tooltip
+  const getModalLabel = () => {
+    if (playlistName && serviceDisplayName) {
+      return `Visit ${playlistName} on ${serviceDisplayName} website`;
+    } else if (playlistName) {
+      return `Visit ${playlistName} playlist`;
+    } else if (serviceDisplayName) {
+      return `Visit ${serviceDisplayName} playlist`;
+    }
+    return "Visit playlist";
+  };
 
   return (
     <>
@@ -52,7 +86,20 @@ export function ServicePlaylistDescriptionModal({
           borderWidth={0.5}
           blur={20}
         >
-          <div className={clsx("p-5")}>
+          <div
+            className={clsx("p-5", playlistUrl && "cursor-pointer")}
+            onClick={handleModalClick}
+            title={playlistUrl ? getModalLabel() : undefined}
+            aria-label={playlistUrl ? getModalLabel() : undefined}
+            role={playlistUrl ? "button" : undefined}
+            tabIndex={playlistUrl ? 0 : undefined}
+            onKeyDown={(e) => {
+              if (playlistUrl && (e.key === "Enter" || e.key === " ")) {
+                e.preventDefault();
+                window.open(playlistUrl, "_blank", "noopener,noreferrer");
+              }
+            }}
+          >
             <div
               className={clsx(
                 "absolute top-0 left-0 right-0 h-px",
@@ -60,7 +107,10 @@ export function ServicePlaylistDescriptionModal({
               )}
             />
             <button
-              onClick={onClose}
+              onClick={(e) => {
+                e.stopPropagation();
+                onClose();
+              }}
               className={clsx(
                 "absolute top-4 right-4 w-8 h-8",
                 "bg-white/60 dark:bg-gray-700/60 backdrop-blur-md",
