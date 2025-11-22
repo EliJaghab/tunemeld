@@ -7,6 +7,7 @@ interface TrackCellProps {
   coverUrl?: string | null | undefined;
   trackName: string;
   artistName: string;
+  isLast?: boolean;
 }
 
 export function TrackCell({
@@ -14,10 +15,16 @@ export function TrackCell({
   coverUrl,
   trackName,
   artistName,
+  isLast = false,
 }: TrackCellProps) {
   return (
     <>
-      <td className={clsx("px-3 py-2 desktop:px-4 desktop:py-3")}>
+      <td
+        className={clsx(
+          "px-3 py-2 desktop:px-4 desktop:py-3",
+          isLast && "rounded-bl-[16px]"
+        )}
+      >
         <ServiceIcon rank={rank} />
       </td>
       <td className={clsx("px-2 py-2 desktop:px-3 desktop:py-3")}>
