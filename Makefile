@@ -2,6 +2,7 @@
 	lint \
 	invalidate_cache \
 	setup_env \
+	check-frontend-tools \
 	build-frontend \
 	serve-frontend \
 	serve-backend \
@@ -32,6 +33,7 @@
 	django-check \
 	typescript-check \
 	clean-cache \
+	clean-frontend-cache \
 	check \
 	format-quick
 
@@ -39,31 +41,69 @@ PROJECT_ROOT := $(shell pwd)
 VENV := $(PROJECT_ROOT)/.venv
 export PYTHONPATH := $(PROJECT_ROOT)
 
+# Directory variables
+BACKEND_DIR := $(PROJECT_ROOT)/backend
+FRONTEND_DIR := $(PROJECT_ROOT)/frontend
+KV_WORKER_DIR := $(PROJECT_ROOT)/kv_worker
+
+# Python executable
+PYTHON := $(VENV)/bin/python
+PYTHON_CI := python
+
+# Virtual environment activation
+ACTIVATE := source $(VENV)/bin/activate
+
 ifeq ($(GITHUB_ACTIONS),)
 	ENV_FILE := .env.dev
+	USE_VENV_PYTHON := true
 else
 	ENV_FILE := .env.prod
+	USE_VENV_PYTHON := false
+endif
+
+# Conditional Python command
+ifeq ($(USE_VENV_PYTHON),true)
+	PYTHON_CMD := $(PYTHON)
+else
+	PYTHON_CMD := $(PYTHON_CI)
 endif
 
 setup_env:
 	@echo "Setting up environment paths..."
-	@echo "Project root: $(shell pwd)"
-	@echo "Virtual environment: $(shell pwd)/.venv"
-	@echo "PYTHONPATH: $(shell pwd)"
+	@echo "Project root: $(PROJECT_ROOT)"
+	@echo "Virtual environment: $(VENV)"
+	@echo "PYTHONPATH: $(PROJECT_ROOT)"
 	@echo "Creating sitecustomize.py to set PYTHONPATH in venv..."
-	@echo "import sys; sys.path.insert(0, '$(shell pwd)')" > .venv/lib/python3.13/site-packages/sitecustomize.py
-	@echo "Loading environment variables from .env.dev..."
+	@echo "import sys; sys.path.insert(0, '$(PROJECT_ROOT)')" > $(VENV)/lib/python3.13/site-packages/sitecustomize.py
+	@echo "Loading environment variables from $(ENV_FILE)..."
 	@# Note: .env files not present in repo, need to be created locally
 
 
-build-frontend:
-	@echo " Building frontend TypeScript..."
-	cd frontend && npm run build
+# Frontend build variables
+NODE_BIN := $(FRONTEND_DIR)/node_modules/.bin
+VITE := $(NODE_BIN)/vite
+TSC := $(NODE_BIN)/tsc
+NODE := node
+
+# Check if frontend tools are available
+check-frontend-tools:
+	@if [ ! -f "$(VITE)" ]; then \
+		echo "Error: Vite not found. Run 'cd frontend && npm install' first."; \
+		exit 1; \
+	fi
+	@if [ ! -f "$(TSC)" ]; then \
+		echo "Error: TypeScript compiler not found. Run 'cd frontend && npm install' first."; \
+		exit 1; \
+	fi
+
+build-frontend: check-frontend-tools
+	@echo " Building React v2 frontend with Vite..."
+	@cd $(FRONTEND_DIR) && $(VITE) build
 	@echo " Frontend built successfully!"
 
 format: install-pre-commit
 	@echo " Running pre-commit hooks to format and lint code..."
-	source .venv/bin/activate && pre-commit run --all-files
+	$(ACTIVATE) && pre-commit run --all-files
 	@echo " Code formatted and linted!"
 	@$(MAKE) build-frontend
 
@@ -74,40 +114,40 @@ invalidate_cache:
 
 lint: setup_env
 	@echo "Running type checking with mypy..."
-	@source venv/bin/activate && \
+	@$(ACTIVATE) && \
 	echo "Checking kv_worker..." && \
-	(cd kv_worker && ../.venv/bin/mypy . --ignore-missing-imports --show-error-codes) && \
+	(cd $(KV_WORKER_DIR) && $(VENV)/bin/mypy . --ignore-missing-imports --show-error-codes) && \
 	echo "Checking backend..." && \
-	(cd backend && ../.venv/bin/mypy . --ignore-missing-imports --show-error-codes --explicit-package-bases)
+	(cd $(BACKEND_DIR) && $(VENV)/bin/mypy . --ignore-missing-imports --show-error-codes --explicit-package-bases)
 
 ruff-check: setup_env
 	@echo "Running ruff linter checks..."
-	source .venv/bin/activate && ruff check --no-fix
+	$(ACTIVATE) && ruff check --no-fix
 
 ruff-fix: setup_env
 	@echo "Running ruff with auto-fixes..."
-	source .venv/bin/activate && ruff check --fix --unsafe-fixes
+	$(ACTIVATE) && ruff check --fix --unsafe-fixes
 
 ruff-format: setup_env
 	@echo "Running ruff formatter..."
-	source .venv/bin/activate && ruff format
+	$(ACTIVATE) && ruff format
 
 django-check: setup_env
 	@echo "Running Django deployment checks..."
-	cd backend && source ../.venv/bin/activate && PYTHONPATH=.. python manage.py check --deploy
+	cd $(BACKEND_DIR) && $(ACTIVATE) && PYTHONPATH=$(PROJECT_ROOT) $(PYTHON) manage.py check --deploy
 
-typescript-check:
+typescript-check: check-frontend-tools
 	@echo "Running TypeScript type checking..."
-	cd frontend && npx tsc --noEmit
+	@cd $(FRONTEND_DIR) && $(TSC) --noEmit
 	@echo "TypeScript check passed!"
 
 django-import-check: setup_env
 	@echo "Testing Django management command imports..."
-	@cd backend && source ../.venv/bin/activate && PYTHONPATH=.. DJANGO_SETTINGS_MODULE=core.settings python -c 'import django; django.setup(); from core.management.commands import playlist_etl; print("All management commands import successfully")'
+	@cd $(BACKEND_DIR) && $(ACTIVATE) && PYTHONPATH=$(PROJECT_ROOT) DJANGO_SETTINGS_MODULE=core.settings $(PYTHON) -c 'import django; django.setup(); from core.management.commands import playlist_etl; print("All management commands import successfully")'
 
 backend-startup-check: setup_env
 	@echo "Validating backend startup..."
-	cd backend && source ../.venv/bin/activate && PYTHONPATH=.. python manage.py check --deploy --fail-level ERROR
+	cd $(BACKEND_DIR) && $(ACTIVATE) && PYTHONPATH=$(PROJECT_ROOT) $(PYTHON) manage.py check --deploy --fail-level ERROR
 
 clean-cache:
 	@echo "Cleaning Python cache files..."
@@ -115,6 +155,12 @@ clean-cache:
 	@find . -name '*.pyc' -delete 2>/dev/null || true
 	@rm -rf .mypy_cache 2>/dev/null || true
 	@echo "Cache cleaned"
+
+clean-frontend-cache:
+	@echo "Cleaning Vite cache..."
+	@rm -rf $(FRONTEND_DIR)/node_modules/.vite 2>/dev/null || true
+	@rm -rf $(FRONTEND_DIR)/dist 2>/dev/null || true
+	@echo "Frontend cache cleaned"
 
 check: lint ruff-check django-check typescript-check
 	@echo "All checks passed!"
@@ -124,33 +170,33 @@ format-quick: ruff-fix ruff-format clean-cache
 
 pre-commit-check: setup_env
 	@echo "Running all pre-commit hooks..."
-	source venv/bin/activate && pre-commit run --all-files
+	$(ACTIVATE) && pre-commit run --all-files
 
 pre-commit-install: setup_env
 	@echo "Installing pre-commit hooks..."
-	source venv/bin/activate && pre-commit install
+	$(ACTIVATE) && pre-commit install
 
 install-dev: setup_env
 	@echo "Installing development dependencies..."
-	source .venv/bin/activate && pip install -e ".[dev]"
+	$(ACTIVATE) && pip install -e ".[dev]"
 
 install-pre-commit: install-dev
 	@echo "Installing pre-commit hooks..."
-	source venv/bin/activate && pre-commit install
+	$(ACTIVATE) && pre-commit install
 
 
-serve-frontend:
-	@echo " Starting TuneMeld frontend with auto-compilation..."
-	@if lsof -ti tcp:8080 > /dev/null 2>&1; then \
-		echo " Frontend server already running at: http://localhost:8080"; \
+serve-frontend: check-frontend-tools
+	@echo " Starting TuneMeld React v2 frontend (Vite dev server)..."
+	@if lsof -ti tcp:3000 > /dev/null 2>&1; then \
+		echo " Vite server already running at: http://localhost:3000"; \
 		echo " Use 'make kill-frontend' to stop existing server"; \
 		exit 1; \
 	fi
-	@echo " TypeScript, CSS, and HTML will auto-compile on file changes"
-	@echo " Website will be available at: http://localhost:8080"
-	@echo " Press Ctrl+C to stop all processes"
+	@echo " React v2 (Vite): http://localhost:3000/index-v2.html"
+	@echo " V1 (Legacy):     http://localhost:3000/index.html"
+	@echo " Press Ctrl+C to stop the server"
 	@echo ""
-	@cd frontend && npm run dev & (cd frontend/dist && python3 -m http.server 8080)
+	@cd $(FRONTEND_DIR) && $(VITE)
 serve-redis:
 	@if [ -n "$$REDIS_URL" ]; then \
 		echo " Using REDIS_URL from environment"; \
@@ -173,7 +219,7 @@ serve-backend: serve-redis
 	else \
 		echo " Backend API: http://localhost:8000"; \
 		echo " Press Ctrl+C to stop"; \
-		cd backend && $(VENV)/bin/python manage.py runserver; \
+		cd $(BACKEND_DIR) && $(PYTHON) manage.py runserver; \
 	fi
 
 clear-cache:
@@ -184,20 +230,16 @@ clear-cache:
 sync-prod: serve-redis
 	@echo " Syncing production to local (database + Redis cache)..."
 	@echo " WARNING: This will overwrite your local data!"
-ifeq ($(GITHUB_ACTIONS),)
-	@cd backend && $(VENV)/bin/python manage.py sync_prod
-else
-	@cd backend && python manage.py sync_prod
-endif
+	@cd $(BACKEND_DIR) && $(PYTHON_CMD) manage.py sync_prod
 	@echo " Production synced to local!"
 
 
 kill-frontend:
 	@echo " Stopping frontend server..."
-	@if lsof -ti tcp:8080 > /dev/null 2>&1; then \
-		lsof -ti tcp:8080 | xargs kill -9 && echo " Frontend server stopped"; \
+	@if lsof -ti tcp:3000 > /dev/null 2>&1; then \
+		lsof -ti tcp:3000 | xargs kill -9 && echo " Vite server (port 3000) stopped"; \
 	else \
-		echo "  No frontend server running on port 8080"; \
+		echo "  No Vite server running on port 3000"; \
 	fi
 
 kill-backend:
@@ -218,107 +260,83 @@ kill-redis:
 
 serve:
 	@echo " Starting both frontend and backend servers..."
-	@echo " Frontend: http://localhost:8080 (with TypeScript auto-compilation)"
+	@echo " React v2 (Vite): http://localhost:3000/index-v2.html"
 	@echo " Backend API: http://localhost:8000"
 	@echo " Redis cache: redis://localhost:6379"
-	@echo " Press Ctrl+C to stop both servers"
+	@echo " Press Ctrl+C to stop all servers"
 	@echo ""
 	@$(MAKE) serve-frontend & $(MAKE) serve-backend & wait
 
 # Django Migration Commands
 makemigrations:
 	@echo " Creating Django migrations..."
-	@cd backend && echo "1\n0" | $(VENV)/bin/python manage.py makemigrations core
+	@cd $(BACKEND_DIR) && echo "1\n0" | $(PYTHON) manage.py makemigrations core
 	@echo " Migrations created successfully"
 
 migrate:
 	@echo " Applying migrations to production PostgreSQL..."
-	@cd backend && $(VENV)/bin/python manage.py migrate --noinput
+	@cd $(BACKEND_DIR) && $(PYTHON) manage.py migrate --noinput
 	@echo " Migrations applied successfully"
 
 migrate-dev:
 	@echo " Applying migrations to local SQLite database..."
-	@cd backend && $(VENV)/bin/python manage.py migrate --noinput
+	@cd $(BACKEND_DIR) && $(PYTHON) manage.py migrate --noinput
 	@echo " Local migrations applied successfully"
 
 # Database Safety and ETL Commands
 migration-safety-check:
 	@echo " Running comprehensive database safety check..."
-	@cd backend && $(VENV)/bin/python migration_safety_check.py
+	@cd $(BACKEND_DIR) && $(PYTHON) migration_safety_check.py
 	@echo " Database safety check passed"
 
 test-play-count-etl:
 	@echo " Running Play Count ETL (limited for testing)..."
-ifeq ($(GITHUB_ACTIONS),)
-	@cd backend && $(VENV)/bin/python manage.py play_count --limit 10
-else
-	@cd backend && python manage.py play_count --limit 10
-endif
+	@cd $(BACKEND_DIR) && $(PYTHON_CMD) manage.py play_count --limit 10
 	@echo " Play Count ETL test completed"
 
 # CI/CD Database Operations
 ci-db-safety-check:
 	@echo " Running comprehensive database safety check..."
-	@cd backend && python migration_safety_check.py
+	@cd $(BACKEND_DIR) && $(PYTHON_CI) migration_safety_check.py
 	@echo " Database safety check passed"
 
 ci-db-migrate:
 	@echo " Checking migration status on production PostgreSQL..."
-	@cd backend && python manage.py showmigrations
+	@cd $(BACKEND_DIR) && $(PYTHON_CI) manage.py showmigrations
 	@echo ""
 	@echo " Applying migrations to production PostgreSQL..."
-	@cd backend && python manage.py migrate --noinput
+	@cd $(BACKEND_DIR) && $(PYTHON_CI) manage.py migrate --noinput
 	@echo ""
 	@echo " Verifying migration consistency..."
-	@cd backend && python manage.py showmigrations | grep -E "\\[ \\]" && echo "❌ Unapplied migrations detected!" && exit 1 || echo " All migrations applied successfully"
+	@cd $(BACKEND_DIR) && $(PYTHON_CI) manage.py showmigrations | grep -E "\\[ \\]" && echo "❌ Unapplied migrations detected!" && exit 1 || echo " All migrations applied successfully"
 	@echo " Production database migrations completed successfully"
 
 ci-db-validate:
 	@echo " Running post-ETL database validation..."
-	@cd backend && python migration_safety_check.py
+	@cd $(BACKEND_DIR) && $(PYTHON_CI) migration_safety_check.py
 	@echo " Post-ETL validation passed"
 
 run-play-count-etl:
 	@echo " Running Play Count ETL Pipeline..."
-ifeq ($(GITHUB_ACTIONS),)
-	@cd backend && $(VENV)/bin/python manage.py play_count
-else
-	@cd backend && python manage.py play_count
-endif
+	@cd $(BACKEND_DIR) && $(PYTHON_CMD) manage.py play_count
 	@echo " Play Count ETL Pipeline completed"
 
 run-playlist-etl:
 	@echo " Running Playlist ETL Pipeline..."
-ifeq ($(GITHUB_ACTIONS),)
-	@cd backend && $(VENV)/bin/python manage.py playlist_etl
-else
-	@cd backend && python manage.py playlist_etl
-endif
+	@cd $(BACKEND_DIR) && $(PYTHON_CMD) manage.py playlist_etl
 	@echo " Playlist ETL Pipeline completed"
 
 run-playlist-etl-force-refresh:
 	@echo " Running Playlist ETL Pipeline with Force Refresh (bypassing RapidAPI cache)..."
-ifeq ($(GITHUB_ACTIONS),)
-	@cd backend && $(VENV)/bin/python manage.py playlist_etl --force-refresh
-else
-	@cd backend && python manage.py playlist_etl --force-refresh
-endif
+	@cd $(BACKEND_DIR) && $(PYTHON_CMD) manage.py playlist_etl --force-refresh
 	@echo " Playlist ETL Pipeline with Force Refresh completed"
 
 run-audio-features-etl:
 	@echo " Running Audio Features ETL Pipeline..."
-ifeq ($(GITHUB_ACTIONS),)
-	@cd backend && $(VENV)/bin/python manage.py audio_features_etl
-else
-	@cd backend && python manage.py audio_features_etl
-endif
+	@cd $(BACKEND_DIR) && $(PYTHON_CMD) manage.py audio_features_etl
 	@echo " Audio Features ETL Pipeline completed"
 
 test-audio-features-etl:
 	@echo " Running Audio Features ETL (limited for testing)..."
-ifeq ($(GITHUB_ACTIONS),)
-	@cd backend && $(VENV)/bin/python manage.py audio_features_etl --limit 10
-else
-	@cd backend && python manage.py audio_features_etl --limit 10
-endif
+	@cd $(BACKEND_DIR) && $(PYTHON_CMD) manage.py audio_features_etl --limit 10
 	@echo " Audio Features ETL test completed"
