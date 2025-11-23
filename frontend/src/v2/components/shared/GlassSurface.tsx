@@ -1,5 +1,10 @@
 import React, { useEffect, useRef, useId } from "react";
 import clsx from "clsx";
+import {
+  supportsBackdropFilterSVG,
+  isMobileDevice,
+  isSafari,
+} from "@/v2/lib/browserSupport";
 
 interface GlassSurfaceProps {
   children: React.ReactNode;
@@ -162,20 +167,6 @@ const GlassSurface: React.FC<GlassSurfaceProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [width, height]);
 
-  const supportsSVGFilters = () => {
-    const isWebkit =
-      /Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent);
-    const isFirefox = /Firefox/.test(navigator.userAgent);
-
-    if (isWebkit || isFirefox) {
-      return false;
-    }
-
-    const div = document.createElement("div");
-    div.style.backdropFilter = `url(#${filterId})`;
-    return div.style.backdropFilter !== "";
-  };
-
   const containerStyle = {
     ...style,
     width: typeof width === "number" ? `${width}px` : width,
@@ -186,13 +177,13 @@ const GlassSurface: React.FC<GlassSurfaceProps> = ({
     "--filter-id": `url(#${filterId})`,
   };
 
-  const isSVG = supportsSVGFilters();
+  const isSVG = supportsBackdropFilterSVG(filterId);
   const isDark =
     typeof document !== "undefined" &&
     document.documentElement.classList.contains("dark");
 
-  // Check if background is explicitly set in style prop (for active buttons)
   const hasCustomBackground = style?.background !== undefined;
+  const useFallback = isMobileDevice() || (isSafari() && !isSVG);
 
   // Base classes for all variants
   const baseClasses = [
@@ -200,9 +191,8 @@ const GlassSurface: React.FC<GlassSurfaceProps> = ({
     "transition-opacity duration-[260ms] ease-out",
   ];
 
-  // SVG variant styles (complex backdrop-filter and box-shadow)
   const svgStyles =
-    isSVG && !hasCustomBackground
+    isSVG && !hasCustomBackground && !useFallback
       ? {
           background: `hsl(0 0% ${
             backgroundOpacity > 0 ? (isDark ? "0%" : "100%") : "0%"
@@ -225,9 +215,24 @@ const GlassSurface: React.FC<GlassSurfaceProps> = ({
         }
       : {};
 
+  const fallbackStyles =
+    (useFallback || !isSVG) && !hasCustomBackground
+      ? {
+          background: isDark
+            ? `rgba(30, 30, 30, ${Math.max(backgroundOpacity, 0.4)})`
+            : `rgba(240, 240, 240, ${Math.max(backgroundOpacity, 0.4)})`,
+          boxShadow: `
+      0px 4px 16px rgba(17, 17, 26, 0.05),
+      0px 8px 24px rgba(17, 17, 26, 0.05),
+      0px 16px 56px rgba(17, 17, 26, 0.05)
+    `,
+        }
+      : {};
+
   const finalStyle = {
     ...containerStyle,
     ...svgStyles,
+    ...fallbackStyles,
   };
 
   return (
