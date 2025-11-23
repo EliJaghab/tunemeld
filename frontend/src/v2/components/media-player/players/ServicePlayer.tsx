@@ -1,112 +1,50 @@
-import React, { useEffect, useState, useRef } from "react";
-import clsx from "clsx";
+import React from "react";
 import { PLAYER, type PlayerValue } from "@/v2/constants";
-import { graphqlClient } from "@/services/graphql-client";
 import type { Track } from "@/types";
+import { YouTubePlayer } from "./YouTubePlayer";
+import { SoundCloudPlayer } from "./SoundCloudPlayer";
+import { SpotifyPlayer } from "./SpotifyPlayer";
+import { AppleMusicPlayer } from "./AppleMusicPlayer";
 
 interface ServicePlayerProps {
   track: Track;
   activePlayer: PlayerValue;
+  playing: boolean;
+  onPlay: () => void;
+  onPause: () => void;
 }
 
 export function ServicePlayer({
   track,
   activePlayer,
+  playing,
+  onPlay,
+  onPause,
 }: ServicePlayerProps): React.ReactElement | null {
-  const [iframeSrc, setIframeSrc] = useState<string | null>(null);
-  const currentTrackRef = useRef<string | null>(null);
-  const currentPlayerRef = useRef<PlayerValue | null>(null);
-
-  useEffect(() => {
-    let cancelled = false;
-
-    async function fetchIframe() {
-      if (
-        track.isrc !== currentTrackRef.current ||
-        activePlayer !== currentPlayerRef.current
-      ) {
-        setIframeSrc(null);
-        currentTrackRef.current = track.isrc;
-        currentPlayerRef.current = activePlayer;
-
-        try {
-          let url = "";
-          if (activePlayer === PLAYER.YOUTUBE && track.youtubeUrl) {
-            url = track.youtubeUrl;
-          } else if (activePlayer === PLAYER.SPOTIFY && track.spotifyUrl) {
-            url = track.spotifyUrl;
-          } else if (
-            activePlayer === PLAYER.APPLE_MUSIC &&
-            track.appleMusicUrl
-          ) {
-            url = track.appleMusicUrl;
-          } else if (
-            activePlayer === PLAYER.SOUNDCLOUD &&
-            track.soundcloudUrl
-          ) {
-            url = track.soundcloudUrl;
-          }
-
-          if (url) {
-            const src = await graphqlClient.generateIframeUrl(
-              activePlayer,
-              url
-            );
-            if (!cancelled) {
-              setIframeSrc(src);
-            }
-          }
-        } catch (error) {
-          console.error("Failed to generate iframe URL:", error);
-        }
-      }
-    }
-
-    fetchIframe();
-
-    return () => {
-      cancelled = true;
-    };
-  }, [track, activePlayer]);
-
-  const getHeight = () => {
-    switch (activePlayer) {
-      case PLAYER.YOUTUBE:
-        return "200px";
-      case PLAYER.SOUNDCLOUD:
-        return "166px";
-      case PLAYER.APPLE_MUSIC:
-        return "175px";
-      default:
-        return "80px";
-    }
-  };
-
-  if (!iframeSrc) {
-    return (
-      <div
-        className={clsx(
-          `w-full mt-4 overflow-hidden rounded-lg bg-black/5 dark:bg-white/5
-          animate-pulse`
-        )}
-        style={{ height: getHeight() }}
-      />
-    );
+  switch (activePlayer) {
+    case PLAYER.YOUTUBE:
+      return (
+        <YouTubePlayer
+          track={track}
+          playing={playing}
+          onPlay={onPlay}
+          onPause={onPause}
+        />
+      );
+    case PLAYER.SOUNDCLOUD:
+      return (
+        <SoundCloudPlayer
+          track={track}
+          playing={playing}
+          onPlay={onPlay}
+          onPause={onPause}
+        />
+      );
+    case PLAYER.SPOTIFY:
+      return <SpotifyPlayer track={track} />;
+    case PLAYER.APPLE_MUSIC:
+      return <AppleMusicPlayer track={track} />;
+    default:
+      return null;
   }
-
-  return (
-    <div className={clsx("w-full mt-4 overflow-hidden rounded-lg")}>
-      <iframe
-        src={iframeSrc}
-        className={clsx("w-full")}
-        style={{
-          height: getHeight(),
-          border: "none",
-        }}
-        allow="autoplay; encrypted-media; picture-in-picture"
-        allowFullScreen
-        title={`${activePlayer} player`}
-      />
-    </div>
-  );
 }

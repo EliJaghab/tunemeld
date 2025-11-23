@@ -10,6 +10,7 @@ interface MiniPlayerProps {
   onClose: () => void;
   isPlaying: boolean;
   onTogglePlay: () => void;
+  canControl?: boolean;
 }
 
 export function MiniPlayer({
@@ -18,6 +19,7 @@ export function MiniPlayer({
   onClose,
   isPlaying,
   onTogglePlay,
+  canControl = false,
 }: MiniPlayerProps): React.ReactElement {
   return (
     <div
@@ -74,41 +76,43 @@ export function MiniPlayer({
             </div>
 
             {/* Right: Play/Pause Button */}
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                onTogglePlay();
-              }}
-              className={clsx(
-                "w-8 h-8 flex items-center justify-center",
-                `text-black dark:text-white hover:scale-110
-                transition-transform`
-              )}
-              aria-label={isPlaying ? "Pause" : "Play"}
-            >
-              {isPlaying ? (
-                <svg
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <rect x="6" y="4" width="4" height="16" rx="1" />
-                  <rect x="14" y="4" width="4" height="16" rx="1" />
-                </svg>
-              ) : (
-                <svg
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path d="M5 3.86967C5 2.54173 6.56213 1.80587 7.61803 2.63976L19.618 12.1094C20.4926 12.7997 20.4926 14.1306 19.618 14.8209L7.61803 24.2906C6.56213 25.1245 5 24.3886 5 23.0607V3.86967Z" />
-                </svg>
-              )}
-            </button>
+            {canControl && (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onTogglePlay();
+                }}
+                className={clsx(
+                  "w-8 h-8 flex items-center justify-center",
+                  `text-black dark:text-white hover:scale-110
+                  transition-transform`
+                )}
+                aria-label={isPlaying ? "Pause" : "Play"}
+              >
+                {isPlaying ? (
+                  <svg
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <rect x="6" y="4" width="4" height="16" rx="1" />
+                    <rect x="14" y="4" width="4" height="16" rx="1" />
+                  </svg>
+                ) : (
+                  <svg
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path d="M5 3.86967C5 2.54173 6.56213 1.80587 7.61803 2.63976L19.618 12.1094C20.4926 12.7997 20.4926 14.1306 19.618 14.8209L7.61803 24.2906C6.56213 25.1245 5 24.3886 5 23.0607V3.86967Z" />
+                  </svg>
+                )}
+              </button>
+            )}
           </div>
         </GlassSurface>
       </div>
