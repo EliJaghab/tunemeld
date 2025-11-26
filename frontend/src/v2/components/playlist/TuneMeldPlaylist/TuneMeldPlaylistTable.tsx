@@ -115,6 +115,7 @@ export function TuneMeldPlaylistTable({
                 track={track}
                 displayRank={index + 1}
                 isLast={index === tracks.length - 1}
+                activeRank={activeRank}
                 onTrackClick={onTrackClick}
               />
             ))}

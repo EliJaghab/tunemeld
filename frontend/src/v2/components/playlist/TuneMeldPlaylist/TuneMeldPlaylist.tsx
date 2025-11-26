@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import clsx from "clsx";
 import { TuneMeldPlaylistTable } from "@/v2/components/playlist/TuneMeldPlaylist/TuneMeldPlaylistTable";
 import { PlaylistSkeleton } from "@/v2/components/playlist/shared/PlaylistSkeleton";
@@ -46,6 +46,44 @@ export function TuneMeldPlaylist({
   const handleToggle = () => {
     setIsCollapsed(!isCollapsed);
   };
+
+  // Sort tracks based on active rank
+  const sortedTracks = useMemo(() => {
+    if (!activeRank || tracks.length === 0) {
+      return tracks;
+    }
+
+    const rankConfig = RANKS.find((r) => r.sortField === activeRank);
+    if (!rankConfig) {
+      return tracks;
+    }
+
+    const sorted = [...tracks].sort((a, b) => {
+      // Get the value from the track using the dataField
+      const aValue = (a as any)[rankConfig.dataField] as
+        | number
+        | null
+        | undefined;
+      const bValue = (b as any)[rankConfig.dataField] as
+        | number
+        | null
+        | undefined;
+
+      // Handle null/undefined values - put them at the end
+      if (aValue == null && bValue == null) return 0;
+      if (aValue == null) return 1;
+      if (bValue == null) return -1;
+
+      // Sort based on sortOrder
+      if (rankConfig.sortOrder === "asc") {
+        return aValue - bValue;
+      } else {
+        return bValue - aValue;
+      }
+    });
+
+    return sorted;
+  }, [tracks, activeRank]);
 
   useEffect(() => {
     let cancelled = false;
@@ -116,7 +154,7 @@ export function TuneMeldPlaylist({
             </div>
           ) : (
             <TuneMeldPlaylistTable
-              tracks={tracks}
+              tracks={sortedTracks}
               isCollapsed={isCollapsed}
               onToggle={handleToggle}
               description={description}
