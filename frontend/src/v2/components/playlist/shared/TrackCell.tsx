@@ -1,6 +1,7 @@
 import React from "react";
 import clsx from "clsx";
 import { ServiceIcon } from "@/v2/components/playlist/shared/ServiceIcon";
+import { MediaSquare } from "@/v2/components/shared/MediaSquare";
 
 interface TrackCellProps {
   rank: number;
@@ -29,14 +30,18 @@ export function TrackCell({
       </td>
       <td className={clsx("px-2 py-2 desktop:px-3 desktop:py-3")}>
         {coverUrl && (
-          <img
-            src={coverUrl}
-            alt={`${trackName} cover`}
+          <div
             className={clsx(
               "w-12 h-12 desktop:w-16 desktop:h-16",
-              "rounded object-cover"
+              "flex-shrink-0"
             )}
-          />
+          >
+            <MediaSquare
+              src={coverUrl}
+              type="image"
+              alt={`${trackName} cover`}
+            />
+          </div>
         )}
       </td>
       <td className={clsx("px-3 py-2 desktop:px-4 desktop:py-3")}>

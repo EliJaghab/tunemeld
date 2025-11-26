@@ -117,7 +117,7 @@ export function ServiceIcon({
           <img
             src={source.iconUrl}
             alt={source.displayName}
-            className={clsx(iconSizes[size], "block")}
+            className={clsx(iconSizes[size], "block object-contain")}
           />
         </button>
       ) : (
@@ -130,7 +130,7 @@ export function ServiceIcon({
           <img
             src={source.iconUrl}
             alt={source.displayName}
-            className={clsx(iconSizes[size], "block")}
+            className={clsx(iconSizes[size], "block object-contain")}
           />
         </a>
       )}
