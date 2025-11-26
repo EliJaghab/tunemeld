@@ -56,7 +56,7 @@ async function initializeApp(): Promise<void> {
 
 async function setupThemeToggle(): Promise<void> {
   const themeToggleButton = stateManager.getElement(
-    "theme-toggle-button",
+    "theme-toggle-button"
   ) as HTMLButtonElement | null;
   if (themeToggleButton) {
     themeToggleButton.addEventListener("click", async () => {
@@ -70,7 +70,7 @@ async function setupThemeToggle(): Promise<void> {
 
 async function updateThemeToggleLabels(): Promise<void> {
   const themeToggleButton = stateManager.getElement(
-    "theme-toggle-button",
+    "theme-toggle-button"
   ) as HTMLButtonElement | null;
   if (!themeToggleButton) return;
 

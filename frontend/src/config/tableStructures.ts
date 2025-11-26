@@ -127,7 +127,7 @@ const TABLE_STRUCTURES: TableStructures = {
  * Creates a shimmer row based on the table structure configuration
  */
 export function createShimmerRowFromStructure(
-  shimmerType: ShimmerType,
+  shimmerType: ShimmerType
 ): HTMLTableRowElement | null {
   const structure = TABLE_STRUCTURES[shimmerType];
   if (!structure) {
@@ -171,7 +171,7 @@ export function createShimmerRowFromStructure(
  * Gets the column structure for a given shimmer type
  */
 export function getTableStructure(
-  shimmerType: ShimmerType,
+  shimmerType: ShimmerType
 ): TableStructure | undefined {
   return TABLE_STRUCTURES[shimmerType];
 }

@@ -36,7 +36,7 @@ function addJsExtensions(dir) {
             return `from '${importPath}/index.js'`;
           }
           return `from '${importPath}.js'`;
-        },
+        }
       );
 
       // Also handle dynamic imports
@@ -53,7 +53,7 @@ function addJsExtensions(dir) {
             return `import('${importPath}/index.js')`;
           }
           return `import('${importPath}.js')`;
-        },
+        }
       );
 
       fs.writeFileSync(fullPath, content, "utf8");

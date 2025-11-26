@@ -29,7 +29,7 @@ async function loadIframeConfigs(): Promise<IframeConfig[]> {
 
 async function createIframeForService(
   url: string,
-  serviceType: string,
+  serviceType: string
 ): Promise<HTMLIFrameElement> {
   const iframe = document.createElement("iframe");
   iframe.width = "100%";
@@ -49,27 +49,27 @@ async function createIframeForService(
     if (!config) {
       console.error("No iframe config found for service:", serviceType);
       throw new Error(
-        `Missing iframe configuration for service: ${serviceType}`,
+        `Missing iframe configuration for service: ${serviceType}`
       );
     }
 
     if (!config.allow) {
       console.error(
         "Missing allow property in iframe config for service:",
-        serviceType,
+        serviceType
       );
       throw new Error(
-        `Missing allow property in iframe config for service: ${serviceType}`,
+        `Missing allow property in iframe config for service: ${serviceType}`
       );
     }
 
     if (!config.height) {
       console.error(
         "Missing height property in iframe config for service:",
-        serviceType,
+        serviceType
       );
       throw new Error(
-        `Missing height property in iframe config for service: ${serviceType}`,
+        `Missing height property in iframe config for service: ${serviceType}`
       );
     }
 
@@ -117,7 +117,7 @@ export function setupBodyClickListener(genre: string): void {
 export async function openTrackFromUrl(
   genre: string,
   player: string,
-  isrc: string,
+  isrc: string
 ): Promise<boolean> {
   try {
     const tracks = document.querySelectorAll("tr[data-isrc]");
@@ -176,7 +176,7 @@ async function handleLinkClick(
   event: Event,
   link: HTMLAnchorElement,
   genre: string,
-  isrc: string | null,
+  isrc: string | null
 ): Promise<void> {
   event.preventDefault();
 
@@ -193,12 +193,12 @@ async function handleLinkClick(
 export async function openPlayer(
   url: string,
   serviceType: string,
-  trackData: Track | null = null,
+  trackData: Track | null = null
 ): Promise<void> {
   const placeholder = document.getElementById("service-player-placeholder");
   const closeButton = document.getElementById("close-player-button");
   const serviceButtonsContainer = document.getElementById(
-    "service-buttons-container",
+    "service-buttons-container"
   );
 
   // Clear service buttons but preserve iframe state
@@ -243,7 +243,7 @@ export async function openPlayer(
     if (trackData && trackData.trackName && trackData.artistName) {
       appRouter.updateTitleWithTrackInfo(
         trackData.trackName,
-        trackData.artistName,
+        trackData.artistName
       );
     }
 
@@ -296,7 +296,7 @@ function closePlayer(): void {
   const closeButton = document.getElementById("close-player-button");
   const playerContainer = document.getElementById("player-container");
   const serviceButtonsContainer = document.getElementById(
-    "service-buttons-container",
+    "service-buttons-container"
   );
   const playerContent = document.getElementById("player-content");
 
@@ -342,7 +342,7 @@ function isSoundCloudLink(url: string): boolean {
 
 function isSpotifyLink(url: string): boolean {
   return /^https:\/\/open\.spotify\.com\/(track|album|playlist)\/[a-zA-Z0-9]+/.test(
-    url,
+    url
   );
 }
 
@@ -363,7 +363,7 @@ async function loadServiceConfigs(): Promise<ServiceConfig[]> {
 
 async function createServiceButtons(trackData: Track | null): Promise<void> {
   const serviceButtonsContainer = document.getElementById(
-    "service-buttons-container",
+    "service-buttons-container"
   );
   if (!serviceButtonsContainer || !trackData) return;
 
@@ -389,7 +389,7 @@ async function createServiceButtons(trackData: Track | null): Promise<void> {
         try {
           const buttonLabels = await graphqlClient.getMiscButtonLabels(
             "service_player_button",
-            source.name,
+            source.name
           );
           if (buttonLabels && buttonLabels.length > 0) {
             const serviceLabel = buttonLabels[0];
@@ -416,7 +416,7 @@ async function createServiceButtons(trackData: Track | null): Promise<void> {
                 currentGenre,
                 currentRank,
                 serviceType,
-                trackData.isrc,
+                trackData.isrc
               );
             }
             window.scrollTo({ top: 0, behavior: "smooth" });

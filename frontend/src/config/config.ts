@@ -78,7 +78,7 @@ export const DEBUG_LOG_ENABLED = isLocalDevelopment();
 export function debugLog(
   namespace: string,
   message: string,
-  meta?: unknown,
+  meta?: unknown
 ): void {
   if (!DEBUG_LOG_ENABLED) return;
   if (meta === undefined) {

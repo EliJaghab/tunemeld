@@ -8,7 +8,7 @@ import type { Track } from "@/types/index";
 let modalInitialized = false;
 
 function getPreferredTrackUrl(
-  track: Track,
+  track: Track
 ): { url: string; service: string } | null {
   if (track.youtubeUrl) {
     return { url: track.youtubeUrl, service: SERVICE_NAMES.YOUTUBE };
@@ -73,7 +73,7 @@ export function initSimilarTracksModal(): void {
 }
 
 export async function openSimilarTracksModal(
-  currentTrack: Track,
+  currentTrack: Track
 ): Promise<void> {
   if (!modalInitialized) {
     initSimilarTracksModal();
@@ -114,7 +114,7 @@ export async function openSimilarTracksModal(
   try {
     const similarTracks = await graphqlClient.getSimilarTracks(
       currentTrack.isrc,
-      10,
+      10
     );
 
     if (similarTracks.length === 0) {
@@ -174,7 +174,7 @@ export async function openSimilarTracksModal(
               currentGenre,
               currentRank,
               trackUrlInfo.service,
-              track.isrc,
+              track.isrc
             );
           }
 

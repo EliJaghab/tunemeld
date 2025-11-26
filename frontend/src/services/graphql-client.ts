@@ -57,7 +57,7 @@ class GraphQLClient {
 
   async query(
     query: string,
-    variables: Record<string, any> = {},
+    variables: Record<string, any> = {}
   ): Promise<any> {
     const startTime = Date.now();
 
@@ -111,7 +111,7 @@ class GraphQLClient {
         console.error("Response Body:", responseBody);
 
         const error = new Error(
-          `GraphQL HTTP Error: ${response.status} ${response.statusText}`,
+          `GraphQL HTTP Error: ${response.status} ${response.statusText}`
         ) as CustomError;
         error.details = errorDetails;
         error.responseBody = responseBody;
@@ -133,7 +133,7 @@ class GraphQLClient {
         const error = new Error(
           `GraphQL Query Error: ${result.errors
             .map((e: GraphQLError) => e.message)
-            .join(", ")}`,
+            .join(", ")}`
         ) as CustomError;
         error.graphqlErrors = result.errors;
         error.duration = duration + "ms";
@@ -163,21 +163,21 @@ class GraphQLClient {
         customError.message.includes("fetch")
       ) {
         enhancedError = new Error(
-          `Network Connection Failed: Unable to reach GraphQL server at ${this.endpoint}`,
+          `Network Connection Failed: Unable to reach GraphQL server at ${this.endpoint}`
         ) as CustomError;
         enhancedError.originalMessage = customError.message;
         enhancedError.isNetworkError = true;
         enhancedError.isConnectionError = true;
       } else if (customError.name === "AbortError") {
         enhancedError = new Error(
-          `Request Timeout: GraphQL query timed out after ${duration}ms`,
+          `Request Timeout: GraphQL query timed out after ${duration}ms`
         ) as CustomError;
         enhancedError.originalMessage = customError.message;
         enhancedError.isNetworkError = true;
         enhancedError.isTimeoutError = true;
       } else {
         enhancedError = new Error(
-          `Unexpected Error: ${customError.message}`,
+          `Unexpected Error: ${customError.message}`
         ) as CustomError;
         enhancedError.originalMessage = customError.message;
         enhancedError.isUnexpectedError = true;
@@ -222,7 +222,7 @@ class GraphQLClient {
   }
 
   async getPlaylistMetadata(
-    genre: string,
+    genre: string
   ): Promise<{ serviceOrder: string[]; playlists: Playlist[] }> {
     const query = `
       query GetPlaylistMetadata($genre: String!) {
@@ -335,7 +335,7 @@ class GraphQLClient {
   }
 
   async getPlayCountsForTracks(
-    isrcs: string[],
+    isrcs: string[]
   ): Promise<{ tracksPlayCounts: PlayCount[] }> {
     const query = `
       query GetPlayCounts($isrcs: [String!]!) {
@@ -399,7 +399,7 @@ class GraphQLClient {
 
   async generateIframeUrl(
     serviceName: string,
-    trackUrl: string,
+    trackUrl: string
   ): Promise<string> {
     const query = `
       query GenerateIframeUrl($serviceName: String!, $trackUrl: String!) {
@@ -429,7 +429,7 @@ class GraphQLClient {
 
   async getMiscButtonLabels(
     buttonType: string,
-    context: string | null = null,
+    context: string | null = null
   ): Promise<ButtonLabel[]> {
     const query = `
       query GetMiscButtonLabels($buttonType: String!, $context: String) {

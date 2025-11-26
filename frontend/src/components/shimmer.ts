@@ -27,7 +27,7 @@ const SHIMMER_LOG_PREFIX = "[Shimmer]";
 
 export const trackLoadLog = (
   phase: string,
-  meta?: Record<string, unknown>,
+  meta?: Record<string, unknown>
 ): void => {
   if (!DEBUG_LOG_ENABLED) {
     return;
@@ -44,7 +44,7 @@ let tunemeldTrackShimmerActive = false;
 let trackShimmerObserver: MutationObserver | null = null;
 
 export const markTunemeldTrackShimmerHidden = (
-  meta?: Record<string, unknown>,
+  meta?: Record<string, unknown>
 ): void => {
   if (tunemeldTrackShimmerActive) {
     tunemeldTrackShimmerActive = false;
@@ -103,21 +103,21 @@ function createInlinePlaceholder(
   element: HTMLElement,
   className: string,
   fallbackWidth?: string,
-  fallbackHeight?: string,
+  fallbackHeight?: string
 ): HTMLElement | null {
   const parent = element.parentElement;
   if (!parent) {
     console.warn(
       SHIMMER_LOG_PREFIX,
       "createInlinePlaceholder: element without parent",
-      element,
+      element
     );
     return null;
   }
 
   const placeholder = createElement(
     "span",
-    `shimmer inline-shimmer ${className}`,
+    `shimmer inline-shimmer ${className}`
   );
   const display = determinePlaceholderDisplay(element);
   placeholder.style.display = display;
@@ -147,7 +147,7 @@ function applyInlineShimmer(
   element: HTMLElement,
   className: string,
   fallbackWidth?: string,
-  fallbackHeight?: string,
+  fallbackHeight?: string
 ): void {
   if (inlineShimmerRegistry.has(element)) {
     return;
@@ -157,7 +157,7 @@ function applyInlineShimmer(
     element,
     className,
     fallbackWidth,
-    fallbackHeight,
+    fallbackHeight
   );
   if (!placeholder) {
     return;
@@ -221,7 +221,7 @@ function createElement(tag: string, className?: string): HTMLElement {
  * Creates a shimmer row based on shimmer type using shared structure configuration
  */
 function createShimmerTableRow(
-  shimmerType: ShimmerType,
+  shimmerType: ShimmerType
 ): HTMLTableRowElement | null {
   return createShimmerRowFromStructure(shimmerType);
 }
@@ -341,7 +341,7 @@ export function showRankSwitchShimmer(): void {
  * Wrapper that shows shimmer, executes callback, then hides shimmer
  */
 export async function withGenreShimmer<T>(
-  callback: () => Promise<T> | T,
+  callback: () => Promise<T> | T
 ): Promise<T> {
   showGenreSwitchShimmer();
   try {
@@ -356,7 +356,7 @@ export async function withGenreShimmer<T>(
  * Wrapper that shows shimmer, executes callback, then hides shimmer
  */
 export async function withRankShimmer<T>(
-  callback: () => Promise<T> | T,
+  callback: () => Promise<T> | T
 ): Promise<T> {
   showRankSwitchShimmer();
   try {
@@ -369,11 +369,11 @@ export async function withRankShimmer<T>(
 
 function injectShimmerIntoPlaceholders(
   shimmerType: ShimmerType,
-  includeHeaderAndControls: boolean,
+  includeHeaderAndControls: boolean
 ): void {
   if (!stateManager.getShimmerState("playlist")) {
     shimmerDebug(
-      "injectShimmerIntoPlaceholders skipped (playlist shimmer inactive)",
+      "injectShimmerIntoPlaceholders skipped (playlist shimmer inactive)"
     );
     return;
   }
@@ -385,7 +385,7 @@ function injectShimmerIntoPlaceholders(
 
   // Main playlist tracks
   const mainPlaylistPlaceholder = document.getElementById(
-    "main-playlist-data-placeholder",
+    "main-playlist-data-placeholder"
   );
   if (mainPlaylistPlaceholder) {
     attachTrackShimmerObserver(mainPlaylistPlaceholder);
@@ -454,14 +454,14 @@ function injectShimmerIntoPlaceholders(
   if (includeHeaderAndControls) {
     // Shimmer for TuneMeld logo
     const tuneMeldLogo = document.querySelector(
-      ".main-playlist .source-icon",
+      ".main-playlist .source-icon"
     ) as HTMLImageElement;
     if (tuneMeldLogo) {
       applyInlineShimmer(tuneMeldLogo, "shimmer-inline-logo", "24px", "24px");
     }
 
     const genreLabel = document.querySelector(
-      ".control-group:has(#genre-controls) .control-label",
+      ".control-group:has(#genre-controls) .control-label"
     );
     if (genreLabel && genreLabel.textContent === "Genre") {
       genreLabel.innerHTML =
@@ -477,13 +477,13 @@ function injectShimmerIntoPlaceholders(
         .fill(0)
         .map(
           () =>
-            '<div class="sort-button shimmer shimmer-control shimmer-control-genre" aria-hidden="true" tabindex="-1"><span class="shimmer-control-bar"></span></div>',
+            '<div class="sort-button shimmer shimmer-control shimmer-control-genre" aria-hidden="true" tabindex="-1"><span class="shimmer-control-bar"></span></div>'
         )
         .join("");
     }
 
     const rankLabel = document.querySelector(
-      ".control-group:has(#sort-controls) .control-label",
+      ".control-group:has(#sort-controls) .control-label"
     );
     if (rankLabel && rankLabel.textContent === "Ranking") {
       rankLabel.innerHTML =
@@ -496,7 +496,7 @@ function injectShimmerIntoPlaceholders(
         .fill(0)
         .map(
           () =>
-            '<div class="sort-button shimmer shimmer-control shimmer-control-rank" aria-hidden="true" tabindex="-1"><span class="shimmer-control-bar"></span></div>',
+            '<div class="sort-button shimmer shimmer-control shimmer-control-rank" aria-hidden="true" tabindex="-1"><span class="shimmer-control-bar"></span></div>'
         )
         .join("");
     }
@@ -510,7 +510,7 @@ function injectShimmerIntoPlaceholders(
         playlistTitle as HTMLElement,
         "shimmer-inline-title",
         "140px",
-        "24px",
+        "24px"
       );
     }
 
@@ -519,7 +519,7 @@ function injectShimmerIntoPlaceholders(
         playlistDesc as HTMLElement,
         "shimmer-inline-description",
         "220px",
-        "20px",
+        "20px"
       );
     }
   }
@@ -529,7 +529,7 @@ export function hideShimmerLoaders(): void {
   shimmerDebug("hideShimmerLoaders: start");
   const initialLoad = stateManager.isInitialLoad();
   const mainPlaceholder = document.getElementById(
-    "main-playlist-data-placeholder",
+    "main-playlist-data-placeholder"
   );
   const shouldRenderCached =
     initialLoad &&
@@ -543,7 +543,7 @@ export function hideShimmerLoaders(): void {
 
   if (shouldRenderCached) {
     shimmerDebug(
-      "hideShimmerLoaders: initial load, rendering cached playlists",
+      "hideShimmerLoaders: initial load, rendering cached playlists"
     );
     window.dispatchEvent(new CustomEvent("renderCachedPlaylists"));
   }
@@ -556,7 +556,7 @@ export function hideShimmerLoaders(): void {
     });
 
     const activeOverlays = document.querySelectorAll<HTMLElement>(
-      ".loading-overlay-playlist.active, .loading-overlay-table.active, .loading-overlay-service.active",
+      ".loading-overlay-playlist.active, .loading-overlay-table.active, .loading-overlay-service.active"
     );
     activeOverlays.forEach((overlay) => {
       overlay.classList.add("fade-out");
@@ -575,29 +575,29 @@ export function hideShimmerLoaders(): void {
 
       // Show the real TuneMeld logo
       const tuneMeldLogo = document.querySelector(
-        ".main-playlist .source-icon",
+        ".main-playlist .source-icon"
       ) as HTMLImageElement | null;
       clearInlineShimmer(tuneMeldLogo);
 
       const playlistTitle = document.getElementById(
-        "tunemeld-playlist-title",
+        "tunemeld-playlist-title"
       ) as HTMLElement | null;
       clearInlineShimmer(playlistTitle);
 
       const playlistDesc = document.getElementById(
-        "playlist-description",
+        "playlist-description"
       ) as HTMLElement | null;
       clearInlineShimmer(playlistDesc);
 
       const genreLabel = document.querySelector(
-        ".control-group:has(#genre-controls) .control-label",
+        ".control-group:has(#genre-controls) .control-label"
       );
       if (genreLabel && genreLabel.querySelector(".shimmer")) {
         genreLabel.innerHTML = "Genre";
       }
 
       const rankLabel = document.querySelector(
-        ".control-group:has(#sort-controls) .control-label",
+        ".control-group:has(#sort-controls) .control-label"
       );
       if (rankLabel && rankLabel.querySelector(".shimmer")) {
         rankLabel.innerHTML = "Ranking";
@@ -640,18 +640,18 @@ export function hideShimmerLoaders(): void {
         console.warn(
           SHIMMER_LOG_PREFIX,
           "hideShimmerLoaders: playlist reveal promise rejected",
-          error,
+          error
         );
       })
       .finally(() => {
         shimmerDebug(
-          "hideShimmerLoaders: reveal promises settled, running fade-out",
+          "hideShimmerLoaders: reveal promises settled, running fade-out"
         );
         runFadeOut();
       });
   } else {
     shimmerDebug(
-      "hideShimmerLoaders: no reveal promise, running fade-out immediately",
+      "hideShimmerLoaders: no reveal promise, running fade-out immediately"
     );
     runFadeOut();
   }

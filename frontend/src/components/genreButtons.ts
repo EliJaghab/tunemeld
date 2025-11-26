@@ -46,7 +46,7 @@ export async function loadAndRenderGenreButtons() {
         : "sort-button";
 
       const genreLabel = genre.buttonLabels?.find(
-        (label: ButtonLabel) => label.buttonType === "genre_button",
+        (label: ButtonLabel) => label.buttonType === "genre_button"
       );
 
       const button = document.createElement("button");

@@ -136,7 +136,7 @@ class AppRouter {
     genre: string,
     rank: string | null,
     player: string | null = null,
-    isrc: string | null = null,
+    isrc: string | null = null
   ): Promise<void> {
     if (!this.hasValidData()) {
       return;
@@ -162,7 +162,7 @@ class AppRouter {
     genre: string,
     rank: string | null,
     player: string | null = null,
-    isrc: string | null = null,
+    isrc: string | null = null
   ): Promise<void> {
     const genreChanged = stateManager.getCurrentGenre() !== genre;
     const needsFullUpdate = genreChanged || this.isInitialLoad;
@@ -205,7 +205,7 @@ class AppRouter {
       if (newRankField) {
         // Wait for shimmer to paint before sorting
         await new Promise((resolve) =>
-          requestAnimationFrame(() => resolve(null)),
+          requestAnimationFrame(() => resolve(null))
         );
         sortTable(newRankField, newOrder);
 
@@ -220,7 +220,7 @@ class AppRouter {
 
         // Wait for sort to paint before hiding shimmer
         await new Promise((resolve) =>
-          requestAnimationFrame(() => resolve(null)),
+          requestAnimationFrame(() => resolve(null))
         );
         hideShimmerLoaders();
       }
@@ -299,7 +299,7 @@ class AppRouter {
 
   async loadGenreContent(
     genre: string,
-    fullUpdate: boolean = true,
+    fullUpdate: boolean = true
   ): Promise<void> {
     routerDebug("loadGenreContent: start", { genre, fullUpdate });
     // Show initial shimmer only on first app load
@@ -329,7 +329,7 @@ class AppRouter {
     genre: string,
     rank: string | null = null,
     player: string | null = null,
-    isrc: string | null = null,
+    isrc: string | null = null
   ): string {
     let url = `/?genre=${encodeURIComponent(genre)}`;
     if (rank) {
@@ -365,7 +365,7 @@ class AppRouter {
     genre: string,
     rank: string | null,
     player: string | null,
-    isrc: string | null,
+    isrc: string | null
   ): void {
     if (!this.router.routes || this.router.routes.length === 0) {
       this.setupRoutes();
@@ -380,7 +380,7 @@ class AppRouter {
     genre: string,
     rank: string | null,
     player: string | null,
-    isrc: string | null,
+    isrc: string | null
   ): void {
     const url = this.buildUrl(genre, rank, player, isrc);
     window.history.replaceState({}, "", url);
@@ -389,7 +389,7 @@ class AppRouter {
   async openTrackPlayer(
     genre: string,
     player: string,
-    isrc: string,
+    isrc: string
   ): Promise<boolean | void> {
     // Wait a bit for the playlist to be loaded
     await new Promise((resolve) => setTimeout(resolve, 100));

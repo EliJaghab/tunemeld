@@ -29,7 +29,7 @@ function isMobileView(): boolean {
 
 async function addMoreButtonLabels(
   moreButton: HTMLElement,
-  serviceName: string,
+  serviceName: string
 ): Promise<void> {
   try {
     // Map service names to button label keys
@@ -66,7 +66,7 @@ async function addMoreButtonLabels(
 }
 
 function updateTuneMeldDescription(
-  description: string | null | undefined,
+  description: string | null | undefined
 ): void {
   const descriptionElement = document.getElementById("playlist-description");
   if (descriptionElement && description) {
@@ -76,7 +76,7 @@ function updateTuneMeldDescription(
     const genre =
       window.location.search.match(/genre=([^&]+)/)?.[1] || "playlist";
     throw new Error(
-      `Missing TuneMeld playlist description for genre: ${genre}. Expected curated description but received: ${description}`,
+      `Missing TuneMeld playlist description for genre: ${genre}. Expected curated description but received: ${description}`
     );
   }
 }
@@ -93,7 +93,7 @@ function displayAppleMusicVideo(url: string): Promise<void> {
     <video id="apple_music-video" class="video-js vjs-default-skin" muted autoplay loop playsinline controlsList="nodownload nofullscreen noremoteplayback"></video>
   `;
   const video = document.getElementById(
-    "apple_music-video",
+    "apple_music-video"
   ) as HTMLVideoElement | null;
 
   return new Promise<void>((resolve) => {
@@ -144,7 +144,7 @@ function displayAppleMusicVideo(url: string): Promise<void> {
 function cleanupExistingVideos(): void {
   // Stop any existing Apple Music videos to prevent AbortError
   const existingVideo = document.getElementById(
-    "apple_music-video",
+    "apple_music-video"
   ) as HTMLVideoElement | null;
   if (existingVideo) {
     existingVideo.pause();
@@ -171,7 +171,7 @@ function createAndAttachModal(
   serviceName: string,
   genre: string,
   serviceIconUrl: string,
-  playlistUrl: string,
+  playlistUrl: string
 ): void {
   const modal = document.createElement("div");
   modal.className = "modal-base description-modal";
@@ -209,7 +209,7 @@ function createAndAttachModal(
 
   // If there's a more button, make it also open the modal
   const moreButton = descriptionElement.querySelector(
-    ".more-button",
+    ".more-button"
   ) as HTMLElement | null;
   if (moreButton) {
     // Add button labels from backend
@@ -224,7 +224,7 @@ function createAndAttachModal(
   }
 
   const closeButton = modal.querySelector(
-    ".description-modal-close",
+    ".description-modal-close"
   ) as HTMLElement | null;
   if (closeButton) {
     closeButton.title = "Close description";
@@ -248,7 +248,7 @@ function setupDescriptionModal(
   serviceName: string,
   genre: string,
   serviceIconUrl: string,
-  playlistUrl: string,
+  playlistUrl: string
 ): void {
   descriptionElement.removeEventListener("click", toggleDescriptionExpand);
 
@@ -260,7 +260,7 @@ function setupDescriptionModal(
     // Show more text on mobile with larger font size
     estimatedMaxTextLength = Math.max(
       MIN_CHAR_LIMIT,
-      Math.min(120, Math.floor((descriptionBoxWidth / 6) * 1.5)),
+      Math.min(120, Math.floor((descriptionBoxWidth / 6) * 1.5))
     );
   } else {
     // Target exactly 3 lines with "more" at end of 3rd line
@@ -270,7 +270,7 @@ function setupDescriptionModal(
     const moreButtonSpace = 6; // Space for " more"
     estimatedMaxTextLength = Math.max(
       MIN_CHAR_LIMIT,
-      Math.floor(avgCharsPerLine * (fullLines + partialLine) - moreButtonSpace),
+      Math.floor(avgCharsPerLine * (fullLines + partialLine) - moreButtonSpace)
     );
   }
 
@@ -309,7 +309,7 @@ function setupDescriptionModal(
     serviceName,
     genre,
     serviceIconUrl,
-    playlistUrl,
+    playlistUrl
   );
 }
 
@@ -339,11 +339,11 @@ function preloadCoverImage(coverUrl: string): Promise<HTMLImageElement> {
 }
 
 function getServiceOverlay(
-  serviceContainer: HTMLElement | null,
+  serviceContainer: HTMLElement | null
 ): HTMLElement | null {
   if (!serviceContainer) return null;
   return serviceContainer.querySelector(
-    ".loading-overlay",
+    ".loading-overlay"
   ) as HTMLElement | null;
 }
 
@@ -367,7 +367,7 @@ async function updateServiceHeaderArt(
   serviceName: string,
   genre: string,
   serviceIconUrl: string,
-  displayCallback?: ((data: any) => void) | null,
+  displayCallback?: ((data: any) => void) | null
 ): Promise<void> {
   headerDebug("updateServiceHeaderArt", {
     service,
@@ -380,13 +380,13 @@ async function updateServiceHeaderArt(
     : "";
 
   const imagePlaceholder = document.getElementById(
-    `${elementPrefix}-image-placeholder`,
+    `${elementPrefix}-image-placeholder`
   ) as HTMLElement | null;
   const titleDescriptionElement = document.getElementById(
-    `${elementPrefix}-title-description`,
+    `${elementPrefix}-title-description`
   ) as HTMLElement | null;
   const coverLinkElement = document.getElementById(
-    `${elementPrefix}-cover-link`,
+    `${elementPrefix}-cover-link`
   );
   const serviceContainer = document.getElementById(elementPrefix);
   const overlay = getServiceOverlay(serviceContainer);
@@ -456,7 +456,7 @@ async function updateServiceHeaderArt(
       serviceName,
       genre,
       serviceIconUrl,
-      playlistUrl,
+      playlistUrl
     );
   }
 
@@ -489,7 +489,7 @@ async function updateServiceHeaderArt(
  */
 export async function updatePlaylistHeader(
   genre: string,
-  displayServiceCallback: ((data: any) => void) | null = null,
+  displayServiceCallback: ((data: any) => void) | null = null
 ): Promise<void> {
   try {
     // Clean up any existing modals and videos when genre changes
@@ -499,7 +499,7 @@ export async function updatePlaylistHeader(
       await graphqlClient.getPlaylistMetadata(genre);
 
     const tuneMeldPlaylist = playlists.find(
-      (p) => p.serviceName === SERVICE_NAMES.TUNEMELD,
+      (p) => p.serviceName === SERVICE_NAMES.TUNEMELD
     );
     updateTuneMeldDescription(tuneMeldPlaylist?.playlistCoverDescriptionText);
 
@@ -515,7 +515,7 @@ export async function updatePlaylistHeader(
           playlist.serviceName,
           genre,
           playlist.serviceIconUrl || "",
-          displayServiceCallback,
+          displayServiceCallback
         );
       }
 
@@ -549,14 +549,14 @@ export function updatePlaylistHeaderSync(
   playlists: Playlist[],
   serviceOrder: string[],
   genre: string,
-  displayServiceCallback: ((data: any) => void) | null = null,
+  displayServiceCallback: ((data: any) => void) | null = null
 ): void {
   // Clean up any existing modals and videos when genre changes
   cleanupExistingModals();
   cleanupExistingVideos();
 
   const tuneMeldPlaylist = playlists.find(
-    (p) => p.serviceName === SERVICE_NAMES.TUNEMELD,
+    (p) => p.serviceName === SERVICE_NAMES.TUNEMELD
   );
   updateTuneMeldDescription(tuneMeldPlaylist?.playlistCoverDescriptionText);
 
@@ -572,7 +572,7 @@ export function updatePlaylistHeaderSync(
         playlist.serviceName,
         genre,
         playlist.serviceIconUrl || "",
-        displayServiceCallback,
+        displayServiceCallback
       );
     }
 

@@ -263,7 +263,7 @@ class StateManager {
   setShimmerState(
     type: string,
     isActive: boolean,
-    isInitialLoad = false,
+    isInitialLoad = false
   ): void {
     if (type === "services") {
       this.state.shimmer.services = isActive;
@@ -318,7 +318,7 @@ class StateManager {
           this.markLoaded("serviceDataLoaded");
         } else {
           stateDebug(
-            "registerServiceHeaderReveal: resolved but token mismatch",
+            "registerServiceHeaderReveal: resolved but token mismatch"
           );
         }
       });
@@ -396,7 +396,7 @@ class StateManager {
   registerModal(
     modalId: string,
     modalElement: HTMLElement,
-    overlayElement: HTMLElement,
+    overlayElement: HTMLElement
   ): void {
     this.state.modals.activeDescriptionModals.add({
       id: modalId,

@@ -51,7 +51,7 @@ function matchesIdentifier(
 }
 
 function getPlayCountDisplayMode(
-  sortField: string | null,
+  sortField: string | null
 ): PlayCountDisplayMode {
   const ranks = stateManager.getRanks();
   const matchingRank = ranks.find((rank) => rank.sortField === sortField);
@@ -119,7 +119,7 @@ export function renderPlaylistTracks(
   placeholderId: string,
   serviceName: string | null,
   serviceDisplayName: string | null = null,
-  options: { forceRender?: boolean; showAllTracks?: boolean } = {},
+  options: { forceRender?: boolean; showAllTracks?: boolean } = {}
 ): void {
   const { forceRender = false, showAllTracks = false } = options;
   const isTuneMeldPlaylist = serviceName === SERVICE_NAMES.TUNEMELD;
@@ -162,7 +162,7 @@ export function renderPlaylistTracks(
   const tableElement = placeholder.closest<HTMLTableElement>("table");
   const dataContainerId = `${placeholderId}--data`;
   let dataContainer = document.getElementById(
-    dataContainerId,
+    dataContainerId
   ) as HTMLTableSectionElement | null;
   if (!dataContainer) {
     dataContainer = document.createElement("tbody");
@@ -170,7 +170,7 @@ export function renderPlaylistTracks(
     dataContainer.className = "playlist-data";
     placeholder.parentElement?.insertBefore(
       dataContainer,
-      placeholder.nextSibling,
+      placeholder.nextSibling
     );
   }
 
@@ -199,7 +199,7 @@ export function renderPlaylistTracks(
     tableElement.classList.remove(
       "hide-source-icons",
       "playcount-total-only",
-      "playcount-trending-only",
+      "playcount-trending-only"
     );
 
     if (isTuneMeldPlaylist) {
@@ -246,7 +246,7 @@ export function renderPlaylistTracks(
             track,
             serviceName || "",
             index + 1,
-            playCountMode,
+            playCountMode
           );
       playlistDebug("renderPlaylistTracks:row", {
         isrc: track.isrc,
@@ -262,7 +262,7 @@ export function renderPlaylistTracks(
       const showAllRow = createShowAllTracksRow(
         placeholderId,
         tracks.length,
-        serviceName,
+        serviceName
       );
       fragment.appendChild(showAllRow);
     }
@@ -272,7 +272,7 @@ export function renderPlaylistTracks(
     const tempContainer = document.createElement("div");
     tempContainer.appendChild(fragment.cloneNode(true) as DocumentFragment);
     const albumImages = Array.from(
-      tempContainer.querySelectorAll<HTMLImageElement>("img.album-cover"),
+      tempContainer.querySelectorAll<HTMLImageElement>("img.album-cover")
     );
     const imagesPromise = waitForImageElements(albumImages);
     registerPlaylistReveal(imagesPromise);
@@ -280,7 +280,7 @@ export function renderPlaylistTracks(
     imagesPromise.finally(() => {
       if (placeholder.dataset.renderToken !== renderToken) {
         playlistDebug(
-          "renderPlaylistTracks: imagesPromise stale token, skipping reveal",
+          "renderPlaylistTracks: imagesPromise stale token, skipping reveal"
         );
         return;
       }
@@ -290,7 +290,7 @@ export function renderPlaylistTracks(
         tableElement.classList.remove(
           "hide-source-icons",
           "playcount-total-only",
-          "playcount-trending-only",
+          "playcount-trending-only"
         );
         if (hideSourceIcons) {
           tableElement.classList.add("hide-source-icons");
@@ -347,7 +347,7 @@ function setTrackInfoLabels(
   trackTitle: HTMLAnchorElement,
   artistElement: HTMLSpanElement,
   track: Track,
-  serviceName: string,
+  serviceName: string
 ): void {
   const fullTrackName =
     track.fullTrackName || track.trackName || "Unknown Track";
@@ -356,7 +356,7 @@ function setTrackInfoLabels(
 
   if (track.buttonLabels && track.buttonLabels.length > 0) {
     const trackLabel = track.buttonLabels.find(
-      (label: ButtonLabel) => label.buttonType === "track_title",
+      (label: ButtonLabel) => label.buttonType === "track_title"
     );
 
     if (trackLabel) {
@@ -370,7 +370,7 @@ function setTrackInfoLabels(
           "aria-label",
           trackLabel.ariaLabel
             .replace("{trackName}", fullTrackName)
-            .replace("{artistName}", fullArtistName),
+            .replace("{artistName}", fullArtistName)
         );
       }
     }
@@ -383,7 +383,7 @@ function setTrackInfoLabels(
 function getRankValue(
   track: Track,
   serviceName: string,
-  displayRank?: number,
+  displayRank?: number
 ): string {
   if (serviceName === SERVICE_NAMES.TUNEMELD) {
     const currentSortColumn = stateManager.getCurrentColumn();
@@ -442,7 +442,7 @@ function getTrackLabels(track: Track): {
 
   if (track.buttonLabels && track.buttonLabels.length > 0) {
     const trackLabel = track.buttonLabels.find(
-      (label: ButtonLabel) => label.buttonType === "track_title",
+      (label: ButtonLabel) => label.buttonType === "track_title"
     );
     if (trackLabel) {
       if (trackLabel.title) {
@@ -502,7 +502,7 @@ function renderTrackInfoCellHtml(track: Track, serviceName: string): string {
 
 function renderPlayCountCellsHtml(
   track: Track,
-  playCountMode: PlayCountDisplayMode,
+  playCountMode: PlayCountDisplayMode
 ): string {
   const playCountData = getPlayCountForTrack(track);
   const showTotal = playCountMode !== "trending";
@@ -550,7 +550,7 @@ function renderPlayCountCellsHtml(
 function createTuneMeldPlaylistTableRow(
   track: Track,
   displayRank: number | undefined,
-  playCountMode: PlayCountDisplayMode,
+  playCountMode: PlayCountDisplayMode
 ): HTMLTableRowElement {
   const row = document.createElement("tr");
   row.setAttribute("data-isrc", track.isrc);
@@ -571,7 +571,7 @@ function createTuneMeldPlaylistTableRow(
   `;
 
   const seenOnCell = row.querySelector(
-    `[data-seen-on="${track.isrc}"]`,
+    `[data-seen-on="${track.isrc}"]`
   ) as HTMLTableCellElement;
   if (seenOnCell) {
     displaySources(seenOnCell, track);
@@ -602,8 +602,8 @@ function getPlayCountForTrack(track: Track) {
     typeof countValue === "string"
       ? Number(countValue)
       : typeof countValue === "number"
-      ? countValue
-      : null;
+        ? countValue
+        : null;
 
   let abbreviated: string | null = null;
   if (typeof parsedCount === "number" && !Number.isNaN(parsedCount)) {
@@ -614,8 +614,8 @@ function getPlayCountForTrack(track: Track) {
     typeof percentageValue === "string"
       ? Number(percentageValue)
       : typeof percentageValue === "number"
-      ? percentageValue
-      : null;
+        ? percentageValue
+        : null;
 
   let percentageFormatted: string | null = null;
   if (typeof parsedPercentage === "number" && !Number.isNaN(parsedPercentage)) {
@@ -653,7 +653,7 @@ function createServicePlaylistTableRow(
   track: Track,
   serviceName: string,
   displayRank?: number,
-  playCountMode: PlayCountDisplayMode = "both",
+  playCountMode: PlayCountDisplayMode = "both"
 ): HTMLTableRowElement {
   const row = document.createElement("tr");
   row.setAttribute("data-isrc", track.isrc);
@@ -674,18 +674,18 @@ function createServicePlaylistTableRow(
     `;
 
     const seenOnCell = row.querySelector(
-      `[data-seen-on="${track.isrc}"]`,
+      `[data-seen-on="${track.isrc}"]`
     ) as HTMLTableCellElement;
     if (seenOnCell) {
       displaySources(seenOnCell, track);
     }
 
     const externalCell = row.querySelector(
-      `[data-external="${track.isrc}"]`,
+      `[data-external="${track.isrc}"]`
     ) as HTMLTableCellElement;
     if (externalCell && track.youtubeSource) {
       externalCell.appendChild(
-        createSourceLinkFromService(track.youtubeSource, null, track),
+        createSourceLinkFromService(track.youtubeSource, null, track)
       );
     }
   } else {
@@ -697,11 +697,11 @@ function createServicePlaylistTableRow(
     `;
 
     const externalCell = row.querySelector(
-      `[data-external="${track.isrc}"]`,
+      `[data-external="${track.isrc}"]`
     ) as HTMLTableCellElement;
     if (externalCell && track.youtubeSource) {
       externalCell.appendChild(
-        createSourceLinkFromService(track.youtubeSource, null, track),
+        createSourceLinkFromService(track.youtubeSource, null, track)
       );
     }
   }
@@ -741,7 +741,7 @@ function displaySources(cell: HTMLTableCellElement, track: Track): void {
       const linkElement = createSourceLinkFromService(
         item.source,
         item.rank,
-        track,
+        track
       );
       sourcesContainer.appendChild(linkElement);
     }
@@ -753,7 +753,7 @@ function displaySources(cell: HTMLTableCellElement, track: Track): void {
 function createSourceLinkFromService(
   source: ServiceSource,
   rank: number | null = null,
-  trackData: Track | null = null,
+  trackData: Track | null = null
 ): HTMLElement {
   if (!source.url) {
     const textNode = document.createTextNode("");
@@ -778,7 +778,7 @@ function createSourceLinkFromService(
     // Look for source icon button label that matches this service
     const sourceLabel = trackData.buttonLabels.find(
       (label: ButtonLabel) =>
-        label.buttonType === "source_icon" && label.context === source.name,
+        label.buttonType === "source_icon" && label.context === source.name
     );
     if (sourceLabel) {
       if (sourceLabel.title) {
@@ -798,7 +798,7 @@ function createSourceLinkFromService(
     linkElement.title = `Play '${fullTrackName}' by ${fullArtistName} on ${source.displayName}${rankText}`;
     linkElement.setAttribute(
       "aria-label",
-      `Play ${fullTrackName} by ${fullArtistName} on ${source.displayName}`,
+      `Play ${fullTrackName} by ${fullArtistName} on ${source.displayName}`
     );
   }
 
@@ -821,7 +821,7 @@ function createSourceLinkFromService(
 function createShowAllTracksRow(
   placeholderId: string,
   totalTrackCount: number,
-  serviceName: string | null,
+  serviceName: string | null
 ): HTMLTableRowElement {
   const row = document.createElement("tr");
   row.className = "show-all-tracks-row";
@@ -856,13 +856,13 @@ export function setPlaylistData(data: Playlist[]): void {
 
 export function cachePlaylistData(
   serviceName: string,
-  playlist: Playlist,
+  playlist: Playlist
 ): void {
   playlistDataCache.set(serviceName, playlist);
 }
 
 export function getPlaylistFromCache(
-  serviceName: string,
+  serviceName: string
 ): Playlist | undefined {
   return playlistDataCache.get(serviceName);
 }
@@ -902,7 +902,7 @@ export function sortTable(column: string, order: string): void {
     "main-playlist-data-placeholder",
     SERVICE_NAMES.TUNEMELD,
     null,
-    { forceRender: true },
+    { forceRender: true }
   );
 }
 
@@ -982,11 +982,11 @@ export async function addToggleEventListeners() {
           await updateCollapseButtonLabels(
             button as HTMLElement,
             targetId,
-            isCollapsed,
+            isCollapsed
           );
         }
-      },
-    ),
+      }
+    )
   );
 }
 
@@ -1010,10 +1010,10 @@ function handleShowAllTracks(button: HTMLElement): void {
 
   const playlistId = `#${serviceName}-playlist`;
   const playlistContent = document.querySelector(
-    `${playlistId} .playlist-content`,
+    `${playlistId} .playlist-content`
   ) as HTMLElement | null;
   const playlistElement = document.querySelector(
-    playlistId,
+    playlistId
   ) as HTMLElement | null;
 
   if (playlistContent?.classList.contains("collapsed")) {
@@ -1024,7 +1024,7 @@ function handleShowAllTracks(button: HTMLElement): void {
   }
 
   const collapseButton = document.querySelector(
-    `.collapse-button[data-target="${playlistId}"]`,
+    `.collapse-button[data-target="${playlistId}"]`
   ) as HTMLElement | null;
   if (collapseButton) {
     collapseButton.textContent = "▼";
@@ -1044,7 +1044,7 @@ async function toggleCollapse(event: Event): Promise<void> {
   }
 
   const content = document.querySelector(
-    `${targetId} .playlist-content`,
+    `${targetId} .playlist-content`
   ) as HTMLElement | null;
   const playlist = document.querySelector(targetId) as HTMLElement | null;
 
@@ -1089,7 +1089,7 @@ async function toggleCollapse(event: Event): Promise<void> {
 async function updateCollapseButtonLabels(
   button: HTMLElement,
   targetId: string,
-  isCollapsed: boolean,
+  isCollapsed: boolean
 ): Promise<void> {
   try {
     let playlistType = "main";

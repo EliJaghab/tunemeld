@@ -36,7 +36,7 @@ function handleTosPrivacyOverlay(): void {
 
 export async function initializeTosPrivacyOverlay(): Promise<void> {
   const acceptButton = document.getElementById(
-    "acceptButton",
+    "acceptButton"
   ) as HTMLButtonElement | null;
   if (!acceptButton) return;
 

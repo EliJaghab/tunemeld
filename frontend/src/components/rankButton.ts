@@ -33,7 +33,7 @@ export async function loadAndRenderRankButtons(): Promise<void> {
     // Check if we have shimmer
     const hasShimmer = sortControlsElement.querySelector(".shimmer");
     const existingRealButtons = sortControlsElement.querySelectorAll(
-      ".sort-button:not(.shimmer)",
+      ".sort-button:not(.shimmer)"
     );
 
     if (!hasShimmer && existingRealButtons.length === ranks.length) {
@@ -53,7 +53,7 @@ export async function loadAndRenderRankButtons(): Promise<void> {
 
     if (hasShimmer) {
       const existingContainer = document.getElementById(
-        "sort-controls-real",
+        "sort-controls-real"
       ) as HTMLElement | null;
       if (existingContainer) {
         realButtonsContainer = existingContainer;

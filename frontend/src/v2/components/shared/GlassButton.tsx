@@ -54,7 +54,8 @@ export function GlassButton({
         onClick={onClick}
         className={clsx(
           "flex items-center gap-2",
-          buttonClassName || "px-4 py-2 desktop:gap-3 desktop:px-6 desktop:py-3",
+          buttonClassName ||
+            "px-4 py-2 desktop:gap-3 desktop:px-6 desktop:py-3",
           active ? "text-white" : "text-black dark:text-white"
         )}
         aria-label={ariaLabel}

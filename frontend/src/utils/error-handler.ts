@@ -38,7 +38,7 @@ class ErrorHandler {
       mainContent.insertBefore(errorBanner, mainContent.firstChild);
 
       const retryBtn = errorBanner.querySelector(
-        "#error-retry-btn",
+        "#error-retry-btn"
       ) as HTMLButtonElement;
       if (retryBtn && this.retryCallback) {
         retryBtn.title = "Retry loading the page";

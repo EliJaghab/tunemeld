@@ -87,7 +87,7 @@ async function fetchServicePlaylists(genre: string): Promise<void> {
   selectorsDebug("fetchServicePlaylists:start", { genre });
   const tuneMeldPlaylist = await graphqlClient.getPlaylist(
     genre,
-    SERVICE_NAMES.TUNEMELD,
+    SERVICE_NAMES.TUNEMELD
   );
   selectorsDebug("fetchServicePlaylists: tunemeld playlist data fetched");
 
@@ -101,7 +101,7 @@ async function fetchServicePlaylists(genre: string): Promise<void> {
       "fetchServicePlaylists: rendering tunemeld playlist tracks",
       {
         isInitial,
-      },
+      }
     );
 
     // Sort data immediately after fetching if current rank is not default
@@ -116,7 +116,7 @@ async function fetchServicePlaylists(genre: string): Promise<void> {
         "main-playlist-data-placeholder",
         SERVICE_NAMES.TUNEMELD,
         null,
-        { forceRender: !isInitial },
+        { forceRender: !isInitial }
       );
     }
   }
@@ -143,7 +143,7 @@ async function loadOtherServicePlaylists(genre: string): Promise<void> {
     ]);
 
   selectorsDebug(
-    "loadOtherServicePlaylists: other service playlists data fetched",
+    "loadOtherServicePlaylists: other service playlists data fetched"
   );
 
   selectorsDebug("loadOtherServicePlaylists: rendering tracks");
@@ -152,7 +152,7 @@ async function loadOtherServicePlaylists(genre: string): Promise<void> {
     renderPlaylistTracks(
       [spotifyPlaylist],
       "spotify-data-placeholder",
-      SERVICE_NAMES.SPOTIFY,
+      SERVICE_NAMES.SPOTIFY
     );
   }
 
@@ -161,7 +161,7 @@ async function loadOtherServicePlaylists(genre: string): Promise<void> {
     renderPlaylistTracks(
       [appleMusicPlaylist],
       "apple_music-data-placeholder",
-      SERVICE_NAMES.APPLE_MUSIC,
+      SERVICE_NAMES.APPLE_MUSIC
     );
   }
 
@@ -170,7 +170,7 @@ async function loadOtherServicePlaylists(genre: string): Promise<void> {
     renderPlaylistTracks(
       [soundcloudPlaylist],
       "soundcloud-data-placeholder",
-      SERVICE_NAMES.SOUNDCLOUD,
+      SERVICE_NAMES.SOUNDCLOUD
     );
   }
 
@@ -180,10 +180,10 @@ async function loadOtherServicePlaylists(genre: string): Promise<void> {
 export async function updateGenreData(
   genre: string,
   updateAll: boolean = false,
-  skipInitialShimmer: boolean = false,
+  skipInitialShimmer: boolean = false
 ): Promise<void> {
   selectorsDebug(
-    `updateGenreData: start, genre=${genre}, updateAll=${updateAll}, skipInitialShimmer=${skipInitialShimmer}`,
+    `updateGenreData: start, genre=${genre}, updateAll=${updateAll}, skipInitialShimmer=${skipInitialShimmer}`
   );
   try {
     // Shimmer is now handled by button click handlers and initial load
@@ -199,7 +199,7 @@ export async function updateGenreData(
         allData.metadata.playlists,
         allData.metadata.serviceOrder,
         genre,
-        null,
+        null
       );
 
       // Mark playlist header as loaded for shimmer coordination

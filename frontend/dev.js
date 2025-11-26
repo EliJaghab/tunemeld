@@ -27,8 +27,8 @@ const copyV2CssFiles = () => {
         log.info(
           `Copied CSS ${path.relative(SRC_DIR, srcPath)} -> ${path.relative(
             DIST_DIR,
-            destPath,
-          )}`,
+            destPath
+          )}`
         );
       }
     });
@@ -83,7 +83,7 @@ log.build("Building Tailwind CSS for v2");
 try {
   execSync(
     "npx tailwindcss -i ./src/v2/styles/tailwind.css -o ./dist/v2/tailwind.css",
-    { stdio: "pipe" },
+    { stdio: "pipe" }
   );
   log.success("Tailwind CSS built");
 } catch (error) {
@@ -219,7 +219,7 @@ const tailwindWatch = spawn(
   ],
   {
     shell: true,
-  },
+  }
 );
 
 let isProcessing = false;
