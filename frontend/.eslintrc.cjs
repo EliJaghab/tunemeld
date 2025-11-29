@@ -21,6 +21,7 @@ module.exports = {
     "plugin:import/typescript",
     "plugin:react-hooks/recommended",
     "prettier",
+    "plugin:storybook/recommended"
   ],
   ignorePatterns: ["dist/**"],
   settings: {

@@ -1,7 +1,15 @@
+/// <reference types="vitest/config" />
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import path from "path";
 import fs from "fs";
+import { fileURLToPath } from "node:url";
+import { storybookTest } from "@storybook/addon-vitest/vitest-plugin";
+import { playwright } from "@vitest/browser-playwright";
+const dirname =
+  typeof __dirname !== "undefined"
+    ? __dirname
+    : path.dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
   plugins: [
@@ -10,10 +18,8 @@ export default defineConfig({
     }),
     {
       name: "serve-static-files",
-      enforce: "post", // Run after Vite's internal middleware and React plugin
+      enforce: "post",
       configureServer(server) {
-        // Use a single middleware that handles all static file serving
-        // This runs LAST, after Vite has processed all module requests
         server.middlewares.use((req, res, next) => {
           if (!req.url) {
             return next();
@@ -27,7 +33,7 @@ export default defineConfig({
             req.url.startsWith("/src/") ||
             req.url.includes("react-refresh") ||
             req.url.includes("@react-refresh") ||
-            req.url.includes("?") || // Query params (HMR uses these)
+            req.url.includes("?") ||
             req.url.startsWith("/@vite") ||
             req.url.startsWith("/@id")
           ) {
@@ -137,5 +143,31 @@ export default defineConfig({
   },
   css: {
     postcss: "./postcss.config.cjs",
+  },
+  test: {
+    projects: [
+      {
+        extends: true,
+        plugins: [
+          storybookTest({
+            configDir: path.join(dirname, ".storybook"),
+          }),
+        ],
+        test: {
+          name: "storybook",
+          browser: {
+            enabled: true,
+            headless: true,
+            provider: playwright({}),
+            instances: [
+              {
+                browser: "chromium",
+              },
+            ],
+          },
+          setupFiles: [".storybook/vitest.setup.ts"],
+        },
+      },
+    ],
   },
 });
