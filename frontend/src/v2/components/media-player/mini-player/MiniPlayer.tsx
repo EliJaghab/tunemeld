@@ -3,8 +3,6 @@ import clsx from "clsx";
 import GlassSurface from "@/v2/components/shared/GlassSurface";
 import { MediaSquare } from "@/v2/components/shared/MediaSquare";
 import { IconButton } from "@/v2/components/shared/IconButton";
-import { PlayIcon } from "@/v2/components/shared/icons/PlayIcon";
-import { PauseIcon } from "@/v2/components/shared/icons/PauseIcon";
 import type { Track } from "@/types";
 
 interface MiniPlayerProps {
@@ -88,16 +86,11 @@ export function MiniPlayer({
                   }}
                   onMouseDown={(e) => e.stopPropagation()}
                   onTouchStart={(e) => e.stopPropagation()}
+                  icon={isPlaying ? "pause" : "play"}
                   ariaLabel={isPlaying ? "Pause" : "Play"}
                   variant="glass"
                   size="sm"
-                >
-                  {isPlaying ? (
-                    <PauseIcon className="w-full h-full" />
-                  ) : (
-                    <PlayIcon className="w-full h-full" />
-                  )}
-                </IconButton>
+                />
               </div>
             )}
           </div>

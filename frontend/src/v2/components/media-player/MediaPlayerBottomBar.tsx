@@ -1,8 +1,6 @@
 import React, { useRef, useEffect, useState } from "react";
 import clsx from "clsx";
 import { IconButton } from "@/v2/components/shared/IconButton";
-import { PlayIcon } from "@/v2/components/shared/icons/PlayIcon";
-import { PauseIcon } from "@/v2/components/shared/icons/PauseIcon";
 import { ServiceIcon } from "@/v2/components/playlist/shared/ServiceIcon";
 import type { Track } from "@/types";
 import type { PlayerValue } from "@/v2/constants";
@@ -88,6 +86,7 @@ export function MediaPlayerBottomBar({
       {canControl && (
         <IconButton
           onClick={onTogglePlay}
+          icon={isPlaying ? "pause" : "play"}
           ariaLabel={isPlaying ? "Pause" : "Play"}
           variant="glass-container"
           size="sm"
@@ -95,13 +94,7 @@ export function MediaPlayerBottomBar({
           borderRadius="rounded-2xl"
           height={playButtonHeight}
           className="flex-shrink-0 z-10 relative"
-        >
-          {isPlaying ? (
-            <PauseIcon className="w-full h-full" />
-          ) : (
-            <PlayIcon className="w-full h-full" />
-          )}
-        </IconButton>
+        />
       )}
 
       <div className="flex-shrink min-w-0" ref={serviceIconsRef}>

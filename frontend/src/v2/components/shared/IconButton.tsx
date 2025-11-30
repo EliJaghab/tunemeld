@@ -8,7 +8,7 @@ interface IconButtonProps {
   ariaLabel?: string;
   className?: string;
   iconClassName?: string;
-  children: React.ReactNode;
+  icon: "play" | "pause" | "close" | "chevron-down";
   size?: "sm" | "md" | "lg";
   variant?: "default" | "transparent" | "glass" | "glass-container";
   disabled?: boolean;
@@ -42,6 +42,30 @@ const variantClasses = {
     "bg-white/60 dark:bg-gray-700/60 backdrop-blur-md border border-white/20 dark:border-gray-600/20 shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_4px_12px_rgba(0,0,0,0.1)] text-black dark:text-white",
 };
 
+const icons = {
+  play: (
+    <svg viewBox="0 0 24 24" fill="currentColor" className="w-full h-full">
+      <path d="M8 5v14l11-7z" />
+    </svg>
+  ),
+  pause: (
+    <svg viewBox="0 0 24 24" fill="currentColor" className="w-full h-full">
+      <rect x="6" y="4" width="4" height="16" rx="1" />
+      <rect x="14" y="4" width="4" height="16" rx="1" />
+    </svg>
+  ),
+  close: (
+    <svg viewBox="0 0 24 24" fill="currentColor" className="w-full h-full">
+      <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
+    </svg>
+  ),
+  "chevron-down": (
+    <svg viewBox="0 0 24 24" fill="currentColor" className="w-full h-full">
+      <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z" />
+    </svg>
+  ),
+};
+
 export function IconButton({
   onClick,
   onMouseDown,
@@ -49,7 +73,7 @@ export function IconButton({
   ariaLabel,
   className = "",
   iconClassName = "",
-  children,
+  icon,
   size = "sm",
   variant = "default",
   disabled = false,
@@ -143,7 +167,7 @@ export function IconButton({
         )}
         style={{ display: "flex", lineHeight: 0, color: "inherit" }}
       >
-        {children}
+        {icons[icon]}
       </span>
     </button>
   );
