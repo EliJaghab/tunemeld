@@ -23,11 +23,11 @@ const getInitialTheme = (): ThemeValue => {
   return prefersDark ? THEME.DARK : THEME.LIGHT;
 };
 
-export const ThemeContextProvider = ({
+export function ThemeContextProvider({
   children,
 }: {
   children: React.ReactNode;
-}) => {
+}) {
   const [theme, setTheme] = useState<ThemeValue>(() => getInitialTheme());
 
   useEffect(() => {
@@ -40,4 +40,4 @@ export const ThemeContextProvider = ({
       {children}
     </ThemeContext.Provider>
   );
-};
+}
