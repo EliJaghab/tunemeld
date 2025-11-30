@@ -10,7 +10,7 @@
 
 ```bash
 # Start servers (use these commands ONLY)
-make serve-frontend    # Starts frontend at http://localhost:8080
+make serve-frontend    # Starts frontend (Vite dev server) at http://localhost:3000
 make serve-backend     # Starts backend at http://localhost:8000 (ensures Redis is running)
 make serve-redis       # Manually start Redis cache if needed (normally run by make serve-backend)
 
@@ -98,8 +98,8 @@ make kill-redis        # Stops local Redis instance started by make serve-redis
 
 **After ANY frontend changes (HTML, CSS, TypeScript, React components), ALWAYS verify in browser:**
 
-1. Navigate to `http://localhost:8080/index-v2.html` using Chrome DevTools MCP
-2. Run `mcp__chrome-devtools__list_console_messages` to check for errors
+1. Navigate to `http://localhost:3000/index-v2` using Playwright MCP
+2. Run `mcp__playwright__browser_console_messages` to check for errors
 3. Address ALL console errors before completing the task
 
 **Why**: Console errors catch runtime issues that pre-commit hooks miss (missing imports, 404s, module resolution failures, etc.)
@@ -109,7 +109,7 @@ make kill-redis        # Stops local Redis instance started by make serve-redis
 ```
 1. Make frontend changes
 2. Run `make format`
-3. Navigate browser to localhost:8080/index-v2.html
+3. Navigate browser to localhost:3000/index-v2
 4. Check console messages
 5. Fix any errors found
 6. Complete task
