@@ -54,7 +54,7 @@
     </script>
     <title>tunemeld</title>
     <!-- Critical theme initialization to prevent FOUC -->
-    <script src="/src/themeInit.js"></script>
+    <script src="themeInit.js"></script>
   </head>
   <body>
     <div class="container" id="main-content">
@@ -291,29 +291,29 @@
       <script type="importmap">
         {
           "imports": {
-            "@/components/title": "/src/components/title.js",
-            "@/components/genreButtons": "/src/components/genreButtons.js",
-            "@/components/servicePlayer": "/src/components/servicePlayer.js",
-            "@/components/shimmer": "/src/components/shimmer.js",
-            "@/components/playlist": "/src/components/playlist.js",
-            "@/components/playlistHeader": "/src/components/playlistHeader.js",
-            "@/components/rankButton": "/src/components/rankButton.js",
-            "@/components/similarTracksModal": "/src/components/similarTracksModal.js",
-            "@/state/StateManager": "/src/state/StateManager.js",
-            "@/routing/router": "/src/routing/router.js",
-            "@/config/config": "/src/config/config.js",
-            "@/config/constants": "/src/config/constants.js",
-            "@/config/tableStructures": "/src/config/tableStructures.js",
-            "@/services/graphql-client": "/src/services/graphql-client.js",
-            "@/utils/error-handler": "/src/utils/error-handler.js",
-            "@/utils/formatting": "/src/utils/formatting.js",
-            "@/utils/selectors": "/src/utils/selectors.js",
-            "@/types": "/src/types/index.js",
-            "@/tosPrivacy": "/src/tosPrivacy.js"
+            "@/components/title": "./components/title.js",
+            "@/components/genreButtons": "./components/genreButtons.js",
+            "@/components/servicePlayer": "./components/servicePlayer.js",
+            "@/components/shimmer": "./components/shimmer.js",
+            "@/components/playlist": "./components/playlist.js",
+            "@/components/playlistHeader": "./components/playlistHeader.js",
+            "@/components/rankButton": "./components/rankButton.js",
+            "@/components/similarTracksModal": "./components/similarTracksModal.js",
+            "@/state/StateManager": "./state/StateManager.js",
+            "@/routing/router": "./routing/router.js",
+            "@/config/config": "./config/config.js",
+            "@/config/constants": "./config/constants.js",
+            "@/config/tableStructures": "./config/tableStructures.js",
+            "@/services/graphql-client": "./services/graphql-client.js",
+            "@/utils/error-handler": "./utils/error-handler.js",
+            "@/utils/formatting": "./utils/formatting.js",
+            "@/utils/selectors": "./utils/selectors.js",
+            "@/types": "./types/index.js",
+            "@/tosPrivacy": "./tosPrivacy.js"
           }
         }
       </script>
-      <script type="module" src="/src/main.js"></script>
+      <script type="module" src="main.js"></script>
       <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
       <script src="https://w.soundcloud.com/player/api.js"></script>
       <script
