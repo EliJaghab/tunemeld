@@ -3,9 +3,9 @@ import clsx from "clsx";
 import GlassSurface from "@/v2/components/shared/GlassSurface";
 import { MediaSquare } from "@/v2/components/shared/MediaSquare";
 import { CloseButton } from "@/v2/components/shared/CloseButton";
-import { ServiceIcon } from "@/v2/components/playlist/shared/ServiceIcon";
 import { ServicePlayer } from "@/v2/components/media-player/players/ServicePlayer";
 import { MiniPlayer } from "@/v2/components/media-player/mini-player/MiniPlayer";
+import { MediaPlayerBottomBar } from "@/v2/components/media-player/MediaPlayerBottomBar";
 import { ChevronDown } from "@/v2/components/shared/icons/ChevronDown";
 import { PLAYER, type PlayerValue } from "@/v2/constants";
 import type { Track } from "@/types";
@@ -92,82 +92,6 @@ function MediaPlayerControls({
         ariaLabel="Close media player"
         position="relative"
       />
-    </div>
-  );
-}
-
-function MediaPlayerServiceIcons({
-  track,
-  onServiceClick,
-}: {
-  track: Track;
-  onServiceClick?: (player: PlayerValue) => void;
-}) {
-  const serviceData = [
-    {
-      source: track.spotifySource,
-      rank: track.spotifyRank,
-    },
-    {
-      source: track.appleMusicSource,
-      rank: track.appleMusicRank,
-    },
-    {
-      source: track.soundcloudSource,
-      rank: track.soundcloudRank,
-    },
-    {
-      source: track.youtubeSource,
-      rank: null,
-    },
-  ].filter((item) => {
-    return item.source !== null && item.source !== undefined;
-  });
-
-  if (serviceData.length === 0) return null;
-
-  return (
-    <div
-      className={clsx(
-        "mt-4 self-end",
-        "bg-white/60 dark:bg-gray-700/60 backdrop-blur-md",
-        "border border-white/20 dark:border-gray-600/20",
-        "rounded-2xl",
-        "px-2 pt-2 pb-0.5 desktop:px-2.5 desktop:pt-2.5 desktop:pb-1",
-        "shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_4px_12px_rgba(0,0,0,0.1)]",
-        "overflow-visible",
-        "flex items-center"
-      )}
-    >
-      <div className={clsx("flex items-center gap-2 desktop:gap-2.5")}>
-        {serviceData.map((item) => {
-          if (!item.source) return null;
-
-          const playerMapping: Record<string, PlayerValue> = {
-            spotify: PLAYER.SPOTIFY,
-            apple_music: PLAYER.APPLE_MUSIC,
-            soundcloud: PLAYER.SOUNDCLOUD,
-            youtube: PLAYER.YOUTUBE,
-          };
-
-          const player = playerMapping[item.source.name.toLowerCase()];
-
-          return (
-            <ServiceIcon
-              key={item.source.name}
-              source={item.source}
-              rank={item.rank ?? undefined}
-              size="md"
-              badgeSize="md"
-              onClick={() => {
-                if (onServiceClick && player) {
-                  onServiceClick(player);
-                }
-              }}
-            />
-          );
-        })}
-      </div>
     </div>
   );
 }
@@ -266,10 +190,15 @@ export function MediaPlayer({
                 />
               )}
 
-              <MediaPlayerServiceIcons
-                track={track}
-                onServiceClick={onServiceClick}
-              />
+              <div className="mt-4">
+                <MediaPlayerBottomBar
+                  track={track}
+                  isPlaying={isPlaying}
+                  canControl={canControl}
+                  onTogglePlay={handleTogglePlay}
+                  onServiceClick={onServiceClick}
+                />
+              </div>
             </div>
           </GlassSurface>
         </div>
