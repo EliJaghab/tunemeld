@@ -1,36 +1,11 @@
 import React, { useRef, useEffect, useState } from "react";
 import clsx from "clsx";
 import { IconButton } from "@/v2/components/shared/IconButton";
+import { PlayIcon } from "@/v2/components/shared/icons/PlayIcon";
+import { PauseIcon } from "@/v2/components/shared/icons/PauseIcon";
 import { ServiceIcon } from "@/v2/components/playlist/shared/ServiceIcon";
 import type { Track } from "@/types";
 import type { PlayerValue } from "@/v2/constants";
-
-function PlayIcon({ className }: { className?: string }): React.ReactElement {
-  return (
-    <svg
-      className={className}
-      viewBox="0 0 24 24"
-      fill="currentColor"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path d="M8 5v14l11-7z" />
-    </svg>
-  );
-}
-
-function PauseIcon({ className }: { className?: string }): React.ReactElement {
-  return (
-    <svg
-      className={className}
-      viewBox="0 0 24 24"
-      fill="currentColor"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <rect x="6" y="4" width="4" height="16" rx="1" />
-      <rect x="14" y="4" width="4" height="16" rx="1" />
-    </svg>
-  );
-}
 
 interface MediaPlayerBottomBarProps {
   track: Track;
