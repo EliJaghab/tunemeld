@@ -342,7 +342,11 @@ export function ServiceArt({
         className={clsx("border-t border-black/20 dark:border-white/30")}
       ></div>
 
-      <div className={clsx("mt-3 desktop:mt-4 h-[80px] desktop:h-[96px]")}>
+      <div
+        className={clsx(
+          "mt-2.5 desktop:mt-2.5 mb-3 desktop:mb-4 h-[80px] desktop:h-[96px]"
+        )}
+      >
         <ServiceArtDescription
           showShimmer={showDescriptionShimmer}
           metadata={metadata}
