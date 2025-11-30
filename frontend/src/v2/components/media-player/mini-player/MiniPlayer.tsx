@@ -5,6 +5,33 @@ import { MediaSquare } from "@/v2/components/shared/MediaSquare";
 import { IconButton } from "@/v2/components/shared/IconButton";
 import type { Track } from "@/types";
 
+function PlayIcon({ className }: { className?: string }): React.ReactElement {
+  return (
+    <svg
+      className={className}
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path d="M8 5v14l11-7z" />
+    </svg>
+  );
+}
+
+function PauseIcon({ className }: { className?: string }): React.ReactElement {
+  return (
+    <svg
+      className={className}
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <rect x="6" y="4" width="4" height="16" rx="1" />
+      <rect x="14" y="4" width="4" height="16" rx="1" />
+    </svg>
+  );
+}
+
 interface MiniPlayerProps {
   track: Track;
   onExpand: () => void;
@@ -91,20 +118,9 @@ export function MiniPlayer({
                   size="sm"
                 >
                   {isPlaying ? (
-                    <img
-                      src="./images/pause.svg"
-                      alt="Pause"
-                      className="w-full h-full object-contain"
-                    />
+                    <PauseIcon className="w-full h-full" />
                   ) : (
-                    <svg
-                      className="w-full h-full"
-                      viewBox="0 0 24 24"
-                      fill="currentColor"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path d="M8 5v14l11-7z" />
-                    </svg>
+                    <PlayIcon className="w-full h-full" />
                   )}
                 </IconButton>
               </div>
