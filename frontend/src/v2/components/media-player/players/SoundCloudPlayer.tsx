@@ -55,7 +55,7 @@ export function SoundCloudPlayer({
     return (
       <div
         className={clsx(
-          `w-full mt-4 overflow-hidden rounded-lg bg-black/5 dark:bg-white/5
+          `w-full mt-4 overflow-hidden rounded-2xl bg-black/5 dark:bg-white/5
           animate-pulse`
         )}
         style={{ height: "166px" }}
@@ -64,7 +64,7 @@ export function SoundCloudPlayer({
   }
 
   return (
-    <div className={clsx("w-full mt-4 overflow-hidden rounded-lg")}>
+    <div className={clsx("w-full mt-4 overflow-hidden rounded-2xl")}>
       <iframe
         src={iframeSrc}
         className={clsx("w-full")}
