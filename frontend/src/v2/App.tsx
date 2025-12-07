@@ -9,7 +9,10 @@ import { TuneMeldBackground } from "@/v2/components/shared/TuneMeldBackground";
 import { ServiceArtSection } from "@/v2/components/service-playlist/ServiceArtSection";
 import { TuneMeldPlaylist } from "@/v2/components/playlist/TuneMeldPlaylist/TuneMeldPlaylist";
 import { MediaPlayer } from "@/v2/components/media-player/MediaPlayer";
-import { MediaPlayerProvider } from "@/v2/contexts/MediaPlayerContext";
+import {
+  MediaPlayerProvider,
+  useMediaPlayer,
+} from "@/v2/contexts/MediaPlayerContext";
 import { useAppRouting } from "@/v2/hooks/useAppRouting";
 import type { Track } from "@/types";
 
@@ -45,6 +48,44 @@ function AppContent(): React.ReactElement {
       onServiceClick={setPlayer}
       onPlayingStateChange={onPlayingStateChange}
     >
+      <AppContentInner
+        activeGenre={activeGenre}
+        activeRank={activeRank}
+        playlistTracks={playlistTracks}
+        setPlaylistTracks={setPlaylistTracks}
+        openTrack={openTrack}
+        setRank={setRank}
+        setGenre={setGenre}
+      />
+    </MediaPlayerProvider>
+  );
+}
+
+function AppContentInner({
+  activeGenre,
+  activeRank,
+  playlistTracks,
+  setPlaylistTracks,
+  openTrack,
+  setRank,
+  setGenre,
+}: {
+  activeGenre: string;
+  activeRank: string;
+  playlistTracks: Track[];
+  setPlaylistTracks: (tracks: Track[]) => void;
+  openTrack: (track: Track) => void;
+  setRank: (rank: string) => void;
+  setGenre: (genre: string) => void;
+}): React.ReactElement {
+  const { wasExplicitlyClosed } = useMediaPlayer();
+
+  // Update useAppRouting with the context value
+  // We need to call it again, but hooks can't be called conditionally
+  // Instead, we'll pass wasExplicitlyClosed to a separate effect
+
+  return (
+    <>
       <main className={clsx("relative z-10")}>
         <VerticalPadding size="lg" />
         <Header />
@@ -63,7 +104,7 @@ function AppContent(): React.ReactElement {
         <VerticalPadding size="lg" />
       </main>
       <MediaPlayer />
-    </MediaPlayerProvider>
+    </>
   );
 }
 

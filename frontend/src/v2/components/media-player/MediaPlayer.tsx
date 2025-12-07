@@ -118,7 +118,9 @@ export function MediaPlayer(): React.ReactElement | null {
   const hasYouTube = !!track?.youtubeSource;
   const canControl = hasYouTube && activePlayer === PLAYER.YOUTUBE;
 
-  if (!isOpen || !track) return null;
+  if (!isOpen || !track) {
+    return null;
+  }
 
   return (
     <>

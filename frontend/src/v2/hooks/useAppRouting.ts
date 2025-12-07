@@ -128,6 +128,13 @@ export function useAppRouting(playlistTracks: Track[]): UseAppRoutingReturn {
     if (isrc) {
       const track = playlistTracks.find((t) => t.isrc === isrc);
       if (track) {
+        // If URL has isrc but state says player is closed, we just closed and URL hasn't updated yet
+        // Don't reopen in this case
+        if (!isMediaPlayerOpen && selectedTrack === null) {
+          return;
+        }
+
+        // Only open if we don't already have this track selected, or if player is closed
         if (selectedTrack?.isrc !== track.isrc || !isMediaPlayerOpen) {
           setSelectedTrack(track);
           setIsMediaPlayerOpen(true);
@@ -190,12 +197,14 @@ export function useAppRouting(playlistTracks: Track[]): UseAppRoutingReturn {
   );
 
   const closeMediaPlayer = useCallback(() => {
+    // Set state first to prevent auto-open (the effect will see isrc in URL but closed state)
+    setSelectedTrack(null);
+    setIsMediaPlayerOpen(false);
+    // Then update URL (this is async, so the effect might run before URL updates)
     const newParams = new URLSearchParams(searchParams);
     newParams.delete("isrc");
     newParams.delete("player");
     setSearchParams(newParams, { replace: true });
-    setSelectedTrack(null);
-    setIsMediaPlayerOpen(false);
   }, [searchParams, setSearchParams]);
 
   const setPlayer = useCallback(

@@ -19,6 +19,7 @@ interface MediaPlayerContextValue {
   isMinimized: boolean;
   isPlaying: boolean;
   hasInteracted: boolean;
+  wasExplicitlyClosed: boolean;
   expand: () => void;
   collapse: () => void;
   togglePlay: () => void;
@@ -56,6 +57,7 @@ export function MediaPlayerProvider({
   const [isPlaying, setIsPlaying] = useState(false);
   const [lastSeenIsrc, setLastSeenIsrc] = useState<string | null>(null);
   const hasSeenOpenRef = useRef(false);
+  const [wasExplicitlyClosed, setWasExplicitlyClosed] = useState(false);
 
   const currentIsrc = track?.isrc ?? null;
   const trackChanged = currentIsrc !== null && currentIsrc !== lastSeenIsrc;
@@ -75,6 +77,8 @@ export function MediaPlayerProvider({
 
     if (currentIsrc !== null) {
       setLastSeenIsrc(currentIsrc);
+      // Reset explicit close flag when a new track opens
+      setWasExplicitlyClosed(false);
     } else if (currentIsrc === null && lastSeenIsrc !== null) {
       setLastSeenIsrc(null);
     }
@@ -112,6 +116,11 @@ export function MediaPlayerProvider({
     setIsPlaying(playing);
   }, []);
 
+  const wrappedOnClose = useCallback(() => {
+    setWasExplicitlyClosed(true);
+    onClose();
+  }, [onClose]);
+
   const value: MediaPlayerContextValue = {
     track,
     activePlayer,
@@ -119,11 +128,12 @@ export function MediaPlayerProvider({
     isMinimized,
     isPlaying,
     hasInteracted,
+    wasExplicitlyClosed,
     expand,
     collapse,
     togglePlay,
     setPlaying,
-    onClose,
+    onClose: wrappedOnClose,
     onServiceClick,
   };
 
