@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import clsx from "clsx";
 import GlassSurface from "@/v2/components/shared/GlassSurface";
 import { MediaSquare } from "@/v2/components/shared/MediaSquare";
@@ -7,23 +7,16 @@ import { ServicePlayer } from "@/v2/components/media-player/players/ServicePlaye
 import { MiniPlayer } from "@/v2/components/media-player/mini-player/MiniPlayer";
 import { MediaPlayerBottomBar } from "@/v2/components/media-player/MediaPlayerBottomBar";
 import { ChevronDown } from "@/v2/components/shared/icons/ChevronDown";
-import { PLAYER, type PlayerValue } from "@/v2/constants";
+import { useMediaPlayer } from "@/v2/contexts/MediaPlayerContext";
+import { PLAYER } from "@/v2/constants";
 import type { Track } from "@/types";
-
-interface MediaPlayerProps {
-  track: Track | null;
-  activePlayer?: PlayerValue | null;
-  isOpen: boolean;
-  onClose: () => void;
-  onServiceClick?: (player: PlayerValue) => void;
-}
 
 function MediaPlayerHeader({ track }: { track: Track }) {
   return (
     <div className={clsx("flex flex-row items-center gap-4 w-full pr-24")}>
       {track.albumCoverUrl && (
         <div
-          className={clsx("flex-shrink-0 overflow-hidden rounded-lg")}
+          className={clsx("flex-shrink-0 overflow-hidden rounded-full")}
           style={{
             width: "64px",
             height: "64px",
@@ -96,15 +89,20 @@ function MediaPlayerControls({
   );
 }
 
-export function MediaPlayer({
-  track,
-  activePlayer,
-  isOpen,
-  onClose,
-  onServiceClick,
-}: MediaPlayerProps): React.ReactElement | null {
-  const [isCollapsed, setIsCollapsed] = useState(false);
-  const [isPlaying, setIsPlaying] = useState(false);
+export function MediaPlayer(): React.ReactElement | null {
+  const {
+    track,
+    activePlayer,
+    isOpen,
+    isMinimized,
+    isPlaying,
+    expand,
+    collapse,
+    togglePlay,
+    setPlaying,
+    onClose,
+    onServiceClick,
+  } = useMediaPlayer();
 
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
@@ -117,103 +115,105 @@ export function MediaPlayer({
     return () => document.removeEventListener("keydown", handleEscape);
   }, [isOpen, onClose]);
 
-  useEffect(() => {
-    if (isOpen) {
-      setIsCollapsed(false);
-    }
-  }, [track, isOpen]);
-
-  useEffect(() => {
-    setIsPlaying(false);
-  }, [track]);
+  const hasYouTube = !!track?.youtubeSource;
+  const canControl = hasYouTube && activePlayer === PLAYER.YOUTUBE;
 
   if (!isOpen || !track) return null;
 
-  const handleTogglePlay = () => {
-    setIsPlaying(!isPlaying);
-  };
-
-  const canControl =
-    activePlayer === PLAYER.YOUTUBE || activePlayer === PLAYER.SOUNDCLOUD;
-
-  const showMiniPlayer = isCollapsed;
-
   return (
     <>
-      <div
-        className={clsx(
-          "fixed bottom-0 left-0 right-0 z-[1001]",
-          "px-4 pb-4 desktop:px-6 desktop:pb-6",
-          "pointer-events-none", // Wrapper is always pointer-events-none
-          showMiniPlayer ? "invisible" : "visible"
-        )}
-      >
-        <div className={clsx("max-w-4xl mx-auto", "pointer-events-auto")}>
-          <GlassSurface
-            width="100%"
-            height="auto"
-            borderRadius={32}
-            backgroundOpacity={0.5}
-            borderWidth={0.5}
-            blur={20}
-            className="!items-start !justify-start"
-          >
-            <div
-              className={clsx(
-                "p-5 text-left w-full min-h-[100px]",
-                "flex flex-col w-full relative",
-                "min-h-min"
-              )}
+      {(canControl || !isMinimized) && (
+        <div
+          className={clsx(
+            "fixed bottom-0 left-0 right-0 z-[1001]",
+            "px-4 pb-4 desktop:px-6 desktop:pb-6",
+            isMinimized && canControl
+              ? "opacity-0 pointer-events-none -z-10"
+              : ""
+          )}
+          style={
+            isMinimized && canControl
+              ? {
+                  position: "fixed",
+                  left: "-9999px",
+                  top: "-9999px",
+                  width: "1px",
+                  height: "1px",
+                  overflow: "hidden",
+                }
+              : undefined
+          }
+        >
+          <div className={clsx("max-w-4xl mx-auto")}>
+            <GlassSurface
+              width="100%"
+              height="auto"
+              borderRadius={32}
+              backgroundOpacity={0.5}
+              borderWidth={0.5}
+              blur={20}
+              className="!items-start !justify-start"
             >
               <div
                 className={clsx(
-                  "absolute top-0 left-0 right-0 h-px",
-                  `bg-gradient-to-r from-transparent via-white/40
-                  to-transparent`
+                  "p-5 text-left w-full min-h-[100px]",
+                  "flex flex-col w-full relative",
+                  "min-h-min overflow-visible",
+                  "overflow-x-visible"
                 )}
-              />
-
-              <MediaPlayerControls
-                onCollapse={() => setIsCollapsed(true)}
-                onClose={onClose}
-              />
-
-              <MediaPlayerHeader track={track} />
-
-              {activePlayer && (
-                <ServicePlayer
-                  track={track}
-                  activePlayer={activePlayer}
-                  playing={isPlaying}
-                  onPlay={() => setIsPlaying(true)}
-                  onPause={() => setIsPlaying(false)}
+              >
+                <div
+                  className={clsx(
+                    "absolute top-0 left-0 right-0 h-px",
+                    `bg-gradient-to-r from-transparent via-white/40
+                    to-transparent`
+                  )}
                 />
-              )}
 
-              <div className="mt-4">
-                <MediaPlayerBottomBar
-                  track={track}
-                  isPlaying={isPlaying}
-                  canControl={canControl}
-                  onTogglePlay={handleTogglePlay}
-                  onServiceClick={onServiceClick}
-                />
+                <MediaPlayerControls onCollapse={collapse} onClose={onClose} />
+
+                <MediaPlayerHeader track={track} />
+
+                {activePlayer && (
+                  <div className="w-full">
+                    <ServicePlayer
+                      key={
+                        canControl
+                          ? `youtube-player-persistent-${track.isrc}`
+                          : undefined
+                      }
+                      track={track}
+                      activePlayer={activePlayer}
+                      playing={isPlaying}
+                      onPlay={() => setPlaying(true)}
+                      onPause={() => setPlaying(false)}
+                    />
+                  </div>
+                )}
+
+                <div className="mt-4 self-end">
+                  <MediaPlayerBottomBar
+                    track={track}
+                    isPlaying={isPlaying}
+                    canControl={canControl}
+                    onTogglePlay={togglePlay}
+                    onServiceClick={onServiceClick}
+                  />
+                </div>
               </div>
-            </div>
-          </GlassSurface>
+            </GlassSurface>
+          </div>
         </div>
-      </div>
+      )}
 
-      {showMiniPlayer && (
+      {isMinimized && (
         <MiniPlayer
           track={track}
           isPlaying={isPlaying}
           canControl={canControl}
-          onTogglePlay={handleTogglePlay}
-          onExpand={() => setIsCollapsed(false)}
-          onClose={() => {
-            onClose();
-          }}
+          onTogglePlay={togglePlay}
+          onExpand={expand}
+          onClose={onClose}
         />
       )}
     </>
