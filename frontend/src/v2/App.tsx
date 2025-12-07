@@ -9,6 +9,7 @@ import { TuneMeldBackground } from "@/v2/components/shared/TuneMeldBackground";
 import { ServiceArtSection } from "@/v2/components/service-playlist/ServiceArtSection";
 import { TuneMeldPlaylist } from "@/v2/components/playlist/TuneMeldPlaylist/TuneMeldPlaylist";
 import { MediaPlayer } from "@/v2/components/media-player/MediaPlayer";
+import { MediaPlayerProvider } from "@/v2/contexts/MediaPlayerContext";
 import { useAppRouting } from "@/v2/hooks/useAppRouting";
 import type { Track } from "@/types";
 
@@ -21,11 +22,13 @@ function AppContent(): React.ReactElement {
     player: activePlayer,
     selectedTrack,
     isMediaPlayerOpen,
+    hasInteracted,
     openTrack,
     closeMediaPlayer,
     setPlayer,
     setRank,
     setGenre,
+    onPlayingStateChange,
   } = useAppRouting(playlistTracks);
 
   useEffect(() => {
@@ -33,7 +36,15 @@ function AppContent(): React.ReactElement {
   }, []);
 
   return (
-    <>
+    <MediaPlayerProvider
+      track={selectedTrack}
+      activePlayer={activePlayer}
+      isOpen={isMediaPlayerOpen}
+      hasInteracted={hasInteracted}
+      onClose={closeMediaPlayer}
+      onServiceClick={setPlayer}
+      onPlayingStateChange={onPlayingStateChange}
+    >
       <main className={clsx("relative z-10")}>
         <VerticalPadding size="lg" />
         <Header />
@@ -44,21 +55,15 @@ function AppContent(): React.ReactElement {
         <VerticalPadding size="lg" />
         <TuneMeldPlaylist
           genre={activeGenre}
-          onTrackClick={(track) => openTrack(track, playlistTracks)}
+          onTrackClick={(track) => openTrack(track)}
           onTracksLoaded={setPlaylistTracks}
           activeRank={activeRank}
           onRankChange={setRank}
         />
         <VerticalPadding size="lg" />
       </main>
-      <MediaPlayer
-        track={selectedTrack}
-        activePlayer={activePlayer}
-        isOpen={isMediaPlayerOpen}
-        onClose={closeMediaPlayer}
-        onServiceClick={setPlayer}
-      />
-    </>
+      <MediaPlayer />
+    </MediaPlayerProvider>
   );
 }
 
