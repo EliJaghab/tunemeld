@@ -63,10 +63,12 @@ export default defineConfig({
           // Serve v1 legacy files from src/ folder (for dev) or dist/ (for built files)
           // This handles v1 files like main.js, themeInit.js, etc.
           // Try src/ first (dev mode), then dist/ (built files)
+          // NEVER serve index-v2.html from dist/ - Vite must handle it
           if (
-            req.url.endsWith(".js") ||
-            req.url.endsWith(".css") ||
-            req.url.endsWith(".html")
+            req.url !== "/index-v2.html" &&
+            (req.url.endsWith(".js") ||
+              req.url.endsWith(".css") ||
+              req.url.endsWith(".html"))
           ) {
             // First try src/ (for dev mode - compiled TypeScript files)
             const srcPath = path.join(__dirname, "src", req.url);
