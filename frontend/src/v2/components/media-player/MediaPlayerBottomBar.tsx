@@ -56,7 +56,7 @@ export function MediaPlayerBottomBar({
       }
     };
 
-    measureHeight();
+    const timeoutId = setTimeout(measureHeight, 0);
 
     const resizeObserver = new ResizeObserver(() => {
       measureHeight();
@@ -69,6 +69,7 @@ export function MediaPlayerBottomBar({
     window.addEventListener("resize", measureHeight);
 
     return () => {
+      clearTimeout(timeoutId);
       resizeObserver.disconnect();
       window.removeEventListener("resize", measureHeight);
     };
@@ -83,7 +84,7 @@ export function MediaPlayerBottomBar({
         "flex-nowrap"
       )}
     >
-      {canControl && (
+      {canControl && playButtonHeight !== undefined && (
         <IconButton
           onClick={onTogglePlay}
           icon={isPlaying ? "pause" : "play"}
