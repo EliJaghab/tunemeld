@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import clsx from "clsx";
 import YouTube from "react-youtube";
 import type { Track } from "@/types";
@@ -17,6 +17,9 @@ export function YouTubePlayer({
   onPause,
 }: YouTubePlayerProps): React.ReactElement | null {
   const [ytPlayer, setYtPlayer] = useState<any>(null);
+  const [isReady, setIsReady] = useState(false);
+  const currentTrackRef = useRef<string | null>(null);
+  const playerRef = useRef<any>(null);
 
   const getYouTubeId = (url: string) => {
     try {
@@ -31,23 +34,49 @@ export function YouTubePlayer({
   const videoId = getYouTubeId(url);
 
   useEffect(() => {
-    if (ytPlayer) {
+    if (currentTrackRef.current !== track.isrc) {
+      currentTrackRef.current = track.isrc;
+      setIsReady(false);
+      setYtPlayer(null);
+      playerRef.current = null;
+    }
+  }, [track.isrc]);
+
+  useEffect(() => {
+    if (
+      ytPlayer &&
+      isReady &&
+      playerRef.current === ytPlayer &&
+      currentTrackRef.current === track.isrc
+    ) {
       try {
-        if (playing) {
-          ytPlayer.playVideo();
-        } else {
-          ytPlayer.pauseVideo();
+        if (
+          typeof ytPlayer.playVideo === "function" &&
+          typeof ytPlayer.pauseVideo === "function"
+        ) {
+          if (playing) {
+            ytPlayer.playVideo();
+          } else {
+            ytPlayer.pauseVideo();
+          }
         }
       } catch (e) {
-        console.error("[YouTubePlayer] Control error", e);
+        if (
+          !(
+            e instanceof TypeError &&
+            (e.message.includes("null") || e.message.includes("undefined"))
+          )
+        ) {
+          console.error("[YouTubePlayer] Control error", e);
+        }
       }
     }
-  }, [playing, ytPlayer]);
+  }, [playing, ytPlayer, isReady, track.isrc]);
 
   if (!videoId) return null;
 
   return (
-    <div className={clsx("w-full mt-4 overflow-hidden rounded-lg")}>
+    <div className={clsx("w-full mt-4 overflow-hidden rounded-2xl")}>
       <YouTube
         videoId={videoId}
         style={{ width: "100%", height: "200px" }}
@@ -61,11 +90,20 @@ export function YouTubePlayer({
           },
         }}
         onReady={(event) => {
-          setYtPlayer(event.target);
+          if (currentTrackRef.current === track.isrc) {
+            const player = event.target;
+            setYtPlayer(player);
+            playerRef.current = player;
+            setIsReady(true);
+          }
         }}
         onStateChange={(event) => {
-          if (event.data === 1) onPlay();
-          if (event.data === 2) onPause();
+          if (event.data === 1) {
+            onPlay();
+          }
+          if (event.data === 2) {
+            onPause();
+          }
         }}
         onError={(e) => console.error("[YouTubePlayer] Error", e)}
       />
