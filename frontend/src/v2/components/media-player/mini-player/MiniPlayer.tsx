@@ -2,7 +2,6 @@ import React from "react";
 import clsx from "clsx";
 import GlassSurface from "@/v2/components/shared/GlassSurface";
 import { MediaSquare } from "@/v2/components/shared/MediaSquare";
-import { IconButton } from "@/v2/components/shared/IconButton";
 import type { Track } from "@/types";
 
 interface MiniPlayerProps {
@@ -77,21 +76,39 @@ export function MiniPlayer({
             </div>
 
             {canControl && (
-              <div className="h-12 flex items-center flex-shrink-0">
-                <IconButton
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    e.preventDefault();
-                    onTogglePlay();
-                  }}
-                  onMouseDown={(e) => e.stopPropagation()}
-                  onTouchStart={(e) => e.stopPropagation()}
-                  icon={isPlaying ? "pause" : "play"}
-                  ariaLabel={isPlaying ? "Pause" : "Play"}
-                  variant="glass"
-                  size="sm"
-                />
-              </div>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  e.preventDefault();
+                  onTogglePlay();
+                }}
+                onMouseDown={(e) => e.stopPropagation()}
+                onTouchStart={(e) => e.stopPropagation()}
+                aria-label={isPlaying ? "Pause" : "Play"}
+                className="h-12 flex items-center justify-center flex-shrink-0
+                  p-0 m-0 border-0 bg-transparent cursor-pointer"
+              >
+                {isPlaying ? (
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    className="w-6 h-6 desktop:w-7 desktop:h-7 text-black
+                      dark:text-white"
+                  >
+                    <rect x="6" y="4" width="4" height="16" rx="1" />
+                    <rect x="14" y="4" width="4" height="16" rx="1" />
+                  </svg>
+                ) : (
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    className="w-6 h-6 desktop:w-7 desktop:h-7 text-black
+                      dark:text-white"
+                  >
+                    <path d="M8 5v14l11-7z" />
+                  </svg>
+                )}
+              </button>
             )}
           </div>
         </GlassSurface>
@@ -107,7 +124,11 @@ export function MiniPlayer({
           borderWidth={0.5}
           blur={20}
           className="!items-center !justify-center cursor-pointer"
-          onClick={onClose}
+          onClick={(e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            onClose();
+          }}
         >
           <svg
             width="24"
@@ -118,7 +139,7 @@ export function MiniPlayer({
             strokeWidth="2"
             strokeLinecap="round"
             strokeLinejoin="round"
-            className="text-black dark:text-white"
+            className="text-black dark:text-white pointer-events-none"
           >
             <path d="M18 6L6 18" />
             <path d="M6 6l12 12" />
