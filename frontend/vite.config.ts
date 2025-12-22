@@ -60,15 +60,23 @@ export default defineConfig({
             }
           }
 
+          // Handle index-v1.html routing
+          if (req.url === "/index-v1" || req.url === "/index-v1.html") {
+            const indexV1Path = path.join(__dirname, "index-v1.html");
+            if (fs.existsSync(indexV1Path)) {
+              res.setHeader("Content-Type", "text/html");
+              fs.createReadStream(indexV1Path).pipe(res);
+              return; // Stop middleware chain
+            }
+          }
+
           // Serve v1 legacy files from src/ folder (for dev) or dist/ (for built files)
           // This handles v1 files like main.js, themeInit.js, etc.
           // Try src/ first (dev mode), then dist/ (built files)
-          // NEVER serve index-v2.html from dist/ - Vite must handle it
           if (
-            req.url !== "/index-v2.html" &&
-            (req.url.endsWith(".js") ||
-              req.url.endsWith(".css") ||
-              req.url.endsWith(".html"))
+            req.url.endsWith(".js") ||
+            req.url.endsWith(".css") ||
+            (req.url.endsWith(".html") && req.url !== "/")
           ) {
             // First try src/ (for dev mode - compiled TypeScript files)
             const srcPath = path.join(__dirname, "src", req.url);
@@ -124,7 +132,8 @@ export default defineConfig({
     sourcemap: false,
     rollupOptions: {
       input: {
-        v2: path.resolve(__dirname, "index-v2.html"),
+        main: path.resolve(__dirname, "index.html"),
+        v1: path.resolve(__dirname, "index-v1.html"),
       },
       output: {
         manualChunks: {
@@ -141,7 +150,7 @@ export default defineConfig({
   },
   server: {
     port: 3000,
-    open: "/index-v2.html",
+    open: "/",
   },
   css: {
     postcss: "./postcss.config.cjs",
