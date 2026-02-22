@@ -167,7 +167,14 @@ export function IconButton({
         )}
         style={{ display: "flex", lineHeight: 0, color: "inherit" }}
       >
-        {icons[icon]}
+        <span
+          className={clsx(
+            (height || width) && "w-3.5 h-3.5 desktop:w-4 desktop:h-4",
+            "flex items-center justify-center"
+          )}
+        >
+          {icons[icon]}
+        </span>
       </span>
     </button>
   );

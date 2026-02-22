@@ -7,7 +7,7 @@ import { ServicePlayer } from "@/v2/components/media-player/players/ServicePlaye
 import { MiniPlayer } from "@/v2/components/media-player/mini-player/MiniPlayer";
 import { MediaPlayerBottomBar } from "@/v2/components/media-player/MediaPlayerBottomBar";
 import { ChevronDown } from "@/v2/components/shared/icons/ChevronDown";
-import { useMediaPlayer } from "@/v2/contexts/MediaPlayerContext";
+import { useMediaPlayerStore } from "@/v2/stores/useMediaPlayerStore";
 import { PLAYER } from "@/v2/constants";
 import type { Track } from "@/types";
 
@@ -91,29 +91,29 @@ function MediaPlayerControls({
 
 export function MediaPlayer(): React.ReactElement | null {
   const {
-    track,
+    currentTrack: track,
     activePlayer,
     isOpen,
     isMinimized,
     isPlaying,
     expand,
-    collapse,
+    minimize,
     togglePlay,
     setPlaying,
-    onClose,
-    onServiceClick,
-  } = useMediaPlayer();
+    close,
+    setActivePlayer,
+  } = useMediaPlayerStore();
 
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === "Escape" && isOpen) {
-        onClose();
+        close();
       }
     };
 
     document.addEventListener("keydown", handleEscape);
     return () => document.removeEventListener("keydown", handleEscape);
-  }, [isOpen, onClose]);
+  }, [isOpen, close]);
 
   const hasYouTube = !!track?.youtubeSource;
   const canControl = hasYouTube && activePlayer === PLAYER.YOUTUBE;
@@ -172,7 +172,7 @@ export function MediaPlayer(): React.ReactElement | null {
                   )}
                 />
 
-                <MediaPlayerControls onCollapse={collapse} onClose={onClose} />
+                <MediaPlayerControls onCollapse={minimize} onClose={close} />
 
                 <MediaPlayerHeader track={track} />
 
@@ -199,7 +199,7 @@ export function MediaPlayer(): React.ReactElement | null {
                     isPlaying={isPlaying}
                     canControl={canControl}
                     onTogglePlay={togglePlay}
-                    onServiceClick={onServiceClick}
+                    onServiceClick={setActivePlayer}
                   />
                 </div>
               </div>
@@ -215,7 +215,7 @@ export function MediaPlayer(): React.ReactElement | null {
           canControl={canControl}
           onTogglePlay={togglePlay}
           onExpand={expand}
-          onClose={onClose}
+          onClose={close}
         />
       )}
     </>

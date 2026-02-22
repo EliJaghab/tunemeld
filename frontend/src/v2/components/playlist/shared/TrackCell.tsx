@@ -23,12 +23,20 @@ export function TrackCell({
       <td
         className={clsx(
           "px-3 py-2 desktop:px-4 desktop:py-3",
+          "w-[60px] desktop:w-[80px]",
+          "table-cell",
           isLast && "rounded-bl-[16px]"
         )}
       >
         <ServiceIcon rank={rank} />
       </td>
-      <td className={clsx("px-2 py-2 desktop:px-3 desktop:py-3")}>
+      <td
+        className={clsx(
+          "px-2 py-2 desktop:px-3 desktop:py-3",
+          "w-[56px] desktop:w-[72px]",
+          "table-cell"
+        )}
+      >
         {coverUrl && (
           <div
             className={clsx(
@@ -44,7 +52,13 @@ export function TrackCell({
           </div>
         )}
       </td>
-      <td className={clsx("px-3 py-2 desktop:px-4 desktop:py-3")}>
+      <td
+        className={clsx(
+          "px-3 py-2 desktop:px-4 desktop:py-3",
+          "min-w-0",
+          "table-cell"
+        )}
+      >
         <div className={clsx("flex flex-col")}>
           <div
             className={clsx(
@@ -52,6 +66,7 @@ export function TrackCell({
               "text-black dark:text-white",
               "line-clamp-1"
             )}
+            title={trackName}
           >
             {trackName}
           </div>
@@ -61,6 +76,7 @@ export function TrackCell({
               "text-black dark:text-white",
               "line-clamp-1"
             )}
+            title={artistName}
           >
             {artistName}
           </div>

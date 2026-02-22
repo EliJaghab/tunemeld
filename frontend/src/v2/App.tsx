@@ -9,81 +9,52 @@ import { TuneMeldBackground } from "@/v2/components/shared/TuneMeldBackground";
 import { ServiceArtSection } from "@/v2/components/service-playlist/ServiceArtSection";
 import { TuneMeldPlaylist } from "@/v2/components/playlist/TuneMeldPlaylist/TuneMeldPlaylist";
 import { MediaPlayer } from "@/v2/components/media-player/MediaPlayer";
-import {
-  MediaPlayerProvider,
-  useMediaPlayer,
-} from "@/v2/contexts/MediaPlayerContext";
-import { useAppRouting } from "@/v2/hooks/useAppRouting";
+import { useTrackUrlSync } from "@/v2/hooks/useTrackUrl";
+import { useGenreNavigation } from "@/v2/hooks/useGenreNavigation";
+import { useMediaPlayerStore } from "@/v2/stores/useMediaPlayerStore";
 import type { Track } from "@/types";
 
 function AppContent(): React.ReactElement {
-  const [playlistTracks, setPlaylistTracks] = useState<Track[]>([]);
-
-  const {
-    genre: activeGenre,
-    rank: activeRank,
-    player: activePlayer,
-    selectedTrack,
-    isMediaPlayerOpen,
-    hasInteracted,
-    openTrack,
-    closeMediaPlayer,
-    setPlayer,
-    setRank,
-    setGenre,
-    onPlayingStateChange,
-  } = useAppRouting(playlistTracks);
+  useTrackUrlSync();
+  const { currentGenre: activeGenre, handleGenreChange } = useGenreNavigation();
+  const { genre, rank, setRank, openTrack, loadFirstTrackForGenre } =
+    useMediaPlayerStore();
 
   useEffect(() => {
     document.title = "tunemeld";
   }, []);
 
+  const handleTracksLoaded = (tracks: Track[]) => {
+    loadFirstTrackForGenre(tracks);
+  };
+
   return (
-    <MediaPlayerProvider
-      track={selectedTrack}
-      activePlayer={activePlayer}
-      isOpen={isMediaPlayerOpen}
-      hasInteracted={hasInteracted}
-      onClose={closeMediaPlayer}
-      onServiceClick={setPlayer}
-      onPlayingStateChange={onPlayingStateChange}
-    >
-      <AppContentInner
-        activeGenre={activeGenre}
-        activeRank={activeRank}
-        playlistTracks={playlistTracks}
-        setPlaylistTracks={setPlaylistTracks}
-        openTrack={openTrack}
-        setRank={setRank}
-        setGenre={setGenre}
-      />
-    </MediaPlayerProvider>
+    <AppContentInner
+      activeGenre={genre}
+      activeRank={rank}
+      openTrack={openTrack}
+      setRank={setRank}
+      setGenre={handleGenreChange}
+      onTracksLoaded={handleTracksLoaded}
+    />
   );
 }
 
 function AppContentInner({
   activeGenre,
   activeRank,
-  playlistTracks,
-  setPlaylistTracks,
   openTrack,
   setRank,
   setGenre,
+  onTracksLoaded,
 }: {
   activeGenre: string;
   activeRank: string;
-  playlistTracks: Track[];
-  setPlaylistTracks: (tracks: Track[]) => void;
   openTrack: (track: Track) => void;
   setRank: (rank: string) => void;
   setGenre: (genre: string) => void;
+  onTracksLoaded: (tracks: Track[]) => void;
 }): React.ReactElement {
-  const { wasExplicitlyClosed } = useMediaPlayer();
-
-  // Update useAppRouting with the context value
-  // We need to call it again, but hooks can't be called conditionally
-  // Instead, we'll pass wasExplicitlyClosed to a separate effect
-
   return (
     <>
       <main className={clsx("relative z-10")}>
@@ -97,7 +68,7 @@ function AppContentInner({
         <TuneMeldPlaylist
           genre={activeGenre}
           onTrackClick={(track) => openTrack(track)}
-          onTracksLoaded={setPlaylistTracks}
+          onTracksLoaded={onTracksLoaded}
           activeRank={activeRank}
           onRankChange={setRank}
         />

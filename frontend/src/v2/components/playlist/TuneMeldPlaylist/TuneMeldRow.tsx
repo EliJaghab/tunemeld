@@ -17,80 +17,6 @@ interface TuneMeldRowProps {
   onTrackClick?: (track: Track) => void;
 }
 
-function PlayCountCell({
-  playCount,
-}: {
-  playCount: number | null | undefined;
-}): React.ReactElement | null {
-  if (playCount == null || isNaN(playCount)) {
-    return (
-      <td
-        className={clsx(
-          "desktop:table-cell py-2 px-3",
-          "text-sm font-semibold",
-          "min-w-[80px]"
-        )}
-      >
-        <span className={clsx("text-gray-400 dark:text-gray-500")}>—</span>
-      </td>
-    );
-  }
-
-  const formatted = formatAbbreviatedPlayCount(playCount);
-
-  return (
-    <td
-      className={clsx(
-        "desktop:table-cell py-2 px-3",
-        "text-sm font-semibold",
-        "min-w-[80px]"
-      )}
-    >
-      <span className={clsx("text-black dark:text-white")}>{formatted}</span>
-    </td>
-  );
-}
-
-function TrendingCell({
-  percentage,
-}: {
-  percentage: number | null | undefined;
-}): React.ReactElement | null {
-  if (percentage == null || isNaN(percentage)) {
-    return (
-      <td
-        className={clsx(
-          "desktop:table-cell py-2 px-3",
-          "text-sm font-semibold",
-          "min-w-[80px]"
-        )}
-      >
-        <span className={clsx("text-gray-400 dark:text-gray-500")}>—</span>
-      </td>
-    );
-  }
-
-  const formatted = formatWeeklyChangePercentage(percentage);
-  const trendClass =
-    percentage < 0
-      ? "text-red-600 dark:text-red-400"
-      : percentage > 0
-        ? "text-green-600 dark:text-green-400"
-        : "text-gray-700 dark:text-gray-300";
-
-  return (
-    <td
-      className={clsx(
-        "desktop:table-cell py-2 px-3",
-        "text-sm font-semibold",
-        "min-w-[80px]"
-      )}
-    >
-      <span className={clsx(trendClass)}>{formatted}</span>
-    </td>
-  );
-}
-
 export function TuneMeldRow({
   track,
   displayRank,
@@ -107,6 +33,69 @@ export function TuneMeldRow({
   const showTotalPlays = activeRank === RANK.TOTAL_PLAYS;
   const showTrending = activeRank === RANK.TRENDING;
   const showServiceIcons = !activeRank || activeRank === RANK.TUNEMELD_RANK;
+
+  // Render the rightmost cell content based on active rank
+  const renderRightCellContent = () => {
+    if (showServiceIcons) {
+      return <SeenOn track={track} />;
+    }
+
+    if (showTotalPlays) {
+      if (
+        track.totalCurrentPlayCount == null ||
+        isNaN(track.totalCurrentPlayCount)
+      ) {
+        return (
+          <span
+            className={clsx(
+              "text-sm font-semibold text-gray-600 dark:text-gray-400"
+            )}
+          >
+            —
+          </span>
+        );
+      }
+      const formatted = formatAbbreviatedPlayCount(track.totalCurrentPlayCount);
+      return (
+        <span
+          className={clsx("text-sm font-semibold text-black dark:text-white")}
+        >
+          {formatted}
+        </span>
+      );
+    }
+
+    if (showTrending) {
+      if (
+        track.totalWeeklyChangePercentage == null ||
+        isNaN(track.totalWeeklyChangePercentage)
+      ) {
+        return (
+          <span
+            className={clsx(
+              "text-sm font-semibold text-black dark:text-gray-400"
+            )}
+          >
+            —
+          </span>
+        );
+      }
+      const formatted = formatWeeklyChangePercentage(
+        track.totalWeeklyChangePercentage
+      );
+      // Use same base classes as play count, then add color
+      const baseClasses = "text-sm font-semibold text-black dark:text-white";
+      const trendClass =
+        track.totalWeeklyChangePercentage < 0
+          ? "!text-red-700 dark:!text-red-400"
+          : track.totalWeeklyChangePercentage > 0
+            ? "!text-green-700 dark:!text-green-400"
+            : "";
+      return <span className={clsx(baseClasses, trendClass)}>{formatted}</span>;
+    }
+
+    return null;
+  };
 
   return (
     <tr
@@ -125,22 +114,16 @@ export function TuneMeldRow({
         artistName={track.artistName}
         isLast={isLast}
       />
-      {showTotalPlays && (
-        <PlayCountCell playCount={track.totalCurrentPlayCount} />
-      )}
-      {showTrending && (
-        <TrendingCell percentage={track.totalWeeklyChangePercentage} />
-      )}
-      {showServiceIcons && (
-        <td
-          className={clsx(
-            "desktop:table-cell py-2 px-3 min-w-[100px]",
-            isLast && "rounded-br-[16px]"
-          )}
-        >
-          <SeenOn track={track} />
-        </td>
-      )}
+      <td
+        className={clsx(
+          "table-cell py-2 pl-3 pr-5",
+          "w-[120px] desktop:w-[140px]",
+          "text-sm font-semibold",
+          isLast && "rounded-br-[16px]"
+        )}
+      >
+        {renderRightCellContent()}
+      </td>
     </tr>
   );
 }
