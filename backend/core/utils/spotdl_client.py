@@ -50,7 +50,7 @@ def _fetch_spotify_playlist_with_retry(playlist_url: str) -> JSON:
             "/usr/bin/true",
         ]
 
-        result = subprocess.run(cmd, capture_output=True, text=True, timeout=300)
+        result = subprocess.run(cmd, capture_output=True, text=True, timeout=600)
 
         if result.returncode != 0:
             error_msg = f"SpotDL failed with exit code {result.returncode}"
