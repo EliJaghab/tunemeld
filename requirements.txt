@@ -12,5 +12,5 @@ pydantic>=2.9.0
 python-dotenv>=1.0.0
 redis>=5.0.8
 requests>=2.32.3
-strawberry-graphql[django]>=0.209.0
+strawberry-graphql[django]==0.282.0
 tenacity>=9.0.0

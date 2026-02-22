@@ -39,73 +39,73 @@ urlpatterns = [
     ),
     path(
         "api/gql/",
-        csrf_exempt(GraphQLView.as_view(schema=schema, graphiql=True)),
+        csrf_exempt(GraphQLView.as_view(schema=schema, graphql_ide="graphiql")),
         name="graphql",
     ),
     path(
         "gql/",
-        csrf_exempt(GraphQLView.as_view(schema=schema, graphiql=True)),
+        csrf_exempt(GraphQLView.as_view(schema=schema, graphql_ide="graphiql")),
         name="graphql_legacy",
     ),
     # Custom GraphQL endpoint names for better Network tab debugging
     path(
         "api/GetAvailableGenres/",
-        csrf_exempt(GraphQLView.as_view(schema=schema, graphiql=False)),
+        csrf_exempt(GraphQLView.as_view(schema=schema, graphql_ide=None)),
         name="graphql_available_genres",
     ),
     path(
         "api/GetPlaylistMetadata/",
-        csrf_exempt(GraphQLView.as_view(schema=schema, graphiql=False)),
+        csrf_exempt(GraphQLView.as_view(schema=schema, graphql_ide=None)),
         name="graphql_playlist_metadata",
     ),
     path(
         "api/GetPlaylist/",
-        csrf_exempt(GraphQLView.as_view(schema=schema, graphiql=False)),
+        csrf_exempt(GraphQLView.as_view(schema=schema, graphql_ide=None)),
         name="graphql_playlist",
     ),
     path(
         "api/GetPlaylistRanks/",
-        csrf_exempt(GraphQLView.as_view(schema=schema, graphiql=False)),
+        csrf_exempt(GraphQLView.as_view(schema=schema, graphql_ide=None)),
         name="graphql_playlist_ranks",
     ),
     path(
         "api/GetPlayCounts/",
-        csrf_exempt(GraphQLView.as_view(schema=schema, graphiql=False)),
+        csrf_exempt(GraphQLView.as_view(schema=schema, graphql_ide=None)),
         name="graphql_play_counts",
     ),
     path(
         "api/GetServiceConfigs/",
-        csrf_exempt(GraphQLView.as_view(schema=schema, graphiql=False)),
+        csrf_exempt(GraphQLView.as_view(schema=schema, graphql_ide=None)),
         name="graphql_service_configs",
     ),
     path(
         "api/GetIframeConfigs/",
-        csrf_exempt(GraphQLView.as_view(schema=schema, graphiql=False)),
+        csrf_exempt(GraphQLView.as_view(schema=schema, graphql_ide=None)),
         name="graphql_iframe_configs",
     ),
     path(
         "api/GenerateIframeUrl/",
-        csrf_exempt(GraphQLView.as_view(schema=schema, graphiql=False)),
+        csrf_exempt(GraphQLView.as_view(schema=schema, graphql_ide=None)),
         name="graphql_generate_iframe_url",
     ),
     path(
         "api/GetRankButtonLabels/",
-        csrf_exempt(GraphQLView.as_view(schema=schema, graphiql=False)),
+        csrf_exempt(GraphQLView.as_view(schema=schema, graphql_ide=None)),
         name="graphql_rank_button_labels",
     ),
     path(
         "api/GetMiscButtonLabels/",
-        csrf_exempt(GraphQLView.as_view(schema=schema, graphiql=False)),
+        csrf_exempt(GraphQLView.as_view(schema=schema, graphql_ide=None)),
         name="graphql_misc_button_labels",
     ),
     path(
         "api/GetStaticConfig/",
-        csrf_exempt(GraphQLView.as_view(schema=schema, graphiql=False)),
+        csrf_exempt(GraphQLView.as_view(schema=schema, graphql_ide=None)),
         name="graphql_static_config",
     ),
     path(
         "api/GetSimilarTracks/",
-        csrf_exempt(GraphQLView.as_view(schema=schema, graphiql=False)),
+        csrf_exempt(GraphQLView.as_view(schema=schema, graphql_ide=None)),
         name="graphql_similar_tracks",
     ),
     path(

@@ -1,6 +1,7 @@
 from datetime import datetime
 
 import strawberry
+import strawberry.types
 from core.api.genre_service_api import (
     get_service,
     get_track_by_isrc,
@@ -185,7 +186,7 @@ class TrackType:
         return getattr(self, "_artist_name", None)
 
     @strawberry.field(description="Contextual button labels for this track")
-    def button_labels(self, info) -> list[ButtonLabelType]:
+    def button_labels(self, info: strawberry.types.Info) -> list[ButtonLabelType]:
         if hasattr(self, "_button_labels"):
             return [
                 ButtonLabelType(
@@ -210,7 +211,7 @@ class TrackType:
         return build_track_query_url(genre, rank, self.isrc, player)
 
     @strawberry.field(description="Position in the TuneMeld playlist for current genre")
-    def tunemeld_rank(self, info) -> int | None:
+    def tunemeld_rank(self, info: strawberry.types.Info) -> int | None:
         if hasattr(self, "_tunemeld_rank"):
             return self._tunemeld_rank
 
@@ -221,7 +222,7 @@ class TrackType:
         return get_track_rank_by_track_object(track_domain, genre_name, ServiceName.TUNEMELD)
 
     @strawberry.field(description="Position on SoundCloud playlist for current genre")
-    def soundcloud_rank(self, info) -> int | None:
+    def soundcloud_rank(self, info: strawberry.types.Info) -> int | None:
         if hasattr(self, "_soundcloud_rank"):
             return self._soundcloud_rank
 
@@ -232,7 +233,7 @@ class TrackType:
         return get_track_rank_by_track_object(track_domain, genre_name, ServiceName.SOUNDCLOUD)
 
     @strawberry.field(description="Position on Spotify playlist for current genre")
-    def spotify_rank(self, info) -> int | None:
+    def spotify_rank(self, info: strawberry.types.Info) -> int | None:
         if hasattr(self, "_spotify_rank"):
             return self._spotify_rank
 
@@ -243,7 +244,7 @@ class TrackType:
         return get_track_rank_by_track_object(track_domain, genre_name, ServiceName.SPOTIFY)
 
     @strawberry.field(description="Position on Apple Music playlist for current genre")
-    def apple_music_rank(self, info) -> int | None:
+    def apple_music_rank(self, info: strawberry.types.Info) -> int | None:
         if hasattr(self, "_apple_music_rank"):
             return self._apple_music_rank
 

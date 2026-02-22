@@ -21,7 +21,7 @@ dependencies = [
     "dj-database-url>=2.1.0",
     "psycopg2-binary>=2.9.10",
     "gunicorn>=20.1.0",
-    "strawberry-graphql[django]>=0.209.0",
+    "strawberry-graphql[django]==0.282.0",
     "pydantic>=2.9.0",
 
     # External Services
