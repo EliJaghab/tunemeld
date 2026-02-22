@@ -92,7 +92,7 @@ def get_soundcloud_playlist(genre: "GenreName", force_refresh: bool = False) -> 
     playlist_cover_url = (
         str(playlist_cover_url_tag["content"])
         if playlist_cover_url_tag and isinstance(playlist_cover_url_tag, Tag) and playlist_cover_url_tag.get("content")
-        else None
+        else ""
     )
 
     metadata: PlaylistMetadata = {

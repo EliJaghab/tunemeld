@@ -34,7 +34,7 @@ class RawPlaylistDataModel(models.Model):
 
     playlist_url = models.URLField(help_text="Original playlist URL")
     playlist_name = models.CharField(max_length=255, blank=True, help_text="Playlist display name")
-    playlist_cover_url = models.URLField(blank=True, help_text="Playlist cover image URL")
+    playlist_cover_url = models.URLField(blank=True, default="", help_text="Playlist cover image URL")
     playlist_cover_description_text = models.TextField(blank=True, help_text="Cover image description")
 
     data = models.JSONField(help_text="Raw JSON data from service API")
