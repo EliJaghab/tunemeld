@@ -54,11 +54,9 @@ class Command(BaseCommand):
 
         if failures:
             failure_summary = "; ".join(f"{s}/{g}: {e}" for s, g, e in failures)
-            logger.error(
+            raise CommandError(
                 f"ETL completed with {len(failures)} failure(s) and {successes} success(es): {failure_summary}"
             )
-            if successes == 0:
-                raise CommandError(f"All {len(failures)} ETL tasks failed: {failure_summary}")
 
     def get_and_save_playlist(
         self, service_name: ServiceName, genre: GenreName, force_refresh: bool = False
