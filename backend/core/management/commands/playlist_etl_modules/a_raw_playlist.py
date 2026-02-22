@@ -39,15 +39,26 @@ class Command(BaseCommand):
             log_progress=False,
         )
 
+        failures = []
+        successes = 0
         for task, _result, exc in results:
             task_service: ServiceName
             task_genre: GenreName
             task_service, task_genre = task
             if exc:
                 logger.error(f"Failed {task_service.value}/{task_genre.value}: {exc}")
-                raise CommandError(f"ETL step failed on {task_service.value}/{task_genre.value}: {exc}") from exc
+                failures.append((task_service.value, task_genre.value, str(exc)))
             else:
+                successes += 1
                 logger.info(f"Completed {task_service.value}/{task_genre.value}")
+
+        if failures:
+            failure_summary = "; ".join(f"{s}/{g}: {e}" for s, g, e in failures)
+            logger.error(
+                f"ETL completed with {len(failures)} failure(s) and {successes} success(es): {failure_summary}"
+            )
+            if successes == 0:
+                raise CommandError(f"All {len(failures)} ETL tasks failed: {failure_summary}")
 
     def get_and_save_playlist(
         self, service_name: ServiceName, genre: GenreName, force_refresh: bool = False
